@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.clebs.celerity.fragments.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/dailyWorkFragment"
+        android:name="com.clebs.celerity.fragments.DailyWorkFragment"
+        android:label="fragment_daily_work"
+        tools:layout="@layout/fragment_daily_work" />
+    <fragment
+        android:id="@+id/invoicesFragment"
+        android:name="com.clebs.celerity.fragments.InvoicesFragment"
+        android:label="fragment_invoices"
+        tools:layout="@layout/fragment_invoices" />
+    <fragment
+        android:id="@+id/passwordsFragment"
+        android:name="com.clebs.celerity.fragments.PasswordsFragment"
+        android:label="fragment_passwords"
+        tools:layout="@layout/fragment_passwords" />
+    <fragment
+        android:id="@+id/ticketsFragment"
+        android:name="com.clebs.celerity.fragments.TicketsFragment"
+        android:label="fragment_tickets"
+        tools:layout="@layout/fragment_tickets" />
+    <fragment
+        android:id="@+id/vechileMileageFragment"
+        tools:layout="@layout/fragment_vechile_mileage"
+        android:name="com.clebs.celerity.fragments.VechileMileageFragment"
+        android:label="VechileMileageFragment" />
+    <fragment
+        android:id="@+id/spareWheelFragment"
+        tools:layout="@layout/fragment_spare_wheel"
+        android:name="com.clebs.celerity.fragments.SpareWheelFragment"
+        android:label="SpareWheelFragment" />
+    <fragment
+        android:id="@+id/windScreenFragment"
+        tools:layout="@layout/fragment_wind_screen"
+        android:name="com.clebs.celerity.fragments.WindScreenFragment"
+        android:label="WindScreenFragment" />
+    <fragment
+        android:id="@+id/completeTaskFragment"
+        android:name="com.clebs.celerity.fragments.CompleteTaskFragment"
+        android:label="CompleteTaskFragment"
+        tools:layout="@layout/fragment_complete_task"/>
+    <fragment
+        android:id="@+id/onRoadHoursFragment"
+        android:name="com.clebs.celerity.fragments.OnRoadHoursFragment"
+        android:label="fragment_on_road_hours"
+        tools:layout="@layout/fragment_on_road_hours" />
+    <fragment
+        android:id="@+id/rideAlongFragment"
+        android:name="com.clebs.celerity.fragments.RideAlongFragment"
+        tools:layout="@layout/fragment_ride_along"
+        android:label="RideAlongFragment" />
+</navigation>

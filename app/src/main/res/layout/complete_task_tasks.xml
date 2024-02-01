@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintStart_toStartOf="parent"
+    app:cardCornerRadius="10dp"
+
+    app:layout_constraintTop_toTopOf="parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="18sp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/vichle_defect"
+            android:letterSpacing="0.02"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:id="@+id/child_Title"
+                android:textSize="15sp"
+                android:fontFamily="@font/poppins"
+                android:text="Vehicle Defect Sheet "/>
+            <ImageButton
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:backgroundTint="@color/white"
+             android:layout_alignParentRight="true"
+                android:src="@drawable/frame__2_"/>
+            
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/vichel_pictures"
+            android:layout_marginTop="18dp"
+            android:layout_below="@+id/vichle_defect">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:letterSpacing="0.02"
+                android:fontFamily="@font/poppins"
+                android:textSize="15sp"
+                android:text="Vehcile Pictures "/>
+            <ImageButton
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:backgroundTint="@color/white"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/frame__2_"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/clocked_in"
+            android:layout_marginTop="18dp"
+            android:layout_below="@+id/vichel_pictures">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins"
+                android:letterSpacing="0.02"
+                android:textSize="15sp"
+                android:text="Clocked In"/>
+            <TextView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:backgroundTint="@color/white"
+                android:layout_alignParentRight="true"
+              android:text="time"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

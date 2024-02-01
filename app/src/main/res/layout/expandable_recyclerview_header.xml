@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintStart_toStartOf="parent"
+    android:layout_margin="20dp"
+    android:paddingStart="18dp"
+    android:paddingEnd="18dp"
+    android:paddingTop="25dp"
+    android:paddingBottom="25dp"
+    android:background="@drawable/shape_textview_radio_button"
+    app:layout_constraintTop_toTopOf="parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Completed Task"
+        android:id="@+id/parent_Title"
+        android:layout_centerVertical="true"
+        android:textSize="18sp"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/orange"/>
+    <ImageButton
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/vector__1_"
+        android:id="@+id/down_iv"
+        android:backgroundTint="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
