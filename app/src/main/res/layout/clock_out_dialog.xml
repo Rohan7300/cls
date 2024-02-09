@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:id="@+id/card"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:id="@+id/rl_me"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/textview_acknowledgement">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:textColor="#000000"
+                        android:id="@+id/headings"
+                        android:gravity="center"
+                        android:text="@string/daily_clock_out_tasks"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:id="@+id/keeping_you"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/daily_da_tasks_after_shift"
+                        android:letterSpacing="0.02"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@id/headings"
+                        android:lineHeight="22sp"
+                        android:textColor="@color/black"
+                        android:gravity="start"
+                        />
+                    <TextView
+                        android:id="@+id/keeping_you_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_1_check_correct_route_information"
+                        android:letterSpacing="0.02"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:fontFamily="@font/poppins"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@id/keeping_you"
+                        android:lineHeight="22sp"
+                        android:textColor="@color/black"
+                        android:gravity="start"
+                        />
+                    <TextView
+                        android:id="@+id/keeping_you_three"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_2_double_check_you_have_completed_daily_vehicle_check_all_defect_reported"
+                        android:letterSpacing="0.02"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:fontFamily="@font/poppins"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@id/keeping_you_two"
+                        android:lineHeight="22sp"
+                        android:textColor="@color/black"
+                        android:gravity="start"
+                        />
+                    <TextView
+                        android:id="@+id/keeping_you_four"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_3_complete_your_dvic_end_of_day_check"
+                        android:letterSpacing="0.02"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:fontFamily="@font/poppins"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@id/keeping_you_three"
+                        android:lineHeight="22sp"
+                        android:textColor="@color/black"
+                        android:gravity="start"
+                        />
+                    <TextView
+                        android:id="@+id/keeping_you_five"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_4_log_out_of_amazon_flex"
+                        android:letterSpacing="0.02"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:fontFamily="@font/poppins"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@id/keeping_you_four"
+                        android:lineHeight="22sp"
+                        android:textColor="@color/black"
+                        android:gravity="start"
+                        />
+                    <TextView
+                    android:id="@+id/keeping_you_six"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_5_clock_out_of_da_system"
+                    android:letterSpacing="0.02"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:fontFamily="@font/poppins"
+                    android:layout_marginTop="20dp"
+                    android:layout_below="@id/keeping_you_five"
+                    android:lineHeight="22sp"
+                    android:textColor="@color/black"
+                    android:gravity="start"
+                    />
+                    <TextView
+                        android:id="@+id/keeping_you_seven"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="6. Thank you, have a good evening."
+                        android:letterSpacing="0.02"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:fontFamily="@font/poppins"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@id/keeping_you_six"
+                        android:lineHeight="22sp"
+                        android:textColor="@color/black"
+                        android:gravity="start"
+                        />
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginBottom="31dp"
+                    android:layout_below="@id/textview_acknowledgement"
+                 >
+
+                    <ImageView
+                        android:id="@+id/img_Acknowledege"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:src="@drawable/acknowledgement" />
+
+
+                </LinearLayout>
+            </RelativeLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -1,5 +1,6 @@
 package com.clebs.celerity.ui
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -38,23 +39,14 @@ class LoginActivity : AppCompatActivity() {
             if (ActivityLoginBinding.edtUser.text!!.isEmpty()) {
                 ActivityLoginBinding.edtUser.setError("Please enter username/email")
 
-            } else if (ActivityLoginBinding.edtUser.text!!.isEmpty()) {
+            } else if (ActivityLoginBinding.edtPass.text!!.isEmpty()) {
                 ActivityLoginBinding.edtPass.setError("Please enter password")
 
-            }
-//            else if (!isValidPassword(ActivityLoginBinding.edtPass.text.toString())){
-//                ActivityLoginBinding.edtPass.setError("Please enter valid password")
-//
-//            }
-            else {
+            } else {
                 ActivityLoginBinding.progressbar.visibility = View.VISIBLE
                 login()
             }
 
-//                login()
-//            val intent = Intent(this, HomeActivity::class.java)
-//            startActivity(intent)
-//            login()
         }
 
 
@@ -72,17 +64,55 @@ class LoginActivity : AppCompatActivity() {
                 if (it.message.equals("Success")) {
 
                     Prefs.getInstance(applicationContext).accessToken = it.token
+                    Prefs.getInstance(applicationContext).userID = it.userID.toString()
                     ActivityLoginBinding.progressbar.visibility = View.GONE
                     Log.e("response", "onCreate: " + it.token)
-                    val intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
+                    GetDriverSignatureInformation()
+                    setLoggedIn(true)
+
 
                 } else {
                     ActivityLoginBinding.progressbar.visibility = View.GONE
                     Toast.makeText(this, "Error in login", Toast.LENGTH_SHORT).show()
+                    setLoggedIn(false)
                 }
+            } else {
+                Toast.makeText(this, "Error in login", Toast.LENGTH_SHORT).show()
+                ActivityLoginBinding.progressbar.visibility = View.GONE
             }
 
         })
+    }
+
+    private fun setLoggedIn(isLoggedIn: Boolean) {
+        Prefs.getInstance(applicationContext).saveBoolean("isLoggedIn", isLoggedIn)
+    }
+
+    fun GetDriverSignatureInformation() {
+        var userid: Double = 0.0
+        if (!Prefs.getInstance(applicationContext).userID.equals(0.0)) {
+            userid = Prefs.getInstance(applicationContext).userID.toDouble()
+        }
+
+        mainViewModel.getDriverSignatureInfo(userid).observe(this@LoginActivity, Observer {
+            if (it!!.isSignatureReq.equals(true)) {
+                Prefs.getInstance(applicationContext).saveBoolean("isSignatureReq",it.isSignatureReq)
+                Prefs.getInstance(applicationContext)
+                    .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
+                Prefs.getInstance(applicationContext)
+                    .saveBoolean("isother", it.isOtherCompanySignatureReq)
+                
+                val intent = Intent(this, PolicyDocsActivity::class.java)
+
+                intent.putExtra("signature_required", "0")
+                startActivity(intent)
+            } else {
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.putExtra("no_signature_required", "0")
+                startActivity(intent)
+            }
+
+        })
+
     }
 }

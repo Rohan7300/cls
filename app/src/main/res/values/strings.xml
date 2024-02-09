@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Celerity</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Hello Home fragment</string>
     <string name="place_the_r">
 Place the Rectangle area as on Vehicle Reg plate as shown in the image The app will automatically detect and capture the registration number upon recognition
 </string>
@@ -19,4 +19,17 @@ Place the Rectangle area as on Vehicle Reg plate as shown in the image The app w
     <string name="route_name">Route Name</string>
     <string name="celerity_ls">Celerity LS Delivery Driver Training Record</string>
     <string name="observation">Observations and explanations must be conducted on a Nursery Level 1 route. The new driver should make at least 50 unassisted deliveries, before being considered as fully trained. Where an individual is identified as not ready the On Site Manager must be made aware of the concerns and the development path to competency before the individual will be allowed to take a route out on their own. All sections must be completed.</string>
+    <string name="daily_clock_out_tasks">Daily Clock Out Tasks</string>
+    <string name="_3_complete_your_dvic_end_of_day_check">3. Complete your DVIC end of day check.</string>
+    <string name="_2_double_check_you_have_completed_daily_vehicle_check_all_defect_reported"><![CDATA[2. Double check you have completed daily vehicle check & all defect reported.]]></string>
+    <string name="_1_check_correct_route_information">1. Check correct route information.</string>
+    <string name="daily_da_tasks_after_shift">DAILY DA TASKS AFTER Shift:</string>
+    <string name="_4_log_out_of_amazon_flex">4. Log out of Amazon Flex.</string>
+    <string name="_5_clock_out_of_da_system">5. Clock out of DA System.</string>
+    <string name="lorem_ipsum_is_simply_dummy_text_of_the_printing_and_typesetting">Lorem Ipsum is simply dummy text of the printing and typesetting ....</string>
+    <string name="lorem_ipsum_is">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
+    <string name="use_email_as_user_name">Use Email as User name</string>
+    <string name="please_confirm">Please confirm if you want to use your Email as your username for Login</string>
+    <string name="use_email_as_username"><u>Use Email as Username</u></string>
+    <string name="enter_defect">Enter Defect*</string>
 </resources>

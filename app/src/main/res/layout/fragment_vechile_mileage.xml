@@ -191,7 +191,7 @@
             android:id="@+id/edt_mil"
             android:layout_width="335dp"
             android:layout_height="45dp"
-
+android:inputType="number"
             android:background="@drawable/shape_edittext_mileage"
             android:fontFamily="@font/poppins"
             android:gravity="center_horizontal|center_vertical"

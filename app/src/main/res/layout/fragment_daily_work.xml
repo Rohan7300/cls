@@ -12,6 +12,7 @@
             android:id="@+id/carconstraint"
             android:layout_width="match_parent"
             android:layout_height="152dp"
+
             android:layout_marginStart="20dp"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="20dp"
@@ -67,8 +68,18 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:id="@+id/constscamera"
                 android:layout_height="match_parent">
 
+                <TextureView
+                    android:id="@+id/camera_surface"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
                 <View
                     android:id="@+id/rectangle_4"
                     android:layout_width="match_parent"
@@ -78,7 +89,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+
                 <ImageView
+                    android:id="@+id/imageView5"
                     android:layout_width="66dp"
                     android:layout_height="66dp"
                     android:src="@drawable/camera_frame"

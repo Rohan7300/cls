@@ -31,18 +31,38 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putString(USER_ACCESS_TOKEN, value).apply()
         }
-
+    var userID: String
+        get() {
+            return sharedPreferences.getString("userID", " ") ?: " "
+        }
+        set(value) {
+            sharedPreferences.edit().putString("userID", value).apply()
+        }
     fun save(key: String?, value: String?) {
-        sharedPreferences. edit().putString(key, value).apply()
-
+        sharedPreferences.edit().putString(key, value).apply()
+        sharedPreferences.edit().apply()
     }
 
     // ============================================//
-     fun getSaveStrings(key: String?) {
-        sharedPreferences.edit().putString(key, key).apply()
+    operator fun get(key: String?): String? {
+        return sharedPreferences.getString(key, key)
+    }
+    fun setLastVisitedScreenId(context: Context,screenId: Int) {
+        sharedPreferences.edit().putInt("last_screen_id", screenId).apply()
     }
 
+    // Function to retrieve the last visited screen ID
+    fun getLastVisitedScreenId(context: Context): Int {
+        return sharedPreferences.getInt("last_screen_id", 0)
+    }
+    fun saveBoolean(key: String?, value: Boolean?) {
+        sharedPreferences.edit().putBoolean(key, value!!).apply()
+        sharedPreferences.edit().apply()
+    }
 
+    fun getBoolean(key: String?, keys: Boolean?): Boolean {
+        return sharedPreferences.getBoolean(key, keys!!)
+    }
     fun clearPreferences() {
         sharedPreferences.edit().clear().apply()
     }

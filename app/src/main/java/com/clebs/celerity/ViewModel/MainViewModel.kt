@@ -1,13 +1,18 @@
 package com.clebs.celerity.ViewModel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.clebs.celerity.models.GetVechileInformationResponse
+import com.clebs.celerity.models.GetsignatureInformation
 import com.clebs.celerity.models.LoginRequest
 import com.clebs.celerity.models.LoginResponse
+import com.clebs.celerity.models.logoutModel
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.ui.App
+import com.clebs.celerity.utils.Prefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -22,14 +27,50 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
 
         return responseLiveData
     }
-    fun getVichelinformationResponse(userID: Double, LmID: Double,VechileRegistrationno:String): MutableLiveData<GetVechileInformationResponse?> {
+
+    fun getVichelinformationResponse(
+        userID: Double,
+        LmID: Double,
+        VechileRegistrationno: String
+    ): MutableLiveData<GetVechileInformationResponse?> {
         val responseLiveData = MutableLiveData<GetVechileInformationResponse?>()
 
         viewModelScope.launch {
-            val response = repo.getVechileinformation(userID,LmID,VechileRegistrationno)
+            val response = repo.getVechileinformation(userID, LmID, VechileRegistrationno)
             responseLiveData.postValue(response)
         }
 
         return responseLiveData
+    }
+
+    fun getDriverSignatureInfo(userID: Double): MutableLiveData<GetsignatureInformation?> {
+        val responseLiveData = MutableLiveData<GetsignatureInformation?>()
+
+        viewModelScope.launch {
+            val response = repo.getDriverSignatureInfo(userID)
+            responseLiveData.postValue(response)
+        }
+
+        return responseLiveData
+
+    }
+    fun Logout(): MutableLiveData<logoutModel?> {
+        val responseLiveData = MutableLiveData<logoutModel?>()
+
+        viewModelScope.launch {
+            val response = repo.logout()
+            responseLiveData.postValue(response)
+        }
+
+        return responseLiveData
+
+    }
+
+    fun setLastVisitedScreenId(Context: Context, screenId: Int) {
+        Prefs.getInstance(App.instance).setLastVisitedScreenId(Context, screenId)
+    }
+
+    fun getLastVisitedScreenId(Context: Context): Int {
+        return Prefs.getInstance(App.instance).getLastVisitedScreenId(Context)
     }
 }

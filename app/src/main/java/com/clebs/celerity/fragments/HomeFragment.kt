@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentHomeBinding
+import com.clebs.celerity.interfaces.BottomNavigationProvider
+import com.clebs.celerity.ui.HomeActivity
 import com.ncorti.slidetoact.SlideToActView
 
 /**
@@ -32,31 +35,34 @@ class HomeFragment : Fragment() {
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentHomeBinding.inflate(inflater, container, false)
         }
-        mbinding.arroww.alpha=1f
+
+        mbinding.arroww.alpha = 1f
         mbinding.slideact.bumpVibration = 50
-        mbinding.slideact.onSlideToActAnimationEventListener=(object :SlideToActView.OnSlideToActAnimationEventListener{
-            override fun onSlideCompleteAnimationEnded(view: SlideToActView) {
-                mbinding.arroww.alpha=0f
-            }
+        mbinding.slideact.onSlideToActAnimationEventListener =
+            (object : SlideToActView.OnSlideToActAnimationEventListener {
+                override fun onSlideCompleteAnimationEnded(view: SlideToActView) {
+                    mbinding.arroww.alpha = 0.0f
+                }
 
-            override fun onSlideCompleteAnimationStarted(view: SlideToActView, threshold: Float) {
-                mbinding.arroww.alpha=0.2f
-            }
+                override fun onSlideCompleteAnimationStarted(
+                    view: SlideToActView,
+                    threshold: Float
+                ) {
+                    mbinding.arroww.alpha = 0.1f
+                }
 
-            override fun onSlideResetAnimationEnded(view: SlideToActView) {
-                mbinding.arroww.alpha=1f
-            }
+                override fun onSlideResetAnimationEnded(view: SlideToActView) {
+                    mbinding.arroww.alpha = 1f
+                }
 
-            override fun onSlideResetAnimationStarted(view: SlideToActView) {
+                override fun onSlideResetAnimationStarted(view: SlideToActView) {
 
-            }
+                }
 
-        })
+            })
         mbinding.slideact.onSlideCompleteListener =
             (object : SlideToActView.OnSlideCompleteListener {
                 override fun onSlideComplete(view: SlideToActView) {
-
-
                     findNavController().navigate(R.id.dailyWorkFragment)
 
 

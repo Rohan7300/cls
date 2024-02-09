@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.VechileMileageFragment">
+
+        <RelativeLayout
+            android:id="@+id/rlinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/headings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_user" />
+
+                <TextView
+                    android:id="@+id/ana_carolin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:gravity="center_horizontal|top"
+                    android:letterSpacing="0.04"
+                    android:lineSpacingExtra="0.02dp"
+                    android:text="@string/ana_carolin"
+                    android:textColor="#231F20"
+                    android:textSize="19sp" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/headings"
+                android:layout_marginStart="20dp"
+
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/pin_alt_light_two"></ImageView>
+
+                    <TextView
+                        android:id="@+id/dxm4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter"
+                        android:letterSpacing="0.03"
+                        android:text="@string/dxm4"
+                        android:textColor="#231F20"
+                        android:textSize="15sp"
+
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/pin_alt_light_two"></ImageView>
+
+                    <TextView
+                        android:id="@+id/dxm42"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter"
+                        android:gravity="center_horizontal|top"
+                        android:letterSpacing="0.03"
+                        android:text="@string/dxm4"
+                        android:textColor="#231F20"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/pin_alt_light_two"></ImageView>
+
+                    <TextView
+                        android:id="@+id/dxm5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter"
+                        android:gravity="center_horizontal|top"
+                        android:letterSpacing="0.03"
+                        android:text="@string/dxm4"
+                        android:textColor="#231F20"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/img_mileage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="35dp"
+            android:src="@drawable/windscreen_ic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rlinfo" />
+
+        <TextView
+            android:id="@+id/vehicle_mil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:gravity="top"
+            android:lineHeight="30sp"
+            android:text="Breaks / ABS / EBS"
+            android:textColor="#4A4A4A"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_mileage" />
+
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedcsroll"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:clipToPadding="false"
+
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:paddingTop="16dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_next"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vehicle_mil">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/const_upload"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/edt_mils_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/edt_mil"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/shape_textview_radio_button"
+                        android:fontFamily="@font/inter"
+                        android:gravity="center_vertical"
+                        android:letterSpacing="0.02"
+                        android:lineHeight="18sp"
+                        android:padding="16dp"
+                        android:text="Defect"
+                        android:textColor="#4A4A4A"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/image_radio"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/round_circle_white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/edt_mil"
+                        app:layout_constraintHorizontal_bias="0.933"
+                        app:layout_constraintStart_toStartOf="@+id/edt_mil"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_upload_defect"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_mils_layout">
+
+                    <EditText
+                        android:id="@+id/edt_defect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/shape_edittext_mileage"
+                        android:fontFamily="@font/poppins"
+
+                        android:gravity="center_vertical"
+                        android:hint="Enter Defect*"
+                        android:letterSpacing="0.03"
+                        android:lineHeight="18sp"
+                        android:padding="20dp"
+                        android:textColor="@color/orange"
+                        android:textColorHint="#AAB9CF"
+                        android:textCursorDrawable="@drawable/txt_cursor_drawable"
+                        android:textSize="15sp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/edt_defect"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginEnd="20dp">
+
+                        <ImageView
+                            android:layout_width="62dp"
+                            android:layout_height="44dp"
+                            android:src="@drawable/upload_bt" />
+
+                        <TextView
+                            android:id="@+id/upload_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:fontFamily="@font/inter"
+                            android:letterSpacing="0.02"
+                            android:text="Upload Image"
+                            android:textColor="#231F20"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/upload_txt_two"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_toRightOf="@+id/upload_txt"
+                            android:fontFamily="@font/inter"
+                            android:gravity="center_vertical"
+                            android:letterSpacing="0.02"
+                            android:text=" (Optional)"
+                            android:textColor="#4A4A4A"
+                            android:textSize="13sp" />
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/edt_mils_layout_two"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_upload_defect">
+
+                    <TextView
+                        android:id="@+id/edt_mil_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/shape_textview_radio_button"
+                        android:fontFamily="@font/inter"
+                        android:gravity="center_vertical"
+                        android:letterSpacing="0.02"
+                        android:lineHeight="18sp"
+                        android:padding="16dp"
+                        android:text="Functional"
+                        android:textColor="#4A4A4A"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/image_radio_two"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/round_circle_white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/edt_mil_two"
+                        app:layout_constraintHorizontal_bias="0.933"
+                        app:layout_constraintStart_toStartOf="@+id/edt_mil_two"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_upload_defect_two"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_mils_layout_two">
+
+                    <EditText
+                        android:id="@+id/edt_defect_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/shape_edittext_mileage"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="center_vertical"
+                        android:hint="Enter Defect*"
+                        android:letterSpacing="0.03"
+                        android:lineHeight="18sp"
+                        android:padding="20dp"
+                        android:textColor="@color/orange"
+                        android:textColorHint="#AAB9CF"
+                        android:textCursorDrawable="@drawable/txt_cursor_drawable"
+                        android:textSize="15sp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/edt_defect_two"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginEnd="20dp">
+
+                        <ImageView
+                            android:layout_width="62dp"
+                            android:layout_height="44dp"
+                            android:src="@drawable/upload_bt" />
+
+                        <TextView
+                            android:id="@+id/upload_txt_two_me"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:fontFamily="@font/inter"
+                            android:letterSpacing="0.02"
+                            android:text="Upload Image"
+                            android:textColor="#231F20"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/upload_txt_two_new"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:layout_toRightOf="@+id/upload_txt_two_me"
+                            android:fontFamily="@font/inter"
+                            android:gravity="center_vertical"
+                            android:letterSpacing="0.02"
+                            android:text=" (Optional)"
+                            android:textColor="#4A4A4A"
+                            android:textSize="13sp" />
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+        <TextView
+            android:id="@+id/tv_next"
+            style="@style/ctaStyle1"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:enabled="false"
+            android:fontFamily="@font/inter"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Save &amp; Next"
+            android:textAllCaps="false"
+            android:textColor="#F36C2E"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

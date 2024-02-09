@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.PolicyDocsFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constss"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/policy_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/poppins_bold"
+                android:letterSpacing="0.02"
+                android:text="Policy Documents"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_policy"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/polic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/policy_title" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ScrollView
+            android:id="@+id/crolls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/constss"
+
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:id="@+id/lls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/ll_amazon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_amazon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:letterSpacing="0.02"
+                        android:text="Amazon Logistics"
+                        android:textColor="@color/text_color"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/img_policy" />
+
+                    <View
+                        android:id="@+id/views1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="20dp"
+                        android:background="@color/text_color"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_amazon" />
+
+                    <LinearLayout
+                        android:id="@+id/llones"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:layout_marginTop="30dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@id/views1">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="30dp">
+
+                            <TextView
+                                android:id="@+id/txtSla"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="SLA"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/img"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadic"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txtSla"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadic"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/upload_icc" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:layout_marginTop="30dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/llones">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="30dp">
+
+                            <TextView
+                                android:id="@+id/txtprivacy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="Privacy Policy"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/img2"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadic2"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txtprivacy"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadic2"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/upload_icc" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:layout_marginTop="30dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/lltwos">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="30dp">
+
+                            <TextView
+                                android:id="@+id/txtgdpr"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="GDPR Policy"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/img3"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadic3"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txtgdpr"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadic3"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/upload_icc" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:layout_marginTop="30dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/ll3">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="30dp">
+
+                            <TextView
+                                android:id="@+id/txtDA"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="DA Engagement Policy"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/img4"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadic4"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txtDA"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadic4"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/upload_icc" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llsix"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:layout_marginTop="30dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/ll4">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="30dp">
+
+                            <TextView
+                                android:id="@+id/txtDAhand"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="DA Hand Book Policy"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/img5"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadic5"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txtDAhand"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadic5"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/upload_icc" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/viewss"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.05dp"
+                        android:layout_margin="20dp"
+                        android:background="@color/text_color" />
+
+                    <LinearLayout
+                        android:id="@+id/check"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/textview_acknowledgement"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.checkbox.MaterialCheckBox
+                            android:id="@+id/checkbox"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="2dp"
+                            android:background="@drawable/checbox_selector"
+                            android:button="@null" />
+
+                        <TextView
+                            android:id="@+id/tick_to_ack"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:fontFamily="@font/inter"
+                            android:gravity="start"
+                            android:letterSpacing="0.02"
+                            android:lineSpacingExtra="1sp"
+                            android:text="@string/tick_to_ack"
+                            android:textColor="#2C2728"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_trucks"
+                    android:layout_width="match_parent"
+
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="60dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Trucks"
+                        android:textColor="@color/text_color"
+                        android:textSize="20sp" />
+
+                    <View
+                        android:id="@+id/viewss2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.05dp"
+                        android:layout_margin="20dp"
+                        android:background="@color/text_color" />
+
+                    <LinearLayout
+                        android:id="@+id/llseven"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/ll4">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="30dp">
+
+                            <TextView
+                                android:id="@+id/txtslapolicy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="DA Hand Book Policy"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/img6"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadic6"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txtslapolicy"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadic6"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/upload_icc" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/lleight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:layout_marginTop="30dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/ll4">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="30dp">
+
+                            <TextView
+                                android:id="@+id/txteight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="DA Hand Book Policy"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/img7"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadic7"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txteight"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadic7"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/upload_icc" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llnine"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:layout_marginTop="30dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/ll4">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="30dp">
+
+                            <TextView
+                                android:id="@+id/txtnine"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="DA Hand Book Policy"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/img9"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadic9"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txtnine"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadic9"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/upload_icc" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:layout_marginTop="30dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/ll4">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="30dp">
+
+                            <TextView
+                                android:id="@+id/txt10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="DA Hand Book Policy"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/img10"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadic10"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txt10"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadic10"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/upload_icc" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll11"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:layout_marginTop="30dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/ll4">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="30dp">
+
+                            <TextView
+                                android:id="@+id/txtDA11"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="DA Hand Book Policy"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/img11"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadic11"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txtDA11"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadic11"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/upload_icc" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/check2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ll11"
+                        android:layout_marginTop="0dp"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <com.google.android.material.checkbox.MaterialCheckBox
+                            android:id="@+id/checkbox2"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="2dp"
+                            android:background="@drawable/checbox_selector"
+                            android:button="@null" />
+
+                        <TextView
+                            android:id="@+id/tick_to_ack2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:fontFamily="@font/inter"
+                            android:gravity="start"
+                            android:letterSpacing="0.02"
+                            android:lineSpacingExtra="1sp"
+                            android:text="@string/tick_to_ack"
+                            android:textColor="#2C2728"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/scanll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/constss"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+
+                android:fontFamily="@font/poppins"
+                android:letterSpacing="0.02"
+                android:text="Sign here"
+                android:textColor="@color/text_color"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:background="@drawable/scan_area_background"
+                android:nestedScrollingEnabled="false">
+
+                <nsmarinro.librarysignature.SignatureView
+                    android:id="@+id/signatureView"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:backgroundTint="#FEF0EA"
+                    android:descendantFocusability="beforeDescendants"
+                    android:focusableInTouchMode="true"
+                    android:nestedScrollingEnabled="false"
+
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:background="@drawable/shape_edittext_onroad"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/baseline_autorenew_24" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/poppins"
+                    android:letterSpacing="0.02"
+                    android:text="Retry"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/ctaStyle1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:fontFamily="@font/poppins"
+                android:gravity="center"
+                android:letterSpacing="0.02"
+                android:padding="16dp"
+                android:text="Sign agreement"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>
+
+

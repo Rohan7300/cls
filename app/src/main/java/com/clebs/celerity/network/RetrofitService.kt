@@ -25,6 +25,7 @@ object RetrofitService {
     private const val BASE_URL = "http://182.64.1.105:8119/"
 
     fun getInstance(): Retrofit {
+
         val builder = OkHttpClient.Builder()
 
         builder.readTimeout(5, TimeUnit.MINUTES)
