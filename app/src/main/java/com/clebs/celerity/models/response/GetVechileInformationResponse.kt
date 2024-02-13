@@ -1,4 +1,4 @@
-package com.clebs.celerity.models
+package com.clebs.celerity.models.response
 
 
 import android.os.Parcelable
@@ -9,6 +9,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Keep
 data class GetVechileInformationResponse(
+
+
     @SerializedName("VehicleLastMillage")
     val vehicleLastMillage: Int,
     @SerializedName("VmDaVehStatusId")

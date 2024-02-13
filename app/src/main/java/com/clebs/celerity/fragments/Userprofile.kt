@@ -4,20 +4,25 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
-import com.clebs.celerity.databinding.FragmentDailyWorkBinding
-import com.clebs.celerity.databinding.FragmentHomeBinding
+import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentUserprofileBinding
+import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
+
+import com.clebs.celerity.network.ApiService
+import com.clebs.celerity.network.RetrofitService
+import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.ui.App
+import com.clebs.celerity.utils.Prefs
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,7 +37,7 @@ private const val ARG_PARAM2 = "param2"
 class Userprofile : Fragment() {
     lateinit var mbinding: FragmentUserprofileBinding
     private var isedit: Boolean = false
-
+    lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +52,15 @@ class Userprofile : Fragment() {
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentUserprofileBinding.inflate(inflater, container, false)
         }
+
+        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+        val mainRepo = MainRepo(apiService)
+
+        mainViewModel =
+            ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
+
+        GetDriversBasicInformation()
+
         mbinding.editImg.setOnClickListener {
             if (isedit) {
                 mbinding.save.visibility = View.VISIBLE
@@ -134,4 +148,23 @@ class Userprofile : Fragment() {
 
     }
 
+    fun GetDriversBasicInformation() {
+        mbinding.pb.visibility = View.VISIBLE
+
+        mainViewModel.GetDriversBasicInformation(
+            GetDriverBasicInfoRequest(Prefs.getInstance(App.instance).userID.toDouble()))
+            .observe(requireActivity(),
+                Observer {
+                    if (it!=null){
+                            Log.e("responseprofile", "GetDriversBasicInformation: ")
+                            mbinding.name.text = it.firstName+" "+it.lastName
+                            mbinding.emailtext.setText(it.emailID)
+                            mbinding.pb.visibility = View.GONE
+                        }
+
+
+
+                })
+
+    }
 }

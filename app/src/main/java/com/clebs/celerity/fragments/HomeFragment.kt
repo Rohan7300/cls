@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
             mbinding = FragmentHomeBinding.inflate(inflater, container, false)
         }
 
-        mbinding.arroww.alpha = 1f
+
         mbinding.slideact.bumpVibration = 50
         mbinding.slideact.onSlideToActAnimationEventListener =
             (object : SlideToActView.OnSlideToActAnimationEventListener {
@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
                 }
 
                 override fun onSlideResetAnimationEnded(view: SlideToActView) {
-                    mbinding.arroww.alpha = 1f
+                    mbinding.arroww.alpha = 0f
                 }
 
                 override fun onSlideResetAnimationStarted(view: SlideToActView) {
@@ -63,6 +63,7 @@ class HomeFragment : Fragment() {
         mbinding.slideact.onSlideCompleteListener =
             (object : SlideToActView.OnSlideCompleteListener {
                 override fun onSlideComplete(view: SlideToActView) {
+                    mbinding.arroww.alpha = 0f
                     findNavController().navigate(R.id.dailyWorkFragment)
 
 
@@ -71,6 +72,7 @@ class HomeFragment : Fragment() {
             })
         mbinding.slideact.onSlideResetListener = (object : SlideToActView.OnSlideResetListener {
             override fun onSlideReset(view: SlideToActView) {
+                mbinding.arroww.alpha = 1f
                 mbinding.arroww.visibility = View.VISIBLE
             }
         })

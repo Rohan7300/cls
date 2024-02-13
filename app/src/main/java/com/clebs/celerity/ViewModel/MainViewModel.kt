@@ -1,19 +1,19 @@
 package com.clebs.celerity.ViewModel
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.clebs.celerity.models.GetVechileInformationResponse
-import com.clebs.celerity.models.GetsignatureInformation
-import com.clebs.celerity.models.LoginRequest
-import com.clebs.celerity.models.LoginResponse
-import com.clebs.celerity.models.logoutModel
+import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
+import com.clebs.celerity.models.response.DriversBasicInformationModel
+import com.clebs.celerity.models.response.GetVechileInformationResponse
+import com.clebs.celerity.models.response.GetsignatureInformation
+import com.clebs.celerity.models.requests.LoginRequest
+import com.clebs.celerity.models.response.LoginResponse
+import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.Prefs
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val repo: MainRepo) : ViewModel() {
@@ -59,6 +59,18 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
 
         viewModelScope.launch {
             val response = repo.logout()
+            responseLiveData.postValue(response)
+        }
+
+        return responseLiveData
+
+    }
+
+    fun GetDriversBasicInformation(GetdriverBasicInforequest: GetDriverBasicInfoRequest): MutableLiveData<DriversBasicInformationModel?> {
+        val responseLiveData = MutableLiveData<DriversBasicInformationModel?>()
+
+        viewModelScope.launch {
+            val response = repo.GetDriversBasicInfo(GetdriverBasicInforequest)
             responseLiveData.postValue(response)
         }
 

@@ -1,4 +1,4 @@
-package com.clebs.celerity.models
+package com.clebs.celerity.models.requests
 
 
 import com.google.gson.annotations.SerializedName

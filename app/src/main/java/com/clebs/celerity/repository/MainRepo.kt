@@ -1,16 +1,13 @@
 package com.clebs.celerity.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.clebs.celerity.models.GetVechileInformationResponse
-import com.clebs.celerity.models.GetsignatureInformation
-import com.clebs.celerity.models.LoginRequest
-import com.clebs.celerity.models.LoginResponse
-import com.clebs.celerity.models.logoutModel
+import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
+import com.clebs.celerity.models.response.DriversBasicInformationModel
+import com.clebs.celerity.models.response.GetVechileInformationResponse
+import com.clebs.celerity.models.response.GetsignatureInformation
+import com.clebs.celerity.models.requests.LoginRequest
+import com.clebs.celerity.models.response.LoginResponse
+import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.network.ApiService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class MainRepo(private val ApiService: ApiService) {
 
@@ -49,5 +46,11 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
-
+    suspend fun GetDriversBasicInfo(GetDriverBasicRequest: GetDriverBasicInfoRequest): DriversBasicInformationModel? {
+        val response = ApiService.GetDriversBasicInfo(GetDriverBasicRequest)
+        if (response.isSuccessful) {
+            return response.body()
+        }
+        return null
+    }
 }
