@@ -35,6 +35,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     lateinit var navController: NavController
     private lateinit var viewModel: MainViewModel
     private lateinit var navGraph: NavGraph
+    var checked: String? = ""
 
     companion object {
         fun showLog(tag: String, message: String) {
@@ -74,12 +75,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
 
 
+        checkIftodayCheckIsDone()
+
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
 
                 R.id.home -> {
 
-                        navController.navigate(R.id.homedemoFragment)
+                    navController.navigate(R.id.homedemoFragment)
 
 
 
@@ -95,7 +98,15 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                     } else {
                         navController.popBackStack()
-                        navController.navigate(screenid)
+                        if (screenid.equals(R.id.vechileMileageFragment)) {
+                            if (checked.equals("1")) {
+                                navController.navigate(R.id.completeTaskFragment)
+
+                            }
+                        } else {
+                            navController.navigate(screenid)
+                        }
+
                         navController.currentDestination!!.id = screenid
 
                     }
@@ -113,14 +124,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                 R.id.passwords -> {
 
-                    ActivityHomeBinding.title.text="Notifications"
+                    ActivityHomeBinding.title.text = "Notifications"
                     navController.navigate(R.id.notifficationsFragment)
 
                     true
                 }
 
                 R.id.tickets -> {
-                    ActivityHomeBinding.title.text="User Tickets"
+                    ActivityHomeBinding.title.text = "User Tickets"
                     navController.navigate(R.id.userTicketsFragment)
 
                     true
@@ -177,16 +188,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
             super.onBackPressed()
         } else {
-//            when (navController.currentDestination?.id) {
-//
-//                R.id.windScreenFragment -> {
-//
-//                    navController.navigateUp()
-//
-//                }
 
-//            }
-            // Allow back press for other views
 
         }
     }
@@ -199,5 +201,22 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     private fun setLoggedIn(isLoggedIn: Boolean) {
         Prefs.getInstance(applicationContext).saveBoolean("isLoggedIn", isLoggedIn)
+    }
+
+    fun checkIftodayCheckIsDone() {
+
+
+        viewModel.CheckIFTodayCheckIsDone().observe(this@HomeActivity, Observer {
+            if (it != null) {
+                Log.e("ldkkcjvckvjc", "checkIftodayCheckIsDone: ")
+                if (it.isSubmited.equals(true)) {
+                    checked = "1"
+                } else {
+                    checked = "0"
+                }
+
+            }
+
+        })
     }
 }

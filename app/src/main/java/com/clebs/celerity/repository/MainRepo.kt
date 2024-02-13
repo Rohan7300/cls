@@ -7,6 +7,7 @@ import com.clebs.celerity.models.response.GetsignatureInformation
 import com.clebs.celerity.models.requests.LoginRequest
 import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
+import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.network.ApiService
 
 class MainRepo(private val ApiService: ApiService) {
@@ -48,6 +49,14 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun GetDriversBasicInfo(GetDriverBasicRequest: GetDriverBasicInfoRequest): DriversBasicInformationModel? {
         val response = ApiService.GetDriversBasicInfo(GetDriverBasicRequest)
+        if (response.isSuccessful) {
+            return response.body()
+        }
+        return null
+    }
+
+    suspend fun CheckIFTodayCheckIsDone(): CheckIFTodayCheckIsDone? {
+        val response = ApiService.CheckifTodayCheckIsDone()
         if (response.isSuccessful) {
             return response.body()
         }

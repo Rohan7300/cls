@@ -11,6 +11,7 @@ import com.clebs.celerity.models.response.GetsignatureInformation
 import com.clebs.celerity.models.requests.LoginRequest
 import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
+import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.Prefs
@@ -77,7 +78,17 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         return responseLiveData
 
     }
+    fun CheckIFTodayCheckIsDone(): MutableLiveData<CheckIFTodayCheckIsDone?> {
+        val responseLiveData = MutableLiveData<CheckIFTodayCheckIsDone?>()
 
+        viewModelScope.launch {
+            val response = repo.CheckIFTodayCheckIsDone()
+            responseLiveData.postValue(response)
+        }
+
+        return responseLiveData
+
+    }
     fun setLastVisitedScreenId(Context: Context, screenId: Int) {
         Prefs.getInstance(App.instance).setLastVisitedScreenId(Context, screenId)
     }

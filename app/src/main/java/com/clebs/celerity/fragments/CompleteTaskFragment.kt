@@ -15,8 +15,14 @@ import android.widget.EditText
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
+import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
+import com.clebs.celerity.network.ApiService
+import com.clebs.celerity.network.RetrofitService
+import com.clebs.celerity.repository.MainRepo
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -33,7 +39,7 @@ class CompleteTaskFragment : Fragment() {
     lateinit var mbinding: FragmentCompleteTaskBinding
     private var isclicked: Boolean = true
     private var isclickedtwo: Boolean = true
-
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +61,12 @@ class CompleteTaskFragment : Fragment() {
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
 
+        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+        val mainRepo = MainRepo(apiService)
+        viewModel =
+            ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
 
-
+        viewModel.setLastVisitedScreenId(requireContext(), R.id.completeTaskFragment)
 
 
 

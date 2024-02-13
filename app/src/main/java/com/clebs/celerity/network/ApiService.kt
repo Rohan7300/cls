@@ -13,6 +13,7 @@ import com.clebs.celerity.models.requests.SaveBreakStartEndTImeRequestModel
 import com.clebs.celerity.models.requests.SaveDriverDocumentSignatureRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.logoutModel
+import com.clebs.celerity.models.response.BaseResponse
 
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
@@ -43,11 +44,11 @@ interface ApiService {
     suspend fun  GetDriversBasicInfo(@Body body: GetDriverBasicInfoRequest):Response<DriversBasicInformationModel>
 
 
-//    @POST("/api/DaDailyWorks/SaveBreakStartAndEndTime")
-//    suspend fun  SaveBreakStartEndTime(@Body body: SaveBreakStartEndTImeRequestModel):Response<BaseResponse>
-//
-//    @POST("/api/DailyWorks/SaveVehDefectSheet")
-//    suspend fun  SaveVichileDeffectSheet(@Body body: SaveVechileDefectSheetRequest):Response<BaseResponse>
+    @POST("/api/DaDailyWorks/SaveBreakStartAndEndTime")
+    suspend fun  SaveBreakStartEndTime(@Body body: SaveBreakStartEndTImeRequestModel):Response<BaseResponse>
+
+    @POST("/api/DailyWorks/SaveVehDefectSheet")
+    suspend fun  SaveVichileDeffectSheet(@Body body: SaveVechileDefectSheetRequest):Response<BaseResponse>
 
     @POST("/api/DailyWorks/GetDefectSheetBasicInfo")
     suspend fun GetDefectSheetBasicInfo(@Body body: GetDefectSheetBasicInfoRequestModel) : Response<GetDefectSheetBasicInfoResponse>
@@ -58,10 +59,10 @@ interface ApiService {
     @GET("/api/DailyWorks/GetDetailsDailyWork/{dwId}")
     suspend fun GetDailyworkDetails(@Path("dwid") dwid: Double):Response<GetDailyWorkDetailsResponse>
 
-//    @POST("/api/DailyWorks/CreateDailyWork")
-//    suspend fun createDailyWork(@Body body: CreateDaikyworkRequestBody) :Response<BaseResponse>
-//
-//    @POST("/api/Drivers/SaveDriverDocumentSingature")
-//    suspend fun  saveDriversDocumentSignature(@Body body: SaveDriverDocumentSignatureRequest) : Response<BaseResponse>
+    @POST("/api/DailyWorks/CreateDailyWork")
+    suspend fun createDailyWork(@Body body: CreateDaikyworkRequestBody) :Response<BaseResponse>
+
+    @POST("/api/Drivers/SaveDriverDocumentSingature")
+    suspend fun  saveDriversDocumentSignature(@Body body: SaveDriverDocumentSignatureRequest) : Response<BaseResponse>
 
 }
