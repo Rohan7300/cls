@@ -1,9 +1,16 @@
 package com.clebs.celerity.ui
 
+import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -35,13 +42,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     lateinit var navController: NavController
     private lateinit var viewModel: MainViewModel
     private lateinit var navGraph: NavGraph
-    var checked: String? = ""
+
 
     companion object {
         fun showLog(tag: String, message: String) {
             Log.e(tag, message)
         }
 
+        var checked: String? = ""
         var Boolean: Boolean = false
     }
 
@@ -83,28 +91,36 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 R.id.home -> {
 
                     navController.navigate(R.id.homedemoFragment)
-
+                    ActivityHomeBinding.title.text = " "
 
 
                     true
                 }
 
                 R.id.daily -> {
-
+                    ActivityHomeBinding.title.text = " "
                     screenid = viewModel.getLastVisitedScreenId(this)
                     if (screenid.equals(0)) {
-                        navController.navigate(R.id.homeFragment)
-                        navController.currentDestination!!.id = R.id.homeFragment
+                        if (checked.equals("1")) {
+                            navController.navigate(R.id.completeTaskFragment)
+                            navController.currentDestination!!.id = R.id.completeTaskFragment
+
+                        } else {
+                            navController.navigate(R.id.homeFragment)
+                            navController.currentDestination!!.id = R.id.homeFragment
+                        }
+
 
                     } else {
-                        navController.popBackStack()
-                        if (screenid.equals(R.id.vechileMileageFragment)) {
-                            if (checked.equals("1")) {
-                                navController.navigate(R.id.completeTaskFragment)
+//                        navController.popBackStack()
+                        if (checked.equals("1")) {
+                            navController.navigate(R.id.completeTaskFragment)
+                            navController.currentDestination!!.id = R.id.completeTaskFragment
 
-                            }
+
                         } else {
                             navController.navigate(screenid)
+                            navController.currentDestination!!.id = screenid
                         }
 
                         navController.currentDestination!!.id = screenid
@@ -117,7 +133,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
 
                     navController.navigate(R.id.invoicesFragment)
-
+                    ActivityHomeBinding.title.text = " "
 
                     true
                 }
@@ -143,7 +159,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         }
         ActivityHomeBinding.imgLogout.setOnClickListener {
-            logout()
+//            logout()
+            showAlertLogout()
 
         }
 
@@ -156,13 +173,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     fun logout() {
+
         viewModel.Logout().observe(this@HomeActivity, Observer {
-
             if (it!!.responseType.equals("Success")) {
-
                 val intent = Intent(this, LoginActivity::class.java)
                 intent.putExtra("logout", "0")
-
+                finish()
                 startActivity(intent)
                 setLoggedIn(false)
             }
@@ -179,7 +195,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             when (navController.currentDestination?.id) {
 
                 R.id.windScreenFragment -> {
-
                     navController.navigateUp()
 
                 }
@@ -204,8 +219,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     fun checkIftodayCheckIsDone() {
-
-
         viewModel.CheckIFTodayCheckIsDone().observe(this@HomeActivity, Observer {
             if (it != null) {
                 Log.e("ldkkcjvckvjc", "checkIftodayCheckIsDone: ")
@@ -218,5 +231,31 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
         })
+    }
+
+    fun showAlertLogout() {
+        val factory = LayoutInflater.from(this)
+        val view: View = factory.inflate(R.layout.logout_layout, null)
+        val deleteDialog: AlertDialog = AlertDialog.Builder(this).create()
+        val imageView: ImageView = view.findViewById(R.id.ic_cross_orange)
+        imageView.setOnClickListener {
+            deleteDialog.dismiss()
+        }
+        val btone:Button=view.findViewById(R.id.bt_no)
+        val bttwo:Button=view.findViewById(R.id.bt_yes)
+
+        btone.setOnClickListener {
+            deleteDialog.dismiss()
+        }
+
+        bttwo.setOnClickListener {
+            logout()
+        }
+        deleteDialog.setView(view)
+        deleteDialog.setCanceledOnTouchOutside(false);
+        deleteDialog.setCancelable(false)
+        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        deleteDialog.show();
+
     }
 }

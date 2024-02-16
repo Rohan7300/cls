@@ -32,24 +32,19 @@ lateinit var ActivitySplashBinding : ActivitySplashBinding
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
         android.os.Handler().postDelayed({
-            // on below line we are
-            // creating a new intent
+
             if (isLoggedIn()) {
                 navigateToHomeScreen()
             } else {
                 navigateToLoginScreen()
             }
 
-            // on the below line we are finishing
-            // our current activity.
             finish()
         }, 3000)
     }
     private fun isLoggedIn(): Boolean {
         return Prefs.getInstance(applicationContext).getBoolean("isLoggedIn", false)
-        // Check if the user is logged in
-        // You can use shared preferences or any other mechanism to store the login state
-        // Return true if the user is logged in, false otherwise
+
     }
 
     fun navigateToLoginScreen() {

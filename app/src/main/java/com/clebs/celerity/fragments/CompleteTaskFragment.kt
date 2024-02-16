@@ -16,6 +16,7 @@ import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -23,6 +24,7 @@ import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.ui.HomeActivity.Companion.checked
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -68,7 +70,10 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.setLastVisitedScreenId(requireContext(), R.id.completeTaskFragment)
 
+        if (checked.equals("0")) {
+            findNavController().navigate(R.id.vechileMileageFragment)
 
+        }
 
 
 
@@ -83,7 +88,6 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.taskDetails.visibility = View.GONE
                 mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
                 mbinding.view2.visibility = View.GONE
-                mbinding.uploadLayouts.visibility = View.VISIBLE
 
             }
             isclicked = !isclicked
@@ -92,7 +96,7 @@ class CompleteTaskFragment : Fragment() {
         mbinding.run {
 
 
-            mbinding.tvNext.isEnabled = !isclicked
+
             if (tvNext.isEnabled) {
                 tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
             } else {
@@ -103,10 +107,9 @@ class CompleteTaskFragment : Fragment() {
         mbinding.tvNext.setOnClickListener {
             if (isclickedtwo) {
 
-                mbinding.uploadLayouts.visibility = View.GONE
+
             } else {
 
-                mbinding.uploadLayouts.visibility = View.VISIBLE
             }
             isclickedtwo = !isclickedtwo
         }

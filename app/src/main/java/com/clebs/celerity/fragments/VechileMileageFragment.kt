@@ -94,7 +94,9 @@ class VechileMileageFragment : Fragment() {
 
         }
         mbinding.tvNext.setOnClickListener {
-            findNavController().navigate(R.id.windScreenFragment)
+            val bundle= Bundle()
+            bundle.putString("vm_mileage",mbinding.edtMil.text.toString())
+            findNavController().navigate(R.id.windScreenFragment,bundle)
         }
         return mbinding.root
     }

@@ -67,34 +67,49 @@
             app:layout_constraintTop_toBottomOf="@+id/carconstraint">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
                 android:id="@+id/constscamera"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextureView
-                    android:id="@+id/camera_surface"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-                <View
+
+                <ImageView
                     android:id="@+id/rectangle_4"
                     android:layout_width="match_parent"
                     android:layout_height="123dp"
                     android:background="@drawable/vectors"
+
+                    android:foregroundGravity="fill"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+
+                <androidx.camera.view.PreviewView
+                    android:id="@+id/rectange"
+                    android:layout_width="match_parent"
+                    android:layout_height="123dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ProgressBar
+                    android:id="@+id/pb"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:indeterminateTint="@color/orange"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/rectangle_4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/rectangle_4" />
 
                 <ImageView
                     android:id="@+id/imageView5"
                     android:layout_width="66dp"
                     android:layout_height="66dp"
                     android:src="@drawable/camera_frame"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/rectangle_4"
                     app:layout_constraintStart_toStartOf="parent"
@@ -106,6 +121,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -156,6 +172,23 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_take_photo"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/bg_white_round_accent_ripple"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/baseline_photo_camera_24"
+            android:tint="@color/orange"
+            android:visibility="gone"
+            app:contentPadding="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
+            app:layout_constraintEnd_toEndOf="@+id/scan_layout"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="@+id/scan_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

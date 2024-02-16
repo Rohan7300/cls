@@ -134,7 +134,9 @@ class Userprofile : Fragment() {
         deleteDialog.setView(view)
         textview_yes.setOnClickListener {
 
+            UseEmailAsUSername()
             deleteDialog.dismiss()
+
         }
         textview_no.setOnClickListener {
 
@@ -150,21 +152,41 @@ class Userprofile : Fragment() {
 
     fun GetDriversBasicInformation() {
         mbinding.pb.visibility = View.VISIBLE
-
+        mbinding.FormLayout.alpha = 0.5f
         mainViewModel.GetDriversBasicInformation(
-            GetDriverBasicInfoRequest(Prefs.getInstance(App.instance).userID.toDouble()))
+            GetDriverBasicInfoRequest(Prefs.getInstance(App.instance).userID.toDouble())
+        )
             .observe(requireActivity(),
                 Observer {
-                    if (it!=null){
-                            Log.e("responseprofile", "GetDriversBasicInformation: ")
-                            mbinding.name.text = it.firstName+" "+it.lastName
-                            mbinding.emailtext.setText(it.emailID)
-                            mbinding.pb.visibility = View.GONE
-                        }
+                    if (it != null) {
+                        Log.e("responseprofile", "GetDriversBasicInformation: ")
+                        mbinding.name.text = it.firstName + " " + it.lastName
+                        mbinding.usertext.setText(it.firstName + " " + it.lastName)
+                        mbinding.emailtext.setText(it.emailID)
+                        mbinding.passtext.setText("**********")
+                        mbinding.phonetext.setText(it.PhoneNumber)
+                        mbinding.addresstext.setText(it.Address)
+                        mbinding.pb.visibility = View.GONE
+                        mbinding.FormLayout.alpha = 1f
 
+                    }
 
 
                 })
 
+    }
+    fun UseEmailAsUSername(){
+
+        mainViewModel.UseEmailasUsername(Prefs.getInstance(App.instance).userID.toDouble(),mbinding.emailtext.text.toString()).observe(requireActivity(),
+            Observer {
+                Log.e("dkfjdkfjdfkj", "UseEmailAsUSername: " )
+                if (it?.code!!.equals(200)){
+
+
+                    Log.e("dlkfdlkfl", "UseEmailAsUSernamesuccess: "+it.code+it.message )
+                }
+
+
+            })
     }
 }

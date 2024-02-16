@@ -3,9 +3,8 @@ package com.clebs.celerity.models.response
 
 import com.google.gson.annotations.SerializedName
 
-data class BaseResponse(
-    @SerializedName("Message")
+data class BaseResponse<T>(
+    val code: Int,
     val message: String,
-    @SerializedName("ResponseType")
-    val responseType: String
+    val data: T
 )

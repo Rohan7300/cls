@@ -36,6 +36,7 @@
                 android:textColor="@color/orange"
                 android:layout_alignParentEnd="true"
                 android:padding="10dp"
+                android:id="@+id/add_new"
                 android:gravity="center"
                 android:background="@drawable/shape_textview_button"
                 android:text="Add new"

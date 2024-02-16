@@ -275,6 +275,24 @@ fun String.fromHtml(): Spanned {
         Html.fromHtml(this)
     }
 }
+fun Context.getFileFromUri(uri: Uri): File {
+
+    val file = File(this.filesDir, UUID.randomUUID().toString() + ".jpg")
+    try {
+        val inputStream =
+            this.contentResolver.openInputStream(uri)
+                ?: throw NullPointerException("file was null")
+        val outputStream = FileOutputStream(file)
+        inputStream.use { i ->
+            outputStream.use { o ->
+                i.copyTo(o, 1024)
+            }
+        }
+    } catch (e: Exception) {
+        Log.e(">>>>>>>>", e.message.toString())
+    }
+    return file
+}
 fun isValidPassword(password: String?): Boolean {
     val pattern: Pattern
     val matcher: Matcher

@@ -6,8 +6,6 @@ import com.google.gson.annotations.SerializedName
 data class DriversBasicInformationModel(
 
 
-
-
     @SerializedName("EmailID")
     val emailID: String,
     @SerializedName("FirstName")
@@ -21,5 +19,13 @@ data class DriversBasicInformationModel(
     @SerializedName("VmID")
     val vmID: Int,
     @SerializedName("VmRegNo")
-    val vmRegNo: String
+    val vmRegNo: String,
+    @SerializedName("PhoneNumber")
+    val PhoneNumber: String,
+    @SerializedName("Address")
+    val Address: String,
+    @SerializedName("IsUsrProfileUpdateReqin90days")
+    val IsUsrProfileUpdateReqin90days: String,
+
+
 )

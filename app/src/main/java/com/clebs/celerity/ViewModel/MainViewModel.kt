@@ -1,6 +1,7 @@
 package com.clebs.celerity.ViewModel
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,7 @@ import com.clebs.celerity.models.response.GetsignatureInformation
 import com.clebs.celerity.models.requests.LoginRequest
 import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
+import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
@@ -18,6 +20,7 @@ import com.clebs.celerity.utils.Prefs
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val repo: MainRepo) : ViewModel() {
+
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
 
@@ -89,6 +92,19 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         return responseLiveData
 
     }
+
+    fun UseEmailasUsername(userID: Double, Email:String): MutableLiveData<BaseResponseTwo?> {
+        val responseLiveData = MutableLiveData<BaseResponseTwo?>()
+
+        viewModelScope.launch {
+            val response = repo.UseEmailAsUsername(userID,Email)
+            responseLiveData.postValue(response)
+        }
+
+        return responseLiveData
+
+    }
+
     fun setLastVisitedScreenId(Context: Context, screenId: Int) {
         Prefs.getInstance(App.instance).setLastVisitedScreenId(Context, screenId)
     }

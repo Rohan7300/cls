@@ -1,18 +1,18 @@
 package com.clebs.celerity.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.NonNull
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentHomeBinding
-import com.clebs.celerity.interfaces.BottomNavigationProvider
-import com.clebs.celerity.ui.HomeActivity
 import com.ncorti.slidetoact.SlideToActView
+
 
 /**
  * A simple [Fragment] subclass.
@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
                     view: SlideToActView,
                     threshold: Float
                 ) {
-                    mbinding.arroww.alpha = 0.1f
+                    mbinding.arroww.alpha = 0.0f
                 }
 
                 override fun onSlideResetAnimationEnded(view: SlideToActView) {
