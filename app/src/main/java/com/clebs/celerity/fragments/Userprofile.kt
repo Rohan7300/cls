@@ -154,7 +154,7 @@ class Userprofile : Fragment() {
         mbinding.pb.visibility = View.VISIBLE
         mbinding.FormLayout.alpha = 0.5f
         mainViewModel.GetDriversBasicInformation(
-            GetDriverBasicInfoRequest(Prefs.getInstance(App.instance).userID.toDouble())
+            Prefs.getInstance(App.instance).userID.toDouble()
         )
             .observe(requireActivity(),
                 Observer {
@@ -175,15 +175,19 @@ class Userprofile : Fragment() {
                 })
 
     }
-    fun UseEmailAsUSername(){
 
-        mainViewModel.UseEmailasUsername(Prefs.getInstance(App.instance).userID.toDouble(),mbinding.emailtext.text.toString()).observe(requireActivity(),
+    fun UseEmailAsUSername() {
+
+        mainViewModel.UseEmailasUsername(
+            Prefs.getInstance(App.instance).userID.toDouble(),
+            "chakshit@gmail.com"
+        ).observe(requireActivity(),
             Observer {
-                Log.e("dkfjdkfjdfkj", "UseEmailAsUSername: " )
-                if (it?.code!!.equals(200)){
+                Log.e("dkfjdkfjdfkj", "UseEmailAsUSername: ")
+                if (it?.Status!!.equals(200)) {
+                    mbinding.usertext.setText(mbinding.emailtext.text.toString())
 
-
-                    Log.e("dlkfdlkfl", "UseEmailAsUSernamesuccess: "+it.code+it.message )
+                    Log.e("dlkfdlkfl", "UseEmailAsUSernamesuccess: " + it.Status + it.message)
                 }
 
 

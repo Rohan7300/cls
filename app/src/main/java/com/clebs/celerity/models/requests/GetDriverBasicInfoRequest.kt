@@ -7,6 +7,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class GetDriverBasicInfoRequest(
-    @SerializedName("UserID")
+    @SerializedName("userId")
     val userID: Double
 ) : Parcelable

@@ -70,11 +70,11 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
 
     }
 
-    fun GetDriversBasicInformation(GetdriverBasicInforequest: GetDriverBasicInfoRequest): MutableLiveData<DriversBasicInformationModel?> {
+    fun GetDriversBasicInformation(userID: Double): MutableLiveData<DriversBasicInformationModel?> {
         val responseLiveData = MutableLiveData<DriversBasicInformationModel?>()
 
         viewModelScope.launch {
-            val response = repo.GetDriversBasicInfo(GetdriverBasicInforequest)
+            val response = repo.GetDriversBasicInfo(userID)
             responseLiveData.postValue(response)
         }
 

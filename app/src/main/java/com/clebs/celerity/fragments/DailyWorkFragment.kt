@@ -370,7 +370,7 @@ class DailyWorkFragment : Fragment() {
             } else {
                 Toast.makeText(
                     requireActivity(),
-                    "Vehicle doesn't exist's. Please enter valid Vehicle Registration number.",
+                    "Vehicle doesn't exist's. Please contact your supervisor.",
                     Toast.LENGTH_SHORT
                 ).show()
             }

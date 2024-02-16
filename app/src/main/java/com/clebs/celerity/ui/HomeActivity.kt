@@ -85,6 +85,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         checkIftodayCheckIsDone()
 
+
+        ActivityHomeBinding.imgDrawer.setOnClickListener {
+            navController.navigate(R.id.profileFragment)
+        }
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
 

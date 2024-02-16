@@ -48,8 +48,8 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
-    suspend fun GetDriversBasicInfo(GetDriverBasicRequest: GetDriverBasicInfoRequest): DriversBasicInformationModel? {
-        val response = ApiService.GetDriversBasicInfo(GetDriverBasicRequest)
+    suspend fun GetDriversBasicInfo(userID: Double): DriversBasicInformationModel? {
+        val response = ApiService.GetDriversBasicInfo(userID)
         if (response.isSuccessful) {
             return response.body()
         }

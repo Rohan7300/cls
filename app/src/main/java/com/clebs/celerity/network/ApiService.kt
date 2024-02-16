@@ -49,8 +49,8 @@ interface ApiService {
     @GET("/api/Home/Logout")
     suspend fun Logout():Response<logoutModel>
 
-    @POST("/api/Drivers/GetDriverBasicInformation")
-    suspend fun  GetDriversBasicInfo(@Body body: GetDriverBasicInfoRequest):Response<DriversBasicInformationModel>
+    @GET("/api/Drivers/GetDriverBasicInformation/{userId}")
+    suspend fun  GetDriversBasicInfo(@Path("userId") userId: Double):Response<DriversBasicInformationModel>
 
 
     @PUT("/api/Drivers/UpdateUsernameFromEmail")
