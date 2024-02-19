@@ -20,6 +20,7 @@ import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
+import com.clebs.celerity.models.response.getVechileDefectSheetInfo
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -52,19 +53,28 @@ interface ApiService {
     @GET("/api/Drivers/GetDriverBasicInformation/{userId}")
     suspend fun  GetDriversBasicInfo(@Path("userId") userId: Double):Response<DriversBasicInformationModel>
 
-
+//working
     @PUT("/api/Drivers/UpdateUsernameFromEmail")
     suspend fun UseEmailAsUsername(@Query("userId") userId: Double, @Query("emailAddress") emailAddress:String):Response<BaseResponseTwo>
+
+    @PUT("/api/Drivers/UpdateDAProfileIn90Days")
+    suspend fun updateDAProfile90days(@Query("userId") userId: Double, @Query("emailAddress") emailAddress:String,@Query("phonenumber") phonenumber:String):Response<BaseResponseTwo>
 
 
     @POST("/api/DaDailyWorks/SaveBreakStartAndEndTime")
     suspend fun  SaveBreakStartEndTime(@Body body: SaveBreakStartEndTImeRequestModel):Response<BaseResponseTwo>
+
+    @POST("/api/DaDailyWorks/DeleteBreakTime/{dawDriverBreakId}")
+    suspend fun  deleteBreakTime(@Path("dawDriverBreakId") dawDriverBreakId :Int):Response<BaseResponseTwo>
 
     @POST("/api/DailyWorks/SaveVehDefectSheet")
     suspend fun  SaveVichileDeffectSheet(@Body body: SaveVechileDefectSheetRequest):Response<BaseResponseTwo>
 
     @POST("/api/DailyWorks/GetDefectSheetBasicInfo")
     suspend fun GetDefectSheetBasicInfo(@Body body: GetDefectSheetBasicInfoRequestModel) : Response<GetDefectSheetBasicInfoResponse>
+
+    @POST("/api/DailyWorks/GetVehicleDefectSheetInfo/{userId}")
+    suspend fun getVechiledefectSheetInfo(@Path("userId") userId: Double) : Response<getVechileDefectSheetInfo>
 
     @POST("/api/DailyWorks/CheckIfTodayDefecChecktIsDone")
     suspend fun CheckifTodayCheckIsDone() :Response<CheckIFTodayCheckIsDone>

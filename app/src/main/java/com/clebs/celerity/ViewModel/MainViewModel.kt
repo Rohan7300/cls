@@ -14,6 +14,7 @@ import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
+import com.clebs.celerity.models.response.getVechileDefectSheetInfo
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.Prefs
@@ -98,6 +99,30 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
 
         viewModelScope.launch {
             val response = repo.UseEmailAsUsername(userID,Email)
+            responseLiveData.postValue(response)
+        }
+
+        return responseLiveData
+
+    }
+
+    fun UpdateDAprofileninetydays(userID: Double, Email:String,phone:String): MutableLiveData<BaseResponseTwo?> {
+        val responseLiveData = MutableLiveData<BaseResponseTwo?>()
+
+        viewModelScope.launch {
+            val response = repo.UpdateDAprofileninetydays(userID,Email,phone)
+            responseLiveData.postValue(response)
+        }
+
+        return responseLiveData
+
+    }
+
+    fun getVechiledefectSheetInfo(userID: Double): MutableLiveData<getVechileDefectSheetInfo?> {
+        val responseLiveData = MutableLiveData<getVechileDefectSheetInfo?>()
+
+        viewModelScope.launch {
+            val response = repo.getVechiledefectSheetInfo(userID)
             responseLiveData.postValue(response)
         }
 

@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.Factory.MyViewModelFactory
@@ -38,6 +40,7 @@ class Userprofile : Fragment() {
     lateinit var mbinding: FragmentUserprofileBinding
     private var isedit: Boolean = false
     lateinit var mainViewModel: MainViewModel
+    var ninetydaysBoolean: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +48,7 @@ class Userprofile : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         if (!this::mbinding.isInitialized) {
@@ -119,8 +121,15 @@ class Userprofile : Fragment() {
             isedit = !isedit
 
         }
+        mbinding.txtChangePassword.setOnClickListener {
+
+            showAlertChangePasword()
+        }
         mbinding.useEmailas.setOnClickListener {
-            showAlert()
+           showAlert()
+        }
+        mbinding.save.setOnClickListener {
+            updateProfile90dys()
         }
         return mbinding.root
     }
@@ -150,47 +159,116 @@ class Userprofile : Fragment() {
 
     }
 
+    fun showAlertChangePasword() {
+        val factory = LayoutInflater.from(requireActivity())
+        val view: View = factory.inflate(R.layout.change_password_dialog, null)
+        val deleteDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
+
+        val edt_old: EditText = view.findViewById(R.id.edt_old)
+        val edt_new: EditText = view.findViewById(R.id.edt_new)
+        val button: TextView = view.findViewById(R.id.save)
+        deleteDialog.setView(view)
+        button.setOnClickListener {
+            if (edt_old.text.isEmpty()) {
+                edt_old.setError("please enter old password")
+            } else if (edt_new.text.isEmpty()) {
+                edt_new.setError("please enter new password")
+            } else {
+                deleteDialog.dismiss()
+
+
+            }
+
+
+        }
+        deleteDialog.setCancelable(true)
+        deleteDialog.setCanceledOnTouchOutside(true);
+        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        deleteDialog.show();
+
+    }
+
+
+    fun showAlertChangePasword90dys() {
+        val factory = LayoutInflater.from(requireActivity())
+        val view: View = factory.inflate(R.layout.change_passwordninetydays, null)
+        val deleteDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
+        deleteDialog.setView(view)
+
+        val button: TextView = view.findViewById(R.id.save)
+        button.setOnClickListener {
+            deleteDialog.dismiss()
+
+
+        }
+
+        deleteDialog.setCancelable(true)
+        deleteDialog.setCanceledOnTouchOutside(true);
+        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        deleteDialog.show();
+
+    }
+
     fun GetDriversBasicInformation() {
         mbinding.pb.visibility = View.VISIBLE
         mbinding.FormLayout.alpha = 0.5f
         mainViewModel.GetDriversBasicInformation(
             Prefs.getInstance(App.instance).userID.toDouble()
-        )
-            .observe(requireActivity(),
-                Observer {
-                    if (it != null) {
-                        Log.e("responseprofile", "GetDriversBasicInformation: ")
-                        mbinding.name.text = it.firstName + " " + it.lastName
-                        mbinding.usertext.setText(it.firstName + " " + it.lastName)
-                        mbinding.emailtext.setText(it.emailID)
-                        mbinding.passtext.setText("**********")
-                        mbinding.phonetext.setText(it.PhoneNumber)
-                        mbinding.addresstext.setText(it.Address)
-                        mbinding.pb.visibility = View.GONE
-                        mbinding.FormLayout.alpha = 1f
+        ).observe(requireActivity(), Observer {
+                if (it != null) {
+                    Log.e("responseprofile", "GetDriversBasicInformation: ")
+                    mbinding.name.text = it.firstName + " " + it.lastName
+                    mbinding.usertext.setText(it.firstName + " " + it.lastName)
+                    mbinding.emailtext.setText(it.emailID)
+                    mbinding.passtext.setText("**********")
+                    mbinding.phonetext.setText(it.PhoneNumber)
+                    mbinding.addresstext.setText(it.Address)
+
+                    mbinding.pb.visibility = View.GONE
+                    mbinding.FormLayout.alpha = 1f
+                    ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
+                    if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
+                        showAlertChangePasword90dys()
+
 
                     }
 
+                }
 
-                })
+
+            })
 
     }
 
     fun UseEmailAsUSername() {
 
         mainViewModel.UseEmailasUsername(
+            Prefs.getInstance(App.instance).userID.toDouble(), "chakshit@gmail.com"
+        ).observe(requireActivity(), Observer {
+            Log.e("dkfjdkfjdfkj", "UseEmailAsUSername: ")
+            if (it?.Status!!.equals(200)) {
+                mbinding.usertext.setText(mbinding.emailtext.text.toString())
+
+                Log.e("dlkfdlkfl", "UseEmailAsUSernamesuccess: " + it.Status + it.message)
+            }
+
+
+        })
+    }
+
+    fun updateProfile90dys() {
+        mainViewModel.UpdateDAprofileninetydays(
             Prefs.getInstance(App.instance).userID.toDouble(),
-            "chakshit@gmail.com"
-        ).observe(requireActivity(),
-            Observer {
-                Log.e("dkfjdkfjdfkj", "UseEmailAsUSername: ")
-                if (it?.Status!!.equals(200)) {
-                    mbinding.usertext.setText(mbinding.emailtext.text.toString())
+            mbinding.emailtext.text.toString(),
+            mbinding.phonetext.text.toString()
+        ).observe(viewLifecycleOwner, Observer {
+            if (it?.Status!!.equals(200)) {
 
-                    Log.e("dlkfdlkfl", "UseEmailAsUSernamesuccess: " + it.Status + it.message)
-                }
+                Toast.makeText(requireContext(), "ProfileUpdated", Toast.LENGTH_SHORT).show()
+
+            }
 
 
-            })
+        })
     }
 }

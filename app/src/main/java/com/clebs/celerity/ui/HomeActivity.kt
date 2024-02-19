@@ -223,7 +223,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     fun checkIftodayCheckIsDone() {
-        viewModel.CheckIFTodayCheckIsDone().observe(this@HomeActivity, Observer {
+        viewModel.getVechiledefectSheetInfo(Prefs.getInstance(applicationContext).userID.toDouble()).observe(this@HomeActivity, Observer {
             if (it != null) {
                 Log.e("ldkkcjvckvjc", "checkIftodayCheckIsDone: ")
                 if (it.isSubmited.equals(true)) {

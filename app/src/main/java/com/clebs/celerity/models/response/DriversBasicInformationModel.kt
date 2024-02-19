@@ -25,7 +25,7 @@ data class DriversBasicInformationModel(
     @SerializedName("Address")
     val Address: String,
     @SerializedName("IsUsrProfileUpdateReqin90days")
-    val IsUsrProfileUpdateReqin90days: String,
+    val IsUsrProfileUpdateReqin90days: Boolean,
 
 
 )

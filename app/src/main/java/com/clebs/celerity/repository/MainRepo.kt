@@ -9,6 +9,7 @@ import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
+import com.clebs.celerity.models.response.getVechileDefectSheetInfo
 import com.clebs.celerity.network.ApiService
 
 class MainRepo(private val ApiService: ApiService) {
@@ -66,6 +67,22 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun UseEmailAsUsername(userID: Double,emailAdddress:String) : BaseResponseTwo?{
         val response = ApiService.UseEmailAsUsername(userID,emailAdddress)
+        if (response.isSuccessful) {
+            return response.body()
+        }
+        return null
+    }
+
+    suspend fun UpdateDAprofileninetydays(userID: Double,emailAdddress:String,phonenumber:String) : BaseResponseTwo?{
+        val response = ApiService.updateDAProfile90days(userID,emailAdddress,phonenumber)
+        if (response.isSuccessful) {
+            return response.body()
+        }
+        return null
+    }
+
+    suspend fun getVechiledefectSheetInfo(userID: Double) : getVechileDefectSheetInfo?{
+        val response = ApiService.getVechiledefectSheetInfo(userID)
         if (response.isSuccessful) {
             return response.body()
         }

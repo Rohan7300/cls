@@ -262,7 +262,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-
+                            android:weightSum="2"
                             app:layout_constraintTop_toBottomOf="@id/passwHint"
 
                             >
@@ -271,6 +271,7 @@
                                 android:id="@+id/passtext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:background="@color/white"
                                 android:enabled="false"
                                 android:fontFamily="@font/poppins"
@@ -282,6 +283,16 @@
                                 android:textColor="@color/text_color"
                                 android:textSize="15sp" />
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="change password"
+                                android:gravity="end"
+                                android:alpha="0.8"
+                                android:id="@+id/txt_change_password"
+                                android:layout_weight="1"
+                                android:textColor="@color/orange"
+                                android:textSize="12sp" />
 
                         </LinearLayout>
 
@@ -440,8 +451,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:visibility="gone"
                     android:indeterminateTint="@color/orange"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"

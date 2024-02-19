@@ -83,15 +83,31 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-
-                <androidx.camera.view.PreviewView
-                    android:id="@+id/rectange"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/viewfinder_cardview"
                     android:layout_width="match_parent"
-                    android:layout_height="123dp"
-                    android:visibility="gone"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="20dp"
+                    android:backgroundTint="@color/white"
+                    android:background="@color/white"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent" >
+
+                    <androidx.camera.view.PreviewView
+                        android:id="@+id/rectange"
+                        android:layout_width="match_parent"
+                        android:layout_height="123dp"
+                        android:visibility="gone"
+
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.cardview.widget.CardView>
+
+
 
                 <ProgressBar
                     android:id="@+id/pb"
