@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
+import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.DataBindingUtil
@@ -20,12 +21,13 @@ import com.clebs.celerity.utils.Prefs
 import java.util.logging.Handler
 
 class SplashActivity : AppCompatActivity() {
-lateinit var ActivitySplashBinding : ActivitySplashBinding
+    lateinit var ActivitySplashBinding: ActivitySplashBinding
     lateinit var mainViewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ActivitySplashBinding=DataBindingUtil.setContentView(this@SplashActivity,R.layout.activity_splash)
+        ActivitySplashBinding =
+            DataBindingUtil.setContentView(this@SplashActivity, R.layout.activity_splash)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
 
@@ -42,6 +44,7 @@ lateinit var ActivitySplashBinding : ActivitySplashBinding
             finish()
         }, 3000)
     }
+
     private fun isLoggedIn(): Boolean {
         return Prefs.getInstance(applicationContext).getBoolean("isLoggedIn", false)
 
@@ -55,13 +58,15 @@ lateinit var ActivitySplashBinding : ActivitySplashBinding
         )
         // on below line we are
         // starting a new activity.
-     startActivity(i)
+        startActivity(i)
 
     }
 
     fun navigateToHomeScreen() {
 
-        if ( Prefs.getInstance(applicationContext).getBoolean("isSignatureReq",false).equals(true)){
+        if (Prefs.getInstance(applicationContext).getBoolean("isSignatureReq", false)
+                .equals(true)
+        ) {
             val i = Intent(
                 this@SplashActivity,
                 PolicyDocsActivity::class.java
@@ -69,8 +74,7 @@ lateinit var ActivitySplashBinding : ActivitySplashBinding
             // on below line we are
             // starting a new activity.
             startActivity(i)
-            }
-        else{
+        } else {
             val i = Intent(
                 this@SplashActivity,
                 HomeActivity::class.java
@@ -83,6 +87,7 @@ lateinit var ActivitySplashBinding : ActivitySplashBinding
 
 
     }
+
     fun GetDriverSignatureInformation() {
         var userid: Double = 0.0
         if (!Prefs.getInstance(applicationContext).userID.equals(0.0)) {
@@ -91,7 +96,8 @@ lateinit var ActivitySplashBinding : ActivitySplashBinding
 
         mainViewModel.getDriverSignatureInfo(userid).observe(this@SplashActivity, Observer {
             if (it!!.isSignatureReq.equals(true)) {
-                Prefs.getInstance(applicationContext).saveBoolean("isSignatureReq",it.isSignatureReq)
+                Prefs.getInstance(applicationContext)
+                    .saveBoolean("isSignatureReq", it.isSignatureReq)
                 Prefs.getInstance(applicationContext)
                     .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
                 Prefs.getInstance(applicationContext)

@@ -197,7 +197,9 @@ class Userprofile : Fragment() {
 
         val button: TextView = view.findViewById(R.id.save)
         button.setOnClickListener {
+            isedit=true
             deleteDialog.dismiss()
+
 
 
         }
