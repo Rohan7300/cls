@@ -27,6 +27,7 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.navigateTo
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,8 +77,9 @@ class VechileMileageFragment : Fragment() {
         )
 
         mbinding.headings.setOnClickListener {
-           findNavController().navigate(R.id.profileFragment)
-
+        //   findNavController().navigate(R.id.profileFragment)
+            //navigateTo(R.id.profileFragment)
+            navigateTo(R.id.profileFragment,requireContext(),findNavController())
         }
 
         mbinding.run {
@@ -96,10 +98,18 @@ class VechileMileageFragment : Fragment() {
         mbinding.tvNext.setOnClickListener {
             val bundle= Bundle()
             bundle.putString("vm_mileage",mbinding.edtMil.text.toString())
-            findNavController().navigate(R.id.windScreenFragment,bundle)
+            navigateTo(R.id.windScreenFragment,requireContext(),findNavController())
+            //findNavController().navigate(R.id.windScreenFragment,bundle)
         }
         return mbinding.root
     }
 
+/*    fun navigateTo(fragmentId: Int) {
 
+        val prefs = Prefs.getInstance(requireContext())
+        val fragmentStack = prefs.getNavigationHistory()
+        fragmentStack.push(fragmentId)
+        findNavController().navigate(fragmentId)
+        prefs.saveNavigationHistory(fragmentStack)
+    }*/
 }

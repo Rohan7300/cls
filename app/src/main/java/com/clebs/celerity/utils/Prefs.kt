@@ -1,8 +1,10 @@
 package com.clebs.celerity.utils
 
-import android.R.id.edit
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.util.Stack
 
 
 class Prefs(context: Context) {
@@ -10,7 +12,7 @@ class Prefs(context: Context) {
     private lateinit var sharedPreferences: SharedPreferences
 
     companion object {
-        private const val USER_ACCESS_TOKEN = "celerity_shared_pref"
+        private const val USER_ACCESS_TOKEN = "sybyl_shared_pref"
         private var instance: Prefs? = null
 
         fun getInstance(context: Context): Prefs {
@@ -66,4 +68,24 @@ class Prefs(context: Context) {
     fun clearPreferences() {
         sharedPreferences.edit().clear().apply()
     }
+
+    fun saveNavigationHistory(fragmentStack: Stack<Int>) {
+        val editor = sharedPreferences.edit()
+        val historyJson = Gson().toJson(fragmentStack)
+        editor.putString("history", historyJson)
+        editor.apply()
+    }
+
+    private inline fun <reified T> Gson.fromJson(json: String): T =
+        fromJson(json, object: TypeToken<T>() {}.type)
+
+    fun getNavigationHistory(): Stack<Int> {
+        val history = sharedPreferences.getString("history", null)
+        return if (history != null) {
+            Gson().fromJson(history)
+        } else {
+            Stack()
+        }
+    }
+
 }

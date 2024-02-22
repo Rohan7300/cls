@@ -5,6 +5,8 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -23,11 +25,15 @@ import android.widget.*
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import com.clebs.celerity.database.ImageEntity
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 
 
 @SuppressLint("HardwareIds")
@@ -196,7 +202,6 @@ fun NavController.isFragmentInBackStack(destinationId: Int) =
     }
 
 
-
 fun getWindowHeight(context: Context): Int {
     // Calculate window height for fullscreen use
     val displayMetrics = DisplayMetrics()
@@ -251,9 +256,6 @@ fun selectDate(
 }
 
 
-
-
-
 fun getUtcTime(date: String): String? {
     val sdf1 = SimpleDateFormat("yyyy-MM-dd")
     sdf1.timeZone = TimeZone.getTimeZone("UTC")
@@ -275,24 +277,7 @@ fun String.fromHtml(): Spanned {
         Html.fromHtml(this)
     }
 }
-fun Context.getFileFromUri(uri: Uri): File {
 
-    val file = File(this.filesDir, UUID.randomUUID().toString() + ".jpg")
-    try {
-        val inputStream =
-            this.contentResolver.openInputStream(uri)
-                ?: throw NullPointerException("file was null")
-        val outputStream = FileOutputStream(file)
-        inputStream.use { i ->
-            outputStream.use { o ->
-                i.copyTo(o, 1024)
-            }
-        }
-    } catch (e: Exception) {
-        Log.e(">>>>>>>>", e.message.toString())
-    }
-    return file
-}
 fun isValidPassword(password: String?): Boolean {
     val pattern: Pattern
     val matcher: Matcher
@@ -301,6 +286,7 @@ fun isValidPassword(password: String?): Boolean {
     matcher = pattern.matcher(password)
     return matcher.matches()
 }
+
 fun String.contains(
     strList: List<String>,
     isAll: Boolean = false,
@@ -333,4 +319,73 @@ fun String.contains(
 
 fun isTesting(): Boolean {
     return true
+}
+
+fun decodeBase64Image(base64String: String): Bitmap {
+    val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+    return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+}
+
+fun convertBitmapToBase64(bitmap: Bitmap): String {
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+    val byteArray = byteArrayOutputStream.toByteArray()
+    return Base64.encodeToString(byteArray, Base64.DEFAULT)
+}
+
+fun dbLog(it: ImageEntity) {
+
+   /* val TAG = "DB_TEST"
+    Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
+    Log.d(TAG, it.toString())
+    Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
+*/
+}
+
+fun setImageView(im: ImageView, value: String) {
+    try {
+        val bitmap: Bitmap = decodeBase64Image(value)
+        im.setImageBitmap(bitmap)
+    } catch (_: Exception) {
+    }
+}
+
+fun navigateTo(fragmentId: Int,context: Context,navController: NavController) {
+    val prefs = Prefs.getInstance(context)
+    val fragmentStack = prefs.getNavigationHistory()
+    fragmentStack.push(fragmentId)
+    navController.navigate(fragmentId)
+    prefs.saveNavigationHistory(fragmentStack)
+}
+fun showToast(msg:String,context: Context){
+    try {
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
+    }catch (_:Exception){
+
+    }
+}
+
+ fun Bitmap.toRequestBody(): okhttp3.RequestBody {
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+    return byteArrayOutputStream.toByteArray().toRequestBody("image/jpeg".toMediaTypeOrNull())
+}
+
+fun Context.getFileFromUri(uri: Uri): File {
+
+    val file = File(this.filesDir, UUID.randomUUID().toString() + ".jpg")
+    try {
+        val inputStream =
+            this.contentResolver.openInputStream(uri)
+                ?: throw NullPointerException("file was null")
+        val outputStream = FileOutputStream(file)
+        inputStream.use { i ->
+            outputStream.use { o ->
+                i.copyTo(o, 1024)
+            }
+        }
+    } catch (e: Exception) {
+        Log.e(">>>>>>>>", e.message.toString())
+    }
+    return file
 }

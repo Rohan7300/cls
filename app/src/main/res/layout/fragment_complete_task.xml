@@ -9,6 +9,18 @@
         android:layout_height="match_parent"
 
         tools:context=".fragments.CompleteTaskFragment">
+        <ProgressBar
+            android:id="@+id/completeTaskFragmentPB"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:visibility="gone"
+            android:indeterminateTint="@color/orange"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
 
         <RelativeLayout
             android:id="@+id/rlinfo"
@@ -211,7 +223,7 @@
                         android:layout_below="@+id/rlcom"
                         android:paddingStart="18dp"
                         android:paddingEnd="18dp"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
                         <RelativeLayout
                             android:id="@+id/vichle_defect"
@@ -259,6 +271,7 @@
 
                             <ImageButton
                                 android:layout_width="25dp"
+                                android:id="@+id/vehiclePicturesIB"
                                 android:layout_height="25dp"
                                 android:layout_alignParentRight="true"
                                 android:backgroundTint="@color/white"
@@ -305,7 +318,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:visibility="gone"
                     android:background="@drawable/shape_expand_main"
                     android:padding="18dp">
 
@@ -350,7 +362,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:visibility="gone"
                         android:background="@drawable/shape_expand_main">
 
                         <RelativeLayout
@@ -523,7 +534,6 @@
                         android:id="@+id/rlcomtwo_break"
                         android:layout_width="match_parent"
                         android:layout_margin="20dp"
-                        android:visibility="gone"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_expand_main"
                         android:padding="18dp">
@@ -563,7 +573,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:id="@+id/txt_upload"
@@ -609,7 +619,7 @@
                             android:weightSum="2">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/constraintLayoutthree"
+                                android:id="@+id/clVehicleDashboard"
                                 android:layout_width="160dp"
                                 android:layout_height="154dp"
                                 android:layout_marginEnd="7dp"
@@ -626,11 +636,11 @@
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <ImageButton
-                                    android:id="@+id/imageButton3"
+                                    android:id="@+id/ivVehicleDashboard"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:backgroundTint="@color/white"
-                                    android:src="@drawable/upload_icc"
+                                    android:src="@drawable/imgvehciledash"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -641,17 +651,18 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/inter"
                                     android:letterSpacing="0.02"
-                                    android:text="Front"
+                                    android:text="Vehicle Dashboard"
                                     android:textColor="#4A4A4A"
                                     android:textSize="13sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/imageButton3" />
+                                    app:layout_constraintTop_toBottomOf="@+id/ivVehicleDashboard" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="160dp"
                                 android:layout_height="154dp"
+                                android:id="@+id/clFront"
                                 android:layout_alignParentRight="true"
                                 android:layout_marginStart="8dp"
                                 android:layout_weight="1"
@@ -666,7 +677,7 @@
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <ImageButton
-                                    android:id="@+id/imageButton5"
+                                    android:id="@+id/ivFront"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:backgroundTint="@color/white"
@@ -686,7 +697,7 @@
                                     android:textSize="13sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/imageButton5" />
+                                    app:layout_constraintTop_toBottomOf="@+id/ivFront" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </LinearLayout>
@@ -710,7 +721,7 @@
                             android:weightSum="2">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/constraintLayout2"
+                                android:id="@+id/clNearSide"
                                 android:layout_width="160dp"
                                 android:layout_height="154dp"
                                 android:layout_marginEnd="7dp"
@@ -727,7 +738,7 @@
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <ImageButton
-                                    android:id="@+id/imageButton2"
+                                    android:id="@+id/ivNearSide"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:backgroundTint="@color/white"
@@ -742,17 +753,18 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/inter"
                                     android:letterSpacing="0.02"
-                                    android:text="Front"
+                                    android:text="Near Side"
                                     android:textColor="#4A4A4A"
                                     android:textSize="13sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
+                                    app:layout_constraintTop_toBottomOf="@+id/ivNearSide" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="160dp"
                                 android:layout_height="154dp"
+                                android:id="@+id/clRearImgUp"
                                 android:layout_alignParentRight="true"
                                 android:layout_marginStart="8dp"
                                 android:layout_weight="1"
@@ -767,11 +779,11 @@
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <ImageButton
-                                    android:id="@+id/imageButtontwo"
+                                    android:id="@+id/ivRearImgUp"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:backgroundTint="@color/white"
-                                    android:src="@drawable/upload_icc"
+                                    android:src="@drawable/imgvehciledash"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -782,12 +794,12 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/inter"
                                     android:letterSpacing="0.02"
-                                    android:text="Front"
+                                    android:text="Rear"
                                     android:textColor="#4A4A4A"
                                     android:textSize="13sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/imageButtontwo" />
+                                    app:layout_constraintTop_toBottomOf="@+id/ivRearImgUp" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -819,7 +831,7 @@
                             android:weightSum="2">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/constraintLayoutfour"
+                                android:id="@+id/clOffSideImgUp"
                                 android:layout_width="160dp"
                                 android:layout_height="154dp"
                                 android:layout_marginEnd="7dp"
@@ -836,7 +848,7 @@
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <ImageButton
-                                    android:id="@+id/imageButtonseven"
+                                    android:id="@+id/ivOffSideImgUp"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:backgroundTint="@color/white"
@@ -851,17 +863,18 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/inter"
                                     android:letterSpacing="0.02"
-                                    android:text="Front"
+                                    android:text="Off Side"
                                     android:textColor="#4A4A4A"
                                     android:textSize="13sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/imageButtonseven" />
+                                    app:layout_constraintTop_toBottomOf="@+id/ivOffSideImgUp" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="160dp"
                                 android:layout_height="154dp"
+                                android:id="@+id/clOilLevel"
                                 android:layout_alignParentRight="true"
                                 android:layout_marginStart="8dp"
                                 android:layout_weight="1"
@@ -876,7 +889,7 @@
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <ImageButton
-                                    android:id="@+id/imageButtonten"
+                                    android:id="@+id/ivOilLevel"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:backgroundTint="@color/white"
@@ -891,12 +904,12 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/inter"
                                     android:letterSpacing="0.02"
-                                    android:text="Front"
+                                    android:text="Oil Level"
                                     android:textColor="#4A4A4A"
                                     android:textSize="13sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/imageButtonten" />
+                                    app:layout_constraintTop_toBottomOf="@+id/ivOilLevel" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </LinearLayout>
 
@@ -921,7 +934,7 @@
                             android:weightSum="2">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/constraintLayouteven"
+                                android:id="@+id/clAddBlueImg"
                                 android:layout_width="160dp"
                                 android:layout_height="154dp"
                                 android:layout_marginEnd="7dp"
@@ -938,7 +951,7 @@
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <ImageButton
-                                    android:id="@+id/imageButton12"
+                                    android:id="@+id/ivAddBlueImg"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:backgroundTint="@color/white"
@@ -953,36 +966,36 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/inter"
                                     android:letterSpacing="0.02"
-                                    android:text="Front"
+                                    android:text="Add Blue"
                                     android:textColor="#4A4A4A"
                                     android:textSize="13sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/imageButton12" />
+                                    app:layout_constraintTop_toBottomOf="@+id/ivAddBlueImg" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                             <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/constraintLayout12"
+                                android:id="@+id/clFaceMask"
                                 android:layout_width="160dp"
                                 android:layout_height="154dp"
-                                android:layout_marginStart="8dp"
                                 android:layout_marginEnd="7dp"
-                                android:layout_weight="2">
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_uploads">
 
 
-                                <ImageView
-                                    android:id="@+id/imageButton13"
+                                <ImageButton
                                     android:layout_width="28dp"
                                     android:layout_height="28dp"
-
+                                    android:src="@drawable/delete_ic"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 
-                                <ImageView
-                                    android:id="@+id/imageButton14"
+                                <ImageButton
+                                    android:id="@+id/ivFaceMask"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:backgroundTint="@color/white"
+                                    android:src="@drawable/upload_icc"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -993,12 +1006,12 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/inter"
                                     android:letterSpacing="0.02"
-
+                                    android:text="Face Mask"
                                     android:textColor="#4A4A4A"
                                     android:textSize="13sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/imageButton14" />
+                                    app:layout_constraintTop_toBottomOf="@+id/ivFaceMask" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </LinearLayout>
                     </RelativeLayout>

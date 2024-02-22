@@ -18,7 +18,6 @@ import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentUserprofileBinding
-import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
 
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
@@ -26,16 +25,6 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.Prefs
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [Userprofile.newInstance] factory method to
- * create an instance of this fragment.
- */
 class Userprofile : Fragment() {
     lateinit var mbinding: FragmentUserprofileBinding
     private var isedit: Boolean = false
@@ -126,7 +115,7 @@ class Userprofile : Fragment() {
             showAlertChangePasword()
         }
         mbinding.useEmailas.setOnClickListener {
-           showAlert()
+            showAlert()
         }
         mbinding.save.setOnClickListener {
             updateProfile90dys()
@@ -197,9 +186,8 @@ class Userprofile : Fragment() {
 
         val button: TextView = view.findViewById(R.id.save)
         button.setOnClickListener {
-            isedit=true
+            isedit = true
             deleteDialog.dismiss()
-
 
 
         }
@@ -214,31 +202,30 @@ class Userprofile : Fragment() {
     fun GetDriversBasicInformation() {
         mbinding.pb.visibility = View.VISIBLE
         mbinding.FormLayout.alpha = 0.5f
-        mainViewModel.GetDriversBasicInformation(
-            Prefs.getInstance(App.instance).userID.toDouble()
+        mainViewModel.GetDriversBasicInformation(Prefs.getInstance(App.instance).userID.toDouble()
         ).observe(requireActivity(), Observer {
-                if (it != null) {
-                    Log.e("responseprofile", "GetDriversBasicInformation: ")
-                    mbinding.name.text = it.firstName + " " + it.lastName
-                    mbinding.usertext.setText(it.firstName + " " + it.lastName)
-                    mbinding.emailtext.setText(it.emailID)
-                    mbinding.passtext.setText("**********")
-                    mbinding.phonetext.setText(it.PhoneNumber)
-                    mbinding.addresstext.setText(it.Address)
+            if (it != null) {
+                Log.e("responseprofile", "GetDriversBasicInformation: ")
+                mbinding.name.text = it.firstName + " " + it.lastName
+                mbinding.usertext.setText(it.firstName + " " + it.lastName)
+                mbinding.emailtext.setText(it.emailID)
+                mbinding.passtext.setText("**********")
+                mbinding.phonetext.setText(it.PhoneNumber)
+                mbinding.addresstext.setText(it.Address)
 
-                    mbinding.pb.visibility = View.GONE
-                    mbinding.FormLayout.alpha = 1f
-                    ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
-                    if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
-                        showAlertChangePasword90dys()
+                mbinding.pb.visibility = View.GONE
+                mbinding.FormLayout.alpha = 1f
+                ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
+                if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
+                    showAlertChangePasword90dys()
 
-
-                    }
 
                 }
 
+            }
 
-            })
+
+        })
 
     }
 

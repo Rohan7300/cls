@@ -54,8 +54,8 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.showLog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getFileFromUri
+import com.clebs.celerity.utils.navigateTo
 import com.kotlinpermissions.KotlinPermissions
-
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -63,6 +63,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
@@ -142,8 +143,8 @@ class DailyWorkFragment : Fragment() {
 
 
         mbinding.rectangle4.setOnClickListener {
-            checkPermissions()
-
+//            checkPermissions()
+            navigateTo(R.id.vechileMileageFragment,requireContext(),findNavController())
 
         }
 
@@ -290,7 +291,7 @@ class DailyWorkFragment : Fragment() {
                     "upload",
                     compressedImageFile.name,
                     RequestBody.create(
-                        MediaType.parse("image/*"),
+                        "image/*".toMediaTypeOrNull(),
                         compressedImageFile
                     )
                 )

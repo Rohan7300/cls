@@ -1,17 +1,13 @@
 package com.clebs.celerity.ui
 
-import android.app.AlertDialog
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
@@ -23,14 +19,20 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
+import com.clebs.celerity.ViewModel.ImageViewModel
+import com.clebs.celerity.ViewModel.ImageViewModelProviderFactory
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.database.ImageDatabase
+import com.clebs.celerity.database.ImagesRepo
 import com.clebs.celerity.databinding.ActivityHomeBinding
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -38,11 +40,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
     lateinit var ActivityHomeBinding: ActivityHomeBinding
     lateinit var bottomNavigationView: BottomNavigationView
+    lateinit var imageViewModel: ImageViewModel
     var screenid: Int = 0
     lateinit var navController: NavController
-    private lateinit var viewModel: MainViewModel
+    public lateinit var viewModel: MainViewModel
     private lateinit var navGraph: NavGraph
-
+    private var completeTaskScreen:Boolean = false
 
     companion object {
         fun showLog(tag: String, message: String) {
@@ -55,7 +58,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onResume() {
         super.onResume()
-
     }
 
     override fun onPause() {
@@ -79,11 +81,54 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         bottomNavigationView.getMenu().findItem(R.id.passwords).setTooltipText("Notifications")
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
+        val imagesRepo =
+            ImagesRepo(ImageDatabase.invoke(this), Prefs.getInstance(applicationContext))
+
         viewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
+        viewModel.getVehicleDefectSheetInfoLiveData.observe(this, Observer {
+            Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
+            if(it!=null)
+            {
+                completeTaskScreen = it.IsSubmited
+            }
+        })
+        viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
 
 
-        checkIftodayCheckIsDone()
+        imageViewModel = ViewModelProvider(
+            this,
+            ImageViewModelProviderFactory(imagesRepo)
+        ).get(ImageViewModel::class.java)
+
+
+
+
+        imageViewModel.images?.observe(this) { imageEntity ->
+            dbLog(imageEntity)
+        }
+
+
+//        checkIftodayCheckIsDone()
+//
+//        if (Build.VERSION.SDK_INT >= 33) {
+//            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+//                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+//            ) {
+//                navPop()
+//
+//            }
+//        } else {
+//            onBackPressedDispatcher.addCallback(
+//                this,
+//                object : OnBackPressedCallback(true) {
+//                    override fun handleOnBackPressed() {
+//
+//                        navPop()
+//
+//                    }
+//                })
+//        }
 
 
         ActivityHomeBinding.imgDrawer.setOnClickListener {
@@ -95,41 +140,31 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 R.id.home -> {
 
                     navController.navigate(R.id.homedemoFragment)
-                    ActivityHomeBinding.title.text = " "
+
 
 
                     true
                 }
 
                 R.id.daily -> {
-                    ActivityHomeBinding.title.text = " "
-                    screenid = viewModel.getLastVisitedScreenId(this)
-                    if (screenid.equals(0)) {
-                        if (checked.equals("1")) {
-                            navController.navigate(R.id.completeTaskFragment)
-                            navController.currentDestination!!.id = R.id.completeTaskFragment
+                        if (!completeTaskScreen) {
+                            screenid = viewModel.getLastVisitedScreenId(this)
+                            if (screenid.equals(0)) {
+                                navController.navigate(R.id.homeFragment)
+                                // navigateTo(R.id.homeFragment)
+                                navController.currentDestination!!.id = R.id.homeFragment
 
+                            } else {
+
+                                navController.navigate(screenid)
+
+
+                                navController.currentDestination!!.id = screenid
+
+                            }
                         } else {
-                            navController.navigate(R.id.homeFragment)
-                            navController.currentDestination!!.id = R.id.homeFragment
-                        }
-
-
-                    } else {
-//                        navController.popBackStack()
-                        if (checked.equals("1")) {
                             navController.navigate(R.id.completeTaskFragment)
-                            navController.currentDestination!!.id = R.id.completeTaskFragment
-
-
-                        } else {
-                            navController.navigate(screenid)
-                            navController.currentDestination!!.id = screenid
                         }
-
-                        navController.currentDestination!!.id = screenid
-
-                    }
                     true
                 }
 
@@ -137,7 +172,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
 
                     navController.navigate(R.id.invoicesFragment)
-                    ActivityHomeBinding.title.text = " "
+
 
                     true
                 }
@@ -163,8 +198,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         }
         ActivityHomeBinding.imgLogout.setOnClickListener {
-//            logout()
-            showAlertLogout()
+            logout()
 
         }
 
@@ -177,12 +211,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     fun logout() {
-
         viewModel.Logout().observe(this@HomeActivity, Observer {
+
             if (it!!.responseType.equals("Success")) {
+
                 val intent = Intent(this, LoginActivity::class.java)
                 intent.putExtra("logout", "0")
-                finish()
                 startActivity(intent)
                 setLoggedIn(false)
             }
@@ -190,31 +224,48 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     }
 
+//    fun navPop(){
+//        when (navController.currentDestination?.id) {
+//
+//            R.id.windScreenFragment, R.id.windowsGlassFragment -> {
+//
+//                navController.navigateUp()
+//
+//            }
+//        }
+
+    //    }
+//    override fun onBackPressed() {
+//
+//
+//        // Get the currently focused view
+//        val focusedView = currentFocus
+//
+//        // Check if the focused view is the BottomNavigationView
+//        if (focusedView is BottomNavigationView) {
+//            if (navController.currentDestination?.id!!.equals(screenid)) {
+//                navController.navigateUp()
+//
+//            }
+//        }
+//
+//
+//
+//    }
+
+    @SuppressLint("MissingSuperCall")
+
     override fun onBackPressed() {
-        // Get the currently focused view
-        val focusedView = currentFocus
-
-        // Check if the focused view is the BottomNavigationView
-        if (focusedView is BottomNavigationView) {
-            when (navController.currentDestination?.id) {
-
-                R.id.windScreenFragment -> {
-                    navController.navigateUp()
-
-                }
-
-
-            }
-            super.onBackPressed()
-        } else {
-
-
-        }
+        //super.onBackPressed()
+        screenid = viewModel.getLastVisitedScreenId(this)
+        backNav()
     }
+
 
     override fun onDestinationChanged(
         controller: NavController, destination: NavDestination, arguments: Bundle?
     ) {
+
 
     }
 
@@ -223,7 +274,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     fun checkIftodayCheckIsDone() {
-        viewModel.getVechiledefectSheetInfo(Prefs.getInstance(applicationContext).userID.toDouble()).observe(this@HomeActivity, Observer {
+
+
+        viewModel.CheckIFTodayCheckIsDone().observe(this@HomeActivity, Observer {
             if (it != null) {
                 Log.e("ldkkcjvckvjc", "checkIftodayCheckIsDone: ")
                 if (it.isSubmited.equals(true)) {
@@ -237,29 +290,19 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         })
     }
 
-    fun showAlertLogout() {
-        val factory = LayoutInflater.from(this)
-        val view: View = factory.inflate(R.layout.logout_layout, null)
-        val deleteDialog: AlertDialog = AlertDialog.Builder(this).create()
-        val imageView: ImageView = view.findViewById(R.id.ic_cross_orange)
-        imageView.setOnClickListener {
-            deleteDialog.dismiss()
+    fun backNav() {
+        val prefs = Prefs.getInstance(applicationContext)
+        val fragmentStack = prefs.getNavigationHistory()
+        if (fragmentStack.size > 1) {
+            fragmentStack.pop()
+            val previousFragment = fragmentStack.peek()
+            if (previousFragment != R.id.dailyWorkFragment) {
+                navController.navigate(previousFragment)
+                prefs.saveNavigationHistory(fragmentStack)
+            } else {
+            }
+        } else {
+            //super.onBackPressed()
         }
-        val btone:Button=view.findViewById(R.id.bt_no)
-        val bttwo:Button=view.findViewById(R.id.bt_yes)
-
-        btone.setOnClickListener {
-            deleteDialog.dismiss()
-        }
-
-        bttwo.setOnClickListener {
-            logout()
-        }
-        deleteDialog.setView(view)
-        deleteDialog.setCanceledOnTouchOutside(false);
-        deleteDialog.setCancelable(false)
-        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-        deleteDialog.show();
-
     }
 }

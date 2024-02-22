@@ -23,7 +23,8 @@ import javax.net.ssl.X509TrustManager
 
 object RetrofitService {
 //    private const val BASE_URL = "http://182.64.1.105:8119/"
-    private const val BASE_URL="http://122.176.42.96:8119/"
+   // private const val BASE_URL="http://122.176.42.96:8119/"
+ private const val BASE_URL="http://192.168.0.150:8119/"
 
     fun getInstance(): Retrofit {
 
@@ -103,6 +104,8 @@ object RetrofitService {
         val applicationContext = App.instance
         return Interceptor { chain ->
             val accessToken: String =Prefs.getInstance(applicationContext).accessToken
+
+
 
             if (Prefs.getInstance(applicationContext).accessToken.isNotEmpty()) {
                 val request: Request = chain.request().newBuilder()
