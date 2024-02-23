@@ -154,4 +154,10 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Part image:MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+    @Multipart
+    @POST("/api/Vehicle/UploadVehicleAddBlueFile")
+    suspend fun UploadVehicleAddBlueFile(
+        @Query("userId") userId: Int,
+        @Part image:MultipartBody.Part
+    ):Response<SimpleStatusMsgResponse>
 }

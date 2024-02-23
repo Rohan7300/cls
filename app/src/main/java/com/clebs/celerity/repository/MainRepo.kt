@@ -142,6 +142,7 @@ class MainRepo(private val ApiService: ApiService) {
             4 -> ApiService.uploadVehRearImage(userID, image)
             5 -> ApiService.UploadVehicleOilLevelFile(userID, image)
             6 -> ApiService.uploadVehOffSideImage(userID, image)
+            7 -> ApiService.UploadVehicleAddBlueFile(userID, image)
             else ->
                 throw IllegalArgumentException()
         }

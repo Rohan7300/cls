@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
@@ -45,7 +46,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     lateinit var navController: NavController
     public lateinit var viewModel: MainViewModel
     private lateinit var navGraph: NavGraph
-    private var completeTaskScreen:Boolean = false
+    private var completeTaskScreen: Boolean = false
 
     companion object {
         fun showLog(tag: String, message: String) {
@@ -86,23 +87,36 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         viewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
+
         viewModel.getVehicleDefectSheetInfoLiveData.observe(this, Observer {
             Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
-            if(it!=null)
-            {
+            ActivityHomeBinding.homeActivityPB.visibility = View.GONE
+            if (it != null) {
                 completeTaskScreen = it.IsSubmited
             }
+            if (!completeTaskScreen) {
+                screenid = viewModel.getLastVisitedScreenId(this)
+                if (screenid.equals(0)) {
+                    navController.navigate(R.id.homeFragment)
+                    navController.currentDestination!!.id = R.id.homeFragment
+
+                } else {
+
+                    navController.navigate(screenid)
+                    navController.currentDestination!!.id = screenid
+
+                }
+            } else {
+                navController.navigate(R.id.completeTaskFragment)
+            }
         })
-        viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
+        //viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
 
 
         imageViewModel = ViewModelProvider(
             this,
             ImageViewModelProviderFactory(imagesRepo)
         ).get(ImageViewModel::class.java)
-
-
-
 
         imageViewModel.images?.observe(this) { imageEntity ->
             dbLog(imageEntity)
@@ -147,24 +161,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
                 R.id.daily -> {
-                        if (!completeTaskScreen) {
-                            screenid = viewModel.getLastVisitedScreenId(this)
-                            if (screenid.equals(0)) {
-                                navController.navigate(R.id.homeFragment)
-                                // navigateTo(R.id.homeFragment)
-                                navController.currentDestination!!.id = R.id.homeFragment
+                    ActivityHomeBinding.homeActivityPB.visibility = View.VISIBLE
+                    viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
 
-                            } else {
-
-                                navController.navigate(screenid)
-
-
-                                navController.currentDestination!!.id = screenid
-
-                            }
-                        } else {
-                            navController.navigate(R.id.completeTaskFragment)
-                        }
                     true
                 }
 

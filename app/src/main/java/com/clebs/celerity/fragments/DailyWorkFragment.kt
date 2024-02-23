@@ -143,8 +143,8 @@ class DailyWorkFragment : Fragment() {
 
 
         mbinding.rectangle4.setOnClickListener {
-//            checkPermissions()
-            navigateTo(R.id.vechileMileageFragment,requireContext(),findNavController())
+  checkPermissions()
+//            navigateTo(R.id.vechileMileageFragment,requireContext(),findNavController())
 
         }
 
