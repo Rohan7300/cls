@@ -31,14 +31,10 @@ class SplashActivity : AppCompatActivity() {
         ActivitySplashBinding =
             DataBindingUtil.setContentView(this@SplashActivity, R.layout.activity_splash)
 
-//        val rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.anam)
+        val rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.anam)
 
         // Set the animation on the circles
-        ActivitySplashBinding.imgCircleLogo.animate()
-            .rotationBy(360f)
-            .setDuration(2000)
-            .setInterpolator(AccelerateInterpolator())
-            .setListener(null)
+        ActivitySplashBinding.imgCircleLogo.startAnimation(rotateAnimation)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
 
