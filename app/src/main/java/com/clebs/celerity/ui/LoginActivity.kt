@@ -37,7 +37,6 @@ class LoginActivity : AppCompatActivity() {
 
             if (ActivityLoginBinding.edtUser.text!!.isEmpty()) {
                 ActivityLoginBinding.edtUser.setError("Please enter username/email")
-
             } else if (ActivityLoginBinding.edtPass.text!!.isEmpty()) {
                 ActivityLoginBinding.edtPass.setError("Please enter password")
 
@@ -45,10 +44,7 @@ class LoginActivity : AppCompatActivity() {
                 ActivityLoginBinding.progressbar.visibility = View.VISIBLE
                 login()
             }
-
         }
-
-
     }
 
     fun login() {
@@ -97,7 +93,7 @@ class LoginActivity : AppCompatActivity() {
         mainViewModel.getDriverSignatureInfo(userid).observe(this@LoginActivity, Observer {
             if (it!=null){
                 ActivityLoginBinding.progressbar.visibility=View.GONE
-                if (it!!.isSignatureReq.equals(true)) {
+                if (!it!!.isSignatureReq.equals(true)) {
                     Prefs.getInstance(applicationContext).saveBoolean("isSignatureReq",it.isSignatureReq)
                     Prefs.getInstance(applicationContext)
                         .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
@@ -117,8 +113,6 @@ class LoginActivity : AppCompatActivity() {
             else{
                 ActivityLoginBinding.progressbar.visibility=View.GONE
             }
-
-
         })
 
     }

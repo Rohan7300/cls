@@ -12,7 +12,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.ActivityPolicyDocsBinding
 import com.clebs.celerity.utils.Prefs
@@ -37,11 +36,8 @@ class PolicyDocsActivity : AppCompatActivity() {
 
         mbinding.checkbox.addOnCheckedStateChangedListener { checkBox, state ->
             if (checkBox.isChecked) {
-
-
                 if (mbinding.llTrucks.visibility == View.GONE) {
                     showAlert()
-
                 } else {
                     if (!mbinding.checkbox2.isChecked) {
                         Toast.makeText(
@@ -53,7 +49,6 @@ class PolicyDocsActivity : AppCompatActivity() {
                         showAlert()
                     }
                 }
-
             } else {
 
             }
@@ -87,11 +82,6 @@ class PolicyDocsActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-
-        // To execute back press
-        // super.onBackPressed()
-
-        // To do something else
         Toast.makeText(applicationContext, "Please sign the policy documents to continue", Toast.LENGTH_SHORT).show()
     }
 

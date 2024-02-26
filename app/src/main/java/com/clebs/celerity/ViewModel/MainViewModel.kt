@@ -14,7 +14,7 @@ import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
-import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
+import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -36,6 +36,7 @@ class MainViewModel(
     val uploadVehicleImageLiveData = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataDailyWorkInfoByIdResponse = MutableLiveData<DailyWorkInfoByIdResponse?>()
     val liveDataRouteLocationResponse = MutableLiveData<GetRouteLocationInfoResponse>()
+    val liveDataRideAlongRouteTypeInfo = MutableLiveData<GetRideAlongRouteTypeInfoResponse>()
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
 
@@ -180,6 +181,12 @@ class MainViewModel(
     fun GetRouteLocationInfo(locID: Int){
         viewModelScope.launch {
             liveDataRouteLocationResponse.postValue(repo.GetRouteLocationInfo(locID))
+        }
+    }
+
+    fun GetRideAlongRouteTypeInfo(userID: Int){
+        viewModelScope.launch {
+            liveDataRideAlongRouteTypeInfo.postValue(repo.GetRideAlongRouteTypeInfo(userID))
         }
     }
 

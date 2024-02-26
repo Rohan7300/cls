@@ -12,6 +12,7 @@ import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -173,6 +174,17 @@ class MainRepo(private val ApiService: ApiService) {
         if (response.isSuccessful){
             return response.body()
         }else{
+            val errorBody = response.errorBody()?.string()
+            println("Error response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetRideAlongRouteTypeInfo(userID: Int): GetRideAlongRouteTypeInfoResponse?{
+        val response = ApiService.GetRideAlongRouteTypeInfo(userID)
+        if(response.isSuccessful)
+            return response.body()
+        else{
             val errorBody = response.errorBody()?.string()
             println("Error response body: $errorBody")
         }
