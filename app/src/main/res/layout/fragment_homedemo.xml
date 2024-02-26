@@ -5,6 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:backgroundTint="@color/light_orange"
         android:background="@drawable/background"
         tools:context=".ui.SplashActivity">
 
