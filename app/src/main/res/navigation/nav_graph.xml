@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homedemoFragment"
+    app:startDestination="@id/homeFragment"
   >
 
     <fragment
@@ -47,6 +47,121 @@
         android:label="WindScreenFragment"
         tools:layout="@layout/fragment_wind_screen" />
     <fragment
+        android:id="@+id/wipersScreenFragment"
+        android:name="com.clebs.celerity.fragments.interior.WipersFragment"
+        android:label="WipersScreenFragment"
+        tools:layout="@layout/fragment_wipers" />
+    <fragment
+        android:id="@+id/mirrorsScreenFragment"
+        android:name="com.clebs.celerity.fragments.interior.MirrorsFragment"
+        android:label="MirrorsScreenFragment"
+        tools:layout="@layout/fragment_mirrors" />
+    <fragment
+        android:id="@+id/cabSecurityFragment"
+        android:name="com.clebs.celerity.fragments.interior.CabSecurityFragment"
+        android:label="CabSecurityFragment"
+        tools:layout="@layout/fragment_cab_security" />
+    <fragment
+        android:id="@+id/seatbeltFragment"
+        android:name="com.clebs.celerity.fragments.interior.SeatBeltFragment"
+        android:label="SeatBeltFragment"
+        tools:layout="@layout/fragment_seat_belt" />
+    <fragment
+        android:id="@+id/warningServiceLightsFragment"
+        android:name="com.clebs.celerity.fragments.interior.WarningFragment"
+        android:label="WarningFragment"
+        tools:layout="@layout/fragment_warning" />
+    <fragment
+        android:id="@+id/fuelAddBlueFragment"
+        android:name="com.clebs.celerity.fragments.interior.FuelFragment"
+        android:label="FuelAddBlueFragment"
+        tools:layout="@layout/fragment_fuel" />
+    <fragment
+        android:id="@+id/oilCoolantFragment"
+        android:name="com.clebs.celerity.fragments.interior.OilFragment"
+        android:label="OilCoolantFragment"
+        tools:layout="@layout/fragment_oil" />
+    <fragment
+        android:id="@+id/lightsFogFragment"
+        android:name="com.clebs.celerity.fragments.interior.LightsFogFragment"
+        android:label="LightsFogFragment"
+        tools:layout="@layout/fragment_lights_fog" />
+    <fragment
+        android:id="@+id/indicatorsSideRepeatorFragment"
+        android:name="com.clebs.celerity.fragments.interior.IndictorsFragment"
+        android:label="IndicatorsSideRepeatorsFragment"
+        tools:layout="@layout/fragment_indictors" />
+    <fragment
+        android:id="@+id/hornFragment"
+        android:name="com.clebs.celerity.fragments.interior.HornFragment"
+        android:label="HornFragment"
+        tools:layout="@layout/fragment_horn" />
+    <fragment
+        android:id="@+id/steeringControlFragment"
+        android:name="com.clebs.celerity.fragments.interior.SteeringControlFragment"
+        android:label="SteeringControlFragment"
+        tools:layout="@layout/fragment_steering_control" />
+    <fragment
+        android:id="@+id/brakesFragment"
+        android:name="com.clebs.celerity.fragments.interior.BreaksFragment"
+        android:label="BrakesFragment"
+        tools:layout="@layout/fragment_breaks" />
+    <fragment
+        android:id="@+id/bodyDamagefrontFragment"
+        android:name="com.clebs.celerity.fragments.exterior.BodyDamageFrontFragment"
+        android:label="BodyDamageFrontFragment"
+        tools:layout="@layout/fragment_body_damage_front" />
+    <fragment
+        android:id="@+id/bodyDamageNearSideFragment"
+        android:name="com.clebs.celerity.fragments.exterior.BodyDamageNearSIdeFragment"
+        android:label="BodyDamageNearSide"
+        tools:layout="@layout/fragment_body_damage_near_s_ide" />
+    <fragment
+        android:id="@+id/bodyDamageRearSideFragment"
+        android:name="com.clebs.celerity.fragments.exterior.BodyDamangeRearSideFragment"
+        android:label="BodyDamageRearSide"
+        tools:layout="@layout/fragment_body_damange_rear_side" />
+    <fragment
+        android:id="@+id/bodyOffsideFragment"
+        android:name="com.clebs.celerity.fragments.exterior.BodyOffsideFragment"
+        android:label="BodyOffsideFragment"
+        tools:layout="@layout/fragment_body_offside" />
+    <fragment
+        android:id="@+id/excessiveSmokeFragment"
+        android:name="com.clebs.celerity.fragments.exterior.ExcessiveSmokeFragment"
+        android:label="ExcessiveSmokeFragment"
+        tools:layout="@layout/fragment_excessive_smoke" />
+    <fragment
+        android:id="@+id/oilFuelCoolantFragment"
+        android:name="com.clebs.celerity.fragments.exterior.OilFuelCoolantLeaksFragment"
+        android:label="OilFuelCoolantFragment"
+        tools:layout="@layout/fragment_oil_fuel_coolant_leaks" />
+    <fragment
+        android:id="@+id/reflectorsFragment"
+        android:name="com.clebs.celerity.fragments.exterior.ReflectorsFragment"
+        android:label="ReflectorsFragment"
+        tools:layout="@layout/fragment_reflectors" />
+    <fragment
+        android:id="@+id/registrationNumberPlateFragment"
+        android:name="com.clebs.celerity.fragments.exterior.RegistrationNumberPlatesFragment"
+        android:label="RegistrationNumberPlateFragment"
+        tools:layout="@layout/fragment_registration_number_plates" />
+    <fragment
+        android:id="@+id/tireConditionLeagalFragment"
+        android:name="com.clebs.celerity.fragments.exterior.TierConditonlegalFragment"
+        android:label="TierConditionLegalFragment"
+        tools:layout="@layout/fragment_tier_conditonlegal" />
+    <fragment
+        android:id="@+id/vehicleLockingFragment"
+        android:name="com.clebs.celerity.fragments.exterior.VechileLockingFragment"
+        android:label="VehicleLockingFragment"
+        tools:layout="@layout/fragment_vechile_locking" />
+    <fragment
+        android:id="@+id/wheelsWheelFixingFragment"
+        android:name="com.clebs.celerity.fragments.exterior.WheelsWheelFixingFragment"
+        android:label="WheelsLockingFragment"
+        tools:layout="@layout/fragment_wheels_wheel_fixing" />
+    <fragment
         android:id="@+id/completeTaskFragment"
         android:name="com.clebs.celerity.fragments.CompleteTaskFragment"
         android:label="CompleteTaskFragment"
@@ -71,7 +186,11 @@
 
         android:name="com.clebs.celerity.ui.HomedemoFragment"
         android:label="HomedemoFragment" />
-
+    <fragment
+        android:id="@+id/policyDocsFragment"
+        tools:layout="@layout/fragment_policy_docs"
+        android:name="com.clebs.celerity.fragments.PolicyDocsFragment"
+        android:label="PolicyDocsFragment" />
     <fragment
         android:id="@+id/windowsGlassFragment"
         tools:layout="@layout/fragment_windows_glass"

@@ -4,32 +4,102 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import android.widget.EditText
+import android.widget.ImageView
+import androidx.core.widget.doAfterTextChanged
 import com.clebs.celerity.R
+import com.clebs.celerity.databinding.FragmentBreaksBinding
+import com.clebs.celerity.fragments.BaseInteriorFragment
+import com.clebs.celerity.utils.setImageView
 
 
-/**
- * A simple [Fragment] subclass.
- * Use the [BreaksFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class BreaksFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class BreaksFragment : BaseInteriorFragment() {
+    private lateinit var mBinding: FragmentBreaksBinding
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.setLastVisitedScreenId(requireActivity(), R.id.brakesFragment)
+        clickListeners()
+        setDefault(mBinding.imageUploadIV,mBinding.edtDefect)
+    }
+    override fun clickListeners() {
+        mBinding.run {
+            edtMil.setOnClickListener {
+                editMil1Visibilty(
+                    mBinding.tvNext,
+                    mBinding.rlUploadDefect,
+                    mBinding.edtMil,
+                    mBinding.edtMilTwo,
+                    mBinding.imageRadioTwo,
+                    mBinding.imageRadio
+                )
+            }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+            edtMilTwo.setOnClickListener {
+                editMil2Visibilty(
+                    mBinding.tvNext,
+                    mBinding.rlUploadDefect,
+                    mBinding.edtMil,
+                    mBinding.edtMilTwo,
+                    mBinding.imageRadioTwo,
+                    mBinding.imageRadio,
+                )
+            }
+
+            imageUploadIV.setOnClickListener {
+                pictureDialogBase64(imageUploadIV)
+            }
+            edtDefect.doAfterTextChanged {
+                doAfterTextChanged(mBinding.tvNext,mBinding.edtDefect)
+            }
+            tvNext.setOnClickListener {
+                saveNnext()
+            }
+
+        }
 
     }
+
+    fun setDefault(defaultIv: ImageView, edtDefect: EditText){
+        imageViewModel.images.value.let {
+            if(it!=null){
+                imageEntity = imageViewModel.images.value!!
+                setImageView(defaultIv, it.inBrakedEbsAbs.toString())
+                if (it.dfNameBrakedEbsAbs!!.isNotEmpty() && it.dfNameBrakedEbsAbs != "f") {
+                    edtDefect.setText(it.dfNameBrakedEbsAbs.toString())
+                }
+            }
+        }
+    }
+
+    override fun saveNnext() {
+        if(defectView) {
+            if (base64 != null) {
+                imageEntity.inBrakedEbsAbs = base64
+                imageViewModel.insertImage(imageEntity)
+            }
+            if(defectName!!.toString().isNotEmpty()){
+                imageEntity.dfNameBrakedEbsAbs = defectName!!.toString()
+                imageViewModel.insertDefectName(imageEntity)
+            }
+        }else if(functionalView){
+            imageEntity.inBrakedEbsAbs = "empty"
+            imageViewModel.insertImage(imageEntity)
+            imageEntity.dfNameBrakedEbsAbs = "f"
+            imageViewModel.insertDefectName(imageEntity)
+
+        }
+        navigateTo(R.id.vehicleLockingFragment)
+        //findNavController().navigate(R.id.vehicleLockingFragment)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_breaks, container, false)
+        if (!this::mBinding.isInitialized) mBinding =
+            FragmentBreaksBinding.inflate(inflater, container, false)
+        return mBinding.root
     }
-
 
 }

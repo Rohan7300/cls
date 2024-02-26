@@ -16,8 +16,6 @@ data class SaveVechileDefectSheetRequest(
     val vdhComments: String,
     @SerializedName("VdhDaId")
     val vdhDaId: Int,
-    @SerializedName("VdhDate")
-    val vdhDate: String,
     @SerializedName("VdhExcessiveEngineExhaustSmoke")
     val vdhExcessiveEngineExhaustSmoke: String,
     @SerializedName("VdhExcessiveEngineExhaustSmokeComment")
@@ -34,8 +32,6 @@ data class SaveVechileDefectSheetRequest(
     val vdhHornReverseBeeper: String,
     @SerializedName("VdhHornReverseBeeperComment")
     val vdhHornReverseBeeperComment: String,
-    @SerializedName("VdhId")
-    val vdhId: Int,
     @SerializedName("VdhIndicatorsSideRepeaters")
     val vdhIndicatorsSideRepeaters: String,
     @SerializedName("VdhIndicatorsSideRepeatersComment")
