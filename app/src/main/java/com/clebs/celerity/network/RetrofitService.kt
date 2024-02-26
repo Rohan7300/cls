@@ -22,9 +22,9 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 object RetrofitService {
-//    private const val BASE_URL = "http://182.64.1.105:8119/"
-    private const val BASE_URL="http://122.176.42.96:8119/"
- //private const val BASE_URL="http://192.168.0.150:8119/"
+    //    private const val BASE_URL = "http://182.64.1.105:8119/"
+    //  private const val BASE_URL="http://122.176.42.96:8119/"
+    private const val BASE_URL = "http://192.168.0.150:8119/"
 
     fun getInstance(): Retrofit {
 
@@ -39,11 +39,15 @@ object RetrofitService {
         builder.addInterceptor(logging)
 
         return Retrofit.Builder().baseUrl(BASE_URL)
-            .client(getUnSecureOkHttpClient(provideHeaderInterceptor(),
-                provideHttpLoggingInterceptor()
-            ))
+            .client(
+                getUnSecureOkHttpClient(
+                    provideHeaderInterceptor(),
+                    provideHttpLoggingInterceptor()
+                )
+            )
             .addConverterFactory(GsonConverterFactory.create()).build()
     }
+
     fun getUnSecureOkHttpClient(
         headerInterceptor: Interceptor,
         loggingInterceptor: HttpLoggingInterceptor
@@ -100,10 +104,11 @@ object RetrofitService {
             .addInterceptor(headerInterceptor)
             .build()
     }
+
     fun provideHeaderInterceptor(): Interceptor {
         val applicationContext = App.instance
         return Interceptor { chain ->
-            val accessToken: String =Prefs.getInstance(applicationContext).accessToken
+            val accessToken: String = Prefs.getInstance(applicationContext).accessToken
 
 
 

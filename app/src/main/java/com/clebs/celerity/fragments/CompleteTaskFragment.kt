@@ -75,8 +75,10 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.vehicleImageUploadInfoLiveData.observe(viewLifecycleOwner, Observer {
             println(it)
-            if (it!!.Status == "404")
+            if (it!!.Status == "404"){
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                showImageUploadLayout = true
+            }
             else {
                 if (it.IsVehicleImageUploaded == false) {
                     showImageUploadLayout = true
@@ -85,39 +87,41 @@ class CompleteTaskFragment : Fragment() {
 
                     showImageUploadLayout = checkNull(it)
 
-                    if (it.DaVehImgDashBoardFileName != null) {
+                    if (it.DaVehImgDashBoardFileName != null)
                         mbinding.ivVehicleDashboard.setImageResource(R.drawable.ic_yes)
-                    } else
-                        showImageUploadLayout = false
 
-                    if (it.DaVehImgFaceMaskFileName != null) {
+                    if (it.DaVehImgFaceMaskFileName != null)
                         mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
-                    }
-                    if (it.DaVehImgRearFileName != null) {
+
+                    if (it.DaVehImgRearFileName != null)
                         mbinding.ivRearImgUp.setImageResource(R.drawable.ic_yes)
-                    }
-                    if (it.DaVehImgFrontFileName != null) {
+
+                    if (it.DaVehImgFrontFileName != null)
                         mbinding.ivFront.setImageResource(R.drawable.ic_yes)
-                    }
-                    if (it.DaVehImgNearSideFileName != null) {
+
+                    if (it.DaVehImgNearSideFileName != null)
                         mbinding.ivNearSide.setImageResource(R.drawable.ic_yes)
-                    }
-                    if (it.DaVehImgOffSideFileName != null) {
+
+                    if (it.DaVehImgOffSideFileName != null)
                         mbinding.ivOffSideImgUp.setImageResource(R.drawable.ic_yes)
-                    }
-                    if (it.DaVehicleAddBlueImage != null) {
+
+                    if (it.DaVehicleAddBlueImage != null)
                         mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
-                    }
-                    if (it.DaVehImgOilLevelFileName != null) {
+
+                    if (it.DaVehImgOilLevelFileName != null)
                         mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
-                    }
+
                 }
+            }
+
+
+            if(!showImageUploadLayout){
+                mbinding.uploadLayouts.visibility = View.GONE
+            }else{
+                mbinding.uploadLayouts.visibility = View.VISIBLE
             }
         })
 
-        if(!showImageUploadLayout){
-            mbinding.uploadLayouts.visibility = View.GONE
-        }
 
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
 
