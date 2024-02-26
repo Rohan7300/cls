@@ -171,7 +171,9 @@ class CompleteTaskFragment : Fragment() {
             pictureDialogBase64(mbinding.ivAddBlueImg, requestCode)
         }
 
-
+        mbinding.AddRoute.setOnClickListener {
+            findNavController().navigate(R.id.onRoadHoursFragment)
+        }
 
         mbinding.rlcom.setOnClickListener {
             if (isclicked) {

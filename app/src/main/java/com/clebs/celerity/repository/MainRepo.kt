@@ -11,6 +11,8 @@ import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
+import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
@@ -149,6 +151,28 @@ class MainRepo(private val ApiService: ApiService) {
         if (response.isSuccessful)
             return response.body()
         else {
+            val errorBody = response.errorBody()?.string()
+            println("Error response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetDailyWorkInfobyId(userID: Int):DailyWorkInfoByIdResponse?{
+        val response = ApiService.GetDailyWorkInfobyId(userID)
+        if (response.isSuccessful){
+            return response.body()
+        }else{
+            val errorBody = response.errorBody()?.string()
+            println("Error response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetRouteLocationInfo(locID: Int): GetRouteLocationInfoResponse?{
+        val response = ApiService.GetRouteLocationInfo(locID)
+        if (response.isSuccessful){
+            return response.body()
+        }else{
             val errorBody = response.errorBody()?.string()
             println("Error response body: $errorBody")
         }
