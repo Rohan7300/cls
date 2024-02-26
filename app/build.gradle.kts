@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -64,6 +65,9 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.multidex:multidex:2.0.1")
+    implementation("com.google.android.gms:play-services-vision:20.0.0")
+    implementation("com.google.firebase:firebase-ml-vision:24.0.3")
+//    implementation("com.google.firebase:firebase-core:21.1.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.github.nsmarinro.SignatureView:librarySignature:0.1.2")
     implementation( "androidx.camera:camera-camera2:1.3.1")

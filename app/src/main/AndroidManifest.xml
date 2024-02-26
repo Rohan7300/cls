@@ -28,27 +28,33 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+
         android:theme="@style/Theme.Celerity"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".ui.PolicyDocsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.CreateTicketsActivity"
             android:exported="true"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Celerity"></activity>
         <activity
             android:name=".ui.HomeActivity"
+            android:screenOrientation="portrait"
             android:exported="true"></activity>
         <activity
             android:name=".ui.LoginActivity"
-            android:exported="true"
+            android:exported="false"
+            android:screenOrientation="portrait"
             android:noHistory="true"></activity>
         <activity
             android:name=".ui.SplashActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:label="@string/app_name"
             android:noHistory="true"
             android:theme="@style/Theme.Celerity">
@@ -62,6 +68,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.com.vansuita.pickimage.provider"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:grantUriPermissions="true"
             tools:replace="android:authorities">
 

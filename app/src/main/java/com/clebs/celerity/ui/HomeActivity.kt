@@ -145,7 +145,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                 R.id.home -> {
 
-                    navController.navigate(R.id.homedemoFragment)
+                    navController.navigate(R.id.homeFragment)
 
 
 

@@ -13,6 +13,8 @@
         <item name="colorOnSecondary">@color/black0</item>
 
     </style>
+
+
     <style name="place_the_r">
         <item name="android:textSize">15sp</item>
         <item name="android:letterSpacing">-0.02</item>
