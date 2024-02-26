@@ -88,4 +88,14 @@ class Prefs(context: Context) {
         }
     }
 
+    fun saveLocationID(locID:Int){
+        val editor = sharedPreferences.edit()
+        editor.putInt("locID", locID)
+        editor.apply()
+    }
+
+    fun getLocationID():Int{
+        return sharedPreferences.getInt("locID",0)
+    }
+
 }

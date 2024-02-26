@@ -1,6 +1,5 @@
 package com.clebs.celerity.fragments
 
-
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -16,8 +15,6 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -27,18 +24,14 @@ import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
-import com.clebs.celerity.database.ImagesRepo
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
+import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
-import com.clebs.celerity.utils.ImageCodes
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.convertBitmapToBase64
-import com.clebs.celerity.utils.decodeBase64Image
 import com.clebs.celerity.utils.navigateTo
-import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.toRequestBody
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import okhttp3.MultipartBody
@@ -49,10 +42,10 @@ class CompleteTaskFragment : Fragment() {
     private var isclicked: Boolean = true
     private var isclickedtwo: Boolean = true
     private lateinit var viewModel: MainViewModel
-    private val CAMERA_REQUEST_CODE = 101
     lateinit var imageView: ImageView
     var userId: Int = 0
-    var requestCode:Int = 0
+    var requestCode: Int = 0
+    var showImageUploadLayout: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,59 +75,66 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.vehicleImageUploadInfoLiveData.observe(viewLifecycleOwner, Observer {
             println(it)
-            if (it!!.Status == "404")
+            if (it!!.Status == "404"){
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                showImageUploadLayout = true
+            }
             else {
                 if (it.IsVehicleImageUploaded == false) {
+                    showImageUploadLayout = true
                     mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                 } else {
-                    if (it.DaVehImgDashBoardFileName != null) {
+
+                    showImageUploadLayout = checkNull(it)
+
+                    if (it.DaVehImgDashBoardFileName != null)
                         mbinding.ivVehicleDashboard.setImageResource(R.drawable.ic_yes)
-                    }
-                    if (it.DaVehImgFaceMaskFileName != null) {
+
+                    if (it.DaVehImgFaceMaskFileName != null)
                         mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
-                    }
-                    if (it.DaVehImgRearFileName != null) {
+
+                    if (it.DaVehImgRearFileName != null)
                         mbinding.ivRearImgUp.setImageResource(R.drawable.ic_yes)
-                    }
-                    if (it.DaVehImgFrontFileName != null) {
+
+                    if (it.DaVehImgFrontFileName != null)
                         mbinding.ivFront.setImageResource(R.drawable.ic_yes)
-                    }
-                    if (it.DaVehImgNearSideFileName != null) {
+
+                    if (it.DaVehImgNearSideFileName != null)
                         mbinding.ivNearSide.setImageResource(R.drawable.ic_yes)
-                    }
-                    if (it.DaVehImgOffSideFileName != null) {
+
+                    if (it.DaVehImgOffSideFileName != null)
                         mbinding.ivOffSideImgUp.setImageResource(R.drawable.ic_yes)
-                    }
-                    if (it.DaVehImgFaceMaskFileName != null) {
+
+                    if (it.DaVehicleAddBlueImage != null)
                         mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
-                    }
-                    if (it.DaVehImgOilLevelFileName != null) {
+
+                    if (it.DaVehImgOilLevelFileName != null)
                         mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
-                    }
+
                 }
+            }
+
+
+            if(!showImageUploadLayout){
+                mbinding.uploadLayouts.visibility = View.GONE
+            }else{
+                mbinding.uploadLayouts.visibility = View.VISIBLE
             }
         })
 
+
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
-
-
 
         viewModel.uploadVehicleImageLiveData.observe(viewLifecycleOwner, Observer {
             progressBarVisibility(false)
             if (it != null) {
-                if(it.Status=="200"){
-                    when(requestCode){
-                        0->mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
-                        1->mbinding.ivVehicleDashboard.setImageResource(R.drawable.ic_yes)
-                        2->mbinding.ivFront.setImageResource(R.drawable.ic_yes)
-                        3->mbinding.ivNearSide.setImageResource(R.drawable.ic_yes)
-                        4->mbinding.ivRearImgUp.setImageResource(R.drawable.ic_yes)
-                        5->mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
-                        6->mbinding.ivOffSideImgUp.setImageResource(R.drawable.ic_yes)
-                        7->mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
-                    }
+                if (it.Status == "200") {
+                    setImageUploadViews(requestCode, 1)
+                } else {
+                    setImageUploadViews(requestCode, 0)
                 }
+            } else {
+                setImageUploadViews(requestCode, 0)
             }
         })
 
@@ -171,35 +171,30 @@ class CompleteTaskFragment : Fragment() {
             pictureDialogBase64(mbinding.ivAddBlueImg, requestCode)
         }
 
-
+        mbinding.AddRoute.setOnClickListener {
+            findNavController().navigate(R.id.onRoadHoursFragment)
+        }
 
         mbinding.rlcom.setOnClickListener {
             if (isclicked) {
                 mbinding.taskDetails.visibility = View.VISIBLE
                 mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
                 mbinding.view2.visibility = View.VISIBLE
-
-
             } else {
                 mbinding.taskDetails.visibility = View.GONE
                 mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
                 mbinding.view2.visibility = View.GONE
                 mbinding.uploadLayouts.visibility = View.VISIBLE
-
             }
             isclicked = !isclicked
-
         }
         mbinding.run {
-
-
             mbinding.tvNext.isEnabled = !isclicked
             if (tvNext.isEnabled) {
                 tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
             } else {
                 tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))
             }
-
         }
         mbinding.tvNext.setOnClickListener {
             if (isclickedtwo) {
@@ -230,25 +225,23 @@ class CompleteTaskFragment : Fragment() {
 
             mbinding.routeLayout.visibility = View.VISIBLE
         }
-//        val listData : MutableList<ParentData> = ArrayList()
-//        val parentData: Array<String> = arrayOf("Completed Task")
-//
-//        val childDataData1: MutableList<ChildData> = mutableListOf(ChildData("Vehicle Defect Sheet","0"),ChildData("Vehcile Pictures","0"),ChildData("Clocked In","0"))
-//
-//        val parentObj1 = ParentData(parentTitle = parentData[0], subList = childDataData1)
-//        listData.add(parentObj1)
-//
-//       mbinding.exRecycle.adapter = RecycleAdapter(requireActivity(),listData)
         return mbinding.root
+    }
+
+    private fun checkNull(res: GetVehicleImageUploadInfoResponse): Boolean {
+        return res.DaVehImgDashBoardFileName == null ||
+                res.DaVehImgFaceMaskFileName == null ||
+                res.DaVehImgRearFileName == null ||
+                res.DaVehImgFrontFileName == null ||
+                res.DaVehImgNearSideFileName == null ||
+                res.DaVehImgOffSideFileName == null ||
+                res.DaVehicleAddBlueImage == null ||
+                res.DaVehImgOilLevelFileName == null
     }
 
     fun showAlert() {
         val factory = LayoutInflater.from(requireContext())
         val view: View = factory.inflate(R.layout.time_picker_dialog, null)
-        val ic_start = view.findViewById<ImageButton>(R.id.ic_breakstart)
-        val ic_breakend = view.findViewById<ImageButton>(R.id.ic_breakend)
-        val edt_breakstart = view.findViewById<EditText>(R.id.edt_breakstart)
-        val edt_breakend = view.findViewById<EditText>(R.id.edt_breakend)
         val deleteDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
         deleteDialog.setView(view)
 
@@ -303,65 +296,96 @@ class CompleteTaskFragment : Fragment() {
         val imagePart = when (requestCode) {
             0 -> {
                 MultipartBody.Part.createFormData(
-                    "uploadFaceMaskDamageVideoFile",
+                    "uploadFaceMaskImage",
                     uniqueFileName,
                     requestBody
                 )
             }
+
             1 -> {
                 MultipartBody.Part.createFormData(
-                    "uploadVehDashBoardImage",
+                    "uploadVehicleDashBoardImage",
                     uniqueFileName,
                     requestBody
                 )
             }
+
             2 -> {
                 MultipartBody.Part.createFormData(
-                    "uploadVehFrontImage",
+                    "uploadVehicleFrontImage",
                     uniqueFileName,
                     requestBody
                 )
             }
+
             3 -> {
                 MultipartBody.Part.createFormData(
-                    "uploadVehNearSideImage",
+                    "uploadVehicleNearSideImage",
                     uniqueFileName,
                     requestBody
                 )
             }
+
             4 -> {
                 MultipartBody.Part.createFormData(
-                    "uploadVehRearImage",
+                    "uploadVehicleRearImage",
                     uniqueFileName,
                     requestBody
                 )
             }
+
             5 -> {
                 MultipartBody.Part.createFormData(
-                    "uploadVehOilLevelDamageVideoFile",
+                    "uploadVehicleOilLevelImage",
                     uniqueFileName,
                     requestBody
                 )
             }
+
             6 -> {
                 MultipartBody.Part.createFormData(
-                    "uploadVehOffSideImage",
+                    "uploadVehicleOffSideImage",
                     uniqueFileName,
                     requestBody
                 )
             }
+
+            7 -> {
+                MultipartBody.Part.createFormData(
+                    "uploadVehicleAddBlueImage",
+                    uniqueFileName,
+                    requestBody
+                )
+            }
+
             else -> throw IllegalArgumentException()
         }
-        viewModel.uploadVehicleImage(userId, imagePart,requestCode)
+        viewModel.uploadVehicleImage(userId, imagePart, requestCode)
     }
 
-    fun progressBarVisibility(show:Boolean){
-        if(show){
+    fun progressBarVisibility(show: Boolean) {
+        if (show) {
             mbinding.completeTaskFragmentPB.bringToFront()
             mbinding.completeTaskFragmentPB.visibility = View.VISIBLE
-        }else{
+        } else {
             mbinding.completeTaskFragmentPB.visibility = View.GONE
         }
+    }
 
+    private fun setImageUploadViews(requestCode: Int, type: Int) {
+        var drawableID: Int = R.drawable.ic_yes
+        if (type != 1)
+            drawableID = R.drawable.refresh
+
+        when (requestCode) {
+            0 -> mbinding.ivFaceMask.setImageResource(drawableID)
+            1 -> mbinding.ivVehicleDashboard.setImageResource(drawableID)
+            2 -> mbinding.ivFront.setImageResource(drawableID)
+            3 -> mbinding.ivNearSide.setImageResource(drawableID)
+            4 -> mbinding.ivRearImgUp.setImageResource(drawableID)
+            5 -> mbinding.ivOilLevel.setImageResource(drawableID)
+            6 -> mbinding.ivOffSideImgUp.setImageResource(drawableID)
+            7 -> mbinding.ivAddBlueImg.setImageResource(drawableID)
+        }
     }
 }

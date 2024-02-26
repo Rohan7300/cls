@@ -17,8 +17,10 @@ import com.clebs.celerity.models.response.BaseResponse
 import com.clebs.celerity.models.response.BaseResponseTwo
 
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
+import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
+import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
@@ -154,4 +156,20 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Part image:MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+    @Multipart
+    @POST("/api/Vehicle/UploadVehicleAddBlueFile")
+    suspend fun UploadVehicleAddBlueFile(
+        @Query("userId") userId: Int,
+        @Part image:MultipartBody.Part
+    ):Response<SimpleStatusMsgResponse>
+
+    @GET("/api/DailyWorks/GetDailyWorkInfobyId/{userId}")
+    suspend fun GetDailyWorkInfobyId(
+        @Path("userId") userId: Int
+    ):Response<DailyWorkInfoByIdResponse>
+
+    @GET("/api/RouteUpdate/GetRouteLocationInfo/{locationId}")
+    suspend fun GetRouteLocationInfo(
+        @Path("locationId") locationId: Int
+    ):Response<GetRouteLocationInfoResponse>
 }

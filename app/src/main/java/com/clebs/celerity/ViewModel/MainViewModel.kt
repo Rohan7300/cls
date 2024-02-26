@@ -13,6 +13,9 @@ import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
+import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
+import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
@@ -31,6 +34,8 @@ class MainViewModel(
     val vechileInformationLiveData = MutableLiveData<GetVechileInformationResponse?>()
     val vehicleImageUploadInfoLiveData = MutableLiveData<GetVehicleImageUploadInfoResponse?>()
     val uploadVehicleImageLiveData = MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataDailyWorkInfoByIdResponse = MutableLiveData<DailyWorkInfoByIdResponse?>()
+    val liveDataRouteLocationResponse = MutableLiveData<GetRouteLocationInfoResponse>()
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
 
@@ -164,6 +169,17 @@ class MainViewModel(
     fun uploadVehicleImage(userID: Int,image:MultipartBody.Part,type:Int){
         viewModelScope.launch {
             uploadVehicleImageLiveData.postValue(repo.uploadVehicleImage(userID,image, type))
+        }
+    }
+
+    fun GetDailyWorkInfoById(userID: Int){
+        viewModelScope.launch {
+            livedataDailyWorkInfoByIdResponse.postValue(repo.GetDailyWorkInfobyId(userID))
+        }
+    }
+    fun GetRouteLocationInfo(locID: Int){
+        viewModelScope.launch {
+            liveDataRouteLocationResponse.postValue(repo.GetRouteLocationInfo(locID))
         }
     }
 

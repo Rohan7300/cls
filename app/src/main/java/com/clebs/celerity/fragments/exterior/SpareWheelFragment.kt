@@ -117,6 +117,8 @@ class SpareWheelFragment : BaseInteriorFragment() {
                     VdhLmId = it.vmLocId
                     VdhOdoMeterReading = it.vehicleLastMillage
 
+                    prefs.saveLocationID(it.vmLocId)
+
                     val request = SaveVechileDefectSheetRequest(
                         weekNo = 0,
                         yearNo = 0,
