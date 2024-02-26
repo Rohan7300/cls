@@ -2,13 +2,20 @@ package com.clebs.celerity.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
 import androidx.databinding.DataBindingUtil
@@ -45,7 +52,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     lateinit var navController: NavController
     public lateinit var viewModel: MainViewModel
     private lateinit var navGraph: NavGraph
-    private var completeTaskScreen:Boolean = false
+    private var completeTaskScreen: Boolean = false
 
     companion object {
         fun showLog(tag: String, message: String) {
@@ -88,8 +95,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
         viewModel.getVehicleDefectSheetInfoLiveData.observe(this, Observer {
             Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
-            if(it!=null)
-            {
+            if (it != null) {
                 completeTaskScreen = it.IsSubmited
             }
         })
@@ -147,24 +153,24 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
                 R.id.daily -> {
-                        if (!completeTaskScreen) {
-                            screenid = viewModel.getLastVisitedScreenId(this)
-                            if (screenid.equals(0)) {
-                                navController.navigate(R.id.homeFragment)
-                                // navigateTo(R.id.homeFragment)
-                                navController.currentDestination!!.id = R.id.homeFragment
+                    if (!completeTaskScreen) {
+                        screenid = viewModel.getLastVisitedScreenId(this)
+                        if (screenid.equals(0)) {
+                            navController.navigate(R.id.homeFragment)
+                            // navigateTo(R.id.homeFragment)
+                            navController.currentDestination!!.id = R.id.homeFragment
 
-                            } else {
-
-                                navController.navigate(screenid)
-
-
-                                navController.currentDestination!!.id = screenid
-
-                            }
                         } else {
-                            navController.navigate(R.id.completeTaskFragment)
+
+                            navController.navigate(screenid)
+
+
+                            navController.currentDestination!!.id = screenid
+
                         }
+                    } else {
+                        navController.navigate(R.id.completeTaskFragment)
+                    }
                     true
                 }
 
@@ -198,7 +204,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         }
         ActivityHomeBinding.imgLogout.setOnClickListener {
-            logout()
+
+
+            showAlertLogout()
 
         }
 
@@ -214,9 +222,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         viewModel.Logout().observe(this@HomeActivity, Observer {
 
             if (it!!.responseType.equals("Success")) {
-
                 val intent = Intent(this, LoginActivity::class.java)
                 intent.putExtra("logout", "0")
+                finish()
                 startActivity(intent)
                 setLoggedIn(false)
             }
@@ -304,5 +312,31 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         } else {
             //super.onBackPressed()
         }
+    }
+
+    fun showAlertLogout() {
+        val factory = LayoutInflater.from(this)
+        val view: View = factory.inflate(R.layout.logout_layout, null)
+        val deleteDialog: AlertDialog = AlertDialog.Builder(this).create()
+        val imageView: ImageView = view.findViewById(R.id.ic_cross_orange)
+        imageView.setOnClickListener {
+            deleteDialog.dismiss()
+        }
+        val btone: Button = view.findViewById(R.id.bt_no)
+        val bttwo: Button = view.findViewById(R.id.bt_yes)
+
+        btone.setOnClickListener {
+            deleteDialog.dismiss()
+        }
+
+        bttwo.setOnClickListener {
+            logout()
+        }
+        deleteDialog.setView(view)
+        deleteDialog.setCanceledOnTouchOutside(false);
+        deleteDialog.setCancelable(false)
+        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        deleteDialog.show();
+
     }
 }

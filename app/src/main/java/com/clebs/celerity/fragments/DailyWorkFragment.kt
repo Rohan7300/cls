@@ -4,25 +4,18 @@ package com.clebs.celerity.fragments
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Matrix
-import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
-import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.StrictMode
-import android.os.StrictMode.ThreadPolicy
 import android.provider.MediaStore
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -40,8 +33,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.ais.plate_req_api.webService.ApiServiceTwo
-import com.ais.plate_req_api.webService.RetrofitHelper
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -53,25 +44,11 @@ import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.showLog
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.getFileFromUri
-import com.clebs.celerity.utils.navigateTo
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.text.FirebaseVisionText
+import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer
 import com.kotlinpermissions.KotlinPermissions
-import id.zelory.compressor.Compressor
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-
-
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -84,7 +61,7 @@ import java.util.concurrent.Executors
  * Use the [DailyWorkFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class DailyWorkFragment : Fragment() {
+open class DailyWorkFragment : Fragment() {
     lateinit var mbinding: FragmentDailyWorkBinding
     lateinit var mainViewModel: MainViewModel
     private val API_TOKEN = "9d04d01d5ba1997289fa28f6f544b16ab9e5a8b6"
@@ -95,7 +72,9 @@ class DailyWorkFragment : Fragment() {
     var isFrontCamera = false
 
     var vrn: String = ""
+    private var imageBitmap: Bitmap? = null
     var countryCode: String = ""
+    var txt: String = ""
     var vehicleType: String = ""
     var score: String = ""
     var bounding: String = ""
@@ -110,12 +89,6 @@ class DailyWorkFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-//        val SDK_INT = Build.VERSION.SDK_INT
-//        if (SDK_INT > 8) {
-//            val policy = ThreadPolicy.Builder().permitAll().build()
-//            StrictMode.setThreadPolicy(policy)
-//            //your codes here
-//        }
 
     }
 
@@ -143,8 +116,7 @@ class DailyWorkFragment : Fragment() {
 
 
         mbinding.rectangle4.setOnClickListener {
-//            checkPermissions()
-            navigateTo(R.id.vechileMileageFragment,requireContext(),findNavController())
+            checkPermissions()
 
         }
 
@@ -211,6 +183,7 @@ class DailyWorkFragment : Fragment() {
                 else
                     CameraSelector.DEFAULT_BACK_CAMERA
             try {
+
                 // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
                 // Bind use cases to camera
@@ -225,8 +198,50 @@ class DailyWorkFragment : Fragment() {
     }
 
 
+    open fun detectTxt() {
+
+        val image = FirebaseVisionImage.fromBitmap(imageBitmap!!)
+        val detector: FirebaseVisionTextRecognizer =
+            FirebaseVision.getInstance().onDeviceTextRecognizer
+        detector.processImage(image)
+            .addOnSuccessListener { firebaseVisionText ->
+                processTxt(firebaseVisionText)
+            }
+            .addOnFailureListener { exception ->
+                // Handle any errors that occur during the text recognition process
+            }
+    }
+
+    open fun processTxt(text: FirebaseVisionText) {
+
+        val blocks: List<FirebaseVisionText.TextBlock> = text.textBlocks
+
+
+        if (blocks.size == 0) {
+
+            Toast.makeText(requireContext(), "No Text ", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        for (block in text.textBlocks) {
+
+            txt = block.getText()
+            if (txt.isNotEmpty()) {
+                getVichleinformation()
+            }
+            Log.e(TAG, "processTxt: " + txt)
+        }
+    }
+
     @SuppressLint("NewApi")
     private fun takePhoto() = try {
+        mbinding.pb.visibility = View.VISIBLE
+        mbinding.rectange.visibility = View.GONE
+        mbinding.ivTakePhoto.visibility = View.GONE
+        mbinding.rectangle4.visibility = View.VISIBLE
+        mbinding.imageView5.visibility = View.GONE
+
+
         val imageCapture = imageCapture ?: throw IOException("Camera not connected")
         val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
             .format(System.currentTimeMillis())
@@ -266,11 +281,16 @@ class DailyWorkFragment : Fragment() {
                         "Photo capture succeeded processing photo",
                         Toast.LENGTH_SHORT
                     ).show()
-                    mbinding.rectange.visibility = View.GONE
-                    mbinding.rectangle4.visibility = View.VISIBLE
-                    mbinding.imageView5.visibility = View.VISIBLE
-                    mbinding.ivTakePhoto.visibility = View.GONE
-                    uploadImageToServerAndGetResults(output.savedUri)
+
+                    imageBitmap = getImageBitmapFromUri(requireContext(), output.savedUri!!)
+                    if (imageBitmap != null) {
+
+                        detectTxt()
+                    }
+
+
+//                    mbinding.rectangle4.setImageBitmap(imageBitmap)
+
                 }
             }
         )
@@ -279,73 +299,17 @@ class DailyWorkFragment : Fragment() {
         println("Photo capture failed: ${e.message}")
     }
 
-    private fun uploadImageToServerAndGetResults(savedUri: Uri?) {
-        if (savedUri != null) {
-            mbinding.pb.visibility = View.VISIBLE
-            val apiService: ApiServiceTwo =
-                RetrofitHelper.getInstance().create(ApiServiceTwo::class.java)
-            GlobalScope.launch(Dispatchers.IO) {
-                val imgFile = requireContext().getFileFromUri(savedUri)
-                val compressedImageFile = Compressor.compress(requireContext(), imgFile)
-                val imageFilePart = MultipartBody.Part.createFormData(
-                    "upload",
-                    compressedImageFile.name,
-                    RequestBody.create(
-                        "image/*".toMediaTypeOrNull(),
-                        compressedImageFile
-                    )
-                )
-                val response =
-                    apiService.getNumberPlateDetails(
-                        token = "TOKEN $API_TOKEN",
-                        imagePart = imageFilePart
-                    )
-                if (response.isSuccessful && response.body() != null) {
-                    Log.e(TAG, "uploadImageToServerAndGetResultssuccess: " + response)
-                    if ((response.body()?.results?.size ?: 0) > 0) {
-                        withContext(Dispatchers.Main) {
-                            // Set variables for vehicle data.
-                            vrn = response.body()?.results?.get(0)?.plate.toString().uppercase()
-                            countryCode = response.body()?.results?.get(0)?.region?.code.toString()
-                                .uppercase()
-                            vehicleType = response.body()?.results?.get(0)?.vehicle?.type.toString()
-                                .uppercase()
-
-                            score = response.body()?.results?.get(0)?.score.toString()
-
-                            bounding = response.body()?.results?.get(0)?.box.toString()
-
-                            Log.d(TAG, response.body()?.results.toString())
-                            if (vrn.isNotEmpty()) {
-                                getVichleinformation()
-                                Log.e(TAG, "uploadImageToServerAndGetResultssuccess: " + vrn)
-                            } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Registration number not found in image",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                        }
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                requireContext(),
-                                "Registration number not found in image",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            mbinding.pb.visibility = View.GONE
-
-                        }
-                    }
-                }
-                Log.e(
-                    TAG,
-                    "uploadImageToServerAndGetResultsfailue: " + response.errorBody() + response.message()
-                )
-            }
+    fun getImageBitmapFromUri(context: Context, uri: Uri): Bitmap? {
+        var bitmap: Bitmap? = null
+        try {
+            val contentResolver: ContentResolver = context.contentResolver
+            val inputStream = contentResolver.openInputStream(uri)
+            bitmap = BitmapFactory.decodeStream(inputStream)
+            inputStream?.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+        return bitmap
     }
 
 
@@ -355,13 +319,19 @@ class DailyWorkFragment : Fragment() {
 
 
     fun getVichleinformation() {
-        mbinding.pb.visibility = View.GONE
+
         mainViewModel.getVichelinformationResponse(
-            Prefs.getInstance(App.instance).userID.toString().toDouble(), 0.toDouble(), vrn
+            Prefs.getInstance(App.instance).userID.toString().toDouble(), 0.toDouble(), txt
         ).observe(requireActivity(), Observer {
             if (it != null) {
                 Prefs.getInstance(App.instance)
+
                     .save("vehicleLastMillage", it.vehicleLastMillage.toString())
+                mbinding.rectange.visibility = View.GONE
+                mbinding.ivTakePhoto.visibility = View.GONE
+                mbinding.rectangle4.visibility = View.VISIBLE
+                mbinding.imageView5.visibility = View.VISIBLE
+                mbinding.pb.visibility = View.GONE
                 showLog(
                     "TAG------->",
                     "mymileage" + it.vehicleLastMillage.toString() + Prefs.getInstance(App.instance)
@@ -371,9 +341,15 @@ class DailyWorkFragment : Fragment() {
             } else {
                 Toast.makeText(
                     requireActivity(),
-                    "Vehicle doesn't exist's. Please contact your supervisor.",
+
+                    "Vehicle doesn't exist's. Please contact your supervisor./ or please scan again.",
                     Toast.LENGTH_SHORT
                 ).show()
+                mbinding.rectange.visibility = View.GONE
+                mbinding.ivTakePhoto.visibility = View.GONE
+                mbinding.rectangle4.visibility = View.VISIBLE
+                mbinding.imageView5.visibility = View.VISIBLE
+                mbinding.pb.visibility = View.GONE
             }
 
         })
