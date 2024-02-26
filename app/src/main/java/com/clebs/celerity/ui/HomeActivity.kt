@@ -146,7 +146,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                 R.id.home -> {
 
-                    navController.navigate(R.id.homeFragment)
+                    navController.navigate(R.id.homedemoFragment)
 
 
 
@@ -205,7 +205,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         }
         ActivityHomeBinding.imgLogout.setOnClickListener {
-
 
             showAlertLogout()
 

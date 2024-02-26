@@ -67,7 +67,10 @@ class CompleteTaskFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
         //    viewModel.setLastVisitedScreenId(requireContext(), R.id.completeTaskFragment)
+        mbinding.icUu.setOnClickListener {
 
+        findNavController().navigate(R.id.profileFragment)
+        }
         if (checked.equals("0")) {
             //findNavController().navigate(R.id.vechileMileageFragment)
             navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
@@ -75,11 +78,10 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.vehicleImageUploadInfoLiveData.observe(viewLifecycleOwner, Observer {
             println(it)
-            if (it!!.Status == "404"){
+            if (it!!.Status == "404") {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                 showImageUploadLayout = true
-            }
-            else {
+            } else {
                 if (it.IsVehicleImageUploaded == false) {
                     showImageUploadLayout = true
                     mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
@@ -115,9 +117,9 @@ class CompleteTaskFragment : Fragment() {
             }
 
 
-            if(!showImageUploadLayout){
+            if (!showImageUploadLayout) {
                 mbinding.uploadLayouts.visibility = View.GONE
-            }else{
+            } else {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
             }
         })
