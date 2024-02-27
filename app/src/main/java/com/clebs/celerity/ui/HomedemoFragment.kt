@@ -1,11 +1,19 @@
 package com.clebs.celerity.ui
 
 import android.os.Bundle
+import android.transition.Fade
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.AnimationUtils
+import android.view.animation.LinearInterpolator
+import android.widget.ImageView
 import com.clebs.celerity.R
+import com.clebs.celerity.databinding.FragmentDailyWorkBinding
+import com.clebs.celerity.databinding.FragmentHomedemoBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,43 +26,39 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class HomedemoFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+  lateinit var mbinding:FragmentHomedemoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_homedemo, container, false)
+        if (!this::mbinding.isInitialized) {
+            mbinding = FragmentHomedemoBinding.inflate(inflater, container, false)
+            val rotateAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.anam)
+            mbinding.imgCircleLogo.startAnimation(rotateAnimation)
+//            mbinding.imgCircleLogo.animate()
+//                .rotationBy(360f)
+//                .setDuration(2000)
+//
+//                .setInterpolator(AccelerateInterpolator())
+//                .setListener(null)
+
+
+            mbinding.icLoh.animate()
+                .rotationBy(360f)
+                .setDuration(2000)
+                .setInterpolator(AccelerateDecelerateInterpolator())
+                .setListener(null)
+
+        }
+        return mbinding.root
+
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomedemoFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomedemoFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+
 }

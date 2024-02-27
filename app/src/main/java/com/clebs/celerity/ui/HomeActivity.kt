@@ -93,12 +93,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         viewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
-        viewModel.getVehicleDefectSheetInfoLiveData.observe(this, Observer {
+
+        viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
             Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
             if (it != null) {
                 completeTaskScreen = it.IsSubmited
             }
-        })
+        }
         viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
 
 
@@ -204,7 +205,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         }
         ActivityHomeBinding.imgLogout.setOnClickListener {
-
 
             showAlertLogout()
 

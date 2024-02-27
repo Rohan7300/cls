@@ -3,7 +3,9 @@ package com.clebs.celerity.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
@@ -28,11 +30,21 @@ class SplashActivity : AppCompatActivity() {
 
         ActivitySplashBinding =
             DataBindingUtil.setContentView(this@SplashActivity, R.layout.activity_splash)
+
+        val rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.anam)
+
+        // Set the animation on the circles
+        ActivitySplashBinding.imgCircleLogo.startAnimation(rotateAnimation)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
 
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
+
+
+
+
+
         android.os.Handler().postDelayed({
 
             if (isLoggedIn()) {

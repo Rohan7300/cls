@@ -3,6 +3,9 @@ package com.clebs.celerity.ui
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,14 +15,20 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
+import com.clebs.celerity.custDialog
 import com.clebs.celerity.databinding.ActivityPolicyDocsBinding
+import com.clebs.celerity.utils.CustDialog
 import com.clebs.celerity.utils.Prefs
-import nsmarinro.librarysignature.SignatureView
+
 
 class PolicyDocsActivity : AppCompatActivity() {
     lateinit var mbinding:ActivityPolicyDocsBinding
+
+    companion object{
+            var path = Path()
+            var brush = Paint()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mbinding = DataBindingUtil.setContentView(this, R.layout.activity_policy_docs)
@@ -37,11 +46,8 @@ class PolicyDocsActivity : AppCompatActivity() {
 
         mbinding.checkbox.addOnCheckedStateChangedListener { checkBox, state ->
             if (checkBox.isChecked) {
-
-
                 if (mbinding.llTrucks.visibility == View.GONE) {
                     showAlert()
-
                 } else {
                     if (!mbinding.checkbox2.isChecked) {
                         Toast.makeText(
@@ -53,7 +59,6 @@ class PolicyDocsActivity : AppCompatActivity() {
                         showAlert()
                     }
                 }
-
             } else {
 
             }
@@ -87,15 +92,19 @@ class PolicyDocsActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-
-        // To execute back press
-        // super.onBackPressed()
-
-        // To do something else
         Toast.makeText(applicationContext, "Please sign the policy documents to continue", Toast.LENGTH_SHORT).show()
     }
 
     fun showAlert() {
+
+       /* mbinding.checkbox.getDrawable().mutate()
+                .setColorFilter(getResources().getColor(R.color.orange), PorterDuff.Mode.SRC_IN);
+*/
+            CustDialog().show(supportFragmentManager, "sign")
+
+
+
+/*
         val factory = LayoutInflater.from(this)
         val view: View = factory.inflate(R.layout.dialog_signature, null)
         val deleteDialog: AlertDialog = AlertDialog.Builder(this).create()
@@ -115,6 +124,9 @@ class PolicyDocsActivity : AppCompatActivity() {
         deleteDialog.setCanceledOnTouchOutside(false);
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         deleteDialog.show();
+*/
 
     }
+
+
 }

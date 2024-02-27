@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
         mbinding.slideact.onSlideToActAnimationEventListener =
             (object : SlideToActView.OnSlideToActAnimationEventListener {
                 override fun onSlideCompleteAnimationEnded(view: SlideToActView) {
-                    mbinding.arroww.alpha = 0.0f
+                    mbinding.arroww.visibility = View.GONE
                 }
 
                 override fun onSlideCompleteAnimationStarted(
@@ -49,6 +49,7 @@ class HomeFragment : Fragment() {
                     threshold: Float
                 ) {
                     mbinding.arroww.alpha = 0.0f
+                    mbinding.arroww.visibility = View.GONE
                 }
 
                 override fun onSlideResetAnimationEnded(view: SlideToActView) {
@@ -56,7 +57,7 @@ class HomeFragment : Fragment() {
                 }
 
                 override fun onSlideResetAnimationStarted(view: SlideToActView) {
-
+                    mbinding.arroww.visibility = View.VISIBLE
                 }
 
             })
