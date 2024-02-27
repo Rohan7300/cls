@@ -243,10 +243,14 @@ class CompleteTaskFragment : Fragment() {
 
             // Get SDK user details
 
+            //user will only show amazon
+
 
             if (sdkKey != null) {
                 if (cqSDKInitializer.isCQSDKInitialized()) {
                     // Show a loading dialog
+
+
 
                     Log.e("sdkskdkdkskdkskd", "onCreateView: ")
                     // Make request to start an inspection
@@ -256,7 +260,7 @@ class CompleteTaskFragment : Fragment() {
                             userName = "",
                             dealer = "",
                             dealerIdentifier = "",
-                            client_unique_id = ""
+                            client_unique_id = ""//drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
                         ),
                         result = { isStarted, msg, code ->
                             // Show error if required
