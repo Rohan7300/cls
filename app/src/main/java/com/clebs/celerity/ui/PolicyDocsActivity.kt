@@ -20,7 +20,7 @@ import com.clebs.celerity.custDialog
 import com.clebs.celerity.databinding.ActivityPolicyDocsBinding
 import com.clebs.celerity.utils.CustDialog
 import com.clebs.celerity.utils.Prefs
-import nsmarinro.librarysignature.SignatureView
+
 
 class PolicyDocsActivity : AppCompatActivity() {
     lateinit var mbinding:ActivityPolicyDocsBinding

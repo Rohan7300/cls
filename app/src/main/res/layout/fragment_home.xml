@@ -218,11 +218,11 @@ app:layout_constraintStart_toStartOf="parent"
             app:slider_locked="false"
             app:bounce_on_start="true" />
 
-        <TextView
+        <ImageView
             android:id="@+id/arroww"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/arrow_line"
+            android:src="@drawable/arrow_line"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/slideact"
