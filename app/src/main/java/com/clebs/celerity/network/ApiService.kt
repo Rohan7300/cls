@@ -12,6 +12,7 @@ import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.SaveBreakStartEndTImeRequestModel
 import com.clebs.celerity.models.requests.SaveDriverDocumentSignatureRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
+import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponse
 import com.clebs.celerity.models.response.BaseResponseTwo
@@ -20,6 +21,7 @@ import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
+import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
@@ -178,4 +180,10 @@ interface ApiService {
     suspend fun GetRideAlongRouteTypeInfo(
         @Path("driverId") userId: Int
     ):Response<GetRideAlongRouteTypeInfoResponse>
+
+    @GET("/api/Drivers/GetDriverSignatureInformation/{userId}")
+    suspend fun GetDriverSignatureInformation(@Path("userId") userId: Int): Response<GetDriverSignatureInformationResponse>
+
+    @POST("/api/Drivers/UpdateDriverAgreementSignature")
+    suspend fun UpdateDriverAgreementSignature(@Body updateDriverAgreementSignatureRequest: UpdateDriverAgreementSignatureRequest):Response<SimpleStatusMsgResponse>
 }

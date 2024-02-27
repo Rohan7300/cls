@@ -9,11 +9,13 @@ import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
 import com.clebs.celerity.models.requests.LoginRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
+import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
@@ -37,6 +39,10 @@ class MainViewModel(
     val livedataDailyWorkInfoByIdResponse = MutableLiveData<DailyWorkInfoByIdResponse?>()
     val liveDataRouteLocationResponse = MutableLiveData<GetRouteLocationInfoResponse>()
     val liveDataRideAlongRouteTypeInfo = MutableLiveData<GetRideAlongRouteTypeInfoResponse>()
+    val liveDataGetDriverSignatureInformation =
+        MutableLiveData<GetDriverSignatureInformationResponse?>()
+    val livedataupdateDriverAgreementSignature = MutableLiveData<SimpleStatusMsgResponse?>()
+
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
 
@@ -75,6 +81,7 @@ class MainViewModel(
 
     }
 
+
     fun Logout(): MutableLiveData<logoutModel?> {
         val responseLiveData = MutableLiveData<logoutModel?>()
 
@@ -112,12 +119,11 @@ class MainViewModel(
     }
 
 
-
-    fun UseEmailasUsername(userID: Double, Email:String): MutableLiveData<BaseResponseTwo?> {
+    fun UseEmailasUsername(userID: Double, Email: String): MutableLiveData<BaseResponseTwo?> {
         val responseLiveData = MutableLiveData<BaseResponseTwo?>()
 
         viewModelScope.launch {
-            val response = repo.UseEmailAsUsername(userID,Email)
+            val response = repo.UseEmailAsUsername(userID, Email)
             responseLiveData.postValue(response)
         }
 
@@ -125,11 +131,15 @@ class MainViewModel(
 
     }
 
-    fun UpdateDAprofileninetydays(userID: Double, Email:String,phone:String): MutableLiveData<BaseResponseTwo?> {
+    fun UpdateDAprofileninetydays(
+        userID: Double,
+        Email: String,
+        phone: String
+    ): MutableLiveData<BaseResponseTwo?> {
         val responseLiveData = MutableLiveData<BaseResponseTwo?>()
 
         viewModelScope.launch {
-            val response = repo.UpdateDAprofileninetydays(userID,Email,phone)
+            val response = repo.UpdateDAprofileninetydays(userID, Email, phone)
             responseLiveData.postValue(response)
         }
 
@@ -151,44 +161,65 @@ class MainViewModel(
         }
     }
 
-    fun SaveVehDefectSheet(vehicleDefectSheetInfoResponse: SaveVechileDefectSheetRequest){
+    fun SaveVehDefectSheet(vehicleDefectSheetInfoResponse: SaveVechileDefectSheetRequest) {
         viewModelScope.launch {
-            SaveVehDefectSheetResponseLiveData.postValue(repo.SaveVehDefectSheet(vehicleDefectSheetInfoResponse))
+            SaveVehDefectSheetResponseLiveData.postValue(
+                repo.SaveVehDefectSheet(
+                    vehicleDefectSheetInfoResponse
+                )
+            )
         }
     }
 
-    fun GetVehicleInformation(userID: Int,vehRegNo: String){
+    fun GetVehicleInformation(userID: Int, vehRegNo: String) {
         viewModelScope.launch {
-            vechileInformationLiveData.postValue(repo.GetVehicleInformation(userID,vehRegNo))
+            vechileInformationLiveData.postValue(repo.GetVehicleInformation(userID, vehRegNo))
         }
     }
-    fun GetVehicleImageUploadInfo(userID: Int){
+
+    fun GetVehicleImageUploadInfo(userID: Int) {
         viewModelScope.launch {
             vehicleImageUploadInfoLiveData.postValue(repo.GetVehicleImageUploadInfo(userID))
         }
     }
-    fun uploadVehicleImage(userID: Int,image:MultipartBody.Part,type:Int){
+
+    fun uploadVehicleImage(userID: Int, image: MultipartBody.Part, type: Int) {
         viewModelScope.launch {
-            uploadVehicleImageLiveData.postValue(repo.uploadVehicleImage(userID,image, type))
+            uploadVehicleImageLiveData.postValue(repo.uploadVehicleImage(userID, image, type))
         }
     }
 
-    fun GetDailyWorkInfoById(userID: Int){
+    fun GetDailyWorkInfoById(userID: Int) {
         viewModelScope.launch {
             livedataDailyWorkInfoByIdResponse.postValue(repo.GetDailyWorkInfobyId(userID))
         }
     }
-    fun GetRouteLocationInfo(locID: Int){
+
+    fun GetRouteLocationInfo(locID: Int) {
         viewModelScope.launch {
             liveDataRouteLocationResponse.postValue(repo.GetRouteLocationInfo(locID))
         }
     }
 
-    fun GetRideAlongRouteTypeInfo(userID: Int){
+    fun GetRideAlongRouteTypeInfo(userID: Int) {
         viewModelScope.launch {
             liveDataRideAlongRouteTypeInfo.postValue(repo.GetRideAlongRouteTypeInfo(userID))
         }
     }
 
+
+    fun GetDriverSignatureInformation(userID: Int) {
+        viewModelScope.launch {
+            val response = repo.GetDriverSignatureInformation(userID)
+            liveDataGetDriverSignatureInformation.postValue(response)
+        }
+    }
+
+    fun UpdateDriverAgreementSignature(updateDriverAgreementSignature: UpdateDriverAgreementSignatureRequest){
+        viewModelScope.launch {
+            val response = repo.UpdateDriverAgreementSignature(updateDriverAgreementSignature)
+            livedataupdateDriverAgreementSignature.postValue(response)
+        }
+    }
 
 }

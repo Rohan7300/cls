@@ -13,10 +13,11 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.DialogFragment
 import com.clebs.celerity.DrawViewClass
 import com.clebs.celerity.R
-import com.clebs.celerity.ui.PolicyDocsActivity
 
 class CustDialog : DialogFragment() {
     private lateinit var drawView: DrawViewClass
+    private var signatureListener: SignatureListener? = null
+
 
     override fun onResume() {
         super.onResume()
@@ -42,6 +43,7 @@ class CustDialog : DialogFragment() {
         save.setOnClickListener {
             val signatureBitmap: Bitmap = drawView.getBitmap()
             testIV.setImageBitmap(signatureBitmap)
+            signatureListener?.onSignatureSaved(signatureBitmap)
         }
 
         retry.setOnClickListener {
@@ -50,5 +52,8 @@ class CustDialog : DialogFragment() {
 
         close.setOnClickListener { dismiss() }
         return rootView
+    }
+    fun setSignatureListener(listener: SignatureListener) {
+        signatureListener = listener
     }
 }

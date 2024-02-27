@@ -7,11 +7,13 @@ import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
 import com.clebs.celerity.models.requests.LoginRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
+import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
@@ -186,6 +188,27 @@ class MainRepo(private val ApiService: ApiService) {
             return response.body()
         else{
             val errorBody = response.errorBody()?.string()
+            println("Error response body: $errorBody")
+        }
+        return null
+    }
+    suspend fun GetDriverSignatureInformation(userID: Int): GetDriverSignatureInformationResponse?{
+        val response = ApiService.GetDriverSignatureInformation(userID)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun UpdateDriverAgreementSignature(updateDriverSignatureRequest: UpdateDriverAgreementSignatureRequest):SimpleStatusMsgResponse?{
+        val response = ApiService.UpdateDriverAgreementSignature(updateDriverSignatureRequest)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.toString()
             println("Error response body: $errorBody")
         }
         return null

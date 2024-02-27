@@ -98,4 +98,14 @@ class Prefs(context: Context) {
         return sharedPreferences.getInt("locID",0)
     }
 
+/*    fun saveSignatureInfo(jsonInfo:String){
+        val editor = sharedPreferences.edit()
+        editor.putString("SignaturInfo",jsonInfo)
+        editor.apply()
+    }
+
+    fun getSignaturInfo():String?{
+        return sharedPreferences.getString("SignaturInfo",null)
+    }*/
+
 }
