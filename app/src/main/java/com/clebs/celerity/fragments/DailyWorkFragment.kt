@@ -116,8 +116,8 @@ open class DailyWorkFragment : Fragment() {
 
 
         mbinding.rectangle4.setOnClickListener {
-            checkPermissions()
-
+           // checkPermissions()
+            findNavController().navigate(R.id.vechileMileageFragment)
         }
 
 
@@ -318,7 +318,7 @@ open class DailyWorkFragment : Fragment() {
     }
 
 
-    fun getVichleinformation() {
+    private fun getVichleinformation() {
 
         mainViewModel.getVichelinformationResponse(
             Prefs.getInstance(App.instance).userID.toString().toDouble(), 0.toDouble(), txt

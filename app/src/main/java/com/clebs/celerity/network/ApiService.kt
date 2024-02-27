@@ -20,6 +20,7 @@ import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
+import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -172,4 +173,9 @@ interface ApiService {
     suspend fun GetRouteLocationInfo(
         @Path("locationId") locationId: Int
     ):Response<GetRouteLocationInfoResponse>
+
+    @GET("/api/RouteUpdate/GetRideAlongRouteTypeInfo/{driverId}")
+    suspend fun GetRideAlongRouteTypeInfo(
+        @Path("driverId") userId: Int
+    ):Response<GetRideAlongRouteTypeInfoResponse>
 }
