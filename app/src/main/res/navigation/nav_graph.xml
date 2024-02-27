@@ -186,11 +186,7 @@
 
         android:name="com.clebs.celerity.ui.HomedemoFragment"
         android:label="HomedemoFragment" />
-    <fragment
-        android:id="@+id/policyDocsFragment"
-        tools:layout="@layout/fragment_policy_docs"
-        android:name="com.clebs.celerity.fragments.PolicyDocsFragment"
-        android:label="PolicyDocsFragment" />
+
     <fragment
         android:id="@+id/windowsGlassFragment"
         tools:layout="@layout/fragment_windows_glass"

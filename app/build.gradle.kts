@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -11,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.clebs.celerity"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -31,9 +32,25 @@ android {
             )
         }
     }
+
+    packaging {
+        resources {
+            merges += "META-INF/LICENSE*.md"
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("x86", "x86_64", "armeabi", "armeabi-v7a", "mips", "mips64", "arm64-v8a")
+            isUniversalApk = false
+        }
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -84,6 +101,13 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     implementation("com.google.code.gson:gson:2.10.1")
+
+
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+
+    // CQ SDK
+    implementation ("com.github.clearquotetech:cq-android-sdk:2.0.4-test")
+
 
     //viewModel
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

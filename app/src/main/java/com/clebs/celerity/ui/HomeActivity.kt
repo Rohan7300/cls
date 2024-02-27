@@ -38,10 +38,13 @@ import com.clebs.celerity.databinding.ActivityHomeBinding
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.utils.Constants
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import io.clearquote.assessment.cq_sdk.CQSDKInitializer
+import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
 
 
 class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
@@ -51,6 +54,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var screenid: Int = 0
     lateinit var navController: NavController
     public lateinit var viewModel: MainViewModel
+
+
+    private lateinit var cqSDKInitializer: CQSDKInitializer
+
+    var sdkkey: String = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
+
     private lateinit var navGraph: NavGraph
     private var completeTaskScreen: Boolean = false
 
@@ -90,6 +99,36 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val mainRepo = MainRepo(apiService)
         val imagesRepo =
             ImagesRepo(ImageDatabase.invoke(this), Prefs.getInstance(applicationContext))
+
+        cqSDKInitializer = CQSDKInitializer(this)
+        cqSDKInitializer.triggerOfflineSync()
+
+        cqSDKInitializer.initSDK(
+            sdkKey = sdkkey,
+            result = { isInitialized, code, message ->
+                // Dismiss loading dialog
+                Log.e("sdkskdkdkskdkskd2", "onCreateView: ")
+                // Check response
+                if (isInitialized && code == PublicConstants.sdkInitializationSuccessCode) {
+                    // Save key in the shared preferences
+                    Log.e("sdkskdkdkskdkskd3", "onCreateView: ")
+                    getSharedPreferences(
+                        Constants.app_shared_preferences_file_name,
+                        AppCompatActivity.MODE_PRIVATE
+                    )?.edit()?.putString(Constants.cq_sdk_key, sdkkey)?.apply()
+
+                    // Finish activity
+
+                } else {
+                    Toast.makeText(this, "Error initializing SDK", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        )
+        cqSDKInitializer.triggerOfflineSync()
+
+
+
 
         viewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
@@ -214,6 +253,25 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        if (intent != null) {
+            val identifier = intent.getStringExtra(PublicConstants.quoteCreationFlowStatusIdentifierKeyInIntent) ?: "Could not identify Identifier"
+            val message = intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent) ?: "Could not identify status message"
+            val tempCode = intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
+            navController.navigate(R.id.completeTaskFragment)
+            // Check if identifier is valid
+            if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
+                // Get code
+                val code = if (tempCode == -1) {
+                    "Could not identify status code"
+                } else {
+                    tempCode
+
+                }
+
+                // Update message in the dialog
+
+            }
+        }
 
 
     }

@@ -18,7 +18,8 @@ class Constants {
         const val ABl_ON_BOARDING = "AblOnBoarding"
         const val EMAIL = "Email"
         const val MOBILE_NUMBER = "Mobilenumber"
-
+        const val app_shared_preferences_file_name = "CQ_SDK_showcase_app_shared_preferences"
+        const val cq_sdk_key = "cq_sdk_key"
 
         var CountMoNoChange = 0
         var resendOtp = 0

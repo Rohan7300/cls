@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,8 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -30,10 +33,16 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
+import com.clebs.celerity.utils.Constants
+import com.clebs.celerity.utils.Constants.Companion.app_shared_preferences_file_name
+import com.clebs.celerity.utils.Constants.Companion.cq_sdk_key
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.toRequestBody
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
+import io.clearquote.assessment.cq_sdk.CQSDKInitializer
+import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
+import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
 import okhttp3.MultipartBody
 import java.util.UUID
 
@@ -42,6 +51,10 @@ class CompleteTaskFragment : Fragment() {
     private var isclicked: Boolean = true
     private var isclickedtwo: Boolean = true
     private lateinit var viewModel: MainViewModel
+
+    private lateinit var cqSDKInitializer: CQSDKInitializer
+
+
     lateinit var imageView: ImageView
     var userId: Int = 0
     var requestCode: Int = 0
@@ -64,15 +77,30 @@ class CompleteTaskFragment : Fragment() {
 
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
+//        mbinding.tvNext.visibility = View.GONE
         viewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
         //    viewModel.setLastVisitedScreenId(requireContext(), R.id.completeTaskFragment)
         mbinding.icUu.setOnClickListener {
 
-        findNavController().navigate(R.id.profileFragment)
+            findNavController().navigate(R.id.profileFragment)
         }
+        cqSDKInitializer = CQSDKInitializer(requireActivity())
+
+
+        val sharedPreferences = context?.getSharedPreferences(
+            app_shared_preferences_file_name,
+            AppCompatActivity.MODE_PRIVATE
+        )
+
+
+
+
+
+
+
         if (checked.equals("0")) {
-            //findNavController().navigate(R.id.vechileMileageFragment)
+
             navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
         }
 
@@ -88,6 +116,8 @@ class CompleteTaskFragment : Fragment() {
                 } else {
 
                     showImageUploadLayout = checkNull(it)
+
+
 
                     if (it.DaVehImgDashBoardFileName != null)
                         mbinding.ivVehicleDashboard.setImageResource(R.drawable.ic_yes)
@@ -113,15 +143,23 @@ class CompleteTaskFragment : Fragment() {
                     if (it.DaVehImgOilLevelFileName != null)
                         mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
 
+
                 }
             }
 
 
             if (!showImageUploadLayout) {
                 mbinding.uploadLayouts.visibility = View.GONE
+
+
             } else {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
+
+                // Get SDK key
+
+
             }
+
         })
 
 
@@ -191,7 +229,7 @@ class CompleteTaskFragment : Fragment() {
             isclicked = !isclicked
         }
         mbinding.run {
-            mbinding.tvNext.isEnabled = !isclicked
+            tvNext.isEnabled = !showImageUploadLayout
             if (tvNext.isEnabled) {
                 tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
             } else {
@@ -199,14 +237,48 @@ class CompleteTaskFragment : Fragment() {
             }
         }
         mbinding.tvNext.setOnClickListener {
-            if (isclickedtwo) {
 
-                mbinding.uploadLayouts.visibility = View.GONE
-            } else {
+            mbinding.tvNext.visibility = View.GONE
+            val sdkKey = sharedPreferences?.getString(cq_sdk_key, "")
 
-                mbinding.uploadLayouts.visibility = View.VISIBLE
+            // Get SDK user details
+
+
+            if (sdkKey != null) {
+                if (cqSDKInitializer.isCQSDKInitialized()) {
+                    // Show a loading dialog
+
+                    Log.e("sdkskdkdkskdkskd", "onCreateView: ")
+                    // Make request to start an inspection
+                    cqSDKInitializer.startInspection(
+                        activityContext = requireContext(),
+                        clientAttrs = ClientAttrs(
+                            userName = "",
+                            dealer = "",
+                            dealerIdentifier = "",
+                            client_unique_id = ""
+                        ),
+                        result = { isStarted, msg, code ->
+                            // Show error if required
+                            if (!isStarted) {
+
+                                Log.e("startedinspection", "onCreateView: " + msg + code)
+                                // Dismiss the loading dialog
+
+                            }
+                        }
+                    )
+                }
+
+//            if (isclickedtwo) {
+//
+//                mbinding.uploadLayouts.visibility = View.GONE
+//            } else {
+//
+//                mbinding.uploadLayouts.visibility = View.VISIBLE
+//            }
+//            isclickedtwo = !isclickedtwo
             }
-            isclickedtwo = !isclickedtwo
         }
         mbinding.taskDetails.getViewTreeObserver()
             .addOnGlobalLayoutListener(OnGlobalLayoutListener { // Check if the view is currently visible or gone
@@ -237,7 +309,6 @@ class CompleteTaskFragment : Fragment() {
                 res.DaVehImgFrontFileName == null ||
                 res.DaVehImgNearSideFileName == null ||
                 res.DaVehImgOffSideFileName == null ||
-                res.DaVehicleAddBlueImage == null ||
                 res.DaVehImgOilLevelFileName == null
     }
 
