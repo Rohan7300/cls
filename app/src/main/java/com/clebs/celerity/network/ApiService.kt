@@ -178,5 +178,4 @@ interface ApiService {
     suspend fun GetRideAlongRouteTypeInfo(
         @Path("driverId") userId: Int
     ):Response<GetRideAlongRouteTypeInfoResponse>
-
 }
