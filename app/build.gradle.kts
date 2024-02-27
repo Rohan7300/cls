@@ -68,7 +68,7 @@ dependencies {
     implementation("com.google.firebase:firebase-ml-vision:24.0.3")
 //    implementation("com.google.firebase:firebase-core:21.1.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.github.nsmarinro.SignatureView:librarySignature:0.1.2")
+
     implementation( "androidx.camera:camera-camera2:1.3.1")
     implementation( "androidx.camera:camera-lifecycle:1.3.1")
     implementation( "androidx.camera:camera-view:")

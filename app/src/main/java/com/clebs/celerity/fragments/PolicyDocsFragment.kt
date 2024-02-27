@@ -19,7 +19,7 @@ import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentPolicyDocsBinding
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.Prefs
-import nsmarinro.librarysignature.SignatureView
+//import nsmarinro.librarysignature.SignatureView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -65,7 +65,7 @@ class PolicyDocsFragment : Fragment() {
 
 
                 if (mbinding.llTrucks.visibility == View.GONE) {
-                    showAlert()
+//                    showAlert()
 
                 } else {
                     if (!mbinding.checkbox2.isChecked) {
@@ -75,7 +75,7 @@ class PolicyDocsFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-                        showAlert()
+//                        showAlert()
                     }
                 }
 
@@ -89,7 +89,7 @@ class PolicyDocsFragment : Fragment() {
 
             if (checkBox.isChecked) {
                 if (mbinding.llAmazon.visibility == View.GONE) {
-                    showAlert()
+//                    showAlert()
 
                 } else {
                     if (!mbinding.checkbox.isChecked) {
@@ -99,7 +99,7 @@ class PolicyDocsFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-                        showAlert()
+//                        showAlert()
                     }
 
                 }
@@ -114,27 +114,27 @@ class PolicyDocsFragment : Fragment() {
 
     }
 
-    fun showAlert() {
-        val factory = LayoutInflater.from(requireActivity())
-        val view: View = factory.inflate(R.layout.dialog_signature, null)
-        val deleteDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
-        val SignatureView = view.findViewById<SignatureView>(R.id.signatureView)
-        val LinearLayout = view.findViewById<LinearLayout>(R.id.llclear)
-        val sign = view.findViewById<TextView>(R.id.bt_sign)
-        sign.setOnClickListener {
-            findNavController().popBackStack()
-            findNavController().navigate(R.id.homedemoFragment)
-            deleteDialog.dismiss()
-        }
-        LinearLayout.setOnClickListener {
-            SignatureView.signatureClear()
-        }
-
-        deleteDialog.setView(view)
-        deleteDialog.setCanceledOnTouchOutside(false);
-        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-        deleteDialog.show();
-
-    }
+//    fun showAlert() {
+//        val factory = LayoutInflater.from(requireActivity())
+//        val view: View = factory.inflate(R.layout.dialog_signature, null)
+//        val deleteDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
+//        val SignatureView = view.findViewById<SignatureView>(R.id.signatureView)
+//        val LinearLayout = view.findViewById<LinearLayout>(R.id.llclear)
+//        val sign = view.findViewById<TextView>(R.id.bt_sign)
+//        sign.setOnClickListener {
+//            findNavController().popBackStack()
+//            findNavController().navigate(R.id.homedemoFragment)
+//            deleteDialog.dismiss()
+//        }
+//        LinearLayout.setOnClickListener {
+//            SignatureView.signatureClear()
+//        }
+//
+//        deleteDialog.setView(view)
+//        deleteDialog.setCanceledOnTouchOutside(false);
+//        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+//        deleteDialog.show();
+//
+//    }
 
 }
