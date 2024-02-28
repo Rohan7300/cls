@@ -8,7 +8,7 @@ data class GetDriverSignatureInformationResponse(
     val IsDriverActive: Boolean,
     val IsOtherCompanySignatureReq: Boolean,
     val IsSignatureReq: Boolean,
-    val OtherCompanyDocuments: List<OtherCompanyDocument>,
+    val OtherCompanyDocuments: List<OtherCompanyDocument>?,
     val PreviousAddress: String,
     val SLASectionReq: Boolean,
     val UserID: Int,

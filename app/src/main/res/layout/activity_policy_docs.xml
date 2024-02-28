@@ -14,7 +14,18 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
+            <ProgressBar
+                android:id="@+id/policyDocPB"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="gone"
+                android:indeterminateTint="@color/orange"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
             <TextView
                 android:id="@+id/policy_title"
                 android:layout_width="wrap_content"
@@ -701,18 +712,6 @@
                 android:layout_margin="20dp"
                 android:background="@drawable/scan_area_background"
                 android:nestedScrollingEnabled="false">
-
-                <nsmarinro.librarysignature.SignatureView
-                    android:id="@+id/signatureView"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:backgroundTint="#FEF0EA"
-                    android:descendantFocusability="beforeDescendants"
-                    android:focusableInTouchMode="true"
-                    android:nestedScrollingEnabled="false"
-
-                    />
-
 
             </LinearLayout>
 

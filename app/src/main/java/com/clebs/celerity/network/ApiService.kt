@@ -1,5 +1,6 @@
 package com.clebs.celerity.network
 
+import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.requests.CreateDaikyworkRequestBody
 import com.clebs.celerity.models.requests.GetDefectSheetBasicInfoRequestModel
 import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
@@ -59,27 +60,33 @@ interface ApiService {
     suspend fun Logout(): Response<logoutModel>
 
     @GET("/api/Drivers/GetDriverBasicInformation/{userId}")
-    suspend fun  GetDriversBasicInfo(@Path("userId") userId: Double):Response<DriversBasicInformationModel>
+    suspend fun GetDriversBasicInfo(@Path("userId") userId: Double): Response<DriversBasicInformationModel>
 
     @POST("/api/DaDailyWorks/SaveBreakStartAndEndTime")
-    suspend fun  SaveBreakStartEndTime(@Body body: SaveBreakStartEndTImeRequestModel):Response<BaseResponseTwo>
+    suspend fun SaveBreakStartEndTime(@Body body: SaveBreakStartEndTImeRequestModel): Response<BaseResponseTwo>
 
     @POST("/api/DaDailyWorks/DeleteBreakTime/{dawDriverBreakId}")
-    suspend fun  deleteBreakTime(@Path("dawDriverBreakId") dawDriverBreakId :Int):Response<BaseResponseTwo>
+    suspend fun deleteBreakTime(@Path("dawDriverBreakId") dawDriverBreakId: Int): Response<BaseResponseTwo>
 
     @POST("/api/DailyWorks/SaveVehDefectSheet")
-    suspend fun  SaveVichileDeffectSheet(@Body body: SaveVechileDefectSheetRequest):Response<BaseResponseTwo>
+    suspend fun SaveVichileDeffectSheet(@Body body: SaveVechileDefectSheetRequest): Response<BaseResponseTwo>
 
     @POST("/api/DailyWorks/GetDefectSheetBasicInfo")
     suspend fun GetDefectSheetBasicInfo(@Body body: GetDefectSheetBasicInfoRequestModel): Response<GetDefectSheetBasicInfoResponse>
 
 
     @PUT("/api/Drivers/UpdateUsernameFromEmail")
-    suspend fun UseEmailAsUsername(@Query("userId") userId: Double, @Query("emailAddress") emailAddress:String):Response<BaseResponseTwo>
+    suspend fun UseEmailAsUsername(
+        @Query("userId") userId: Double,
+        @Query("emailAddress") emailAddress: String
+    ): Response<BaseResponseTwo>
 
     @PUT("/api/Drivers/UpdateDAProfileIn90Days")
-    suspend fun updateDAProfile90days(@Query("userId") userId: Double, @Query("emailAddress") emailAddress:String,@Query("phonenumber") phonenumber:String):Response<BaseResponseTwo>
-
+    suspend fun updateDAProfile90days(
+        @Query("userId") userId: Double,
+        @Query("emailAddress") emailAddress: String,
+        @Query("phonenumber") phonenumber: String
+    ): Response<BaseResponseTwo>
 
 
     @POST("/api/DailyWorks/CheckIfTodayDefecChecktIsDone")
@@ -89,10 +96,10 @@ interface ApiService {
     suspend fun GetDailyworkDetails(@Path("dwid") dwid: Double): Response<GetDailyWorkDetailsResponse>
 
     @POST("/api/DailyWorks/CreateDailyWork")
-    suspend fun createDailyWork(@Body body: CreateDaikyworkRequestBody) :Response<BaseResponseTwo>
+    suspend fun createDailyWork(@Body body: CreateDaikyworkRequestBody): Response<BaseResponseTwo>
 
     @POST("/api/Drivers/SaveDriverDocumentSingature")
-    suspend fun  saveDriversDocumentSignature(@Body body: SaveDriverDocumentSignatureRequest) : Response<BaseResponseTwo>
+    suspend fun saveDriversDocumentSignature(@Body body: SaveDriverDocumentSignatureRequest): Response<BaseResponseTwo>
 
     @GET("/api/DailyWorks/GetVehicleDefectSheetInfo/{userId}")
     suspend fun GetVehicleDefectSheetInfo(@Path("userId") userId: Int): Response<GetVehicleDefectSheetInfoResponse>
@@ -115,75 +122,79 @@ interface ApiService {
     @POST("/api/Vehicle/UploadFaceMaskFile")
     suspend fun UploadFaceMaskFile(
         @Query("userId") userId: Int,
-        @Part image:MultipartBody.Part
-    ):Response<SimpleStatusMsgResponse>
+        @Part image: MultipartBody.Part
+    ): Response<SimpleStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleDashBoardPictureFile")
     suspend fun uploadVehicleDashboardImage(
         @Query("userId") userId: Int,
-        @Part image:MultipartBody.Part
-    ):Response<SimpleStatusMsgResponse>
+        @Part image: MultipartBody.Part
+    ): Response<SimpleStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleFrontPictureFile")
     suspend fun uploadVehFrontImage(
         @Query("userId") userId: Int,
-        @Part image:MultipartBody.Part
-    ):Response<SimpleStatusMsgResponse>
+        @Part image: MultipartBody.Part
+    ): Response<SimpleStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleNearSidePictureFile")
     suspend fun uploadVehNearSideImage(
         @Query("userId") userId: Int,
-        @Part image:MultipartBody.Part
-    ):Response<SimpleStatusMsgResponse>
+        @Part image: MultipartBody.Part
+    ): Response<SimpleStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleRearPictureFile")
     suspend fun uploadVehRearImage(
         @Query("userId") userId: Int,
-        @Part image:MultipartBody.Part
-    ):Response<SimpleStatusMsgResponse>
+        @Part image: MultipartBody.Part
+    ): Response<SimpleStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleOilLevelFile")
     suspend fun UploadVehicleOilLevelFile(
         @Query("userId") userId: Int,
-        @Part image:MultipartBody.Part
-    ):Response<SimpleStatusMsgResponse>
+        @Part image: MultipartBody.Part
+    ): Response<SimpleStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleOffSidePictureFile")
     suspend fun uploadVehOffSideImage(
         @Query("userId") userId: Int,
-        @Part image:MultipartBody.Part
-    ):Response<SimpleStatusMsgResponse>
+        @Part image: MultipartBody.Part
+    ): Response<SimpleStatusMsgResponse>
+
     @Multipart
     @POST("/api/Vehicle/UploadVehicleAddBlueFile")
     suspend fun UploadVehicleAddBlueFile(
         @Query("userId") userId: Int,
-        @Part image:MultipartBody.Part
-    ):Response<SimpleStatusMsgResponse>
+        @Part image: MultipartBody.Part
+    ): Response<SimpleStatusMsgResponse>
 
     @GET("/api/DailyWorks/GetDailyWorkInfobyId/{userId}")
     suspend fun GetDailyWorkInfobyId(
         @Path("userId") userId: Int
-    ):Response<DailyWorkInfoByIdResponse>
+    ): Response<DailyWorkInfoByIdResponse>
 
     @GET("/api/RouteUpdate/GetRouteLocationInfo/{locationId}")
     suspend fun GetRouteLocationInfo(
         @Path("locationId") locationId: Int
-    ):Response<GetRouteLocationInfoResponse>
+    ): Response<GetRouteLocationInfoResponse>
 
     @GET("/api/RouteUpdate/GetRideAlongRouteTypeInfo/{driverId}")
     suspend fun GetRideAlongRouteTypeInfo(
         @Path("driverId") userId: Int
-    ):Response<GetRideAlongRouteTypeInfoResponse>
+    ): Response<GetRideAlongRouteTypeInfoResponse>
 
     @GET("/api/Drivers/GetDriverSignatureInformation/{userId}")
     suspend fun GetDriverSignatureInformation(@Path("userId") userId: Int): Response<GetDriverSignatureInformationResponse>
 
     @POST("/api/Drivers/UpdateDriverAgreementSignature")
-    suspend fun UpdateDriverAgreementSignature(@Body updateDriverAgreementSignatureRequest: UpdateDriverAgreementSignatureRequest):Response<SimpleStatusMsgResponse>
+    suspend fun UpdateDriverAgreementSignature(@Body updateDriverAgreementSignatureRequest: UpdateDriverAgreementSignatureRequest): Response<SimpleStatusMsgResponse>
+
+    @POST("/api/RouteUpdate/AddOnRouteInfo")
+    suspend fun AddOnRouteInfo(@Body addOnRouteInfoRequest: AddOnRouteInfoRequest): Response<SimpleStatusMsgResponse>
 }

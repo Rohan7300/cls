@@ -94,14 +94,15 @@ class LoginActivity : AppCompatActivity() {
             if (it!=null){
               //     Prefs.getInstance(applicationContext).saveSignatureInfo(it.toString())
                 ActivityLoginBinding.progressbar.visibility=View.GONE
-                if (!it.isSignatureReq.equals(true)) {
+                if (it.isSignatureReq.equals(true)) {
                     Prefs.getInstance(applicationContext).saveBoolean("isSignatureReq",it.isSignatureReq)
                     Prefs.getInstance(applicationContext)
                         .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
                     Prefs.getInstance(applicationContext)
                         .saveBoolean("isother", it.isOtherCompanySignatureReq)
 
-                    val intent = Intent(this, HomeActivity::class.java)
+                   val intent = Intent(this, PolicyDocsActivity::class.java)
+                   // val intent = Intent(this, HomeActivity::class.java)
 
                     intent.putExtra("signature_required", "0")
                     startActivity(intent)

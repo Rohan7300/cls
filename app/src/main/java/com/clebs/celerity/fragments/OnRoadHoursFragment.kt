@@ -13,13 +13,18 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
+import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentOnRoadHoursBinding
+import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 
 class OnRoadHoursFragment : Fragment() {
+    private var selectedLocId: Int = 0
+    private var selectedRouteId: Int = 0
     lateinit var binding: FragmentOnRoadHoursBinding
     lateinit var viewModel: MainViewModel
     lateinit var prefs: Prefs
@@ -30,6 +35,8 @@ class OnRoadHoursFragment : Fragment() {
     private var parcelsDelivered: String? = null
     private var totalMileage: String? = null
     private var routeComment: String? = null
+    private var dwID:Int = 0
+    private var vehID:Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +51,7 @@ class OnRoadHoursFragment : Fragment() {
     }
 
     private fun chkNotNullInputs(): Boolean {
+
         return selectedLocation == null ||
                 selectedRouteType == null ||
                 routeName == null ||
@@ -56,12 +64,15 @@ class OnRoadHoursFragment : Fragment() {
         prefs = Prefs.getInstance(requireContext())
         viewModel.livedataDailyWorkInfoByIdResponse.observe(viewLifecycleOwner) {
             if (it != null) {
+                dwID = it.DailyWorkId
                 vehicleInfoSection()
             }
         }
         inputListeners()
         viewModel.GetDailyWorkInfoById(prefs.userID.toInt())
         binding.onRoadHoursSave.setOnClickListener {
+            parcelsDelivered = binding.edtParcels.text.toString()
+            totalMileage = binding.edtMileage.text.toString()
             if (chkNotNullInputs()) {
                 showToast("Pls!!Complete the form first", requireContext())
             } else {
@@ -71,7 +82,27 @@ class OnRoadHoursFragment : Fragment() {
     }
 
     private fun sendData() {
-
+        progressBarVisibility(true)
+        viewModel.livedataAddOnRouteInfo.observe(viewLifecycleOwner){
+            progressBarVisibility(false)
+            if(it!=null){
+                findNavController().navigate(R.id.completeTaskFragment)
+            }
+        }
+        viewModel.AddOnRouteInfo(AddOnRouteInfoRequest(
+            RtAddMode = "" ,
+            RtComment = "$routeComment",
+            RtType = selectedRouteId,
+            RtDwId = dwID,
+            RtId = 0,
+            RtFinishMileage = totalMileage?.toInt()?:0,
+            RtLocationId = selectedLocId,
+            RtName = routeName!!,
+            RtNoOfParcelsDelivered = parcelsDelivered?.toInt()?:0,
+            RtNoParcelsbroughtback = binding.parcelsBroughtBack.text.toString().toInt(),
+            RtUsrId = prefs.userID.toInt(),
+            VehicleId =vehID
+        ))
     }
 
     private fun setInputListener(editText: EditText) {
@@ -106,7 +137,7 @@ class OnRoadHoursFragment : Fragment() {
                 if (it != null) {
                     prefs.saveLocationID(it.vmLocId)
                     locID = it.vmLocId
-
+                    vehID = it.vmId
                     locationSection()
                 }
             }
@@ -125,7 +156,8 @@ class OnRoadHoursFragment : Fragment() {
             if (locationData != null) {
                 rideAlongApiCall()
                 val locNames = locationData.map { it.LocationName }
-                setSpinners(binding.spinnerLocation, binding.editTextSelectRouteLocation, locNames)
+                val locIds = locationData.map { it.LocId }
+                setSpinners(binding.spinnerLocation, binding.editTextSelectRouteLocation, locNames,locIds)
             }
         }
         viewModel.GetRouteLocationInfo(locID)
@@ -135,13 +167,14 @@ class OnRoadHoursFragment : Fragment() {
         viewModel.liveDataRideAlongRouteTypeInfo.observe(viewLifecycleOwner) { routeData ->
             if (routeData != null) {
                 val routeNames = routeData.map { it.RtName }
-                setSpinners(binding.spinnerRouteType, binding.editText, routeNames)
+                val routeIDs = routeData.map { it.RtId }
+                setSpinners(binding.spinnerRouteType, binding.editText, routeNames,routeIDs)
             }
         }
         viewModel.GetRideAlongRouteTypeInfo(prefs.userID.toInt())
     }
 
-    private fun setSpinners(spinner: Spinner, tv: TextView, items: List<String>) {
+    private fun setSpinners(spinner: Spinner, tv: TextView, items: List<String>,ids:List<Int>) {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
@@ -158,8 +191,14 @@ class OnRoadHoursFragment : Fragment() {
                 spinner.isVisible = false
 
                 when (spinner) {
-                    binding.spinnerLocation -> selectedLocation = selectedItem
-                    binding.spinnerRouteType -> selectedRouteType = selectedItem
+                    binding.spinnerLocation -> {
+                        selectedLocId = ids[position]
+                        selectedLocation = selectedItem
+                    }
+                    binding.spinnerRouteType -> {
+                        selectedRouteType = selectedItem
+                        selectedRouteId = ids[position]
+                    }
                 }
             }
 
@@ -169,6 +208,14 @@ class OnRoadHoursFragment : Fragment() {
 
         tv.setOnClickListener {
             spinner.isVisible = !spinner.isVisible
+        }
+    }
+    fun progressBarVisibility(show: Boolean) {
+        if (show) {
+            binding.pbOnRoadHours.bringToFront()
+            binding.pbOnRoadHours.visibility = View.VISIBLE
+        } else {
+            binding.pbOnRoadHours.visibility = View.GONE
         }
     }
 

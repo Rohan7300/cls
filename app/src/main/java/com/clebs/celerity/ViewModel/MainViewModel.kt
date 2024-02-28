@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
 import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
@@ -42,6 +43,7 @@ class MainViewModel(
     val liveDataGetDriverSignatureInformation =
         MutableLiveData<GetDriverSignatureInformationResponse?>()
     val livedataupdateDriverAgreementSignature = MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataAddOnRouteInfo = MutableLiveData<SimpleStatusMsgResponse?>()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -215,10 +217,17 @@ class MainViewModel(
         }
     }
 
-    fun UpdateDriverAgreementSignature(updateDriverAgreementSignature: UpdateDriverAgreementSignatureRequest){
+    fun UpdateDriverAgreementSignature(updateDriverAgreementSignature: UpdateDriverAgreementSignatureRequest) {
         viewModelScope.launch {
             val response = repo.UpdateDriverAgreementSignature(updateDriverAgreementSignature)
             livedataupdateDriverAgreementSignature.postValue(response)
+        }
+    }
+
+    fun AddOnRouteInfo(addOnRouteInfoRequest: AddOnRouteInfoRequest){
+        viewModelScope.launch {
+            val response = repo.AddOnRouteInfo(addOnRouteInfoRequest)
+            livedataAddOnRouteInfo.postValue(response)
         }
     }
 

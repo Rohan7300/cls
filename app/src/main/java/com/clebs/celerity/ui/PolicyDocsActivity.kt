@@ -32,8 +32,8 @@ import com.clebs.celerity.utils.showToast
 class PolicyDocsActivity : AppCompatActivity() {
     lateinit var mbinding: ActivityPolicyDocsBinding
     lateinit var viewModel: MainViewModel
-    private var dataLoaded  = false
-    private var driverSignatureInfo:GetDriverSignatureInformationResponse? = null
+    private var dataLoaded = false
+    private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
     var userId = 0
 
     companion object {
@@ -59,12 +59,12 @@ class PolicyDocsActivity : AppCompatActivity() {
         val mainRepo = MainRepo(apiService)
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
 
-        viewModel.liveDataGetDriverSignatureInformation.observe(this){
-            if(it!=null){
+        viewModel.liveDataGetDriverSignatureInformation.observe(this) {
+            if (it != null) {
                 driverSignatureInfo = it
             }
         }
-        userId =  Prefs.getInstance(this).userID.toInt()
+        userId = Prefs.getInstance(this).userID.toInt()
 
         viewModel.GetDriverSignatureInformation(userId)
 
@@ -74,11 +74,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                     showAlert()
                 } else {
                     if (!mbinding.checkbox2.isChecked) {
-                        Toast.makeText(
-                            this,
-                            "Please check the trucks agreement to proceed",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showToast("Please check the trucks agreement to proceed",this)
                     } else {
                         showAlert()
                     }
@@ -91,11 +87,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                     showAlert()
                 } else {
                     if (!mbinding.checkbox.isChecked) {
-                        Toast.makeText(
-                            this,
-                            "Please check the amazon agreement to proceed",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showToast("Please check the amazon agreement to proceed",this)
                     } else {
                         showAlert()
                     }
@@ -106,35 +98,40 @@ class PolicyDocsActivity : AppCompatActivity() {
 
     private fun showAlert() {
         val dialog = CustDialog()
-        dialog.setSignatureListener(object :SignatureListener{
+        dialog.setSignatureListener(object : SignatureListener {
             override fun onSignatureSaved(bitmap: Bitmap) {
-                Log.d("Sign","Bitmap $bitmap")
+                Log.d("Sign", "Bitmap $bitmap")
+                progressBarVisibility(true)
                 updateSignatureInfoApi(bitmap)
             }
-
         })
         dialog.show(supportFragmentManager, "sign")
     }
 
     private fun updateSignatureInfoApi(bitmap: Bitmap) {
-        viewModel.livedataupdateDriverAgreementSignature.observe(this){
-            if(it!=null){
+        viewModel.livedataupdateDriverAgreementSignature.observe(this) {
+            progressBarVisibility(false)
+            if (it != null) {
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
             }
         }
-        if(driverSignatureInfo!=null){
-           
-            
-            val companyDocIds = driverSignatureInfo!!.OtherCompanyDocuments.flatMap { company ->
+        if (driverSignatureInfo != null) {
+
+
+            val companyDocIds = driverSignatureInfo!!.OtherCompanyDocuments?.flatMap { company ->
                 company.DocumentList.map { document ->
                     document.CompanyDocId
                 }
-            }
-            val companyIDS  = arrayListOf<CompanySignedDocX>()
-                driverSignatureInfo!!.OtherCompanyDocuments.map {
-                companyIDS.add(CompanySignedDocX(it.CompanyID,it.DocumentList.map { docs->docs.CompanyDocId }))
-            }
+            }?: emptyList<Int>()
+            val companyIDS = arrayListOf<CompanySignedDocX>()
+            driverSignatureInfo!!.OtherCompanyDocuments?.map {
+                companyIDS.add(
+                    CompanySignedDocX(
+                        it.CompanyID,
+                        it.DocumentList.map { docs -> docs.CompanyDocId })
+                )
+            }?: emptyArray<CompanySignedDocX>()
 
             val driverVanHire = DriverHireAgreementX(
                 Accidents = false,
@@ -149,25 +146,28 @@ class PolicyDocsActivity : AppCompatActivity() {
                 Signature = "",
                 UserID = 0,
             )
+val bse64 = "data:image/png;base64,"+bitmapToBase64(bitmap)
+            Log.d("Base64","$bse64")
+            viewModel.UpdateDriverAgreementSignature(
+                UpdateDriverAgreementSignatureRequest(
+                    Address = driverSignatureInfo!!.PreviousAddress,//GRTTOwer
+                    CompanyDocId = companyDocIds,//[]
+                    CompanySignedDocs = companyIDS,//[]
+                    DriverHireAgreement = driverVanHire,
+                    HasAgreement = true,
+                    IsDAVanHireChecked = driverSignatureInfo!!.DAVanHireSectionReq,
+                    IsDAHandbookChecked = driverSignatureInfo!!.DAHandbookSectionReq,
+                    IsGDPRChecked = driverSignatureInfo!!.GDPRSectionReq,
+                    IsSLAChecked = driverSignatureInfo!!.SLASectionReq,
+                    Signature = bse64,
+                    UserID = userId,
+                    IsAmazonSignatureUpdated = driverSignatureInfo!!.isAmazonSignatureReq,
+                    IsDAEngagementChecked = driverSignatureInfo!!.DAEngagementSectionReq
+                )
+            )
 
-            viewModel.UpdateDriverAgreementSignature(UpdateDriverAgreementSignatureRequest(
-                Address = driverSignatureInfo!!.PreviousAddress,
-                CompanyDocId = companyDocIds,
-                CompanySignedDocs = companyIDS,
-                DriverHireAgreement = driverVanHire,
-                HasAgreement = true,
-                IsDAVanHireChecked = driverSignatureInfo!!.DAVanHireSectionReq,
-                IsDAHandbookChecked = driverSignatureInfo!!.DAHandbookSectionReq,
-                IsGDPRChecked = driverSignatureInfo!!.GDPRSectionReq,
-                IsSLAChecked = driverSignatureInfo!!.SLASectionReq,
-                Signature =  bitmapToBase64(bitmap),
-                UserID = userId,
-                IsAmazonSignatureUpdated = driverSignatureInfo!!.isAmazonSignatureReq,
-                IsDAEngagementChecked = driverSignatureInfo!!.DAEngagementSectionReq
-            ))
-
-        }else{
-            showToast("Pls Wait!!",this)
+        } else {
+            showToast("Pls Wait!!", this)
         }
 
 
@@ -180,5 +180,15 @@ class PolicyDocsActivity : AppCompatActivity() {
             "Please sign the policy documents to continue",
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+
+    fun progressBarVisibility(show: Boolean) {
+        if (show) {
+            mbinding.policyDocPB.bringToFront()
+            mbinding.policyDocPB.visibility = View.VISIBLE
+        } else {
+            mbinding.policyDocPB.visibility = View.GONE
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.clebs.celerity.repository
 
 import android.util.Log
+import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
 import com.clebs.celerity.models.response.GetVechileInformationResponse
@@ -208,7 +209,18 @@ class MainRepo(private val ApiService: ApiService) {
         if(response.isSuccessful)
             return response.body()
         else{
-            val errorBody = response.errorBody()?.toString()
+            val errorBody = response.errorBody()?.string()
+            println("Error response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun AddOnRouteInfo(addOnRouteInfoRequest: AddOnRouteInfoRequest):SimpleStatusMsgResponse?{
+        val response = ApiService.AddOnRouteInfo(addOnRouteInfoRequest)
+        if(response.isSuccessful){
+            return response.body()
+        }else{
+            val errorBody = response.errorBody()?.string()
             println("Error response body: $errorBody")
         }
         return null

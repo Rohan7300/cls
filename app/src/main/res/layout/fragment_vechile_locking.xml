@@ -141,7 +141,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="35dp"
-            android:src="@drawable/windscreen_ic"
+            android:src="@drawable/vehiclelockingsystem"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rlinfo" />

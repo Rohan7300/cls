@@ -145,18 +145,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             when (item.itemId) {
 
                 R.id.home -> {
-
                     navController.navigate(R.id.homedemoFragment)
-
-
-
                     true
                 }
 
                 R.id.daily -> {
                     if (!completeTaskScreen) {
                         screenid = viewModel.getLastVisitedScreenId(this)
-                        if (screenid.equals(0)) {
+                        if (screenid == 0) {
                             navController.navigate(R.id.homeFragment)
                             // navigateTo(R.id.homeFragment)
                             navController.currentDestination!!.id = R.id.homeFragment
@@ -169,6 +165,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             navController.currentDestination!!.id = screenid
 
                         }
+
                     } else {
                         navController.navigate(R.id.completeTaskFragment)
                     }
