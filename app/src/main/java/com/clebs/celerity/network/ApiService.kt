@@ -23,6 +23,7 @@ import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
+import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
@@ -201,4 +202,7 @@ interface ApiService {
 
     @POST("/api/DaDailyWorks/SaveBreakStartAndEndTime")
     suspend fun SaveBreakTime(@Body saveBreakTimeRequest: SaveBreakTimeRequest):Response<SimpleStatusMsgResponse>
+
+    @GET("/api/DaDailyWorks/GetDriverBreakTimeInfoByDate/{driverId}")
+    suspend fun GetDriverBreakInfo(@Path("driverId") driverId:Int):Response<GetDriverBreakTimeInfoResponse>
 }

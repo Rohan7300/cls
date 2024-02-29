@@ -15,6 +15,7 @@ import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
@@ -232,6 +233,17 @@ class MainRepo(private val ApiService: ApiService) {
         if(response.isSuccessful){
             return response.body()
         }else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetDriverBreakInfo(driverId:Int):GetDriverBreakTimeInfoResponse?{
+        val response = ApiService.GetDriverBreakInfo(driverId)
+        if(response.isSuccessful)
+            return response.body()
+        else{
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }

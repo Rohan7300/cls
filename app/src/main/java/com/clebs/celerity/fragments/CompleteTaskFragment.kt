@@ -9,13 +9,15 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ImageButton
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -26,6 +28,8 @@ import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
+import com.clebs.celerity.databinding.TimePickerDialogBinding
+import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
@@ -34,9 +38,13 @@ import com.clebs.celerity.ui.HomeActivity.Companion.checked
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.progressBarVisibility
+import com.clebs.celerity.utils.showTimePickerDialog
+import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toRequestBody
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import okhttp3.MultipartBody
+import java.text.SimpleDateFormat
+import java.util.Locale
 import java.util.UUID
 
 class CompleteTaskFragment : Fragment() {
@@ -44,10 +52,12 @@ class CompleteTaskFragment : Fragment() {
     private var isclicked: Boolean = true
     private var isclickedtwo: Boolean = true
     private lateinit var viewModel: MainViewModel
-    lateinit var imageView: ImageView
-    var userId: Int = 0
-    var requestCode: Int = 0
-    var showImageUploadLayout: Boolean = false
+    private lateinit var imageView: ImageView
+    private var userId: Int = 0
+    private var requestCode: Int = 0
+    private var showImageUploadLayout: Boolean = false
+    var breakStartTime: String = ""
+    var breakEndTime: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,9 +79,23 @@ class CompleteTaskFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
         //    viewModel.setLastVisitedScreenId(requireContext(), R.id.completeTaskFragment)
+
+        viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner){
+            if(it!=null){
+              //  deleteDialog.cancel()
+            }else{
+                showToast("Something went wrong!!",requireContext())
+            }
+            progressBarVisibility(
+                false,
+                mbinding.completeTaskFragmentPB,
+                mbinding.overlayViewCompleteTask
+            )
+
+        }
         mbinding.icUu.setOnClickListener {
 
-        findNavController().navigate(R.id.profileFragment)
+            findNavController().navigate(R.id.profileFragment)
         }
         if (checked.equals("0")) {
             //findNavController().navigate(R.id.vechileMileageFragment)
@@ -130,7 +154,11 @@ class CompleteTaskFragment : Fragment() {
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
 
         viewModel.uploadVehicleImageLiveData.observe(viewLifecycleOwner, Observer {
-            progressBarVisibility(false,mbinding.completeTaskFragmentPB,mbinding.overlayViewCompleteTask)
+            progressBarVisibility(
+                false,
+                mbinding.completeTaskFragmentPB,
+                mbinding.overlayViewCompleteTask
+            )
             if (it != null) {
                 if (it.Status == "200") {
                     setImageUploadViews(requestCode, 1)
@@ -243,21 +271,88 @@ class CompleteTaskFragment : Fragment() {
                 res.DaVehImgOilLevelFileName == null
     }
 
+    private fun chkTime(edtBreakstart: EditText, edtBreakend: EditText): Boolean {
+
+        val startTime = edtBreakstart.text.toString()
+        val endTime = edtBreakend.text.toString()
+        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val start = sdf.parse(startTime)
+        val end = sdf.parse(endTime)
+        if (start != null) {
+            if (start.before(end))
+                return true
+        }
+        return false
+    }
+
     private fun showAlert() {
-        val factory = LayoutInflater.from(requireContext())
-        val view: View = factory.inflate(R.layout.time_picker_dialog, null)
+        val dialogBinding = TimePickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
         val deleteDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
-        deleteDialog.setView(view)
-
-
+        deleteDialog.setView(dialogBinding.root)
 
         deleteDialog.setCanceledOnTouchOutside(true)
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         deleteDialog.show()
 
-        deleteDialog.findViewById<ImageButton>(R.id.ic_cross_orange).setOnClickListener {
+        dialogBinding.icCrossOrange.setOnClickListener {
             deleteDialog.cancel()
         }
+        dialogBinding.edtBreakstart.setOnClickListener {
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
+        }
+        dialogBinding.edtBreakend.setOnClickListener {
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
+        }
+
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                val startText = dialogBinding.edtBreakstart.text.toString()
+                val endText = dialogBinding.edtBreakend.text.toString()
+
+                if (startText.isNotEmpty() && endText.isNotEmpty()) {
+                    breakStartTime = startText
+                    breakEndTime = endText
+                    dialogBinding.timeTvNext.isEnabled = true
+                    dialogBinding.timeTvNext.setTextColor(Color.WHITE)
+                }
+            }
+        }
+
+        dialogBinding.edtBreakstart.addTextChangedListener(textWatcher)
+        dialogBinding.edtBreakend.addTextChangedListener(textWatcher)
+
+        dialogBinding.timeTvNext.setOnClickListener {
+            if (chkTime(dialogBinding.edtBreakstart, dialogBinding.edtBreakend)) {
+                deleteDialog.cancel()
+                progressBarVisibility(
+                    true,
+                    mbinding.completeTaskFragmentPB,
+                    mbinding.overlayViewCompleteTask
+                )
+                sendBreakTimeData()
+            } else {
+                showToast("Please add valid time information", requireContext())
+            }
+        }
+
+    }
+
+    private fun sendBreakTimeData() {
+
+        viewModel.SaveBreakTime(
+            SaveBreakTimeRequest(
+                UserId = userId.toString(),
+                DawDriverBreakId = "null",
+                BreakStartTime = breakStartTime,
+                BreakFinishTime = breakEndTime
+            )
+        )
     }
 
 
@@ -300,7 +395,11 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun sendImage(imageBitmap: Bitmap, requestCode: Int) {
-        progressBarVisibility(true,mbinding.completeTaskFragmentPB,mbinding.overlayViewCompleteTask)
+        progressBarVisibility(
+            true,
+            mbinding.completeTaskFragmentPB,
+            mbinding.overlayViewCompleteTask
+        )
         val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
         val requestBody = imageBitmap.toRequestBody()
         val imagePart = when (requestCode) {

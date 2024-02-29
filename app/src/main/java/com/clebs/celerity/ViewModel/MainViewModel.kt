@@ -17,6 +17,7 @@ import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
@@ -46,6 +47,7 @@ class MainViewModel(
     val livedataupdateDriverAgreementSignature = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataAddOnRouteInfo = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataSaveBreakTime = MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataDriverBreakInfo = MutableLiveData<GetDriverBreakTimeInfoResponse?>()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -237,6 +239,13 @@ class MainViewModel(
         viewModelScope.launch {
             val response = repo.SaveBreakTime(saveBreakTimeRequest)
             livedataSaveBreakTime.postValue(response)
+        }
+    }
+
+    fun GetDriverBreakTimeInfo(driverId:Int){
+        viewModelScope.launch {
+            val response = repo.GetDriverBreakInfo(driverId)
+            livedataDriverBreakInfo.postValue(response)
         }
     }
 

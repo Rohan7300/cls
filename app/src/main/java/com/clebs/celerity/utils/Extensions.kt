@@ -3,6 +3,7 @@ package com.clebs.celerity.utils
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -410,4 +411,23 @@ fun progressBarVisibility(show: Boolean,pb:ProgressBar, overlayView:View) {
         overlayView.isClickable = false
         overlayView.isFocusable = false
     }
+}
+
+fun showTimePickerDialog(context: Context, editText: EditText) {
+    val calendar = Calendar.getInstance()
+    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+    val minute = calendar.get(Calendar.MINUTE)
+
+    val timePickerDialog = TimePickerDialog(
+        context,
+        { _, selectedHour, selectedMinute ->
+            val time = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute)
+            editText.setText(time)
+        },
+        hour,
+        minute,
+        true
+    )
+
+    timePickerDialog.show()
 }
