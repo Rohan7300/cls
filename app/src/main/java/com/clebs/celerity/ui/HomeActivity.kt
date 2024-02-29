@@ -11,22 +11,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
-import android.window.OnBackInvokedDispatcher
-import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.forEach
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.ImageViewModel
@@ -40,17 +34,17 @@ import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.dbLog
-import com.clebs.celerity.utils.toast
+import com.clebs.celerity.utils.progressBarVisibility
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
-    lateinit var ActivityHomeBinding: ActivityHomeBinding
-    lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var ActivityHomeBinding: ActivityHomeBinding
+    private lateinit var bottomNavigationView: BottomNavigationView
     lateinit var imageViewModel: ImageViewModel
-    var screenid: Int = 0
-    lateinit var navController: NavController
-    public lateinit var viewModel: MainViewModel
+    private var screenid: Int = 0
+    private lateinit var navController: NavController
+    lateinit var viewModel: MainViewModel
     private lateinit var navGraph: NavGraph
     private var completeTaskScreen: Boolean = false
 
@@ -58,19 +52,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         fun showLog(tag: String, message: String) {
             Log.e(tag, message)
         }
-
         var checked: String? = ""
         var Boolean: Boolean = false
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,11 +81,26 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
             Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
+            progressBarVisibility(false,ActivityHomeBinding.homeActivityPB,ActivityHomeBinding.overlayViewHomeActivity)
             if (it != null) {
                 completeTaskScreen = it.IsSubmited
+                if (!completeTaskScreen) {
+                    screenid = viewModel.getLastVisitedScreenId(this)
+                    if (screenid == 0) {
+                        navController.navigate(R.id.homeFragment)
+                        // navigateTo(R.id.homeFragment)
+                        navController.currentDestination!!.id = R.id.homeFragment
+
+                    } else {
+                        navController.navigate(screenid)
+                        navController.currentDestination!!.id = screenid
+                    }
+                } else {
+                    navController.navigate(R.id.completeTaskFragment)
+                }
             }
         }
-        viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
+
 
 
         imageViewModel = ViewModelProvider(
@@ -115,29 +115,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             dbLog(imageEntity)
         }
 
-
-//        checkIftodayCheckIsDone()
-//
-//        if (Build.VERSION.SDK_INT >= 33) {
-//            onBackInvokedDispatcher.registerOnBackInvokedCallback(
-//                OnBackInvokedDispatcher.PRIORITY_DEFAULT
-//            ) {
-//                navPop()
-//
-//            }
-//        } else {
-//            onBackPressedDispatcher.addCallback(
-//                this,
-//                object : OnBackPressedCallback(true) {
-//                    override fun handleOnBackPressed() {
-//
-//                        navPop()
-//
-//                    }
-//                })
-//        }
-
-
         ActivityHomeBinding.imgDrawer.setOnClickListener {
             navController.navigate(R.id.profileFragment)
         }
@@ -150,39 +127,17 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
                 R.id.daily -> {
-                    if (!completeTaskScreen) {
-                        screenid = viewModel.getLastVisitedScreenId(this)
-                        if (screenid == 0) {
-                            navController.navigate(R.id.homeFragment)
-                            // navigateTo(R.id.homeFragment)
-                            navController.currentDestination!!.id = R.id.homeFragment
-
-                        } else {
-
-                            navController.navigate(screenid)
-
-
-                            navController.currentDestination!!.id = screenid
-
-                        }
-
-                    } else {
-                        navController.navigate(R.id.completeTaskFragment)
-                    }
+                    viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
+                    progressBarVisibility(true,ActivityHomeBinding.homeActivityPB,ActivityHomeBinding.overlayViewHomeActivity)
                     true
                 }
 
                 R.id.invoices -> {
-
-
                     navController.navigate(R.id.invoicesFragment)
-
-
                     true
                 }
 
                 R.id.passwords -> {
-
                     ActivityHomeBinding.title.text = "Notifications"
                     navController.navigate(R.id.notifficationsFragment)
 
@@ -202,22 +157,16 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         }
         ActivityHomeBinding.imgLogout.setOnClickListener {
-
             showAlertLogout()
-
         }
-
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-
-
     }
 
     fun logout() {
         viewModel.Logout().observe(this@HomeActivity, Observer {
-
             if (it!!.responseType.equals("Success")) {
                 val intent = Intent(this, LoginActivity::class.java)
                 intent.putExtra("logout", "0")
@@ -226,7 +175,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 setLoggedIn(false)
             }
         })
-
     }
 
 //    fun navPop(){

@@ -11,6 +11,7 @@ import com.clebs.celerity.models.response.GetsignatureInformation
 import com.clebs.celerity.models.requests.LoginRequest
 import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.SaveBreakStartEndTImeRequestModel
+import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.requests.SaveDriverDocumentSignatureRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
@@ -197,4 +198,7 @@ interface ApiService {
 
     @POST("/api/RouteUpdate/AddOnRouteInfo")
     suspend fun AddOnRouteInfo(@Body addOnRouteInfoRequest: AddOnRouteInfoRequest): Response<SimpleStatusMsgResponse>
+
+    @POST("/api/DaDailyWorks/SaveBreakStartAndEndTime")
+    suspend fun SaveBreakTime(@Body saveBreakTimeRequest: SaveBreakTimeRequest):Response<SimpleStatusMsgResponse>
 }

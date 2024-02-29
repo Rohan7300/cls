@@ -395,3 +395,19 @@ fun bitmapToBase64(bitmap: Bitmap): String {
     val byteArray = byteArrayOutputStream.toByteArray()
     return Base64.encodeToString(byteArray, Base64.DEFAULT)
 }
+
+fun progressBarVisibility(show: Boolean,pb:ProgressBar, overlayView:View) {
+    if (show) {
+        pb.bringToFront()
+        pb.visibility = View.VISIBLE
+        overlayView.visibility = View.VISIBLE
+        overlayView.bringToFront()
+        overlayView.isClickable = true
+        overlayView.isFocusable = true
+    } else {
+        pb.visibility = View.GONE
+        overlayView.visibility = View.GONE
+        overlayView.isClickable = false
+        overlayView.isFocusable = false
+    }
+}

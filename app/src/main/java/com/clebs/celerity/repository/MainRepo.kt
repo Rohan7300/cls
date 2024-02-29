@@ -7,6 +7,7 @@ import com.clebs.celerity.models.response.DriversBasicInformationModel
 import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
 import com.clebs.celerity.models.requests.LoginRequest
+import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.response.LoginResponse
@@ -222,6 +223,17 @@ class MainRepo(private val ApiService: ApiService) {
         }else{
             val errorBody = response.errorBody()?.string()
             println("Error response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun SaveBreakTime(saveBreakTimeRequest: SaveBreakTimeRequest):SimpleStatusMsgResponse?{
+        val response = ApiService.SaveBreakTime(saveBreakTimeRequest)
+        if(response.isSuccessful){
+            return response.body()
+        }else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
         }
         return null
     }

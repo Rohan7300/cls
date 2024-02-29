@@ -26,15 +26,14 @@ import com.clebs.celerity.utils.CustDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SignatureListener
 import com.clebs.celerity.utils.bitmapToBase64
-import com.clebs.celerity.utils.convertImageFileToBase64
+import com.clebs.celerity.utils.progressBarVisibility
 import com.clebs.celerity.utils.showToast
 
 class PolicyDocsActivity : AppCompatActivity() {
     lateinit var mbinding: ActivityPolicyDocsBinding
     lateinit var viewModel: MainViewModel
-    private var dataLoaded = false
     private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
-    var userId = 0
+    private var userId = 0
 
     companion object {
         var path = Path()
@@ -101,7 +100,7 @@ class PolicyDocsActivity : AppCompatActivity() {
         dialog.setSignatureListener(object : SignatureListener {
             override fun onSignatureSaved(bitmap: Bitmap) {
                 Log.d("Sign", "Bitmap $bitmap")
-                progressBarVisibility(true)
+                progressBarVisibility(true,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)
                 updateSignatureInfoApi(bitmap)
             }
         })
@@ -110,7 +109,7 @@ class PolicyDocsActivity : AppCompatActivity() {
 
     private fun updateSignatureInfoApi(bitmap: Bitmap) {
         viewModel.livedataupdateDriverAgreementSignature.observe(this) {
-            progressBarVisibility(false)
+            progressBarVisibility(false,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)
             if (it != null) {
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
@@ -147,7 +146,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                 UserID = 0,
             )
 val bse64 = "data:image/png;base64,"+bitmapToBase64(bitmap)
-            Log.d("Base64","$bse64")
+            Log.d("Base64", bse64)
             viewModel.UpdateDriverAgreementSignature(
                 UpdateDriverAgreementSignatureRequest(
                     Address = driverSignatureInfo!!.PreviousAddress,//GRTTOwer
@@ -183,12 +182,12 @@ val bse64 = "data:image/png;base64,"+bitmapToBase64(bitmap)
     }
 
 
-    fun progressBarVisibility(show: Boolean) {
+   /* fun progressBarVisibility(show: Boolean) {
         if (show) {
             mbinding.policyDocPB.bringToFront()
             mbinding.policyDocPB.visibility = View.VISIBLE
         } else {
             mbinding.policyDocPB.visibility = View.GONE
         }
-    }
+    }*/
 }

@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -32,6 +33,7 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.navigateTo
+import com.clebs.celerity.utils.progressBarVisibility
 import com.clebs.celerity.utils.toRequestBody
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import okhttp3.MultipartBody
@@ -128,7 +130,7 @@ class CompleteTaskFragment : Fragment() {
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
 
         viewModel.uploadVehicleImageLiveData.observe(viewLifecycleOwner, Observer {
-            progressBarVisibility(false)
+            progressBarVisibility(false,mbinding.completeTaskFragmentPB,mbinding.overlayViewCompleteTask)
             if (it != null) {
                 if (it.Status == "200") {
                     setImageUploadViews(requestCode, 1)
@@ -241,15 +243,21 @@ class CompleteTaskFragment : Fragment() {
                 res.DaVehImgOilLevelFileName == null
     }
 
-    fun showAlert() {
+    private fun showAlert() {
         val factory = LayoutInflater.from(requireContext())
         val view: View = factory.inflate(R.layout.time_picker_dialog, null)
         val deleteDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
         deleteDialog.setView(view)
 
-        deleteDialog.setCanceledOnTouchOutside(true);
-        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-        deleteDialog.show();
+
+
+        deleteDialog.setCanceledOnTouchOutside(true)
+        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        deleteDialog.show()
+
+        deleteDialog.findViewById<ImageButton>(R.id.ic_cross_orange).setOnClickListener {
+            deleteDialog.cancel()
+        }
     }
 
 
@@ -292,7 +300,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun sendImage(imageBitmap: Bitmap, requestCode: Int) {
-        progressBarVisibility(true)
+        progressBarVisibility(true,mbinding.completeTaskFragmentPB,mbinding.overlayViewCompleteTask)
         val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
         val requestBody = imageBitmap.toRequestBody()
         val imagePart = when (requestCode) {
@@ -363,15 +371,6 @@ class CompleteTaskFragment : Fragment() {
             else -> throw IllegalArgumentException()
         }
         viewModel.uploadVehicleImage(userId, imagePart, requestCode)
-    }
-
-    fun progressBarVisibility(show: Boolean) {
-        if (show) {
-            mbinding.completeTaskFragmentPB.bringToFront()
-            mbinding.completeTaskFragmentPB.visibility = View.VISIBLE
-        } else {
-            mbinding.completeTaskFragmentPB.visibility = View.GONE
-        }
     }
 
     private fun setImageUploadViews(requestCode: Int, type: Int) {
