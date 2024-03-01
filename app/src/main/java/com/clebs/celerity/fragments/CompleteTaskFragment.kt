@@ -80,19 +80,78 @@ class CompleteTaskFragment : Fragment() {
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
         //    viewModel.setLastVisitedScreenId(requireContext(), R.id.completeTaskFragment)
 
-        viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner){
-            if(it!=null){
-              //  deleteDialog.cancel()
-            }else{
-                showToast("Something went wrong!!",requireContext())
+        viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
+            if (it != null) {
+                //  deleteDialog.cancel()
+            } else {
+                showToast("Something went wrong!!", requireContext())
             }
             progressBarVisibility(
                 false,
                 mbinding.completeTaskFragmentPB,
                 mbinding.overlayViewCompleteTask
             )
-
         }
+
+        viewModel.livedataDailyWorkInfoByIdResponse.observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it.ClockedInTime != null) {
+                    mbinding.tvClockedIN.text = it.ClockedInTime.toString()
+                    mbinding.rlcomtwoClock.visibility = View.GONE
+                    mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                }
+                if(it.ClockedOutTime!=null) {
+                    mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
+                    mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
+                }
+            }
+        }
+
+        viewModel.livedataClockInTime.observe(viewLifecycleOwner){
+            if(it!=null){
+
+                mbinding.rlcomtwoClock.visibility = View.GONE
+                mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+            }
+        }
+
+        viewModel.livedataUpdateClockOutTime.observe(viewLifecycleOwner){
+            if(it!=null){
+                mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
+            }
+        }
+
+        viewModel.GetDailyWorkInfoById(userId)
+
+        mbinding.rlcomtwoClock.setOnClickListener {
+
+            viewModel.UpdateClockInTime(userId)
+        }
+
+        mbinding.rlcomtwoClockOut.setOnClickListener {
+            viewModel.UpdateClockOutTime(userId)
+        }
+
+
+        viewModel.livedataDriverBreakInfo.observe(viewLifecycleOwner) {
+            if (it != null) {
+                val latestBreakInfo = it.lastOrNull()
+
+                latestBreakInfo?.let { breakInfo ->
+                    val breakTimeEnd = breakInfo.BreakTimeEnd
+                    val breakTimeStart = breakInfo.BreakTimeStart
+                    if (breakTimeStart.isNotEmpty() && breakTimeEnd.isNotEmpty()) {
+                        mbinding.downIvsBreak.setImageResource(R.drawable.ic_yes)
+                    } else {
+                        showToast("No Break time information added!!", requireContext())
+                    }
+                } ?: showToast("No Break time information added!!", requireContext())
+            } else {
+                showToast("Something went wrong!!", requireContext())
+            }
+        }
+
+        viewModel.GetDriverBreakTimeInfo(userId)
         mbinding.icUu.setOnClickListener {
 
             findNavController().navigate(R.id.profileFragment)

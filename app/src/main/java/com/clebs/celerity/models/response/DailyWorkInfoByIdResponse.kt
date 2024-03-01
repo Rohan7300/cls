@@ -1,7 +1,7 @@
 package com.clebs.celerity.models.response
 
 data class DailyWorkInfoByIdResponse(
-    val ClockedInTime: Any,
+    val ClockedInTime: Any?,
     val ClockedOutTime: Any,
     val DailyWorkDate: String,
     val DailyWorkFaceMaskFileName: String,

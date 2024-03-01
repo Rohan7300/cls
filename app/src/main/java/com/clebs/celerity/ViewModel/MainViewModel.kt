@@ -48,6 +48,8 @@ class MainViewModel(
     val livedataAddOnRouteInfo = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataSaveBreakTime = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataDriverBreakInfo = MutableLiveData<GetDriverBreakTimeInfoResponse?>()
+    val livedataClockInTime = MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataUpdateClockOutTime = MutableLiveData<SimpleStatusMsgResponse?>()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -246,6 +248,18 @@ class MainViewModel(
         viewModelScope.launch {
             val response = repo.GetDriverBreakInfo(driverId)
             livedataDriverBreakInfo.postValue(response)
+        }
+    }
+    fun UpdateClockInTime(driverId:Int){
+        viewModelScope.launch {
+            val response = repo.UpdateClockInTime(driverId)
+            livedataClockInTime.postValue(response)
+        }
+    }
+    fun UpdateClockOutTime(driverId:Int){
+        viewModelScope.launch {
+            val response = repo.UpdateClockOutTime(driverId)
+            livedataUpdateClockOutTime.postValue(response)
         }
     }
 

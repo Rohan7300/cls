@@ -249,4 +249,24 @@ class MainRepo(private val ApiService: ApiService) {
         }
         return null
     }
+    suspend fun UpdateClockInTime(driverId:Int):SimpleStatusMsgResponse?{
+        val response = ApiService.UpdateClockInTime(driverId)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+    suspend fun UpdateClockOutTime(driverId:Int):SimpleStatusMsgResponse?{
+        val response = ApiService.UpdateClockOutTime(driverId)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
 }

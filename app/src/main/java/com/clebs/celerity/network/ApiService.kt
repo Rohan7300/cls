@@ -205,4 +205,11 @@ interface ApiService {
 
     @GET("/api/DaDailyWorks/GetDriverBreakTimeInfoByDate/{driverId}")
     suspend fun GetDriverBreakInfo(@Path("driverId") driverId:Int):Response<GetDriverBreakTimeInfoResponse>
+
+    @POST("/api/DailyWorks/UpdateClockInTime/{dwUsrID}")
+    suspend fun UpdateClockInTime(@Path("dwUsrID") dwid: Int):Response<SimpleStatusMsgResponse>
+
+    @POST("/api/DailyWorks/UpdateClockOutTime/{dwUsrID}")
+    suspend fun UpdateClockOutTime(@Path("dwUsrID") dwid: Int):Response<SimpleStatusMsgResponse>
+
 }
