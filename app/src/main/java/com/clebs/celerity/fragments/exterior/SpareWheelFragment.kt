@@ -13,6 +13,7 @@ import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentSpareWheelBinding
 import com.clebs.celerity.fragments.BaseInteriorFragment
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
+import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.showToast
@@ -198,10 +199,12 @@ class SpareWheelFragment : BaseInteriorFragment() {
             }
         })
 
-        viewModel.GetVehicleInformation(
-            userId,
-            "YE23MUU"
-        )
+        viewModel.GetDriversBasicInformation(
+            Prefs.getInstance(App.instance).userID.toDouble()).observe(viewLifecycleOwner) {
+            if (it!=null){
+                viewModel.GetVehicleInformation(prefs.userID.toInt(),it.vmRegNo)
+            }
+        }
 
 
         viewModel.SaveVehDefectSheetResponseLiveData.observe(viewLifecycleOwner, Observer {

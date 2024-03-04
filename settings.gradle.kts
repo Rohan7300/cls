@@ -3,6 +3,7 @@ pluginManagement {
         google()
         jcenter()
         mavenCentral()
+        mavenLocal()
         gradlePluginPortal()
     }
 }
@@ -11,11 +12,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         jcenter()
+        mavenLocal()
         mavenCentral()
-        maven {
-            setUrl("https://jitpack.io")
-        }
-    }
+        maven { url = uri("https://jitpack.io") }
+        maven { url = uri("https://europe-maven.pkg.dev/anyline-ttr-sdk/maven") } }
 }
 
 rootProject.name = "Celerity"

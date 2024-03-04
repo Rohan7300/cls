@@ -67,12 +67,12 @@
                         android:src="@drawable/pin_alt_light_two"></ImageView>
 
                     <TextView
-                        android:id="@+id/dxm4"
+                        android:id="@+id/dxLoc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/inter"
                         android:letterSpacing="0.03"
-                        android:text="@string/dxm4"
+                        android:text="@string/dxLoc"
                         android:textColor="#231F20"
                         android:textSize="15sp"
 
@@ -94,13 +94,13 @@
                         android:src="@drawable/pin_alt_light_two"></ImageView>
 
                     <TextView
-                        android:id="@+id/dxm42"
+                        android:id="@+id/dxReg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/inter"
                         android:gravity="center_horizontal|top"
                         android:letterSpacing="0.03"
-                        android:text="@string/dxm4"
+                        android:text="@string/dxLoc"
                         android:textColor="#231F20"
                         android:textSize="15sp" />
 
@@ -126,7 +126,7 @@
                         android:fontFamily="@font/inter"
                         android:gravity="center_horizontal|top"
                         android:letterSpacing="0.03"
-                        android:text="@string/dxm4"
+                        android:text="@string/dxLoc"
                         android:textColor="#231F20"
                         android:textSize="15sp" />
 

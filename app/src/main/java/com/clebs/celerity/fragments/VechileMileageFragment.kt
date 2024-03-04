@@ -68,13 +68,19 @@ class VechileMileageFragment : Fragment() {
         }
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
-        viewModel =
-            ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
+        viewModel =(activity as HomeActivity).viewModel
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.vechileMileageFragment)
 
         mbinding.miles.setText(
             Prefs.getInstance(App.instance).get("vehicleLastMillage") + " Miles"
         )
+
+
+        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner){
+            mbinding.dxLoc.text = it?.locationName?:""
+            mbinding.dxReg.text = it?.vmRegNo?:""
+        }
+
 
         mbinding.headings.setOnClickListener {
         //   findNavController().navigate(R.id.profileFragment)
