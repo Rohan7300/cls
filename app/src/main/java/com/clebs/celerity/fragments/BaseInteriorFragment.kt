@@ -214,6 +214,36 @@ abstract class BaseInteriorFragment : Fragment() {
         }
     }
 
+    fun editMil2VisibilityNew(rlUploadDefect: RelativeLayout,
+                              edtMil: TextView,
+                              edtMilTwo: TextView,
+                              imageRadioTwo: ImageButton,
+                              imageRadio: ImageButton){
+        defectView = false
+        rlUploadDefect.visibility = View.VISIBLE
+        edtMilTwo.setBackgroundDrawable(
+            ContextCompat.getDrawable(
+                requireContext(), R.drawable.shape_filled_textview
+            )
+        )
+        imageRadioTwo.setImageDrawable(
+            ContextCompat.getDrawable(
+                requireContext(), R.drawable.round_circle_orange
+            )
+        )
+        rlUploadDefect.visibility = View.GONE
+        edtMil.setBackgroundDrawable(
+            ContextCompat.getDrawable(
+                requireContext(), R.drawable.shape_textview_button
+            )
+        )
+        imageRadio.setImageDrawable(
+            ContextCompat.getDrawable(
+                requireContext(), R.drawable.round_circle_white
+            )
+        )
+    }
+
     fun doAfterTextChanged(tvNext: TextView, edtDefect: EditText) {
         tvNext.isEnabled = (edtDefect.text?.length!! > 0)
         if (edtDefect.text?.length!! > 0)

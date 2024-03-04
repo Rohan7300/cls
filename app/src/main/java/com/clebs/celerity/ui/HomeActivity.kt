@@ -92,8 +92,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         navController.currentDestination!!.id = R.id.homeFragment
 
                     } else {
-                        navController.navigate(screenid)
-                        navController.currentDestination!!.id = screenid
+                        try{
+                            navController.navigate(screenid)
+                            navController.currentDestination!!.id = screenid
+                        }catch (_:Exception){
+                            navController.navigate(R.id.homeFragment)
+                            navController.currentDestination!!.id = R.id.homeFragment
+                        }
                     }
                 } else {
                     navController.navigate(R.id.completeTaskFragment)
@@ -127,8 +132,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
                 R.id.daily -> {
-                    viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
-                    progressBarVisibility(true,ActivityHomeBinding.homeActivityPB,ActivityHomeBinding.overlayViewHomeActivity)
+                  /*  viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
+                    progressBarVisibility(true,ActivityHomeBinding.homeActivityPB,ActivityHomeBinding.overlayViewHomeActivity)*/
+                    navController.navigate(R.id.homeFragment)
+                    navController.currentDestination!!.id = R.id.homeFragment
+
                     true
                 }
 

@@ -78,7 +78,121 @@ class CompleteTaskFragment : Fragment() {
         val mainRepo = MainRepo(apiService)
         viewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
-        //    viewModel.setLastVisitedScreenId(requireContext(), R.id.completeTaskFragment)
+
+        viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
+        viewModel.GetDriverBreakTimeInfo(userId)
+        viewModel.GetDailyWorkInfoById(userId)
+        observers()
+
+        mbinding.rlcomtwoClock.setOnClickListener {
+            viewModel.UpdateClockInTime(userId)
+        }
+
+        mbinding.rlcomtwoClockOut.setOnClickListener {
+            viewModel.UpdateClockOutTime(userId)
+        }
+
+        mbinding.icUu.setOnClickListener {
+            findNavController().navigate(R.id.profileFragment)
+        }
+
+        if (checked.equals("0")) {
+            //findNavController().navigate(R.id.vechileMileageFragment)
+            navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
+        }
+
+        mbinding.clFaceMask.setOnClickListener {
+            requestCode = 0
+            pictureDialogBase64(mbinding.ivFaceMask, requestCode)
+        }
+        mbinding.clVehicleDashboard.setOnClickListener {
+            /*requestCode = 1
+            pictureDialogBase64(mbinding.ivVehicleDashboard, requestCode)*/
+        }
+        mbinding.clFront.setOnClickListener {
+            /*requestCode = 2
+            pictureDialogBase64(mbinding.ivFront, requestCode)*/
+        }
+        mbinding.clNearSide.setOnClickListener {
+            /*requestCode = 3
+            pictureDialogBase64(mbinding.ivNearSide, requestCode)*/
+        }
+        mbinding.clRearImgUp.setOnClickListener {
+            /*requestCode = 4
+            pictureDialogBase64(mbinding.ivRearImgUp, requestCode)*/
+        }
+        mbinding.clOilLevel.setOnClickListener {
+            requestCode = 5
+            pictureDialogBase64(mbinding.ivOilLevel, requestCode)
+        }
+        mbinding.clOffSideImgUp.setOnClickListener {
+            /*requestCode = 6
+            pictureDialogBase64(mbinding.ivOffSideImgUp, requestCode)*/
+        }
+        mbinding.clAddBlueImg.setOnClickListener {
+            requestCode = 7
+            pictureDialogBase64(mbinding.ivAddBlueImg, requestCode)
+        }
+
+        mbinding.AddRoute.setOnClickListener {
+            findNavController().navigate(R.id.onRoadHoursFragment)
+        }
+
+        mbinding.rlcom.setOnClickListener {
+            if (isclicked) {
+                mbinding.taskDetails.visibility = View.VISIBLE
+                mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
+                mbinding.view2.visibility = View.VISIBLE
+            } else {
+                mbinding.taskDetails.visibility = View.GONE
+                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
+                mbinding.view2.visibility = View.GONE
+                mbinding.uploadLayouts.visibility = View.VISIBLE
+            }
+            isclicked = !isclicked
+        }
+        mbinding.run {
+            mbinding.tvNext.isEnabled = !isclicked
+            if (tvNext.isEnabled) {
+                tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            } else {
+                tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))
+            }
+        }
+
+        mbinding.tvNext.setOnClickListener {
+            if (isclickedtwo) {
+
+                mbinding.uploadLayouts.visibility = View.GONE
+            } else {
+
+                mbinding.uploadLayouts.visibility = View.VISIBLE
+            }
+            isclickedtwo = !isclickedtwo
+        }
+
+        mbinding.taskDetails.getViewTreeObserver()
+            .addOnGlobalLayoutListener(OnGlobalLayoutListener { // Check if the view is currently visible or gone
+                val isVisible = mbinding.taskDetails.visibility == View.VISIBLE
+
+                // Apply animation based on the visibility
+                if (isVisible) {
+                    val slideInAnimation: Animation =
+                        AnimationUtils.loadAnimation(context, com.clebs.celerity.R.anim.slide_down)
+                    mbinding.taskDetails.startAnimation(slideInAnimation)
+                } else {
+                    val slideOutAnimation: Animation =
+                        AnimationUtils.loadAnimation(context, com.clebs.celerity.R.anim.slide_up)
+                    mbinding.taskDetails.startAnimation(slideOutAnimation)
+                }
+            })
+        mbinding.rlcomtwoRoad.setOnClickListener {
+            mbinding.routeLayout.visibility = View.VISIBLE
+        }
+        return mbinding.root
+    }
+
+    private fun observers() {
 
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -121,17 +235,6 @@ class CompleteTaskFragment : Fragment() {
             }
         }
 
-        viewModel.GetDailyWorkInfoById(userId)
-
-        mbinding.rlcomtwoClock.setOnClickListener {
-
-            viewModel.UpdateClockInTime(userId)
-        }
-
-        mbinding.rlcomtwoClockOut.setOnClickListener {
-            viewModel.UpdateClockOutTime(userId)
-        }
-
 
         viewModel.livedataDriverBreakInfo.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -151,15 +254,22 @@ class CompleteTaskFragment : Fragment() {
             }
         }
 
-        viewModel.GetDriverBreakTimeInfo(userId)
-        mbinding.icUu.setOnClickListener {
-
-            findNavController().navigate(R.id.profileFragment)
-        }
-        if (checked.equals("0")) {
-            //findNavController().navigate(R.id.vechileMileageFragment)
-            navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
-        }
+        viewModel.uploadVehicleImageLiveData.observe(viewLifecycleOwner, Observer {
+            progressBarVisibility(
+                false,
+                mbinding.completeTaskFragmentPB,
+                mbinding.overlayViewCompleteTask
+            )
+            if (it != null) {
+                if (it.Status == "200") {
+                    setImageUploadViews(requestCode, 1)
+                } else {
+                    setImageUploadViews(requestCode, 0)
+                }
+            } else {
+                setImageUploadViews(requestCode, 0)
+            }
+        })
 
         viewModel.vehicleImageUploadInfoLiveData.observe(viewLifecycleOwner, Observer {
             println(it)
@@ -209,114 +319,6 @@ class CompleteTaskFragment : Fragment() {
             }
         })
 
-
-        viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
-
-        viewModel.uploadVehicleImageLiveData.observe(viewLifecycleOwner, Observer {
-            progressBarVisibility(
-                false,
-                mbinding.completeTaskFragmentPB,
-                mbinding.overlayViewCompleteTask
-            )
-            if (it != null) {
-                if (it.Status == "200") {
-                    setImageUploadViews(requestCode, 1)
-                } else {
-                    setImageUploadViews(requestCode, 0)
-                }
-            } else {
-                setImageUploadViews(requestCode, 0)
-            }
-        })
-
-        mbinding.clFaceMask.setOnClickListener {
-            requestCode = 0
-            pictureDialogBase64(mbinding.ivFaceMask, requestCode)
-        }
-        mbinding.clVehicleDashboard.setOnClickListener {
-            requestCode = 1
-            pictureDialogBase64(mbinding.ivVehicleDashboard, requestCode)
-        }
-        mbinding.clFront.setOnClickListener {
-            requestCode = 2
-            pictureDialogBase64(mbinding.ivFront, requestCode)
-        }
-        mbinding.clNearSide.setOnClickListener {
-            requestCode = 3
-            pictureDialogBase64(mbinding.ivNearSide, requestCode)
-        }
-        mbinding.clRearImgUp.setOnClickListener {
-            requestCode = 4
-            pictureDialogBase64(mbinding.ivRearImgUp, requestCode)
-        }
-        mbinding.clOilLevel.setOnClickListener {
-            requestCode = 5
-            pictureDialogBase64(mbinding.ivOilLevel, requestCode)
-        }
-        mbinding.clOffSideImgUp.setOnClickListener {
-            requestCode = 6
-            pictureDialogBase64(mbinding.ivOffSideImgUp, requestCode)
-        }
-        mbinding.clAddBlueImg.setOnClickListener {
-            requestCode = 7
-            pictureDialogBase64(mbinding.ivAddBlueImg, requestCode)
-        }
-
-        mbinding.AddRoute.setOnClickListener {
-            findNavController().navigate(R.id.onRoadHoursFragment)
-        }
-
-        mbinding.rlcom.setOnClickListener {
-            if (isclicked) {
-                mbinding.taskDetails.visibility = View.VISIBLE
-                mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
-                mbinding.view2.visibility = View.VISIBLE
-            } else {
-                mbinding.taskDetails.visibility = View.GONE
-                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
-                mbinding.view2.visibility = View.GONE
-                mbinding.uploadLayouts.visibility = View.VISIBLE
-            }
-            isclicked = !isclicked
-        }
-        mbinding.run {
-            mbinding.tvNext.isEnabled = !isclicked
-            if (tvNext.isEnabled) {
-                tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-            } else {
-                tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))
-            }
-        }
-        mbinding.tvNext.setOnClickListener {
-            if (isclickedtwo) {
-
-                mbinding.uploadLayouts.visibility = View.GONE
-            } else {
-
-                mbinding.uploadLayouts.visibility = View.VISIBLE
-            }
-            isclickedtwo = !isclickedtwo
-        }
-        mbinding.taskDetails.getViewTreeObserver()
-            .addOnGlobalLayoutListener(OnGlobalLayoutListener { // Check if the view is currently visible or gone
-                val isVisible = mbinding.taskDetails.visibility == View.VISIBLE
-
-                // Apply animation based on the visibility
-                if (isVisible) {
-                    val slideInAnimation: Animation =
-                        AnimationUtils.loadAnimation(context, com.clebs.celerity.R.anim.slide_down)
-                    mbinding.taskDetails.startAnimation(slideInAnimation)
-                } else {
-                    val slideOutAnimation: Animation =
-                        AnimationUtils.loadAnimation(context, com.clebs.celerity.R.anim.slide_up)
-                    mbinding.taskDetails.startAnimation(slideOutAnimation)
-                }
-            })
-        mbinding.rlcomtwoRoad.setOnClickListener {
-
-            mbinding.routeLayout.visibility = View.VISIBLE
-        }
-        return mbinding.root
     }
 
     private fun checkNull(res: GetVehicleImageUploadInfoResponse): Boolean {
