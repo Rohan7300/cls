@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+    <domain-config>
+        <domain includeSubdomains="true">https://euserver.clearquote.io/</domain>
+    </domain-config>
+</network-security-config>
+
+<!--    public static String BASE_URL = "http://40.114.120.180:8989";-->

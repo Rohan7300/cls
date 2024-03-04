@@ -12,21 +12,16 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
-import android.window.OnBackInvokedDispatcher
-import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.forEach
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.ImageViewModel
@@ -35,16 +30,19 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.ImageDatabase
 import com.clebs.celerity.database.ImagesRepo
 import com.clebs.celerity.databinding.ActivityHomeBinding
+
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.Constants
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.dbLog
-import com.clebs.celerity.utils.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
@@ -53,7 +51,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     lateinit var imageViewModel: ImageViewModel
     var screenid: Int = 0
     lateinit var navController: NavController
-    public lateinit var viewModel: MainViewModel
+    lateinit var viewModel: MainViewModel
 
 
     private lateinit var cqSDKInitializer: CQSDKInitializer
@@ -100,6 +98,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val imagesRepo =
             ImagesRepo(ImageDatabase.invoke(this), Prefs.getInstance(applicationContext))
 
+
+        viewModel =
+            ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
+
+        GetDriversBasicInformation()
+
         cqSDKInitializer = CQSDKInitializer(this)
         cqSDKInitializer.triggerOfflineSync()
 
@@ -130,8 +134,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
 
 
-        viewModel =
-            ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
 
         viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
             Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
@@ -186,13 +188,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 R.id.home -> {
 
                     navController.navigate(R.id.homedemoFragment)
-
+                    ActivityHomeBinding.title.text = ""
 
 
                     true
                 }
 
                 R.id.daily -> {
+                    ActivityHomeBinding.title.text = ""
                     if (!completeTaskScreen) {
                         screenid = viewModel.getLastVisitedScreenId(this)
                         if (screenid.equals(0)) {
@@ -215,7 +218,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
                 R.id.invoices -> {
-
+                    ActivityHomeBinding.title.text = ""
 
                     navController.navigate(R.id.invoicesFragment)
 
@@ -254,9 +257,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
-            val identifier = intent.getStringExtra(PublicConstants.quoteCreationFlowStatusIdentifierKeyInIntent) ?: "Could not identify Identifier"
-            val message = intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent) ?: "Could not identify status message"
-            val tempCode = intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
+            val identifier =
+                intent.getStringExtra(PublicConstants.quoteCreationFlowStatusIdentifierKeyInIntent)
+                    ?: "Could not identify Identifier"
+            val message =
+                intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
+                    ?: "Could not identify status message"
+            val tempCode =
+                intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
             navController.navigate(R.id.completeTaskFragment)
             // Check if identifier is valid
             if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
@@ -395,6 +403,23 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         deleteDialog.setCancelable(false)
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         deleteDialog.show();
+
+    }
+
+    fun GetDriversBasicInformation() {
+
+        viewModel.GetDriversBasicInformation(
+            Prefs.getInstance(App.instance).userID.toDouble()
+        ).observe(this, Observer {
+            if (it != null) {
+                Log.e("responseprofile", "GetDriversBasicInformation: ")
+
+                Prefs.getInstance(applicationContext).save("name", it.firstName + it.lastName)
+
+            }
+
+
+        })
 
     }
 }

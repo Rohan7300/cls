@@ -17,7 +17,6 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -32,8 +31,8 @@ import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
-import com.clebs.celerity.utils.Constants
 import com.clebs.celerity.utils.Constants.Companion.app_shared_preferences_file_name
 import com.clebs.celerity.utils.Constants.Companion.cq_sdk_key
 import com.clebs.celerity.utils.Prefs
@@ -42,7 +41,6 @@ import com.clebs.celerity.utils.toRequestBody
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
-import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
 import okhttp3.MultipartBody
 import java.util.UUID
 
@@ -76,8 +74,13 @@ class CompleteTaskFragment : Fragment() {
         mbinding.parentBreak.setOnClickListener(clickListener)
 
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+
         val mainRepo = MainRepo(apiService)
+
 //        mbinding.tvNext.visibility = View.GONE
+        mbinding.anaCarolin.setText(Prefs.getInstance(App.instance).get("name"))
+
+
         viewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
         //    viewModel.setLastVisitedScreenId(requireContext(), R.id.completeTaskFragment)

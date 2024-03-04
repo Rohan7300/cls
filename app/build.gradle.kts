@@ -44,14 +44,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    splits {
-        abi {
-            isEnable = true
-            reset()
-            include("x86", "x86_64", "armeabi", "armeabi-v7a", "mips", "mips64", "arm64-v8a")
-            isUniversalApk = false
-        }
-    }
+//    splits {
+//        abi {
+//            isEnable = true
+//            reset()
+//            include("x86", "x86_64", "armeabi", "armeabi-v7a", "mips", "mips64", "arm64-v8a")
+//            isUniversalApk = false
+//        }
+//    }
     kotlinOptions {
         jvmTarget = "1.8"
     }

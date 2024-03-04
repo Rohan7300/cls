@@ -13,6 +13,7 @@ class Prefs(context: Context) {
 
     companion object {
         private const val USER_ACCESS_TOKEN = "sybyl_shared_pref"
+        private const val USER_ACCESS_TOKEN_TWO = "sybyl_shared_prefs"
         private var instance: Prefs? = null
 
         fun getInstance(context: Context): Prefs {
@@ -27,6 +28,14 @@ class Prefs(context: Context) {
     }
 
     var accessToken: String
+        get() {
+            return sharedPreferences.getString(USER_ACCESS_TOKEN, " ") ?: " "
+        }
+        set(value) {
+            sharedPreferences.edit().putString(USER_ACCESS_TOKEN, value).apply()
+        }
+
+    var accessTokenclearquote: String
         get() {
             return sharedPreferences.getString(USER_ACCESS_TOKEN, " ") ?: " "
         }

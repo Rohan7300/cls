@@ -68,6 +68,7 @@ class VechileMileageFragment : Fragment() {
         }
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
+        mbinding.anaCarolin.setText(Prefs.getInstance(App.instance).get("name"))
         viewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.vechileMileageFragment)
