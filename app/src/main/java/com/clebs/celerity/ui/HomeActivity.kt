@@ -132,11 +132,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
                 R.id.daily -> {
-                  /*  viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
-                    progressBarVisibility(true,ActivityHomeBinding.homeActivityPB,ActivityHomeBinding.overlayViewHomeActivity)*/
-                    navController.navigate(R.id.homeFragment)
-                    navController.currentDestination!!.id = R.id.homeFragment
-
+                    viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
+                    progressBarVisibility(true,ActivityHomeBinding.homeActivityPB,ActivityHomeBinding.overlayViewHomeActivity)
                     true
                 }
 

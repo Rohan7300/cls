@@ -85,10 +85,20 @@ class CompleteTaskFragment : Fragment() {
         observers()
 
         mbinding.rlcomtwoClock.setOnClickListener {
+            progressBarVisibility(
+                true,
+                mbinding.completeTaskFragmentPB,
+                mbinding.overlayViewCompleteTask
+            )
             viewModel.UpdateClockInTime(userId)
         }
 
         mbinding.rlcomtwoClockOut.setOnClickListener {
+            progressBarVisibility(
+                true,
+                mbinding.completeTaskFragmentPB,
+                mbinding.overlayViewCompleteTask
+            )
             viewModel.UpdateClockOutTime(userId)
         }
 
@@ -208,6 +218,7 @@ class CompleteTaskFragment : Fragment() {
         }
 
         viewModel.livedataDailyWorkInfoByIdResponse.observe(viewLifecycleOwner) {
+
             if (it != null) {
                 if (it.ClockedInTime != null) {
                     mbinding.tvClockedIN.text = it.ClockedInTime.toString()
@@ -222,14 +233,25 @@ class CompleteTaskFragment : Fragment() {
         }
 
         viewModel.livedataClockInTime.observe(viewLifecycleOwner){
+            progressBarVisibility(
+                false,
+                mbinding.completeTaskFragmentPB,
+                mbinding.overlayViewCompleteTask
+            )
             if(it!=null){
-
                 mbinding.rlcomtwoClock.visibility = View.GONE
                 mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+            }else{
+                showToast("Please add face mask image first",requireContext())
             }
         }
 
         viewModel.livedataUpdateClockOutTime.observe(viewLifecycleOwner){
+            progressBarVisibility(
+                false,
+                mbinding.completeTaskFragmentPB,
+                mbinding.overlayViewCompleteTask
+            )
             if(it!=null){
                 mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
             }
