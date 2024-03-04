@@ -77,8 +77,6 @@ class WindScreenFragment : Fragment() {
             }
         }
 
-
-
         Log.d("Check ", imageViewModel.images.toString())
 
         mbinding.edtMil.setOnClickListener {
@@ -91,16 +89,20 @@ class WindScreenFragment : Fragment() {
             pictureDialogBase64()
         }
 
-
         mbinding.edtMilTwo.setOnClickListener {
             isupload = false
             isuploadtwo = !isuploadtwo
             if (isuploadtwo) {
                 mbinding.rlUploadDefect.visibility = View.GONE
-                mbinding.tvNext.isEnabled = true
+              //  mbinding.tvNext.isEnabled = true
                 tvNextColorUpdate()
                 selectLayout2()
             }
+            imageEntity.inWindScreen = "empty"
+            imageViewModel.insertImage(imageEntity)
+            imageEntity.dfNameWindScreen = "f"
+            imageViewModel.insertDefectName(imageEntity)
+            navigateTo(R.id.windowsGlassFragment)
         }
 
         mbinding.run {
@@ -124,8 +126,7 @@ class WindScreenFragment : Fragment() {
                         imageEntity.dfNameWindScreen = defectName!!.toString()
                         imageViewModel.insertDefectName(imageEntity)
                     }
-                }
-                else{
+                } else {
                     imageEntity.inWindScreen = "empty"
                     imageViewModel.insertImage(imageEntity)
                     imageEntity.dfNameWindScreen = "f"
@@ -271,6 +272,4 @@ class WindScreenFragment : Fragment() {
         findNavController().navigate(fragmentId)
         prefs.saveNavigationHistory(fragmentStack)
     }
-
-
 }

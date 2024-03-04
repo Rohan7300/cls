@@ -23,6 +23,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5" />
 
+        <View
+            android:id="@+id/overlayViewCompleteTask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
+
         <RelativeLayout
             android:id="@+id/rlinfo"
             android:layout_width="match_parent"
@@ -154,17 +167,6 @@
 
 
         </RelativeLayout>
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminateTint="@color/orange"
-            android:visibility="gone"
-            android:id="@+id/pbs"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_next"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedcsroll"
@@ -313,9 +315,38 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="25dp"
+                                android:id="@+id/tv_ClockedIN"
                                 android:layout_alignParentRight="true"
                                 android:backgroundTint="@color/white"
                                 android:text="time"
+                                android:textColor="#6DA95E"
+                                android:textSize="15sp" />
+
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/clocked_in"
+                            android:layout_marginTop="18dp"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="Clocked Out"
+                                android:textColor="@color/black"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="25dp"
+                                android:layout_alignParentRight="true"
+                                android:backgroundTint="@color/white"
+                                android:text="time"
+                                android:id="@+id/clocked_outTime"
                                 android:textColor="#6DA95E"
                                 android:textSize="15sp" />
 
@@ -368,7 +399,37 @@
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:id="@+id/rlcomtwo_ClockOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:visibility="gone"
+                    android:background="@drawable/shape_expand_main"
+                    android:padding="18dp">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/inter"
+                        android:letterSpacing="0.02"
+                        android:text="Clock Out"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <ImageButton
+                        android:layout_width="40dp"
+                        android:id="@+id/clock_out_mark"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:backgroundTint="@color/white"
+                        android:src="@drawable/ic_clockout"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -638,7 +699,6 @@
                                 <ImageButton
                                     android:id="@+id/imageButtonss"
                                     android:layout_width="28dp"
-                                    android:visibility="gone"
                                     android:layout_height="28dp"
                                     android:src="@drawable/delete_ic"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -681,7 +741,6 @@
                                     android:id="@+id/imageButton4"
                                     android:layout_width="28dp"
                                     android:layout_height="28dp"
-                                    android:visibility="gone"
                                     android:src="@drawable/delete_ic"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -743,7 +802,6 @@
                                     android:id="@+id/imageButton"
                                     android:layout_width="28dp"
                                     android:layout_height="28dp"
-                                    android:visibility="gone"
                                     android:src="@drawable/delete_ic"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -785,7 +843,6 @@
                                     android:id="@+id/imageButtons"
                                     android:layout_width="28dp"
                                     android:layout_height="28dp"
-                                    android:visibility="gone"
                                     android:src="@drawable/delete_ic"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -855,7 +912,6 @@
                                     android:id="@+id/imageButtonsix"
                                     android:layout_width="28dp"
                                     android:layout_height="28dp"
-                                    android:visibility="gone"
                                     android:src="@drawable/delete_ic"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -897,7 +953,6 @@
                                     android:id="@+id/imageButtonnine"
                                     android:layout_width="28dp"
                                     android:layout_height="28dp"
-                                    android:visibility="gone"
                                     android:src="@drawable/delete_ic"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -960,7 +1015,6 @@
                                     android:id="@+id/imageButtoneleven"
                                     android:layout_width="28dp"
                                     android:layout_height="28dp"
-                                    android:visibility="gone"
                                     android:src="@drawable/delete_ic"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -1001,7 +1055,6 @@
                                 <ImageButton
                                     android:layout_width="28dp"
                                     android:layout_height="28dp"
-                                    android:visibility="gone"
                                     android:src="@drawable/delete_ic"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />

@@ -3,6 +3,7 @@ package com.clebs.celerity.utils
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -388,4 +389,45 @@ fun Context.getFileFromUri(uri: Uri): File {
         Log.e(">>>>>>>>", e.message.toString())
     }
     return file
+}
+fun bitmapToBase64(bitmap: Bitmap): String {
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+    val byteArray = byteArrayOutputStream.toByteArray()
+    return Base64.encodeToString(byteArray, Base64.DEFAULT)
+}
+
+fun progressBarVisibility(show: Boolean,pb:ProgressBar, overlayView:View) {
+    if (show) {
+        pb.bringToFront()
+        pb.visibility = View.VISIBLE
+        overlayView.visibility = View.VISIBLE
+        overlayView.bringToFront()
+        overlayView.isClickable = true
+        overlayView.isFocusable = true
+    } else {
+        pb.visibility = View.GONE
+        overlayView.visibility = View.GONE
+        overlayView.isClickable = false
+        overlayView.isFocusable = false
+    }
+}
+
+fun showTimePickerDialog(context: Context, editText: EditText) {
+    val calendar = Calendar.getInstance()
+    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+    val minute = calendar.get(Calendar.MINUTE)
+
+    val timePickerDialog = TimePickerDialog(
+        context,
+        { _, selectedHour, selectedMinute ->
+            val time = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute)
+            editText.setText(time)
+        },
+        hour,
+        minute,
+        true
+    )
+
+    timePickerDialog.show()
 }

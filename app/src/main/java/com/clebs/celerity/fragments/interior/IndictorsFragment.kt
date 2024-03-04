@@ -36,14 +36,24 @@ class IndictorsFragment : BaseInteriorFragment() {
             }
 
             edtMilTwo.setOnClickListener {
-                editMil2Visibilty(
+             /*                editMil2Visibilty(
                     mBinding.tvNext,
                     mBinding.rlUploadDefect,
                     mBinding.edtMil,
                     mBinding.edtMilTwo,
                     mBinding.imageRadioTwo,
                     mBinding.imageRadio
+                )*/
+                editMil2VisibilityNew(
+                    mBinding.rlUploadDefect,
+                    mBinding.edtMil,
+                    mBinding.edtMilTwo,
+                    mBinding.imageRadioTwo,
+                    mBinding.imageRadio
                 )
+                functionalView = true
+                defectView = false
+                saveNnext()
             }
 
             imageUploadIV.setOnClickListener {

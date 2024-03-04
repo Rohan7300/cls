@@ -183,7 +183,6 @@
         android:label="ProfileFragment" />
     <fragment
         android:id="@+id/homedemoFragment"
-
         android:name="com.clebs.celerity.ui.HomedemoFragment"
         android:label="HomedemoFragment" />
 

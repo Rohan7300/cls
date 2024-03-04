@@ -4,16 +4,21 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
 import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
 import com.clebs.celerity.models.requests.LoginRequest
+import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
+import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
@@ -37,6 +42,15 @@ class MainViewModel(
     val livedataDailyWorkInfoByIdResponse = MutableLiveData<DailyWorkInfoByIdResponse?>()
     val liveDataRouteLocationResponse = MutableLiveData<GetRouteLocationInfoResponse>()
     val liveDataRideAlongRouteTypeInfo = MutableLiveData<GetRideAlongRouteTypeInfoResponse>()
+    val liveDataGetDriverSignatureInformation =
+        MutableLiveData<GetDriverSignatureInformationResponse?>()
+    val livedataupdateDriverAgreementSignature = MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataAddOnRouteInfo = MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataSaveBreakTime = MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataDriverBreakInfo = MutableLiveData<GetDriverBreakTimeInfoResponse?>()
+    val livedataClockInTime = MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataUpdateClockOutTime = MutableLiveData<SimpleStatusMsgResponse?>()
+
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
 
@@ -75,6 +89,7 @@ class MainViewModel(
 
     }
 
+
     fun Logout(): MutableLiveData<logoutModel?> {
         val responseLiveData = MutableLiveData<logoutModel?>()
 
@@ -112,12 +127,11 @@ class MainViewModel(
     }
 
 
-
-    fun UseEmailasUsername(userID: Double, Email:String): MutableLiveData<BaseResponseTwo?> {
+    fun UseEmailasUsername(userID: Double, Email: String): MutableLiveData<BaseResponseTwo?> {
         val responseLiveData = MutableLiveData<BaseResponseTwo?>()
 
         viewModelScope.launch {
-            val response = repo.UseEmailAsUsername(userID,Email)
+            val response = repo.UseEmailAsUsername(userID, Email)
             responseLiveData.postValue(response)
         }
 
@@ -125,11 +139,15 @@ class MainViewModel(
 
     }
 
-    fun UpdateDAprofileninetydays(userID: Double, Email:String,phone:String): MutableLiveData<BaseResponseTwo?> {
+    fun UpdateDAprofileninetydays(
+        userID: Double,
+        Email: String,
+        phone: String
+    ): MutableLiveData<BaseResponseTwo?> {
         val responseLiveData = MutableLiveData<BaseResponseTwo?>()
 
         viewModelScope.launch {
-            val response = repo.UpdateDAprofileninetydays(userID,Email,phone)
+            val response = repo.UpdateDAprofileninetydays(userID, Email, phone)
             responseLiveData.postValue(response)
         }
 
@@ -151,44 +169,98 @@ class MainViewModel(
         }
     }
 
-    fun SaveVehDefectSheet(vehicleDefectSheetInfoResponse: SaveVechileDefectSheetRequest){
+    fun SaveVehDefectSheet(vehicleDefectSheetInfoResponse: SaveVechileDefectSheetRequest) {
         viewModelScope.launch {
-            SaveVehDefectSheetResponseLiveData.postValue(repo.SaveVehDefectSheet(vehicleDefectSheetInfoResponse))
+            SaveVehDefectSheetResponseLiveData.postValue(
+                repo.SaveVehDefectSheet(
+                    vehicleDefectSheetInfoResponse
+                )
+            )
         }
     }
 
-    fun GetVehicleInformation(userID: Int,vehRegNo: String){
+    fun GetVehicleInformation(userID: Int, vehRegNo: String) {
         viewModelScope.launch {
-            vechileInformationLiveData.postValue(repo.GetVehicleInformation(userID,vehRegNo))
+            vechileInformationLiveData.postValue(repo.GetVehicleInformation(userID, vehRegNo))
         }
     }
-    fun GetVehicleImageUploadInfo(userID: Int){
+
+    fun GetVehicleImageUploadInfo(userID: Int) {
         viewModelScope.launch {
             vehicleImageUploadInfoLiveData.postValue(repo.GetVehicleImageUploadInfo(userID))
         }
     }
-    fun uploadVehicleImage(userID: Int,image:MultipartBody.Part,type:Int){
+
+    fun uploadVehicleImage(userID: Int, image: MultipartBody.Part, type: Int) {
         viewModelScope.launch {
-            uploadVehicleImageLiveData.postValue(repo.uploadVehicleImage(userID,image, type))
+            uploadVehicleImageLiveData.postValue(repo.uploadVehicleImage(userID, image, type))
         }
     }
 
-    fun GetDailyWorkInfoById(userID: Int){
+    fun GetDailyWorkInfoById(userID: Int) {
         viewModelScope.launch {
             livedataDailyWorkInfoByIdResponse.postValue(repo.GetDailyWorkInfobyId(userID))
         }
     }
-    fun GetRouteLocationInfo(locID: Int){
+
+    fun GetRouteLocationInfo(locID: Int) {
         viewModelScope.launch {
             liveDataRouteLocationResponse.postValue(repo.GetRouteLocationInfo(locID))
         }
     }
 
-    fun GetRideAlongRouteTypeInfo(userID: Int){
+    fun GetRideAlongRouteTypeInfo(userID: Int) {
         viewModelScope.launch {
             liveDataRideAlongRouteTypeInfo.postValue(repo.GetRideAlongRouteTypeInfo(userID))
         }
     }
 
+
+    fun GetDriverSignatureInformation(userID: Int) {
+        viewModelScope.launch {
+            val response = repo.GetDriverSignatureInformation(userID)
+            liveDataGetDriverSignatureInformation.postValue(response)
+        }
+    }
+
+    fun UpdateDriverAgreementSignature(updateDriverAgreementSignature: UpdateDriverAgreementSignatureRequest) {
+        viewModelScope.launch {
+            val response = repo.UpdateDriverAgreementSignature(updateDriverAgreementSignature)
+            livedataupdateDriverAgreementSignature.postValue(response)
+        }
+    }
+
+    fun AddOnRouteInfo(addOnRouteInfoRequest: AddOnRouteInfoRequest) {
+        viewModelScope.launch {
+            val response = repo.AddOnRouteInfo(addOnRouteInfoRequest)
+            livedataAddOnRouteInfo.postValue(response)
+        }
+    }
+
+    fun SaveBreakTime(saveBreakTimeRequest: SaveBreakTimeRequest) {
+        viewModelScope.launch {
+            val response = repo.SaveBreakTime(saveBreakTimeRequest)
+            livedataSaveBreakTime.postValue(response)
+        }
+    }
+
+    fun GetDriverBreakTimeInfo(driverId:Int){
+        viewModelScope.launch {
+            val response = repo.GetDriverBreakInfo(driverId)
+            livedataDriverBreakInfo.postValue(response)
+        }
+    }
+    fun UpdateClockInTime(driverId:Int){
+        viewModelScope.launch {
+            val response = repo.UpdateClockInTime(driverId)
+            livedataClockInTime.postValue(response)
+        }
+    }
+    fun UpdateClockOutTime(driverId:Int){
+        viewModelScope.launch {
+            val response = repo.UpdateClockOutTime(driverId)
+            livedataUpdateClockOutTime.postValue(response)
+        }
+    }
 
 }

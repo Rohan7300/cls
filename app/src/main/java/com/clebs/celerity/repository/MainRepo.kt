@@ -1,17 +1,22 @@
 package com.clebs.celerity.repository
 
 import android.util.Log
+import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
 import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
 import com.clebs.celerity.models.requests.LoginRequest
+import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
+import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
@@ -187,6 +192,80 @@ class MainRepo(private val ApiService: ApiService) {
         else{
             val errorBody = response.errorBody()?.string()
             println("Error response body: $errorBody")
+        }
+        return null
+    }
+    suspend fun GetDriverSignatureInformation(userID: Int): GetDriverSignatureInformationResponse?{
+        val response = ApiService.GetDriverSignatureInformation(userID)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun UpdateDriverAgreementSignature(updateDriverSignatureRequest: UpdateDriverAgreementSignatureRequest):SimpleStatusMsgResponse?{
+        val response = ApiService.UpdateDriverAgreementSignature(updateDriverSignatureRequest)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun AddOnRouteInfo(addOnRouteInfoRequest: AddOnRouteInfoRequest):SimpleStatusMsgResponse?{
+        val response = ApiService.AddOnRouteInfo(addOnRouteInfoRequest)
+        if(response.isSuccessful){
+            return response.body()
+        }else{
+            val errorBody = response.errorBody()?.string()
+            println("Error response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun SaveBreakTime(saveBreakTimeRequest: SaveBreakTimeRequest):SimpleStatusMsgResponse?{
+        val response = ApiService.SaveBreakTime(saveBreakTimeRequest)
+        if(response.isSuccessful){
+            return response.body()
+        }else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetDriverBreakInfo(driverId:Int):GetDriverBreakTimeInfoResponse?{
+        val response = ApiService.GetDriverBreakInfo(driverId)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+    suspend fun UpdateClockInTime(driverId:Int):SimpleStatusMsgResponse?{
+        val response = ApiService.UpdateClockInTime(driverId)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+    suspend fun UpdateClockOutTime(driverId:Int):SimpleStatusMsgResponse?{
+        val response = ApiService.UpdateClockOutTime(driverId)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
         }
         return null
     }

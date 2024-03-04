@@ -40,17 +40,6 @@
                 android:background="@drawable/scan_area_background"
                 android:nestedScrollingEnabled="false">
 
-<!--                <nsmarinro.librarysignature.SignatureView-->
-<!--                    android:id="@+id/signatureView"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="200dp"-->
-<!--                    android:backgroundTint="#FEF0EA"-->
-<!--                    android:descendantFocusability="beforeDescendants"-->
-<!--                    android:focusableInTouchMode="true"-->
-<!--                    android:nestedScrollingEnabled="false"-->
-
-<!--                    />-->
-
 
             </LinearLayout>
 

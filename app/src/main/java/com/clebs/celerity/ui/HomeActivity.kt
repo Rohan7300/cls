@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -30,34 +29,22 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.ImageDatabase
 import com.clebs.celerity.database.ImagesRepo
 import com.clebs.celerity.databinding.ActivityHomeBinding
-
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
-import com.clebs.celerity.utils.Constants
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.dbLog
+import com.clebs.celerity.utils.progressBarVisibility
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import io.clearquote.assessment.cq_sdk.CQSDKInitializer
-import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
-    lateinit var ActivityHomeBinding: ActivityHomeBinding
-    lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var ActivityHomeBinding: ActivityHomeBinding
+    private lateinit var bottomNavigationView: BottomNavigationView
     lateinit var imageViewModel: ImageViewModel
-    var screenid: Int = 0
-    lateinit var navController: NavController
+    private var screenid: Int = 0
+    private lateinit var navController: NavController
     lateinit var viewModel: MainViewModel
-
-
-    private lateinit var cqSDKInitializer: CQSDKInitializer
-
-    var sdkkey: String = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
-
     private lateinit var navGraph: NavGraph
     private var completeTaskScreen: Boolean = false
 
@@ -65,19 +52,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         fun showLog(tag: String, message: String) {
             Log.e(tag, message)
         }
-
         var checked: String? = ""
         var Boolean: Boolean = false
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,50 +76,36 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val imagesRepo =
             ImagesRepo(ImageDatabase.invoke(this), Prefs.getInstance(applicationContext))
 
-
         viewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
 
-        GetDriversBasicInformation()
-
-        cqSDKInitializer = CQSDKInitializer(this)
-        cqSDKInitializer.triggerOfflineSync()
-
-        cqSDKInitializer.initSDK(
-            sdkKey = sdkkey,
-            result = { isInitialized, code, message ->
-                // Dismiss loading dialog
-                Log.e("sdkskdkdkskdkskd2", "onCreateView: ")
-                // Check response
-                if (isInitialized && code == PublicConstants.sdkInitializationSuccessCode) {
-                    // Save key in the shared preferences
-                    Log.e("sdkskdkdkskdkskd3", "onCreateView: ")
-                    getSharedPreferences(
-                        Constants.app_shared_preferences_file_name,
-                        AppCompatActivity.MODE_PRIVATE
-                    )?.edit()?.putString(Constants.cq_sdk_key, sdkkey)?.apply()
-
-                    // Finish activity
-
-                } else {
-                    Toast.makeText(this, "Error initializing SDK", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-        )
-        cqSDKInitializer.triggerOfflineSync()
-
-
-
-
-
         viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
             Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
+            progressBarVisibility(false,ActivityHomeBinding.homeActivityPB,ActivityHomeBinding.overlayViewHomeActivity)
             if (it != null) {
                 completeTaskScreen = it.IsSubmited
+                if (!completeTaskScreen) {
+                    screenid = viewModel.getLastVisitedScreenId(this)
+                    if (screenid == 0) {
+                        navController.navigate(R.id.homeFragment)
+                        // navigateTo(R.id.homeFragment)
+                        navController.currentDestination!!.id = R.id.homeFragment
+
+                    } else {
+                        try{
+                            navController.navigate(screenid)
+                            navController.currentDestination!!.id = screenid
+                        }catch (_:Exception){
+                            navController.navigate(R.id.homeFragment)
+                            navController.currentDestination!!.id = R.id.homeFragment
+                        }
+                    }
+                } else {
+                    navController.navigate(R.id.completeTaskFragment)
+                }
             }
         }
-        viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
+
 
 
         imageViewModel = ViewModelProvider(
@@ -156,29 +120,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             dbLog(imageEntity)
         }
 
-
-//        checkIftodayCheckIsDone()
-//
-//        if (Build.VERSION.SDK_INT >= 33) {
-//            onBackInvokedDispatcher.registerOnBackInvokedCallback(
-//                OnBackInvokedDispatcher.PRIORITY_DEFAULT
-//            ) {
-//                navPop()
-//
-//            }
-//        } else {
-//            onBackPressedDispatcher.addCallback(
-//                this,
-//                object : OnBackPressedCallback(true) {
-//                    override fun handleOnBackPressed() {
-//
-//                        navPop()
-//
-//                    }
-//                })
-//        }
-
-
         ActivityHomeBinding.imgDrawer.setOnClickListener {
             navController.navigate(R.id.profileFragment)
         }
@@ -186,48 +127,22 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             when (item.itemId) {
 
                 R.id.home -> {
-
                     navController.navigate(R.id.homedemoFragment)
-                    ActivityHomeBinding.title.text = ""
-
-
                     true
                 }
 
                 R.id.daily -> {
-                    ActivityHomeBinding.title.text = ""
-                    if (!completeTaskScreen) {
-                        screenid = viewModel.getLastVisitedScreenId(this)
-                        if (screenid.equals(0)) {
-                            navController.navigate(R.id.homeFragment)
-                            // navigateTo(R.id.homeFragment)
-                            navController.currentDestination!!.id = R.id.homeFragment
-
-                        } else {
-
-                            navController.navigate(screenid)
-
-
-                            navController.currentDestination!!.id = screenid
-
-                        }
-                    } else {
-                        navController.navigate(R.id.completeTaskFragment)
-                    }
+                    viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
+                    progressBarVisibility(true,ActivityHomeBinding.homeActivityPB,ActivityHomeBinding.overlayViewHomeActivity)
                     true
                 }
 
                 R.id.invoices -> {
-                    ActivityHomeBinding.title.text = ""
-
                     navController.navigate(R.id.invoicesFragment)
-
-
                     true
                 }
 
                 R.id.passwords -> {
-
                     ActivityHomeBinding.title.text = "Notifications"
                     navController.navigate(R.id.notifficationsFragment)
 
@@ -247,46 +162,16 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         }
         ActivityHomeBinding.imgLogout.setOnClickListener {
-
             showAlertLogout()
-
         }
-
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if (intent != null) {
-            val identifier =
-                intent.getStringExtra(PublicConstants.quoteCreationFlowStatusIdentifierKeyInIntent)
-                    ?: "Could not identify Identifier"
-            val message =
-                intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
-                    ?: "Could not identify status message"
-            val tempCode =
-                intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
-            navController.navigate(R.id.completeTaskFragment)
-            // Check if identifier is valid
-            if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
-                // Get code
-                val code = if (tempCode == -1) {
-                    "Could not identify status code"
-                } else {
-                    tempCode
-
-                }
-
-                // Update message in the dialog
-
-            }
-        }
-
-
     }
 
     fun logout() {
         viewModel.Logout().observe(this@HomeActivity, Observer {
-
             if (it!!.responseType.equals("Success")) {
                 val intent = Intent(this, LoginActivity::class.java)
                 intent.putExtra("logout", "0")
@@ -295,7 +180,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 setLoggedIn(false)
             }
         })
-
     }
 
 //    fun navPop(){
@@ -403,23 +287,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         deleteDialog.setCancelable(false)
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         deleteDialog.show();
-
-    }
-
-    fun GetDriversBasicInformation() {
-
-        viewModel.GetDriversBasicInformation(
-            Prefs.getInstance(App.instance).userID.toDouble()
-        ).observe(this, Observer {
-            if (it != null) {
-                Log.e("responseprofile", "GetDriversBasicInformation: ")
-
-                Prefs.getInstance(applicationContext).save("name", it.firstName + it.lastName)
-
-            }
-
-
-        })
 
     }
 }
