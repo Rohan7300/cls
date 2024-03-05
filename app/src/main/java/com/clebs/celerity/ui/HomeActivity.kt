@@ -33,13 +33,15 @@ import com.clebs.celerity.databinding.ActivityHomeBinding
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
-import com.clebs.celerity.utils.Constants
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.progressBarVisibility
+import com.clebs.celerity.utils.showToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
@@ -52,12 +54,17 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private lateinit var navGraph: NavGraph
     private var completeTaskScreen: Boolean = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
+    private var sdkkey = ""
+    private var userId: Int = 0
+    var firstName = ""
+    var lastName = ""
+    var date = ""
 
-    var sdkkey: String = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
     companion object {
         fun showLog(tag: String, message: String) {
             Log.e(tag, message)
         }
+
         var checked: String? = ""
         var Boolean: Boolean = false
     }
@@ -68,6 +75,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         super.onCreate(savedInstanceState)
         ActivityHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
+
+
+        sdkkey = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
+        cqSDKInitializer()
+        userId = Prefs.getInstance(this).userID.toInt()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -75,43 +87,25 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         navController.addOnDestinationChangedListener(this)
 
         bottomNavigationView.selectedItemId = R.id.home
-        bottomNavigationView.getMenu().findItem(R.id.daily).setTooltipText("Daily work")
-        bottomNavigationView.getMenu().findItem(R.id.passwords).setTooltipText("Notifications")
+        bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
+        bottomNavigationView.menu.findItem(R.id.passwords).setTooltipText("Notifications")
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         val imagesRepo =
             ImagesRepo(ImageDatabase.invoke(this), Prefs.getInstance(applicationContext))
 
         viewModel =
-            ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
-        cqSDKInitializer = CQSDKInitializer(this)
-        cqSDKInitializer.triggerOfflineSync()
+            ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
 
-        cqSDKInitializer.initSDK(
-            sdkKey = sdkkey,
-            result = { isInitialized, code, message ->
-                // Dismiss loading dialog
-                Log.e("sdkskdkdkskdkskd2", "onCreateView: ")
-                // Check response
-                if (isInitialized && code == PublicConstants.sdkInitializationSuccessCode) {
-                    // Save key in the shared preferences
-                    Log.e("sdkskdkdkskdkskd3", "onCreateView: ")
-                    getSharedPreferences(
-                        Constants.app_shared_preferences_file_name,
-                        AppCompatActivity.MODE_PRIVATE
-                    )?.edit()?.putString(Constants.cq_sdk_key, sdkkey)?.apply()
 
-                    // Finish activity
-
-                } else {
-                    Toast.makeText(this, "Error initializing SDK", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-        )
+        getVehicleLocationInfo()
         viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
             Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
-            progressBarVisibility(false,ActivityHomeBinding.homeActivityPB,ActivityHomeBinding.overlayViewHomeActivity)
+            progressBarVisibility(
+                false,
+                ActivityHomeBinding.homeActivityPB,
+                ActivityHomeBinding.overlayViewHomeActivity
+            )
             if (it != null) {
                 completeTaskScreen = it.IsSubmited
                 if (!completeTaskScreen) {
@@ -122,10 +116,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         navController.currentDestination!!.id = R.id.homeFragment
 
                     } else {
-                        try{
+                        try {
                             navController.navigate(screenid)
                             navController.currentDestination!!.id = screenid
-                        }catch (_:Exception){
+                        } catch (_: Exception) {
                             navController.navigate(R.id.homeFragment)
                             navController.currentDestination!!.id = R.id.homeFragment
                         }
@@ -136,17 +130,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         }
 
-
-
         imageViewModel = ViewModelProvider(
             this,
             ImageViewModelProviderFactory(imagesRepo)
-        ).get(ImageViewModel::class.java)
+        )[ImageViewModel::class.java]
 
-
-
-
-        imageViewModel.images?.observe(this) { imageEntity ->
+        imageViewModel.images.observe(this) { imageEntity ->
             dbLog(imageEntity)
         }
 
@@ -163,9 +152,16 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
                 R.id.daily -> {
+                 /*   navController.navigate(R.id.homeFragment)
+                    navController.currentDestination!!.id = R.id.homeFragment*/
+
                     ActivityHomeBinding.title.text = ""
                     viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
-                    progressBarVisibility(true,ActivityHomeBinding.homeActivityPB,ActivityHomeBinding.overlayViewHomeActivity)
+                    progressBarVisibility(
+                        true,
+                        ActivityHomeBinding.homeActivityPB,
+                        ActivityHomeBinding.overlayViewHomeActivity
+                    )
                     true
                 }
 
@@ -199,50 +195,48 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
     }
 
+    private fun getVehicleLocationInfo() {
+        val today = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("dd/MM")
+        date = today.format(formatter)
+
+        progressBarVisibility(
+            true,
+            ActivityHomeBinding.homeActivityPB,
+            ActivityHomeBinding.overlayViewHomeActivity
+        )
+
+        viewModel.GetDriversBasicInformation(
+            userId.toDouble()
+        ).observe(this) {
+            progressBarVisibility(
+                false,
+                ActivityHomeBinding.homeActivityPB,
+                ActivityHomeBinding.overlayViewHomeActivity
+            )
+            if (it != null) {
+                viewModel.GetVehicleInformation(userId, it.vmRegNo)
+                firstName = it.firstName
+                lastName = it.lastName
+            }
+        }
+    }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
     }
 
-    fun logout() {
-        viewModel.Logout().observe(this@HomeActivity, Observer {
-            if (it!!.responseType.equals("Success")) {
+    private fun logout() {
+        viewModel.Logout().observe(this@HomeActivity) {
+            if (it!!.responseType == "Success") {
                 val intent = Intent(this, LoginActivity::class.java)
                 intent.putExtra("logout", "0")
                 finish()
                 startActivity(intent)
                 setLoggedIn(false)
             }
-        })
+        }
     }
-
-//    fun navPop(){
-//        when (navController.currentDestination?.id) {
-//
-//            R.id.windScreenFragment, R.id.windowsGlassFragment -> {
-//
-//                navController.navigateUp()
-//
-//            }
-//        }
-
-    //    }
-//    override fun onBackPressed() {
-//
-//
-//        // Get the currently focused view
-//        val focusedView = currentFocus
-//
-//        // Check if the focused view is the BottomNavigationView
-//        if (focusedView is BottomNavigationView) {
-//            if (navController.currentDestination?.id!!.equals(screenid)) {
-//                navController.navigateUp()
-//
-//            }
-//        }
-//
-//
-//
-//    }
 
     @SuppressLint("MissingSuperCall")
 
@@ -265,39 +259,38 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     fun checkIftodayCheckIsDone() {
-
-
         viewModel.CheckIFTodayCheckIsDone().observe(this@HomeActivity, Observer {
             if (it != null) {
                 Log.e("ldkkcjvckvjc", "checkIftodayCheckIsDone: ")
-                if (it.isSubmited.equals(true)) {
-                    checked = "1"
+                checked = if (it.isSubmited) {
+                    "1"
                 } else {
-                    checked = "0"
+                    "0"
                 }
 
             }
-
         })
     }
 
-    fun backNav() {
-        val prefs = Prefs.getInstance(applicationContext)
-        val fragmentStack = prefs.getNavigationHistory()
-        if (fragmentStack.size > 1) {
-            fragmentStack.pop()
-            val previousFragment = fragmentStack.peek()
-            if (previousFragment != R.id.dailyWorkFragment) {
-                navController.navigate(previousFragment)
-                prefs.saveNavigationHistory(fragmentStack)
-            } else {
+    private fun backNav() {
+        try{
+            val prefs = Prefs.getInstance(applicationContext)
+            val fragmentStack = prefs.getNavigationHistory()
+            if (fragmentStack.size > 1) {
+                fragmentStack.pop()
+                val previousFragment = fragmentStack.peek()
+                if (previousFragment != R.id.dailyWorkFragment) {
+                    navController.navigate(previousFragment)
+                    prefs.saveNavigationHistory(fragmentStack)
+                }
             }
-        } else {
-            //super.onBackPressed()
+        }catch (_:Exception){
+
         }
+
     }
 
-    fun showAlertLogout() {
+    private fun showAlertLogout() {
         val factory = LayoutInflater.from(this)
         val view: View = factory.inflate(R.layout.logout_layout, null)
         val deleteDialog: AlertDialog = AlertDialog.Builder(this).create()
@@ -321,5 +314,22 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         deleteDialog.show();
 
+    }
+
+
+    private fun cqSDKInitializer() {
+        cqSDKInitializer = CQSDKInitializer(this)
+        cqSDKInitializer.triggerOfflineSync()
+
+        cqSDKInitializer.initSDK(
+            sdkKey = sdkkey,
+            result = { isInitialized, code, _ ->
+                if (isInitialized && code == PublicConstants.sdkInitializationSuccessCode) {
+                    Prefs.getInstance(applicationContext).saveCQSdkKey(sdkkey)
+                } else {
+                    showToast("Error initializing SDK", this)
+                }
+            }
+        )
     }
 }

@@ -335,11 +335,11 @@ class CompleteTaskFragment : Fragment() {
 
                 }
             }
-
+            mbinding.tvNext.isEnabled =it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
             if (it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null) {
 
                 mbinding.uploadLayouts.visibility = View.GONE
-                mbinding.tvNext.isEnabled
+                mbinding.tvNext.isEnabled =it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
             }
 //            if (!showImageUploadLayout) {
 //                mbinding.uploadLayouts.visibility = View.GONE
