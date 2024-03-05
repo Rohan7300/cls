@@ -93,13 +93,14 @@ class LoginActivity : AppCompatActivity() {
         mainViewModel.getDriverSignatureInfo(userid).observe(this@LoginActivity, Observer {
             if (it!=null){
               //     Prefs.getInstance(applicationContext).saveSignatureInfo(it.toString())
+                Prefs.getInstance(applicationContext).saveBoolean("isSignatureReq",it.isSignatureReq)
+                Prefs.getInstance(applicationContext)
+                    .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
+                Prefs.getInstance(applicationContext)
+                    .saveBoolean("isother", it.isOtherCompanySignatureReq)
                 ActivityLoginBinding.progressbar.visibility=View.GONE
-                if (it.isSignatureReq.equals(true)) {
-                    Prefs.getInstance(applicationContext).saveBoolean("isSignatureReq",it.isSignatureReq)
-                    Prefs.getInstance(applicationContext)
-                        .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
-                    Prefs.getInstance(applicationContext)
-                        .saveBoolean("isother", it.isOtherCompanySignatureReq)
+                if (it.isAmazonSignatureReq.equals(true) || it.isOtherCompanySignatureReq.equals(true)) {
+
 
                    val intent = Intent(this, PolicyDocsActivity::class.java)
                    // val intent = Intent(this, HomeActivity::class.java)
