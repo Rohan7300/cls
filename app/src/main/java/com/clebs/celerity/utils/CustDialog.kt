@@ -44,6 +44,10 @@ class CustDialog : DialogFragment() {
             val signatureBitmap: Bitmap = drawView.getBitmap()
             testIV.setImageBitmap(signatureBitmap)
             signatureListener?.onSignatureSaved(signatureBitmap)
+            dismiss()
+
+
+
         }
 
         retry.setOnClickListener {

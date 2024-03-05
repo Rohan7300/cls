@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -32,10 +33,13 @@ import com.clebs.celerity.databinding.ActivityHomeBinding
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.utils.Constants
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.progressBarVisibility
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import io.clearquote.assessment.cq_sdk.CQSDKInitializer
+import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
 
 
 class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
@@ -47,7 +51,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     lateinit var viewModel: MainViewModel
     private lateinit var navGraph: NavGraph
     private var completeTaskScreen: Boolean = false
+    private lateinit var cqSDKInitializer: CQSDKInitializer
 
+    var sdkkey: String = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
     companion object {
         fun showLog(tag: String, message: String) {
             Log.e(tag, message)
@@ -78,7 +84,31 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         viewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
+        cqSDKInitializer = CQSDKInitializer(this)
+        cqSDKInitializer.triggerOfflineSync()
 
+        cqSDKInitializer.initSDK(
+            sdkKey = sdkkey,
+            result = { isInitialized, code, message ->
+                // Dismiss loading dialog
+                Log.e("sdkskdkdkskdkskd2", "onCreateView: ")
+                // Check response
+                if (isInitialized && code == PublicConstants.sdkInitializationSuccessCode) {
+                    // Save key in the shared preferences
+                    Log.e("sdkskdkdkskdkskd3", "onCreateView: ")
+                    getSharedPreferences(
+                        Constants.app_shared_preferences_file_name,
+                        AppCompatActivity.MODE_PRIVATE
+                    )?.edit()?.putString(Constants.cq_sdk_key, sdkkey)?.apply()
+
+                    // Finish activity
+
+                } else {
+                    Toast.makeText(this, "Error initializing SDK", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        )
         viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
             Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
             progressBarVisibility(false,ActivityHomeBinding.homeActivityPB,ActivityHomeBinding.overlayViewHomeActivity)
@@ -127,17 +157,20 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             when (item.itemId) {
 
                 R.id.home -> {
+                    ActivityHomeBinding.title.text = ""
                     navController.navigate(R.id.homedemoFragment)
                     true
                 }
 
                 R.id.daily -> {
+                    ActivityHomeBinding.title.text = ""
                     viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
                     progressBarVisibility(true,ActivityHomeBinding.homeActivityPB,ActivityHomeBinding.overlayViewHomeActivity)
                     true
                 }
 
                 R.id.invoices -> {
+                    ActivityHomeBinding.title.text = ""
                     navController.navigate(R.id.invoicesFragment)
                     true
                 }
