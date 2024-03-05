@@ -84,37 +84,45 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun GetDriverSignatureInformation() {
-        ActivityLoginBinding.progressbar.visibility=View.VISIBLE
+        ActivityLoginBinding.progressbar.visibility = View.VISIBLE
         var userid: Double = 0.0
         if (!Prefs.getInstance(applicationContext).userID.equals(0.0)) {
             userid = Prefs.getInstance(applicationContext).userID.toDouble()
         }
 
         mainViewModel.getDriverSignatureInfo(userid).observe(this@LoginActivity, Observer {
-            if (it!=null){
-              //     Prefs.getInstance(applicationContext).saveSignatureInfo(it.toString())
-                Prefs.getInstance(applicationContext).saveBoolean("isSignatureReq",it.isSignatureReq)
+            if (it != null) {
+                //     Prefs.getInstance(applicationContext).saveSignatureInfo(it.toString())
+                Prefs.getInstance(applicationContext)
+                    .saveBoolean("isSignatureReq", it.isSignatureReq)
                 Prefs.getInstance(applicationContext)
                     .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
                 Prefs.getInstance(applicationContext)
                     .saveBoolean("isother", it.isOtherCompanySignatureReq)
-                ActivityLoginBinding.progressbar.visibility=View.GONE
-                if (it.isAmazonSignatureReq.equals(true) || it.isOtherCompanySignatureReq.equals(true)) {
+                ActivityLoginBinding.progressbar.visibility = View.GONE
+                if (it.isSignatureReq) {
 
+                    if (it.isAmazonSignatureReq.equals(true) || it.isOtherCompanySignatureReq.equals(
+                            true
+                        )
+                    ) {
+                        val intent = Intent(this, PolicyDocsActivity::class.java)
+                        // val intent = Intent(this, HomeActivity::class.java)
 
-                   val intent = Intent(this, PolicyDocsActivity::class.java)
-                   // val intent = Intent(this, HomeActivity::class.java)
-
-                    intent.putExtra("signature_required", "0")
-                    startActivity(intent)
+                        intent.putExtra("signature_required", "0")
+                        startActivity(intent)
+                    } else {
+                        val intent = Intent(this, HomeActivity::class.java)
+                        intent.putExtra("no_signature_required", "0")
+                        startActivity(intent)
+                    }
                 } else {
                     val intent = Intent(this, HomeActivity::class.java)
                     intent.putExtra("no_signature_required", "0")
                     startActivity(intent)
                 }
-            }
-            else{
-                ActivityLoginBinding.progressbar.visibility=View.GONE
+            } else {
+                ActivityLoginBinding.progressbar.visibility = View.GONE
             }
         })
 
