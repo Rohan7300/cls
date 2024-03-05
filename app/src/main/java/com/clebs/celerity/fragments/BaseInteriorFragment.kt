@@ -281,5 +281,4 @@ abstract class BaseInteriorFragment : Fragment() {
         prefs.saveNavigationHistory(fragmentStack)
     }
 
-
 }
