@@ -116,8 +116,8 @@ open class DailyWorkFragment : Fragment() {
 
 
         mbinding.rectangle4.setOnClickListener {
-           // checkPermissions()
-            findNavController().navigate(R.id.vechileMileageFragment)
+            checkPermissions()
+//            findNavController().navigate(R.id.vechileMileageFragment)
         }
 
 
@@ -331,6 +331,10 @@ open class DailyWorkFragment : Fragment() {
                 mbinding.ivTakePhoto.visibility = View.GONE
                 mbinding.rectangle4.visibility = View.VISIBLE
                 mbinding.imageView5.visibility = View.VISIBLE
+                if (txt.isNotEmpty()) {
+                    Prefs.getInstance(App.instance).save("vrn", txt)
+                }
+
                 mbinding.pb.visibility = View.GONE
                 showLog(
                     "TAG------->",
