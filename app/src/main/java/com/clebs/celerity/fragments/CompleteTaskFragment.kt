@@ -337,6 +337,7 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.run {
                         mbinding.tvNext.isEnabled=it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
                             if (tvNext.isEnabled) {
+
                                 tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                             } else {
                                 tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))
@@ -614,7 +615,7 @@ class CompleteTaskFragment : Fragment() {
                     userName = "",
                     dealer = "",
                     dealerIdentifier = "",
-                    client_unique_id = "Q-" + inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                    client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
                 ),
                 result = { isStarted, msg, code ->
                     // Show error if required
