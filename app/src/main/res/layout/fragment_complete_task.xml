@@ -300,7 +300,6 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/vichel_pictures"
                             android:layout_marginTop="18dp"
-                            android:layout_marginBottom="10dp"
                             android:orientation="horizontal">
 
                             <TextView
@@ -318,7 +317,7 @@
                                 android:id="@+id/tv_ClockedIN"
                                 android:layout_alignParentRight="true"
                                 android:backgroundTint="@color/white"
-                                android:text="time"
+                                android:text="- - - - "
                                 android:textColor="#6DA95E"
                                 android:textSize="15sp" />
 
@@ -345,7 +344,7 @@
                                 android:layout_height="25dp"
                                 android:layout_alignParentRight="true"
                                 android:backgroundTint="@color/white"
-                                android:text="time"
+                                android:text="- - - - "
                                 android:id="@+id/clocked_outTime"
                                 android:textColor="#6DA95E"
                                 android:textSize="15sp" />
@@ -384,8 +383,19 @@
                         android:layout_centerHorizontal="true"
                         android:fontFamily="@font/poppins_semibold"
                         android:text="5.00 PM"
+                        android:visibility="gone"
                         android:textColor="@color/text_color"
                         android:textSize="18sp" />
+
+                    <ImageButton
+                        android:layout_width="40dp"
+                        android:id="@+id/clock_in_mark"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:backgroundTint="@color/white"
+                        android:src="@drawable/clock_in"
+                        android:visibility="visible" />
 
                     <ImageButton
                         android:id="@+id/down_ivs"
@@ -399,41 +409,12 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:id="@+id/rlcomtwo_ClockOut"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:visibility="gone"
-                    android:background="@drawable/shape_expand_main"
-                    android:padding="18dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:fontFamily="@font/inter"
-                        android:letterSpacing="0.02"
-                        android:text="Clock Out"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_color"
-                        android:textSize="15sp" />
-
-                    <ImageButton
-                        android:layout_width="40dp"
-                        android:id="@+id/clock_out_mark"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerHorizontal="true"
-                        android:backgroundTint="@color/white"
-                        android:src="@drawable/ic_clockout"
-                        android:visibility="visible" />
-
-                </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
+                    android:id="@+id/onRoadView"
                     android:background="@drawable/shape_expand_main">
 
                     <RelativeLayout
@@ -636,7 +617,37 @@
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:id="@+id/rlcomtwo_ClockOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:visibility="gone"
+                    android:background="@drawable/shape_expand_main"
+                    android:padding="18dp">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/inter"
+                        android:letterSpacing="0.02"
+                        android:text="Clock Out"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <ImageButton
+                        android:layout_width="40dp"
+                        android:id="@+id/clock_out_mark"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:backgroundTint="@color/white"
+                        android:src="@drawable/ic_clockout"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
                 <LinearLayout
                     android:id="@+id/upload_layouts"
                     android:layout_width="match_parent"

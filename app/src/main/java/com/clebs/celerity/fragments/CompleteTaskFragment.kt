@@ -44,6 +44,7 @@ import com.clebs.celerity.utils.progressBarVisibility
 import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toRequestBody
+import com.clebs.celerity.utils.visible
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
@@ -95,13 +96,7 @@ class CompleteTaskFragment : Fragment() {
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
         viewModel.GetDriverBreakTimeInfo(userId)
         viewModel.GetDailyWorkInfoById(userId)
-        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner){
-            mbinding.dxLoc.text = it?.locationName?:""
-            mbinding.dxReg.text = it?.vmRegNo?:""
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-                .also { name -> mbinding.anaCarolin.text = name }
-            mbinding.dxm5.text = (activity as HomeActivity).date
-        }
+
         observers()
         clientUniqueID()
 
@@ -196,16 +191,26 @@ class CompleteTaskFragment : Fragment() {
 
         mbinding.tvNext.setOnClickListener {
             mbinding.tvNext.visibility = View.GONE
-            mbinding.uploadLayouts.visibility=View.GONE
+            mbinding.uploadLayouts.visibility = View.GONE
         }
 
         mbinding.rlcomtwoRoad.setOnClickListener {
-            mbinding.routeLayout.visibility = View.VISIBLE
+            if (mbinding.routeLayout.visibility == View.GONE)
+                mbinding.routeLayout.visibility = View.VISIBLE
+            else
+                mbinding.routeLayout.visibility = View.GONE
         }
         return mbinding.root
     }
 
     private fun observers() {
+        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+            mbinding.dxLoc.text = it?.locationName ?: ""
+            mbinding.dxReg.text = it?.vmRegNo ?: ""
+            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
+                .also { name -> mbinding.anaCarolin.text = name }
+            mbinding.dxm5.text = (activity as HomeActivity).date
+        }
 
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -221,13 +226,24 @@ class CompleteTaskFragment : Fragment() {
         }
 
         viewModel.livedataDailyWorkInfoByIdResponse.observe(viewLifecycleOwner) {
-
             if (it != null) {
                 if (it.ClockedInTime != null) {
                     mbinding.tvClockedIN.text = it.ClockedInTime.toString()
                     mbinding.rlcomtwoClock.visibility = View.GONE
                     mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                }else{
+                    with(mbinding) {
+                        listOf(
+                            rlcomtwoBreak,
+                            onRoadView,
+                            rlcomtwoBreak,
+                            rlcomtwoClockOut
+                        ).forEach { thisView -> thisView.visibility = View.GONE }
+                    }
                 }
+
+
+
                 if (it.ClockedOutTime != null) {
                     mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
@@ -236,6 +252,7 @@ class CompleteTaskFragment : Fragment() {
         }
 
         viewModel.livedataClockInTime.observe(viewLifecycleOwner) {
+            viewModel.GetDailyWorkInfoById(userId)
             progressBarVisibility(
                 false,
                 mbinding.completeTaskFragmentPB,
@@ -250,6 +267,7 @@ class CompleteTaskFragment : Fragment() {
         }
 
         viewModel.livedataUpdateClockOutTime.observe(viewLifecycleOwner) {
+            viewModel.GetDailyWorkInfoById(userId)
             progressBarVisibility(
                 false,
                 mbinding.completeTaskFragmentPB,
@@ -285,6 +303,7 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.completeTaskFragmentPB,
                 mbinding.overlayViewCompleteTask
             )
+            viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
             if (it != null) {
                 if (it.Status == "200") {
                     viewModel.GetVehicleImageUploadInfo(userId)
@@ -308,7 +327,21 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                 } else {
 
-//                    showImageUploadLayout = checkNull(it)
+                    showImageUploadLayout = checkNull(it)
+
+                    if (showImageUploadLayout) {
+                        mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                        mbinding.taskDetails.visibility = View.VISIBLE
+                        with(mbinding) {
+                            listOf(
+                                rlcomtwoBreak,
+                                onRoadView,
+                                rlcomtwoBreak,
+                                rlcomtwoClock,
+                                rlcomtwoClockOut
+                            ).forEach { thisView -> thisView.visibility = View.GONE }
+                        }
+                    }
 
                     if (it.DaVehImgDashBoardFileName != null)
                         mbinding.ivVehicleDashboard.setImageResource(R.drawable.ic_yes)
@@ -335,12 +368,23 @@ class CompleteTaskFragment : Fragment() {
                         mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
 
                     mbinding.run {
-                        mbinding.tvNext.isEnabled=it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
-                            if (tvNext.isEnabled) {
-                                tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                            } else {
-                                tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))
-                            }
+                        mbinding.tvNext.isEnabled =
+                            it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
+                        if (tvNext.isEnabled) {
+                            tvNext.setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.white
+                                )
+                            )
+                        } else {
+                            tvNext.setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.orange
+                                )
+                            )
+                        }
                     }
 
                 }
@@ -618,7 +662,7 @@ class CompleteTaskFragment : Fragment() {
                 ),
                 result = { isStarted, msg, code ->
                     // Show error if required
-                    Log.e("messsagesss", "startInspection: " + msg+code)
+                    Log.e("messsagesss", "startInspection: " + msg + code)
                     if (isStarted
                     ) {
                         mbinding.uploadll1.visibility = View.GONE
