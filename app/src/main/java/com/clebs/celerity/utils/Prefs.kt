@@ -107,6 +107,12 @@ class Prefs(context: Context) {
         return sharedPreferences.getInt("locID",0)
     }
 
+    fun saveCQSdkKey(key:String){
+        val editor = sharedPreferences.edit()
+        editor.putString("CQ_KEY", key)
+        editor.apply()
+    }
+
 /*    fun saveSignatureInfo(jsonInfo:String){
         val editor = sharedPreferences.edit()
         editor.putString("SignaturInfo",jsonInfo)

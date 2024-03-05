@@ -39,10 +39,28 @@ abstract class BaseInteriorFragment : Fragment() {
     var imageEntity = ImageEntity()
     lateinit var prefs: Prefs
     lateinit var fragmentStack: Stack<Int>
+    lateinit var dxLoc: TextView
+    lateinit var dxReg: TextView
+    lateinit var dxm5: TextView
+    lateinit var ana_carolin: TextView
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as HomeActivity).viewModel
         imageViewModel = (activity as HomeActivity).imageViewModel
+        dxLoc = view.findViewById(R.id.dxLoc)
+        dxReg = view.findViewById(R.id.dxReg)
+        dxm5 = view.findViewById(R.id.dxm5)
+        ana_carolin = view.findViewById(R.id.ana_carolin)
+
+        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+            dxLoc.text = it?.locationName ?: ""
+            dxReg.text = it?.vmRegNo ?: ""
+            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
+                .also { name -> ana_carolin.text = name }
+            dxm5.text = (activity as HomeActivity).date
+        }
+
+
         prefs = Prefs.getInstance(requireContext())
         fragmentStack = prefs.getNavigationHistory()
     }
@@ -214,11 +232,13 @@ abstract class BaseInteriorFragment : Fragment() {
         }
     }
 
-    fun editMil2VisibilityNew(rlUploadDefect: RelativeLayout,
-                              edtMil: TextView,
-                              edtMilTwo: TextView,
-                              imageRadioTwo: ImageButton,
-                              imageRadio: ImageButton){
+    fun editMil2VisibilityNew(
+        rlUploadDefect: RelativeLayout,
+        edtMil: TextView,
+        edtMilTwo: TextView,
+        imageRadioTwo: ImageButton,
+        imageRadio: ImageButton
+    ) {
         defectView = false
         rlUploadDefect.visibility = View.VISIBLE
         edtMilTwo.setBackgroundDrawable(

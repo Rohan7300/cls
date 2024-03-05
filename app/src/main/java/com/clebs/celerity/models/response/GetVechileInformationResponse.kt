@@ -22,5 +22,7 @@ data class GetVechileInformationResponse(
     @SerializedName("VmRegNo")
     val vmRegNo: String,
     @SerializedName("VmType")
-    val vmType: String
+    val vmType: String,
+    @SerializedName("LocationName")
+    val locationName: String
 ) : Parcelable

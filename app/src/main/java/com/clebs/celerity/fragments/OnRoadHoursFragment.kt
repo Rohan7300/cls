@@ -18,6 +18,7 @@ import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentOnRoadHoursBinding
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
+import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
@@ -141,10 +142,17 @@ class OnRoadHoursFragment : Fragment() {
                     locationSection()
                 }
             }
+            viewModel.GetDriversBasicInformation(
+                Prefs.getInstance(App.instance).userID.toDouble()).observe(viewLifecycleOwner) {
+                if (it!=null){
+                    viewModel.GetVehicleInformation(prefs.userID.toInt(),it.vmRegNo)
+                }
+            }
+            /*
             viewModel.GetVehicleInformation(
                 prefs.userID.toInt(),
                 "YE23MUU"
-            )
+            )*/
         } else {
             locID = prefs.getLocationID()
             locationSection()

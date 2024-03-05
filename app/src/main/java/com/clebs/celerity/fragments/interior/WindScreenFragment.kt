@@ -62,8 +62,7 @@ class WindScreenFragment : Fragment() {
 
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
-        viewModel =
-            ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
+        viewModel =(activity as HomeActivity).viewModel
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.windScreenFragment)
 
         imageViewModel = (activity as HomeActivity).imageViewModel
@@ -76,6 +75,16 @@ class WindScreenFragment : Fragment() {
                 }
             }
         }
+
+
+        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner){
+            mbinding.dxLoc.text = it?.locationName?:""
+            mbinding.dxReg.text = it?.vmRegNo?:""
+            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
+                .also { name -> mbinding.anaCarolin.text = name }
+            mbinding.dxm5.text = (activity as HomeActivity).date
+        }
+
 
         Log.d("Check ", imageViewModel.images.toString())
 

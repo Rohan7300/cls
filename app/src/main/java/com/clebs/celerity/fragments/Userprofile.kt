@@ -218,15 +218,9 @@ class Userprofile : Fragment() {
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
                 if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
                     showAlertChangePasword90dys()
-
-
                 }
-
             }
-
-
         })
-
     }
 
     fun UseEmailAsUSername() {

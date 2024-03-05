@@ -65,8 +65,12 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
+
         }
     }
+
 }
 
 dependencies {
@@ -123,6 +127,8 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    implementation ("com.github.clearquotetech:cq-android-sdk:2.0.4-test")
 
     kapt("androidx.room:room-compiler:2.6.1")
 
