@@ -1,7 +1,10 @@
 package com.clebs.celerity.models.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class GetVehicleImageUploadInfoResponse(
     var Status: String,
     var Message: String,
@@ -18,4 +21,4 @@ data class GetVehicleImageUploadInfoResponse(
     @SerializedName("DaVehicleOilLevelImage") var DaVehImgOilLevelFileName: String? = null,
     @SerializedName("DaVehicleAddBlueImage") var DaVehicleAddBlueImage: String? = null,
     @SerializedName("IsVehicleImageUploaded") var IsVehicleImageUploaded: Boolean? = null
-)
+) : Parcelable
