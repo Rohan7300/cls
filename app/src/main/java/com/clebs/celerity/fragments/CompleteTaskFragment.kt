@@ -36,6 +36,7 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
+import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.navigateTo
@@ -89,12 +90,18 @@ class CompleteTaskFragment : Fragment() {
 
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
-        viewModel =
-            ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
+        viewModel = (activity as HomeActivity).viewModel
 
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
         viewModel.GetDriverBreakTimeInfo(userId)
         viewModel.GetDailyWorkInfoById(userId)
+        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner){
+            mbinding.dxLoc.text = it?.locationName?:""
+            mbinding.dxReg.text = it?.vmRegNo?:""
+            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
+                .also { name -> mbinding.anaCarolin.text = name }
+            mbinding.dxm5.text = (activity as HomeActivity).date
+        }
         observers()
         clientUniqueID()
 
@@ -185,16 +192,11 @@ class CompleteTaskFragment : Fragment() {
             }
             isclicked = !isclicked
         }
-        mbinding.run {
-            if (tvNext.isEnabled) {
-                tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-            } else {
-                tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))
-            }
-        }
+
 
         mbinding.tvNext.setOnClickListener {
             mbinding.tvNext.visibility = View.GONE
+            mbinding.uploadLayouts.visibility=View.GONE
         }
 
         mbinding.rlcomtwoRoad.setOnClickListener {
@@ -285,6 +287,7 @@ class CompleteTaskFragment : Fragment() {
             )
             if (it != null) {
                 if (it.Status == "200") {
+                    viewModel.GetVehicleImageUploadInfo(userId)
                     setImageUploadViews(requestCode, 1)
                 } else {
                     setImageUploadViews(requestCode, 0)
@@ -305,7 +308,7 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                 } else {
 
-                    showImageUploadLayout = checkNull(it)
+//                    showImageUploadLayout = checkNull(it)
 
                     if (it.DaVehImgDashBoardFileName != null)
                         mbinding.ivVehicleDashboard.setImageResource(R.drawable.ic_yes)
@@ -331,16 +334,23 @@ class CompleteTaskFragment : Fragment() {
                     if (it.DaVehImgOilLevelFileName != null)
                         mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
 
-
+                    mbinding.run {
+                        mbinding.tvNext.isEnabled=it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
+                            if (tvNext.isEnabled) {
+                                tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                            } else {
+                                tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))
+                            }
+                    }
 
                 }
             }
-            mbinding.tvNext.isEnabled =it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
-            if (it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null) {
-
-                mbinding.uploadLayouts.visibility = View.GONE
-                mbinding.tvNext.isEnabled =it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
-            }
+//            mbinding.tvNext.isEnabled =it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
+//            if (it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null) {
+//
+//                mbinding.uploadLayouts.visibility = View.GONE
+//                mbinding.tvNext.isEnabled =it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
+//            }
 //            if (!showImageUploadLayout) {
 //                mbinding.uploadLayouts.visibility = View.GONE
 //            } else {
