@@ -82,7 +82,7 @@ class CompleteTaskFragment : Fragment() {
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
-
+        Prefs.getInstance(requireContext()).clearNavigationHistory()
 
         cqSDKInitializer = CQSDKInitializer(requireContext())
 

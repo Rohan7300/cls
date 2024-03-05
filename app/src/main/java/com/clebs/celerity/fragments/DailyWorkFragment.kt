@@ -116,8 +116,8 @@ open class DailyWorkFragment : Fragment() {
 
 
         mbinding.rectangle4.setOnClickListener {
-            checkPermissions()
-//            findNavController().navigate(R.id.vechileMileageFragment)
+           // checkPermissions()
+            findNavController().navigate(R.id.vechileMileageFragment)
         }
 
 

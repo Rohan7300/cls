@@ -152,16 +152,16 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
                 R.id.daily -> {
-                    navController.navigate(R.id.homeFragment)
+               /*     navController.navigate(R.id.homeFragment)
                     navController.currentDestination!!.id = R.id.homeFragment
-
-                    /*ActivityHomeBinding.title.text = ""
+*/
+                    ActivityHomeBinding.title.text = ""
                     viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
                     progressBarVisibility(
                         true,
                         ActivityHomeBinding.homeActivityPB,
                         ActivityHomeBinding.overlayViewHomeActivity
-                    )*/
+                    )
                     true
                 }
 
@@ -276,7 +276,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         try{
             val prefs = Prefs.getInstance(applicationContext)
             val fragmentStack = prefs.getNavigationHistory()
-            if (fragmentStack.size > 1) {
+            if(navController.currentDestination?.id == R.id.completeTaskFragment){
+                prefs.clearNavigationHistory()
+            }
+            else if (fragmentStack.size > 1 ) {
                 fragmentStack.pop()
                 val previousFragment = fragmentStack.peek()
                 if (previousFragment != R.id.dailyWorkFragment) {

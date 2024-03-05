@@ -96,7 +96,10 @@ class Prefs(context: Context) {
             Stack()
         }
     }
-
+    fun clearNavigationHistory() {
+        val emptyStack = Stack<Int>()
+        sharedPreferences.edit().putString("history", Gson().toJson(emptyStack)).apply()
+    }
     fun saveLocationID(locID:Int){
         val editor = sharedPreferences.edit()
         editor.putInt("locID", locID)

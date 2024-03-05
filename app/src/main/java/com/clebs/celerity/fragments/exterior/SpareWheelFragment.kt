@@ -38,6 +38,8 @@ class SpareWheelFragment : BaseInteriorFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.spareWheelFragment)
         clickListeners()
+
+
         setDefault(mBinding.imageUploadIV, mBinding.edtDefect)
     }
 
@@ -210,7 +212,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
         viewModel.SaveVehDefectSheetResponseLiveData.observe(viewLifecycleOwner, Observer {
             mBinding.spareWheelPB.visibility = View.GONE
             if(it!=null){
-                findNavController().navigate(R.id.completeTaskFragment)
+                navigateTo(R.id.completeTaskFragment)
             }else{
                 showToast("Failed to save!!",requireContext())
             }
