@@ -60,8 +60,8 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var imageView: ImageView
     private var userId: Int = 0
-    lateinit var regexPattern: Regex
-    lateinit var inspectionID: String
+    private lateinit var regexPattern: Regex
+    private lateinit var inspectionID: String
     private var requestCode: Int = 0
     private var showImageUploadLayout: Boolean = false
     var breakStartTime: String = ""
