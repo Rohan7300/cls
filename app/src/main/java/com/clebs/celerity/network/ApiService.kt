@@ -25,7 +25,11 @@ import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
+import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
+import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfo
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
+import com.clebs.celerity.models.response.GetRideAlongVehicleLists
+import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -211,5 +215,14 @@ interface ApiService {
 
     @POST("/api/DailyWorks/UpdateClockOutTime/{dwUsrID}")
     suspend fun UpdateClockOutTime(@Path("dwUsrID") dwid: Int):Response<SimpleStatusMsgResponse>
+
+    @GET("/api/RouteUpdate/GetRideAlongDriversList")
+    suspend fun GetRideAlongDriversList():Response<GetRideAlongDriversListResponse>
+
+    @GET("/api/RouteUpdate/GetRideAlongVehicleLists")
+    suspend fun GetRideAlongVehicleLists():Response<GetRideAlongVehicleLists>
+
+    @GET("/api/RouteUpdate/GetRouteInfoById/{routeId}")
+    suspend fun GetRouteInfoById(@Path("routeId") routeId:Int):Response<GetRouteInfoByIdRes>
 
 }

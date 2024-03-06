@@ -58,6 +58,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private var userId: Int = 0
     var firstName = ""
     var lastName = ""
+    var isLeadDriver = false
     var date = ""
 
     companion object {
@@ -218,6 +219,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 viewModel.GetVehicleInformation(userId, it.vmRegNo)
                 firstName = it.firstName
                 lastName = it.lastName
+                isLeadDriver = it.IsLeadDriver
             }
         }
     }

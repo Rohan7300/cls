@@ -17,7 +17,11 @@ import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
+import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
+import com.clebs.celerity.models.response.GetRideAlongVehicleLists
+import com.clebs.celerity.models.response.GetRideAlongVehicleListsItem
+import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -261,6 +265,38 @@ class MainRepo(private val ApiService: ApiService) {
     }
     suspend fun UpdateClockOutTime(driverId:Int):SimpleStatusMsgResponse?{
         val response = ApiService.UpdateClockOutTime(driverId)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetRideAlongDriversList():GetRideAlongDriversListResponse?{
+        val response = ApiService.GetRideAlongDriversList()
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+    suspend fun GetRideAlongVehicleLists(): GetRideAlongVehicleLists?{
+        val response = ApiService.GetRideAlongVehicleLists()
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetRouteInfoById(routeID:Int):GetRouteInfoByIdRes?{
+        val response = ApiService.GetRouteInfoById(routeID)
         if(response.isSuccessful)
             return response.body()
         else{

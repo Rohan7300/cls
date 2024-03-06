@@ -119,6 +119,10 @@ class CompleteTaskFragment : Fragment() {
             viewModel.UpdateClockOutTime(userId)
         }
 
+        mbinding.rideAlong.setOnClickListener {
+            findNavController().navigate(R.id.rideAlongFragment)
+        }
+
         mbinding.icUu.setOnClickListener {
             findNavController().navigate(R.id.profileFragment)
         }
@@ -210,6 +214,10 @@ class CompleteTaskFragment : Fragment() {
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
                 .also { name -> mbinding.anaCarolin.text = name }
             mbinding.dxm5.text = (activity as HomeActivity).date
+            val isLeadDriver = (activity as HomeActivity).isLeadDriver
+            if(!isLeadDriver){
+                mbinding.rideAlong.visibility = View.GONE
+            }
         }
 
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
@@ -231,6 +239,8 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.tvClockedIN.text = it.ClockedInTime.toString()
                     mbinding.rlcomtwoClock.visibility = View.GONE
                     mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                    mbinding.onRoadView.visibility = View.VISIBLE
+                    mbinding.rlcomtwoBreak.visibility = View.VISIBLE
                 }else{
                     with(mbinding) {
                         listOf(
@@ -321,6 +331,16 @@ class CompleteTaskFragment : Fragment() {
             if (it!!.Status == "404") {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                 showImageUploadLayout = true
+                mbinding.taskDetails.visibility = View.VISIBLE
+/*                with(mbinding) {
+                    listOf(
+                        rlcomtwoBreak,
+                        onRoadView,
+                        rlcomtwoBreak,
+                        rlcomtwoClock,
+                        rlcomtwoClockOut
+                    ).forEach { thisView -> thisView.visibility = View.GONE }
+                }*/
             } else {
                 if (it.IsVehicleImageUploaded == false) {
                     showImageUploadLayout = true
@@ -629,9 +649,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     fun clientUniqueID(): String {
-
         val x = Prefs.getInstance(App.instance).userID.toString()
-
         val y = Prefs.getInstance(App.instance).get("vrn")
         // example string
         val currentDate = LocalDateTime.now()

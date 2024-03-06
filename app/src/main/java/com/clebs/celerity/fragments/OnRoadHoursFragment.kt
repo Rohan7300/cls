@@ -52,7 +52,6 @@ class OnRoadHoursFragment : Fragment() {
     }
 
     private fun chkNotNullInputs(): Boolean {
-
         return selectedLocation == null ||
                 selectedRouteType == null ||
                 routeName == null ||

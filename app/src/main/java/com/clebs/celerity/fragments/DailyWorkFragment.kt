@@ -117,7 +117,7 @@ open class DailyWorkFragment : Fragment() {
 
         mbinding.rectangle4.setOnClickListener {
            //checkPermissions()
-            findNavController().navigate(R.id.vechileMileageFragment)
+           findNavController().navigate(R.id.vechileMileageFragment)
         }
 
 
@@ -266,7 +266,7 @@ open class DailyWorkFragment : Fragment() {
                     MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
                     contentValues
                 ).build()
-        imageCapture.takePicture(
+        imageCapture!!.takePicture(
             outputOptions, ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {

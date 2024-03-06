@@ -19,7 +19,10 @@ import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
+import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
+import com.clebs.celerity.models.response.GetRideAlongVehicleLists
+import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -50,6 +53,9 @@ class MainViewModel(
     val livedataDriverBreakInfo = MutableLiveData<GetDriverBreakTimeInfoResponse?>()
     val livedataClockInTime = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataUpdateClockOutTime = MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataGetRideAlongDriversList = MutableLiveData<GetRideAlongDriversListResponse?>()
+    val livedataGetRideAlongVehicleLists = MutableLiveData<GetRideAlongVehicleLists?>()
+    val livedataGetRouteInfoById = MutableLiveData<GetRouteInfoByIdRes?>()
 
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
@@ -264,4 +270,22 @@ class MainViewModel(
         }
     }
 
+    fun GetRideAlongDriversList(){
+        viewModelScope.launch {
+            val response = repo.GetRideAlongDriversList()
+            livedataGetRideAlongDriversList.postValue(response)
+        }
+    }
+    fun GetRideAlongVehicleLists(){
+        viewModelScope.launch {
+            val response = repo.GetRideAlongVehicleLists()
+            livedataGetRideAlongVehicleLists.postValue(response)
+        }
+    }
+    fun GetRouteInfoById(routeID:Int){
+        viewModelScope.launch {
+            val response = repo.GetRouteInfoById(routeID)
+            livedataGetRouteInfoById.postValue(response)
+        }
+    }
 }
