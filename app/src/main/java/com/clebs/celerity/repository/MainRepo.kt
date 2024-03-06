@@ -2,7 +2,6 @@ package com.clebs.celerity.repository
 
 import android.util.Log
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
-import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
 import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
@@ -26,7 +25,6 @@ import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.network.ApiService
 import com.google.gson.Gson
 import okhttp3.MultipartBody
-import retrofit2.Response
 import java.lang.IllegalArgumentException
 
 class MainRepo(private val ApiService: ApiService) {
@@ -269,4 +267,7 @@ class MainRepo(private val ApiService: ApiService) {
         }
         return null
     }
+
+
+
 }

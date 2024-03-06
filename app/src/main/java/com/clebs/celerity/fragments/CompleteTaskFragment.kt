@@ -337,7 +337,6 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.run {
                         mbinding.tvNext.isEnabled=it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
                             if (tvNext.isEnabled) {
-
                                 tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                             } else {
                                 tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))

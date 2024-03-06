@@ -11,13 +11,13 @@
             android:id="@+id/daily_work_"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+           android:layout_marginTop="48dp"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="36dp"
-            android:layout_marginTop="24dp"
             android:layout_marginEnd="36dp"
             android:background="@drawable/daily_works"
             android:clipToOutline="true"
+            app:layout_constraintBottom_toTopOf="@id/swipe_for_v"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -57,10 +57,10 @@ Marian Ionut Malasincu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/marian_ionu"
-                android:layout_marginBottom="32dp"
                 android:layout_marginStart="37dp"
                 android:layout_marginTop="26dp"
                 android:layout_marginEnd="37dp"
+                android:layout_marginBottom="32dp"
                 android:orientation="horizontal">
 
 
@@ -170,68 +170,72 @@ Marian Ionut Malasincu"
             android:id="@+id/swipe_for_v"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+           android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"
             android:fontFamily="@font/poppins"
+            app:layout_constraintTop_toBottomOf="@id/daily_work_"
             android:gravity="center_horizontal|top"
-            android:text="@string/swipe_for_v"
             android:letterSpacing="0.02"
+            android:text="@string/swipe_for_v"
             android:textColor="#575757"
             android:textSize="15sp"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/daily_work_" />
+          app:layout_constraintBottom_toTopOf="@+id/fm" />
 
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="30dp"
-    android:layout_marginTop="8dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    android:layout_marginEnd="30dp"
-    android:backgroundTint="@color/white"
-    android:clipChildren="true"
-    app:layout_constraintTop_toBottomOf="@id/swipe_for_v">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.ncorti.slidetoact.SlideToActView
-            android:id="@+id/slideact"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-app:layout_constraintStart_toStartOf="parent"
-
-            app:layout_constraintTop_toTopOf="parent"
-            app:area_margin="1dp"
-            app:outer_color="#FFF1EB"
-            app:animation_duration="250"
-            app:slider_icon="@drawable/scan_id"
-            app:inner_color="#FD844D"
-            app:icon_margin="24dp"
-            app:text_size="12sp"
-            app:rotate_icon="false"
-            app:text=""
-            app:slider_height="80dp"
-            app:slider_locked="false"
-            app:bounce_on_start="true" />
-
-        <ImageView
-            android:id="@+id/arroww"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/arrow_line"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="8dp"
+            android:id="@+id/fm"
+            android:layout_marginEnd="30dp"
+            android:backgroundTint="@color/white"
+            android:clipChildren="true"
+            android:layout_marginBottom="90dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/slideact"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/swipe_for_v">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.ncorti.slidetoact.SlideToActView
+                    android:id="@+id/slideact"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:animation_duration="250"
+
+                    app:area_margin="1dp"
+                    app:bounce_on_start="true"
+                    app:icon_margin="24dp"
+                    app:inner_color="#FD844D"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:outer_color="#FFF1EB"
+                    app:rotate_icon="false"
+                    app:slider_height="80dp"
+                    app:slider_icon="@drawable/scan_id"
+                    app:slider_locked="false"
+                    app:text=""
+                    app:text_size="12sp" />
+
+                <ImageView
+                    android:id="@+id/arroww"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_line"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/slideact"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-</FrameLayout>
+        </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

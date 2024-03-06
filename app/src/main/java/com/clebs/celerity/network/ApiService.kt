@@ -3,7 +3,6 @@ package com.clebs.celerity.network
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.requests.CreateDaikyworkRequestBody
 import com.clebs.celerity.models.requests.GetDefectSheetBasicInfoRequestModel
-import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
 import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
@@ -16,7 +15,6 @@ import com.clebs.celerity.models.requests.SaveDriverDocumentSignatureRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.logoutModel
-import com.clebs.celerity.models.response.BaseResponse
 import com.clebs.celerity.models.response.BaseResponseTwo
 
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
@@ -211,5 +209,7 @@ interface ApiService {
 
     @POST("/api/DailyWorks/UpdateClockOutTime/{dwUsrID}")
     suspend fun UpdateClockOutTime(@Path("dwUsrID") dwid: Int):Response<SimpleStatusMsgResponse>
+
+
 
 }

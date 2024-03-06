@@ -82,7 +82,9 @@
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/viewfinder_cardview"
                     android:layout_width="match_parent"
@@ -142,11 +144,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scan_layout">
+            app:layout_constraintTop_toBottomOf="@+id/iv_take_photo">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -193,15 +196,18 @@
             android:id="@+id/iv_take_photo"
             android:layout_width="54dp"
             android:layout_height="54dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginTop="36dp"
+
             android:background="@drawable/camera_ivs"
             android:clickable="true"
             android:focusable="true"
-          android:padding="10dp"
+            android:padding="10dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
+            app:layout_constraintBottom_toBottomOf="@+id/scan_layout"
             app:layout_constraintEnd_toEndOf="@+id/scan_layout"
-            app:layout_constraintStart_toStartOf="@+id/scan_layout" />
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="@+id/scan_layout"
+            app:layout_constraintTop_toBottomOf="@+id/scan_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
