@@ -55,7 +55,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private var completeTaskScreen: Boolean = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private var sdkkey = ""
-    private var userId: Int = 0
+    var userId: Int = 0
     var firstName = ""
     var lastName = ""
     var isLeadDriver = false

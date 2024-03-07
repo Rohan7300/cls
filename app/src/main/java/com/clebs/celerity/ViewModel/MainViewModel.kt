@@ -1,9 +1,11 @@
 package com.clebs.celerity.ViewModel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
 import com.clebs.celerity.models.response.GetVechileInformationResponse
@@ -20,6 +22,7 @@ import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
+import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
@@ -56,6 +59,8 @@ class MainViewModel(
     val livedataGetRideAlongDriversList = MutableLiveData<GetRideAlongDriversListResponse?>()
     val livedataGetRideAlongVehicleLists = MutableLiveData<GetRideAlongVehicleLists?>()
     val livedataGetRouteInfoById = MutableLiveData<GetRouteInfoByIdRes?>()
+    val livedataRideAlongSubmitApiRes = MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataRideAlongRouteInfoById = MutableLiveData<GetRideAlongRouteInfoByIdRes?>()
 
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
@@ -288,4 +293,33 @@ class MainViewModel(
             livedataGetRouteInfoById.postValue(response)
         }
     }
+    fun AddOnRideAlongRouteInfo(addOnRideAlongRouteInfoRequest:AddOnRideAlongRouteInfoRequest){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.AddOnRideAlongRouteInfo(addOnRideAlongRouteInfoRequest)
+            }
+            result.onSuccess { response ->
+                livedataRideAlongSubmitApiRes.postValue(response)
+            }
+            result.onFailure {exception ->
+                Log.e("AddOnRideAlongRouteInfo", "Error: ${exception.message}")
+            }
+        }
+    }
+
+    fun GetRideAlongRouteInfoById(routeID: Int,leadDriverId:Int){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.GetRideAlongRouteInfoById(routeID,leadDriverId)
+            }
+            result.onSuccess {response->
+                livedataRideAlongRouteInfoById.postValue(response)
+            }
+            result.onFailure {ex->
+                Log.e("GetRideAlongRouteInfoById Exception", "Error: ${ex.message}")
+            }
+        }
+    }
+
+
 }

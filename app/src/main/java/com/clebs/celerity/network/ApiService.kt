@@ -1,5 +1,6 @@
 package com.clebs.celerity.network
 
+import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.requests.CreateDaikyworkRequestBody
 import com.clebs.celerity.models.requests.GetDefectSheetBasicInfoRequestModel
@@ -26,6 +27,7 @@ import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
+import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfo
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
@@ -205,24 +207,34 @@ interface ApiService {
     suspend fun AddOnRouteInfo(@Body addOnRouteInfoRequest: AddOnRouteInfoRequest): Response<SimpleStatusMsgResponse>
 
     @POST("/api/DaDailyWorks/SaveBreakStartAndEndTime")
-    suspend fun SaveBreakTime(@Body saveBreakTimeRequest: SaveBreakTimeRequest):Response<SimpleStatusMsgResponse>
+    suspend fun SaveBreakTime(@Body saveBreakTimeRequest: SaveBreakTimeRequest): Response<SimpleStatusMsgResponse>
 
     @GET("/api/DaDailyWorks/GetDriverBreakTimeInfoByDate/{driverId}")
-    suspend fun GetDriverBreakInfo(@Path("driverId") driverId:Int):Response<GetDriverBreakTimeInfoResponse>
+    suspend fun GetDriverBreakInfo(@Path("driverId") driverId: Int): Response<GetDriverBreakTimeInfoResponse>
 
     @POST("/api/DailyWorks/UpdateClockInTime/{dwUsrID}")
-    suspend fun UpdateClockInTime(@Path("dwUsrID") dwid: Int):Response<SimpleStatusMsgResponse>
+    suspend fun UpdateClockInTime(@Path("dwUsrID") dwid: Int): Response<SimpleStatusMsgResponse>
 
     @POST("/api/DailyWorks/UpdateClockOutTime/{dwUsrID}")
-    suspend fun UpdateClockOutTime(@Path("dwUsrID") dwid: Int):Response<SimpleStatusMsgResponse>
+    suspend fun UpdateClockOutTime(@Path("dwUsrID") dwid: Int): Response<SimpleStatusMsgResponse>
 
     @GET("/api/RouteUpdate/GetRideAlongDriversList")
-    suspend fun GetRideAlongDriversList():Response<GetRideAlongDriversListResponse>
+    suspend fun GetRideAlongDriversList(): Response<GetRideAlongDriversListResponse>
 
     @GET("/api/RouteUpdate/GetRideAlongVehicleLists")
-    suspend fun GetRideAlongVehicleLists():Response<GetRideAlongVehicleLists>
+    suspend fun GetRideAlongVehicleLists(): Response<GetRideAlongVehicleLists>
 
     @GET("/api/RouteUpdate/GetRouteInfoById/{routeId}")
-    suspend fun GetRouteInfoById(@Path("routeId") routeId:Int):Response<GetRouteInfoByIdRes>
+    suspend fun GetRouteInfoById(@Path("routeId") routeId: Int): Response<GetRouteInfoByIdRes>
+
+    @POST("/api/RouteUpdate/AddOnRideAlongRouteInfo")
+    suspend fun AddOnRideAlongRouteInfo(@Body addOnRideAlongRouteInfoRequest: AddOnRideAlongRouteInfoRequest)
+            : Response<SimpleStatusMsgResponse>
+
+    @GET("/api/RouteUpdate/GetRideAlongRouteInfoById")
+    suspend fun GetRideAlongRouteInfoById(
+        @Query("routeId") routeId: Int,
+        @Query("LeadDriverId") LeadDriverId: Int
+    ): Response<GetRideAlongRouteInfoByIdRes>
 
 }

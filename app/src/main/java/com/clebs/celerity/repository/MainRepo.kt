@@ -1,6 +1,7 @@
 package com.clebs.celerity.repository
 
 import android.util.Log
+import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
@@ -18,6 +19,7 @@ import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
+import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRideAlongVehicleListsItem
@@ -297,6 +299,27 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun GetRouteInfoById(routeID:Int):GetRouteInfoByIdRes?{
         val response = ApiService.GetRouteInfoById(routeID)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun AddOnRideAlongRouteInfo(addOnRideAlongRouteInfoRequest: AddOnRideAlongRouteInfoRequest):SimpleStatusMsgResponse?{
+        val response = ApiService.AddOnRideAlongRouteInfo(addOnRideAlongRouteInfoRequest)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+    suspend fun GetRideAlongRouteInfoById(routeID: Int,leadDriverId:Int):GetRideAlongRouteInfoByIdRes?{
+        val response = ApiService.GetRideAlongRouteInfoById(routeID,leadDriverId)
         if(response.isSuccessful)
             return response.body()
         else{
