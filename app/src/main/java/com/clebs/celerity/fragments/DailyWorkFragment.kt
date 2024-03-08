@@ -116,8 +116,8 @@ open class DailyWorkFragment : Fragment() {
 
 
         mbinding.rectangle4.setOnClickListener {
-           //checkPermissions()
-           findNavController().navigate(R.id.vechileMileageFragment)
+            checkPermissions()
+            //findNavController().navigate(R.id.vechileMileageFragment)
         }
 
 
@@ -127,28 +127,55 @@ open class DailyWorkFragment : Fragment() {
 
     private fun checkPermissions() {
         // Request camera permissions
-        KotlinPermissions.with(requireActivity()) // Where this is an FragmentActivity instance
-            .permissions(
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ).onAccepted {
-                mbinding.rectange.visibility = View.VISIBLE
-                mbinding.ivTakePhoto.visibility = View.VISIBLE
-                mbinding.rectangle4.visibility = View.GONE
-                mbinding.imageView5.visibility = View.GONE
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            KotlinPermissions.with(requireActivity()) // Where this is an FragmentActivity instance
+                .permissions(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_AUDIO
+                ).onAccepted {
+                    mbinding.rectange.visibility = View.VISIBLE
+                    mbinding.ivTakePhoto.visibility = View.VISIBLE
+                    mbinding.rectangle4.visibility = View.GONE
+                    mbinding.imageView5.visibility = View.GONE
 
-                startCamera()
-                initListeners()
-            }.onDenied {
-                mbinding.rectange.visibility = View.GONE
-                mbinding.rectangle4.visibility = View.VISIBLE
-                mbinding.imageView5.visibility = View.VISIBLE
-                mbinding.ivTakePhoto.visibility = View.GONE
-                Log.d(TAG, "User denied permissions")
-            }.onForeverDenied {
-                Log.d(TAG, "User forever denied permissions")
-            }.ask()
+                    startCamera()
+                    initListeners()
+                }.onDenied {
+                    mbinding.rectange.visibility = View.GONE
+                    mbinding.rectangle4.visibility = View.VISIBLE
+                    mbinding.imageView5.visibility = View.VISIBLE
+                    mbinding.ivTakePhoto.visibility = View.GONE
+                    Log.d(TAG, "User denied permissions")
+                }.onForeverDenied {
+                    Log.d(TAG, "User forever denied permissions")
+                }.ask()
+        } else {
+
+            KotlinPermissions.with(requireActivity()) // Where this is an FragmentActivity instance
+                .permissions(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ).onAccepted {
+                    mbinding.rectange.visibility = View.VISIBLE
+                    mbinding.ivTakePhoto.visibility = View.VISIBLE
+                    mbinding.rectangle4.visibility = View.GONE
+                    mbinding.imageView5.visibility = View.GONE
+
+                    startCamera()
+                    initListeners()
+                }.onDenied {
+                    mbinding.rectange.visibility = View.GONE
+                    mbinding.rectangle4.visibility = View.VISIBLE
+                    mbinding.imageView5.visibility = View.VISIBLE
+                    mbinding.ivTakePhoto.visibility = View.GONE
+                    Log.d(TAG, "User denied permissions")
+                }.onForeverDenied {
+                    Log.d(TAG, "User forever denied permissions")
+                }.ask()
+        }
     }
 
     override fun onDestroy() {
@@ -218,7 +245,7 @@ open class DailyWorkFragment : Fragment() {
 
 
         if (blocks.size == 0) {
-
+            mbinding.pb.visibility = View.GONE
             Toast.makeText(requireContext(), "No Text ", Toast.LENGTH_LONG).show()
             return
         }
@@ -266,7 +293,7 @@ open class DailyWorkFragment : Fragment() {
                     MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
                     contentValues
                 ).build()
-        imageCapture!!.takePicture(
+        imageCapture.takePicture(
             outputOptions, ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
@@ -295,6 +322,7 @@ open class DailyWorkFragment : Fragment() {
             }
         )
     } catch (e: Exception) {
+        mbinding.pb.visibility = View.GONE
         Log.d(TAG, "Photo capture failed: ${e.message}")
         println("Photo capture failed: ${e.message}")
     }

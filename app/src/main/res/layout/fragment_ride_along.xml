@@ -5,18 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.OnRoadHoursFragment">
+
     <ProgressBar
         android:id="@+id/rideAlongPB"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:visibility="visible"
         android:indeterminateTint="@color/orange"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
+
     <View
         android:id="@+id/rideAlongOverlay"
         android:layout_width="match_parent"
@@ -299,17 +301,27 @@
                     android:textColorHint="#4A4A4A"
                     android:textCursorDrawable="@color/orange"
                     android:textSize="14sp"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@+id/route" />
 
-                <Spinner
-                    android:id="@+id/spinnerSelectDriver"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/shape_edittext_onroad"
+                    android:padding="14dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:visibility="visible"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edt_routes" />
+                    app:layout_constraintTop_toBottomOf="@+id/edt_routes">
+
+                    <Spinner
+                        android:id="@+id/spinnerSelectDriver"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/arrow_left"
+                        android:dropDownVerticalOffset="40dp"
+                        android:visibility="visible" />
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -345,24 +357,35 @@
                     android:textColorHint="#4A4A4A"
                     android:textCursorDrawable="@color/orange"
                     android:textSize="14sp"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@+id/route_type"
                     tools:layout_editor_absoluteX="12dp" />
 
-                <Spinner
-                    android:id="@+id/spinnerSelectVehicle"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
+                    android:background="@drawable/shape_edittext_onroad"
+                    android:padding="14dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText" />
+                    app:layout_constraintTop_toBottomOf="@+id/route_type"
+                    tools:layout_editor_absoluteY="12dp">
+
+                    <Spinner
+                        android:id="@+id/spinnerSelectVehicle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:dropDownVerticalOffset="40dp"
+                        android:visibility="visible" />
+                </LinearLayout>
 
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="17dp"
                     android:layout_marginEnd="15dp"
                     android:src="@drawable/arrow_left"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/editText"
                     app:layout_constraintEnd_toEndOf="@+id/editText"
                     app:layout_constraintTop_toTopOf="@+id/editText" />
@@ -382,6 +405,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:letterSpacing="0.02"
+
                     android:text="Select Route Location*"
                     android:textColor="#4A4A4A"
                     android:textSize="15sp"
@@ -400,24 +424,33 @@
                     android:textColorHint="#4A4A4A"
                     android:textCursorDrawable="@color/orange"
                     android:textSize="14sp"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@+id/select_route_type"
                     tools:layout_editor_absoluteX="12dp" />
 
-                <Spinner
-                    android:id="@+id/spinnerRouteLocation"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
+                    android:background="@drawable/shape_edittext_onroad"
+                    android:padding="14dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_select_route_location" />
+                    app:layout_constraintTop_toBottomOf="@+id/editText_select_route_location">
+
+                    <Spinner
+                        android:id="@+id/spinnerRouteLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible" />
+                </LinearLayout>
 
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="17dp"
                     android:layout_marginEnd="15dp"
                     android:src="@drawable/arrow_left"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/editText_select_route_location"
                     app:layout_constraintEnd_toEndOf="@+id/editText_select_route_location"
                     app:layout_constraintTop_toTopOf="@+id/editText_select_route_location" />
@@ -495,16 +528,17 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_edittext_onroad"
                     android:padding="14dp"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@+id/parcel_deliver_brought"
                     tools:layout_editor_absoluteX="12dp">
 
 
                     <TextView
+                        android:id="@+id/tvRouteType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins"
                         android:gravity="start"
-                        android:id="@+id/tvRouteType"
                         android:letterSpacing="0.02"
                         android:text="Not Allocated"
                         android:textColor="#4A4A4A"
@@ -513,17 +547,23 @@
 
                 </RelativeLayout>
 
-                <Spinner
-                    android:id="@+id/SpinnerRouteType"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/shape_edittext_onroad"
+                    android:padding="14dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:visibility="visible"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+                    app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
+                    <Spinner
+                        android:id="@+id/SpinnerRouteType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible" />
 
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -545,13 +585,15 @@
                     android:weightSum="2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
+
                     <RelativeLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:orientation="horizontal"
+                        android:layout_weight="1"
                         android:background="@drawable/shape_edittext_onroad"
-                        android:layout_height="wrap_content">
+                        android:orientation="horizontal">
+
                         <TextView
                             android:id="@+id/edt_traing"
                             android:layout_width="wrap_content"
@@ -567,23 +609,24 @@
                             tools:layout_editor_absoluteX="12dp" />
 
                         <RadioButton
-                            android:layout_width="25dp"
                             android:id="@+id/rbReTraining"
+                            android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerVertical="true"
-                            android:background="@color/white"
                             android:layout_toRightOf="@id/edt_traing"
+                            android:background="@color/white"
                             android:src="@drawable/circle_grey_ic" />
-                        
+
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:orientation="horizontal"
+                        android:layout_weight="1"
                         android:background="@drawable/shape_edittext_onroad"
-                        android:layout_height="wrap_content">
+                        android:orientation="horizontal">
+
                         <TextView
                             android:id="@+id/edt_traingtwo"
                             android:layout_width="wrap_content"
@@ -599,19 +642,17 @@
                             tools:layout_editor_absoluteX="12dp" />
 
                         <RadioButton
-                            android:layout_width="25dp"
                             android:id="@+id/rbTraining"
+                            android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerVertical="true"
-                            android:background="@color/white"
                             android:layout_toRightOf="@id/edt_traingtwo"
+                            android:background="@color/white"
                             android:src="@drawable/radio_button_blue" />
 
                     </RelativeLayout>
 
                 </LinearLayout>
-
-             
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -659,10 +700,10 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <RelativeLayout
+                android:id="@+id/rideAlongCancel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:id="@+id/rideAlongCancel"
                 android:layout_marginBottom="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/constcomment">
@@ -675,10 +716,10 @@
                     android:src="@drawable/cancel_bt" />
 
                 <ImageView
+                    android:id="@+id/saveBT"
                     android:layout_width="120dp"
                     android:layout_height="40dp"
                     android:layout_alignParentEnd="true"
-                    android:id="@+id/saveBT"
                     android:layout_marginEnd="12dp"
                     android:src="@drawable/save_bt" />
 

@@ -146,6 +146,7 @@
                     android:fontFamily="@font/poppins"
                     android:hint="Enter password"
                     android:paddingStart="8dp"
+                    android:inputType="textPassword"
                     android:singleLine="true"
                     android:textCursorDrawable="@color/orange"
                     android:textSize="15sp"

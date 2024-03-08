@@ -38,9 +38,8 @@ class DrawViewClass : View {
     private fun initial() {
         brush.isAntiAlias = true
         brush.color = currentBrush
-        brush.strokeJoin = Paint.Join.ROUND
-        brush.style = Paint.Style.FILL
-        brush.strokeWidth = 4f
+        brush.style = Paint.Style.STROKE
+        brush.strokeWidth = 1f
 
         params = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,

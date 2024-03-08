@@ -111,8 +111,12 @@ class RideAlongFragment : Fragment() {
             progressBarVisibility(false,binding.rideAlongPB,binding.rideAlongOverlay)
             if (it != null) {
                 progressBarVisibility(true,binding.rideAlongPB,binding.rideAlongOverlay)
-                viewModel.GetRouteLocationInfo(it.RtLocationId)
-                viewModel.GetRideAlongRouteInfoById(it.RtId, selectedDriverId!!)
+                try {
+                    viewModel.GetRouteLocationInfo(it.RtLocationId)
+                    viewModel.GetRideAlongRouteInfoById(it.RtId, selectedDriverId!!)
+                }catch (_:Exception){
+
+                }
             }
         }
         viewModel.livedataRideAlongRouteInfoById.observe(viewLifecycleOwner) {
@@ -153,6 +157,7 @@ class RideAlongFragment : Fragment() {
 
     private fun clickListeners() {
         var isReTrainingSelected = false
+        var isTrainingSelected = false
         binding.run {
             rideAlongCancel.setOnClickListener {
                 findNavController().navigate(R.id.completeTaskFragment)
@@ -167,15 +172,16 @@ class RideAlongFragment : Fragment() {
                 rbReTraining.isChecked = isReTrainingSelected
                 retraining = true
                 training = false
-                rbTraining.isChecked = !isReTrainingSelected
+                rbTraining.isChecked = false
             }
 
             rbTraining.setOnClickListener {
+                isTrainingSelected = !isTrainingSelected
                 isReTrainingSelected = false
                 retraining = false
                 training = true
                 rbReTraining.isChecked = false
-                rbTraining.isChecked = true
+                rbTraining.isChecked = isTrainingSelected
             }
         }
     }
@@ -220,45 +226,50 @@ class RideAlongFragment : Fragment() {
     }
 
     private fun setSpinners(spinner: Spinner, tv: TextView, items: List<String>, ids: List<Int>) {
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, items)
+
+        val dummyItem = "Select Item"
+        val itemsList = mutableListOf(dummyItem)
+        itemsList.addAll(items)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        //adapter.addAll(itemsList)
+
         spinner.adapter = adapter
+
+        spinner.setSelection(0)
+
         try {
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
-                ) {
-
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     parent?.let { nonNullParent ->
-                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
-                        selectedItem.let { nonNullSelectedItem ->
-                            tv.text = nonNullSelectedItem
-                            when (spinner) {
-                                binding.spinnerSelectDriver -> {
-                                    selectedDriverId = ids[position]
-                                    selectedDriverName = nonNullSelectedItem
-                                    progressBarVisibility(true,binding.rideAlongPB,binding.rideAlongOverlay)
-                                    viewModel.GetRideAlongRouteTypeInfo(selectedDriverId!!)
-                                }
-
-                                binding.spinnerSelectVehicle -> {
-                                    selectedVehicleName = nonNullSelectedItem
-                                    selectedVehicleId = ids[position]
-                                }
-
-                                binding.SpinnerRouteType -> {
-                                    selectedRouteId = ids[position]
-                                    progressBarVisibility(true,binding.rideAlongPB,binding.rideAlongOverlay)
-                                    viewModel.GetRouteInfoById(selectedRouteId!!)
-                                }
-                                binding.spinnerRouteLocation -> {
-                                    selectedLocId = ids[position]
+                        if (position != 0) { // Skip the dummy item
+                            val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
+                            selectedItem.let { nonNullSelectedItem ->
+                                tv.text = nonNullSelectedItem
+                                when (spinner) {
+                                    binding.spinnerSelectDriver -> {
+                                        selectedDriverId = ids[position - 1] // Adjust the index for ids list
+                                        selectedDriverName = nonNullSelectedItem
+                                        progressBarVisibility(true, binding.rideAlongPB, binding.rideAlongOverlay)
+                                        viewModel.GetRideAlongRouteTypeInfo(selectedDriverId!!)
+                                    }
+                                    binding.spinnerSelectVehicle -> {
+                                        selectedVehicleName = nonNullSelectedItem
+                                        selectedVehicleId = ids[position - 1] // Adjust the index for ids list
+                                    }
+                                    binding.SpinnerRouteType -> {
+                                        selectedRouteId = ids[position - 1] // Adjust the index for ids list
+                                        progressBarVisibility(true, binding.rideAlongPB, binding.rideAlongOverlay)
+                                        viewModel.GetRouteInfoById(selectedRouteId!!)
+                                    }
+                                    binding.spinnerRouteLocation -> {
+                                        selectedLocId = ids[position - 1] // Adjust the index for ids list
+                                    }
                                 }
                             }
                         }
                     }
                 }
-
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }

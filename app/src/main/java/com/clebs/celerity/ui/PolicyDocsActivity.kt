@@ -104,6 +104,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                 updateSignatureInfoApi(bitmap)
             }
         })
+        dialog.isCancelable = false
         dialog.show(supportFragmentManager, "sign")
     }
 

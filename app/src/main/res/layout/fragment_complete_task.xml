@@ -12,8 +12,8 @@
 
         <ProgressBar
             android:id="@+id/completeTaskFragmentPB"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:indeterminateTint="@color/orange"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -168,7 +168,6 @@
 
         </RelativeLayout>
 
-
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedcsroll"
             android:layout_width="match_parent"
@@ -180,8 +179,7 @@
             android:paddingTop="35dp"
             app:layout_constraintBottom_toTopOf="@+id/tv_next"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rlinfo"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toBottomOf="@id/rlinfo">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -302,6 +300,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/vichel_pictures"
                             android:layout_marginTop="18dp"
+                            android:layout_marginBottom="10dp"
                             android:orientation="horizontal">
 
                             <TextView
@@ -314,12 +313,12 @@
                                 android:textSize="15sp" />
 
                             <TextView
-                                android:id="@+id/tv_ClockedIN"
                                 android:layout_width="wrap_content"
                                 android:layout_height="25dp"
+                                android:id="@+id/tv_ClockedIN"
                                 android:layout_alignParentRight="true"
                                 android:backgroundTint="@color/white"
-                                android:text="- - - - "
+                                android:text="time"
                                 android:textColor="#6DA95E"
                                 android:textSize="15sp" />
 
@@ -343,12 +342,12 @@
                                 android:textSize="15sp" />
 
                             <TextView
-                                android:id="@+id/clocked_outTime"
                                 android:layout_width="wrap_content"
                                 android:layout_height="25dp"
                                 android:layout_alignParentRight="true"
                                 android:backgroundTint="@color/white"
-                                android:text="- - - - "
+                                android:text="time"
+                                android:id="@+id/clocked_outTime"
                                 android:textColor="#6DA95E"
                                 android:textSize="15sp" />
 
@@ -387,18 +386,7 @@
                         android:fontFamily="@font/poppins_semibold"
                         android:text="5.00 PM"
                         android:textColor="@color/text_color"
-                        android:textSize="18sp"
-                        android:visibility="gone" />
-
-                    <ImageButton
-                        android:id="@+id/clock_in_mark"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerHorizontal="true"
-                        android:backgroundTint="@color/white"
-                        android:src="@drawable/clock_in"
-                        android:visibility="visible" />
+                        android:textSize="18sp" />
 
                     <ImageButton
                         android:id="@+id/down_ivs"
@@ -412,9 +400,39 @@
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:id="@+id/rlcomtwo_ClockOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:visibility="gone"
+                    android:background="@drawable/shape_expand_main"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/inter"
+                        android:letterSpacing="0.02"
+                        android:text="Clock Out"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp" />
+
+                    <ImageButton
+                        android:layout_width="40dp"
+                        android:id="@+id/clock_out_mark"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:backgroundTint="@color/white"
+                        android:src="@drawable/ic_clockout"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/onRoadView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
@@ -620,37 +638,6 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:id="@+id/rlcomtwo_ClockOut"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:background="@drawable/shape_expand_main"
-                    android:padding="18dp"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:fontFamily="@font/inter"
-                        android:letterSpacing="0.02"
-                        android:text="Clock Out"
-                        android:textColor="@color/text_color"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <ImageButton
-                        android:id="@+id/clock_out_mark"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerHorizontal="true"
-                        android:backgroundTint="@color/white"
-                        android:src="@drawable/ic_clockout"
-                        android:visibility="visible" />
-
-                </RelativeLayout>
 
                 <LinearLayout
                     android:id="@+id/upload_layouts"
@@ -692,14 +679,15 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="20dp"
+                        android:visibility="gone"
                         android:layout_weight="1"
                         android:orientation="horizontal"
                         app:layout_constraintTop_toBottomOf="@id/rl_first">
 
                         <LinearLayout
-                            android:id="@+id/uploadll1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:id="@+id/uploadll1"
                             android:orientation="horizontal"
                             android:weightSum="2">
 
@@ -797,6 +785,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="20dp"
+                        android:visibility="gone"
                         android:orientation="horizontal">
 
                         <LinearLayout
@@ -895,8 +884,23 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center">
 
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:letterSpacing="0.01"
+                            android:gravity="center"
+                            android:id="@+id/startinspection"
+                            android:fontFamily="@font/poppins_bold"
+                            android:layout_gravity="center"
+                            android:textSize="16sp"
+
+                            android:text="Start Inspection" />
 
                     </LinearLayout>
 
@@ -918,6 +922,7 @@
                                 android:id="@+id/clOffSideImgUp"
                                 android:layout_width="180dp"
                                 android:layout_height="154dp"
+                                android:visibility="gone"
                                 android:layout_marginEnd="7dp"
 
                                 android:background="@drawable/shape_uploads">
@@ -966,13 +971,13 @@
 
                                 android:background="@drawable/shape_uploads">
 
-                                <ImageButton
-                                    android:id="@+id/imageButtonnine"
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
-                                    android:src="@drawable/delete_ic"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
+                                <!--                                <ImageButton-->
+                                <!--                                    android:id="@+id/imageButtonnine"-->
+                                <!--                                    android:layout_width="28dp"-->
+                                <!--                                    android:layout_height="28dp"-->
+                                <!--                                    android:src="@drawable/delete_ic"-->
+                                <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
 
                                 <ImageButton
                                     android:id="@+id/ivOilLevel"
@@ -1028,13 +1033,13 @@
                                 android:background="@drawable/shape_uploads">
 
 
-                                <ImageButton
-                                    android:id="@+id/imageButtoneleven"
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
-                                    android:src="@drawable/delete_ic"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
+                                <!--                                <ImageButton-->
+                                <!--                                    android:id="@+id/imageButtoneleven"-->
+                                <!--                                    android:layout_width="28dp"-->
+                                <!--                                    android:layout_height="28dp"-->
+                                <!--                                    android:src="@drawable/delete_ic"-->
+                                <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
 
                                 <ImageButton
                                     android:id="@+id/ivAddBlueImg"
@@ -1069,12 +1074,12 @@
                                 android:background="@drawable/shape_uploads">
 
 
-                                <ImageButton
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
-                                    android:src="@drawable/delete_ic"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
+                                <!--                                <ImageButton-->
+                                <!--                                    android:layout_width="28dp"-->
+                                <!--                                    android:layout_height="28dp"-->
+                                <!--                                    android:src="@drawable/delete_ic"-->
+                                <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
 
                                 <ImageButton
                                     android:id="@+id/ivFaceMask"
@@ -1109,6 +1114,7 @@
 
 
         </androidx.core.widget.NestedScrollView>
+
 
         <TextView
             android:id="@+id/tv_next"

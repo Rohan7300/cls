@@ -30,6 +30,7 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.ImageDatabase
 import com.clebs.celerity.database.ImagesRepo
 import com.clebs.celerity.databinding.ActivityHomeBinding
+import com.clebs.celerity.fragments.CompleteTaskFragment
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
@@ -70,7 +71,41 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         var Boolean: Boolean = false
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent != null) {
+            // Get status
+            val identifier =
+                intent.getStringExtra(PublicConstants.quoteCreationFlowStatusIdentifierKeyInIntent)
+                    ?: "Could not identify Identifier"
+            val message =
+                intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
+                    ?: "Could not identify status message"
+            val tempCode =
+                intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
+            if (tempCode == 200) {
+                CompleteTaskFragment.inspectionstarted = true
 
+                showToast("inspection success",this)
+            } else {
+
+                showToast("inspection Failed",this)
+                CompleteTaskFragment.inspectionstarted = false
+
+            }
+            // Check if identifier is valid
+            if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
+                // Get code
+                val code = if (tempCode == -1) {
+                    "Could not identify status code"
+                } else {
+                    tempCode
+                }
+
+                // Update message in the dia
+            }
+        }
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -216,7 +251,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 ActivityHomeBinding.overlayViewHomeActivity
             )
             if (it != null) {
-                viewModel.GetVehicleInformation(userId, it.vmRegNo)
+                try {
+                    if(it.vmRegNo!=null)
+                    viewModel.GetVehicleInformation(userId, it.vmRegNo)
+                }catch (e:Exception){
+Log.d("sds",e.toString())
+                }
+
                 firstName = it.firstName
                 lastName = it.lastName
                 isLeadDriver = it.IsLeadDriver
@@ -224,9 +265,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-    }
 
     private fun logout() {
         viewModel.Logout().observe(this@HomeActivity) {

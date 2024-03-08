@@ -204,7 +204,10 @@ class SpareWheelFragment : BaseInteriorFragment() {
         viewModel.GetDriversBasicInformation(
             Prefs.getInstance(App.instance).userID.toDouble()).observe(viewLifecycleOwner) {
             if (it!=null){
-                viewModel.GetVehicleInformation(prefs.userID.toInt(),it.vmRegNo)
+                if(it.vmRegNo!=null){
+                    viewModel.GetVehicleInformation(prefs.userID.toInt(),it.vmRegNo)
+                }
+
             }
         }
 

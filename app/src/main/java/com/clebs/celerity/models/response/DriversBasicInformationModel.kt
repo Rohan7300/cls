@@ -19,7 +19,7 @@ data class DriversBasicInformationModel(
     @SerializedName("VmID")
     val vmID: Int,
     @SerializedName("VmRegNo")
-    val vmRegNo: String,
+    val vmRegNo: String?,
     @SerializedName("PhoneNumber")
     val PhoneNumber: String,
     @SerializedName("Address")
