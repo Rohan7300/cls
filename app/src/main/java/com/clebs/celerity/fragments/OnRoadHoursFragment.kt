@@ -20,6 +20,7 @@ import com.clebs.celerity.databinding.FragmentOnRoadHoursBinding
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 
@@ -38,7 +39,8 @@ class OnRoadHoursFragment : Fragment() {
     private var routeComment: String? = null
     private var dwID:Int = 0
     private var vehID:Int = 0
-
+    private lateinit var loadingDialog: LoadingDialog
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,6 +64,8 @@ class OnRoadHoursFragment : Fragment() {
     private fun init() {
         viewModel = (activity as HomeActivity).viewModel
         prefs = Prefs.getInstance(requireContext())
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        
         viewModel.livedataDailyWorkInfoByIdResponse.observe(viewLifecycleOwner) {
             if (it != null) {
                 dwID = it.DailyWorkId
@@ -82,9 +86,9 @@ class OnRoadHoursFragment : Fragment() {
     }
 
     private fun sendData() {
-        progressBarVisibility(true)
+        loadingDialog.show()
         viewModel.livedataAddOnRouteInfo.observe(viewLifecycleOwner){
-            progressBarVisibility(false)
+            loadingDialog.cancel()
             if(it!=null){
                 findNavController().navigate(R.id.completeTaskFragment)
             }
@@ -217,14 +221,6 @@ class OnRoadHoursFragment : Fragment() {
 
         tv.setOnClickListener {
             spinner.isVisible = !spinner.isVisible
-        }
-    }
-    fun progressBarVisibility(show: Boolean) {
-        if (show) {
-            binding.pbOnRoadHours.bringToFront()
-            binding.pbOnRoadHours.visibility = View.VISIBLE
-        } else {
-            binding.pbOnRoadHours.visibility = View.GONE
         }
     }
 

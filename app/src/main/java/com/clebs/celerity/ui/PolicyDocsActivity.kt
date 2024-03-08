@@ -23,10 +23,10 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.CustDialog
+import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SignatureListener
 import com.clebs.celerity.utils.bitmapToBase64
-import com.clebs.celerity.utils.progressBarVisibility
 import com.clebs.celerity.utils.showToast
 
 class PolicyDocsActivity : AppCompatActivity() {
@@ -34,6 +34,7 @@ class PolicyDocsActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
     private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
     private var userId = 0
+    lateinit var loadingDialog: LoadingDialog
 
     companion object {
         var path = Path()
@@ -47,7 +48,7 @@ class PolicyDocsActivity : AppCompatActivity() {
         } else {
             mbinding.llAmazon.visibility = View.VISIBLE
         }
-
+        loadingDialog = LoadingDialog(this)
         if (!Prefs.getInstance(App.instance).getBoolean("isother", false)) {
             mbinding.llTrucks.visibility = View.GONE
         } else {
@@ -100,7 +101,8 @@ class PolicyDocsActivity : AppCompatActivity() {
         dialog.setSignatureListener(object : SignatureListener {
             override fun onSignatureSaved(bitmap: Bitmap) {
                 Log.d("Sign", "Bitmap $bitmap")
-                progressBarVisibility(true,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)
+              /*  progressBarVisibility(true,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)*/
+                loadingDialog.show()
                 updateSignatureInfoApi(bitmap)
             }
         })
@@ -110,7 +112,8 @@ class PolicyDocsActivity : AppCompatActivity() {
 
     private fun updateSignatureInfoApi(bitmap: Bitmap) {
         viewModel.livedataupdateDriverAgreementSignature.observe(this) {
-            progressBarVisibility(false,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)
+            /*progressBarVisibility(false,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)*/
+            loadingDialog.cancel()
             if (it != null) {
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)

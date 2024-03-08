@@ -38,13 +38,12 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
+import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.navigateTo
-import com.clebs.celerity.utils.progressBarVisibility
 import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toRequestBody
-import com.clebs.celerity.utils.visible
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
@@ -68,6 +67,7 @@ class CompleteTaskFragment : Fragment() {
     private var showImageUploadLayout: Boolean = false
     var breakStartTime: String = ""
     var breakEndTime: String = ""
+    lateinit var loadingDialog:LoadingDialog
     private lateinit var cqSDKInitializer: CQSDKInitializer
 
     companion object {
@@ -85,6 +85,7 @@ class CompleteTaskFragment : Fragment() {
         val clickListener = View.OnClickListener {
             showAlert()
         }
+        loadingDialog = (activity as HomeActivity).loadingDialog
         userId = Prefs.getInstance(requireContext()).userID.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.downIvsBreak.setOnClickListener(clickListener)
@@ -113,20 +114,12 @@ class CompleteTaskFragment : Fragment() {
 
 
         mbinding.rlcomtwoClock.setOnClickListener {
-            progressBarVisibility(
-                true,
-                mbinding.completeTaskFragmentPB,
-                mbinding.overlayViewCompleteTask
-            )
+            loadingDialog.show()
             viewModel.UpdateClockInTime(userId)
         }
 
         mbinding.rlcomtwoClockOut.setOnClickListener {
-            progressBarVisibility(
-                true,
-                mbinding.completeTaskFragmentPB,
-                mbinding.overlayViewCompleteTask
-            )
+            loadingDialog.show()
             viewModel.UpdateClockOutTime(userId)
         }
 
@@ -239,6 +232,7 @@ class CompleteTaskFragment : Fragment() {
 
     private fun observers() {
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+            loadingDialog.cancel()
             mbinding.dxLoc.text = it?.locationName ?: ""
             mbinding.dxReg.text = it?.vmRegNo ?: ""
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
@@ -256,14 +250,11 @@ class CompleteTaskFragment : Fragment() {
             } else {
                 showToast("Something went wrong!!", requireContext())
             }
-            progressBarVisibility(
-                false,
-                mbinding.completeTaskFragmentPB,
-                mbinding.overlayViewCompleteTask
-            )
+            loadingDialog.cancel()
         }
 
         viewModel.livedataDailyWorkInfoByIdResponse.observe(viewLifecycleOwner) {
+            loadingDialog.cancel()
             if (it != null) {
                 if (it.ClockedInTime != null) {
                     mbinding.tvClockedIN.text = it.ClockedInTime.toString()
@@ -282,8 +273,6 @@ class CompleteTaskFragment : Fragment() {
                     }
                 }
 
-
-
                 if (it.ClockedOutTime != null) {
                     mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
@@ -293,11 +282,6 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.livedataClockInTime.observe(viewLifecycleOwner) {
             viewModel.GetDailyWorkInfoById(userId)
-            progressBarVisibility(
-                false,
-                mbinding.completeTaskFragmentPB,
-                mbinding.overlayViewCompleteTask
-            )
             if (it != null) {
                 mbinding.rlcomtwoClock.visibility = View.GONE
                 mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
@@ -308,11 +292,6 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.livedataUpdateClockOutTime.observe(viewLifecycleOwner) {
             viewModel.GetDailyWorkInfoById(userId)
-            progressBarVisibility(
-                false,
-                mbinding.completeTaskFragmentPB,
-                mbinding.overlayViewCompleteTask
-            )
             if (it != null) {
                 mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
             }
@@ -320,6 +299,7 @@ class CompleteTaskFragment : Fragment() {
 
 
         viewModel.livedataDriverBreakInfo.observe(viewLifecycleOwner) {
+            loadingDialog.cancel()
             if (it != null) {
                 val latestBreakInfo = it.lastOrNull()
 
@@ -338,11 +318,8 @@ class CompleteTaskFragment : Fragment() {
         }
 
         viewModel.uploadVehicleImageLiveData.observe(viewLifecycleOwner, Observer {
-            progressBarVisibility(
-                false,
-                mbinding.completeTaskFragmentPB,
-                mbinding.overlayViewCompleteTask
-            )
+
+            loadingDialog.cancel()
             viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
             if (it != null) {
                 if (it.Status == "200") {
@@ -357,6 +334,7 @@ class CompleteTaskFragment : Fragment() {
         })
 
         viewModel.vehicleImageUploadInfoLiveData.observe(viewLifecycleOwner, Observer {
+            loadingDialog.cancel()
             println(it)
             if (it!!.Status == "404") {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
@@ -519,11 +497,7 @@ class CompleteTaskFragment : Fragment() {
         dialogBinding.timeTvNext.setOnClickListener {
             if (chkTime(dialogBinding.edtBreakstart, dialogBinding.edtBreakend)) {
                 deleteDialog.cancel()
-                progressBarVisibility(
-                    true,
-                    mbinding.completeTaskFragmentPB,
-                    mbinding.overlayViewCompleteTask
-                )
+                loadingDialog.show()
                 sendBreakTimeData()
             } else {
                 showToast("Please add valid time information", requireContext())
@@ -584,11 +558,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun sendImage(imageBitmap: Bitmap, requestCode: Int) {
-        progressBarVisibility(
-            true,
-            mbinding.completeTaskFragmentPB,
-            mbinding.overlayViewCompleteTask
-        )
+        loadingDialog.show()
         val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
         val requestBody = imageBitmap.toRequestBody()
         val imagePart = when (requestCode) {

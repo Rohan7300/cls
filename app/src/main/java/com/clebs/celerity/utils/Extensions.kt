@@ -397,7 +397,7 @@ fun bitmapToBase64(bitmap: Bitmap): String {
     return Base64.encodeToString(byteArray, Base64.DEFAULT)
 }
 
-fun progressBarVisibility(show: Boolean,pb:ProgressBar, overlayView:View) {
+/*fun progressBarVisibility(show: Boolean,pb:ProgressBar, overlayView:View) {
     if (show) {
         pb.bringToFront()
         pb.visibility = View.VISIBLE
@@ -411,7 +411,7 @@ fun progressBarVisibility(show: Boolean,pb:ProgressBar, overlayView:View) {
         overlayView.isClickable = false
         overlayView.isFocusable = false
     }
-}
+}*/
 
 fun showTimePickerDialog(context: Context, editText: EditText) {
     val calendar = Calendar.getInstance()

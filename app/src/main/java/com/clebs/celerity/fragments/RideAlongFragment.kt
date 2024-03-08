@@ -18,7 +18,7 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentRideAlongBinding
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.ui.HomeActivity
-import com.clebs.celerity.utils.progressBarVisibility
+import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.showToast
 
 
@@ -41,6 +41,7 @@ class RideAlongFragment : Fragment() {
     private var rtFinishMileage: Int? = null
     private var rtNoOfParcelsDelivered: Int? = null
     private var rtNoParcelsbroughtback: Int? = null
+    lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -48,7 +49,7 @@ class RideAlongFragment : Fragment() {
             binding = FragmentRideAlongBinding.inflate(inflater, container, false)
         }
         viewModel = (activity as HomeActivity).viewModel
-
+        loadingDialog = (activity as HomeActivity).loadingDialog
         clickListeners()
         setInputListener(binding.edtParcels)
         setInputListener(binding.edtRouteComment)
@@ -60,7 +61,7 @@ class RideAlongFragment : Fragment() {
 
     private fun observers() {
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-            progressBarVisibility(false,binding.rideAlongPB,binding.rideAlongOverlay)
+            loadingDialog.cancel()
             binding.dxLoc.text = it?.locationName ?: ""
             binding.dxReg.text = it?.vmRegNo ?: ""
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
@@ -70,7 +71,7 @@ class RideAlongFragment : Fragment() {
             leadDriverID = (activity as HomeActivity).userId
         }
         viewModel.livedataGetRideAlongVehicleLists.observe(viewLifecycleOwner) {
-            progressBarVisibility(false,binding.rideAlongPB,binding.rideAlongOverlay)
+            loadingDialog.cancel()
             it?.let { vehicleLists ->
                 val vehIds = vehicleLists.mapNotNull { vehicleList -> vehicleList.VehicleId }
                 val vehNames = vehicleLists.mapNotNull { vehicleList -> vehicleList.VehicleName }
@@ -81,7 +82,7 @@ class RideAlongFragment : Fragment() {
             }
         }
         viewModel.livedataGetRideAlongDriversList.observe(viewLifecycleOwner) {
-            progressBarVisibility(false,binding.rideAlongPB,binding.rideAlongOverlay)
+            loadingDialog.cancel()
             if (it != null) {
                 val driverId = it.map { drivers -> drivers.Id }
                 val driverName = it.map { drivers -> drivers.Name }
@@ -89,14 +90,14 @@ class RideAlongFragment : Fragment() {
                 if (driverId.isNotEmpty() && driverName.isNotEmpty()) setSpinners(
                     binding.spinnerSelectDriver, binding.edtRoutes, driverName, driverId
                 )
-                progressBarVisibility(false,binding.rideAlongPB,binding.rideAlongOverlay)
+                loadingDialog.cancel()
                 viewModel.GetRideAlongVehicleLists()
             }
 
         }
 
         viewModel.liveDataRideAlongRouteTypeInfo.observe(viewLifecycleOwner) {
-            progressBarVisibility(false,binding.rideAlongPB,binding.rideAlongOverlay)
+            loadingDialog.cancel()
             if (it != null) {
                 val typeName = it.map { type -> type.RtName }
                 val typeId = it.map { type -> type.RtId }
@@ -108,19 +109,19 @@ class RideAlongFragment : Fragment() {
         }
 
         viewModel.livedataGetRouteInfoById.observe(viewLifecycleOwner) {
-            progressBarVisibility(false,binding.rideAlongPB,binding.rideAlongOverlay)
+            loadingDialog.cancel()
             if (it != null) {
-                progressBarVisibility(true,binding.rideAlongPB,binding.rideAlongOverlay)
+                loadingDialog.show()
                 try {
                     viewModel.GetRouteLocationInfo(it.RtLocationId)
                     viewModel.GetRideAlongRouteInfoById(it.RtId, selectedDriverId!!)
-                }catch (_:Exception){
+                } catch (_: Exception) {
 
                 }
             }
         }
         viewModel.livedataRideAlongRouteInfoById.observe(viewLifecycleOwner) {
-            progressBarVisibility(false,binding.rideAlongPB,binding.rideAlongOverlay)
+            loadingDialog.cancel()
             if (it != null) {
                 rtType = it.RtType
                 trainingDays = it.TrainingDays
@@ -130,7 +131,7 @@ class RideAlongFragment : Fragment() {
             }
         }
         viewModel.liveDataRouteLocationResponse.observe(viewLifecycleOwner) {
-            progressBarVisibility(false,binding.rideAlongPB,binding.rideAlongOverlay)
+            loadingDialog.cancel()
             if (it != null) {
                 val locationNames = it.map { loc -> loc.LocationName }
                 val locationId = it.map { loc -> loc.LocId }
@@ -144,11 +145,11 @@ class RideAlongFragment : Fragment() {
             }
         }
 
-        viewModel.livedataRideAlongSubmitApiRes.observe(viewLifecycleOwner){
-            if(it!=null){
+        viewModel.livedataRideAlongSubmitApiRes.observe(viewLifecycleOwner) {
+            if (it != null) {
                 findNavController().navigate(R.id.completeTaskFragment)
-            }else{
-                showToast("Please!! try again.",requireContext())
+            } else {
+                showToast("Please!! try again.", requireContext())
             }
 
         }
@@ -187,25 +188,25 @@ class RideAlongFragment : Fragment() {
     }
 
     private fun rideAlongApi() {
-        progressBarVisibility(true,binding.rideAlongPB,binding.rideAlongOverlay)
+        loadingDialog.show()
         viewModel.AddOnRideAlongRouteInfo(
-                 AddOnRideAlongRouteInfoRequest(
-                     IsReTraining = retraining!!,
-                     LeadDriverId =  selectedDriverId!!,
-                     RtAddMode ="" ,
-                     RtComment = routeComment!!,
-                     RtFinishMileage = rtFinishMileage!!,
-                     RtId =selectedRouteId!! ,
-                     RtLocationId =  selectedLocId!!,
-                     RtName = routeName!!,
-                     RtNoOfParcelsDelivered =rtNoOfParcelsDelivered!! ,
-                     RtNoParcelsbroughtback = rtNoParcelsbroughtback!!,
-                     RtType = rtType!!,
-                     RtUsrId = leadDriverID!!,
-                     TrainingDays = 0,
-                     VehicleId =selectedVehicleId!!
-                 )
-             )
+            AddOnRideAlongRouteInfoRequest(
+                IsReTraining = retraining!!,
+                LeadDriverId = selectedDriverId!!,
+                RtAddMode = "",
+                RtComment = routeComment!!,
+                RtFinishMileage = rtFinishMileage!!,
+                RtId = selectedRouteId!!,
+                RtLocationId = selectedLocId!!,
+                RtName = routeName!!,
+                RtNoOfParcelsDelivered = rtNoOfParcelsDelivered!!,
+                RtNoParcelsbroughtback = rtNoParcelsbroughtback!!,
+                RtType = rtType!!,
+                RtUsrId = leadDriverID!!,
+                TrainingDays = 0,
+                VehicleId = selectedVehicleId!!
+            )
+        )
     }
 
     private fun chkNull(): Boolean {
@@ -230,7 +231,8 @@ class RideAlongFragment : Fragment() {
         val dummyItem = "Select Item"
         val itemsList = mutableListOf(dummyItem)
         itemsList.addAll(items)
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsList)
+        val adapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         //adapter.addAll(itemsList)
 
@@ -240,7 +242,12 @@ class RideAlongFragment : Fragment() {
 
         try {
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
                     parent?.let { nonNullParent ->
                         if (position != 0) { // Skip the dummy item
                             val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
@@ -248,28 +255,36 @@ class RideAlongFragment : Fragment() {
                                 tv.text = nonNullSelectedItem
                                 when (spinner) {
                                     binding.spinnerSelectDriver -> {
-                                        selectedDriverId = ids[position - 1] // Adjust the index for ids list
+                                        selectedDriverId =
+                                            ids[position - 1] // Adjust the index for ids list
                                         selectedDriverName = nonNullSelectedItem
-                                        progressBarVisibility(true, binding.rideAlongPB, binding.rideAlongOverlay)
+                                        loadingDialog.show()
                                         viewModel.GetRideAlongRouteTypeInfo(selectedDriverId!!)
                                     }
+
                                     binding.spinnerSelectVehicle -> {
                                         selectedVehicleName = nonNullSelectedItem
-                                        selectedVehicleId = ids[position - 1] // Adjust the index for ids list
+                                        selectedVehicleId =
+                                            ids[position - 1] // Adjust the index for ids list
                                     }
+
                                     binding.SpinnerRouteType -> {
-                                        selectedRouteId = ids[position - 1] // Adjust the index for ids list
-                                        progressBarVisibility(true, binding.rideAlongPB, binding.rideAlongOverlay)
+                                        selectedRouteId =
+                                            ids[position - 1] // Adjust the index for ids list
+                                        loadingDialog.show()
                                         viewModel.GetRouteInfoById(selectedRouteId!!)
                                     }
+
                                     binding.spinnerRouteLocation -> {
-                                        selectedLocId = ids[position - 1] // Adjust the index for ids list
+                                        selectedLocId =
+                                            ids[position - 1] // Adjust the index for ids list
                                     }
                                 }
                             }
                         }
                     }
                 }
+
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }
