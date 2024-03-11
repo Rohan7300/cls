@@ -142,7 +142,6 @@ class CompleteTaskFragment : Fragment() {
         }
         mbinding.startinspection.setOnClickListener {
 
-
             startInspection()
         }
         /*        mbinding.clVehicleDashboard.setOnClickListener {
@@ -248,7 +247,7 @@ class CompleteTaskFragment : Fragment() {
             if (it != null) {
                 //  deleteDialog.cancel()
             } else {
-                showToast("Something went wrong!!", requireContext())
+               // showToast("Something went wrong!!", requireContext())
             }
             loadingDialog.cancel()
         }
@@ -313,7 +312,7 @@ class CompleteTaskFragment : Fragment() {
                     }
                 } ?: showToast("No Break time information added!!", requireContext())
             } else {
-                showToast("Something went wrong!!", requireContext())
+              //  showToast("Something went wrong!!", requireContext())
             }
         }
 
@@ -662,7 +661,8 @@ class CompleteTaskFragment : Fragment() {
     }
 
     fun startInspection() {
-        mbinding.completeTaskFragmentPB.visibility = View.VISIBLE
+        //mbinding.completeTaskFragmentPB.visibility = View.VISIBLE
+        loadingDialog.show()
 
         if (cqSDKInitializer.isCQSDKInitialized()) {
             // Show a loading dialog
@@ -670,40 +670,46 @@ class CompleteTaskFragment : Fragment() {
             Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
             Log.e("sdkskdkdkskdkskd", "onCreateView: ")
             // Make request to start an inspection
-            cqSDKInitializer.startInspection(
-                activityContext = requireContext(),
-                clientAttrs = ClientAttrs(
-                    userName = "",
-                    dealer = "",
-                    dealerIdentifier = "",
-                    client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
-                ),
-                result = { isStarted, msg, code ->
-                    // Show error if required
-                    Log.e("messsagesss", "startInspection: " + msg + code)
-                    if (isStarted
-                    ) {
+  try {
+      cqSDKInitializer.startInspection(
+          activityContext = requireContext(),
+          clientAttrs = ClientAttrs(
+              userName = "",
+              dealer = "",
+              dealerIdentifier = "",
+              client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+          ),
+          result = { isStarted, msg, code ->
+              // Show error if required
+              Log.e("messsagesss", "startInspection: " + msg + code)
+              if (isStarted
+              ) {
 //                        mbinding.uploadll1.visibility = View.GONE
 //                        mbinding.clOffSideImgUp.visibility = View.GONE
 //                        mbinding.rlFirst.visibility = View.GONE
 //                        mbinding.rlSecond.visibility = View.GONE
-                    } else {
+              } else {
 //                        mbinding.uploadll1.visibility = View.VISIBLE
 //                        mbinding.clOffSideImgUp.visibility = View.VISIBLE
 //                        mbinding.rlFirst.visibility = View.VISIBLE
 //                        mbinding.rlSecond.visibility = View.VISIBLE
-                    }
-                    if (msg == "Success") {
-                        mbinding.completeTaskFragmentPB.visibility = View.GONE
-                    }
-                    if (!isStarted) {
-                        mbinding.completeTaskFragmentPB.visibility = View.GONE
-                        Log.e("startedinspection", "onCreateView: " + msg + isStarted)
-                        // Dismiss the loading dialog
+              }
+              if (msg == "Success") {
+                  //mbinding.completeTaskFragmentPB.visibility = View.GONE
+                  loadingDialog.cancel()
+              }
+              if (!isStarted) {
+                  //mbinding.completeTaskFragmentPB.visibility = View.GONE
+                  loadingDialog.cancel()
+                  Log.e("startedinspection", "onCreateView: " + msg + isStarted)
+                  // Dismiss the loading dialog
 
-                    }
-                }
-            )
+              }
+          }
+      )
+  }catch (_:Exception){
+      showToast("Please try again later!!",requireContext())
+  }
         }
     }
 }

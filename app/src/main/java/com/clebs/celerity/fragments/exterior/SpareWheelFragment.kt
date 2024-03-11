@@ -14,6 +14,8 @@ import com.clebs.celerity.databinding.FragmentSpareWheelBinding
 import com.clebs.celerity.fragments.BaseInteriorFragment
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.ui.App
+import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.showToast
@@ -25,6 +27,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
     var VdhVmId = 0
     var VdhLmId = 0
     var VdhOdoMeterReading = 0
+    lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,8 +40,8 @@ class SpareWheelFragment : BaseInteriorFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.spareWheelFragment)
+        loadingDialog = (activity as HomeActivity).loadingDialog
         clickListeners()
-
 
         setDefault(mBinding.imageUploadIV, mBinding.edtDefect)
     }
@@ -119,7 +122,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
             imageViewModel.insertDefectName(imageEntity)
         }
 
-        mBinding.spareWheelPB.visibility = View.VISIBLE
+        loadingDialog.show()
         var isApiCallInProgress = false
         VdhDaId = userId
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner, Observer { it ->
@@ -213,7 +216,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
 
 
         viewModel.SaveVehDefectSheetResponseLiveData.observe(viewLifecycleOwner, Observer {
-            mBinding.spareWheelPB.visibility = View.GONE
+            loadingDialog.cancel()
             if(it!=null){
                 navigateTo(R.id.completeTaskFragment)
             }else{

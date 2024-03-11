@@ -26,7 +26,6 @@ import android.widget.*
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.database.ImageEntity
 import java.io.*
 import java.text.SimpleDateFormat
@@ -431,3 +430,4 @@ fun showTimePickerDialog(context: Context, editText: EditText) {
 
     timePickerDialog.show()
 }
+

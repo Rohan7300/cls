@@ -107,25 +107,25 @@ class SplashActivity : AppCompatActivity() {
         }
 
         mainViewModel.getDriverSignatureInfo(userid).observe(this@SplashActivity, Observer {
-          if(it!=null){
-              if (it!!.isSignatureReq.equals(true)) {
-                  Prefs.getInstance(applicationContext)
-                      .saveBoolean("isSignatureReq", it.isSignatureReq)
-                  Prefs.getInstance(applicationContext)
-                      .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
-                  Prefs.getInstance(applicationContext)
-                      .saveBoolean("isother", it.isOtherCompanySignatureReq)
+            if (it != null) {
+                if (it!!.isSignatureReq.equals(true)) {
+                    Prefs.getInstance(applicationContext)
+                        .saveBoolean("isSignatureReq", it.isSignatureReq)
+                    Prefs.getInstance(applicationContext)
+                        .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
+                    Prefs.getInstance(applicationContext)
+                        .saveBoolean("isother", it.isOtherCompanySignatureReq)
 
-                  val intent = Intent(this, PolicyDocsActivity::class.java)
+                    val intent = Intent(this, PolicyDocsActivity::class.java)
 
-                  intent.putExtra("signature_required", "0")
-                  startActivity(intent)
-              } else {
-                  val intent = Intent(this, HomeActivity::class.java)
-                  intent.putExtra("no_signature_required", "0")
-                  startActivity(intent)
-              }
-          }
+                    intent.putExtra("signature_required", "0")
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("no_signature_required", "0")
+                    startActivity(intent)
+                }
+            }
 
         })
 

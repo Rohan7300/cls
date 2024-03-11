@@ -546,6 +546,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
+            android:importantForAutofill="no"
                     android:id="@+id/edt_parcels"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -681,6 +682,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
+            android:importantForAutofill="no"
                     android:id="@+id/edt_route_comment"
                     android:layout_width="match_parent"
                     android:layout_height="90dp"

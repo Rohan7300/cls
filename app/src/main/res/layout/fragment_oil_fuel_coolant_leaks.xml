@@ -88,10 +88,10 @@
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/pin_alt_light_two"></ImageView>
+                <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_truck"/>
 
                     <TextView
                         android:id="@+id/dxReg"
@@ -104,6 +104,7 @@
                         android:textColor="#231F20"
                         android:textSize="15sp" />
 
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -114,10 +115,10 @@
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/pin_alt_light_two"></ImageView>
+                                        <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_frame"/>
 
                     <TextView
                         android:id="@+id/dxm5"
@@ -232,6 +233,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/edt_mils_layout">
 
                     <EditText
+            android:importantForAutofill="no"
                         android:id="@+id/edt_defect"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -341,6 +343,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/edt_mils_layout_two">
 
                     <EditText
+            android:importantForAutofill="no"
                         android:id="@+id/edt_defect_two"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -24,6 +24,7 @@ import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.showToast
 
 class Userprofile : Fragment() {
     lateinit var mbinding: FragmentUserprofileBinding
@@ -202,7 +203,8 @@ class Userprofile : Fragment() {
     fun GetDriversBasicInformation() {
         mbinding.pb.visibility = View.VISIBLE
         mbinding.FormLayout.alpha = 0.5f
-        mainViewModel.GetDriversBasicInformation(Prefs.getInstance(App.instance).userID.toDouble()
+        mainViewModel.GetDriversBasicInformation(
+            Prefs.getInstance(App.instance).userID.toDouble()
         ).observe(requireActivity(), Observer {
             if (it != null) {
                 Log.e("responseprofile", "GetDriversBasicInformation: ")
@@ -245,10 +247,12 @@ class Userprofile : Fragment() {
             mbinding.emailtext.text.toString(),
             mbinding.phonetext.text.toString()
         ).observe(viewLifecycleOwner, Observer {
-            if (it?.Status!!.equals(200)) {
+            if (it != null) {
+                if (it?.Status!!.equals(200)) {
 
-                Toast.makeText(requireContext(), "ProfileUpdated", Toast.LENGTH_SHORT).show()
+                    showToast("ProfileUpdated", requireContext())
 
+                }
             }
 
 

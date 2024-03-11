@@ -342,13 +342,19 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         bttwo.setOnClickListener {
-            logout()
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.putExtra("logout", "0")
+            Prefs.getInstance(applicationContext).clearPreferences()
+            finish()
+            startActivity(intent)
+            setLoggedIn(false)
+            //logout()
         }
         deleteDialog.setView(view)
-        deleteDialog.setCanceledOnTouchOutside(false);
+        deleteDialog.setCanceledOnTouchOutside(false)
         deleteDialog.setCancelable(false)
-        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-        deleteDialog.show();
+        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        deleteDialog.show()
 
     }
 

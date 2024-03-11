@@ -88,10 +88,10 @@
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/pin_alt_light_two"></ImageView>
+                <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_truck"/>
 
                     <TextView
                         android:id="@+id/dxReg"
@@ -104,6 +104,7 @@
                         android:textColor="#231F20"
                         android:textSize="15sp" />
 
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -114,10 +115,10 @@
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/pin_alt_light_two"></ImageView>
+                                        <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_frame"/>
 
                     <TextView
                         android:id="@+id/dxm5"
@@ -183,12 +184,12 @@
             android:textColor="#626C7C"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/previous_re"
-
             app:layout_constraintStart_toStartOf="@+id/previous_re"
             app:layout_constraintTop_toBottomOf="@id/previous_re" />
 
         <EditText
-            android:id="@+id/edt_mil"
+            android:importantForAutofill="no"
+            android:id="@+id/edt_milvm"
             android:layout_width="335dp"
             android:layout_height="45dp"
             android:background="@drawable/shape_edittext_mileage"
@@ -199,7 +200,6 @@
             android:letterSpacing="0.03"
             android:lineHeight="18sp"
             android:padding="5dp"
-
             android:textColor="@color/orange"
             android:textColorHint="#AAB9CF"
             android:textCursorDrawable="@drawable/txt_cursor_drawable"
@@ -222,7 +222,7 @@
             android:text="Save &amp; Next"
             android:textAllCaps="false"
             android:textColor="#F36C2E"
-            app:layout_constraintTop_toBottomOf="@+id/edt_mil" />
+            app:layout_constraintTop_toBottomOf="@+id/edt_milvm" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

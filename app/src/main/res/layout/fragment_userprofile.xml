@@ -24,15 +24,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User Profile"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_marginVertical="15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/dpLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="97dp"
+                    android:layout_marginTop="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4"
                     tools:ignore="MissingConstraints">
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -125,6 +138,7 @@
                             >
 
                             <EditText
+            android:importantForAutofill="no"
                                 android:id="@+id/emailtext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -210,6 +224,7 @@
                             >
 
                             <EditText
+            android:importantForAutofill="no"
                                 android:id="@+id/usertext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -269,6 +284,7 @@
                             >
 
                             <EditText
+            android:importantForAutofill="no"
                                 android:id="@+id/passtext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -285,13 +301,13 @@
                                 android:textSize="15sp" />
 
                             <TextView
+                                android:id="@+id/txt_change_password"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="change password"
-                                android:gravity="end"
-                                android:alpha="0.8"
-                                android:id="@+id/txt_change_password"
                                 android:layout_weight="1"
+                                android:alpha="0.8"
+                                android:gravity="end"
+                                android:text="change password"
                                 android:textColor="@color/orange"
                                 android:textSize="12sp" />
 
@@ -339,6 +355,7 @@
                             >
 
                             <EditText
+            android:importantForAutofill="no"
                                 android:id="@+id/phonetext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -398,6 +415,7 @@
                             >
 
                             <EditText
+            android:importantForAutofill="no"
                                 android:id="@+id/addresstext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

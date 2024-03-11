@@ -202,6 +202,7 @@ app:layout_constraintTop_toBottomOf="@id/cdsss"
                                 android:layout_marginTop="10dp">
 
                                 <EditText
+            android:importantForAutofill="no"
                                     android:id="@+id/tv_registration"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -249,6 +250,7 @@ app:layout_constraintTop_toBottomOf="@id/cdsss"
                                     android:textSize="16sp" />
 
                                 <EditText
+            android:importantForAutofill="no"
                                     android:id="@+id/edt_des"
                                     android:layout_width="match_parent"
                                     android:layout_height="180dp"

@@ -115,7 +115,12 @@ class PolicyDocsActivity : AppCompatActivity() {
             /*progressBarVisibility(false,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)*/
             loadingDialog.cancel()
             if (it != null) {
+                if(it.Status=="200"){
+                    Prefs.getInstance(applicationContext)
+                        .saveBoolean("isSignatureReq", false)
+                }
                 val intent = Intent(this, HomeActivity::class.java)
+
                 startActivity(intent)
             }
         }
@@ -172,8 +177,6 @@ val bse64 = "data:image/png;base64,"+bitmapToBase64(bitmap)
         } else {
             showToast("Pls Wait!!", this)
         }
-
-
     }
 
     @SuppressLint("MissingSuperCall")

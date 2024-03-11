@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.DialogFragment
 import com.clebs.celerity.DrawViewClass
+import com.clebs.celerity.DrawViewClass.Companion.pathList
 import com.clebs.celerity.R
 
 class CustDialog : DialogFragment() {
@@ -41,13 +42,15 @@ class CustDialog : DialogFragment() {
         drawView = rootView.findViewById(R.id.drawView)
 
         save.setOnClickListener {
-            val signatureBitmap: Bitmap = drawView.getBitmap()
-            testIV.setImageBitmap(signatureBitmap)
-            signatureListener?.onSignatureSaved(signatureBitmap)
-            dismiss()
-
-
-
+            if (pathList.isEmpty()) {
+                // Show a toast indicating that the user has not signed
+                showToast("Please sign before saving",requireContext())
+            } else {
+                val signatureBitmap: Bitmap = drawView.getBitmap()
+                testIV.setImageBitmap(signatureBitmap)
+                signatureListener?.onSignatureSaved(signatureBitmap)
+                dismiss()
+            }
         }
 
         retry.setOnClickListener {

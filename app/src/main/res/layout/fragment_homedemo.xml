@@ -15,7 +15,7 @@
             android:fontFamily="@font/poppins_bold"
 android:textSize="30sp"
             android:layout_marginTop="32dp"
-            android:text="Welcome to celeriy"
+            android:text="Welcome to celerity"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
