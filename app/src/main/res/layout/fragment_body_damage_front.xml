@@ -74,8 +74,7 @@
                         android:letterSpacing="0.03"
                         android:text="@string/dxLoc"
                         android:textColor="#231F20"
-                        android:textSize="15sp"
-
+                        android:textSize="13sp"
                         />
 
                 </LinearLayout>
@@ -88,9 +87,9 @@
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+             v       <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="18dp"
                         android:src="@drawable/ic_truck"/>
 
                     <TextView
@@ -102,7 +101,7 @@
                         android:letterSpacing="0.03"
                         android:text="@string/dxLoc"
                         android:textColor="#231F20"
-                        android:textSize="15sp" />
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -113,9 +112,9 @@
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+             <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="18dp"
                         android:src="@drawable/ic_frame"/>
 
                     <TextView
@@ -127,7 +126,7 @@
                         android:letterSpacing="0.03"
                         android:text="@string/dxLoc"
                         android:textColor="#231F20"
-                        android:textSize="15sp" />
+                        android:textSize="13sp" />
 
                 </LinearLayout>
             </LinearLayout>

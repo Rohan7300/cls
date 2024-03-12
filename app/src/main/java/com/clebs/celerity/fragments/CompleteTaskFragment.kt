@@ -22,6 +22,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -33,7 +34,6 @@ import com.clebs.celerity.databinding.TimePickerDialogBinding
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.network.ApiService
-import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
@@ -41,6 +41,7 @@ import com.clebs.celerity.ui.HomeActivity.Companion.checked
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.navigateTo
+import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toRequestBody
@@ -69,10 +70,9 @@ class CompleteTaskFragment : Fragment() {
     var breakEndTime: String = ""
     lateinit var loadingDialog:LoadingDialog
     private lateinit var cqSDKInitializer: CQSDKInitializer
-
+    private lateinit var fragmentManager:FragmentManager
     companion object {
         var inspectionstarted: Boolean? = null
-
     }
 
     override fun onCreateView(
@@ -91,7 +91,7 @@ class CompleteTaskFragment : Fragment() {
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
         Prefs.getInstance(requireContext()).clearNavigationHistory()
-
+        fragmentManager = (activity as HomeActivity).fragmentManager
         cqSDKInitializer = CQSDKInitializer(requireContext())
         if (inspectionstarted?.equals(true) == true) {
 
@@ -101,8 +101,6 @@ class CompleteTaskFragment : Fragment() {
             mbinding.startinspection.visibility = View.VISIBLE
         }
 
-        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
-        val mainRepo = MainRepo(apiService)
         viewModel = (activity as HomeActivity).viewModel
 
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
@@ -661,55 +659,59 @@ class CompleteTaskFragment : Fragment() {
     }
 
     fun startInspection() {
-        //mbinding.completeTaskFragmentPB.visibility = View.VISIBLE
-        loadingDialog.show()
+        if(Build.VERSION.SDK_INT<=Build.VERSION_CODES.TIRAMISU){
+            loadingDialog.show()
 
-        if (cqSDKInitializer.isCQSDKInitialized()) {
-            // Show a loading dialog
+            if (cqSDKInitializer.isCQSDKInitialized()) {
+                // Show a loading dialog
 
-            Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
-            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
-            // Make request to start an inspection
-  try {
-      cqSDKInitializer.startInspection(
-          activityContext = requireContext(),
-          clientAttrs = ClientAttrs(
-              userName = "",
-              dealer = "",
-              dealerIdentifier = "",
-              client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
-          ),
-          result = { isStarted, msg, code ->
-              // Show error if required
-              Log.e("messsagesss", "startInspection: " + msg + code)
-              if (isStarted
-              ) {
+                Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
+                Log.e("sdkskdkdkskdkskd", "onCreateView: ")
+                // Make request to start an inspection
+                try {
+                    cqSDKInitializer.startInspection(
+                        activityContext = requireContext(),
+                        clientAttrs = ClientAttrs(
+                            userName = "",
+                            dealer = "",
+                            dealerIdentifier = "",
+                            client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                        ),
+                        result = { isStarted, msg, code ->
+                            // Show error if required
+                            Log.e("messsagesss", "startInspection: " + msg + code)
+                            if (isStarted
+                            ) {
 //                        mbinding.uploadll1.visibility = View.GONE
 //                        mbinding.clOffSideImgUp.visibility = View.GONE
 //                        mbinding.rlFirst.visibility = View.GONE
 //                        mbinding.rlSecond.visibility = View.GONE
-              } else {
+                            } else {
 //                        mbinding.uploadll1.visibility = View.VISIBLE
 //                        mbinding.clOffSideImgUp.visibility = View.VISIBLE
 //                        mbinding.rlFirst.visibility = View.VISIBLE
 //                        mbinding.rlSecond.visibility = View.VISIBLE
-              }
-              if (msg == "Success") {
-                  //mbinding.completeTaskFragmentPB.visibility = View.GONE
-                  loadingDialog.cancel()
-              }
-              if (!isStarted) {
-                  //mbinding.completeTaskFragmentPB.visibility = View.GONE
-                  loadingDialog.cancel()
-                  Log.e("startedinspection", "onCreateView: " + msg + isStarted)
-                  // Dismiss the loading dialog
+                            }
+                            if (msg == "Success") {
+                                //mbinding.completeTaskFragmentPB.visibility = View.GONE
+                                loadingDialog.cancel()
+                            }
+                            if (!isStarted) {
+                                //mbinding.completeTaskFragmentPB.visibility = View.GONE
+                                loadingDialog.cancel()
+                                Log.e("startedinspection", "onCreateView: " + msg + isStarted)
+                                // Dismiss the loading dialog
 
-              }
-          }
-      )
-  }catch (_:Exception){
-      showToast("Please try again later!!",requireContext())
-  }
+                            }
+                        }
+                    )
+                }catch (_:Exception){
+                    showToast("Please try again later!!",requireContext())
+                }
+            }
+        }else{
+            showErrorDialog(fragmentManager,"CTF-1","We are currently updating our app for Android 13+ devices. Please try again later.")
         }
+
     }
 }

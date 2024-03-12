@@ -1,6 +1,7 @@
 package com.clebs.celerity.repository
 
 import android.util.Log
+import androidx.fragment.app.FragmentManager
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
@@ -30,6 +31,7 @@ import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.network.ApiService
+import com.clebs.celerity.utils.NoInternetDialog
 import com.google.gson.Gson
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -42,7 +44,11 @@ class MainRepo(private val ApiService: ApiService) {
 
         if (response.isSuccessful) {
             return response.body()
-        }
+        }else{
+                val errorBody = response.errorBody()?.string()
+                println("Error Response body: $errorBody")
+
+             }
         return null
     }
 

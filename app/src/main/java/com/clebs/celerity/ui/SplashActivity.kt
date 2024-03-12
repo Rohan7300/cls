@@ -120,10 +120,12 @@ class SplashActivity : AppCompatActivity() {
 
                     intent.putExtra("signature_required", "0")
                     startActivity(intent)
+                    finish()
                 } else {
                     val intent = Intent(this, HomeActivity::class.java)
                     intent.putExtra("no_signature_required", "0")
                     startActivity(intent)
+                    finish()
                 }
             }
 

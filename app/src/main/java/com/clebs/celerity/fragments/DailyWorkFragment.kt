@@ -363,7 +363,7 @@ open class DailyWorkFragment : Fragment() {
             } else {
 
                 showToast(
-                    "Vehicle doesn't exist's. Please contact your supervisor./ or please scan again.",
+                    "Vehicle doesn't exists. Please scan again or contact your supervisor.",
                     requireContext()
                 )
                 mbinding.rectange.visibility = View.GONE

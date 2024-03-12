@@ -8,6 +8,8 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -25,8 +27,10 @@ import android.view.View
 import android.widget.*
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import com.clebs.celerity.database.ImageEntity
+import com.google.android.gms.dynamic.SupportFragmentWrapper
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -429,5 +433,19 @@ fun showTimePickerDialog(context: Context, editText: EditText) {
     )
 
     timePickerDialog.show()
+}
+
+ fun isNetworkAvailable(context: Context): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkCapabilities = connectivityManager.activeNetwork ?: return false
+    val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+    return actNw.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+}
+
+fun showErrorDialog(fragmentManager: FragmentManager,code:String,msg: String){
+    val errorDialog: ErrorDialog = ErrorDialog.newInstance(msg,code)
+
+    errorDialog.show(fragmentManager,ErrorDialog.TAG)
 }
 
