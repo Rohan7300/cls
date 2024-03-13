@@ -29,6 +29,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -43,6 +44,7 @@ import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.showLog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showToast
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -72,7 +74,7 @@ open class DailyWorkFragment : Fragment() {
     var vehicleType: String = ""
     var score: String = ""
     var bounding: String = ""
-
+    private lateinit var fragmentManager: FragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +83,7 @@ open class DailyWorkFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fragmentManager = (activity as HomeActivity).fragmentManager
         //   cameraExecutor = Executors.newSingleThreadExecutor()
 
 
@@ -361,11 +364,11 @@ open class DailyWorkFragment : Fragment() {
                 )
                 showAlert()
             } else {
-
-                showToast(
+            showErrorDialog(fragmentManager,"DWF-01","Vehicle doesn't exists. Please scan again or contact your supervisor.")
+           /*     showToast(
                     "Vehicle doesn't exists. Please scan again or contact your supervisor.",
                     requireContext()
-                )
+                )*/
                 mbinding.rectange.visibility = View.GONE
                 mbinding.ivTakePhoto.visibility = View.GONE
                 mbinding.rectangle4.visibility = View.VISIBLE

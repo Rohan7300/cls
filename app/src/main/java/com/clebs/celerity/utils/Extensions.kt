@@ -364,8 +364,8 @@ fun navigateTo(fragmentId: Int,context: Context,navController: NavController) {
 fun showToast(msg:String,context: Context){
     try {
         Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
-    }catch (_:Exception){
-
+    }catch (e:Exception){
+        Log.d("ToastException",e.message.toString())
     }
 }
 

@@ -58,7 +58,6 @@ import java.util.UUID
 class CompleteTaskFragment : Fragment() {
     lateinit var mbinding: FragmentCompleteTaskBinding
     private var isclicked: Boolean = true
-    private var isclickedtwo: Boolean = true
     private lateinit var viewModel: MainViewModel
     private lateinit var imageView: ImageView
     private var userId: Int = 0
@@ -497,7 +496,8 @@ class CompleteTaskFragment : Fragment() {
                 loadingDialog.show()
                 sendBreakTimeData()
             } else {
-                showToast("Please add valid time information", requireContext())
+                showErrorDialog(fragmentManager,"CTF-02","Please add valid time information")
+                //showToast("Please add valid time information", requireContext())
             }
         }
 
