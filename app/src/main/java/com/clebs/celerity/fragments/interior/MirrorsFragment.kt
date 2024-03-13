@@ -18,6 +18,7 @@ class MirrorsFragment : BaseInteriorFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.mirrorsScreenFragment)
+        mBinding.tvNext.visibility = View.GONE
         clickListeners()
         setDefault(mBinding.mirrorsScreenIV,mBinding.edtDefect)
     }

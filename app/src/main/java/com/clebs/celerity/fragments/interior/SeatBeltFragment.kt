@@ -18,6 +18,7 @@ class SeatBeltFragment : BaseInteriorFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.seatbeltFragment)
+        mBinding.tvNext.visibility = View.GONE
         clickListeners()
         setDefault(mBinding.imageUploadIV, mBinding.edtDefect)
     }

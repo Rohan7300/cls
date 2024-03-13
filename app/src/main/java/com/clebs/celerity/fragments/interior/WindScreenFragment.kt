@@ -31,6 +31,7 @@ import com.clebs.celerity.utils.DBNames
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertBitmapToBase64
 import com.clebs.celerity.utils.setImageView
+import com.clebs.celerity.utils.visible
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 
 
@@ -64,7 +65,7 @@ class WindScreenFragment : Fragment() {
         val mainRepo = MainRepo(apiService)
         viewModel =(activity as HomeActivity).viewModel
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.windScreenFragment)
-
+        mbinding.tvNext.visibility = View.GONE
         imageViewModel = (activity as HomeActivity).imageViewModel
         imageEntity = imageViewModel.images.value!!
         imageViewModel.images.value.let {
@@ -75,8 +76,6 @@ class WindScreenFragment : Fragment() {
                 }
             }
         }
-
-
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner){
             mbinding.dxLoc.text = it?.locationName?:""
             mbinding.dxReg.text = it?.vmRegNo?:""
@@ -154,6 +153,7 @@ class WindScreenFragment : Fragment() {
 
     private fun selectLayout1() {
         if (isupload) {
+            mbinding.tvNext.visibility = View.VISIBLE
             mbinding.rlUploadDefect.visibility = View.VISIBLE
             mbinding.edtMil.setBackgroundDrawable(
                 ContextCompat.getDrawable(
@@ -161,6 +161,7 @@ class WindScreenFragment : Fragment() {
                     R.drawable.shape_filled_textview
                 )
             )
+
             mbinding.imageRadio.setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),

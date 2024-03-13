@@ -15,26 +15,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
 import com.clebs.celerity.databinding.TimePickerDialogBinding
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
-import com.clebs.celerity.network.ApiService
-import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
@@ -228,17 +221,19 @@ class CompleteTaskFragment : Fragment() {
 
     private fun observers() {
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
-            mbinding.dxLoc.text = it?.locationName ?: ""
-            mbinding.dxReg.text = it?.vmRegNo ?: ""
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-                .also { name -> mbinding.anaCarolin.text = name }
-            mbinding.dxm5.text = (activity as HomeActivity).date
-            val isLeadDriver = (activity as HomeActivity).isLeadDriver
-            if (!isLeadDriver) {
-                mbinding.rideAlong.visibility = View.GONE
+            if(it!=null){
+                loadingDialog.cancel()
+                mbinding.dxLoc.text = it?.locationName ?: ""
+                mbinding.dxReg.text = it?.vmRegNo ?: ""
+                "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
+                    .also { name -> mbinding.anaCarolin.text = name }
+                mbinding.dxm5.text = (activity as HomeActivity).date
+                val isLeadDriver = (activity as HomeActivity).isLeadDriver
+                if (!isLeadDriver) {
+                    mbinding.rideAlong.visibility = View.GONE
+                }
             }
-        }
+          }
 
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -272,6 +267,16 @@ class CompleteTaskFragment : Fragment() {
                 if (it.ClockedOutTime != null) {
                     mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
+                }
+            }else{
+                with(mbinding) {
+                    listOf(
+                        rlcomtwoClock,
+                        rlcomtwoBreak,
+                        onRoadView,
+                        rlcomtwoBreak,
+                        rlcomtwoClockOut
+                    ).forEach { thisView -> thisView.visibility = View.GONE }
                 }
             }
         }
@@ -332,87 +337,90 @@ class CompleteTaskFragment : Fragment() {
         viewModel.vehicleImageUploadInfoLiveData.observe(viewLifecycleOwner, Observer {
             loadingDialog.cancel()
             println(it)
-            if (it!!.Status == "404") {
-                mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
-                showImageUploadLayout = true
-                mbinding.taskDetails.visibility = View.VISIBLE
-                /*                with(mbinding) {
-                                    listOf(
-                                        rlcomtwoBreak,
-                                        onRoadView,
-                                        rlcomtwoBreak,
-                                        rlcomtwoClock,
-                                        rlcomtwoClockOut
-                                    ).forEach { thisView -> thisView.visibility = View.GONE }
-                                }*/
-            } else {
-                if (it.IsVehicleImageUploaded == false) {
-                    showImageUploadLayout = true
+            if(it!=null){
+                if (it!!.Status == "404") {
                     mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                    showImageUploadLayout = true
+                    mbinding.taskDetails.visibility = View.VISIBLE
+                    /*                with(mbinding) {
+                                        listOf(
+                                            rlcomtwoBreak,
+                                            onRoadView,
+                                            rlcomtwoBreak,
+                                            rlcomtwoClock,
+                                            rlcomtwoClockOut
+                                        ).forEach { thisView -> thisView.visibility = View.GONE }
+                                    }*/
                 } else {
-
-                    showImageUploadLayout = checkNull(it)
-
-                    if (showImageUploadLayout) {
+                    if (it.IsVehicleImageUploaded == false) {
+                        showImageUploadLayout = true
                         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
-                        mbinding.taskDetails.visibility = View.VISIBLE
-                        with(mbinding) {
-                            listOf(
-                                rlcomtwoBreak,
-                                onRoadView,
-                                rlcomtwoBreak,
-                                rlcomtwoClock,
-                                rlcomtwoClockOut
-                            ).forEach { thisView -> thisView.visibility = View.GONE }
+                    } else {
+
+                        showImageUploadLayout = checkNull(it)
+
+                        if (showImageUploadLayout) {
+                            mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                            mbinding.taskDetails.visibility = View.VISIBLE
+                            with(mbinding) {
+                                listOf(
+                                    rlcomtwoBreak,
+                                    onRoadView,
+                                    rlcomtwoBreak,
+                                    rlcomtwoClock,
+                                    rlcomtwoClockOut
+                                ).forEach { thisView -> thisView.visibility = View.GONE }
+                            }
                         }
-                    }
 
-                    if (it.DaVehImgDashBoardFileName != null)
-                        mbinding.ivVehicleDashboard.setImageResource(R.drawable.ic_yes)
+                        if (it.DaVehImgDashBoardFileName != null)
+                            mbinding.ivVehicleDashboard.setImageResource(R.drawable.ic_yes)
 
-                    if (it.DaVehImgFaceMaskFileName != null)
-                        mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
+                        if (it.DaVehImgFaceMaskFileName != null)
+                            mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
 
-                    if (it.DaVehImgRearFileName != null)
-                        mbinding.ivRearImgUp.setImageResource(R.drawable.ic_yes)
+                        if (it.DaVehImgRearFileName != null)
+                            mbinding.ivRearImgUp.setImageResource(R.drawable.ic_yes)
 
-                    if (it.DaVehImgFrontFileName != null)
-                        mbinding.ivFront.setImageResource(R.drawable.ic_yes)
+                        if (it.DaVehImgFrontFileName != null)
+                            mbinding.ivFront.setImageResource(R.drawable.ic_yes)
 
-                    if (it.DaVehImgNearSideFileName != null)
-                        mbinding.ivNearSide.setImageResource(R.drawable.ic_yes)
+                        if (it.DaVehImgNearSideFileName != null)
+                            mbinding.ivNearSide.setImageResource(R.drawable.ic_yes)
 
-                    if (it.DaVehImgOffSideFileName != null)
-                        mbinding.ivOffSideImgUp.setImageResource(R.drawable.ic_yes)
+                        if (it.DaVehImgOffSideFileName != null)
+                            mbinding.ivOffSideImgUp.setImageResource(R.drawable.ic_yes)
 
-                    if (it.DaVehicleAddBlueImage != null)
-                        mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
+                        if (it.DaVehicleAddBlueImage != null)
+                            mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
 
-                    if (it.DaVehImgOilLevelFileName != null)
-                        mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
+                        if (it.DaVehImgOilLevelFileName != null)
+                            mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
 
-                    mbinding.run {
-                        mbinding.tvNext.isEnabled =
-                            it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
-                        if (tvNext.isEnabled) {
-                            tvNext.setTextColor(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    R.color.white
+                        mbinding.run {
+                            mbinding.tvNext.isEnabled =
+                                it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
+                            if (tvNext.isEnabled) {
+                                tvNext.setTextColor(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.white
+                                    )
                                 )
-                            )
-                        } else {
-                            tvNext.setTextColor(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    R.color.orange
+                            } else {
+                                tvNext.setTextColor(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.orange
+                                    )
                                 )
-                            )
+                            }
                         }
-                    }
 
+                    }
                 }
             }
+
 //            mbinding.tvNext.isEnabled =it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
 //            if (it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null) {
 //
@@ -670,7 +678,7 @@ class CompleteTaskFragment : Fragment() {
                 // Make request to start an inspection
                 try {
                     cqSDKInitializer.startInspection(
-                        activityContext = requireContext(),
+                        activityContext = requireActivity().baseContext,
                         clientAttrs = ClientAttrs(
                             userName = "",
                             dealer = "",
@@ -706,7 +714,8 @@ class CompleteTaskFragment : Fragment() {
                         }
                     )
                 }catch (_:Exception){
-                    showToast("Please try again later!!",requireContext())
+                    //showToast("Please try again later!!",requireContext())
+                    showErrorDialog(fragmentManager,"CTF-02","Please try again later!!")
                 }
             }
         }else{

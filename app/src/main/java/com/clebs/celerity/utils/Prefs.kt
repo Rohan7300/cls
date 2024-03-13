@@ -35,6 +35,14 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putString(USER_ACCESS_TOKEN, value).apply()
         }
 
+    var vmRegNo:String
+        get() {
+            return sharedPreferences.getString("vmRegNo","")?:""
+        }
+        set(value) {
+            sharedPreferences.edit().putString("vmRegNo",value).apply()
+        }
+
     var accessTokenclearquote: String
         get() {
             return sharedPreferences.getString(USER_ACCESS_TOKEN, " ") ?: " "
