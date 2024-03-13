@@ -20,7 +20,10 @@
                 android:id="@+id/headings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -197,12 +200,13 @@
                         android:layout_marginEnd="20dp"
                         android:background="@drawable/shape_textview_radio_button"
                         android:fontFamily="@font/inter"
+                        android:textStyle="bold"
                         android:gravity="center_vertical"
                         android:letterSpacing="0.02"
                         android:lineHeight="18sp"
                         android:padding="16dp"
                         android:text="Defect"
-                        android:textColor="#4A4A4A"
+                        android:textColor="@color/text_color"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

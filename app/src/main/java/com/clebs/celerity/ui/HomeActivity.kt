@@ -11,11 +11,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -34,10 +34,11 @@ import com.clebs.celerity.fragments.CompleteTaskFragment
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
-import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.dbLog
+import com.clebs.celerity.utils.progressBarVisibility
 import com.clebs.celerity.utils.showToast
+import com.clebs.celerity.utils.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
@@ -55,14 +56,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private lateinit var navGraph: NavGraph
     private var completeTaskScreen: Boolean = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
-    lateinit var fragmentManager: FragmentManager
     private var sdkkey = ""
-    var userId: Int = 0
+    private var userId: Int = 0
     var firstName = ""
     var lastName = ""
-    var isLeadDriver = false
     var date = ""
-    lateinit var loadingDialog: LoadingDialog
 
     companion object {
         fun showLog(tag: String, message: String) {
@@ -76,6 +74,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
+            // Get status
             val identifier =
                 intent.getStringExtra(PublicConstants.quoteCreationFlowStatusIdentifierKeyInIntent)
                     ?: "Could not identify Identifier"
@@ -87,10 +86,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (tempCode == 200) {
                 CompleteTaskFragment.inspectionstarted = true
 
-                showToast("inspection success", this)
+toast("inspection success")
             } else {
 
-                showToast("inspection Failed", this)
+                toast("inspection Failed")
                 CompleteTaskFragment.inspectionstarted = false
 
             }
@@ -114,7 +113,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         ActivityHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
 
-        loadingDialog = LoadingDialog(this)
+
         sdkkey = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
         cqSDKInitializer()
         userId = Prefs.getInstance(this).userID.toInt()
@@ -123,123 +122,114 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         navController = navHostFragment.navController
         navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
         navController.addOnDestinationChangedListener(this)
-        fragmentManager = this.supportFragmentManager
+
         bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
         bottomNavigationView.menu.findItem(R.id.passwords).setTooltipText("Notifications")
+        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+        val mainRepo = MainRepo(apiService)
+        val imagesRepo =
+            ImagesRepo(ImageDatabase.invoke(this), Prefs.getInstance(applicationContext))
 
-        try {
-            val apiService = RetrofitService.getInstance().create(ApiService::class.java)
-            val mainRepo = MainRepo(apiService)
-            val imagesRepo =
-                ImagesRepo(ImageDatabase.invoke(this), Prefs.getInstance(applicationContext))
-
-            viewModel =
-                ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
+        viewModel =
+            ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
 
 
-            getVehicleLocationInfo()
-            viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
-                Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
-                loadingDialog.cancel()
-                /*progressBarVisibility(
-                    false,
-                    ActivityHomeBinding.homeActivityPB,
-                    ActivityHomeBinding.overlayViewHomeActivity
-                )*/
-                if (it != null) {
-                    completeTaskScreen = it.IsSubmited
-                    if (!completeTaskScreen) {
-                        screenid = viewModel.getLastVisitedScreenId(this)
-                        if (screenid == 0) {
-                            navController.navigate(R.id.homeFragment)
-                            // navigateTo(R.id.homeFragment)
-                            navController.currentDestination!!.id = R.id.homeFragment
+        getVehicleLocationInfo()
+        viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
+            Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
+            progressBarVisibility(
+                false,
+                ActivityHomeBinding.homeActivityPB,
+                ActivityHomeBinding.overlayViewHomeActivity
+            )
+            if (it != null) {
+                completeTaskScreen = it.IsSubmited
+                if (!completeTaskScreen) {
+                    screenid = viewModel.getLastVisitedScreenId(this)
+                    if (screenid == 0) {
+                        navController.navigate(R.id.homeFragment)
+                        // navigateTo(R.id.homeFragment)
+                        navController.currentDestination!!.id = R.id.homeFragment
 
-                        } else {
-                            try {
-                                navController.navigate(screenid)
-                                navController.currentDestination!!.id = screenid
-                            } catch (_: Exception) {
-                                navController.navigate(R.id.homeFragment)
-                                navController.currentDestination!!.id = R.id.homeFragment
-                            }
-                        }
                     } else {
-                        navController.navigate(R.id.completeTaskFragment)
+                        try {
+                            navController.navigate(screenid)
+                            navController.currentDestination!!.id = screenid
+                        } catch (_: Exception) {
+                            navController.navigate(R.id.homeFragment)
+                            navController.currentDestination!!.id = R.id.homeFragment
+                        }
                     }
+                } else {
+                    navController.navigate(R.id.completeTaskFragment)
                 }
             }
-
-            imageViewModel = ViewModelProvider(
-                this,
-                ImageViewModelProviderFactory(imagesRepo)
-            )[ImageViewModel::class.java]
-
-            imageViewModel.images.observe(this) { imageEntity ->
-                dbLog(imageEntity)
-            }
-
-            ActivityHomeBinding.imgDrawer.setOnClickListener {
-                navController.navigate(R.id.profileFragment)
-            }
-            bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-                when (item.itemId) {
-
-                    R.id.home -> {
-                        ActivityHomeBinding.title.text = ""
-                        navController.navigate(R.id.homedemoFragment)
-                        true
-                    }
-
-                    R.id.daily -> {
-                        /*     navController.navigate(R.id.homeFragment)
-                             navController.currentDestination!!.id = R.id.homeFragment
-         */
-                        ActivityHomeBinding.title.text = ""
-                        viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
-                        loadingDialog.show()
-                        /*        progressBarVisibility(
-                                    true,
-                                    ActivityHomeBinding.homeActivityPB,
-                                    ActivityHomeBinding.overlayViewHomeActivity
-                                )*/
-                        true
-                    }
-
-                    R.id.invoices -> {
-                        ActivityHomeBinding.title.text = ""
-                        navController.navigate(R.id.invoicesFragment)
-                        true
-                    }
-
-                    R.id.passwords -> {
-                        ActivityHomeBinding.title.text = "Notifications"
-                        navController.navigate(R.id.notifficationsFragment)
-
-                        true
-                    }
-
-                    R.id.tickets -> {
-                        ActivityHomeBinding.title.text = "User Tickets"
-                        navController.navigate(R.id.userTicketsFragment)
-
-                        true
-
-                    }
-
-                    else -> false
-                }
-
-            }
-            ActivityHomeBinding.imgLogout.setOnClickListener {
-                showAlertLogout()
-            }
-        }catch (e:Exception){
-            RetrofitService.handleNetworkError(e,fragmentManager)
         }
 
+        imageViewModel = ViewModelProvider(
+            this,
+            ImageViewModelProviderFactory(imagesRepo)
+        )[ImageViewModel::class.java]
 
+        imageViewModel.images.observe(this) { imageEntity ->
+            dbLog(imageEntity)
+        }
+
+        ActivityHomeBinding.imgDrawer.setOnClickListener {
+            navController.navigate(R.id.profileFragment)
+        }
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+
+                R.id.home -> {
+                    ActivityHomeBinding.title.text = ""
+                    navController.navigate(R.id.homedemoFragment)
+                    true
+                }
+
+                R.id.daily -> {
+                    /*     navController.navigate(R.id.homeFragment)
+                         navController.currentDestination!!.id = R.id.homeFragment
+     */
+                    ActivityHomeBinding.title.text = ""
+                    viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
+                    progressBarVisibility(
+                        true,
+                        ActivityHomeBinding.homeActivityPB,
+                        ActivityHomeBinding.overlayViewHomeActivity
+                    )
+                    true
+                }
+
+                R.id.invoices -> {
+                    ActivityHomeBinding.title.text = ""
+                    navController.navigate(R.id.invoicesFragment)
+                    true
+                }
+
+                R.id.passwords -> {
+                    ActivityHomeBinding.title.text = "Notifications"
+                    navController.navigate(R.id.notifficationsFragment)
+
+                    true
+                }
+
+                R.id.tickets -> {
+                    ActivityHomeBinding.title.text = "User Tickets"
+                    navController.navigate(R.id.userTicketsFragment)
+
+                    true
+
+                }
+
+                else -> false
+            }
+
+        }
+        ActivityHomeBinding.imgLogout.setOnClickListener {
+//            showAlertLogout()
+        }
     }
 
     private fun getVehicleLocationInfo() {
@@ -247,23 +237,24 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val formatter = DateTimeFormatter.ofPattern("dd/MM")
         date = today.format(formatter)
 
-        loadingDialog.show()
+        progressBarVisibility(
+            true,
+            ActivityHomeBinding.homeActivityPB,
+            ActivityHomeBinding.overlayViewHomeActivity
+        )
 
         viewModel.GetDriversBasicInformation(
             userId.toDouble()
         ).observe(this) {
-            loadingDialog.cancel()
+            progressBarVisibility(
+                false,
+                ActivityHomeBinding.homeActivityPB,
+                ActivityHomeBinding.overlayViewHomeActivity
+            )
             if (it != null) {
-                try {
-                    if (it.vmRegNo != null)
-                        viewModel.GetVehicleInformation(userId, it.vmRegNo)
-                } catch (e: Exception) {
-                    Log.d("sds", e.toString())
-                }
-
+                viewModel.GetVehicleInformation(userId, it.vmRegNo)
                 firstName = it.firstName
                 lastName = it.lastName
-                isLeadDriver = it.IsLeadDriver
             }
         }
     }
@@ -351,19 +342,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         bttwo.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            intent.putExtra("logout", "0")
-            Prefs.getInstance(applicationContext).clearPreferences()
-            finish()
-            startActivity(intent)
-            setLoggedIn(false)
-            //logout()
+            logout()
         }
         deleteDialog.setView(view)
-        deleteDialog.setCanceledOnTouchOutside(false)
+        deleteDialog.setCanceledOnTouchOutside(false);
         deleteDialog.setCancelable(false)
-        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        deleteDialog.show()
+        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        deleteDialog.show();
 
     }
 
