@@ -184,25 +184,24 @@
                 android:layout_height="wrap_content">
 
 
-
-                    <TextView
-                        android:id="@+id/edt_mil"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
-                        android:background="@drawable/defect_selector"
-                        android:fontFamily="@font/inter"
-                        android:gravity="center_vertical"
-                        android:letterSpacing="0.02"
-                        android:lineHeight="18sp"
-                        android:padding="16dp"
-                        android:text="Defect"
-                        android:textColor="#4A4A4A"
-                        android:textSize="20sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/edt_mil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/defect_selector"
+                    android:fontFamily="@font/inter_semibold"
+                    android:gravity="center_vertical"
+                    android:letterSpacing="0.01"
+                    android:lineHeight="18sp"
+                    android:padding="16dp"
+                    android:text="Defect"
+                    android:textColor="#4A4A4A"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
                     android:id="@+id/image_radio"

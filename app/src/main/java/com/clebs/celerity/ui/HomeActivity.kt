@@ -242,7 +242,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     }
 
-    private fun getVehicleLocationInfo() {
+     fun getVehicleLocationInfo() {
         val today = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("dd/MM")
         date = today.format(formatter)

@@ -30,6 +30,7 @@ class Userprofile : Fragment() {
     private var isedit: Boolean = false
     lateinit var mainViewModel: MainViewModel
     var ninetydaysBoolean: Boolean? = null
+    var userName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -167,8 +168,6 @@ class Userprofile : Fragment() {
 
 
             }
-
-
         }
         deleteDialog.setCancelable(true)
         deleteDialog.setCanceledOnTouchOutside(true);
@@ -225,9 +224,9 @@ class Userprofile : Fragment() {
     }
 
     fun UseEmailAsUSername() {
-
+        userName = mbinding.emailtext.text.toString()
         mainViewModel.UseEmailasUsername(
-            Prefs.getInstance(App.instance).userID.toDouble(), "chakshit@gmail.com"
+            Prefs.getInstance(App.instance).userID.toDouble(), userName
         ).observe(requireActivity(), Observer {
             Log.e("dkfjdkfjdfkj", "UseEmailAsUSername: ")
             if (it?.Status!!.equals(200)) {
@@ -235,7 +234,6 @@ class Userprofile : Fragment() {
 
                 Log.e("dlkfdlkfl", "UseEmailAsUSernamesuccess: " + it.Status + it.message)
             }
-
 
         })
     }

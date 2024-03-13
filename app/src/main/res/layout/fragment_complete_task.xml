@@ -49,12 +49,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/ic_uu"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/ic_user" />
 
                 <TextView
@@ -67,7 +68,7 @@
                     android:lineSpacingExtra="0.02dp"
                     android:text="@string/ana_carolin"
                     android:textColor="#231F20"
-                    android:textSize="19sp" />
+                    android:textSize="17sp" />
 
 
             </LinearLayout>
@@ -87,12 +88,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="18dp"
                     android:layout_weight="1"
-                    android:gravity="center_horizontal"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="16dp"
-                        android:layout_height="18dp"
+                        android:layout_height="16dp"
+                        android:layout_margin="1dp"
                         android:src="@drawable/pin_alt_light_two">
 
 
@@ -106,7 +108,7 @@
                         android:letterSpacing="0.03"
                         android:text="@string/dxLoc"
                         android:textColor="#231F20"
-                        android:textSize="15sp"
+                        android:textSize="13sp"
 
                         />
 
@@ -117,13 +119,16 @@
                     android:layout_height="18dp"
 
                     android:layout_weight="1"
-                    android:gravity="center_horizontal"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
-         v       <ImageView
+                    v
+
+                    <ImageView
                         android:layout_width="16dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/ic_truck"/>
+                        android:layout_height="16dp"
+                        android:layout_margin="1dp"
+                        android:src="@drawable/ic_truck" />
 
                     <TextView
                         android:id="@+id/dxReg"
@@ -134,7 +139,7 @@
                         android:letterSpacing="0.03"
                         android:text="@string/dxLoc"
                         android:textColor="#231F20"
-                        android:textSize="15sp" />
+                        android:textSize="13sp" />
 
 
                 </LinearLayout>
@@ -144,13 +149,14 @@
                     android:layout_height="18dp"
 
                     android:layout_weight="1"
-                    android:gravity="center_horizontal"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
-                                 <ImageView
+                    <ImageView
                         android:layout_width="16dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/ic_frame"/>
+                        android:layout_height="16dp"
+                        android:layout_margin="1dp"
+                        android:src="@drawable/ic_frame" />
 
                     <TextView
                         android:id="@+id/dxm5"
@@ -161,7 +167,7 @@
                         android:letterSpacing="0.03"
                         android:text="@string/dxLoc"
                         android:textColor="#231F20"
-                        android:textSize="15sp" />
+                        android:textSize="13sp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -177,7 +183,7 @@
             android:clipToPadding="false"
             android:fillViewport="true"
             android:overScrollMode="never"
-            android:paddingTop="35dp"
+            android:paddingTop="20dp"
             app:layout_constraintBottom_toTopOf="@+id/tv_next"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rlinfo">
@@ -218,7 +224,7 @@
                             android:fontFamily="@font/poppins_bold"
                             android:text="Completed Task"
                             android:textColor="@color/text_color"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
 
                         <ImageButton
                             android:id="@+id/down_iv"
@@ -239,7 +245,7 @@
                         android:layout_below="@+id/rlcom"
                         android:paddingStart="18dp"
                         android:paddingEnd="18dp"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
                         <RelativeLayout
                             android:id="@+id/vichle_defect"
@@ -257,7 +263,7 @@
                                 android:letterSpacing="0.02"
                                 android:text="Vehicle Defect Sheet "
                                 android:textColor="@color/black"
-                                android:textSize="15sp" />
+                                android:textSize="14sp" />
 
                             <ImageButton
                                 android:layout_width="25dp"
@@ -273,7 +279,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/vichle_defect"
-                            android:layout_marginTop="18dp"
+                            android:layout_marginTop="15dp"
                             android:orientation="horizontal">
 
                             <TextView
@@ -283,7 +289,7 @@
                                 android:letterSpacing="0.02"
                                 android:text="Vehicle Pictures "
                                 android:textColor="@color/black"
-                                android:textSize="15sp" />
+                                android:textSize="14sp" />
 
                             <ImageButton
                                 android:id="@+id/vehiclePicturesIB"
@@ -300,8 +306,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/vichel_pictures"
-                            android:layout_marginTop="18dp"
-                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="15dp"
                             android:orientation="horizontal">
 
                             <TextView
@@ -311,15 +316,15 @@
                                 android:letterSpacing="0.02"
                                 android:text="Clocked In"
                                 android:textColor="@color/black"
-                                android:textSize="15sp" />
+                                android:textSize="14sp" />
 
                             <TextView
+                                android:id="@+id/tv_ClockedIN"
                                 android:layout_width="wrap_content"
                                 android:layout_height="25dp"
-                                android:id="@+id/tv_ClockedIN"
                                 android:layout_alignParentRight="true"
                                 android:backgroundTint="@color/white"
-                                android:text="time"
+                                android:text="- - - -"
                                 android:textColor="#6DA95E"
                                 android:textSize="15sp" />
 
@@ -329,7 +334,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/clocked_in"
-                            android:layout_marginTop="18dp"
+                            android:layout_marginTop="15dp"
                             android:layout_marginBottom="10dp"
                             android:orientation="horizontal">
 
@@ -340,15 +345,15 @@
                                 android:letterSpacing="0.02"
                                 android:text="Clocked Out"
                                 android:textColor="@color/black"
-                                android:textSize="15sp" />
+                                android:textSize="14sp" />
 
                             <TextView
+                                android:id="@+id/clocked_outTime"
                                 android:layout_width="wrap_content"
                                 android:layout_height="25dp"
                                 android:layout_alignParentRight="true"
                                 android:backgroundTint="@color/white"
-                                android:text="time"
-                                android:id="@+id/clocked_outTime"
+                                android:text="- - - -"
                                 android:textColor="#6DA95E"
                                 android:textSize="15sp" />
 
@@ -380,12 +385,11 @@
 
                     <ImageView
                         android:id="@+id/tv_time"
-                        android:src="@drawable/clock_in"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
-                 />
+                        android:src="@drawable/clock_in" />
 
                     <ImageButton
                         android:id="@+id/down_ivs"
@@ -404,9 +408,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:visibility="gone"
                     android:background="@drawable/shape_expand_main"
-                    android:padding="18dp">
+                    android:padding="18dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -415,13 +419,13 @@
                         android:fontFamily="@font/inter"
                         android:letterSpacing="0.02"
                         android:text="Clock Out"
-                        android:textStyle="bold"
                         android:textColor="@color/text_color"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
                     <ImageButton
-                        android:layout_width="30dp"
                         android:id="@+id/clock_out_mark"
+                        android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
@@ -432,10 +436,10 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/onRoadView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:id="@+id/onRoadView"
                     android:background="@drawable/shape_expand_main">
 
                     <RelativeLayout
@@ -679,15 +683,15 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="20dp"
-                        android:visibility="gone"
                         android:layout_weight="1"
                         android:orientation="horizontal"
+                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@id/rl_first">
 
                         <LinearLayout
+                            android:id="@+id/uploadll1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/uploadll1"
                             android:orientation="horizontal"
                             android:weightSum="2">
 
@@ -785,8 +789,8 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="20dp"
-                        android:visibility="gone"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -892,15 +896,34 @@
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:letterSpacing="0.01"
-                            android:gravity="center"
-                            android:id="@+id/startinspection"
-                            android:fontFamily="@font/poppins_bold"
                             android:layout_gravity="center"
-                            android:textSize="16sp"
+                            android:fontFamily="@font/poppins_bold"
+                            android:gravity="center"
+                            android:letterSpacing="0.01"
+                            android:text="Start Inspection"
+                            android:textColor="@color/black"
+                            android:visibility="gone"
+                            android:textSize="16sp" />
 
-                            android:text="Start Inspection" />
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/startinspection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FD9B7D"
+                            app:cardCornerRadius="20dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/poppins_bold"
+                                android:paddingHorizontal="20dp"
+                                android:paddingVertical="8dp"
+                                android:letterSpacing="0.05"
+                                android:text="Start Inspection"
+                                android:textColor="@color/white"
+                                android:textSize="14sp" />
+                        </androidx.cardview.widget.CardView>
 
                     </LinearLayout>
 
@@ -922,10 +945,10 @@
                                 android:id="@+id/clOffSideImgUp"
                                 android:layout_width="180dp"
                                 android:layout_height="154dp"
-                                android:visibility="gone"
                                 android:layout_marginEnd="7dp"
+                                android:background="@drawable/shape_uploads"
 
-                                android:background="@drawable/shape_uploads">
+                                android:visibility="gone">
 
 
                                 <ImageButton

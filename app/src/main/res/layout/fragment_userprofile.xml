@@ -152,7 +152,7 @@
                                 android:letterSpacing="0.01"
                                 android:padding="10dp"
                                 android:paddingStart="0dp"
-                                android:textColor="@color/text_color"
+                                android:textColor="@color/gray"
                                 android:textSize="14sp" />
 
                             <ImageView
@@ -236,7 +236,7 @@
                                 android:letterSpacing="0.02"
                                 android:padding="10dp"
                                 android:paddingStart="0dp"
-                                android:textColor="@color/text_color"
+                                android:textColor="@color/gray"
                                 android:textSize="15sp" />
 
 
@@ -297,7 +297,7 @@
                                 android:letterSpacing="0.02"
                                 android:padding="10dp"
                                 android:paddingStart="0dp"
-                                android:textColor="@color/text_color"
+                                android:textColor="@color/gray"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -309,6 +309,7 @@
                                 android:gravity="end"
                                 android:text="change password"
                                 android:textColor="@color/orange"
+                                android:visibility="gone"
                                 android:textSize="12sp" />
 
                         </LinearLayout>
@@ -366,7 +367,7 @@
                                 android:letterSpacing="0.02"
                                 android:padding="10dp"
                                 android:paddingStart="0dp"
-                                android:textColor="@color/text_color"
+                                android:textColor="@color/gray"
                                 android:textSize="15sp" />
 
 
@@ -426,7 +427,7 @@
                                 android:letterSpacing="0.02"
                                 android:padding="10dp"
                                 android:paddingStart="0dp"
-                                android:textColor="@color/text_color"
+                                android:textColor="@color/gray"
                                 android:textSize="15sp" />
 
 
