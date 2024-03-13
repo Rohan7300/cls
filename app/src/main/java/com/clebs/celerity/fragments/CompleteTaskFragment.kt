@@ -78,7 +78,7 @@ class CompleteTaskFragment : Fragment() {
             showAlert()
         }
         loadingDialog = (activity as HomeActivity).loadingDialog
-        userId = Prefs.getInstance(requireContext()).userID.toInt()
+        userId = Prefs.getInstance(requireContext())    .userID.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)

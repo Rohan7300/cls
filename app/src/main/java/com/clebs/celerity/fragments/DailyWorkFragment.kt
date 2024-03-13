@@ -341,6 +341,7 @@ open class DailyWorkFragment : Fragment() {
 
     private fun getVichleinformation() {
         Prefs.getInstance(App.instance).vmRegNo = txt
+        (activity as HomeActivity).getVehicleLocationInfo()
         mainViewModel.getVichelinformationResponse(
             Prefs.getInstance(App.instance).userID.toString().toDouble(), 0.toDouble(), txt
         ).observe(requireActivity(), Observer {

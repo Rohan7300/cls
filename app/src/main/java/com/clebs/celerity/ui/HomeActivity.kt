@@ -11,11 +11,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -34,9 +34,9 @@ import com.clebs.celerity.fragments.CompleteTaskFragment
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.dbLog
-import com.clebs.celerity.utils.progressBarVisibility
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -57,10 +57,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private var completeTaskScreen: Boolean = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private var sdkkey = ""
-    private var userId: Int = 0
+    lateinit var loadingDialog: LoadingDialog
+    lateinit var fragmentManager:FragmentManager
+    var userId: Int = 0
     var firstName = ""
     var lastName = ""
     var date = ""
+    var isLeadDriver = false
 
     companion object {
         fun showLog(tag: String, message: String) {
@@ -112,8 +115,8 @@ toast("inspection success")
         super.onCreate(savedInstanceState)
         ActivityHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
-
-
+        loadingDialog = LoadingDialog(this)
+        fragmentManager = this.supportFragmentManager
         sdkkey = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
         cqSDKInitializer()
         userId = Prefs.getInstance(this).userID.toInt()
@@ -138,11 +141,8 @@ toast("inspection success")
         getVehicleLocationInfo()
         viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
             Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
-            progressBarVisibility(
-                false,
-                ActivityHomeBinding.homeActivityPB,
-                ActivityHomeBinding.overlayViewHomeActivity
-            )
+    loadingDialog.dismiss()
+
             if (it != null) {
                 completeTaskScreen = it.IsSubmited
                 if (!completeTaskScreen) {
@@ -194,11 +194,7 @@ toast("inspection success")
      */
                     ActivityHomeBinding.title.text = ""
                     viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
-                    progressBarVisibility(
-                        true,
-                        ActivityHomeBinding.homeActivityPB,
-                        ActivityHomeBinding.overlayViewHomeActivity
-                    )
+                    loadingDialog.show()
                     true
                 }
 
@@ -232,29 +228,25 @@ toast("inspection success")
         }
     }
 
-    private fun getVehicleLocationInfo() {
+     fun getVehicleLocationInfo() {
         val today = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("dd/MM")
         date = today.format(formatter)
 
-        progressBarVisibility(
-            true,
-            ActivityHomeBinding.homeActivityPB,
-            ActivityHomeBinding.overlayViewHomeActivity
-        )
+        loadingDialog.show()
 
         viewModel.GetDriversBasicInformation(
             userId.toDouble()
         ).observe(this) {
-            progressBarVisibility(
-                false,
-                ActivityHomeBinding.homeActivityPB,
-                ActivityHomeBinding.overlayViewHomeActivity
-            )
+            loadingDialog.dismiss()
             if (it != null) {
-                viewModel.GetVehicleInformation(userId, it.vmRegNo)
-                firstName = it.firstName
-                lastName = it.lastName
+                if(Prefs.getInstance(applicationContext).vmRegNo.isNotEmpty()){
+
+                    viewModel.GetVehicleInformation(userId, Prefs.getInstance(applicationContext).vmRegNo)
+                    firstName = it.firstName
+                    lastName = it.lastName
+                    isLeadDriver = it.IsLeadDriver
+                }
             }
         }
     }
