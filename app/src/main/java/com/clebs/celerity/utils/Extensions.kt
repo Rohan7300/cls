@@ -448,4 +448,8 @@ fun showErrorDialog(fragmentManager: FragmentManager,code:String,msg: String){
 
     errorDialog.show(fragmentManager,ErrorDialog.TAG)
 }
-
+fun getCurrentDateTime(): String {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+    return dateFormat.format(Date())
+}

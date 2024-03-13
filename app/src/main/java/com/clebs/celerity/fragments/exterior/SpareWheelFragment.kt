@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
@@ -17,7 +18,9 @@ import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.setImageView
+import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showToast
 
 class SpareWheelFragment : BaseInteriorFragment() {
@@ -28,6 +31,8 @@ class SpareWheelFragment : BaseInteriorFragment() {
     var VdhLmId = 0
     var VdhOdoMeterReading = 0
     lateinit var loadingDialog: LoadingDialog
+    private lateinit var fragmentManager: FragmentManager
+    var isDefected = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +44,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fragmentManager = (activity as HomeActivity).fragmentManager
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.spareWheelFragment)
         loadingDialog = (activity as HomeActivity).loadingDialog
         clickListeners()
@@ -125,7 +131,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
         loadingDialog.show()
         var isApiCallInProgress = false
         VdhDaId = userId
-        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner, Observer { it ->
+        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) { it ->
             it?.let {
                 if (!isApiCallInProgress) {
                     isApiCallInProgress = true
@@ -140,11 +146,12 @@ class SpareWheelFragment : BaseInteriorFragment() {
                         yearNo = 0,
                         vdhVmId = VdhVmId,
                         vdhLmId = VdhLmId,
-                        vdhDaId =userId,
+                        VdhDate = getCurrentDateTime(),
+                        vdhDaId = userId,
                         vdhOdoMeterReading = VdhOdoMeterReading,
                         vdhComments = "TEST",
                         vdhPocIsaction = true,
-                        vdhIsDefected = true,
+                        vdhIsDefected = isDefected,
                         vdhBrakes = dOrf(imageEntity.dfNameBrakedEbsAbs),
                         vdhBrakesComment = imageEntity.dfNameBrakedEbsAbs!!,
                         vdhCabSecurityInterior = dOrf(imageEntity.dfNameCabSecurityInterior),
@@ -202,7 +209,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
                     viewModel.SaveVehDefectSheet(request)
                 }
             }
-        })
+        }
 
         viewModel.GetDriversBasicInformation(
             Prefs.getInstance(App.instance).userID.toDouble()).observe(viewLifecycleOwner) {
@@ -210,7 +217,6 @@ class SpareWheelFragment : BaseInteriorFragment() {
                 if(it.vmRegNo!=null){
                     viewModel.GetVehicleInformation(prefs.userID.toInt(),it.vmRegNo)
                 }
-
             }
         }
 
@@ -220,12 +226,15 @@ class SpareWheelFragment : BaseInteriorFragment() {
             if(it!=null){
                 navigateTo(R.id.completeTaskFragment)
             }else{
-                showToast("Failed to save!!",requireContext())
+                showErrorDialog(fragmentManager,"SPW-01","Failed to Save")
+                //showToast("Failed to save!!",requireContext())
             }
         })
     }
 
     private fun dOrf(value: String?): String {
+        if(value!="f")
+            isDefected = true
         return if (value == "f") "F" else "D"
     }
 }
