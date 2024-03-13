@@ -120,10 +120,10 @@
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
-                    <ImageView
+         v       <ImageView
                         android:layout_width="16dp"
                         android:layout_height="18dp"
-                        android:src="@drawable/pin_alt_light_two"></ImageView>
+                        android:src="@drawable/ic_truck"/>
 
                     <TextView
                         android:id="@+id/dxReg"
@@ -136,6 +136,7 @@
                         android:textColor="#231F20"
                         android:textSize="15sp" />
 
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -146,10 +147,10 @@
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
-                    <ImageView
+                                 <ImageView
                         android:layout_width="16dp"
                         android:layout_height="18dp"
-                        android:src="@drawable/pin_alt_light_two"></ImageView>
+                        android:src="@drawable/ic_frame"/>
 
                     <TextView
                         android:id="@+id/dxm5"
@@ -280,7 +281,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
                                 android:letterSpacing="0.02"
-                                android:text="Vehcile Pictures "
+                                android:text="Vehicle Pictures "
                                 android:textColor="@color/black"
                                 android:textSize="15sp" />
 
@@ -377,16 +378,14 @@
                         android:textColor="@color/text_color"
                         android:textSize="15sp" />
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/tv_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:src="@drawable/clock_in"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="5.00 PM"
-                        android:textColor="@color/text_color"
-                        android:textSize="18sp" />
+                 />
 
                     <ImageButton
                         android:id="@+id/down_ivs"
@@ -421,9 +420,9 @@
                         android:textSize="15sp" />
 
                     <ImageButton
-                        android:layout_width="40dp"
+                        android:layout_width="30dp"
                         android:id="@+id/clock_out_mark"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
                         android:backgroundTint="@color/white"
@@ -436,6 +435,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
+                    android:id="@+id/onRoadView"
                     android:background="@drawable/shape_expand_main">
 
                     <RelativeLayout
@@ -889,7 +889,7 @@
                         android:layout_marginBottom="10dp"
                         android:gravity="center">
 
-                        <androidx.appcompat.widget.AppCompatButton
+                        <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/black"
@@ -897,7 +897,6 @@
                             android:gravity="center"
                             android:id="@+id/startinspection"
                             android:fontFamily="@font/poppins_bold"
-                            android:background="@drawable/glow_button"
                             android:layout_gravity="center"
                             android:textSize="16sp"
 
@@ -972,13 +971,13 @@
 
                                 android:background="@drawable/shape_uploads">
 
-<!--                                <ImageButton-->
-<!--                                    android:id="@+id/imageButtonnine"-->
-<!--                                    android:layout_width="28dp"-->
-<!--                                    android:layout_height="28dp"-->
-<!--                                    android:src="@drawable/delete_ic"-->
-<!--                                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                                    app:layout_constraintTop_toTopOf="parent" />-->
+                                <!--                                <ImageButton-->
+                                <!--                                    android:id="@+id/imageButtonnine"-->
+                                <!--                                    android:layout_width="28dp"-->
+                                <!--                                    android:layout_height="28dp"-->
+                                <!--                                    android:src="@drawable/delete_ic"-->
+                                <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
 
                                 <ImageButton
                                     android:id="@+id/ivOilLevel"
@@ -1034,13 +1033,13 @@
                                 android:background="@drawable/shape_uploads">
 
 
-<!--                                <ImageButton-->
-<!--                                    android:id="@+id/imageButtoneleven"-->
-<!--                                    android:layout_width="28dp"-->
-<!--                                    android:layout_height="28dp"-->
-<!--                                    android:src="@drawable/delete_ic"-->
-<!--                                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                                    app:layout_constraintTop_toTopOf="parent" />-->
+                                <!--                                <ImageButton-->
+                                <!--                                    android:id="@+id/imageButtoneleven"-->
+                                <!--                                    android:layout_width="28dp"-->
+                                <!--                                    android:layout_height="28dp"-->
+                                <!--                                    android:src="@drawable/delete_ic"-->
+                                <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
 
                                 <ImageButton
                                     android:id="@+id/ivAddBlueImg"
@@ -1075,12 +1074,12 @@
                                 android:background="@drawable/shape_uploads">
 
 
-<!--                                <ImageButton-->
-<!--                                    android:layout_width="28dp"-->
-<!--                                    android:layout_height="28dp"-->
-<!--                                    android:src="@drawable/delete_ic"-->
-<!--                                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                                    app:layout_constraintTop_toTopOf="parent" />-->
+                                <!--                                <ImageButton-->
+                                <!--                                    android:layout_width="28dp"-->
+                                <!--                                    android:layout_height="28dp"-->
+                                <!--                                    android:src="@drawable/delete_ic"-->
+                                <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+                                <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
 
                                 <ImageButton
                                     android:id="@+id/ivFaceMask"

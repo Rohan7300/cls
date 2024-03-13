@@ -96,6 +96,13 @@ class Prefs(context: Context) {
             Stack()
         }
     }
+    var vehicleLastMileage: Int?
+        get() {
+            return sharedPreferences.getInt("vehicleLastMileage", 0).takeIf { it != 0 }?:0
+        }
+        set(value) {
+            sharedPreferences.edit().putInt("vehicleLastMileage", value ?: 0).apply()
+        }
     fun clearNavigationHistory() {
         val emptyStack = Stack<Int>()
         sharedPreferences.edit().putString("history", Gson().toJson(emptyStack)).apply()

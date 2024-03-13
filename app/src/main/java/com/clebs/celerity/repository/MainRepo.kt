@@ -1,7 +1,10 @@
 package com.clebs.celerity.repository
 
 import android.util.Log
+import androidx.fragment.app.FragmentManager
+import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
+import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
 import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
@@ -16,15 +19,22 @@ import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
+import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
+import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
+import com.clebs.celerity.models.response.GetRideAlongVehicleLists
+import com.clebs.celerity.models.response.GetRideAlongVehicleListsItem
+import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.network.ApiService
+import com.clebs.celerity.utils.NoInternetDialog
 import com.google.gson.Gson
 import okhttp3.MultipartBody
+import retrofit2.Response
 import java.lang.IllegalArgumentException
 
 class MainRepo(private val ApiService: ApiService) {
@@ -34,7 +44,11 @@ class MainRepo(private val ApiService: ApiService) {
 
         if (response.isSuccessful) {
             return response.body()
-        }
+        }else{
+                val errorBody = response.errorBody()?.string()
+                println("Error Response body: $errorBody")
+
+             }
         return null
     }
 
@@ -268,6 +282,56 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
+    suspend fun GetRideAlongDriversList():GetRideAlongDriversListResponse?{
+        val response = ApiService.GetRideAlongDriversList()
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+    suspend fun GetRideAlongVehicleLists(): GetRideAlongVehicleLists?{
+        val response = ApiService.GetRideAlongVehicleLists()
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
 
+    suspend fun GetRouteInfoById(routeID:Int):GetRouteInfoByIdRes?{
+        val response = ApiService.GetRouteInfoById(routeID)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
 
+    suspend fun AddOnRideAlongRouteInfo(addOnRideAlongRouteInfoRequest: AddOnRideAlongRouteInfoRequest):SimpleStatusMsgResponse?{
+        val response = ApiService.AddOnRideAlongRouteInfo(addOnRideAlongRouteInfoRequest)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+    suspend fun GetRideAlongRouteInfoById(routeID: Int,leadDriverId:Int):GetRideAlongRouteInfoByIdRes?{
+        val response = ApiService.GetRideAlongRouteInfoById(routeID,leadDriverId)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
 }

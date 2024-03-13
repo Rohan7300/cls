@@ -2,15 +2,16 @@ package com.clebs.celerity.network
 
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.text.TextUtils
 import android.util.Log
+import androidx.fragment.app.FragmentManager
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.showErrorDialog
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.security.SecureRandom
@@ -23,7 +24,7 @@ import javax.net.ssl.X509TrustManager
 
 object RetrofitService {
 //    private const val BASE_URL = "http://182.64.1.105:8119/"
-   private const val BASE_URL="http://122.176.42.96:8119/"
+  private const val BASE_URL="http://122.176.42.96:8119/"
 //private const val BASE_URL="http://192.168.0.150:8119/"
 
     fun getInstance(): Retrofit {
@@ -83,7 +84,7 @@ object RetrofitService {
 
             return builder.build()
         } catch (e: Exception) {
-            e.printStackTrace()
+                e.printStackTrace()
             return getSecureOkHttpClient(headerInterceptor, loggingInterceptor)
         }
     }
@@ -102,25 +103,29 @@ object RetrofitService {
     }
     fun provideHeaderInterceptor(): Interceptor {
         val applicationContext = App.instance
-        return Interceptor { chain ->
-            val accessToken: String =Prefs.getInstance(applicationContext).accessToken
-
-
-
-            if (Prefs.getInstance(applicationContext).accessToken.isNotEmpty()) {
-                val request: Request = chain.request().newBuilder()
-                    .addHeader("accept", "application/json")
-                    .addHeader("Content-Type", "application/json")
-                    .addHeader("Authorization", "Bearer $accessToken").build()
-                chain.proceed(request)
-            } else {
-                val request: Request = chain.request().newBuilder()
-                    .addHeader("Content-Type", "application/json")
-                    .addHeader("Accept", "application/json").build()
-                chain.proceed(request)
-            }
+        try {
+            return Interceptor { chain ->
+                val accessToken: String =Prefs.getInstance(applicationContext).accessToken
+                Log.d("Net Interceptor","Internet Available")
+                if (Prefs.getInstance(applicationContext).accessToken.isNotEmpty()) {
+                    val request: Request = chain.request().newBuilder()
+                        .addHeader("accept", "application/json")
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Authorization", "Bearer $accessToken").build()
+                    chain.proceed(request)
+                } else {
+                    val request: Request = chain.request().newBuilder()
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Accept", "application/json").build()
+                    chain.proceed(request)
+                }
+        }
+        }catch (_:Exception){
+            throw Exception()
         }
     }
+
+
 
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         val httpLoggingInterceptor =
@@ -137,4 +142,19 @@ object RetrofitService {
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         return httpLoggingInterceptor
     }
+
+    fun handleNetworkError(exception: Throwable,fragmentManager: FragmentManager) {
+
+        if (exception is HttpException) {
+            showErrorDialog(fragmentManager,"RF-CN01","Failed to connect to server!!.")
+            Log.e("RetrofitService", "HTTP Error: ${exception.code()}")
+        } else if (exception is java.net.ConnectException) {
+            showErrorDialog(fragmentManager,"RF-CN02","Failed to connect to server!!.")
+            Log.e("RetrofitService", "Connection Error: ${exception.message}")
+        } else {
+            showErrorDialog(fragmentManager,"RF-CN03","Failed to connect to server!!.")
+            Log.e("RetrofitService", "Unknown Error: ${exception.message}")
+        }
+    }
+
 }

@@ -8,6 +8,8 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -25,9 +27,10 @@ import android.view.View
 import android.widget.*
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.database.ImageEntity
+import com.google.android.gms.dynamic.SupportFragmentWrapper
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -361,8 +364,8 @@ fun navigateTo(fragmentId: Int,context: Context,navController: NavController) {
 fun showToast(msg:String,context: Context){
     try {
         Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
-    }catch (_:Exception){
-
+    }catch (e:Exception){
+        Log.d("ToastException",e.message.toString())
     }
 }
 
@@ -397,7 +400,7 @@ fun bitmapToBase64(bitmap: Bitmap): String {
     return Base64.encodeToString(byteArray, Base64.DEFAULT)
 }
 
-fun progressBarVisibility(show: Boolean,pb:ProgressBar, overlayView:View) {
+/*fun progressBarVisibility(show: Boolean,pb:ProgressBar, overlayView:View) {
     if (show) {
         pb.bringToFront()
         pb.visibility = View.VISIBLE
@@ -411,7 +414,7 @@ fun progressBarVisibility(show: Boolean,pb:ProgressBar, overlayView:View) {
         overlayView.isClickable = false
         overlayView.isFocusable = false
     }
-}
+}*/
 
 fun showTimePickerDialog(context: Context, editText: EditText) {
     val calendar = Calendar.getInstance()
@@ -431,3 +434,18 @@ fun showTimePickerDialog(context: Context, editText: EditText) {
 
     timePickerDialog.show()
 }
+
+ fun isNetworkAvailable(context: Context): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkCapabilities = connectivityManager.activeNetwork ?: return false
+    val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+    return actNw.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+}
+
+fun showErrorDialog(fragmentManager: FragmentManager,code:String,msg: String){
+    val errorDialog: ErrorDialog = ErrorDialog.newInstance(msg,code)
+
+    errorDialog.show(fragmentManager,ErrorDialog.TAG)
+}
+

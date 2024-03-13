@@ -22,7 +22,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -30,6 +29,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -44,6 +44,8 @@ import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.showLog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.showErrorDialog
+import com.clebs.celerity.utils.showToast
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
@@ -55,21 +57,15 @@ import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [DailyWorkFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 open class DailyWorkFragment : Fragment() {
     lateinit var mbinding: FragmentDailyWorkBinding
-    lateinit var mainViewModel: MainViewModel
+    private lateinit var mainViewModel: MainViewModel
     private val API_TOKEN = "9d04d01d5ba1997289fa28f6f544b16ab9e5a8b6"
 
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
 
-    var isFrontCamera = false
+    private var isFrontCamera = false
 
     var vrn: String = ""
     private var imageBitmap: Bitmap? = null
@@ -78,7 +74,7 @@ open class DailyWorkFragment : Fragment() {
     var vehicleType: String = ""
     var score: String = ""
     var bounding: String = ""
-
+    private lateinit var fragmentManager: FragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +83,8 @@ open class DailyWorkFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        cameraExecutor = Executors.newSingleThreadExecutor()
+        fragmentManager = (activity as HomeActivity).fragmentManager
+        //   cameraExecutor = Executors.newSingleThreadExecutor()
 
 
     }
@@ -246,7 +243,7 @@ open class DailyWorkFragment : Fragment() {
 
         if (blocks.size == 0) {
             mbinding.pb.visibility = View.GONE
-            Toast.makeText(requireContext(), "No Text ", Toast.LENGTH_LONG).show()
+            showToast("No Text ", requireContext())
             return
         }
 
@@ -256,7 +253,7 @@ open class DailyWorkFragment : Fragment() {
             if (txt.isNotEmpty()) {
                 getVichleinformation()
             }
-            Log.e(TAG, "processTxt: " + txt)
+            Log.e(TAG, "processTxt: $txt")
         }
     }
 
@@ -303,12 +300,8 @@ open class DailyWorkFragment : Fragment() {
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     Log.d(TAG, "Photo capture succeeded processing photo")
-                    Toast.makeText(
-                        requireContext(),
-                        "Photo capture succeeded processing photo",
-                        Toast.LENGTH_SHORT
-                    ).show()
 
+                    showToast("Photo capture succeeded processing photo", requireContext())
                     imageBitmap = getImageBitmapFromUri(requireContext(), output.savedUri!!)
                     if (imageBitmap != null) {
 
@@ -371,12 +364,11 @@ open class DailyWorkFragment : Fragment() {
                 )
                 showAlert()
             } else {
-                Toast.makeText(
-                    requireActivity(),
-
-                    "Vehicle doesn't exist's. Please contact your supervisor./ or please scan again.",
-                    Toast.LENGTH_SHORT
-                ).show()
+            showErrorDialog(fragmentManager,"DWF-01","Vehicle doesn't exists. Please scan again or contact your supervisor.")
+           /*     showToast(
+                    "Vehicle doesn't exists. Please scan again or contact your supervisor.",
+                    requireContext()
+                )*/
                 mbinding.rectange.visibility = View.GONE
                 mbinding.ivTakePhoto.visibility = View.GONE
                 mbinding.rectangle4.visibility = View.VISIBLE
@@ -402,9 +394,7 @@ open class DailyWorkFragment : Fragment() {
                 deleteDialog.dismiss()
 
             } else {
-                Toast.makeText(
-                    requireActivity(), "Please check the acknowledgment check", Toast.LENGTH_SHORT
-                ).show()
+                showToast("Please check the acknowledgment check", requireContext())
             }
         }
 

@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -20,6 +21,7 @@ import com.clebs.celerity.databinding.FragmentOnRoadHoursBinding
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 
@@ -36,23 +38,30 @@ class OnRoadHoursFragment : Fragment() {
     private var parcelsDelivered: String? = null
     private var totalMileage: String? = null
     private var routeComment: String? = null
-    private var dwID:Int = 0
-    private var vehID:Int = 0
+    private var dwID: Int = 0
+    private var vehID: Int = 0
+    lateinit var edtRoutes: EditText
+    private lateinit var loadingDialog: LoadingDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         if (!this::binding.isInitialized) {
-            binding = FragmentOnRoadHoursBinding.inflate(inflater, container, false)
+            binding =
+                DataBindingUtil.inflate(inflater, R.layout.fragment_on_road_hours, container, false)
         }
-        init()
+
         return binding.root
 
     }
 
-    private fun chkNotNullInputs(): Boolean {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        init()
+    }
 
+    private fun chkNotNullInputs(): Boolean {
         return selectedLocation == null ||
                 selectedRouteType == null ||
                 routeName == null ||
@@ -63,6 +72,8 @@ class OnRoadHoursFragment : Fragment() {
     private fun init() {
         viewModel = (activity as HomeActivity).viewModel
         prefs = Prefs.getInstance(requireContext())
+        loadingDialog = (activity as HomeActivity).loadingDialog
+
         viewModel.livedataDailyWorkInfoByIdResponse.observe(viewLifecycleOwner) {
             if (it != null) {
                 dwID = it.DailyWorkId
@@ -75,7 +86,7 @@ class OnRoadHoursFragment : Fragment() {
             parcelsDelivered = binding.edtParcels.text.toString()
             totalMileage = binding.edtMileage.text.toString()
             if (chkNotNullInputs()) {
-                showToast("Pls!!Complete the form first", requireContext())
+                showToast("Please!!Complete the form first", requireContext())
             } else {
                 sendData()
             }
@@ -83,27 +94,29 @@ class OnRoadHoursFragment : Fragment() {
     }
 
     private fun sendData() {
-        progressBarVisibility(true)
-        viewModel.livedataAddOnRouteInfo.observe(viewLifecycleOwner){
-            progressBarVisibility(false)
-            if(it!=null){
+        loadingDialog.show()
+        viewModel.livedataAddOnRouteInfo.observe(viewLifecycleOwner) {
+            loadingDialog.cancel()
+            if (it != null) {
                 findNavController().navigate(R.id.completeTaskFragment)
             }
         }
-        viewModel.AddOnRouteInfo(AddOnRouteInfoRequest(
-            RtAddMode = "" ,
-            RtComment = "$routeComment",
-            RtType = selectedRouteId,
-            RtDwId = dwID,
-            RtId = 0,
-            RtFinishMileage = totalMileage?.toInt()?:0,
-            RtLocationId = selectedLocId,
-            RtName = routeName!!,
-            RtNoOfParcelsDelivered = parcelsDelivered?.toInt()?:0,
-            RtNoParcelsbroughtback = binding.parcelsBroughtBack.text.toString().toInt(),
-            RtUsrId = prefs.userID.toInt(),
-            VehicleId =vehID
-        ))
+        viewModel.AddOnRouteInfo(
+            AddOnRouteInfoRequest(
+                RtAddMode = "",
+                RtComment = "$routeComment",
+                RtType = selectedRouteId,
+                RtDwId = dwID,
+                RtId = 0,
+                RtFinishMileage = totalMileage?.toInt() ?: 0,
+                RtLocationId = selectedLocId,
+                RtName = routeName!!,
+                RtNoOfParcelsDelivered = parcelsDelivered?.toInt() ?: 0,
+                RtNoParcelsbroughtback = binding.parcelsBroughtBack.text.toString().toInt(),
+                RtUsrId = prefs.userID.toInt(),
+                VehicleId = vehID
+            )
+        )
     }
 
     private fun setInputListener(editText: EditText) {
@@ -112,11 +125,11 @@ class OnRoadHoursFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val value = s?.toString()
-                when (editText) {
-                    binding.edtRoutes -> routeName = value
-                    binding.parcelDeliver -> parcelsDelivered = value
-                    binding.totalMileage -> totalMileage = value
-                    binding.edtRouteComment -> routeComment = value
+                when (editText.id) {
+                    R.id.edt_routesORH -> routeName = value
+                    R.id.edt_parcels -> parcelsDelivered = value
+                    R.id.edt_mileage -> totalMileage = value
+                    R.id.edt_route_comment -> routeComment = value
                 }
             }
 
@@ -125,7 +138,9 @@ class OnRoadHoursFragment : Fragment() {
     }
 
     private fun inputListeners() {
-        setInputListener(binding.edtRoutes)
+        setInputListener(binding.edtRoutesORH)
+        binding.edtRoutesORH.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS)
+
         setInputListener(binding.edtParcels)
         setInputListener(binding.edtMileage)
         setInputListener(binding.edtRouteComment)
@@ -143,9 +158,12 @@ class OnRoadHoursFragment : Fragment() {
                 }
             }
             viewModel.GetDriversBasicInformation(
-                Prefs.getInstance(App.instance).userID.toDouble()).observe(viewLifecycleOwner) {
-                if (it!=null){
-                    viewModel.GetVehicleInformation(prefs.userID.toInt(),it.vmRegNo)
+                Prefs.getInstance(App.instance).userID.toDouble()
+            ).observe(viewLifecycleOwner) {
+                if (it != null) {
+                    if (it.vmRegNo != null) {
+                        viewModel.GetVehicleInformation(prefs.userID.toInt(), it.vmRegNo)
+                    }
                 }
             }
             /*
@@ -165,7 +183,12 @@ class OnRoadHoursFragment : Fragment() {
                 rideAlongApiCall()
                 val locNames = locationData.map { it.LocationName }
                 val locIds = locationData.map { it.LocId }
-                setSpinners(binding.spinnerLocation, binding.editTextSelectRouteLocation, locNames,locIds)
+                setSpinners(
+                    binding.spinnerLocation,
+                    binding.editTextSelectRouteLocation,
+                    locNames,
+                    locIds
+                )
             }
         }
         viewModel.GetRouteLocationInfo(locID)
@@ -176,13 +199,13 @@ class OnRoadHoursFragment : Fragment() {
             if (routeData != null) {
                 val routeNames = routeData.map { it.RtName }
                 val routeIDs = routeData.map { it.RtId }
-                setSpinners(binding.spinnerRouteType, binding.editText, routeNames,routeIDs)
+                setSpinners(binding.spinnerRouteType, binding.editText, routeNames, routeIDs)
             }
         }
         viewModel.GetRideAlongRouteTypeInfo(prefs.userID.toInt())
     }
 
-    private fun setSpinners(spinner: Spinner, tv: TextView, items: List<String>,ids:List<Int>) {
+    private fun setSpinners(spinner: Spinner, tv: TextView, items: List<String>, ids: List<Int>) {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
@@ -203,6 +226,7 @@ class OnRoadHoursFragment : Fragment() {
                         selectedLocId = ids[position]
                         selectedLocation = selectedItem
                     }
+
                     binding.spinnerRouteType -> {
                         selectedRouteType = selectedItem
                         selectedRouteId = ids[position]
@@ -216,14 +240,6 @@ class OnRoadHoursFragment : Fragment() {
 
         tv.setOnClickListener {
             spinner.isVisible = !spinner.isVisible
-        }
-    }
-    fun progressBarVisibility(show: Boolean) {
-        if (show) {
-            binding.pbOnRoadHours.bringToFront()
-            binding.pbOnRoadHours.visibility = View.VISIBLE
-        } else {
-            binding.pbOnRoadHours.visibility = View.GONE
         }
     }
 

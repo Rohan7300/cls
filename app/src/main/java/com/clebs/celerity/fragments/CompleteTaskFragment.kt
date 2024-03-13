@@ -22,6 +22,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -33,14 +34,14 @@ import com.clebs.celerity.databinding.TimePickerDialogBinding
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.network.ApiService
-import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
+import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.navigateTo
-import com.clebs.celerity.utils.progressBarVisibility
+import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toRequestBody
@@ -55,26 +56,22 @@ import java.util.Locale
 import java.util.UUID
 
 class CompleteTaskFragment : Fragment() {
-
-
     lateinit var mbinding: FragmentCompleteTaskBinding
     private var isclicked: Boolean = true
-    private var isclickedtwo: Boolean = true
     private lateinit var viewModel: MainViewModel
     private lateinit var imageView: ImageView
     private var userId: Int = 0
-    lateinit var regexPattern: Regex
-    lateinit var inspectionID: String
+    private lateinit var regexPattern: Regex
+    private lateinit var inspectionID: String
     private var requestCode: Int = 0
     private var showImageUploadLayout: Boolean = false
     var breakStartTime: String = ""
     var breakEndTime: String = ""
-
+    lateinit var loadingDialog:LoadingDialog
     private lateinit var cqSDKInitializer: CQSDKInitializer
-
+    private lateinit var fragmentManager:FragmentManager
     companion object {
         var inspectionstarted: Boolean? = null
-
     }
 
     override fun onCreateView(
@@ -87,58 +84,44 @@ class CompleteTaskFragment : Fragment() {
         val clickListener = View.OnClickListener {
             showAlert()
         }
-
+        loadingDialog = (activity as HomeActivity).loadingDialog
         userId = Prefs.getInstance(requireContext()).userID.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
         Prefs.getInstance(requireContext()).clearNavigationHistory()
-
+        fragmentManager = (activity as HomeActivity).fragmentManager
         cqSDKInitializer = CQSDKInitializer(requireContext())
+        if (inspectionstarted?.equals(true) == true) {
 
-        if (inspectionstarted?.equals(true) == true){
+            mbinding.startinspection.visibility = View.GONE
 
-            mbinding.startinspection.visibility=View.GONE
-
+        } else {
+            mbinding.startinspection.visibility = View.VISIBLE
         }
-        else{
-            mbinding.startinspection.visibility=View.VISIBLE
-        }
-        Log.e("skdjksddkshdfkjsjkskj", "onCreateView: "+ inspectionstarted )
-        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
-        val mainRepo = MainRepo(apiService)
+
         viewModel = (activity as HomeActivity).viewModel
 
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
         viewModel.GetDriverBreakTimeInfo(userId)
         viewModel.GetDailyWorkInfoById(userId)
-        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-            mbinding.dxLoc.text = it?.locationName ?: ""
-            mbinding.dxReg.text = it?.vmRegNo ?: ""
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-                .also { name -> mbinding.anaCarolin.text = name }
-            mbinding.dxm5.text = (activity as HomeActivity).date
-        }
+
         observers()
         clientUniqueID()
 
 
         mbinding.rlcomtwoClock.setOnClickListener {
-            progressBarVisibility(
-                true,
-                mbinding.completeTaskFragmentPB,
-                mbinding.overlayViewCompleteTask
-            )
+            loadingDialog.show()
             viewModel.UpdateClockInTime(userId)
         }
 
         mbinding.rlcomtwoClockOut.setOnClickListener {
-            progressBarVisibility(
-                true,
-                mbinding.completeTaskFragmentPB,
-                mbinding.overlayViewCompleteTask
-            )
+            loadingDialog.show()
             viewModel.UpdateClockOutTime(userId)
+        }
+
+        mbinding.rideAlong.setOnClickListener {
+            findNavController().navigate(R.id.rideAlongFragment)
         }
 
         mbinding.icUu.setOnClickListener {
@@ -156,41 +139,43 @@ class CompleteTaskFragment : Fragment() {
         }
         mbinding.startinspection.setOnClickListener {
 
+            startInspection()
+        }
+        /*        mbinding.clVehicleDashboard.setOnClickListener {
+                    //startInspection()
+                    *//*requestCode = 1
+            pictureDialogBase64(mbinding.ivVehicleDashboard, requestCode)*//*
+        }
+        mbinding.clFront.setOnClickListener {
+            *//*requestCode = 2
+        startInspection()
+            pictureDialogBase64(mbinding.ivFront, requestCode)*//*
 
             startInspection()
         }
-//        mbinding.clVehicleDashboard.setOnClickListener {
-//            startInspection()
-//            /*requestCode = 1
-//            pictureDialogBase64(mbinding.ivVehicleDashboard, requestCode)*/
-//        }
-//        mbinding.clFront.setOnClickListener {
-//            /*requestCode = 2
-//        startInspection()
-//            pictureDialogBase64(mbinding.ivFront, requestCode)*/
-//
-//            startInspection()
-//        }
-//        mbinding.clNearSide.setOnClickListener {
-//            /*requestCode = 3
-//            pictureDialogBase64(mbinding.ivNearSide, requestCode)*/
-//            startInspection()
-//        }
-//        mbinding.clRearImgUp.setOnClickListener {
-//            /*requestCode = 4
-//            pictureDialogBase64(mbinding.ivRearImgUp, requestCode)*/
-//            startInspection()
-//        }
+        mbinding.clNearSide.setOnClickListener {
+            *//*requestCode = 3
+            pictureDialogBase64(mbinding.ivNearSide, requestCode)*//*
+            startInspection()
+        }
+        mbinding.clRearImgUp.setOnClickListener {
+            *//*requestCode = 4
+            pictureDialogBase64(mbinding.ivRearImgUp, requestCode)*//*
+            startInspection()
+        }
+              mbinding.clOffSideImgUp.setOnClickListener {
+            /*requestCode = 6
+            pictureDialogBase64(mbinding.ivOffSideImgUp, requestCode)*/
+            startInspection()
+        }
+        */
+
         mbinding.clOilLevel.setOnClickListener {
             requestCode = 5
             pictureDialogBase64(mbinding.ivOilLevel, requestCode)
 //            startInspection()
         }
-//        mbinding.clOffSideImgUp.setOnClickListener {
-//            /*requestCode = 6
-//            pictureDialogBase64(mbinding.ivOffSideImgUp, requestCode)*/
-//            startInspection()
-//        }
+
         mbinding.clAddBlueImg.setOnClickListener {
             requestCode = 7
             pictureDialogBase64(mbinding.ivAddBlueImg, requestCode)
@@ -222,46 +207,68 @@ class CompleteTaskFragment : Fragment() {
         }
 
         mbinding.rlcomtwoRoad.setOnClickListener {
-            mbinding.routeLayout.visibility = View.VISIBLE
+            if (mbinding.routeLayout.visibility == View.GONE)
+                mbinding.routeLayout.visibility = View.VISIBLE
+            else
+                mbinding.routeLayout.visibility = View.GONE
         }
         return mbinding.root
     }
 
     override fun onResume() {
         super.onResume()
-        if (inspectionstarted?.equals(true) == true){
+        if (inspectionstarted?.equals(true) == true) {
 
-            mbinding.startinspection.visibility=View.GONE
+            mbinding.startinspection.visibility = View.GONE
 
-        }
-        else{
-            mbinding.startinspection.visibility=View.VISIBLE
+        } else {
+            mbinding.startinspection.visibility = View.VISIBLE
         }
     }
 
     private fun observers() {
+        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+            loadingDialog.cancel()
+            mbinding.dxLoc.text = it?.locationName ?: ""
+            mbinding.dxReg.text = it?.vmRegNo ?: ""
+            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
+                .also { name -> mbinding.anaCarolin.text = name }
+            mbinding.dxm5.text = (activity as HomeActivity).date
+            val isLeadDriver = (activity as HomeActivity).isLeadDriver
+            if (!isLeadDriver) {
+                mbinding.rideAlong.visibility = View.GONE
+            }
+        }
 
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             if (it != null) {
                 //  deleteDialog.cancel()
             } else {
-                showToast("Something went wrong!!", requireContext())
+               // showToast("Something went wrong!!", requireContext())
             }
-            progressBarVisibility(
-                false,
-                mbinding.completeTaskFragmentPB,
-                mbinding.overlayViewCompleteTask
-            )
+            loadingDialog.cancel()
         }
 
         viewModel.livedataDailyWorkInfoByIdResponse.observe(viewLifecycleOwner) {
-
+            loadingDialog.cancel()
             if (it != null) {
                 if (it.ClockedInTime != null) {
                     mbinding.tvClockedIN.text = it.ClockedInTime.toString()
                     mbinding.rlcomtwoClock.visibility = View.GONE
                     mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                    mbinding.onRoadView.visibility = View.VISIBLE
+                    mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+                } else {
+                    with(mbinding) {
+                        listOf(
+                            rlcomtwoBreak,
+                            onRoadView,
+                            rlcomtwoBreak,
+                            rlcomtwoClockOut
+                        ).forEach { thisView -> thisView.visibility = View.GONE }
+                    }
                 }
+
                 if (it.ClockedOutTime != null) {
                     mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
@@ -270,11 +277,7 @@ class CompleteTaskFragment : Fragment() {
         }
 
         viewModel.livedataClockInTime.observe(viewLifecycleOwner) {
-            progressBarVisibility(
-                false,
-                mbinding.completeTaskFragmentPB,
-                mbinding.overlayViewCompleteTask
-            )
+            viewModel.GetDailyWorkInfoById(userId)
             if (it != null) {
                 mbinding.rlcomtwoClock.visibility = View.GONE
                 mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
@@ -284,11 +287,7 @@ class CompleteTaskFragment : Fragment() {
         }
 
         viewModel.livedataUpdateClockOutTime.observe(viewLifecycleOwner) {
-            progressBarVisibility(
-                false,
-                mbinding.completeTaskFragmentPB,
-                mbinding.overlayViewCompleteTask
-            )
+            viewModel.GetDailyWorkInfoById(userId)
             if (it != null) {
                 mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
             }
@@ -296,6 +295,7 @@ class CompleteTaskFragment : Fragment() {
 
 
         viewModel.livedataDriverBreakInfo.observe(viewLifecycleOwner) {
+            loadingDialog.cancel()
             if (it != null) {
                 val latestBreakInfo = it.lastOrNull()
 
@@ -309,16 +309,14 @@ class CompleteTaskFragment : Fragment() {
                     }
                 } ?: showToast("No Break time information added!!", requireContext())
             } else {
-                showToast("Something went wrong!!", requireContext())
+              //  showToast("Something went wrong!!", requireContext())
             }
         }
 
         viewModel.uploadVehicleImageLiveData.observe(viewLifecycleOwner, Observer {
-            progressBarVisibility(
-                false,
-                mbinding.completeTaskFragmentPB,
-                mbinding.overlayViewCompleteTask
-            )
+
+            loadingDialog.cancel()
+            viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
             if (it != null) {
                 if (it.Status == "200") {
                     viewModel.GetVehicleImageUploadInfo(userId)
@@ -332,17 +330,42 @@ class CompleteTaskFragment : Fragment() {
         })
 
         viewModel.vehicleImageUploadInfoLiveData.observe(viewLifecycleOwner, Observer {
+            loadingDialog.cancel()
             println(it)
             if (it!!.Status == "404") {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                 showImageUploadLayout = true
+                mbinding.taskDetails.visibility = View.VISIBLE
+                /*                with(mbinding) {
+                                    listOf(
+                                        rlcomtwoBreak,
+                                        onRoadView,
+                                        rlcomtwoBreak,
+                                        rlcomtwoClock,
+                                        rlcomtwoClockOut
+                                    ).forEach { thisView -> thisView.visibility = View.GONE }
+                                }*/
             } else {
                 if (it.IsVehicleImageUploaded == false) {
                     showImageUploadLayout = true
                     mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                 } else {
 
-//                    showImageUploadLayout = checkNull(it)
+                    showImageUploadLayout = checkNull(it)
+
+                    if (showImageUploadLayout) {
+                        mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                        mbinding.taskDetails.visibility = View.VISIBLE
+                        with(mbinding) {
+                            listOf(
+                                rlcomtwoBreak,
+                                onRoadView,
+                                rlcomtwoBreak,
+                                rlcomtwoClock,
+                                rlcomtwoClockOut
+                            ).forEach { thisView -> thisView.visibility = View.GONE }
+                        }
+                    }
 
                     if (it.DaVehImgDashBoardFileName != null)
                         mbinding.ivVehicleDashboard.setImageResource(R.drawable.ic_yes)
@@ -470,14 +493,11 @@ class CompleteTaskFragment : Fragment() {
         dialogBinding.timeTvNext.setOnClickListener {
             if (chkTime(dialogBinding.edtBreakstart, dialogBinding.edtBreakend)) {
                 deleteDialog.cancel()
-                progressBarVisibility(
-                    true,
-                    mbinding.completeTaskFragmentPB,
-                    mbinding.overlayViewCompleteTask
-                )
+                loadingDialog.show()
                 sendBreakTimeData()
             } else {
-                showToast("Please add valid time information", requireContext())
+                showErrorDialog(fragmentManager,"CTF-02","Please add valid time information")
+                //showToast("Please add valid time information", requireContext())
             }
         }
 
@@ -535,11 +555,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun sendImage(imageBitmap: Bitmap, requestCode: Int) {
-        progressBarVisibility(
-            true,
-            mbinding.completeTaskFragmentPB,
-            mbinding.overlayViewCompleteTask
-        )
+        loadingDialog.show()
         val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
         val requestBody = imageBitmap.toRequestBody()
         val imagePart = when (requestCode) {
@@ -630,9 +646,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     fun clientUniqueID(): String {
-
         val x = Prefs.getInstance(App.instance).userID.toString()
-
         val y = Prefs.getInstance(App.instance).get("vrn")
         // example string
         val currentDate = LocalDateTime.now()
@@ -645,50 +659,59 @@ class CompleteTaskFragment : Fragment() {
     }
 
     fun startInspection() {
-//mbinding.completeTaskFragmentPB.visibility=View.VISIBLE
+        if(Build.VERSION.SDK_INT<=Build.VERSION_CODES.TIRAMISU){
+            loadingDialog.show()
 
-        if (cqSDKInitializer.isCQSDKInitialized()) {
-            // Show a loading dialog
+            if (cqSDKInitializer.isCQSDKInitialized()) {
+                // Show a loading dialog
 
-//            Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
-//            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
-//            // Make request to start an inspection
-            cqSDKInitializer.startInspection(
-                activityContext = requireContext(),
-                clientAttrs = ClientAttrs(
-                    userName = "",
-                    dealer = "",
-                    dealerIdentifier = "",
-                    client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
-                ),
-                result = { isStarted, msg, code ->
-                    // Show error if required
-//                    Log.e("messsagesss", "startInspection: " + msg + code)
-                    if (isStarted
-                    ) {
+                Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
+                Log.e("sdkskdkdkskdkskd", "onCreateView: ")
+                // Make request to start an inspection
+                try {
+                    cqSDKInitializer.startInspection(
+                        activityContext = requireContext(),
+                        clientAttrs = ClientAttrs(
+                            userName = "",
+                            dealer = "",
+                            dealerIdentifier = "",
+                            client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                        ),
+                        result = { isStarted, msg, code ->
+                            // Show error if required
+                            Log.e("messsagesss", "startInspection: " + msg + code)
+                            if (isStarted
+                            ) {
 //                        mbinding.uploadll1.visibility = View.GONE
 //                        mbinding.clOffSideImgUp.visibility = View.GONE
 //                        mbinding.rlFirst.visibility = View.GONE
 //                        mbinding.rlSecond.visibility = View.GONE
-                    } else {
+                            } else {
 //                        mbinding.uploadll1.visibility = View.VISIBLE
 //                        mbinding.clOffSideImgUp.visibility = View.VISIBLE
 //                        mbinding.rlFirst.visibility = View.VISIBLE
 //                        mbinding.rlSecond.visibility = View.VISIBLE
-                    }
-                    if (msg=="Success"){
+                            }
+                            if (msg == "Success") {
+                                //mbinding.completeTaskFragmentPB.visibility = View.GONE
+                                loadingDialog.cancel()
+                            }
+                            if (!isStarted) {
+                                //mbinding.completeTaskFragmentPB.visibility = View.GONE
+                                loadingDialog.cancel()
+                                Log.e("startedinspection", "onCreateView: " + msg + isStarted)
+                                // Dismiss the loading dialog
 
-                    }
-                    if (!isStarted) {
-
-//                        Log.e("startedinspection", "onCreateView: " + msg + isStarted)
-                        // Dismiss the loading dialog
-
-                    }
+                            }
+                        }
+                    )
+                }catch (_:Exception){
+                    showToast("Please try again later!!",requireContext())
                 }
-            )
-
-
+            }
+        }else{
+            showErrorDialog(fragmentManager,"CTF-1","We are currently updating our app for Android 13+ devices. Please try again later.")
         }
+
     }
 }

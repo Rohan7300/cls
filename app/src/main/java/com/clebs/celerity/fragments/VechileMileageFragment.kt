@@ -7,13 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentVechileMileageBinding
-import com.clebs.celerity.network.ApiService
-import com.clebs.celerity.network.RetrofitService
-import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
@@ -30,17 +28,34 @@ class VechileMileageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         if (!this::mbinding.isInitialized) {
-            mbinding = FragmentVechileMileageBinding.inflate(inflater, container, false)
+            mbinding =DataBindingUtil.inflate(inflater,R.layout.fragment_vechile_mileage,container, false)
         }
-        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
-        val mainRepo = MainRepo(apiService)
+              return mbinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         viewModel =(activity as HomeActivity).viewModel
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.vechileMileageFragment)
 
-        mbinding.miles.setText(
-            Prefs.getInstance(App.instance).get("vehicleLastMillage") + " Miles"
-        )
+        mbinding.miles.text = buildString {
+            append("${Prefs.getInstance(App.instance).vehicleLastMileage} ")
+            append("Miles")
+        }
 
+
+        mbinding.edtMilvm.doAfterTextChanged { edtMilText ->
+            edtMilText.let {
+                mbinding.tvNext.isEnabled = edtMilText?.isNotEmpty() == true
+                mbinding.tvNext.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        if (mbinding.tvNext.isEnabled) R.color.white else R.color.orange
+                    )
+                )
+            }
+        }
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner){
             mbinding.dxLoc.text = it?.locationName?:""
@@ -54,22 +69,11 @@ class VechileMileageFragment : Fragment() {
             navigateTo(R.id.profileFragment,requireContext(),findNavController())
         }
 
-//        mbinding.run {
-           mbinding. edtMil.doAfterTextChanged {
 
-                mbinding.tvNext.isEnabled = (mbinding.edtMil.text?.length!! > 0)
-                if (mbinding.tvNext.isEnabled) {
-                    mbinding.tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                } else {
-                    mbinding.  tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))
-                }
-//            }
-        }
         mbinding.tvNext.setOnClickListener {
             val bundle= Bundle()
-            bundle.putString("vm_mileage",mbinding.edtMil.text.toString())
+            bundle.putString("vm_mileage",mbinding.edtMilvm.text.toString())
             navigateTo(R.id.windScreenFragment,requireContext(),findNavController())
         }
-        return mbinding.root
     }
 }

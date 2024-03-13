@@ -48,7 +48,7 @@
             android:fontFamily="@font/inter"
             android:letterSpacing="0.02"
             android:id="@+id/des"
-            android:text="Are you sure , you want to logout?"
+            android:text="Are you sure you want to logout?"
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"

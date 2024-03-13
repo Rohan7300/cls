@@ -60,6 +60,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_txt" />
 
             <EditText
+            android:importantForAutofill="no"
                 android:id="@+id/edt_breakstart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -98,6 +99,7 @@
                 app:layout_constraintTop_toBottomOf="@id/edt_breakstart" />
 
             <EditText
+            android:importantForAutofill="no"
                 android:id="@+id/edt_breakend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

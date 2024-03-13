@@ -19,13 +19,15 @@ data class DriversBasicInformationModel(
     @SerializedName("VmID")
     val vmID: Int,
     @SerializedName("VmRegNo")
-    val vmRegNo: String,
+    val vmRegNo: String?,
     @SerializedName("PhoneNumber")
     val PhoneNumber: String,
     @SerializedName("Address")
     val Address: String,
     @SerializedName("IsUsrProfileUpdateReqin90days")
     val IsUsrProfileUpdateReqin90days: Boolean,
+    @SerializedName("IsLeadDriver")
+    val IsLeadDriver: Boolean,
 
 
 )
