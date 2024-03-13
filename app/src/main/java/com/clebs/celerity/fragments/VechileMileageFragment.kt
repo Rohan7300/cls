@@ -54,16 +54,16 @@ class VechileMileageFragment : Fragment() {
             navigateTo(R.id.profileFragment,requireContext(),findNavController())
         }
 
-        mbinding.run {
-            edtMil.doAfterTextChanged {
+//        mbinding.run {
+           mbinding. edtMil.doAfterTextChanged {
 
-                mbinding.tvNext.isEnabled = (edtMil.text?.length!! > 0)
-                if (tvNext.isEnabled) {
-                    tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                mbinding.tvNext.isEnabled = (mbinding.edtMil.text?.length!! > 0)
+                if (mbinding.tvNext.isEnabled) {
+                    mbinding.tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                 } else {
-                    tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))
+                    mbinding.  tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))
                 }
-            }
+//            }
         }
         mbinding.tvNext.setOnClickListener {
             val bundle= Bundle()

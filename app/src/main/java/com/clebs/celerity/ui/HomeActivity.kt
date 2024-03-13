@@ -30,6 +30,7 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.ImageDatabase
 import com.clebs.celerity.database.ImagesRepo
 import com.clebs.celerity.databinding.ActivityHomeBinding
+import com.clebs.celerity.fragments.CompleteTaskFragment
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
@@ -37,6 +38,7 @@ import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.progressBarVisibility
 import com.clebs.celerity.utils.showToast
+import com.clebs.celerity.utils.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
@@ -69,6 +71,41 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         var Boolean: Boolean = false
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent != null) {
+            // Get status
+            val identifier =
+                intent.getStringExtra(PublicConstants.quoteCreationFlowStatusIdentifierKeyInIntent)
+                    ?: "Could not identify Identifier"
+            val message =
+                intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
+                    ?: "Could not identify status message"
+            val tempCode =
+                intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
+            if (tempCode == 200) {
+                CompleteTaskFragment.inspectionstarted = true
+
+toast("inspection success")
+            } else {
+
+                toast("inspection Failed")
+                CompleteTaskFragment.inspectionstarted = false
+
+            }
+            // Check if identifier is valid
+            if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
+                // Get code
+                val code = if (tempCode == -1) {
+                    "Could not identify status code"
+                } else {
+                    tempCode
+                }
+
+                // Update message in the dia
+            }
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -152,9 +189,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
                 R.id.daily -> {
-               /*     navController.navigate(R.id.homeFragment)
-                    navController.currentDestination!!.id = R.id.homeFragment
-*/
+                    /*     navController.navigate(R.id.homeFragment)
+                         navController.currentDestination!!.id = R.id.homeFragment
+     */
                     ActivityHomeBinding.title.text = ""
                     viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
                     progressBarVisibility(
@@ -191,7 +228,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         }
         ActivityHomeBinding.imgLogout.setOnClickListener {
-            showAlertLogout()
+//            showAlertLogout()
         }
     }
 
@@ -222,9 +259,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-    }
 
     private fun logout() {
         viewModel.Logout().observe(this@HomeActivity) {
@@ -273,13 +307,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     private fun backNav() {
-        try{
+        try {
             val prefs = Prefs.getInstance(applicationContext)
             val fragmentStack = prefs.getNavigationHistory()
-            if(navController.currentDestination?.id == R.id.completeTaskFragment){
+            if (navController.currentDestination?.id == R.id.completeTaskFragment) {
                 prefs.clearNavigationHistory()
-            }
-            else if (fragmentStack.size > 1 ) {
+            } else if (fragmentStack.size > 1) {
                 fragmentStack.pop()
                 val previousFragment = fragmentStack.peek()
                 if (previousFragment != R.id.dailyWorkFragment) {
@@ -287,7 +320,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     prefs.saveNavigationHistory(fragmentStack)
                 }
             }
-        }catch (_:Exception){
+        } catch (_: Exception) {
 
         }
 

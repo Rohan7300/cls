@@ -9,7 +9,7 @@
     <item
         android:id="@+id/daily"
         android:icon="@drawable/daily_work"
-        android:title="Daily work" />
+        android:title="Routes" />
     <item
         android:id="@+id/invoices"
         android:icon="@drawable/invoices"
@@ -17,7 +17,7 @@
     <item
         android:id="@+id/passwords"
         android:icon="@drawable/passwords"
-        android:title="Notifications" />
+        android:title="Alerts" />
     <item
         android:id="@+id/tickets"
         android:icon="@drawable/tickets_ic"

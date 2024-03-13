@@ -12,8 +12,8 @@
 
         <ProgressBar
             android:id="@+id/completeTaskFragmentPB"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:indeterminateTint="@color/orange"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -323,6 +323,7 @@
                                 android:textSize="15sp" />
 
                         </RelativeLayout>
+
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -430,6 +431,7 @@
                         android:visibility="visible" />
 
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -677,6 +679,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="20dp"
+                        android:visibility="gone"
                         android:layout_weight="1"
                         android:orientation="horizontal"
                         app:layout_constraintTop_toBottomOf="@id/rl_first">
@@ -782,6 +785,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="20dp"
+                        android:visibility="gone"
                         android:orientation="horizontal">
 
                         <LinearLayout
@@ -880,8 +884,24 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center">
 
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:letterSpacing="0.01"
+                            android:gravity="center"
+                            android:id="@+id/startinspection"
+                            android:fontFamily="@font/poppins_bold"
+                            android:background="@drawable/glow_button"
+                            android:layout_gravity="center"
+                            android:textSize="16sp"
+
+                            android:text="Start Inspection" />
 
                     </LinearLayout>
 
@@ -897,13 +917,13 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                           >
+                            android:layout_height="wrap_content">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/clOffSideImgUp"
                                 android:layout_width="180dp"
                                 android:layout_height="154dp"
+                                android:visibility="gone"
                                 android:layout_marginEnd="7dp"
 
                                 android:background="@drawable/shape_uploads">
@@ -952,13 +972,13 @@
 
                                 android:background="@drawable/shape_uploads">
 
-                                <ImageButton
-                                    android:id="@+id/imageButtonnine"
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
-                                    android:src="@drawable/delete_ic"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
+<!--                                <ImageButton-->
+<!--                                    android:id="@+id/imageButtonnine"-->
+<!--                                    android:layout_width="28dp"-->
+<!--                                    android:layout_height="28dp"-->
+<!--                                    android:src="@drawable/delete_ic"-->
+<!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                                    app:layout_constraintTop_toTopOf="parent" />-->
 
                                 <ImageButton
                                     android:id="@+id/ivOilLevel"
@@ -1014,13 +1034,13 @@
                                 android:background="@drawable/shape_uploads">
 
 
-                                <ImageButton
-                                    android:id="@+id/imageButtoneleven"
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
-                                    android:src="@drawable/delete_ic"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
+<!--                                <ImageButton-->
+<!--                                    android:id="@+id/imageButtoneleven"-->
+<!--                                    android:layout_width="28dp"-->
+<!--                                    android:layout_height="28dp"-->
+<!--                                    android:src="@drawable/delete_ic"-->
+<!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                                    app:layout_constraintTop_toTopOf="parent" />-->
 
                                 <ImageButton
                                     android:id="@+id/ivAddBlueImg"
@@ -1055,12 +1075,12 @@
                                 android:background="@drawable/shape_uploads">
 
 
-                                <ImageButton
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
-                                    android:src="@drawable/delete_ic"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
+<!--                                <ImageButton-->
+<!--                                    android:layout_width="28dp"-->
+<!--                                    android:layout_height="28dp"-->
+<!--                                    android:src="@drawable/delete_ic"-->
+<!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                                    app:layout_constraintTop_toTopOf="parent" />-->
 
                                 <ImageButton
                                     android:id="@+id/ivFaceMask"

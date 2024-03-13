@@ -5,6 +5,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:alpha="0.8"
     android:background="@drawable/background"
     tools:context=".ui.SplashActivity">
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,8 +24,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <ImageView
-        android:layout_width="103dp"
-        android:layout_height="74dp"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
