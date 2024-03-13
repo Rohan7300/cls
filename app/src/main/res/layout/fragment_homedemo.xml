@@ -5,8 +5,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:backgroundTint="@color/light_orange"
-        android:background="@drawable/background"
+
         tools:context=".ui.SplashActivity">
 
         <TextView
@@ -38,7 +39,7 @@ android:textSize="30sp"
             <ImageView
                 android:layout_width="103dp"
                 android:layout_height="74dp"
-                android:src="@drawable/logo"
+                android:src="@drawable/logo_new"
                 android:id="@+id/ic_loh"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

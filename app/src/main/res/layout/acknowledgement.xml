@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -22,7 +22,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="16dp"
                     android:id="@+id/textview_acknowledgement">
                     <TextView
                         android:layout_width="match_parent"
@@ -32,14 +32,14 @@
                         android:id="@+id/headings"
                         android:gravity="center"
                         android:text="@string/key_chain_confirmation_alert"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp"/>
                     <TextView
                         android:id="@+id/keeping_you"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/keeping_you"
                         android:letterSpacing="0.02"
-                        android:textSize="15sp"
+                        android:textSize="14sp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:fontFamily="@font/poppins"
@@ -79,13 +79,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
+                        android:layout_marginBottom="8dp"
                         android:fontFamily="@font/inter"
                         android:gravity="start"
                         android:layout_marginEnd="20dp"
                         android:lineSpacingExtra="1sp"
                         android:text="@string/tick_to_ack"
-                        android:textColor="#2C2728"
-                        android:textSize="15sp" />
+                        android:textColor="@color/text_color"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
