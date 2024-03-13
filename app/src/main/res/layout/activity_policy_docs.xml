@@ -49,15 +49,15 @@
                 android:letterSpacing="0.02"
                 android:text="Policy Documents"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/img_policy"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:src="@drawable/policy_img"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -92,13 +92,13 @@
                         android:id="@+id/tv_amazon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginEnd="20dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
                         android:fontFamily="@font/poppins_semibold"
                         android:letterSpacing="0.02"
                         android:text="Amazon Logistics"
                         android:textColor="@color/text_color"
-                        android:textSize="20sp"
+                        android:textSize="19sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/img_policy" />
 
@@ -106,7 +106,7 @@
                         android:id="@+id/views1"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_margin="20dp"
+                        android:layout_margin="16dp"
                         android:background="@color/text_color"
                         app:layout_constraintTop_toBottomOf="@+id/tv_amazon" />
 
@@ -114,7 +114,7 @@
                         android:id="@+id/llones"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
+                        android:layout_margin="16dp"
                         android:layout_marginTop="10dp"
                         android:orientation="vertical"
                         app:layout_constraintTop_toBottomOf="@id/views1">
@@ -125,7 +125,7 @@
                             android:layout_marginTop="12dp"
                             android:background="@drawable/round_corners"
                             android:orientation="horizontal"
-                            android:padding="20dp">
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/txtSla"
@@ -161,7 +161,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
+                        android:layout_margin="16dp"
 
                         android:orientation="vertical"
                         app:layout_constraintTop_toBottomOf="@+id/llones">
@@ -169,10 +169,9 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
                             android:background="@drawable/round_corners"
                             android:orientation="horizontal"
-                            android:padding="20dp">
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/txtprivacy"
@@ -209,18 +208,16 @@
                         android:id="@+id/ll3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_margin="16dp"
                         android:orientation="vertical"
                         app:layout_constraintTop_toBottomOf="@+id/lltwos">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
                             android:background="@drawable/round_corners"
                             android:orientation="horizontal"
-                            android:padding="20dp">
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/txtgdpr"
@@ -257,18 +254,16 @@
                         android:id="@+id/ll4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_margin="16dp"
                         android:orientation="vertical"
                         app:layout_constraintTop_toBottomOf="@+id/ll3">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
                             android:background="@drawable/round_corners"
                             android:orientation="horizontal"
-                            android:padding="20dp">
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/txtDA"
@@ -305,18 +300,17 @@
                         android:id="@+id/llsix"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_margin="16dp"
                         android:orientation="vertical"
                         app:layout_constraintTop_toBottomOf="@+id/ll4">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
+
                             android:background="@drawable/round_corners"
                             android:orientation="horizontal"
-                            android:padding="20dp">
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/txtDAhand"
@@ -377,8 +371,8 @@
                             android:id="@+id/tick_to_ack"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
                             android:fontFamily="@font/inter"
                             android:gravity="start"
                             android:letterSpacing="0.02"
@@ -403,35 +397,33 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="16dp"
                         android:fontFamily="@font/poppins_semibold"
                         android:text="Trucks"
                         android:textColor="@color/text_color"
-                        android:textSize="20sp" />
+                        android:textSize="19sp" />
 
                     <View
                         android:id="@+id/viewss2"
                         android:layout_width="match_parent"
                         android:layout_height="0.05dp"
-                        android:layout_margin="20dp"
+                        android:layout_margin="16dp"
                         android:background="@color/text_color" />
 
                     <LinearLayout
                         android:id="@+id/llseven"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_margin="16dp"
                         android:orientation="vertical"
                         app:layout_constraintTop_toBottomOf="@+id/ll4">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
                             android:background="@drawable/round_corners"
                             android:orientation="horizontal"
-                            android:padding="20dp">
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/txtslapolicy"
@@ -468,18 +460,16 @@
                         android:id="@+id/lleight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_margin="16dp"
                         android:orientation="vertical"
                         app:layout_constraintTop_toBottomOf="@+id/ll4">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
                             android:background="@drawable/round_corners"
                             android:orientation="horizontal"
-                            android:padding="20dp">
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/txteight"
@@ -516,18 +506,16 @@
                         android:id="@+id/llnine"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_margin="16dp"
                         android:orientation="vertical"
                         app:layout_constraintTop_toBottomOf="@+id/ll4">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
                             android:background="@drawable/round_corners"
                             android:orientation="horizontal"
-                            android:padding="20dp">
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/txtnine"
@@ -564,18 +552,16 @@
                         android:id="@+id/ll10"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_margin="16dp"
                         android:orientation="vertical"
                         app:layout_constraintTop_toBottomOf="@+id/ll4">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
                             android:background="@drawable/round_corners"
                             android:orientation="horizontal"
-                            android:padding="20dp">
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/txt10"
@@ -612,18 +598,16 @@
                         android:id="@+id/ll11"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_margin="16dp"
                         android:orientation="vertical"
                         app:layout_constraintTop_toBottomOf="@+id/ll4">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
                             android:background="@drawable/round_corners"
                             android:orientation="horizontal"
-                            android:padding="20dp">
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/txtDA11"
@@ -678,8 +662,8 @@
                             android:id="@+id/tick_to_ack2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
                             android:fontFamily="@font/inter"
                             android:gravity="start"
                             android:letterSpacing="0.02"

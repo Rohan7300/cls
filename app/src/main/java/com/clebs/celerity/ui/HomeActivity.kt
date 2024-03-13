@@ -38,7 +38,6 @@ import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.showToast
-import com.clebs.celerity.utils.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
@@ -56,14 +55,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private lateinit var navGraph: NavGraph
     private var completeTaskScreen: Boolean = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
+    lateinit var fragmentManager: FragmentManager
     private var sdkkey = ""
-    lateinit var loadingDialog: LoadingDialog
-    lateinit var fragmentManager:FragmentManager
     var userId: Int = 0
     var firstName = ""
     var lastName = ""
-    var date = ""
     var isLeadDriver = false
+    var date = ""
+    lateinit var loadingDialog: LoadingDialog
 
     companion object {
         fun showLog(tag: String, message: String) {
@@ -77,7 +76,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
-            // Get status
             val identifier =
                 intent.getStringExtra(PublicConstants.quoteCreationFlowStatusIdentifierKeyInIntent)
                     ?: "Could not identify Identifier"
@@ -89,10 +87,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (tempCode == 200) {
                 CompleteTaskFragment.inspectionstarted = true
 
-toast("inspection success")
+                showToast("inspection success", this)
             } else {
 
-                toast("inspection Failed")
+                showToast("inspection Failed", this)
                 CompleteTaskFragment.inspectionstarted = false
 
             }
@@ -115,8 +113,8 @@ toast("inspection success")
         super.onCreate(savedInstanceState)
         ActivityHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
+
         loadingDialog = LoadingDialog(this)
-        fragmentManager = this.supportFragmentManager
         sdkkey = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
         cqSDKInitializer()
         userId = Prefs.getInstance(this).userID.toInt()
@@ -125,110 +123,126 @@ toast("inspection success")
         navController = navHostFragment.navController
         navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
         navController.addOnDestinationChangedListener(this)
-
+        fragmentManager = this.supportFragmentManager
         bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
         bottomNavigationView.menu.findItem(R.id.passwords).setTooltipText("Notifications")
-        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
-        val mainRepo = MainRepo(apiService)
-        val imagesRepo =
-            ImagesRepo(ImageDatabase.invoke(this), Prefs.getInstance(applicationContext))
 
-        viewModel =
-            ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
+        try {
+            val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+            val mainRepo = MainRepo(apiService)
+            val imagesRepo =
+                ImagesRepo(ImageDatabase.invoke(this), Prefs.getInstance(applicationContext))
+
+            viewModel =
+                ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
 
 
-        getVehicleLocationInfo()
-        viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
-            Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
-    loadingDialog.dismiss()
-
-            if (it != null) {
-                completeTaskScreen = it.IsSubmited
-                if (!completeTaskScreen) {
-                    screenid = viewModel.getLastVisitedScreenId(this)
-                    if (screenid == 0) {
-                        navController.navigate(R.id.homeFragment)
-                        // navigateTo(R.id.homeFragment)
-                        navController.currentDestination!!.id = R.id.homeFragment
-
-                    } else {
-                        try {
-                            navController.navigate(screenid)
-                            navController.currentDestination!!.id = screenid
-                        } catch (_: Exception) {
+            getVehicleLocationInfo()
+            viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
+                Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
+                loadingDialog.cancel()
+                /*progressBarVisibility(
+                    false,
+                    ActivityHomeBinding.homeActivityPB,
+                    ActivityHomeBinding.overlayViewHomeActivity
+                )*/
+                if (it != null) {
+                    completeTaskScreen = it.IsSubmited
+                    if (!completeTaskScreen) {
+                        screenid = viewModel.getLastVisitedScreenId(this)
+                        if (screenid == 0) {
                             navController.navigate(R.id.homeFragment)
+                            // navigateTo(R.id.homeFragment)
                             navController.currentDestination!!.id = R.id.homeFragment
+
+                        } else {
+                            try {
+                                navController.navigate(screenid)
+                                navController.currentDestination!!.id = screenid
+                            } catch (_: Exception) {
+                                navController.navigate(R.id.homeFragment)
+                                navController.currentDestination!!.id = R.id.homeFragment
+                            }
                         }
+                    } else {
+                        navController.navigate(R.id.completeTaskFragment)
                     }
-                } else {
-                    navController.navigate(R.id.completeTaskFragment)
                 }
             }
-        }
 
-        imageViewModel = ViewModelProvider(
-            this,
-            ImageViewModelProviderFactory(imagesRepo)
-        )[ImageViewModel::class.java]
+            imageViewModel = ViewModelProvider(
+                this,
+                ImageViewModelProviderFactory(imagesRepo)
+            )[ImageViewModel::class.java]
 
-        imageViewModel.images.observe(this) { imageEntity ->
-            dbLog(imageEntity)
-        }
-
-        ActivityHomeBinding.imgDrawer.setOnClickListener {
-            navController.navigate(R.id.profileFragment)
-        }
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-
-                R.id.home -> {
-                    ActivityHomeBinding.title.text = ""
-                    navController.navigate(R.id.homedemoFragment)
-                    true
-                }
-
-                R.id.daily -> {
-                    /*     navController.navigate(R.id.homeFragment)
-                         navController.currentDestination!!.id = R.id.homeFragment
-     */
-                    ActivityHomeBinding.title.text = ""
-                    viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
-                    loadingDialog.show()
-                    true
-                }
-
-                R.id.invoices -> {
-                    ActivityHomeBinding.title.text = ""
-                    navController.navigate(R.id.invoicesFragment)
-                    true
-                }
-
-                R.id.passwords -> {
-                    ActivityHomeBinding.title.text = "Notifications"
-                    navController.navigate(R.id.notifficationsFragment)
-
-                    true
-                }
-
-                R.id.tickets -> {
-                    ActivityHomeBinding.title.text = "User Tickets"
-                    navController.navigate(R.id.userTicketsFragment)
-
-                    true
-
-                }
-
-                else -> false
+            imageViewModel.images.observe(this) { imageEntity ->
+                dbLog(imageEntity)
             }
 
+            ActivityHomeBinding.imgDrawer.setOnClickListener {
+                navController.navigate(R.id.profileFragment)
+            }
+            bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+                when (item.itemId) {
+
+                    R.id.home -> {
+                        ActivityHomeBinding.title.text = ""
+                        navController.navigate(R.id.homedemoFragment)
+                        true
+                    }
+
+                    R.id.daily -> {
+                        /*     navController.navigate(R.id.homeFragment)
+                             navController.currentDestination!!.id = R.id.homeFragment
+         */
+                        ActivityHomeBinding.title.text = ""
+                        viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
+                        loadingDialog.show()
+                        /*        progressBarVisibility(
+                                    true,
+                                    ActivityHomeBinding.homeActivityPB,
+                                    ActivityHomeBinding.overlayViewHomeActivity
+                                )*/
+                        true
+                    }
+
+                    R.id.invoices -> {
+                        ActivityHomeBinding.title.text = ""
+                        navController.navigate(R.id.invoicesFragment)
+                        true
+                    }
+
+                    R.id.passwords -> {
+                        ActivityHomeBinding.title.text = "Notifications"
+                        navController.navigate(R.id.notifficationsFragment)
+
+                        true
+                    }
+
+                    R.id.tickets -> {
+                        ActivityHomeBinding.title.text = "User Tickets"
+                        navController.navigate(R.id.userTicketsFragment)
+
+                        true
+
+                    }
+
+                    else -> false
+                }
+
+            }
+            ActivityHomeBinding.imgLogout.setOnClickListener {
+                showAlertLogout()
+            }
+        }catch (e:Exception){
+            RetrofitService.handleNetworkError(e,fragmentManager)
         }
-        ActivityHomeBinding.imgLogout.setOnClickListener {
-//            showAlertLogout()
-        }
+
+
     }
 
-     fun getVehicleLocationInfo() {
+    private fun getVehicleLocationInfo() {
         val today = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("dd/MM")
         date = today.format(formatter)
@@ -238,15 +252,18 @@ toast("inspection success")
         viewModel.GetDriversBasicInformation(
             userId.toDouble()
         ).observe(this) {
-            loadingDialog.dismiss()
+            loadingDialog.cancel()
             if (it != null) {
-                if(Prefs.getInstance(applicationContext).vmRegNo.isNotEmpty()){
-
-                    viewModel.GetVehicleInformation(userId, Prefs.getInstance(applicationContext).vmRegNo)
-                    firstName = it.firstName
-                    lastName = it.lastName
-                    isLeadDriver = it.IsLeadDriver
+                try {
+                    if (it.vmRegNo != null)
+                        viewModel.GetVehicleInformation(userId, it.vmRegNo)
+                } catch (e: Exception) {
+                    Log.d("sds", e.toString())
                 }
+
+                firstName = it.firstName
+                lastName = it.lastName
+                isLeadDriver = it.IsLeadDriver
             }
         }
     }
@@ -334,13 +351,19 @@ toast("inspection success")
         }
 
         bttwo.setOnClickListener {
-            logout()
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.putExtra("logout", "0")
+            Prefs.getInstance(applicationContext).clearPreferences()
+            finish()
+            startActivity(intent)
+            setLoggedIn(false)
+            //logout()
         }
         deleteDialog.setView(view)
-        deleteDialog.setCanceledOnTouchOutside(false);
+        deleteDialog.setCanceledOnTouchOutside(false)
         deleteDialog.setCancelable(false)
-        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-        deleteDialog.show();
+        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        deleteDialog.show()
 
     }
 
