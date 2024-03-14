@@ -17,6 +17,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -108,8 +109,6 @@ open class DailyWorkFragment : Fragment() {
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
         mainViewModel.setLastVisitedScreenId(requireContext(), R.id.dailyWorkFragment)
-
-
 
 
         mbinding.rectangle4.setOnClickListener {
@@ -248,12 +247,13 @@ open class DailyWorkFragment : Fragment() {
         }
 
         for (block in text.textBlocks) {
-
-            txt = block.getText()
+            val lineText = block.lines.get(0).text
+            txt=lineText.replace(" ","")
+            Log.e(TAG, "processTxtscanning: $txt")
             if (txt.isNotEmpty()) {
                 getVichleinformation()
             }
-            Log.e(TAG, "processTxt: $txt")
+
         }
     }
 
@@ -339,8 +339,9 @@ open class DailyWorkFragment : Fragment() {
     }
 
 
-    private fun getVichleinformation() {
-
+ fun getVichleinformation() {
+        Prefs.getInstance(App.instance).vmRegNo = txt
+        (activity as HomeActivity).getVehicleLocationInfo()
         mainViewModel.getVichelinformationResponse(
             Prefs.getInstance(App.instance).userID.toString().toDouble(), 0.toDouble(), txt
         ).observe(requireActivity(), Observer {
@@ -364,11 +365,11 @@ open class DailyWorkFragment : Fragment() {
                 )
                 showAlert()
             } else {
-            showErrorDialog(fragmentManager,"DWF-01","Vehicle doesn't exists. Please scan again or contact your supervisor.")
-           /*     showToast(
-                    "Vehicle doesn't exists. Please scan again or contact your supervisor.",
-                    requireContext()
-                )*/
+                showErrorDialog(fragmentManager,"DWF-01","Vehicle doesn't exists. Please scan again or contact your supervisor.")
+                /*     showToast(
+                         "Vehicle doesn't exists. Please scan again or contact your supervisor.",
+                         requireContext()
+                     )*/
                 mbinding.rectange.visibility = View.GONE
                 mbinding.ivTakePhoto.visibility = View.GONE
                 mbinding.rectangle4.visibility = View.VISIBLE
@@ -400,6 +401,13 @@ open class DailyWorkFragment : Fragment() {
 
         deleteDialog.setView(view)
         deleteDialog.setCanceledOnTouchOutside(false);
+        deleteDialog.setOnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                true
+            } else {
+                false
+            }
+        }
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         deleteDialog.show();
 
