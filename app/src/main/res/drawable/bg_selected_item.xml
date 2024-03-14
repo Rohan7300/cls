@@ -3,5 +3,5 @@
         android:state_checked="true"
         android:drawable="@drawable/shape_selected_item" />
     <item
-        android:drawable="@drawable/bgunselcted" />
+        android:drawable="@color/light_orange2" />
 </selector>

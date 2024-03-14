@@ -94,6 +94,7 @@ class CompleteTaskFragment : Fragment() {
         }
 
         viewModel = (activity as HomeActivity).viewModel
+        (activity as HomeActivity).getVehicleLocationInfo()
 
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
         viewModel.GetDriverBreakTimeInfo(userId)

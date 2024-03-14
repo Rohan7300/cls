@@ -1,14 +1,13 @@
 package com.clebs.celerity.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.AnimationUtils
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,7 +19,6 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.Prefs
-import java.util.logging.Handler
 
 class SplashActivity : AppCompatActivity() {
     lateinit var ActivitySplashBinding: ActivitySplashBinding
@@ -32,6 +30,8 @@ class SplashActivity : AppCompatActivity() {
             DataBindingUtil.setContentView(this@SplashActivity, R.layout.activity_splash)
 
         val rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.anam)
+      //
+
 
         // Set the animation on the circles
         ActivitySplashBinding.imgCircleLogo.startAnimation(rotateAnimation)
@@ -40,9 +40,6 @@ class SplashActivity : AppCompatActivity() {
 
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
-
-
-
 
 
         android.os.Handler().postDelayed({
@@ -61,6 +58,7 @@ class SplashActivity : AppCompatActivity() {
         return Prefs.getInstance(applicationContext).getBoolean("isLoggedIn", false)
 
     }
+
 
     fun navigateToLoginScreen() {
         // Navigate to the login screen

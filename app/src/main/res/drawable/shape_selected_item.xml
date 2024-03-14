@@ -4,8 +4,6 @@
     android:insetRight="5dp">
     <shape android:shape="rectangle"
         >
-
-
         <solid android:color="#FEF0EA"
             />
 
