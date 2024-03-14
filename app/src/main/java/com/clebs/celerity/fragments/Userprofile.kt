@@ -13,10 +13,12 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentUserprofileBinding
+import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
@@ -30,8 +32,10 @@ class Userprofile : Fragment() {
     private var isedit: Boolean = false
     lateinit var mainViewModel: MainViewModel
     var ninetydaysBoolean: Boolean? = null
-    var userName = ""
-
+    var edtold: String? = null
+    var edtnew: String? = null
+    var firstname: String? = null
+    var lastname: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,9 +69,9 @@ class Userprofile : Fragment() {
                 mbinding.usertext.isFocusable = true
                 mbinding.usertext.isFocusableInTouchMode = true
 
-                mbinding.passtext.isEnabled = true
-                mbinding.passtext.isFocusable = true
-                mbinding.passtext.isFocusableInTouchMode = true
+//                mbinding.passtext.isEnabled = true
+//                mbinding.passtext.isFocusable = true
+//                mbinding.passtext.isFocusableInTouchMode = true
 
                 mbinding.phonetext.isEnabled = true
                 mbinding.phonetext.isFocusable = true
@@ -119,7 +123,13 @@ class Userprofile : Fragment() {
             showAlert()
         }
         mbinding.save.setOnClickListener {
-            updateProfile90dys()
+            if (ninetydaysBoolean == true) {
+                updateProfile90dys()
+
+            } else {
+                updateprofileregular()
+            }
+//            updateProfile90dys()
         }
         return mbinding.root
     }
@@ -164,10 +174,15 @@ class Userprofile : Fragment() {
             } else if (edt_new.text.isEmpty()) {
                 edt_new.setError("please enter new password")
             } else {
+                edtold = edt_old.text.toString()
+                edtnew = edt_new.text.toString()
+                updateProfilePassword()
                 deleteDialog.dismiss()
 
 
             }
+
+
         }
         deleteDialog.setCancelable(true)
         deleteDialog.setCanceledOnTouchOutside(true);
@@ -185,7 +200,7 @@ class Userprofile : Fragment() {
 
         val button: TextView = view.findViewById(R.id.save)
         button.setOnClickListener {
-            isedit = true
+
             deleteDialog.dismiss()
 
 
@@ -208,11 +223,12 @@ class Userprofile : Fragment() {
                 Log.e("responseprofile", "GetDriversBasicInformation: ")
                 mbinding.name.text = it.firstName + " " + it.lastName
                 mbinding.usertext.setText(it.firstName + " " + it.lastName)
+                firstname = it.firstName
+                lastname = it.lastName
                 mbinding.emailtext.setText(it.emailID)
                 mbinding.passtext.setText("**********")
                 mbinding.phonetext.setText(it.PhoneNumber)
                 mbinding.addresstext.setText(it.Address)
-
                 mbinding.pb.visibility = View.GONE
                 mbinding.FormLayout.alpha = 1f
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
@@ -224,9 +240,9 @@ class Userprofile : Fragment() {
     }
 
     fun UseEmailAsUSername() {
-        userName = mbinding.emailtext.text.toString()
+
         mainViewModel.UseEmailasUsername(
-            Prefs.getInstance(App.instance).userID.toDouble(), userName
+            Prefs.getInstance(App.instance).userID.toDouble(), "chakshit@gmail.com"
         ).observe(requireActivity(), Observer {
             Log.e("dkfjdkfjdfkj", "UseEmailAsUSername: ")
             if (it?.Status!!.equals(200)) {
@@ -234,6 +250,7 @@ class Userprofile : Fragment() {
 
                 Log.e("dlkfdlkfl", "UseEmailAsUSernamesuccess: " + it.Status + it.message)
             }
+
 
         })
     }
@@ -245,6 +262,8 @@ class Userprofile : Fragment() {
             mbinding.phonetext.text.toString()
         ).observe(viewLifecycleOwner, Observer {
             if (it != null) {
+                isedit=false
+                mbinding.save.visibility=View.GONE
                 if (it?.Status!!.equals(200)) {
 
                     showToast("ProfileUpdated", requireContext())
@@ -255,4 +274,56 @@ class Userprofile : Fragment() {
 
         })
     }
+
+    fun updateProfilePassword() {
+
+        mainViewModel.updateProfilepassword(
+            Prefs.getInstance(App.instance).userID.toDouble(),
+            edtold!!, edtnew!!
+        )
+        mainViewModel.updateprofilelivedata.observe(viewLifecycleOwner) {
+
+            if (it != null) {
+
+                if (it.Status.equals("200")) {
+
+                    showToast("Password has been changed", requireContext())
+                }
+            } else {
+                showToast("Error in changing password", requireContext())
+            }
+        }
+    }
+
+    fun updateprofileregular() {
+
+        mainViewModel.updateprofileRegular(
+            UpdateProfileRequestBody(
+                Prefs.getInstance(App.instance).userID.toInt(),
+                firstname!!,
+                lastname!!,
+                mbinding.emailtext.text.toString(),
+                mbinding.phonetext.text.toString(),
+                mbinding.addresstext.text.toString()
+            )
+        )
+
+        mainViewModel.updateprofileregular.observe(viewLifecycleOwner) {
+            if (it != null) {
+                isedit=false
+                mbinding.save.visibility=View.GONE
+                if (it.Status.equals("200")) {
+
+                    showToast("profile successfully updated", requireContext())
+
+                }
+                else {
+                    showToast("Error in updating profile", requireContext())
+                }
+            }
+
+        }
+
+    }
+
 }

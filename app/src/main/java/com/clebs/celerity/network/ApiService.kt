@@ -15,6 +15,7 @@ import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.requests.SaveDriverDocumentSignatureRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
+import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 
@@ -235,6 +236,9 @@ interface ApiService {
         @Query("LeadDriverId") LeadDriverId: Int
     ): Response<GetRideAlongRouteInfoByIdRes>
 
+@PUT("/api/Drivers/UpdatePassword")
+suspend fun updateprofilepassword(@Query("userId") userId: Double ,@Query("oldPassword") oldpassword:String,@Query("newPassword") newpassworfd :String):Response<SimpleStatusMsgResponse>
 
-
+@PUT("/api/Drivers/UpdateProfile")
+suspend fun updateprofileregular(@Body request:UpdateProfileRequestBody):Response<SimpleStatusMsgResponse>
 }

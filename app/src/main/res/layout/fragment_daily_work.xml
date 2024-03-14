@@ -6,6 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         tools:context=".fragments.HomeFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -183,7 +184,7 @@
                     android:textAlignment="center"
                     android:textAppearance="@style/place_the_r"
                     android:textColor="@color/text_color"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
 
                     app:layout_constraintStart_toStartOf="parent"
