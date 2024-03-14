@@ -1145,7 +1145,7 @@
             android:layout_marginBottom="20dp"
             android:enabled="false"
             android:fontFamily="@font/inter"
-
+android:visibility="gone"
             android:gravity="center_horizontal|center_vertical"
             android:text="Save &amp; Next"
             android:textAllCaps="false"

@@ -255,8 +255,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             loadingDialog.cancel()
             if (it != null) {
                 try {
-                    if (it.vmRegNo != null)
-                        viewModel.GetVehicleInformation(userId, it.vmRegNo)
+                    //if (it.vmRegNo != null)
+                        viewModel.GetVehicleInformation(userId, Prefs.getInstance(this).vmRegNo)
                 } catch (e: Exception) {
                     Log.d("sds", e.toString())
                 }
