@@ -74,7 +74,6 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:textSize="30sp"
-
             app:itemBackground="@drawable/bg_selected_item"
             app:itemIconSize="20dp"
             app:labelVisibilityMode="labeled"

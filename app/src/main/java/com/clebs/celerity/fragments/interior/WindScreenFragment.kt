@@ -47,10 +47,6 @@ class WindScreenFragment : Fragment() {
     lateinit var imageViewModel: ImageViewModel
     var imageEntity = ImageEntity()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,8 +57,6 @@ class WindScreenFragment : Fragment() {
         val vm_id = arguments?.get("vm_mileage")
         Log.e("vmvmvmv", "onCreateView: $vm_id")
 
-        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
-        val mainRepo = MainRepo(apiService)
         viewModel =(activity as HomeActivity).viewModel
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.windScreenFragment)
         mbinding.tvNext.visibility = View.GONE
@@ -77,11 +71,11 @@ class WindScreenFragment : Fragment() {
             }
         }
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner){
-            mbinding.dxLoc.text = it?.locationName?:""
-            mbinding.dxReg.text = it?.vmRegNo?:""
+            mbinding.headerTop.dxLoc.text = it?.locationName?:""
+            mbinding.headerTop.dxReg.text = it?.vmRegNo?:""
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-                .also { name -> mbinding.anaCarolin.text = name }
-            mbinding.dxm5.text = (activity as HomeActivity).date
+                .also { name -> mbinding.headerTop.anaCarolin.text = name }
+            mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
         }
 
 
@@ -144,7 +138,7 @@ class WindScreenFragment : Fragment() {
                 //findNavController().navigate(R.id.windowsGlassFragment)
             }
         }
-        mbinding.headings.setOnClickListener {
+        mbinding.headerTop.headings.setOnClickListener {
             //findNavController().navigate(R.id.profileFragment)
             navigateTo(R.id.profileFragment)
         }

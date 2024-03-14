@@ -117,12 +117,10 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="18dp"
-
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    v
 
                     <ImageView
                         android:layout_width="16dp"
@@ -141,13 +139,11 @@
                         android:textColor="#231F20"
                         android:textSize="13sp" />
 
-
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="18dp"
-
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="horizontal">
