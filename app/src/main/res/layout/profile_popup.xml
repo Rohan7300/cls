@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    app:cardBackgroundColor="@color/white"
+    app:cardBackgroundColor="@color/very_light_orange"
     app:cardCornerRadius="20dp"
     app:cardElevation="8dp"
+
     app:cardMaxElevation="10dp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true">
@@ -14,6 +15,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
+
         android:layout_margin="20dp">
 
         <TextView
@@ -34,7 +37,7 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal"
             android:weightSum="2"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +61,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:layout_marginTop="48dp"
             android:orientation="horizontal"
             android:weightSum="2"
             app:layout_constraintTop_toBottomOf="@id/linearLayout">
@@ -70,11 +73,11 @@
                 android:layout_height="48dp"
                 android:text="No"
                 android:layout_weight="1"
-                android:background="@drawable/shape_textview_button"
+                android:background="@drawable/shape_button_three"
                 android:textAllCaps="false"
                 android:fontFamily="@font/inter"
-                android:layout_marginTop="48dp"
-                android:textColor="#F36C2E"
+
+                android:textColor="@color/text_color"
                 android:layout_marginBottom="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginEnd="20dp"
@@ -89,9 +92,9 @@
                 android:layout_weight="1"
                 android:textAllCaps="false"
                 android:fontFamily="@font/inter"
-              android:background="@drawable/shape_textview_button"
-                android:layout_marginTop="48dp"
-                android:textColor="#F36C2E"
+              android:background="@drawable/shape_button_three"
+
+                android:textColor="@color/text_color"
                 android:layout_marginBottom="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginEnd="20dp"

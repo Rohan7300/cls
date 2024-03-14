@@ -28,7 +28,7 @@ Place the Rectangle area as on Vehicle Reg plate as shown in the image The app w
     <string name="_5_clock_out_of_da_system">5. Clock out of DA System.</string>
     <string name="lorem_ipsum_is_simply_dummy_text_of_the_printing_and_typesetting">Lorem Ipsum is simply dummy text of the printing and typesetting ....</string>
     <string name="lorem_ipsum_is">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
-    <string name="use_email_as_user_name">Use Email as User name</string>
+    <string name="use_email_as_user_name">Use Email as Username</string>
     <string name="please_confirm">Please confirm if you want to use your Email as your username for Login</string>
     <string name="use_email_as_username"><u>Use Email as Username</u></string>
     <string name="enter_defect">Enter Defect*</string>

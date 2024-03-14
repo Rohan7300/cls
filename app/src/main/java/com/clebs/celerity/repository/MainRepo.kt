@@ -12,6 +12,7 @@ import com.clebs.celerity.models.requests.LoginRequest
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
+import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
@@ -44,12 +45,40 @@ class MainRepo(private val ApiService: ApiService) {
 
         if (response.isSuccessful) {
             return response.body()
-        }else{
-                val errorBody = response.errorBody()?.string()
-                println("Error Response body: $errorBody")
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
 
-             }
+        }
         return null
+    }
+
+    suspend fun updateprofilePassword(
+        userID: Double,
+        oldpass: String,
+        newpass: String
+    ): SimpleStatusMsgResponse? {
+
+        val response = ApiService.updateprofilepassword(userID, oldpass, newpass)
+
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+
+        }
+        return null
+    }
+
+    suspend fun updteprofileregular(request: UpdateProfileRequestBody): SimpleStatusMsgResponse? {
+        val response = ApiService.updateprofileregular(request)
+        if (response.isSuccessful) {
+
+            return response.body()
+        }
+        return null
+
     }
 
     suspend fun getVechileinformation(
@@ -97,16 +126,20 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
 
-    suspend fun UseEmailAsUsername(userID: Double,emailAdddress:String) : BaseResponseTwo?{
-        val response = ApiService.UseEmailAsUsername(userID,emailAdddress)
+    suspend fun UseEmailAsUsername(userID: Double, emailAdddress: String): BaseResponseTwo? {
+        val response = ApiService.UseEmailAsUsername(userID, emailAdddress)
         if (response.isSuccessful) {
             return response.body()
         }
         return null
     }
 
-    suspend fun UpdateDAprofileninetydays(userID: Double,emailAdddress:String,phonenumber:String) : BaseResponseTwo?{
-        val response = ApiService.updateDAProfile90days(userID,emailAdddress,phonenumber)
+    suspend fun UpdateDAprofileninetydays(
+        userID: Double,
+        emailAdddress: String,
+        phonenumber: String
+    ): BaseResponseTwo? {
+        val response = ApiService.updateDAProfile90days(userID, emailAdddress, phonenumber)
         if (response.isSuccessful) {
             return response.body()
         }
@@ -175,160 +208,168 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
-    suspend fun GetDailyWorkInfobyId(userID: Int):DailyWorkInfoByIdResponse?{
+    suspend fun GetDailyWorkInfobyId(userID: Int): DailyWorkInfoByIdResponse? {
         val response = ApiService.GetDailyWorkInfobyId(userID)
-        if (response.isSuccessful){
+        if (response.isSuccessful) {
             return response.body()
-        }else{
+        } else {
             val errorBody = response.errorBody()?.string()
             println("Error response body: $errorBody")
         }
         return null
     }
 
-    suspend fun GetRouteLocationInfo(locID: Int): GetRouteLocationInfoResponse?{
+    suspend fun GetRouteLocationInfo(locID: Int): GetRouteLocationInfoResponse? {
         val response = ApiService.GetRouteLocationInfo(locID)
-        if (response.isSuccessful){
+        if (response.isSuccessful) {
             return response.body()
-        }else{
+        } else {
             val errorBody = response.errorBody()?.string()
             println("Error response body: $errorBody")
         }
         return null
     }
 
-    suspend fun GetRideAlongRouteTypeInfo(userID: Int): GetRideAlongRouteTypeInfoResponse?{
+    suspend fun GetRideAlongRouteTypeInfo(userID: Int): GetRideAlongRouteTypeInfoResponse? {
         val response = ApiService.GetRideAlongRouteTypeInfo(userID)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error response body: $errorBody")
         }
         return null
     }
-    suspend fun GetDriverSignatureInformation(userID: Int): GetDriverSignatureInformationResponse?{
+
+    suspend fun GetDriverSignatureInformation(userID: Int): GetDriverSignatureInformationResponse? {
         val response = ApiService.GetDriverSignatureInformation(userID)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error response body: $errorBody")
         }
         return null
     }
 
-    suspend fun UpdateDriverAgreementSignature(updateDriverSignatureRequest: UpdateDriverAgreementSignatureRequest):SimpleStatusMsgResponse?{
+    suspend fun UpdateDriverAgreementSignature(updateDriverSignatureRequest: UpdateDriverAgreementSignatureRequest): SimpleStatusMsgResponse? {
         val response = ApiService.UpdateDriverAgreementSignature(updateDriverSignatureRequest)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error response body: $errorBody")
         }
         return null
     }
 
-    suspend fun AddOnRouteInfo(addOnRouteInfoRequest: AddOnRouteInfoRequest):SimpleStatusMsgResponse?{
+    suspend fun AddOnRouteInfo(addOnRouteInfoRequest: AddOnRouteInfoRequest): SimpleStatusMsgResponse? {
         val response = ApiService.AddOnRouteInfo(addOnRouteInfoRequest)
-        if(response.isSuccessful){
+        if (response.isSuccessful) {
             return response.body()
-        }else{
+        } else {
             val errorBody = response.errorBody()?.string()
             println("Error response body: $errorBody")
         }
         return null
     }
 
-    suspend fun SaveBreakTime(saveBreakTimeRequest: SaveBreakTimeRequest):SimpleStatusMsgResponse?{
+    suspend fun SaveBreakTime(saveBreakTimeRequest: SaveBreakTimeRequest): SimpleStatusMsgResponse? {
         val response = ApiService.SaveBreakTime(saveBreakTimeRequest)
-        if(response.isSuccessful){
+        if (response.isSuccessful) {
             return response.body()
-        }else{
+        } else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
         return null
     }
 
-    suspend fun GetDriverBreakInfo(driverId:Int):GetDriverBreakTimeInfoResponse?{
+    suspend fun GetDriverBreakInfo(driverId: Int): GetDriverBreakTimeInfoResponse? {
         val response = ApiService.GetDriverBreakInfo(driverId)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
         return null
     }
-    suspend fun UpdateClockInTime(driverId:Int):SimpleStatusMsgResponse?{
+
+    suspend fun UpdateClockInTime(driverId: Int): SimpleStatusMsgResponse? {
         val response = ApiService.UpdateClockInTime(driverId)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
         return null
     }
-    suspend fun UpdateClockOutTime(driverId:Int):SimpleStatusMsgResponse?{
+
+    suspend fun UpdateClockOutTime(driverId: Int): SimpleStatusMsgResponse? {
         val response = ApiService.UpdateClockOutTime(driverId)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
         return null
     }
 
-    suspend fun GetRideAlongDriversList():GetRideAlongDriversListResponse?{
+    suspend fun GetRideAlongDriversList(): GetRideAlongDriversListResponse? {
         val response = ApiService.GetRideAlongDriversList()
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
         return null
     }
-    suspend fun GetRideAlongVehicleLists(): GetRideAlongVehicleLists?{
+
+    suspend fun GetRideAlongVehicleLists(): GetRideAlongVehicleLists? {
         val response = ApiService.GetRideAlongVehicleLists()
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
         return null
     }
 
-    suspend fun GetRouteInfoById(routeID:Int):GetRouteInfoByIdRes?{
+    suspend fun GetRouteInfoById(routeID: Int): GetRouteInfoByIdRes? {
         val response = ApiService.GetRouteInfoById(routeID)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
         return null
     }
 
-    suspend fun AddOnRideAlongRouteInfo(addOnRideAlongRouteInfoRequest: AddOnRideAlongRouteInfoRequest):SimpleStatusMsgResponse?{
+    suspend fun AddOnRideAlongRouteInfo(addOnRideAlongRouteInfoRequest: AddOnRideAlongRouteInfoRequest): SimpleStatusMsgResponse? {
         val response = ApiService.AddOnRideAlongRouteInfo(addOnRideAlongRouteInfoRequest)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
         return null
     }
-    suspend fun GetRideAlongRouteInfoById(routeID: Int,leadDriverId:Int):GetRideAlongRouteInfoByIdRes?{
-        val response = ApiService.GetRideAlongRouteInfoById(routeID,leadDriverId)
-        if(response.isSuccessful)
+
+    suspend fun GetRideAlongRouteInfoById(
+        routeID: Int,
+        leadDriverId: Int
+    ): GetRideAlongRouteInfoByIdRes? {
+        val response = ApiService.GetRideAlongRouteInfoById(routeID, leadDriverId)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
