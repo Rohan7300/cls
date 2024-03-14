@@ -17,6 +17,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -108,8 +109,6 @@ open class DailyWorkFragment : Fragment() {
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
         mainViewModel.setLastVisitedScreenId(requireContext(), R.id.dailyWorkFragment)
-
-
 
 
         mbinding.rectangle4.setOnClickListener {
@@ -401,6 +400,13 @@ open class DailyWorkFragment : Fragment() {
 
         deleteDialog.setView(view)
         deleteDialog.setCanceledOnTouchOutside(false);
+        deleteDialog.setOnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                true
+            } else {
+                false
+            }
+        }
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         deleteDialog.show();
 

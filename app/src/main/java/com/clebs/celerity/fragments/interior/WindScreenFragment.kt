@@ -139,8 +139,8 @@ class WindScreenFragment : Fragment() {
             }
         }
         mbinding.headerTop.headings.setOnClickListener {
-            //findNavController().navigate(R.id.profileFragment)
-            navigateTo(R.id.profileFragment)
+            findNavController().navigate(R.id.profileFragment)
+            //navigateTo(R.id.profileFragment)
         }
         return mbinding.root
     }
