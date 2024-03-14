@@ -426,7 +426,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
                         android:backgroundTint="@color/white"
-                        android:src="@drawable/ic_clockout"
+                        android:src="@drawable/clockout"
                         android:visibility="visible" />
 
                 </RelativeLayout>

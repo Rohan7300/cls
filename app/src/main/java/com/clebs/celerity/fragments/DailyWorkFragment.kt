@@ -242,7 +242,8 @@ open class DailyWorkFragment : Fragment() {
 
         if (blocks.size == 0) {
             mbinding.pb.visibility = View.GONE
-            showToast("No Text ", requireContext())
+            //showToast("No Text ", requireContext())
+            showErrorDialog(fragmentManager,"DWF-03","Vehicle doesn't exists. Please scan again or contact your supervisor.")
             return
         }
 

@@ -58,11 +58,18 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var inspectionID: String
     private var requestCode: Int = 0
     private var showImageUploadLayout: Boolean = false
+    var isAllImageUploaded: Boolean = false
+    var isInspectionDone: Boolean = false
+    var imagesUploaded: Boolean = false
+    var isClockedIn: Boolean = false
+    var isOnRoadHours: Boolean = false
+    var visibilityLevel = 0
     var breakStartTime: String = ""
     var breakEndTime: String = ""
-    lateinit var loadingDialog:LoadingDialog
+    lateinit var loadingDialog: LoadingDialog
     private lateinit var cqSDKInitializer: CQSDKInitializer
-    private lateinit var fragmentManager:FragmentManager
+    private lateinit var fragmentManager: FragmentManager
+
     companion object {
         var inspectionstarted: Boolean? = null
     }
@@ -78,7 +85,7 @@ class CompleteTaskFragment : Fragment() {
             showAlert()
         }
         loadingDialog = (activity as HomeActivity).loadingDialog
-        userId = Prefs.getInstance(requireContext())    .userID.toInt()
+        userId = Prefs.getInstance(requireContext()).userID.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
@@ -97,12 +104,13 @@ class CompleteTaskFragment : Fragment() {
         (activity as HomeActivity).getVehicleLocationInfo()
 
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
+
+        observers()
+
         viewModel.GetDriverBreakTimeInfo(userId)
         viewModel.GetDailyWorkInfoById(userId)
 
-        observers()
         clientUniqueID()
-
 
         mbinding.rlcomtwoClock.setOnClickListener {
             loadingDialog.show()
@@ -134,34 +142,6 @@ class CompleteTaskFragment : Fragment() {
         mbinding.startinspection.setOnClickListener {
             startInspection()
         }
-        /*        mbinding.clVehicleDashboard.setOnClickListener {
-                    //startInspection()
-                    *//*requestCode = 1
-            pictureDialogBase64(mbinding.ivVehicleDashboard, requestCode)*//*
-        }
-        mbinding.clFront.setOnClickListener {
-            *//*requestCode = 2
-        startInspection()
-            pictureDialogBase64(mbinding.ivFront, requestCode)*//*
-
-            startInspection()
-        }
-        mbinding.clNearSide.setOnClickListener {
-            *//*requestCode = 3
-            pictureDialogBase64(mbinding.ivNearSide, requestCode)*//*
-            startInspection()
-        }
-        mbinding.clRearImgUp.setOnClickListener {
-            *//*requestCode = 4
-            pictureDialogBase64(mbinding.ivRearImgUp, requestCode)*//*
-            startInspection()
-        }
-              mbinding.clOffSideImgUp.setOnClickListener {
-            /*requestCode = 6
-            pictureDialogBase64(mbinding.ivOffSideImgUp, requestCode)*/
-            startInspection()
-        }
-        */
 
         mbinding.clOilLevel.setOnClickListener {
             requestCode = 5
@@ -185,18 +165,20 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
                 mbinding.view2.visibility = View.VISIBLE
             } else {
-                mbinding.taskDetails.visibility = View.GONE
+               mbinding.taskDetails.visibility = View.GONE
                 mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
                 mbinding.view2.visibility = View.GONE
-                mbinding.uploadLayouts.visibility = View.VISIBLE
+                //mbinding.uploadLayouts.visibility = View.VISIBLE
             }
             isclicked = !isclicked
         }
 
 
         mbinding.tvNext.setOnClickListener {
+            isInspectionDone = true
             mbinding.tvNext.visibility = View.GONE
             mbinding.uploadLayouts.visibility = View.GONE
+            mbinding.rlcomtwoClock.visibility = View.VISIBLE
         }
 
         mbinding.rlcomtwoRoad.setOnClickListener {
@@ -221,7 +203,7 @@ class CompleteTaskFragment : Fragment() {
 
     private fun observers() {
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-            if(it!=null){
+            if (it != null) {
                 loadingDialog.cancel()
                 mbinding.dxLoc.text = it?.locationName ?: ""
                 mbinding.dxReg.text = it?.vmRegNo ?: ""
@@ -233,13 +215,13 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.rideAlong.visibility = View.GONE
                 }
             }
-          }
+        }
 
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             if (it != null) {
-                //  deleteDialog.cancel()
+                //visibilityLevel = 3
             } else {
-               // showToast("Something went wrong!!", requireContext())
+                // showToast("Something went wrong!!", requireContext())
             }
             loadingDialog.cancel()
         }
@@ -249,26 +231,30 @@ class CompleteTaskFragment : Fragment() {
             if (it != null) {
                 if (it.ClockedInTime != null) {
                     mbinding.tvClockedIN.text = it.ClockedInTime.toString()
+                    isClockedIn = true
+                    setVisibiltyLevel()
                     mbinding.rlcomtwoClock.visibility = View.GONE
                     mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
                     mbinding.onRoadView.visibility = View.VISIBLE
                     mbinding.rlcomtwoBreak.visibility = View.VISIBLE
                 } else {
-                    with(mbinding) {
+            /*        with(mbinding) {
                         listOf(
                             rlcomtwoBreak,
                             onRoadView,
                             rlcomtwoBreak,
                             rlcomtwoClockOut
                         ).forEach { thisView -> thisView.visibility = View.GONE }
-                    }
+                    }*/
+                    isClockedIn = false
+                    setVisibiltyLevel()
                 }
 
                 if (it.ClockedOutTime != null) {
                     mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
                 }
-            }else{
+            } else {
                 with(mbinding) {
                     listOf(
                         rlcomtwoClock,
@@ -284,8 +270,8 @@ class CompleteTaskFragment : Fragment() {
         viewModel.livedataClockInTime.observe(viewLifecycleOwner) {
             viewModel.GetDailyWorkInfoById(userId)
             if (it != null) {
-                mbinding.rlcomtwoClock.visibility = View.GONE
-                mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                isClockedIn = true
+                setVisibiltyLevel()
             } else {
                 showToast("Please add face mask image first", requireContext())
             }
@@ -314,7 +300,7 @@ class CompleteTaskFragment : Fragment() {
                     }
                 } ?: showToast("No Break time information added!!", requireContext())
             } else {
-              //  showToast("Something went wrong!!", requireContext())
+                //  showToast("Something went wrong!!", requireContext())
             }
         }
 
@@ -337,33 +323,41 @@ class CompleteTaskFragment : Fragment() {
         viewModel.vehicleImageUploadInfoLiveData.observe(viewLifecycleOwner, Observer {
             loadingDialog.cancel()
             println(it)
-            if(it!=null){
+            if (it != null) {
                 if (it!!.Status == "404") {
                     mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                     showImageUploadLayout = true
-                    mbinding.taskDetails.visibility = View.VISIBLE
-                     with(mbinding) {
-                                        listOf(
-                                            rlcomtwoBreak,
-                                            onRoadView,
-                                            rlcomtwoBreak,
-                                            rlcomtwoClock,
-                                            rlcomtwoClockOut,
-                                            tvNext
-                                        ).forEach { thisView -> thisView.visibility = View.GONE }
-                                    }
+                    imagesUploaded = false
+                    setVisibiltyLevel()
+       /*             mbinding.taskDetails.visibility = View.VISIBLE
+                    with(mbinding) {
+                        listOf(
+                            rlcomtwoBreak,
+                            onRoadView,
+                            rlcomtwoBreak,
+                            rlcomtwoClock,
+                            rlcomtwoClockOut,
+                            tvNext
+                        ).forEach { thisView -> thisView.visibility = View.GONE }
+                        }
+                        */
+
                 } else {
                     if (it.IsVehicleImageUploaded == false) {
                         showImageUploadLayout = true
+                        imagesUploaded = false
+                        setVisibiltyLevel()
                         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                     } else {
 
                         showImageUploadLayout = checkNull(it)
 
                         if (showImageUploadLayout) {
+                            imagesUploaded = false
+                            setVisibiltyLevel()
                             mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                             mbinding.taskDetails.visibility = View.VISIBLE
-                            with(mbinding) {
+      /*                      with(mbinding) {
                                 listOf(
                                     rlcomtwoBreak,
                                     onRoadView,
@@ -371,7 +365,11 @@ class CompleteTaskFragment : Fragment() {
                                     rlcomtwoClock,
                                     rlcomtwoClockOut
                                 ).forEach { thisView -> thisView.visibility = View.GONE }
-                            }
+                            }*/
+                        } else {
+                            imagesUploaded = true
+                            setVisibiltyLevel()
+                            isAllImageUploaded = true
                         }
 
                         if (it.DaVehImgDashBoardFileName != null)
@@ -505,7 +503,7 @@ class CompleteTaskFragment : Fragment() {
                 loadingDialog.show()
                 sendBreakTimeData()
             } else {
-                showErrorDialog(fragmentManager,"CTF-02","Please add valid time information")
+                showErrorDialog(fragmentManager, "CTF-02", "Please add valid time information")
                 //showToast("Please add valid time information", requireContext())
             }
         }
@@ -668,8 +666,11 @@ class CompleteTaskFragment : Fragment() {
     }
 
     fun startInspection() {
-        mbinding.tvNext.visibility = View.VISIBLE
-        if(Build.VERSION.SDK_INT<=Build.VERSION_CODES.TIRAMISU){
+        if (isAllImageUploaded) {
+            mbinding.tvNext.visibility = View.VISIBLE
+        }
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
             loadingDialog.show()
 
             if (cqSDKInitializer.isCQSDKInitialized()) {
@@ -680,7 +681,7 @@ class CompleteTaskFragment : Fragment() {
                 // Make request to start an inspection
                 try {
                     cqSDKInitializer.startInspection(
-                        activityContext = requireActivity().baseContext,
+                        activityContext = requireActivity(),
                         clientAttrs = ClientAttrs(
                             userName = "",
                             dealer = "",
@@ -715,14 +716,71 @@ class CompleteTaskFragment : Fragment() {
                             }
                         }
                     )
-                }catch (_:Exception){
+                } catch (_: Exception) {
                     //showToast("Please try again later!!",requireContext())
-                    showErrorDialog(fragmentManager,"CTF-02","Please try again later!!")
+                    showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
                 }
             }
-        }else{
-            showErrorDialog(fragmentManager,"CTF-1","We are currently updating our app for Android 13+ devices. Please try again later.")
+        } else {
+            showErrorDialog(
+                fragmentManager,
+                "CTF-1",
+                "We are currently updating our app for Android 13+ devices. Please try again later."
+            )
         }
 
     }
+
+    fun visibiltyControlls() {
+        with(mbinding) {
+            listOf(
+                uploadLayouts,
+                rlcomtwoBreak,
+                onRoadView,
+                rlcomtwoBreak,
+                rlcomtwoClock,
+                rlcomtwoClockOut,
+                taskDetails
+            ).forEach { thisView -> thisView.visibility = View.GONE }
+        }
+        when (visibilityLevel) {
+            0 -> {
+                mbinding.uploadLayouts.visibility = View.VISIBLE
+                mbinding.taskDetails.visibility = View.VISIBLE
+            }
+
+            1 -> {
+                mbinding.rlcomtwoClock.visibility = View.VISIBLE
+            }
+
+            2 -> {
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+            }
+
+            3 -> {
+                mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    fun setVisibiltyLevel() {
+        visibilityLevel = 0
+        if (!imagesUploaded) {
+            visibilityLevel = 0
+            visibiltyControlls()
+            return
+        }else{
+            visibilityLevel +=1
+        }
+        if (isClockedIn){
+            visibilityLevel += 1
+        }
+        if (isOnRoadHours)
+            visibilityLevel += 1
+
+        visibiltyControlls()
+    }
+
+
 }
