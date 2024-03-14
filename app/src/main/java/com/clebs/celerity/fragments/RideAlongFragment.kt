@@ -93,7 +93,6 @@ class RideAlongFragment : Fragment() {
                 loadingDialog.cancel()
                 viewModel.GetRideAlongVehicleLists()
             }
-
         }
 
         viewModel.liveDataRideAlongRouteTypeInfo.observe(viewLifecycleOwner) {

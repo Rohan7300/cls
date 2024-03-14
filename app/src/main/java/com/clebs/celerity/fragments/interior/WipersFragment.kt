@@ -18,6 +18,7 @@ class WipersFragment : BaseInteriorFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.wipersScreenFragment)
+        mBinding.tvNext.visibility = View.GONE
         clickListeners()
         setDefault(mBinding.wiperScreenIv,mBinding.edtDefect)
     }

@@ -188,7 +188,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                     R.id.home -> {
                         ActivityHomeBinding.title.text = ""
-                        navController.navigate(R.id.dailyWorkFragment)
+                        navController.navigate(R.id.homedemoFragment)
                         true
                     }
 
@@ -242,7 +242,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     }
 
-    fun getVehicleLocationInfo() {
+     fun getVehicleLocationInfo() {
         val today = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("dd/MM")
         date = today.format(formatter)

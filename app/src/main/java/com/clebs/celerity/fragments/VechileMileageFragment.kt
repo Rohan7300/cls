@@ -58,14 +58,14 @@ class VechileMileageFragment : Fragment() {
         }
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner){
-            mbinding.dxLoc.text = it?.locationName?:""
-            mbinding.dxReg.text = it?.vmRegNo?:""
+            mbinding.headerTop.dxLoc.text = it?.locationName?:""
+            mbinding.headerTop.dxReg.text = it?.vmRegNo?:""
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-                .also { name -> mbinding.anaCarolin.text = name }
-            mbinding.dxm5.text = (activity as HomeActivity).date
+                .also { name -> mbinding.headerTop.anaCarolin.text = name }
+            mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
         }
 
-        mbinding.headings.setOnClickListener {
+        mbinding.headerTop.headings.setOnClickListener {
             navigateTo(R.id.profileFragment,requireContext(),findNavController())
         }
 

@@ -26,6 +26,7 @@ class RegistrationNumberPlatesFragment : BaseInteriorFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.registrationNumberPlateFragment)
+        mBinding.tvNext.visibility = View.GONE
         clickListeners()
         setDefault(mBinding.imageUploadIV, mBinding.edtDefect)
     }

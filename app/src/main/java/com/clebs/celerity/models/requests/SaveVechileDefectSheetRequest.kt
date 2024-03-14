@@ -16,6 +16,8 @@ data class SaveVechileDefectSheetRequest(
     val vdhComments: String,
     @SerializedName("VdhDaId")
     val vdhDaId: Int,
+    @SerializedName("VdhDate")
+    val VdhDate: String,
     @SerializedName("VdhExcessiveEngineExhaustSmoke")
     val vdhExcessiveEngineExhaustSmoke: String,
     @SerializedName("VdhExcessiveEngineExhaustSmokeComment")

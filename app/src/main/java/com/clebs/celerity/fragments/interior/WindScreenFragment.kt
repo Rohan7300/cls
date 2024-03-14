@@ -31,6 +31,7 @@ import com.clebs.celerity.utils.DBNames
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertBitmapToBase64
 import com.clebs.celerity.utils.setImageView
+import com.clebs.celerity.utils.visible
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 
 
@@ -46,10 +47,6 @@ class WindScreenFragment : Fragment() {
     lateinit var imageViewModel: ImageViewModel
     var imageEntity = ImageEntity()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,11 +57,9 @@ class WindScreenFragment : Fragment() {
         val vm_id = arguments?.get("vm_mileage")
         Log.e("vmvmvmv", "onCreateView: $vm_id")
 
-        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
-        val mainRepo = MainRepo(apiService)
         viewModel =(activity as HomeActivity).viewModel
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.windScreenFragment)
-
+        mbinding.tvNext.visibility = View.GONE
         imageViewModel = (activity as HomeActivity).imageViewModel
         imageEntity = imageViewModel.images.value!!
         imageViewModel.images.value.let {
@@ -75,14 +70,12 @@ class WindScreenFragment : Fragment() {
                 }
             }
         }
-
-
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner){
-            mbinding.dxLoc.text = it?.locationName?:""
-            mbinding.dxReg.text = it?.vmRegNo?:""
+            mbinding.headerTop.dxLoc.text = it?.locationName?:""
+            mbinding.headerTop.dxReg.text = it?.vmRegNo?:""
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-                .also { name -> mbinding.anaCarolin.text = name }
-            mbinding.dxm5.text = (activity as HomeActivity).date
+                .also { name -> mbinding.headerTop.anaCarolin.text = name }
+            mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
         }
 
 
@@ -145,15 +138,16 @@ class WindScreenFragment : Fragment() {
                 //findNavController().navigate(R.id.windowsGlassFragment)
             }
         }
-        mbinding.headings.setOnClickListener {
-            //findNavController().navigate(R.id.profileFragment)
-            navigateTo(R.id.profileFragment)
+        mbinding.headerTop.headings.setOnClickListener {
+            findNavController().navigate(R.id.profileFragment)
+            //navigateTo(R.id.profileFragment)
         }
         return mbinding.root
     }
 
     private fun selectLayout1() {
         if (isupload) {
+            mbinding.tvNext.visibility = View.VISIBLE
             mbinding.rlUploadDefect.visibility = View.VISIBLE
             mbinding.edtMil.setBackgroundDrawable(
                 ContextCompat.getDrawable(
@@ -161,6 +155,7 @@ class WindScreenFragment : Fragment() {
                     R.drawable.shape_filled_textview
                 )
             )
+
             mbinding.imageRadio.setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),

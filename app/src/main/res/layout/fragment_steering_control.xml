@@ -3,144 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".fragments.VechileMileageFragment">
 
-        <RelativeLayout
-            android:id="@+id/rlinfo"
+        <include
+            android:id="@+id/headerTop"
+            layout="@layout/fragment_headers" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:id="@+id/headings"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/ic_user" />
-
-                <TextView
-                    android:id="@+id/ana_carolin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_bold"
-                    android:gravity="center_horizontal|top"
-                    android:letterSpacing="0.04"
-                    android:lineSpacingExtra="0.02dp"
-                    android:text="@string/ana_carolin"
-                    android:textColor="#231F20"
-                    android:textSize="19sp" />
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/headings"
-                android:layout_marginStart="20dp"
-
-                android:layout_marginEnd="20dp"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/pin_alt_light_two"></ImageView>
-
-                    <TextView
-                        android:id="@+id/dxLoc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter"
-                        android:letterSpacing="0.03"
-                        android:text="@string/dxLoc"
-                        android:textColor="#231F20"
-                        android:textSize="15sp"
-
-                        />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-         v       <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/ic_truck"/>
-
-                    <TextView
-                        android:id="@+id/dxReg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter"
-                        android:gravity="center_horizontal|top"
-                        android:letterSpacing="0.03"
-                        android:text="@string/dxLoc"
-                        android:textColor="#231F20"
-                        android:textSize="15sp" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                                 <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/ic_frame"/>
-
-                    <TextView
-                        android:id="@+id/dxm5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter"
-                        android:gravity="center_horizontal|top"
-                        android:letterSpacing="0.03"
-                        android:text="@string/dxLoc"
-                        android:textColor="#231F20"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-
-        </RelativeLayout>
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingHorizontal="5dp">
 
         <ImageView
             android:id="@+id/img_mileage"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="35dp"
             android:src="@drawable/steeringcontrol"
             app:layout_constraintEnd_toEndOf="parent"
@@ -162,25 +49,13 @@
             app:layout_constraintTop_toBottomOf="@id/img_mileage" />
 
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedcsroll"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="20dp"
-            android:clipToPadding="false"
 
-            android:fillViewport="true"
-            android:overScrollMode="never"
-            android:paddingTop="16dp"
-            app:layout_constraintBottom_toTopOf="@id/tv_next"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/vehicle_mil">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+     <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/const_upload"
                 android:layout_width="match_parent"
+           android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
                 android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -400,12 +275,11 @@
                     </RelativeLayout>
 
 
-                </RelativeLayout>
+
+               </RelativeLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        </androidx.core.widget.NestedScrollView>
 
         <TextView
             android:id="@+id/tv_next"
@@ -423,9 +297,10 @@
             android:textAllCaps="false"
             android:textColor="#F36C2E"
             app:layout_constraintBottom_toBottomOf="parent" />
+        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 </layout>

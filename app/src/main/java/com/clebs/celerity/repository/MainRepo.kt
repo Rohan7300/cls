@@ -157,6 +157,10 @@ class MainRepo(private val ApiService: ApiService) {
         val response = ApiService.SaveVehDefectSheet(vehicleDefectSheetInfoResponse)
         if (response.isSuccessful)
             return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
         return null
     }
 

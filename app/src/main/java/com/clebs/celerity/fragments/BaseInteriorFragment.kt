@@ -140,6 +140,7 @@ abstract class BaseInteriorFragment : Fragment() {
         functionalView = false
         defectView = !defectView
         if (defectView) {
+            tvNext.visibility = View.VISIBLE
             rlUploadDefect.visibility = View.VISIBLE
             edtMil.setBackgroundDrawable(
                 ContextCompat.getDrawable(
@@ -162,6 +163,7 @@ abstract class BaseInteriorFragment : Fragment() {
                 )
             )
         } else {
+            tvNext.visibility = View.GONE
             rlUploadDefect.visibility = View.GONE
             edtMil.setBackgroundDrawable(
                 ContextCompat.getDrawable(

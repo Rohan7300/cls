@@ -32,6 +32,7 @@ class BodyDamangeRearSideFragment : BaseInteriorFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.bodyDamageRearSideFragment)
+        mBinding.tvNext.visibility = View.GONE
         clickListeners()
         setDefault(mBinding.imageUploadIV, mBinding.edtDefect)
     }

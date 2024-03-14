@@ -2,6 +2,7 @@ package com.clebs.celerity.utils
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -42,7 +43,10 @@ class ErrorDialog:DialogFragment() {
             tryAgain.setOnClickListener {
                 dialog?.dismiss()
             }
-            builder.setView(view).create()
+
+            val dialog = builder.setView(view).create()
+            dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 }
