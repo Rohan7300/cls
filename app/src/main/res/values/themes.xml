@@ -16,6 +16,7 @@
     </style>
 <style name="ctanine" parent="Theme.MaterialComponents.NoActionBar">
 
+
     <item name="android:windowDisablePreview">true</item>
     <item name="colorOnPrimary">@color/white</item>
     <item name="android:windowBackground">@drawable/backsplash</item>

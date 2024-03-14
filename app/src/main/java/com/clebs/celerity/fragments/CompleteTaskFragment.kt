@@ -94,6 +94,7 @@ class CompleteTaskFragment : Fragment() {
         }
 
         viewModel = (activity as HomeActivity).viewModel
+        (activity as HomeActivity).getVehicleLocationInfo()
 
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
         viewModel.GetDriverBreakTimeInfo(userId)
@@ -131,7 +132,6 @@ class CompleteTaskFragment : Fragment() {
             pictureDialogBase64(mbinding.ivFaceMask, requestCode)
         }
         mbinding.startinspection.setOnClickListener {
-
             startInspection()
         }
         /*        mbinding.clVehicleDashboard.setOnClickListener {
@@ -342,15 +342,16 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                     showImageUploadLayout = true
                     mbinding.taskDetails.visibility = View.VISIBLE
-                    /*                with(mbinding) {
+                     with(mbinding) {
                                         listOf(
                                             rlcomtwoBreak,
                                             onRoadView,
                                             rlcomtwoBreak,
                                             rlcomtwoClock,
-                                            rlcomtwoClockOut
+                                            rlcomtwoClockOut,
+                                            tvNext
                                         ).forEach { thisView -> thisView.visibility = View.GONE }
-                                    }*/
+                                    }
                 } else {
                     if (it.IsVehicleImageUploaded == false) {
                         showImageUploadLayout = true
@@ -667,6 +668,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     fun startInspection() {
+        mbinding.tvNext.visibility = View.VISIBLE
         if(Build.VERSION.SDK_INT<=Build.VERSION_CODES.TIRAMISU){
             loadingDialog.show()
 

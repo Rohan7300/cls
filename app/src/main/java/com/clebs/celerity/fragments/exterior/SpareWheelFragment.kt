@@ -156,7 +156,6 @@ class SpareWheelFragment : BaseInteriorFragment() {
                             vdhOdoMeterReading = VdhOdoMeterReading,
                             vdhComments = "TEST",
                             vdhPocIsaction = true,
-                            vdhIsDefected = isDefected,
                             vdhBrakes = dOrf(imageEntity.dfNameBrakedEbsAbs),
                             vdhBrakesComment = imageEntity.dfNameBrakedEbsAbs!!,
                             vdhCabSecurityInterior = dOrf(imageEntity.dfNameCabSecurityInterior),
@@ -208,7 +207,8 @@ class SpareWheelFragment : BaseInteriorFragment() {
                             vdhWipersWashers = dOrf(imageEntity.dfNameWipersWashers),
                             vdhWipersWashersComment = imageEntity.dfNameWipersWashers!!,
                             vdhFuelOilLeaks = dOrf(imageEntity.dfNameOilCoolantLevel),
-                            vdhFuelOilLeaksComment = imageEntity.dfNameOilCoolantLevel!!
+                            vdhFuelOilLeaksComment = imageEntity.dfNameOilCoolantLevel!!,
+                            vdhIsDefected = isDefected,
                         )
 
                         viewModel.SaveVehDefectSheet(request)
