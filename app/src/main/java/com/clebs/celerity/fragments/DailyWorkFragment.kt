@@ -247,12 +247,13 @@ open class DailyWorkFragment : Fragment() {
         }
 
         for (block in text.textBlocks) {
-
-            txt = block.getText()
+            val lineText = block.lines.get(0).text
+            txt=lineText.replace(" ","")
+            Log.e(TAG, "processTxtscanning: $txt")
             if (txt.isNotEmpty()) {
                 getVichleinformation()
             }
-            Log.e(TAG, "processTxt: $txt")
+
         }
     }
 
@@ -338,7 +339,7 @@ open class DailyWorkFragment : Fragment() {
     }
 
 
-    private fun getVichleinformation() {
+ fun getVichleinformation() {
         Prefs.getInstance(App.instance).vmRegNo = txt
         (activity as HomeActivity).getVehicleLocationInfo()
         mainViewModel.getVichelinformationResponse(
@@ -364,11 +365,11 @@ open class DailyWorkFragment : Fragment() {
                 )
                 showAlert()
             } else {
-            showErrorDialog(fragmentManager,"DWF-01","Vehicle doesn't exists. Please scan again or contact your supervisor.")
-           /*     showToast(
-                    "Vehicle doesn't exists. Please scan again or contact your supervisor.",
-                    requireContext()
-                )*/
+                showErrorDialog(fragmentManager,"DWF-01","Vehicle doesn't exists. Please scan again or contact your supervisor.")
+                /*     showToast(
+                         "Vehicle doesn't exists. Please scan again or contact your supervisor.",
+                         requireContext()
+                     )*/
                 mbinding.rectange.visibility = View.GONE
                 mbinding.ivTakePhoto.visibility = View.GONE
                 mbinding.rectangle4.visibility = View.VISIBLE
