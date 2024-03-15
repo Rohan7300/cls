@@ -102,16 +102,15 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
-                            android:background="@drawable/shape_edittext_mileage"
+                            android:background="@drawable/new_edittext_defect"
                             android:fontFamily="@font/poppins"
                             android:gravity="center_vertical"
-
                             android:hint="@string/enter_defect"
                             android:importantForAutofill="no"
                             android:letterSpacing="0.03"
                             android:lineHeight="18sp"
-                            android:padding="20dp"
-                            android:textColor="@color/orange"
+                            android:padding="16dp"
+                            android:textColor="@color/text_color"
                             android:textColorHint="#AAB9CF"
                             android:textCursorDrawable="@drawable/txt_cursor_drawable"
                             android:textSize="15sp" />
@@ -121,14 +120,14 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/edt_defect"
                             android:layout_marginStart="16dp"
-                            android:layout_marginTop="30dp"
+                            android:layout_marginTop="20dp"
                             android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="30dp">
+                            android:layout_marginBottom="20dp">
 
                             <ImageView
                                 android:id="@+id/windScreenIV"
-                                android:layout_width="62dp"
-                                android:layout_height="44dp"
+                                android:layout_width="50dp"
+                                android:layout_height="39dp"
                                 android:src="@drawable/upload_bt" />
 
                             <TextView
@@ -140,7 +139,7 @@
                                 android:letterSpacing="0.02"
                                 android:text="Upload Image"
                                 android:textColor="#231F20"
-                                android:textSize="13sp" />
+                                android:textSize="12sp" />
 
                             <TextView
                                 android:id="@+id/upload_txt_two"
@@ -163,7 +162,7 @@
                         android:id="@+id/edt_mils_layout_two"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
+                        android:layout_marginTop="15dp"
                         android:orientation="horizontal"
                         app:layout_constraintTop_toBottomOf="@+id/rl_upload_defect">
 
@@ -203,7 +202,7 @@
                         android:id="@+id/rl_upload_defect_two"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
+
                         android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@+id/edt_mils_layout_two">
 

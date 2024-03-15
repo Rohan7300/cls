@@ -83,6 +83,8 @@ class CompleteTaskFragment : Fragment() {
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
         Prefs.getInstance(requireContext()).clearNavigationHistory()
+
+//        mbinding.taskDetails.visibility = View.GONE
         fragmentManager = (activity as HomeActivity).fragmentManager
         cqSDKInitializer = CQSDKInitializer(requireContext())
         if (inspectionstarted?.equals(true) == true) {
@@ -341,7 +343,7 @@ class CompleteTaskFragment : Fragment() {
                 if (it!!.Status == "404") {
                     mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                     showImageUploadLayout = true
-                    mbinding.taskDetails.visibility = View.VISIBLE
+//                    mbinding.taskDetails.visibility = View.VISIBLE
                      with(mbinding) {
                                         listOf(
                                             rlcomtwoBreak,
@@ -680,7 +682,7 @@ class CompleteTaskFragment : Fragment() {
                 // Make request to start an inspection
                 try {
                     cqSDKInitializer.startInspection(
-                        activityContext = requireActivity().baseContext,
+                        activityContext = requireActivity(),
                         clientAttrs = ClientAttrs(
                             userName = "",
                             dealer = "",

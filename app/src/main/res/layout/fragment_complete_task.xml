@@ -241,7 +241,7 @@
                         android:layout_below="@+id/rlcom"
                         android:paddingStart="18dp"
                         android:paddingEnd="18dp"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <RelativeLayout
                             android:id="@+id/vichle_defect"
