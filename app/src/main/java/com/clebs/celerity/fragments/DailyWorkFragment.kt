@@ -45,8 +45,9 @@ import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.showLog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.ScanErrorDialogListener
 import com.clebs.celerity.utils.navigateTo
-import com.clebs.celerity.utils.showErrorDialog
+import com.clebs.celerity.utils.showScanErrorDialog
 import com.clebs.celerity.utils.showToast
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -57,9 +58,8 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
-open class DailyWorkFragment : Fragment() {
+class DailyWorkFragment : Fragment(),ScanErrorDialogListener {
     lateinit var mbinding: FragmentDailyWorkBinding
     private lateinit var mainViewModel: MainViewModel
     private val API_TOKEN = "9d04d01d5ba1997289fa28f6f544b16ab9e5a8b6"
@@ -122,7 +122,7 @@ open class DailyWorkFragment : Fragment() {
         return mbinding.root
     }
 
-    private fun checkPermissions() {
+     fun checkPermissions() {
         // Request camera permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             KotlinPermissions.with(requireActivity()) // Where this is an FragmentActivity instance
@@ -191,7 +191,7 @@ open class DailyWorkFragment : Fragment() {
     }
 
     @SuppressLint("NewApi")
-    private fun startCamera() {
+    fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
@@ -244,7 +244,7 @@ open class DailyWorkFragment : Fragment() {
         if (blocks.size == 0) {
             mbinding.pb.visibility = View.GONE
             //showToast("No Text ", requireContext())
-            showErrorDialog(fragmentManager,"DWF-03","Vehicle doesn't exists. Please scan again or contact your supervisor.")
+            showScanErrorDialog(this,fragmentManager,"DWF-03","Vehicle doesn't exists. Please scan again or contact your supervisor.")
             return
         }
 
@@ -346,9 +346,7 @@ open class DailyWorkFragment : Fragment() {
             Prefs.getInstance(App.instance).userID.toString().toDouble(), 0.toDouble(), txt
         ).observe(requireActivity(), Observer {
             if (it != null) {
-                Prefs.getInstance(App.instance)
-
-                    .save("vehicleLastMillage", it.vehicleLastMillage.toString())
+                Prefs.getInstance(App.instance).save("vehicleLastMillage", it.vehicleLastMillage.toString())
                 mbinding.rectange.visibility = View.GONE
                 mbinding.ivTakePhoto.visibility = View.GONE
                 mbinding.rectangle4.visibility = View.VISIBLE
@@ -365,7 +363,7 @@ open class DailyWorkFragment : Fragment() {
                 )
                 showAlert()
             } else {
-                showErrorDialog(fragmentManager,"DWF-01","Vehicle doesn't exists. Please scan again or contact your supervisor.")
+                showScanErrorDialog(this,fragmentManager,"DWF-01","Vehicle doesn't exists. Please scan again or contact your supervisor.")
                 /*     showToast(
                          "Vehicle doesn't exists. Please scan again or contact your supervisor.",
                          requireContext()
@@ -412,6 +410,10 @@ open class DailyWorkFragment : Fragment() {
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         deleteDialog.show();
 
+    }
+
+    override fun onTryAgainClicked() {
+        checkPermissions()
     }
 
 

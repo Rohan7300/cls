@@ -11,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +26,9 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
+import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showToast
 
 class Userprofile : Fragment() {
@@ -36,6 +40,7 @@ class Userprofile : Fragment() {
     var edtnew: String? = null
     var firstname: String? = null
     var lastname: String? = null
+    private lateinit var fragmentManager: FragmentManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -51,7 +56,7 @@ class Userprofile : Fragment() {
 
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
-
+        fragmentManager = (activity as HomeActivity).fragmentManager
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
 
@@ -65,9 +70,9 @@ class Userprofile : Fragment() {
                 mbinding.emailtext.isFocusableInTouchMode = true
 
 
-                mbinding.usertext.isEnabled = true
-                mbinding.usertext.isFocusable = true
-                mbinding.usertext.isFocusableInTouchMode = true
+//                mbinding.usertext.isEnabled = true
+//                mbinding.usertext.isFocusable = true
+//                mbinding.usertext.isFocusableInTouchMode = true
 
 //                mbinding.passtext.isEnabled = true
 //                mbinding.passtext.isFocusable = true
@@ -166,6 +171,7 @@ class Userprofile : Fragment() {
 
         val edt_old: EditText = view.findViewById(R.id.edt_old)
         val edt_new: EditText = view.findViewById(R.id.edt_new)
+        val edt_new_two = view.findViewById<EditText>(R.id.edt_new_sec)
         val button: TextView = view.findViewById(R.id.save)
         deleteDialog.setView(view)
         button.setOnClickListener {
@@ -173,6 +179,11 @@ class Userprofile : Fragment() {
                 edt_old.setError("please enter old password")
             } else if (edt_new.text.isEmpty()) {
                 edt_new.setError("please enter new password")
+            } else if (edt_new_two.text.isEmpty()) {
+                edt_new_two.setError("please re-enter new password")
+            } else if (!edt_new.text.toString().equals(edt_new_two.text.toString())) {
+
+                showToast("New password fields doesnot match", requireActivity())
             } else {
                 edtold = edt_old.text.toString()
                 edtnew = edt_new.text.toString()
@@ -232,9 +243,9 @@ class Userprofile : Fragment() {
                 mbinding.pb.visibility = View.GONE
                 mbinding.FormLayout.alpha = 1f
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
-                if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
-                    showAlertChangePasword90dys()
-                }
+//                if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
+//                    showAlertChangePasword90dys()
+//                }
             }
         })
     }
@@ -262,8 +273,8 @@ class Userprofile : Fragment() {
             mbinding.phonetext.text.toString()
         ).observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                isedit=false
-                mbinding.save.visibility=View.GONE
+                isedit = false
+                mbinding.save.visibility = View.GONE
                 if (it?.Status!!.equals(200)) {
 
                     showToast("ProfileUpdated", requireContext())
@@ -285,12 +296,21 @@ class Userprofile : Fragment() {
 
             if (it != null) {
 
-                if (it.Status.equals("200")) {
-
-                    showToast("Password has been changed", requireContext())
+                if (it.Status == "200") {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Password has been changed",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("succcessssss", "updateProfilePassword1: ")
+//                    showToast("Password has been changed", requireContext())
                 }
-            } else {
-                showToast("Error in changing password", requireContext())
+
+            }
+            else {
+                showErrorDialog(fragmentManager, "0", "Error in changing password.")
+                Log.e("succcessssss", "updateProfilePassword1: ")
+//                    showToast("Error in changing password", requireContext())
             }
         }
     }
@@ -310,14 +330,13 @@ class Userprofile : Fragment() {
 
         mainViewModel.updateprofileregular.observe(viewLifecycleOwner) {
             if (it != null) {
-                isedit=false
-                mbinding.save.visibility=View.GONE
+                isedit = false
+                mbinding.save.visibility = View.GONE
                 if (it.Status.equals("200")) {
 
                     showToast("profile successfully updated", requireContext())
 
-                }
-                else {
+                } else {
                     showToast("Error in updating profile", requireContext())
                 }
             }
