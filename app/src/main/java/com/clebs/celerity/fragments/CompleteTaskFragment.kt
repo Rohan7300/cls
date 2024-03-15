@@ -233,10 +233,10 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.tvClockedIN.text = it.ClockedInTime.toString()
                     isClockedIn = true
                     setVisibiltyLevel()
-                    mbinding.rlcomtwoClock.visibility = View.GONE
+             /*       mbinding.rlcomtwoClock.visibility = View.GONE
                     mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
                     mbinding.onRoadView.visibility = View.VISIBLE
-                    mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+                    mbinding.rlcomtwoBreak.visibility = View.VISIBLE*/
                 } else {
             /*        with(mbinding) {
                         listOf(
@@ -691,8 +691,7 @@ class CompleteTaskFragment : Fragment() {
                         result = { isStarted, msg, code ->
                             // Show error if required
                             Log.e("messsagesss", "startInspection: " + msg + code)
-                            if (isStarted
-                            ) {
+                            if (isStarted) {
 //                        mbinding.uploadll1.visibility = View.GONE
 //                        mbinding.clOffSideImgUp.visibility = View.GONE
 //                        mbinding.rlFirst.visibility = View.GONE
@@ -731,7 +730,7 @@ class CompleteTaskFragment : Fragment() {
 
     }
 
-    fun visibiltyControlls() {
+    private fun visibiltyControlls() {
         with(mbinding) {
             listOf(
                 uploadLayouts,
@@ -764,7 +763,7 @@ class CompleteTaskFragment : Fragment() {
         }
     }
 
-    fun setVisibiltyLevel() {
+    private fun setVisibiltyLevel() {
         visibilityLevel = 0
         if (!imagesUploaded) {
             visibilityLevel = 0
@@ -781,6 +780,4 @@ class CompleteTaskFragment : Fragment() {
 
         visibiltyControlls()
     }
-
-
 }

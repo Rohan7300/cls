@@ -45,6 +45,7 @@ import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.showLog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showToast
 import com.google.firebase.ml.vision.FirebaseVision
@@ -309,9 +310,7 @@ open class DailyWorkFragment : Fragment() {
                         detectTxt()
                     }
 
-
 //                    mbinding.rectangle4.setImageBitmap(imageBitmap)
-
                 }
             }
         )
@@ -392,7 +391,8 @@ open class DailyWorkFragment : Fragment() {
         image.setOnClickListener {
 
             if (checkBox.isChecked) {
-                findNavController().navigate(R.id.vechileMileageFragment)
+               // findNavController().navigate(R.id.vechileMileageFragment)
+                navigateTo(R.id.vechileMileageFragment,requireContext(),findNavController())
                 deleteDialog.dismiss()
 
             } else {
