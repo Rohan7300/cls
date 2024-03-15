@@ -166,6 +166,7 @@ class Userprofile : Fragment() {
 
         val edt_old: EditText = view.findViewById(R.id.edt_old)
         val edt_new: EditText = view.findViewById(R.id.edt_new)
+        val edt_new_two=view.findViewById<EditText>(R.id.edt_new_sec)
         val button: TextView = view.findViewById(R.id.save)
         deleteDialog.setView(view)
         button.setOnClickListener {
@@ -173,7 +174,15 @@ class Userprofile : Fragment() {
                 edt_old.setError("please enter old password")
             } else if (edt_new.text.isEmpty()) {
                 edt_new.setError("please enter new password")
-            } else {
+            }
+            else if (edt_new_two.text.isEmpty()){
+                edt_new_two.setError("please re-enter new password")
+            }
+            else if (!edt_new.text.toString().equals(edt_new_two.text.toString())){
+
+                showToast("New password fields doesnot match",requireActivity())
+            }
+            else {
                 edtold = edt_old.text.toString()
                 edtnew = edt_new.text.toString()
                 updateProfilePassword()

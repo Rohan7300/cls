@@ -46,6 +46,8 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import java.util.Timer
+import java.util.TimerTask
 import java.util.UUID
 
 class CompleteTaskFragment : Fragment() {
@@ -87,6 +89,16 @@ class CompleteTaskFragment : Fragment() {
 //        mbinding.taskDetails.visibility = View.GONE
         fragmentManager = (activity as HomeActivity).fragmentManager
         cqSDKInitializer = CQSDKInitializer(requireContext())
+        cqSDKInitializer.triggerOfflineSync()
+
+        Timer().scheduleAtFixedRate( object : TimerTask() {
+            override fun run() {
+                cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
+                    Log.e("hdhsdshdsdjshhsds", "run========: " +isSyncCompletedForAllQuotes)
+                }
+
+            }
+        }, 0, 1000)
         if (inspectionstarted?.equals(true) == true) {
 
             mbinding.startinspection.visibility = View.GONE
@@ -212,6 +224,8 @@ class CompleteTaskFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+
         if (inspectionstarted?.equals(true) == true) {
 
             mbinding.startinspection.visibility = View.GONE
