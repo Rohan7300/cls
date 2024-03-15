@@ -80,6 +80,15 @@ class OnRoadHoursFragment : Fragment() {
                 vehicleInfoSection()
             }
         }
+        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+            loadingDialog.cancel()
+            binding.headerTop.dxLoc.text = it?.locationName ?: ""
+            binding.headerTop.dxReg.text = it?.vmRegNo ?: ""
+            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+                binding.headerTop.anaCarolin.text = name
+            }
+            binding.headerTop.dxm5.text = (activity as HomeActivity).date
+        }
         inputListeners()
         viewModel.GetDailyWorkInfoById(prefs.userID.toInt())
         binding.onRoadHoursSave.setOnClickListener {

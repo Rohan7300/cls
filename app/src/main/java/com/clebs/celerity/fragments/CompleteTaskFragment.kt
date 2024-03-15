@@ -89,6 +89,7 @@ class CompleteTaskFragment : Fragment() {
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
+        mbinding.ivFaceMask.setImageResource(R.drawable.upload_icc)
         Prefs.getInstance(requireContext()).clearNavigationHistory()
         fragmentManager = (activity as HomeActivity).fragmentManager
         cqSDKInitializer = CQSDKInitializer(requireContext())
@@ -123,10 +124,10 @@ class CompleteTaskFragment : Fragment() {
         }
 
         mbinding.rideAlong.setOnClickListener {
-            findNavController().navigate(R.id.rideAlongFragment)
+            navigateTo(R.id.rideAlongFragment,requireContext(),findNavController())
         }
 
-        mbinding.icUu.setOnClickListener {
+        mbinding.headerTop.icpnUser.setOnClickListener {
             findNavController().navigate(R.id.profileFragment)
         }
 
@@ -156,7 +157,7 @@ class CompleteTaskFragment : Fragment() {
         }
 
         mbinding.AddRoute.setOnClickListener {
-            findNavController().navigate(R.id.onRoadHoursFragment)
+            navigateTo(R.id.onRoadHoursFragment,requireContext(),findNavController())
         }
 
         mbinding.rlcom.setOnClickListener {
@@ -205,11 +206,11 @@ class CompleteTaskFragment : Fragment() {
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             if (it != null) {
                 loadingDialog.cancel()
-                mbinding.dxLoc.text = it?.locationName ?: ""
-                mbinding.dxReg.text = it?.vmRegNo ?: ""
+                mbinding.headerTop.dxLoc.text = it?.locationName ?: ""
+                mbinding.headerTop.dxReg.text = it?.vmRegNo ?: ""
                 "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-                    .also { name -> mbinding.anaCarolin.text = name }
-                mbinding.dxm5.text = (activity as HomeActivity).date
+                    .also { name -> mbinding.headerTop.anaCarolin.text = name }
+                mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
                 val isLeadDriver = (activity as HomeActivity).isLeadDriver
                 if (!isLeadDriver) {
                     mbinding.rideAlong.visibility = View.GONE
@@ -329,19 +330,6 @@ class CompleteTaskFragment : Fragment() {
                     showImageUploadLayout = true
                     imagesUploaded = false
                     setVisibiltyLevel()
-       /*             mbinding.taskDetails.visibility = View.VISIBLE
-                    with(mbinding) {
-                        listOf(
-                            rlcomtwoBreak,
-                            onRoadView,
-                            rlcomtwoBreak,
-                            rlcomtwoClock,
-                            rlcomtwoClockOut,
-                            tvNext
-                        ).forEach { thisView -> thisView.visibility = View.GONE }
-                        }
-                        */
-
                 } else {
                     if (it.IsVehicleImageUploaded == false) {
                         showImageUploadLayout = true
@@ -357,15 +345,6 @@ class CompleteTaskFragment : Fragment() {
                             setVisibiltyLevel()
                             mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                             mbinding.taskDetails.visibility = View.VISIBLE
-      /*                      with(mbinding) {
-                                listOf(
-                                    rlcomtwoBreak,
-                                    onRoadView,
-                                    rlcomtwoBreak,
-                                    rlcomtwoClock,
-                                    rlcomtwoClockOut
-                                ).forEach { thisView -> thisView.visibility = View.GONE }
-                            }*/
                         } else {
                             imagesUploaded = true
                             setVisibiltyLevel()
@@ -419,19 +398,7 @@ class CompleteTaskFragment : Fragment() {
                     }
                 }
             }
-
-//            mbinding.tvNext.isEnabled =it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
-//            if (it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null) {
-//
-//                mbinding.uploadLayouts.visibility = View.GONE
-//                mbinding.tvNext.isEnabled =it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
-//            }
-//            if (!showImageUploadLayout) {
-//                mbinding.uploadLayouts.visibility = View.GONE
-//            } else {
-//                mbinding.uploadLayouts.visibility = View.VISIBLE
-//            }
-        })
+                    })
 
     }
 
@@ -744,6 +711,7 @@ class CompleteTaskFragment : Fragment() {
         }
         when (visibilityLevel) {
             0 -> {
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.taskDetails.visibility = View.VISIBLE
             }

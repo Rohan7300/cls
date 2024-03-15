@@ -12,7 +12,7 @@ import com.clebs.celerity.R
 
 class ErrorDialog:DialogFragment() {
     companion object {
-        const val TAG = "ErrroDialogFragment"
+        const val TAG = "ErrorDialogFragment"
         private const val ARG_MSG = "msg"
         private const val ARG_CODE = "code"
 

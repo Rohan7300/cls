@@ -15,8 +15,8 @@
         android:padding="25dp">
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginBottom="5dp"
             android:src="@drawable/erorwarning" />
@@ -65,7 +65,7 @@
             android:text=" Please check your internet connection!! "
             android:textAlignment="center"
             android:textColor="@color/orange"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/noIntTryAgain"
@@ -82,8 +82,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/poppins_bold"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="8dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="6dp"
                 android:text="Try Again"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
