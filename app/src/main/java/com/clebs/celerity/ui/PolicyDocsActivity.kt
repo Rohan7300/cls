@@ -4,18 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Path
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.TranslateAnimation
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.clebs.celerity.DrawViewClass
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -34,11 +29,9 @@ import com.clebs.celerity.utils.SignatureListener
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.showToast
 
-
 class PolicyDocsActivity : AppCompatActivity() {
     lateinit var mbinding: ActivityPolicyDocsBinding
     lateinit var viewModel: MainViewModel
-    private lateinit var drawView: DrawViewClass
     private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
     private var userId = 0
     lateinit var loadingDialog: LoadingDialog
@@ -77,59 +70,28 @@ class PolicyDocsActivity : AppCompatActivity() {
 
         mbinding.checkbox.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
-                mbinding.crolls.visibility=View.GONE
-//                val fadeOut: Animation = AlphaAnimation(1f, 0f)
-//                fadeOut.setInterpolator(AccelerateInterpolator()) //and this
-//
-//                fadeOut.setStartOffset(1000)
-//                fadeOut.setDuration(1000)
-                val animate = TranslateAnimation(0f, 0f,0f,  mbinding.crolls.height.toFloat())
-                animate.setDuration(300);
-                mbinding.crolls.alpha=0.1f
-                mbinding.crolls.startAnimation(animate);
                 if (mbinding.llTrucks.visibility == View.GONE) {
-//                    showAlert()
+                    showAlert()
                 } else {
                     if (!mbinding.checkbox2.isChecked) {
                         showToast("Please check the trucks agreement to proceed",this)
                     } else {
-//                        showAlert()
+                        showAlert()
                     }
                 }
-            }
-            else{
-                val animate = TranslateAnimation(0f, 0f, mbinding.crolls.height.toFloat(), 0f)
-                animate.setDuration(500);
-                animate.setFillAfter(true);
-                mbinding.crolls.alpha=1f
-                mbinding.crolls.startAnimation(animate);
-                mbinding.crolls.visibility=View.VISIBLE
             }
         }
         mbinding.checkbox2.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
-                mbinding.nestedtwo.visibility=View.GONE
-                val animate = TranslateAnimation(0f, 0f,0f,  mbinding.nestedtwo.height.toFloat())
-                animate.setDuration(300);
-                mbinding.nestedtwo.startAnimation(animate);
-                mbinding.nestedtwo.alpha=0.1f
                 if (mbinding.llAmazon.visibility == View.GONE) {
-//                    showAlert()
+                    showAlert()
                 } else {
                     if (!mbinding.checkbox.isChecked) {
                         showToast("Please check the amazon agreement to proceed",this)
                     } else {
-//                        showAlert()
+                        showAlert()
                     }
                 }
-            }
-            else{
-                val animate = TranslateAnimation(0f, 0f, mbinding.nestedtwo.height.toFloat(), 0f)
-                animate.setDuration(500);
-                animate.setFillAfter(true);
-                mbinding.nestedtwo.alpha=1f
-                mbinding.nestedtwo.startAnimation(animate);
-                mbinding.nestedtwo.visibility=View.VISIBLE
             }
         }
     }
@@ -160,6 +122,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                 val intent = Intent(this, HomeActivity::class.java)
 
                 startActivity(intent)
+
             }
         }
         if (driverSignatureInfo != null) {

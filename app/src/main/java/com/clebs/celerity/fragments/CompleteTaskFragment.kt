@@ -65,6 +65,8 @@ class CompleteTaskFragment : Fragment() {
     lateinit var loadingDialog:LoadingDialog
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager:FragmentManager
+    var inspectionOfflineImagesCHeck: Boolean? = null
+
     companion object {
         var inspectionstarted: Boolean? = null
     }
@@ -91,16 +93,21 @@ class CompleteTaskFragment : Fragment() {
         cqSDKInitializer = CQSDKInitializer(requireContext())
         cqSDKInitializer.triggerOfflineSync()
 
-        Timer().scheduleAtFixedRate( object : TimerTask() {
-            override fun run() {
-                cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
-                    Log.e("hdhsdshdsdjshhsds", "run========: " +isSyncCompletedForAllQuotes)
-                }
 
-            }
-        }, 0, 1000)
         if (inspectionstarted?.equals(true) == true) {
+            Timer().scheduleAtFixedRate( object : TimerTask() {
+                override fun run() {
+                    cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
 
+                        inspectionOfflineImagesCHeck=isSyncCompletedForAllQuotes//if true then show double tick green
+
+
+                        //if only inspection started is true then single tick or pending
+                        Log.e("hdhsdshdsdjshhsds", "run========: " +isSyncCompletedForAllQuotes)
+                    }
+
+                }
+            }, 0, 1000)
             mbinding.startinspection.visibility = View.GONE
 
         } else {
