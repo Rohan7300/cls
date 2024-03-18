@@ -174,39 +174,24 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/editText"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:background="@drawable/shape_edittext_onroad"
-                            android:fontFamily="@font/poppins"
-                            android:hint="Select route type"
                             android:padding="14dp"
-                            android:textColorHint="#4A4A4A"
-                            android:textCursorDrawable="@color/orange"
-                            android:textSize="14sp"
-                            app:layout_constraintTop_toBottomOf="@+id/route_type"
-                            tools:layout_editor_absoluteX="12dp" />
-
-                        <Spinner
-                            android:id="@+id/spinnerRouteType"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/editText" />
+                            app:layout_constraintTop_toBottomOf="@+id/route_type">
 
-                        <ImageView
-                            android:layout_width="10dp"
-                            android:layout_height="17dp"
-                            android:layout_marginEnd="15dp"
-                            android:src="@drawable/arrow_left"
-                            app:layout_constraintBottom_toBottomOf="@+id/editText"
-                            app:layout_constraintEnd_toEndOf="@+id/editText"
-                            app:layout_constraintTop_toTopOf="@+id/editText" />
+                            <Spinner
+                                android:id="@+id/spinnerRouteType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent" />
+                        </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -229,37 +214,24 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/editText_select_route_location"
+                        <LinearLayout
+                            android:id="@+id/spinnerLocationLL"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
                             android:background="@drawable/shape_edittext_onroad"
-                            android:fontFamily="@font/poppins"
-                            android:hint="Not Allocated"
                             android:padding="14dp"
-                            android:textColorHint="#4A4A4A"
-                            android:textCursorDrawable="@color/orange"
-                            android:textSize="14sp"
-                            app:layout_constraintTop_toBottomOf="@+id/select_route_type"
-                            tools:layout_editor_absoluteX="16dp" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/select_route_type">
 
-                        <Spinner
-                            android:id="@+id/spinnerLocation"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            app:layout_constraintTop_toBottomOf="@+id/editText_select_route_location"
-                            tools:layout_editor_absoluteX="12dp" />
+                            <Spinner
+                                android:id="@+id/spinnerLocation"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                tools:layout_editor_absoluteX="12dp" />
+                        </LinearLayout>
 
-                        <ImageView
-                            android:layout_width="10dp"
-                            android:layout_height="17dp"
-                            android:layout_marginEnd="15dp"
-                            android:src="@drawable/arrow_left"
-                            app:layout_constraintBottom_toBottomOf="@+id/editText_select_route_location"
-                            app:layout_constraintEnd_toEndOf="@+id/editText_select_route_location"
-                            app:layout_constraintTop_toTopOf="@+id/editText_select_route_location" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -338,6 +310,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/parcel_deliver_brought">
 
                             <ImageButton
+                                android:id="@+id/pbb_minus"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_marginStart="16dp"
@@ -352,11 +325,12 @@
                                 android:layout_centerInParent="true"
                                 android:fontFamily="@font/poppins"
                                 android:letterSpacing="0.02"
-                                android:text="15"
+                                android:text="1"
                                 android:textColor="#4A4A4A"
                                 android:textSize="15sp" />
 
                             <ImageButton
+                                android:id="@+id/pbb_plus"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_alignParentEnd="true"
@@ -403,6 +377,7 @@
                             android:gravity="center"
                             android:hint="0"
                             android:importantForAutofill="no"
+                            android:inputType="number"
                             android:padding="14dp"
                             android:textColorHint="#4A4A4A"
                             android:textCursorDrawable="@color/orange"

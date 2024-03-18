@@ -35,6 +35,16 @@ class SeatBeltFragment : BaseInteriorFragment() {
                     mBinding.imageRadio
                 )
             }
+                        imageRadio.setOnClickListener {
+                editMil1Visibilty(
+                    mBinding.tvNext,
+                    mBinding.rlUploadDefect,
+                    mBinding.edtMil,
+                    mBinding.edtMilTwo,
+                    mBinding.imageRadioTwo,
+                    mBinding.imageRadio
+                )
+            }
 
             edtMilTwo.setOnClickListener {
              /*                editMil2Visibilty(
@@ -45,6 +55,19 @@ class SeatBeltFragment : BaseInteriorFragment() {
                     mBinding.imageRadioTwo,
                     mBinding.imageRadio
                 )*/
+                editMil2VisibilityNew(
+                    mBinding.rlUploadDefect,
+                    mBinding.edtMil,
+                    mBinding.edtMilTwo,
+                    mBinding.imageRadioTwo,
+                    mBinding.imageRadio
+                )
+                functionalView = true
+                defectView = false
+                saveNnext()
+            }
+
+            imageRadioTwo.setOnClickListener {
                 editMil2VisibilityNew(
                     mBinding.rlUploadDefect,
                     mBinding.edtMil,
