@@ -88,7 +88,7 @@
                 android:letterSpacing="0.03"
                 android:lineHeight="18sp"
                 android:padding="5dp"
-                android:textColor="@color/orange"
+                android:textColor="@color/text_color"
                 android:textColorHint="#AAB9CF"
                 android:textCursorDrawable="@drawable/txt_cursor_drawable"
                 android:textSize="15sp"

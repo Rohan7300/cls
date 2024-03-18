@@ -142,7 +142,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
                         isApiCallInProgress = true
                         VdhVmId = it.vmId
                         VdhLmId = it.vmLocId
-                        VdhOdoMeterReading = it.vehicleLastMillage
+                        VdhOdoMeterReading =Prefs.getInstance(requireContext()).vehicleLastMileage?: it.vehicleLastMillage
 
                         prefs.saveLocationID(it.vmLocId)
 

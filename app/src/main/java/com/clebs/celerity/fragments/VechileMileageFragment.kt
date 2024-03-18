@@ -40,14 +40,28 @@ class VechileMileageFragment : Fragment() {
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.vechileMileageFragment)
 
         mbinding.miles.text = buildString {
+
             append("${Prefs.getInstance(App.instance).vehicleLastMileage} ")
             append("Miles")
         }
 
+        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) { it ->
+            it?.let {
+                Prefs.getInstance(App.instance).vehicleLastMileage = it.vehicleLastMillage
+                mbinding.miles.text = buildString {
+
+                    append("${it.vehicleLastMillage} ")
+                    append("Miles")
+                }
+            }
+        }
 
         mbinding.edtMilvm.doAfterTextChanged { edtMilText ->
             edtMilText.let {
-                mbinding.tvNext.isEnabled = edtMilText?.isNotEmpty() == true
+                if(edtMilText?.isNotEmpty() == true){
+                    Prefs.getInstance(App.instance).vehicleLastMileage = edtMilText.toString().toInt()
+                    mbinding.tvNext.isEnabled = true
+                }
                 mbinding.tvNext.setTextColor(
                     ContextCompat.getColor(
                         requireContext(),

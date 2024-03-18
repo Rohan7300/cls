@@ -62,12 +62,12 @@ class RideAlongFragment : Fragment() {
     private fun observers() {
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            binding.dxLoc.text = it?.locationName ?: ""
-            binding.dxReg.text = it?.vmRegNo ?: ""
+            binding.headerTop.dxLoc.text = it?.locationName ?: ""
+            binding.headerTop.dxReg.text = it?.vmRegNo ?: ""
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-                binding.anaCarolin.text = name
+                binding.headerTop.anaCarolin.text = name
             }
-            binding.dxm5.text = (activity as HomeActivity).date
+            binding.headerTop.dxm5.text = (activity as HomeActivity).date
             leadDriverID = (activity as HomeActivity).userId
         }
         viewModel.livedataGetRideAlongVehicleLists.observe(viewLifecycleOwner) {

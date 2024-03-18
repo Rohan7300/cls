@@ -7,19 +7,31 @@
     app:cardCornerRadius="20dp">
 
     <LinearLayout
-        android:layout_width="250dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="25dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+
+            <ImageView
+                android:id="@+id/scanCross"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/cancel" />
+        </LinearLayout>
+
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:layout_gravity="center"
             android:layout_marginBottom="5dp"
-            android:src="@drawable/erorwarning" />
+            android:src="@drawable/scan" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +46,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins_bold"
-
                 android:text="Error : "
                 android:textAlignment="center"
                 android:textColor="@color/black"
@@ -73,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="#FA7777"
+            android:backgroundTint="@color/orange"
             android:padding="10dp"
             app:cardCornerRadius="20dp">
 
@@ -84,7 +95,7 @@
                 android:fontFamily="@font/poppins_bold"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="6dp"
-                android:text="Try Again"
+                android:text="Scan Again"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
         </androidx.cardview.widget.CardView>

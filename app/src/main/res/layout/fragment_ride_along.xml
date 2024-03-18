@@ -1,189 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.OnRoadHoursFragment">
 
-    <ProgressBar
-        android:id="@+id/rideAlongPB"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:indeterminateTint="@color/orange"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        <include
+            android:id="@+id/headerTop"
+            layout="@layout/fragment_headers" />
 
-    <View
-        android:id="@+id/rideAlongOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#68000000"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <RelativeLayout
-        android:id="@+id/rlinfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:id="@+id/headings"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/ic_user" />
-
-            <TextView
-                android:id="@+id/ana_carolin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_bold"
-                android:gravity="center_horizontal|top"
-                android:letterSpacing="0.04"
-                android:lineSpacingExtra="0.02dp"
-                android:text="@string/ana_carolin"
-                android:textColor="#231F20"
-                android:textSize="19sp" />
-
-
-        </LinearLayout>
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/headings"
-            android:layout_marginStart="20dp"
-
-            android:layout_marginEnd="20dp"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="18dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/pin_alt_light_two">
+            android:layout_marginVertical="20dp"
+            android:orientation="vertical">
 
 
-                </ImageView>
-
-                <TextView
-                    android:id="@+id/dxLoc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter"
-                    android:letterSpacing="0.03"
-                    android:text="@string/dxLoc"
-                    android:textColor="#231F20"
-                    android:textSize="15sp"
-
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="18dp"
-
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/pin_alt_light_two">
-
-                </ImageView>
-
-                <TextView
-                    android:id="@+id/dxReg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter"
-                    android:gravity="center_horizontal|top"
-                    android:letterSpacing="0.03"
-                    android:text="@string/dxLoc"
-                    android:textColor="#231F20"
-                    android:textSize="15sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="18dp"
-
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/pin_alt_light_two">
-
-
-                </ImageView>
-
-                <TextView
-                    android:id="@+id/dxm5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter"
-                    android:gravity="center_horizontal|top"
-                    android:letterSpacing="0.03"
-                    android:text="@string/dxLoc"
-                    android:textColor="#231F20"
-                    android:textSize="15sp" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-
-    </RelativeLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedcsroll"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="8dp"
-        android:clipToPadding="true"
-        android:fillViewport="true"
-        android:overScrollMode="never"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rlinfo">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="30dp"
@@ -728,8 +572,7 @@
             </RelativeLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-    </androidx.core.widget.NestedScrollView>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -73,7 +73,7 @@
             android:textSize="30sp"
             app:itemBackground="@drawable/bg_selected_item"
             app:itemIconSize="20dp"
-            android:padding="1dp"
+            android:paddingVertical="4dp"
             app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

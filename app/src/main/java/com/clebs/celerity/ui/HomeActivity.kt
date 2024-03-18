@@ -257,6 +257,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 try {
                     //if (it.vmRegNo != null)
                         viewModel.GetVehicleInformation(userId, Prefs.getInstance(this).vmRegNo)
+
+
                 } catch (e: Exception) {
                     Log.d("sds", e.toString())
                 }

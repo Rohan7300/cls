@@ -29,7 +29,9 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
+import com.clebs.celerity.R
 import com.clebs.celerity.database.ImageEntity
+import com.clebs.celerity.fragments.DailyWorkFragment
 import com.google.android.gms.dynamic.SupportFragmentWrapper
 import java.io.*
 import java.text.SimpleDateFormat
@@ -339,11 +341,11 @@ fun convertBitmapToBase64(bitmap: Bitmap): String {
 
 fun dbLog(it: ImageEntity) {
 
-   /* val TAG = "DB_TEST"
-    Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
-    Log.d(TAG, it.toString())
-    Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
-*/
+    /* val TAG = "DB_TEST"
+     Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
+     Log.d(TAG, it.toString())
+     Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
+ */
 }
 
 fun setImageView(im: ImageView, value: String) {
@@ -354,22 +356,23 @@ fun setImageView(im: ImageView, value: String) {
     }
 }
 
-fun navigateTo(fragmentId: Int,context: Context,navController: NavController) {
+fun navigateTo(fragmentId: Int, context: Context, navController: NavController) {
     val prefs = Prefs.getInstance(context)
     val fragmentStack = prefs.getNavigationHistory()
     fragmentStack.push(fragmentId)
     navController.navigate(fragmentId)
     prefs.saveNavigationHistory(fragmentStack)
 }
-fun showToast(msg:String,context: Context){
+
+fun showToast(msg: String, context: Context) {
     try {
-        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
-    }catch (e:Exception){
-        Log.d("ToastException",e.message.toString())
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+    } catch (e: Exception) {
+        Log.d("ToastException", e.message.toString())
     }
 }
 
- fun Bitmap.toRequestBody(): okhttp3.RequestBody {
+fun Bitmap.toRequestBody(): okhttp3.RequestBody {
     val byteArrayOutputStream = ByteArrayOutputStream()
     compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
     return byteArrayOutputStream.toByteArray().toRequestBody("image/jpeg".toMediaTypeOrNull())
@@ -393,6 +396,7 @@ fun Context.getFileFromUri(uri: Uri): File {
     }
     return file
 }
+
 fun bitmapToBase64(bitmap: Bitmap): String {
     val byteArrayOutputStream = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
@@ -435,7 +439,7 @@ fun showTimePickerDialog(context: Context, editText: EditText) {
     timePickerDialog.show()
 }
 
- fun isNetworkAvailable(context: Context): Boolean {
+fun isNetworkAvailable(context: Context): Boolean {
     val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val networkCapabilities = connectivityManager.activeNetwork ?: return false
@@ -443,11 +447,23 @@ fun showTimePickerDialog(context: Context, editText: EditText) {
     return actNw.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
 }
 
-fun showErrorDialog(fragmentManager: FragmentManager,code:String,msg: String){
-    val errorDialog: ErrorDialog = ErrorDialog.newInstance(msg,code)
+fun showErrorDialog(fragmentManager: FragmentManager, code: String, msg: String) {
+    val errorDialog: ErrorDialog = ErrorDialog.newInstance(msg, code)
 
-    errorDialog.show(fragmentManager,ErrorDialog.TAG)
+    errorDialog.show(fragmentManager, ErrorDialog.TAG)
 }
+
+fun showScanErrorDialog(
+    dailyWorkFragment: DailyWorkFragment,
+    fragmentManager: FragmentManager,
+    code: String,
+    msg: String
+) {
+    val scanDialog: ScanErrorDialog = ScanErrorDialog.newInstance(msg, code)
+    scanDialog.setListener(dailyWorkFragment)
+    scanDialog.show(fragmentManager, ScanErrorDialog.TAG)
+}
+
 fun getCurrentDateTime(): String {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     dateFormat.timeZone = TimeZone.getTimeZone("UTC")

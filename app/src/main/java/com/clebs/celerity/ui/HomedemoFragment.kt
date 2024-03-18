@@ -39,7 +39,7 @@ class HomedemoFragment : Fragment() {
     ): View? {
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentHomedemoBinding.inflate(inflater, container, false)
-            val rotateAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.anam)
+  /*          val rotateAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.anam)
             mbinding.imgCircleLogo.startAnimation(rotateAnimation)
 //            mbinding.imgCircleLogo.animate()
 //                .rotationBy(360f)
@@ -53,7 +53,7 @@ class HomedemoFragment : Fragment() {
                 .rotationBy(360f)
                 .setDuration(2000)
                 .setInterpolator(AccelerateDecelerateInterpolator())
-                .setListener(null)
+                .setListener(null)*/
 
         }
         return mbinding.root
