@@ -34,10 +34,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.ais.plate_req_api.model.NumberPlateResponse
+import com.ais.plate_req_api.webService.RetrofitHelper
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentDailyWorkBinding
+import com.clebs.celerity.network.ApiPlateRecognizer
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
@@ -46,6 +49,7 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.showLog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.ScanErrorDialogListener
+import com.clebs.celerity.utils.getFileFromUri
 import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.showScanErrorDialog
 import com.clebs.celerity.utils.showToast
@@ -54,12 +58,23 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer
 import com.kotlinpermissions.KotlinPermissions
+import id.zelory.compressor.Compressor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.Call
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
-class DailyWorkFragment : Fragment(),ScanErrorDialogListener {
+class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
     lateinit var mbinding: FragmentDailyWorkBinding
     private lateinit var mainViewModel: MainViewModel
     private val API_TOKEN = "9d04d01d5ba1997289fa28f6f544b16ab9e5a8b6"
@@ -104,7 +119,7 @@ class DailyWorkFragment : Fragment(),ScanErrorDialogListener {
             mbinding = FragmentDailyWorkBinding.inflate(inflater, container, false)
         }
         HomeActivity.Boolean = true
-
+        cameraExecutor = Executors.newSingleThreadExecutor()
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         mainViewModel =
@@ -122,7 +137,7 @@ class DailyWorkFragment : Fragment(),ScanErrorDialogListener {
         return mbinding.root
     }
 
-     fun checkPermissions() {
+    fun checkPermissions() {
         // Request camera permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             KotlinPermissions.with(requireActivity()) // Where this is an FragmentActivity instance
@@ -244,13 +259,18 @@ class DailyWorkFragment : Fragment(),ScanErrorDialogListener {
         if (blocks.size == 0) {
             mbinding.pb.visibility = View.GONE
             //showToast("No Text ", requireContext())
-            showScanErrorDialog(this,fragmentManager,"DWF-03","Vehicle doesn't exists. Please scan again or contact your supervisor.")
+            showScanErrorDialog(
+                this,
+                fragmentManager,
+                "DWF-03",
+                "Vehicle doesn't exists. Please scan again or contact your supervisor."
+            )
             return
         }
 
         for (block in text.textBlocks) {
             val lineText = block.lines.get(0).text
-            txt=lineText.replace(" ","")
+            txt = lineText.replace(" ", "")
             Log.e(TAG, "processTxtscanning: $txt")
             if (txt.isNotEmpty()) {
                 getVichleinformation()
@@ -305,10 +325,13 @@ class DailyWorkFragment : Fragment(),ScanErrorDialogListener {
 
                     showToast("Photo capture succeeded processing photo", requireContext())
                     imageBitmap = getImageBitmapFromUri(requireContext(), output.savedUri!!)
-                    if (imageBitmap != null) {
 
-                        detectTxt()
-                    }
+                    uploadImageToServerAndGetResults(output.savedUri)
+
+//                    if (imageBitmap != null) {
+//
+//                        detectTxt()
+//                    }
 
 //                    mbinding.rectangle4.setImageBitmap(imageBitmap)
                 }
@@ -338,15 +361,73 @@ class DailyWorkFragment : Fragment(),ScanErrorDialogListener {
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     }
 
+     fun uploadImageToServerAndGetResults(savedUri: Uri?) {
+        if (savedUri != null) {
 
- fun getVichleinformation() {
-        Prefs.getInstance(App.instance).vmRegNo = txt
+            val apiService: ApiPlateRecognizer = RetrofitHelper.getInstance().create(ApiPlateRecognizer::class.java)
+            GlobalScope.launch(Dispatchers.IO) {
+                val imgFile = requireContext().getFileFromUri(savedUri)
+                val compressedImageFile = Compressor.compress(requireContext(), imgFile)
+                val imageFilePart = MultipartBody.Part.createFormData(
+                    "upload",
+                    compressedImageFile.name,
+                    RequestBody.create(
+                        "image/*".toMediaTypeOrNull(),
+                        compressedImageFile
+                    )
+                )
+                val response =
+                    apiService.getNumberPlateDetails(
+                        token = "TOKEN $API_TOKEN",
+                        imagePart = imageFilePart
+                    )
+                if (response.isSuccessful && response.body() != null) {
+                    if ((response.body()?.results?.size ?: 0) > 0) {
+                        withContext(Dispatchers.Main) {
+
+                            // Set variables for vehicle data.
+                            vrn = response.body()?.results?.get(0)?.plate.toString().uppercase()
+                            countryCode = response.body()?.results?.get(0)?.region?.code.toString()
+                                .uppercase()
+                            vehicleType = response.body()?.results?.get(0)?.vehicle?.type.toString()
+                                .uppercase()
+
+                            score = response.body()?.results?.get(0)?.score.toString()
+
+                            bounding = response.body()?.results?.get(0)?.box.toString()
+
+                            Log.d(TAG, response.body()?.results.toString())
+                            getVichleinformation()
+
+                        }
+                    } else {
+                        showScanErrorDialog(
+                            this@DailyWorkFragment,
+                            fragmentManager,
+                            "DWF-03",
+                            "Vehicle doesn't exists. Please scan again or contact your supervisor."
+                        )
+                        mbinding.pb.visibility=View.GONE
+                        withContext(Dispatchers.Main) {
+                            Log.d(TAG, "No VRN found in image.")
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    fun getVichleinformation() {
+        Prefs.getInstance(App.instance).vmRegNo = vrn
         (activity as HomeActivity).getVehicleLocationInfo()
         mainViewModel.getVichelinformationResponse(
-            Prefs.getInstance(App.instance).userID.toString().toDouble(), 0.toDouble(), txt
+            Prefs.getInstance(App.instance).userID.toString().toDouble(), 0.toDouble(), vrn
         ).observe(requireActivity(), Observer {
             if (it != null) {
-                Prefs.getInstance(App.instance).save("vehicleLastMillage", it.vehicleLastMillage.toString())
+                Prefs.getInstance(App.instance)
+                    .save("vehicleLastMillage", it.vehicleLastMillage.toString())
                 mbinding.rectange.visibility = View.GONE
                 mbinding.ivTakePhoto.visibility = View.GONE
                 mbinding.rectangle4.visibility = View.VISIBLE
@@ -363,7 +444,12 @@ class DailyWorkFragment : Fragment(),ScanErrorDialogListener {
                 )
                 showAlert()
             } else {
-                showScanErrorDialog(this,fragmentManager,"DWF-01","Vehicle doesn't exists. Please scan again or contact your supervisor.")
+                showScanErrorDialog(
+                    this,
+                    fragmentManager,
+                    "DWF-01",
+                    "Vehicle doesn't exists. Please scan again or contact your supervisor."
+                )
                 /*     showToast(
                          "Vehicle doesn't exists. Please scan again or contact your supervisor.",
                          requireContext()
@@ -389,8 +475,8 @@ class DailyWorkFragment : Fragment(),ScanErrorDialogListener {
         image.setOnClickListener {
 
             if (checkBox.isChecked) {
-               // findNavController().navigate(R.id.vechileMileageFragment)
-                navigateTo(R.id.vechileMileageFragment,requireContext(),findNavController())
+                // findNavController().navigate(R.id.vechileMileageFragment)
+                navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
                 deleteDialog.dismiss()
 
             } else {

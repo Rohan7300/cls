@@ -9,7 +9,8 @@
     </item>
     <item android:bottom="0dp"  android:top="1dp" >
         // add android:right="5dp" and android:left="5dp" for border on left and right
-        <shape android:shape="rectangle">
+        <shape android:shape="rectangle"
+            >
             <solid android:color="#FFD2BF" />
             <corners android:topLeftRadius="16dp" android:topRightRadius="16dp" />
         </shape>

@@ -128,12 +128,12 @@ class Userprofile : Fragment() {
             showAlert()
         }
         mbinding.save.setOnClickListener {
-            if (ninetydaysBoolean == true) {
-                updateProfile90dys()
-
-            } else {
+//            if (ninetydaysBoolean == true) {
+//                updateProfile90dys()
+//
+//            } else {
                 updateprofileregular()
-            }
+//            }
 //            updateProfile90dys()
         }
         return mbinding.root
@@ -320,8 +320,6 @@ class Userprofile : Fragment() {
         mainViewModel.updateprofileRegular(
             UpdateProfileRequestBody(
                 Prefs.getInstance(App.instance).userID.toInt(),
-                firstname!!,
-                lastname!!,
                 mbinding.emailtext.text.toString(),
                 mbinding.phonetext.text.toString(),
                 mbinding.addresstext.text.toString()
@@ -337,7 +335,8 @@ class Userprofile : Fragment() {
                     showToast("profile successfully updated", requireContext())
 
                 } else {
-                    showToast("Error in updating profile", requireContext())
+                    showErrorDialog(fragmentManager,"0","Error in updating profile")
+
                 }
             }
 
