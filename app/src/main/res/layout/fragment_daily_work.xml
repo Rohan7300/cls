@@ -28,6 +28,7 @@
                     android:id="@+id/scan"
                     android:layout_width="147dp"
                     android:layout_height="76dp"
+                    android:background="@color/very_light_orange"
                     android:src="@drawable/scan_area"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -38,6 +39,7 @@
                     android:layout_height="152dp"
                     android:layout_alignParentEnd="true"
                     android:src="@drawable/car"
+
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -78,8 +80,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="123dp"
                     android:background="@drawable/vectors"
-
                     android:foregroundGravity="fill"
+                    android:tooltipText="Scan Area"
+
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -90,13 +93,13 @@
                     android:id="@+id/viewfinder_cardview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:cardCornerRadius="20dp"
-                    android:backgroundTint="@color/white"
                     android:background="@color/white"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:backgroundTint="@color/white"
+                    app:cardCornerRadius="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" >
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <androidx.camera.view.PreviewView
                         android:id="@+id/rectange"
@@ -109,7 +112,6 @@
 
 
                 </androidx.cardview.widget.CardView>
-
 
 
                 <ProgressBar
@@ -127,6 +129,7 @@
                     android:id="@+id/imageView5"
                     android:layout_width="66dp"
                     android:layout_height="66dp"
+
                     android:src="@drawable/camera_frame"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -144,8 +147,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -184,7 +187,7 @@
                     android:textAlignment="center"
                     android:textAppearance="@style/place_the_r"
                     android:textColor="@color/text_color"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
 
                     app:layout_constraintStart_toStartOf="parent"
@@ -198,11 +201,10 @@
             android:layout_width="54dp"
             android:layout_height="54dp"
             android:layout_marginTop="36dp"
-
-            android:background="@drawable/camera_ivs"
+            android:src="@drawable/camera_ivs"
             android:clickable="true"
             android:focusable="true"
-            android:padding="10dp"
+           android:backgroundTint="@color/light_orange2"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/scan_layout"
             app:layout_constraintEnd_toEndOf="@+id/scan_layout"

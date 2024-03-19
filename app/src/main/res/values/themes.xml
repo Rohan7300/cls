@@ -3,7 +3,7 @@
 
     <style name="Theme.Celerity" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/light_orange</item>
-        <item name="android:statusBarColor">@color/light_orange</item>
+        <item name="android:statusBarColor">@color/light_orange2</item>
         <item name="colorPrimary">@color/light_orange</item>
 
         <item name="colorOnPrimary">@color/white</item>

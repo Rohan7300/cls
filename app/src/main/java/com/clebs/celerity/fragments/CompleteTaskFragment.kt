@@ -56,16 +56,23 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var imageView: ImageView
     private var userId: Int = 0
+
+    var inspectionOfflineImagesCHeck: Boolean? = null
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
     private var requestCode: Int = 0
     private var showImageUploadLayout: Boolean = false
+    var isAllImageUploaded: Boolean = false
+    var isInspectionDone: Boolean = false
+    var imagesUploaded: Boolean = false
+    var isClockedIn: Boolean = false
+    var isOnRoadHours: Boolean = false
+    var visibilityLevel = 0
     var breakStartTime: String = ""
     var breakEndTime: String = ""
-    lateinit var loadingDialog:LoadingDialog
+    lateinit var loadingDialog: LoadingDialog
     private lateinit var cqSDKInitializer: CQSDKInitializer
-    private lateinit var fragmentManager:FragmentManager
-    var inspectionOfflineImagesCHeck: Boolean? = null
+    private lateinit var fragmentManager: FragmentManager
 
     companion object {
         var inspectionstarted: Boolean? = null
@@ -80,6 +87,8 @@ class CompleteTaskFragment : Fragment() {
         val clickListener = View.OnClickListener {
             showAlert()
         }
+
+
         loadingDialog = (activity as HomeActivity).loadingDialog
         userId = Prefs.getInstance(requireContext()).userID.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
@@ -90,22 +99,22 @@ class CompleteTaskFragment : Fragment() {
         fragmentManager = (activity as HomeActivity).fragmentManager
         cqSDKInitializer = CQSDKInitializer(requireContext())
         cqSDKInitializer.triggerOfflineSync()
+        Log.e("kjkjkkjboolean", "onCreateView: "+ inspectionstarted )
 
 
-        if (inspectionstarted?.equals(true) == true) {
+        if (Prefs.getInstance(App.instance).getBoolean("isinspectiondone",false).equals(true)) {
+
             Timer().scheduleAtFixedRate( object : TimerTask() {
                 override fun run() {
                     cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
-
-                        inspectionOfflineImagesCHeck=isSyncCompletedForAllQuotes//if true then show double tick green
-
-
-                        //if only inspection started is true then single tick or pending
                         Log.e("hdhsdshdsdjshhsds", "run========: " +isSyncCompletedForAllQuotes)
+                        inspectionOfflineImagesCHeck=isSyncCompletedForAllQuotes
                     }
 
                 }
             }, 0, 1000)
+
+
             mbinding.startinspection.visibility = View.GONE
 
         } else {
@@ -122,11 +131,10 @@ class CompleteTaskFragment : Fragment() {
         viewModel.GetDriverBreakTimeInfo(userId)
         viewModel.GetDailyWorkInfoById(userId)
 
-        observers()
         clientUniqueID()
 
-
         mbinding.rlcomtwoClock.setOnClickListener {
+
             loadingDialog.show()
             viewModel.UpdateClockInTime(userId)
         }
@@ -205,7 +213,18 @@ class CompleteTaskFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (inspectionstarted?.equals(true) == true) {
+        if (Prefs.getInstance(App.instance).getBoolean("isinspectiondone",false).equals(true)) {
+
+            Timer().scheduleAtFixedRate( object : TimerTask() {
+                override fun run() {
+                    cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
+                        Log.e("hdhsdshdsdjshhsds", "run========: " +isSyncCompletedForAllQuotes)
+                        inspectionOfflineImagesCHeck=isSyncCompletedForAllQuotes
+                    }
+
+                }
+            }, 0, 1000)
+
 
             mbinding.startinspection.visibility = View.GONE
 

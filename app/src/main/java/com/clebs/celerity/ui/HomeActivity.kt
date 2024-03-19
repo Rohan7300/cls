@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
@@ -84,15 +85,20 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     ?: "Could not identify status message"
             val tempCode =
                 intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
+            Log.e("onnewintent", "onNewIntent: ", )
             if (tempCode == 200) {
+                Prefs.getInstance(applicationContext).saveBoolean("isinspectiondone",true)
                 CompleteTaskFragment.inspectionstarted = true
+                navController.popBackStack()
 
+                navController.navigate(R.id.completeTaskFragment)
                 showToast("inspection success", this)
             } else {
-
+                Log.e("onnewintent", "onNewIntenttwo: ", )
+                Prefs.getInstance(applicationContext).saveBoolean("isinspectiondone",false)
                 showToast("inspection Failed", this)
                 CompleteTaskFragment.inspectionstarted = false
-
+                navController.navigate(R.id.completeTaskFragment)
             }
             // Check if identifier is valid
             if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
@@ -199,6 +205,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         ActivityHomeBinding.title.text = ""
                         viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
                         loadingDialog.show()
+
+
                         /*        progressBarVisibility(
                                     true,
                                     ActivityHomeBinding.homeActivityPB,
@@ -235,14 +243,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             ActivityHomeBinding.imgLogout.setOnClickListener {
                 showAlertLogout()
             }
-        }catch (e:Exception){
-            RetrofitService.handleNetworkError(e,fragmentManager)
+        } catch (e: Exception) {
+            RetrofitService.handleNetworkError(e, fragmentManager)
         }
 
 
     }
 
-     fun getVehicleLocationInfo() {
+    fun getVehicleLocationInfo() {
         val today = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("dd/MM")
         date = today.format(formatter)
@@ -256,7 +264,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (it != null) {
                 try {
                     //if (it.vmRegNo != null)
-                        viewModel.GetVehicleInformation(userId, Prefs.getInstance(this).vmRegNo)
+                    viewModel.GetVehicleInformation(userId, Prefs.getInstance(this).vmRegNo)
 
 
                 } catch (e: Exception) {
