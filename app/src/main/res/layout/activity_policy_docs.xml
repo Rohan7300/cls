@@ -14,31 +14,6 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-            <ProgressBar
-                android:id="@+id/policyDocPB"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:visibility="gone"
-                android:indeterminateTint="@color/orange"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.5" />
-
-            <View
-                android:id="@+id/overlayViewPolicyActivity"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.5" />
 
             <TextView
                 android:id="@+id/policy_title"
@@ -56,8 +31,8 @@
 
             <ImageView
                 android:id="@+id/img_policy"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:src="@drawable/policy_img"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -98,18 +73,27 @@
                         android:letterSpacing="0.02"
                         android:text="Amazon Logistics"
                         android:textColor="@color/text_color"
-                        android:textSize="19sp"
+                        android:textSize="17sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/img_policy" />
 
-                    <View
-                        android:id="@+id/views1"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_margin="16dp"
-                        android:background="@color/text_color"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_amazon" />
 
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:id="@+id/amazon_Layout"
+                        android:visibility="visible"
+                        >
+                        <View
+                            android:id="@+id/views1"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginHorizontal="16dp"
+                            android:layout_marginVertical="10dp"
+                            android:background="@color/text_color"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_amazon" />
                     <LinearLayout
                         android:id="@+id/llones"
                         android:layout_width="match_parent"
@@ -342,7 +326,7 @@
 
 
                     </LinearLayout>
-
+                    </LinearLayout>
                     <View
                         android:id="@+id/viewss"
                         android:layout_width="match_parent"
@@ -376,10 +360,11 @@
                             android:fontFamily="@font/inter"
                             android:gravity="start"
                             android:letterSpacing="0.02"
+                            android:padding="5dp"
                             android:lineSpacingExtra="1sp"
                             android:text="@string/tick_to_ack"
                             android:textColor="#2C2728"
-                            android:textSize="15sp" />
+                            android:textSize="13sp" />
 
                     </LinearLayout>
 
@@ -389,7 +374,6 @@
                 <LinearLayout
                     android:id="@+id/ll_trucks"
                     android:layout_width="match_parent"
-
                     android:layout_height="wrap_content"
                     android:layout_marginTop="60dp"
                     android:orientation="vertical">
@@ -401,13 +385,19 @@
                         android:fontFamily="@font/poppins_semibold"
                         android:text="Trucks"
                         android:textColor="@color/text_color"
-                        android:textSize="19sp" />
-
+                        android:textSize="17sp" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/truckLayout"
+    >
                     <View
                         android:id="@+id/viewss2"
                         android:layout_width="match_parent"
                         android:layout_height="0.05dp"
-                        android:layout_margin="16dp"
+                        android:layout_marginVertical="12dp"
+                        android:layout_marginHorizontal="16dp"
                         android:background="@color/text_color" />
 
                     <LinearLayout
@@ -639,7 +629,7 @@
 
 
                     </LinearLayout>
-
+</LinearLayout>
                     <LinearLayout
                         android:id="@+id/check2"
                         android:layout_width="match_parent"
@@ -667,10 +657,11 @@
                             android:fontFamily="@font/inter"
                             android:gravity="start"
                             android:letterSpacing="0.02"
+                            android:padding="5dp"
                             android:lineSpacingExtra="1sp"
                             android:text="@string/tick_to_ack"
                             android:textColor="#2C2728"
-                            android:textSize="15sp" />
+                            android:textSize="13sp" />
 
                     </LinearLayout>
 

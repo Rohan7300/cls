@@ -74,9 +74,9 @@ class CompleteTaskFragment : Fragment() {
     private var imageUploadLevel = 0
 
     var inspectionOfflineImagesCHeck: Boolean? = null
-
+    var inspectionstarted: Boolean? = null
     companion object {
-        var inspectionstarted: Boolean? = null
+
     }
 
     override fun onCreateView(
@@ -100,22 +100,7 @@ class CompleteTaskFragment : Fragment() {
         cqSDKInitializer.triggerOfflineSync()
         setProgress()
 
-        if (inspectionstarted?.equals(true) == true) {
-            Timer().scheduleAtFixedRate(object : TimerTask() {
-                override fun run() {
-                    cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
-                        Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
-                        inspectionOfflineImagesCHeck = isSyncCompletedForAllQuotes
-                        /*    if (isSyncCompletedForAllQuotes)
-                                //setProgress()*/
-                    }
-                }
-            }, 0, 1000)
-            mbinding.startinspection.visibility = View.GONE
-
-        } else {
-            mbinding.startinspection.visibility = View.VISIBLE
-        }
+        inspectionstarted = (activity as HomeActivity).inspectionstarted
 
         viewModel = (activity as HomeActivity).viewModel
         (activity as HomeActivity).getVehicleLocationInfo()
@@ -208,6 +193,10 @@ class CompleteTaskFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection",false)
+        Log.d("hdhsdshdsdjshhsds","Ins $inspectionstarted")
+        checkInspection()
         if (inspectionstarted?.equals(true) == true) {
 
             mbinding.startinspection.visibility = View.GONE
@@ -215,6 +204,8 @@ class CompleteTaskFragment : Fragment() {
         } else {
             mbinding.startinspection.visibility = View.VISIBLE
         }
+
+
     }
 
     private fun observers() {
@@ -768,6 +759,25 @@ class CompleteTaskFragment : Fragment() {
                 progressBar.setProgress(100, true)
                 progressBar.setBackgroundColor(Color.GREEN)
             }
+        }
+    }
+
+    private fun checkInspection(){
+        if (inspectionstarted?.equals(true) == true) {
+            Timer().scheduleAtFixedRate(object : TimerTask() {
+                override fun run() {
+                    cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
+                        Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
+                        inspectionOfflineImagesCHeck = isSyncCompletedForAllQuotes
+                        /*    if (isSyncCompletedForAllQuotes)
+                                //setProgress()*/
+                    }
+                }
+            }, 0, 1000)
+            mbinding.startinspection.visibility = View.GONE
+
+        } else {
+            mbinding.startinspection.visibility = View.VISIBLE
         }
     }
 }

@@ -330,7 +330,7 @@
                                 android:letterSpacing="0.02"
                                 android:text="@string/route_name"
                                 android:textColor="#4A4A4A"
-                                android:textSize="15sp" />
+                                android:textSize="13sp" />
 
                             <TextView
                                 android:id="@+id/route_name_two"
@@ -342,7 +342,7 @@
                                 android:letterSpacing="0.02"
                                 android:text="@string/route_name"
                                 android:textColor="#4A4A4A"
-                                android:textSize="15sp" />
+                                android:textSize="13sp" />
 
                             <ImageView
                                 android:id="@+id/edt_ic"
@@ -372,7 +372,6 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="15dp"
                             android:background="@drawable/shape_edittext_mileage"
-
                             android:orientation="horizontal"
                             android:paddingStart="18dp"
                             android:paddingEnd="18dp">
@@ -393,7 +392,7 @@
                                 android:padding="18dp"
                                 android:text="Add a new route"
                                 android:textColor="#4A4A4A"
-                                android:textSize="14sp" />
+                                android:textSize="13sp" />
 
                         </RelativeLayout>
 
@@ -427,7 +426,7 @@
                                 android:padding="18dp"
                                 android:text="Add a ride along"
                                 android:textColor="#4A4A4A"
-                                android:textSize="14sp" />
+                                android:textSize="13sp" />
 
                         </RelativeLayout>
 
@@ -720,7 +719,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:layout_marginBottom="10dp"
                         android:gravity="center">
 
@@ -828,6 +827,11 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="visible">
+
+
+                        <include
+                            android:id="@+id/progressContainer"
+                            layout="@layout/custom_progress" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/clFaceMask"
@@ -1028,9 +1032,6 @@
                             </LinearLayout>
                         </RelativeLayout>
 
-                        <include
-                            android:id="@+id/progressContainer"
-                            layout="@layout/custom_progress" />
                     </LinearLayout>
 
                 </LinearLayout>

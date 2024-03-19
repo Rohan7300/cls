@@ -61,6 +61,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var firstName = ""
     var lastName = ""
     var isLeadDriver = false
+    var inspectionstarted: Boolean? = null
     var date = ""
     lateinit var loadingDialog: LoadingDialog
 
@@ -79,19 +80,26 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             val identifier =
                 intent.getStringExtra(PublicConstants.quoteCreationFlowStatusIdentifierKeyInIntent)
                     ?: "Could not identify Identifier"
+
+
             val message =
                 intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
                     ?: "Could not identify status message"
+            Log.d("hdhsdshdsdjshhsds","main $message")
             val tempCode =
                 intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
             if (tempCode == 200) {
-                CompleteTaskFragment.inspectionstarted = true
-
+                Log.d("hdhsdshdsdjshhsds","200 $message")
+                Prefs.getInstance(this).saveBoolean("Inspection", true)
+                //inspectionstarted = true
+                navController.navigate(R.id.completeTaskFragment)
                 showToast("inspection success", this)
             } else {
-
+                Log.d("hdhsdshdsdjshhsds","else $message")
+                navController.navigate(R.id.completeTaskFragment)
                 showToast("inspection Failed", this)
-                CompleteTaskFragment.inspectionstarted = false
+                Prefs.getInstance(this).saveBoolean("Inspection", false)
+                //inspectionstarted = false
 
             }
             // Check if identifier is valid
@@ -106,6 +114,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 // Update message in the dia
             }
         }
+        Log.d("hdhsdshdsdjshhsds","No Intent")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -235,14 +244,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             ActivityHomeBinding.imgLogout.setOnClickListener {
                 showAlertLogout()
             }
-        }catch (e:Exception){
-            RetrofitService.handleNetworkError(e,fragmentManager)
+        } catch (e: Exception) {
+            RetrofitService.handleNetworkError(e, fragmentManager)
         }
 
 
     }
 
-     fun getVehicleLocationInfo() {
+    fun getVehicleLocationInfo() {
         val today = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("dd/MM")
         date = today.format(formatter)
@@ -256,7 +265,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (it != null) {
                 try {
                     //if (it.vmRegNo != null)
-                        viewModel.GetVehicleInformation(userId, Prefs.getInstance(this).vmRegNo)
+                    viewModel.GetVehicleInformation(userId, Prefs.getInstance(this).vmRegNo)
 
 
                 } catch (e: Exception) {

@@ -70,6 +70,7 @@ class PolicyDocsActivity : AppCompatActivity() {
 
         mbinding.checkbox.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
+                mbinding.amazonLayout.visibility = View.GONE
                 if (mbinding.llTrucks.visibility == View.GONE) {
                     showAlert()
                 } else {
@@ -79,10 +80,13 @@ class PolicyDocsActivity : AppCompatActivity() {
                         showAlert()
                     }
                 }
+            }else{
+                mbinding.amazonLayout.visibility = View.VISIBLE
             }
         }
         mbinding.checkbox2.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
+                mbinding.truckLayout.visibility = View.GONE
                 if (mbinding.llAmazon.visibility == View.GONE) {
                     showAlert()
                 } else {
@@ -92,11 +96,16 @@ class PolicyDocsActivity : AppCompatActivity() {
                         showAlert()
                     }
                 }
+            }else{
+                mbinding.truckLayout.visibility = View.VISIBLE
             }
         }
     }
 
     private fun showAlert() {
+        mbinding.llAmazon.visibility = View.GONE
+        mbinding.llTrucks.visibility = View.GONE
+
         val dialog = CustDialog()
         dialog.setSignatureListener(object : SignatureListener {
             override fun onSignatureSaved(bitmap: Bitmap) {
