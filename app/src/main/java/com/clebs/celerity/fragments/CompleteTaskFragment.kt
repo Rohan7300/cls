@@ -65,7 +65,7 @@ class CompleteTaskFragment : Fragment() {
     private var imagesUploaded: Boolean = false
     private var isClockedIn: Boolean = false
     private var isOnRoadHours: Boolean = false
-    private var visibilityLevel = 0
+    private var visibilityLevel = -1
     var breakStartTime: String = ""
     var breakEndTime: String = ""
     private lateinit var loadingDialog: LoadingDialog
@@ -74,10 +74,8 @@ class CompleteTaskFragment : Fragment() {
     private var imageUploadLevel = 0
 
     var inspectionOfflineImagesCHeck: Boolean? = null
-    var inspectionstarted: Boolean? = null
-    companion object {
+    private var inspectionstarted: Boolean = false
 
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -100,10 +98,9 @@ class CompleteTaskFragment : Fragment() {
         cqSDKInitializer.triggerOfflineSync()
         setProgress()
 
-        inspectionstarted = (activity as HomeActivity).inspectionstarted
-
+        inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
         viewModel = (activity as HomeActivity).viewModel
-        (activity as HomeActivity).getVehicleLocationInfo()
+        //(activity as HomeActivity).getVehicleLocationInfo()
 
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
 
@@ -194,12 +191,12 @@ class CompleteTaskFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection",false)
-        Log.d("hdhsdshdsdjshhsds","Ins $inspectionstarted")
+        inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
+        Log.d("hdhsdshdsdjshhsds", "Ins $inspectionstarted")
         checkInspection()
         if (inspectionstarted?.equals(true) == true) {
 
-            mbinding.startinspection.visibility = View.GONE
+            setVisibiltyLevel()
 
         } else {
             mbinding.startinspection.visibility = View.VISIBLE
@@ -210,20 +207,24 @@ class CompleteTaskFragment : Fragment() {
 
     private fun observers() {
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+
+            loadingDialog.cancel()
+
             if (it != null) {
-                loadingDialog.cancel()
                 mbinding.headerTop.dxLoc.text = it?.locationName ?: ""
                 mbinding.headerTop.dxReg.text = it?.vmRegNo ?: ""
-                "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-                    mbinding.headerTop.anaCarolin.text = name
-                }
-                mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
-                val isLeadDriver = (activity as HomeActivity).isLeadDriver
-                if (!isLeadDriver) {
-                    mbinding.rideAlong.visibility = View.GONE
-                }
+            }
+
+            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+                mbinding.headerTop.anaCarolin.text = name
+            }
+            mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
+            val isLeadDriver = (activity as HomeActivity).isLeadDriver
+            if (!isLeadDriver) {
+                mbinding.rideAlong.visibility = View.GONE
             }
         }
+
 
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -261,6 +262,7 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.livedataClockInTime.observe(viewLifecycleOwner) {
             viewModel.GetDailyWorkInfoById(userId)
+            loadingDialog.cancel()
             if (it != null) {
                 isClockedIn = true
                 setVisibiltyLevel()
@@ -271,6 +273,7 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.livedataUpdateClockOutTime.observe(viewLifecycleOwner) {
             viewModel.GetDailyWorkInfoById(userId)
+            loadingDialog.cancel()
             if (it != null) {
                 mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
             }
@@ -326,7 +329,7 @@ class CompleteTaskFragment : Fragment() {
                         showImageUploadLayout = true
                         imagesUploaded = false
                         setVisibiltyLevel()
-                        mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                      //  mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                     } else {
 
                         showImageUploadLayout = checkNull(it)
@@ -334,7 +337,7 @@ class CompleteTaskFragment : Fragment() {
                         if (showImageUploadLayout) {
                             imagesUploaded = false
                             setVisibiltyLevel()
-                            mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                         //   mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                             mbinding.taskDetails.visibility = View.VISIBLE
                         } else {
                             imagesUploaded = true
@@ -403,7 +406,6 @@ class CompleteTaskFragment : Fragment() {
                                 )
                             }
                         }
-
                     }
                 }
             }
@@ -690,10 +692,19 @@ class CompleteTaskFragment : Fragment() {
             ).forEach { thisView -> thisView.visibility = View.GONE }
         }
         when (visibilityLevel) {
-            0 -> {
-
+            -1 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.taskDetails.visibility = View.VISIBLE
+                mbinding.imageUploadView.visibility = View.GONE
+                /*mbinding.clFaceMask.visibility = View.GONE
+                mbinding.clOilLevel.visibility = View.GONE*/
+            }
+
+            0 -> {
+                mbinding.uploadLayouts.visibility = View.VISIBLE
+                mbinding.taskDetails.visibility = View.VISIBLE
+                mbinding.imageUploadView.visibility = View.VISIBLE
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.singlecheckmark)
             }
 
             1 -> {
@@ -716,6 +727,11 @@ class CompleteTaskFragment : Fragment() {
 
     private fun setVisibiltyLevel() {
         visibilityLevel = 0
+        if (!inspectionstarted && !imagesUploaded) {
+            visibilityLevel = -1
+            visibiltyControlls()
+            return
+        }
         if (!imagesUploaded) {
             visibilityLevel = 0
             visibiltyControlls()
@@ -762,7 +778,7 @@ class CompleteTaskFragment : Fragment() {
         }
     }
 
-    private fun checkInspection(){
+    private fun checkInspection() {
         if (inspectionstarted?.equals(true) == true) {
             Timer().scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {

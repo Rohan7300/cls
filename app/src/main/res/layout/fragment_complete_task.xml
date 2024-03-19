@@ -15,6 +15,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:overScrollMode="never"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -29,7 +30,8 @@
                     android:id="@+id/complete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="14dp"
                     android:background="@drawable/shape_expand_main">
 
                     <View
@@ -479,31 +481,8 @@
                     android:orientation="vertical"
                     android:visibility="visible">
 
-                    <TextView
-                        android:id="@+id/txt_upload"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:letterSpacing="0.02"
-                        android:lineHeight="27sp"
-                        android:text="Upload Vehicle Pictures"
-                        android:textAllCaps="true"
-                        android:textColor="#4A4A4A"
-                        android:textSize="18sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/task_details" />
 
-                    <View
-                        android:id="@+id/view"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="20dp"
-                        android:background="#4A4A4A"
-                        app:layout_constraintTop_toBottomOf="@+id/txt_upload" />
+
 
                     <RelativeLayout
                         android:id="@+id/rl_second"
@@ -616,7 +595,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="14dp"
                         android:layout_marginEnd="20dp"
                         android:orientation="horizontal"
                         android:visibility="gone">
@@ -763,6 +742,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="16dp"
+                        android:visibility="gone"
                         android:layout_marginEnd="20dp"
                         android:orientation="horizontal"
                         app:layout_constraintTop_toBottomOf="@id/view">
@@ -828,6 +808,33 @@
                         android:orientation="vertical"
                         android:visibility="visible">
 
+
+                        <TextView
+                            android:id="@+id/txt_upload"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginVertical="10dp"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:letterSpacing="0.02"
+                            android:lineHeight="27sp"
+                            android:text="Upload Vehicle Pictures"
+                            android:textAllCaps="true"
+                            android:textColor="#4A4A4A"
+                            android:textSize="18sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/task_details" />
+
+                        <View
+                            android:id="@+id/view"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="20dp"
+                            android:background="#4A4A4A"
+                            app:layout_constraintTop_toBottomOf="@+id/txt_upload" />
 
                         <include
                             android:id="@+id/progressContainer"

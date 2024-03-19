@@ -61,7 +61,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var firstName = ""
     var lastName = ""
     var isLeadDriver = false
-    var inspectionstarted: Boolean? = null
     var date = ""
     lateinit var loadingDialog: LoadingDialog
 

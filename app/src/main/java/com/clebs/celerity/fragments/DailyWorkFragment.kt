@@ -407,7 +407,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                             "DWF-03",
                             "Vehicle doesn't exists. Please scan again or contact your supervisor."
                         )
-                        mbinding.pb.visibility=View.GONE
+                        //mbinding.pb.visibility=View.GONE
                         withContext(Dispatchers.Main) {
                             Log.d(TAG, "No VRN found in image.")
 
