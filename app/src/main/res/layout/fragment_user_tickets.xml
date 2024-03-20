@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".fragments.UserTicketsFragment">
+        tools:context=".fragments.UserTicketsFragment"
+        >
+        <include
+            layout="@layout/no_data_layout"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -55,6 +64,6 @@
             app:layout_constraintTop_toBottomOf="@+id/rlreltive"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </LinearLayout>
 
 </layout>

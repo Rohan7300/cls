@@ -178,6 +178,19 @@ class CompleteTaskFragment : Fragment() {
             }
             isclicked = !isclicked
         }
+        mbinding.downIv.setOnClickListener {
+            if (isclicked) {
+                mbinding.taskDetails.visibility = View.VISIBLE
+                mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
+                mbinding.view2.visibility = View.VISIBLE
+            } else {
+                mbinding.taskDetails.visibility = View.GONE
+                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
+                mbinding.view2.visibility = View.GONE
+                //mbinding.uploadLayouts.visibility = View.VISIBLE
+            }
+            isclicked = !isclicked
+        }
 
 
         mbinding.tvNext.setOnClickListener {

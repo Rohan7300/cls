@@ -204,6 +204,7 @@ class OnRoadHoursFragment : Fragment() {
     private fun locationSection() {
         viewModel.liveDataRouteLocationResponse.observe(viewLifecycleOwner) { locationData ->
             if (locationData != null) {
+                loadingDialog.show()
                 rideAlongApiCall()
                 val locNames = locationData.map { it.LocationName }
                 val locIds = locationData.map { it.LocId }
@@ -219,6 +220,7 @@ class OnRoadHoursFragment : Fragment() {
 
     private fun rideAlongApiCall() {
         viewModel.liveDataRideAlongRouteTypeInfo.observe(viewLifecycleOwner) { routeData ->
+
             if (routeData != null) {
                 val routeNames = routeData.map { it.RtName }
                 val routeIDs = routeData.map { it.RtId }

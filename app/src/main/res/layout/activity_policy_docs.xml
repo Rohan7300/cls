@@ -41,69 +41,71 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:id="@+id/lls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/lls"
+                android:id="@+id/ll_amazon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:nestedScrollingEnabled="false"
-                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/ll_amazon"
+                    android:id="@+id/amazonHeader"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginHorizontal="2dp"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp">
 
-                    <LinearLayout
-                        android:id="@+id/amazonHeader"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tv_amazon"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="2dp"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="4dp">
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:letterSpacing="0.02"
+                        android:text="Amazon Logistics"
+                        android:textColor="@color/text_color"
+                        android:textSize="17sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/img_policy" />
 
-                        <TextView
-                            android:id="@+id/tv_amazon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:letterSpacing="0.02"
-                            android:text="Amazon Logistics"
-                            android:textColor="@color/text_color"
-                            android:textSize="17sp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/img_policy" />
+                    <ImageView
+                        android:id="@+id/amazonArrow"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/chevron" />
 
-                        <ImageView
-                            android:id="@+id/amazonArrow"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/chevron" />
+                </LinearLayout>
 
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/views1"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginVertical="10dp"
-                        android:background="@color/text_color"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_amazon" />
+                <View
+                    android:id="@+id/views1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="@color/text_color"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_amazon" />
 
 
-                    <ScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
                     <LinearLayout
                         android:id="@+id/amazon_Layout"
                         android:layout_width="match_parent"
@@ -386,56 +388,50 @@
 
                         </LinearLayout>
                     </LinearLayout>
-                    </ScrollView>
-                </LinearLayout>
+            </LinearLayout>
 
+
+            <LinearLayout
+                android:id="@+id/ll_trucks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/ll_trucks"
+                    android:id="@+id/truckHeaderLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:orientation="vertical">
+                    android:layout_marginHorizontal="2dp"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp">
 
-                    <LinearLayout
-                        android:id="@+id/truckHeaderLL"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="2dp"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="4dp">
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Trucks"
+                        android:textColor="@color/text_color"
+                        android:textSize="17sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Trucks"
-                            android:textColor="@color/text_color"
-                            android:textSize="17sp" />
+                    <ImageView
+                        android:id="@+id/truckArrow"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/chevron" />
+                </LinearLayout>
 
-                        <ImageView
-                            android:id="@+id/truckArrow"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/chevron" />
-                    </LinearLayout>
+                <View
+                    android:id="@+id/viewss2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="@color/text_color" />
 
-                    <View
-                        android:id="@+id/viewss2"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginVertical="10dp"
-                        android:background="@color/text_color" />
-
-
-                    <ScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
 
                     <LinearLayout
                         android:id="@+id/truckLayout"
@@ -709,13 +705,11 @@
 
                         </LinearLayout>
                     </LinearLayout>
-                    </ScrollView>
-
-                </LinearLayout>
-
 
             </LinearLayout>
 
+
+        </LinearLayout>
 
 
         <LinearLayout
@@ -791,7 +785,21 @@
 
 
         </LinearLayout>
+    </LinearLayout>
+</ScrollView>
+        <LinearLayout
+            android:id="@+id/signLayoutll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:layout_marginBottom="15dp"
+            android:visibility="gone">
 
+            <include
+                android:id="@+id/signLayout"
+                layout="@layout/sign_layout" />
+        </LinearLayout>
     </LinearLayout>
 </layout>
 
