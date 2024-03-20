@@ -72,6 +72,7 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
     private var imageUploadLevel = 0
+    var apiCount = 0
 
     var inspectionOfflineImagesCHeck: Boolean? = null
     private var inspectionstarted: Boolean = false
@@ -102,22 +103,28 @@ class CompleteTaskFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         //(activity as HomeActivity).getVehicleLocationInfo()
 
+        showDialog()
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
+
 
         observers()
 
+        showDialog()
         viewModel.GetDriverBreakTimeInfo(userId)
+        showDialog()
         viewModel.GetDailyWorkInfoById(userId)
+
 
         clientUniqueID()
 
         mbinding.rlcomtwoClock.setOnClickListener {
-            loadingDialog.show()
+            showDialog()
             viewModel.UpdateClockInTime(userId)
+
         }
 
         mbinding.rlcomtwoClockOut.setOnClickListener {
-            loadingDialog.show()
+            showDialog()
             viewModel.UpdateClockOutTime(userId)
         }
 
@@ -171,6 +178,19 @@ class CompleteTaskFragment : Fragment() {
             }
             isclicked = !isclicked
         }
+        mbinding.downIv.setOnClickListener {
+            if (isclicked) {
+                mbinding.taskDetails.visibility = View.VISIBLE
+                mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
+                mbinding.view2.visibility = View.VISIBLE
+            } else {
+                mbinding.taskDetails.visibility = View.GONE
+                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
+                mbinding.view2.visibility = View.GONE
+                //mbinding.uploadLayouts.visibility = View.VISIBLE
+            }
+            isclicked = !isclicked
+        }
 
 
         mbinding.tvNext.setOnClickListener {
@@ -208,7 +228,7 @@ class CompleteTaskFragment : Fragment() {
     private fun observers() {
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
 
-            loadingDialog.cancel()
+            hideDialog()
 
             if (it != null) {
                 mbinding.headerTop.dxLoc.text = it?.locationName ?: ""
@@ -232,11 +252,11 @@ class CompleteTaskFragment : Fragment() {
             } else {
                 // showToast("Something went wrong!!", requireContext())
             }
-            loadingDialog.cancel()
+            hideDialog()
         }
 
         viewModel.livedataDailyWorkInfoByIdResponse.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
+            hideDialog()
             if (it != null) {
                 if (it.ClockedInTime != null) {
                     mbinding.tvClockedIN.text = it.ClockedInTime.toString()
@@ -261,8 +281,9 @@ class CompleteTaskFragment : Fragment() {
         }
 
         viewModel.livedataClockInTime.observe(viewLifecycleOwner) {
+            hideDialog()
             viewModel.GetDailyWorkInfoById(userId)
-            loadingDialog.cancel()
+            showDialog()
             if (it != null) {
                 isClockedIn = true
                 setVisibiltyLevel()
@@ -272,8 +293,9 @@ class CompleteTaskFragment : Fragment() {
         }
 
         viewModel.livedataUpdateClockOutTime.observe(viewLifecycleOwner) {
+            hideDialog()
             viewModel.GetDailyWorkInfoById(userId)
-            loadingDialog.cancel()
+            showDialog()
             if (it != null) {
                 mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
             }
@@ -281,7 +303,7 @@ class CompleteTaskFragment : Fragment() {
 
 
         viewModel.livedataDriverBreakInfo.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
+            hideDialog()
             if (it != null) {
                 val latestBreakInfo = it.lastOrNull()
 
@@ -300,11 +322,11 @@ class CompleteTaskFragment : Fragment() {
         }
 
         viewModel.uploadVehicleImageLiveData.observe(viewLifecycleOwner, Observer {
-
-            loadingDialog.cancel()
+            hideDialog()
             viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
             if (it != null) {
                 if (it.Status == "200") {
+                    showDialog()
                     viewModel.GetVehicleImageUploadInfo(userId)
                     setImageUploadViews(requestCode, 1)
                 } else {
@@ -316,7 +338,7 @@ class CompleteTaskFragment : Fragment() {
         })
 
         viewModel.vehicleImageUploadInfoLiveData.observe(viewLifecycleOwner, Observer {
-            loadingDialog.cancel()
+            hideDialog()
             println(it)
             if (it != null) {
                 if (it!!.Status == "404") {
@@ -329,7 +351,7 @@ class CompleteTaskFragment : Fragment() {
                         showImageUploadLayout = true
                         imagesUploaded = false
                         setVisibiltyLevel()
-                      //  mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                        //  mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                     } else {
 
                         showImageUploadLayout = checkNull(it)
@@ -337,7 +359,7 @@ class CompleteTaskFragment : Fragment() {
                         if (showImageUploadLayout) {
                             imagesUploaded = false
                             setVisibiltyLevel()
-                         //   mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                            //   mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                             mbinding.taskDetails.visibility = View.VISIBLE
                         } else {
                             imagesUploaded = true
@@ -372,22 +394,6 @@ class CompleteTaskFragment : Fragment() {
                         if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
                             imageUploadLevel = 3
                         }
-
-
-                        /*if (it.DaVehImgRearFileName != null) mbinding.ivRearImgUp.setImageResource(R.drawable.ic_yes)
-
-                        if (it.DaVehImgFrontFileName != null) mbinding.ivFront.setImageResource(R.drawable.ic_yes)
-
-                        if (it.DaVehImgNearSideFileName != null) mbinding.ivNearSide.setImageResource(
-                            R.drawable.ic_yes
-                        )
-     if (it.DaVehImgDashBoardFileName != null) mbinding.ivVehicleDashboard.setImageResource(
-                            R.drawable.ic_yes
-                        )
-                        if (it.DaVehImgOffSideFileName != null) mbinding.ivOffSideImgUp.setImageResource(
-                            R.drawable.ic_yes
-                        )*/
-
 
                         mbinding.run {
                             mbinding.tvNext.isEnabled =
@@ -475,7 +481,6 @@ class CompleteTaskFragment : Fragment() {
         dialogBinding.timeTvNext.setOnClickListener {
             if (chkTime(dialogBinding.edtBreakstart, dialogBinding.edtBreakend)) {
                 deleteDialog.cancel()
-                loadingDialog.show()
                 sendBreakTimeData()
             } else {
                 showErrorDialog(fragmentManager, "CTF-02", "Please add valid time information")
@@ -485,7 +490,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun sendBreakTimeData() {
-
+        showDialog()
         viewModel.SaveBreakTime(
             SaveBreakTimeRequest(
                 UserId = userId.toString(),
@@ -536,9 +541,10 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun sendImage(imageBitmap: Bitmap, requestCode: Int) {
-        loadingDialog.show()
+
         val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
         val requestBody = imageBitmap.toRequestBody()
+
         val imagePart = when (requestCode) {
             0 -> {
                 MultipartBody.Part.createFormData(
@@ -590,7 +596,10 @@ class CompleteTaskFragment : Fragment() {
 
             else -> throw IllegalArgumentException()
         }
+
+        showDialog()
         viewModel.uploadVehicleImage(userId, imagePart, requestCode)
+
     }
 
     private fun setImageUploadViews(requestCode: Int, type: Int) {
@@ -795,5 +804,20 @@ class CompleteTaskFragment : Fragment() {
         } else {
             mbinding.startinspection.visibility = View.VISIBLE
         }
+    }
+
+    private fun hideDialog() {
+        apiCount--
+        if (apiCount <= 0) {
+            loadingDialog.cancel()
+            apiCount = 0
+        }
+    }
+
+    private fun showDialog() {
+        if (apiCount == 0) {
+            loadingDialog.show()
+        }
+        apiCount++
     }
 }

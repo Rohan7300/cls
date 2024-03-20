@@ -9,11 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.clebs.celerity.DrawViewClass
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -123,18 +128,46 @@ class PolicyDocsActivity : AppCompatActivity() {
         // mbinding.llTrucks.visibility = View.GONE
 
         //mbinding.scanll.visibility = View.VISIBLE
+        mbinding.signLayoutll.visibility = View.VISIBLE
+        mbinding.amazonHeader.isClickable = false
+        mbinding.truckHeaderLL.isClickable = false
+        val retry =mbinding.signLayout.RetryLay
+        val close = mbinding.signLayout.cl
+        val save = mbinding.signLayout.sv
+        val testIV = mbinding.signLayout.textIV
+        val drawView = mbinding.signLayout.paintView.drawView
 
-        val dialog = CustDialog()
+        save.setOnClickListener {
+            if (DrawViewClass.pathList.isEmpty()) {
+                // Show a toast indicating that the user has not signed
+                showToast("Please sign before saving",this)
+            } else {
+                val signatureBitmap: Bitmap = drawView.getBitmap()
+                testIV.setImageBitmap(signatureBitmap)
+             //   signatureListener?.onSignatureSaved(signatureBitmap)
+                loadingDialog.show()
+                updateSignatureInfoApi(signatureBitmap)
+               // dismiss()
+            }
+        }
+
+        retry.setOnClickListener {
+            drawView.clearSignature()
+        }
+
+/*        val dialog = CustDialog()
         dialog.setSignatureListener(object : SignatureListener {
             override fun onSignatureSaved(bitmap: Bitmap) {
                 Log.d("Sign", "Bitmap $bitmap")
-                /*  progressBarVisibility(true,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)*/
+                *//*  progressBarVisibility(true,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)*//*
                 loadingDialog.show()
                 updateSignatureInfoApi(bitmap)
             }
         })
         dialog.isCancelable = false
-        dialog.show(supportFragmentManager, "sign")
+        dialog.show(supportFragmentManager, "sign")*/
+
+
     }
 
     private fun updateSignatureInfoApi(bitmap: Bitmap) {
@@ -216,15 +249,6 @@ class PolicyDocsActivity : AppCompatActivity() {
         ).show()
     }
 
-
-    /* fun progressBarVisibility(show: Boolean) {
-         if (show) {
-             mbinding.policyDocPB.bringToFront()
-             mbinding.policyDocPB.visibility = View.VISIBLE
-         } else {
-             mbinding.policyDocPB.visibility = View.GONE
-         }
-     }*/
 
     private fun setVisibility(ll: LinearLayout, visibility: Boolean) {
         if (visibility)
