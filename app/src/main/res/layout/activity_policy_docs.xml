@@ -7,12 +7,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/very_light_orange"
         tools:context=".fragments.PolicyDocsFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constss"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -30,10 +34,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_policy"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="179dp"
+                android:layout_height="154dp"
                 android:src="@drawable/policy_img"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +65,12 @@
             <LinearLayout
                 android:id="@+id/ll_amazon"
                 android:layout_width="match_parent"
+                android:layout_margin="2dp"
+                android:paddingTop="16dp"
+
+                android:background="@drawable/shape_expand_main"
                 android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -395,7 +404,13 @@
                 android:id="@+id/ll_trucks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+             android:layout_marginStart="2dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp"
+                android:layout_marginEnd="2dp"
+
+              android:layout_marginTop="16dp"
+                android:background="@drawable/shape_expand_main"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -717,16 +732,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/constss"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="vertical"
             android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/poppins"
                 android:letterSpacing="0.02"
                 android:text="Sign here"
@@ -736,7 +750,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_margin="16dp"
                 android:background="@drawable/scan_area_background"
                 android:nestedScrollingEnabled="false">
 
@@ -745,7 +759,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_margin="16dp"
                 android:background="@drawable/shape_edittext_onroad"
                 android:orientation="horizontal"
                 android:padding="10dp">
@@ -772,9 +786,7 @@
                 style="@style/ctaStyle1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="30dp"
+                android:layout_margin="16dp"
                 android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:letterSpacing="0.02"
@@ -791,9 +803,7 @@
             android:id="@+id/signLayoutll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="bottom"
-            android:layout_marginBottom="15dp"
+           android:layout_margin="16dp"
             android:visibility="gone">
 
             <include

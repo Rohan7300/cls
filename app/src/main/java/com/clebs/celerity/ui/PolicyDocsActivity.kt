@@ -4,17 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Path
-import android.opengl.Visibility
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -30,10 +25,8 @@ import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
-import com.clebs.celerity.utils.CustDialog
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.SignatureListener
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.showToast
 
@@ -42,6 +35,8 @@ class PolicyDocsActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
     private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
     private var userId = 0
+    var isImage1 = true
+    var isImage2 = true
     lateinit var loadingDialog: LoadingDialog
 
 
@@ -79,11 +74,28 @@ class PolicyDocsActivity : AppCompatActivity() {
 
         mbinding.amazonHeader.setOnClickListener {
 
+
+            if (isImage1){
+                mbinding.views1.visibility=View.GONE
+            }
+            else{
+                mbinding.views1.visibility=View.VISIBLE
+            }
+            isImage1 = !isImage1
+
                 setVisibility(mbinding.amazonLayout, !mbinding.amazonLayout.isVisible)
+
 
         }
 
         mbinding.truckHeaderLL.setOnClickListener {
+            if (isImage2){
+                mbinding.viewss2.visibility=View.GONE
+            }
+            else{
+                mbinding.viewss2.visibility=View.VISIBLE
+            }
+            isImage2 = !isImage2
 
                 setVisibility(mbinding.truckLayout,!mbinding.truckLayout.isVisible)
 
@@ -92,6 +104,7 @@ class PolicyDocsActivity : AppCompatActivity() {
         mbinding.checkbox.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
                 mbinding.amazonLayout.visibility = View.GONE
+                mbinding.views1.visibility=View.GONE
                 if (mbinding.llTrucks.visibility == View.GONE) {
                     showAlert()
                 } else {
@@ -103,11 +116,13 @@ class PolicyDocsActivity : AppCompatActivity() {
                 }
             } else {
                 mbinding.amazonLayout.visibility = View.VISIBLE
+                mbinding.views1.visibility=View.VISIBLE
             }
         }
         mbinding.checkbox2.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
                 mbinding.truckLayout.visibility = View.GONE
+                mbinding.viewss2.visibility=View.GONE
                 if (mbinding.llAmazon.visibility == View.GONE) {
                     showAlert()
                 } else {
@@ -119,6 +134,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                 }
             } else {
                 mbinding.truckLayout.visibility = View.VISIBLE
+                mbinding.viewss2.visibility=View.VISIBLE
             }
         }
     }
@@ -252,6 +268,7 @@ class PolicyDocsActivity : AppCompatActivity() {
 
     private fun setVisibility(ll: LinearLayout, visibility: Boolean) {
         if (visibility)
+
             ll.visibility = View.VISIBLE
         else
             ll.visibility = View.GONE
