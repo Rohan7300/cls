@@ -16,7 +16,7 @@
             android:fontFamily="@font/poppins_bold"
 android:textSize="30sp"
             android:layout_marginTop="32dp"
-            android:text="Welcome to celerity"
+            android:text="@string/Dashboard"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,13 +29,7 @@ android:textSize="30sp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/img_circle_logo"
-                android:src="@drawable/splash_screen_ic"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:layout_width="103dp"
                 android:layout_height="74dp"
