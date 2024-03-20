@@ -220,7 +220,7 @@ class OnRoadHoursFragment : Fragment() {
 
     private fun rideAlongApiCall() {
         viewModel.liveDataRideAlongRouteTypeInfo.observe(viewLifecycleOwner) { routeData ->
-
+            loadingDialog.cancel()
             if (routeData != null) {
                 val routeNames = routeData.map { it.RtName }
                 val routeIDs = routeData.map { it.RtId }

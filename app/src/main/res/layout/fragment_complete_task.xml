@@ -30,14 +30,16 @@
                     android:id="@+id/complete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="14dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/shape_expand_main">
 
                     <View
                         android:id="@+id/view2"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
+                        android:layout_marginHorizontal="1dp"
                         android:layout_below="@+id/rlcom"
                         android:background="#6DA95E"
                         android:visibility="gone" />
@@ -320,6 +322,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15dp"
+                            android:visibility="gone"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="15dp"
                             android:layout_marginBottom="24dp">
@@ -365,11 +368,23 @@
 
                         </RelativeLayout>
 
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/getDriverRouteId"
+                            android:layout_marginHorizontal="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="24dp"
+                            />
+
+
+
                         <RelativeLayout
                             android:id="@+id/Add_route"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/filled_routes"
+                            android:layout_below="@+id/getDriverRouteId"
                             android:layout_marginStart="15dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="15dp"

@@ -19,6 +19,7 @@ import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
@@ -157,7 +158,7 @@ class MainRepo(private val ApiService: ApiService) {
         val response = ApiService.SaveVehDefectSheet(vehicleDefectSheetInfoResponse)
         if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
@@ -371,6 +372,19 @@ class MainRepo(private val ApiService: ApiService) {
         leadDriverId: Int
     ): GetRideAlongRouteInfoByIdRes? {
         val response = ApiService.GetRideAlongRouteInfoById(routeID, leadDriverId)
+        if (response.isSuccessful)
+            return response.body()
+        else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetDriverRouteInfoByDate(
+        driverId: Int
+    ): GetDriverRouteInfoByDateResponse? {
+        val response = ApiService.GetDriverRouteInfoByDate(driverId)
         if (response.isSuccessful)
             return response.body()
         else {

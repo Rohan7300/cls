@@ -22,6 +22,7 @@ import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
@@ -65,6 +66,7 @@ class MainViewModel(
     val updateprofilelivedata = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataRideAlongRouteInfoById = MutableLiveData<GetRideAlongRouteInfoByIdRes?>()
     val updateprofileregular = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDatadriverInfobyRouteDate = MutableLiveData<GetDriverRouteInfoByDateResponse?>()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -347,5 +349,18 @@ class MainViewModel(
         }
     }
 
+    fun GetDriverRouteInfoByDate(driverId:Int){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.GetDriverRouteInfoByDate(driverId)
+            }
+            result.onSuccess {response->
+                liveDatadriverInfobyRouteDate.postValue(response)
+            }
+            result.onFailure { ex->
+                Log.e("GetDriverRouteInfoByDate Exception","Error: ${ex.message}")
+            }
+        }
+    }
 
 }

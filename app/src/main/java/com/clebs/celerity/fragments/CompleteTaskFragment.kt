@@ -22,11 +22,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.adapters.DriverRouteAdapter
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
 import com.clebs.celerity.databinding.TimePickerDialogBinding
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
+import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
@@ -113,6 +116,7 @@ class CompleteTaskFragment : Fragment() {
         viewModel.GetDriverBreakTimeInfo(userId)
         showDialog()
         viewModel.GetDailyWorkInfoById(userId)
+        viewModel.GetDriverRouteInfoByDate(userId)
 
 
         clientUniqueID()
@@ -324,6 +328,7 @@ class CompleteTaskFragment : Fragment() {
         viewModel.uploadVehicleImageLiveData.observe(viewLifecycleOwner, Observer {
             hideDialog()
             viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
+            showDialog()
             if (it != null) {
                 if (it.Status == "200") {
                     showDialog()
@@ -416,6 +421,21 @@ class CompleteTaskFragment : Fragment() {
                 }
             }
         })
+
+
+        val adapter = DriverRouteAdapter(GetDriverRouteInfoByDateResponse())
+
+        mbinding.getDriverRouteId.adapter = adapter
+        mbinding.getDriverRouteId.layoutManager = LinearLayoutManager(requireContext())
+
+        viewModel.liveDatadriverInfobyRouteDate.observe(viewLifecycleOwner) { routes ->
+            routes?.let {
+                adapter.list.clear()
+                adapter.list.addAll(it)
+                adapter.notifyDataSetChanged()
+            } ?: run {
+            }
+        }
 
     }
 

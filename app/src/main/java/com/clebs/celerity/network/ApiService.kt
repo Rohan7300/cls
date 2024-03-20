@@ -24,6 +24,7 @@ import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
@@ -236,9 +237,18 @@ interface ApiService {
         @Query("LeadDriverId") LeadDriverId: Int
     ): Response<GetRideAlongRouteInfoByIdRes>
 
-@PUT("/api/Drivers/UpdatePassword")
-suspend fun updateprofilepassword(@Query("userId") userId: Double ,@Query("oldPassword") oldpassword:String,@Query("newPassword") newpassworfd :String):Response<SimpleStatusMsgResponse>
+    @PUT("/api/Drivers/UpdatePassword")
+    suspend fun updateprofilepassword(
+        @Query("userId") userId: Double,
+        @Query("oldPassword") oldpassword: String,
+        @Query("newPassword") newpassworfd: String
+    ): Response<SimpleStatusMsgResponse>
 
-@PUT("/api/Drivers/UpdateProfile")
-suspend fun updateprofileregular(@Body request:UpdateProfileRequestBody):Response<SimpleStatusMsgResponse>
+    @PUT("/api/Drivers/UpdateProfile")
+    suspend fun updateprofileregular(@Body request: UpdateProfileRequestBody): Response<SimpleStatusMsgResponse>
+
+    @GET("/api/RouteUpdate/GetDriverRouteInfoByDate/{driverId}")
+    suspend fun GetDriverRouteInfoByDate(
+        @Path("driverId") driverId: Int
+    ):Response<GetDriverRouteInfoByDateResponse>
 }
