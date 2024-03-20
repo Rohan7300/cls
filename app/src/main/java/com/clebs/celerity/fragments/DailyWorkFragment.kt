@@ -53,12 +53,16 @@ import com.clebs.celerity.utils.getFileFromUri
 import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.showScanErrorDialog
 import com.clebs.celerity.utils.showToast
+import com.elconfidencial.bubbleshowcase.BubbleShowCase
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer
 import com.kotlinpermissions.KotlinPermissions
 import id.zelory.compressor.Compressor
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -104,6 +108,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
         //   cameraExecutor = Executors.newSingleThreadExecutor()
 
 
+
     }
 
     override fun onResume() {
@@ -125,10 +130,50 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
         mainViewModel.setLastVisitedScreenId(requireContext(), R.id.dailyWorkFragment)
+//
 
+        BubbleShowCaseBuilder(requireActivity()) //Activity instance
+            .title("Capture") //Any title for the bubble view
+            .description("Click here to capture Vehicle Registration number.") //More detailed description
+            .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
+            //You can force the position of the arrow to change the location of the bubble.
+            .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
+            //Bubble background color
+            .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
+            .titleTextSize(16) //Title text size in SP (default value 16sp)
+            .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
+            .image(requireContext().resources.getDrawable(R.drawable.baseline_document_scanner_24)!!) //Bubble main image
+            .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
+
+            .listener(
+                (object : BubbleShowCaseListener { //Listener for user actions
+                    override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
+                        //Called when the user clicks the target
+                        bubbleShowCase.dismiss()
+                    }
+
+                    override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
+                        //Called when the user clicks the close button
+                        bubbleShowCase.dismiss()
+                    }
+
+                    override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
+                        //Called when the user clicks on the bubble
+                        bubbleShowCase.dismiss()
+                    }
+
+                    override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
+                        bubbleShowCase.dismiss()
+                        //Called when the user clicks on the background dim
+                    }
+                })
+            )
+            .targetView(mbinding.scanLayout).highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
+            .show()
 
         mbinding.rectangle4.setOnClickListener {
             checkPermissions()
+
             //findNavController().navigate(R.id.vechileMileageFragment)
         }
 
