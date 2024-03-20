@@ -40,6 +40,7 @@ class OnRoadHoursFragment : Fragment() {
     private var routeComment: String? = null
     private var dwID: Int = 0
     private var vehID: Int = 0
+    private var parcelBack = 0
     lateinit var edtRoutes: EditText
     private lateinit var loadingDialog: LoadingDialog
 
@@ -62,17 +63,31 @@ class OnRoadHoursFragment : Fragment() {
     }
 
     private fun chkNotNullInputs(): Boolean {
-        return selectedLocation == null ||
-                selectedRouteType == null ||
-                routeName == null ||
-                parcelsDelivered == null
-                || totalMileage == null
+        return selectedLocation.isNullOrEmpty() ||
+                selectedRouteType.isNullOrEmpty() ||
+                routeName.isNullOrEmpty()||
+                parcelsDelivered.isNullOrEmpty()
+                || totalMileage.isNullOrEmpty()
+                || parcelsDelivered.isNullOrEmpty()
     }
 
     private fun init() {
         viewModel = (activity as HomeActivity).viewModel
         prefs = Prefs.getInstance(requireContext())
         loadingDialog = (activity as HomeActivity).loadingDialog
+        parcelBack = binding.parcelsBroughtBack.text.toString().toInt()
+
+        binding.pbbPlus.setOnClickListener {
+            parcelBack += 1
+            binding.parcelsBroughtBack.text = parcelBack.toString()
+        }
+
+        binding.pbbMinus.setOnClickListener {
+            if (parcelBack > 0) {
+                parcelBack -= 1
+                binding.parcelsBroughtBack.text = parcelBack.toString()
+            }
+        }
 
         viewModel.livedataDailyWorkInfoByIdResponse.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -194,7 +209,6 @@ class OnRoadHoursFragment : Fragment() {
                 val locIds = locationData.map { it.LocId }
                 setSpinners(
                     binding.spinnerLocation,
-                    binding.editTextSelectRouteLocation,
                     locNames,
                     locIds
                 )
@@ -208,16 +222,26 @@ class OnRoadHoursFragment : Fragment() {
             if (routeData != null) {
                 val routeNames = routeData.map { it.RtName }
                 val routeIDs = routeData.map { it.RtId }
-                setSpinners(binding.spinnerRouteType, binding.editText, routeNames, routeIDs)
+                setSpinners(binding.spinnerRouteType, routeNames, routeIDs)
             }
         }
         viewModel.GetRideAlongRouteTypeInfo(prefs.userID.toInt())
     }
 
-    private fun setSpinners(spinner: Spinner, tv: TextView, items: List<String>, ids: List<Int>) {
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, items)
+    private fun setSpinners(spinner: Spinner, items: List<String>, ids: List<Int>) {
+
+        val dummyItem = "Select Item"
+        val itemsList = mutableListOf(dummyItem)
+        itemsList.addAll(items)
+        val adapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        //adapter.addAll(itemsList)
+
         spinner.adapter = adapter
+
+        spinner.setSelection(0)
+
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -226,19 +250,22 @@ class OnRoadHoursFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                val selectedItem = parent?.getItemAtPosition(position) as String
-                tv.text = selectedItem
-                spinner.isVisible = false
+                parent?.let { nonNullParent ->
+                    if (position != 0) { // Skip the dummy item
+                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
+                        selectedItem.let { nonNullSelectedItem ->
+                            when (spinner) {
+                                binding.spinnerLocation -> {
+                                    selectedLocId = ids[position - 1]
+                                    selectedLocation = selectedItem
+                                }
 
-                when (spinner) {
-                    binding.spinnerLocation -> {
-                        selectedLocId = ids[position]
-                        selectedLocation = selectedItem
-                    }
-
-                    binding.spinnerRouteType -> {
-                        selectedRouteType = selectedItem
-                        selectedRouteId = ids[position]
+                                binding.spinnerRouteType -> {
+                                    selectedRouteType = selectedItem
+                                    selectedRouteId = ids[position - 1]
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -246,10 +273,5 @@ class OnRoadHoursFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
-
-        tv.setOnClickListener {
-            spinner.isVisible = !spinner.isVisible
-        }
     }
-
 }

@@ -11,6 +11,7 @@ import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentRegistrationNumberPlatesBinding
 import com.clebs.celerity.fragments.BaseInteriorFragment
 import com.clebs.celerity.utils.setImageView
+
 class RegistrationNumberPlatesFragment : BaseInteriorFragment() {
 
     private lateinit var mBinding: FragmentRegistrationNumberPlatesBinding
@@ -43,16 +44,38 @@ class RegistrationNumberPlatesFragment : BaseInteriorFragment() {
                     mBinding.imageRadio
                 )
             }
-
-            edtMilTwo.setOnClickListener {
-             /*                editMil2Visibilty(
+            imageRadio.setOnClickListener {
+                editMil1Visibilty(
                     mBinding.tvNext,
                     mBinding.rlUploadDefect,
                     mBinding.edtMil,
                     mBinding.edtMilTwo,
                     mBinding.imageRadioTwo,
                     mBinding.imageRadio
-                )*/
+                )
+            }
+
+            edtMilTwo.setOnClickListener {
+                /*                editMil2Visibilty(
+                       mBinding.tvNext,
+                       mBinding.rlUploadDefect,
+                       mBinding.edtMil,
+                       mBinding.edtMilTwo,
+                       mBinding.imageRadioTwo,
+                       mBinding.imageRadio
+                   )*/
+                editMil2VisibilityNew(
+                    mBinding.rlUploadDefect,
+                    mBinding.edtMil,
+                    mBinding.edtMilTwo,
+                    mBinding.imageRadioTwo,
+                    mBinding.imageRadio
+                )
+                functionalView = true
+                defectView = false
+                saveNnext()
+            }
+            imageRadioTwo.setOnClickListener {
                 editMil2VisibilityNew(
                     mBinding.rlUploadDefect,
                     mBinding.edtMil,
@@ -99,7 +122,7 @@ class RegistrationNumberPlatesFragment : BaseInteriorFragment() {
                 imageEntity.dfNameRegistrationNumberPlates = defectName!!.toString()
                 imageViewModel.insertDefectName(imageEntity)
             }
-        }else if(functionalView){
+        } else if (functionalView) {
             imageEntity.exRegistrationNumberPlates = "empty"
             imageViewModel.insertImage(imageEntity)
             imageEntity.dfNameRegistrationNumberPlates = "f"

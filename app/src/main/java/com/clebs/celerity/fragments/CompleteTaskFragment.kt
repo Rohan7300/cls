@@ -56,27 +56,26 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var imageView: ImageView
     private var userId: Int = 0
-
-    var inspectionOfflineImagesCHeck: Boolean? = null
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
     private var requestCode: Int = 0
     private var showImageUploadLayout: Boolean = false
-    var isAllImageUploaded: Boolean = false
-    var isInspectionDone: Boolean = false
-    var imagesUploaded: Boolean = false
-    var isClockedIn: Boolean = false
-    var isOnRoadHours: Boolean = false
-    var visibilityLevel = 0
+    private var isAllImageUploaded: Boolean = false
+    private var isInspectionDone: Boolean = false
+    private var imagesUploaded: Boolean = false
+    private var isClockedIn: Boolean = false
+    private var isOnRoadHours: Boolean = false
+    private var visibilityLevel = -1
     var breakStartTime: String = ""
     var breakEndTime: String = ""
-    lateinit var loadingDialog: LoadingDialog
+    private lateinit var loadingDialog: LoadingDialog
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
+    private var imageUploadLevel = 0
 
-    companion object {
-        var inspectionstarted: Boolean? = null
-    }
+    var inspectionOfflineImagesCHeck: Boolean? = null
+    private var inspectionstarted: Boolean = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -87,8 +86,6 @@ class CompleteTaskFragment : Fragment() {
         val clickListener = View.OnClickListener {
             showAlert()
         }
-
-
         loadingDialog = (activity as HomeActivity).loadingDialog
         userId = Prefs.getInstance(requireContext()).userID.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
@@ -99,30 +96,11 @@ class CompleteTaskFragment : Fragment() {
         fragmentManager = (activity as HomeActivity).fragmentManager
         cqSDKInitializer = CQSDKInitializer(requireContext())
         cqSDKInitializer.triggerOfflineSync()
-        Log.e("kjkjkkjboolean", "onCreateView: "+ inspectionstarted )
+        setProgress()
 
-
-        if (Prefs.getInstance(App.instance).getBoolean("isinspectiondone",false).equals(true)) {
-
-            Timer().scheduleAtFixedRate( object : TimerTask() {
-                override fun run() {
-                    cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
-                        Log.e("hdhsdshdsdjshhsds", "run========: " +isSyncCompletedForAllQuotes)
-                        inspectionOfflineImagesCHeck=isSyncCompletedForAllQuotes
-                    }
-
-                }
-            }, 0, 1000)
-
-
-            mbinding.startinspection.visibility = View.GONE
-
-        } else {
-            mbinding.startinspection.visibility = View.VISIBLE
-        }
-
+        inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
         viewModel = (activity as HomeActivity).viewModel
-        (activity as HomeActivity).getVehicleLocationInfo()
+        //(activity as HomeActivity).getVehicleLocationInfo()
 
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
 
@@ -134,7 +112,6 @@ class CompleteTaskFragment : Fragment() {
         clientUniqueID()
 
         mbinding.rlcomtwoClock.setOnClickListener {
-
             loadingDialog.show()
             viewModel.UpdateClockInTime(userId)
         }
@@ -213,42 +190,41 @@ class CompleteTaskFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (Prefs.getInstance(App.instance).getBoolean("isinspectiondone",false).equals(true)) {
 
-            Timer().scheduleAtFixedRate( object : TimerTask() {
-                override fun run() {
-                    cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
-                        Log.e("hdhsdshdsdjshhsds", "run========: " +isSyncCompletedForAllQuotes)
-                        inspectionOfflineImagesCHeck=isSyncCompletedForAllQuotes
-                    }
+        inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
+        Log.d("hdhsdshdsdjshhsds", "Ins $inspectionstarted")
+        checkInspection()
+        if (inspectionstarted?.equals(true) == true) {
 
-                }
-            }, 0, 1000)
-
-
-            mbinding.startinspection.visibility = View.GONE
+            setVisibiltyLevel()
 
         } else {
             mbinding.startinspection.visibility = View.VISIBLE
         }
+
+
     }
 
     private fun observers() {
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+
+            loadingDialog.cancel()
+
             if (it != null) {
-                loadingDialog.cancel()
                 mbinding.headerTop.dxLoc.text = it?.locationName ?: ""
                 mbinding.headerTop.dxReg.text = it?.vmRegNo ?: ""
-                "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-                    mbinding.headerTop.anaCarolin.text = name
-                }
-                mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
-                val isLeadDriver = (activity as HomeActivity).isLeadDriver
-                if (!isLeadDriver) {
-                    mbinding.rideAlong.visibility = View.GONE
-                }
+            }
+
+            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+                mbinding.headerTop.anaCarolin.text = name
+            }
+            mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
+            val isLeadDriver = (activity as HomeActivity).isLeadDriver
+            if (!isLeadDriver) {
+                mbinding.rideAlong.visibility = View.GONE
             }
         }
+
 
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -265,18 +241,8 @@ class CompleteTaskFragment : Fragment() {
                 if (it.ClockedInTime != null) {
                     mbinding.tvClockedIN.text = it.ClockedInTime.toString()
                     isClockedIn = true
-                    setVisibiltyLevel()/*       mbinding.rlcomtwoClock.visibility = View.GONE
-                           mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
-                           mbinding.onRoadView.visibility = View.VISIBLE
-                           mbinding.rlcomtwoBreak.visibility = View.VISIBLE*/
-                } else {/*        with(mbinding) {
-                                listOf(
-                                    rlcomtwoBreak,
-                                    onRoadView,
-                                    rlcomtwoBreak,
-                                    rlcomtwoClockOut
-                                ).forEach { thisView -> thisView.visibility = View.GONE }
-                            }*/
+                    setVisibiltyLevel()
+                } else {
                     isClockedIn = false
                     setVisibiltyLevel()
                 }
@@ -296,6 +262,7 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.livedataClockInTime.observe(viewLifecycleOwner) {
             viewModel.GetDailyWorkInfoById(userId)
+            loadingDialog.cancel()
             if (it != null) {
                 isClockedIn = true
                 setVisibiltyLevel()
@@ -306,6 +273,7 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.livedataUpdateClockOutTime.observe(viewLifecycleOwner) {
             viewModel.GetDailyWorkInfoById(userId)
+            loadingDialog.cancel()
             if (it != null) {
                 mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
             }
@@ -327,7 +295,7 @@ class CompleteTaskFragment : Fragment() {
                     }
                 } ?: showToast("No Break time information added!!", requireContext())
             } else {
-                //  showToast("Something went wrong!!", requireContext())
+
             }
         }
 
@@ -361,7 +329,7 @@ class CompleteTaskFragment : Fragment() {
                         showImageUploadLayout = true
                         imagesUploaded = false
                         setVisibiltyLevel()
-                        mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                      //  mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                     } else {
 
                         showImageUploadLayout = checkNull(it)
@@ -369,41 +337,57 @@ class CompleteTaskFragment : Fragment() {
                         if (showImageUploadLayout) {
                             imagesUploaded = false
                             setVisibiltyLevel()
-                            mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                         //   mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                             mbinding.taskDetails.visibility = View.VISIBLE
                         } else {
                             imagesUploaded = true
                             setVisibiltyLevel()
                             isAllImageUploaded = true
                         }
+                        if (it.DaVehImgFaceMaskFileName != null) {
+                            imageUploadLevel = 1
+                            setProgress()
+                            mbinding.ivFaceMask.setImageResource(
+                                R.drawable.ic_yes
+                            )
+                        }
 
-                        if (it.DaVehImgDashBoardFileName != null) mbinding.ivVehicleDashboard.setImageResource(
-                            R.drawable.ic_yes
-                        )
+                        if (it.DaVehicleAddBlueImage != null) {
+                            imageUploadLevel = 2
+                            setProgress()
 
-                        if (it.DaVehImgFaceMaskFileName != null) mbinding.ivFaceMask.setImageResource(
-                            R.drawable.ic_yes
-                        )
+                            mbinding.ivAddBlueImg.setImageResource(
+                                R.drawable.ic_yes
+                            )
+                        }
 
-                        if (it.DaVehImgRearFileName != null) mbinding.ivRearImgUp.setImageResource(R.drawable.ic_yes)
+                        if (it.DaVehImgOilLevelFileName != null) {
+                            imageUploadLevel = 3
+                            setProgress()
+                            mbinding.ivOilLevel.setImageResource(
+                                R.drawable.ic_yes
+                            )
+                        }
+
+                        if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
+                            imageUploadLevel = 3
+                        }
+
+
+                        /*if (it.DaVehImgRearFileName != null) mbinding.ivRearImgUp.setImageResource(R.drawable.ic_yes)
 
                         if (it.DaVehImgFrontFileName != null) mbinding.ivFront.setImageResource(R.drawable.ic_yes)
 
                         if (it.DaVehImgNearSideFileName != null) mbinding.ivNearSide.setImageResource(
                             R.drawable.ic_yes
                         )
-
+     if (it.DaVehImgDashBoardFileName != null) mbinding.ivVehicleDashboard.setImageResource(
+                            R.drawable.ic_yes
+                        )
                         if (it.DaVehImgOffSideFileName != null) mbinding.ivOffSideImgUp.setImageResource(
                             R.drawable.ic_yes
-                        )
+                        )*/
 
-                        if (it.DaVehicleAddBlueImage != null) mbinding.ivAddBlueImg.setImageResource(
-                            R.drawable.ic_yes
-                        )
-
-                        if (it.DaVehImgOilLevelFileName != null) mbinding.ivOilLevel.setImageResource(
-                            R.drawable.ic_yes
-                        )
 
                         mbinding.run {
                             mbinding.tvNext.isEnabled =
@@ -422,7 +406,6 @@ class CompleteTaskFragment : Fragment() {
                                 )
                             }
                         }
-
                     }
                 }
             }
@@ -496,7 +479,6 @@ class CompleteTaskFragment : Fragment() {
                 sendBreakTimeData()
             } else {
                 showErrorDialog(fragmentManager, "CTF-02", "Please add valid time information")
-                //showToast("Please add valid time information", requireContext())
             }
         }
 
@@ -627,7 +609,7 @@ class CompleteTaskFragment : Fragment() {
         }
     }
 
-    fun clientUniqueID(): String {
+    private fun clientUniqueID(): String {
         val x = Prefs.getInstance(App.instance).userID.toString()
         val y = Prefs.getInstance(App.instance).get("vrn")
         // example string
@@ -640,7 +622,7 @@ class CompleteTaskFragment : Fragment() {
         Log.e("resistrationvrnpatterhn", "clientUniqueID: " + regexPattern + inspectionID)
     }
 
-    fun startInspection() {
+    private fun startInspection() {
         if (isAllImageUploaded) {
             mbinding.tvNext.visibility = View.VISIBLE
         }
@@ -663,33 +645,27 @@ class CompleteTaskFragment : Fragment() {
                             client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
                         ),
                         result = { isStarted, msg, code ->
-                            // Show error if required
+
                             Log.e("messsagesss", "startInspection: " + msg + code)
                             if (isStarted) {
-//                        mbinding.uploadll1.visibility = View.GONE
-//                        mbinding.clOffSideImgUp.visibility = View.GONE
-//                        mbinding.rlFirst.visibility = View.GONE
-//                        mbinding.rlSecond.visibility = View.GONE
+//
                             } else {
-//                        mbinding.uploadll1.visibility = View.VISIBLE
-//                        mbinding.clOffSideImgUp.visibility = View.VISIBLE
-//                        mbinding.rlFirst.visibility = View.VISIBLE
-//                        mbinding.rlSecond.visibility = View.VISIBLE
+//
                             }
                             if (msg == "Success") {
-                                //mbinding.completeTaskFragmentPB.visibility = View.GONE
+
                                 loadingDialog.cancel()
                             }
                             if (!isStarted) {
-                                //mbinding.completeTaskFragmentPB.visibility = View.GONE
+
                                 loadingDialog.cancel()
                                 Log.e("startedinspection", "onCreateView: " + msg + isStarted)
-                                // Dismiss the loading dialog
+
 
                             }
                         })
                 } catch (_: Exception) {
-                    //showToast("Please try again later!!",requireContext())
+
                     showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
                 }
             }
@@ -716,10 +692,19 @@ class CompleteTaskFragment : Fragment() {
             ).forEach { thisView -> thisView.visibility = View.GONE }
         }
         when (visibilityLevel) {
-            0 -> {
-
+            -1 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.taskDetails.visibility = View.VISIBLE
+                mbinding.imageUploadView.visibility = View.GONE
+                /*mbinding.clFaceMask.visibility = View.GONE
+                mbinding.clOilLevel.visibility = View.GONE*/
+            }
+
+            0 -> {
+                mbinding.uploadLayouts.visibility = View.VISIBLE
+                mbinding.taskDetails.visibility = View.VISIBLE
+                mbinding.imageUploadView.visibility = View.VISIBLE
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.singlecheckmark)
             }
 
             1 -> {
@@ -742,6 +727,11 @@ class CompleteTaskFragment : Fragment() {
 
     private fun setVisibiltyLevel() {
         visibilityLevel = 0
+        if (!inspectionstarted && !imagesUploaded) {
+            visibilityLevel = -1
+            visibiltyControlls()
+            return
+        }
         if (!imagesUploaded) {
             visibilityLevel = 0
             visibiltyControlls()
@@ -755,5 +745,55 @@ class CompleteTaskFragment : Fragment() {
         if (isOnRoadHours) visibilityLevel += 1
 
         visibiltyControlls()
+    }
+
+    private fun setProgress() {
+        val progressBar = mbinding.progressContainer.progressBarStep1
+        mbinding.clAddBlueImg.visibility = View.GONE
+        mbinding.clFaceMask.visibility = View.GONE
+        mbinding.clOilLevel.visibility = View.GONE
+        when (imageUploadLevel) {
+            0 -> {
+                progressBar.setProgress(13, true)
+                mbinding.clFaceMask.visibility = View.VISIBLE
+
+            }
+
+            1 -> {
+                progressBar.setProgress(45, true)
+                mbinding.clAddBlueImg.visibility = View.VISIBLE
+
+            }
+
+            2 -> {
+                progressBar.setProgress(70, true)
+                mbinding.clOilLevel.visibility = View.VISIBLE
+            }
+
+            else -> {
+                //    mbinding.clFaceMask.visibility = View.VISIBLE
+                progressBar.setProgress(100, true)
+                progressBar.setBackgroundColor(Color.GREEN)
+            }
+        }
+    }
+
+    private fun checkInspection() {
+        if (inspectionstarted?.equals(true) == true) {
+            Timer().scheduleAtFixedRate(object : TimerTask() {
+                override fun run() {
+                    cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
+                        Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
+                        inspectionOfflineImagesCHeck = isSyncCompletedForAllQuotes
+                        /*    if (isSyncCompletedForAllQuotes)
+                                //setProgress()*/
+                    }
+                }
+            }, 0, 1000)
+            mbinding.startinspection.visibility = View.GONE
+
+        } else {
+            mbinding.startinspection.visibility = View.VISIBLE
+        }
     }
 }

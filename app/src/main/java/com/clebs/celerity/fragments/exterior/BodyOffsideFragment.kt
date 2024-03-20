@@ -45,16 +45,38 @@ class BodyOffsideFragment : BaseInteriorFragment() {
                     mBinding.imageRadio
                 )
             }
-
-            edtMilTwo.setOnClickListener {
-             /*                editMil2Visibilty(
+            imageRadio.setOnClickListener {
+                editMil1Visibilty(
                     mBinding.tvNext,
                     mBinding.rlUploadDefect,
                     mBinding.edtMil,
                     mBinding.edtMilTwo,
                     mBinding.imageRadioTwo,
                     mBinding.imageRadio
-                )*/
+                )
+            }
+
+            edtMilTwo.setOnClickListener {
+                /*                editMil2Visibilty(
+                       mBinding.tvNext,
+                       mBinding.rlUploadDefect,
+                       mBinding.edtMil,
+                       mBinding.edtMilTwo,
+                       mBinding.imageRadioTwo,
+                       mBinding.imageRadio
+                   )*/
+                editMil2VisibilityNew(
+                    mBinding.rlUploadDefect,
+                    mBinding.edtMil,
+                    mBinding.edtMilTwo,
+                    mBinding.imageRadioTwo,
+                    mBinding.imageRadio
+                )
+                functionalView = true
+                defectView = false
+                saveNnext()
+            }
+            imageRadioTwo.setOnClickListener {
                 editMil2VisibilityNew(
                     mBinding.rlUploadDefect,
                     mBinding.edtMil,
@@ -101,7 +123,7 @@ class BodyOffsideFragment : BaseInteriorFragment() {
                 imageEntity.dfNameBodyDamageOffside = defectName!!.toString()
                 imageViewModel.insertDefectName(imageEntity)
             }
-        }else if(functionalView){
+        } else if (functionalView) {
             imageEntity.exBodyDamageOffside = "empty"
             imageViewModel.insertImage(imageEntity)
             imageEntity.dfNameBodyDamageOffside = "f"

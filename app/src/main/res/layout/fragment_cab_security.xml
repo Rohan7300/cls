@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semibold"
-            android:gravity="top"
+            android:gravity="center"
             android:lineHeight="30sp"
             android:text="Cab security/ Interior"
             android:textColor="#4A4A4A"

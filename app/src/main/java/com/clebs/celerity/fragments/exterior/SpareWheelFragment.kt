@@ -67,6 +67,16 @@ class SpareWheelFragment : BaseInteriorFragment() {
                     mBinding.imageRadio
                 )
             }
+            imageRadio.setOnClickListener {
+                editMil1Visibilty(
+                    mBinding.tvNext,
+                    mBinding.rlUploadDefect,
+                    mBinding.edtMil,
+                    mBinding.edtMilTwo,
+                    mBinding.imageRadioTwo,
+                    mBinding.imageRadio
+                )
+            }
 
             edtMilTwo.setOnClickListener {
                 /*                editMil2Visibilty(
@@ -77,6 +87,19 @@ class SpareWheelFragment : BaseInteriorFragment() {
                        mBinding.imageRadioTwo,
                        mBinding.imageRadio
                    )*/
+                editMil2VisibilityNew(
+                    mBinding.rlUploadDefect,
+                    mBinding.edtMil,
+                    mBinding.edtMilTwo,
+                    mBinding.imageRadioTwo,
+                    mBinding.imageRadio
+                )
+                functionalView = true
+                defectView = false
+                saveNnext()
+            }
+
+            imageRadioTwo.setOnClickListener {
                 editMil2VisibilityNew(
                     mBinding.rlUploadDefect,
                     mBinding.edtMil,
@@ -142,7 +165,8 @@ class SpareWheelFragment : BaseInteriorFragment() {
                         isApiCallInProgress = true
                         VdhVmId = it.vmId
                         VdhLmId = it.vmLocId
-                        VdhOdoMeterReading =Prefs.getInstance(requireContext()).vehicleLastMileage?: it.vehicleLastMillage
+                        VdhOdoMeterReading = Prefs.getInstance(requireContext()).vehicleLastMileage
+                            ?: it.vehicleLastMillage
 
                         prefs.saveLocationID(it.vmLocId)
 
@@ -216,15 +240,15 @@ class SpareWheelFragment : BaseInteriorFragment() {
                 }
             }
 
- /*           viewModel.GetDriversBasicInformation(
-                Prefs.getInstance(App.instance).userID.toDouble()
-            ).observe(viewLifecycleOwner) {
-                if (it != null) {
-                    if (it.vmRegNo != null) {
-                        viewModel.GetVehicleInformation(prefs.userID.toInt(), prefs.vmRegNo)
-                    }
-                }
-            }*/
+            /*           viewModel.GetDriversBasicInformation(
+                           Prefs.getInstance(App.instance).userID.toDouble()
+                       ).observe(viewLifecycleOwner) {
+                           if (it != null) {
+                               if (it.vmRegNo != null) {
+                                   viewModel.GetVehicleInformation(prefs.userID.toInt(), prefs.vmRegNo)
+                               }
+                           }
+                       }*/
             viewModel.GetVehicleInformation(prefs.userID.toInt(), prefs.vmRegNo)
             viewModel.SaveVehDefectSheetResponseLiveData.observe(viewLifecycleOwner) {
                 loadingDialog.cancel()

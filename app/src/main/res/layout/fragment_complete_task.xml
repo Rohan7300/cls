@@ -10,13 +10,13 @@
 
         <include
             android:id="@+id/headerTop"
-            layout="@layout/fragment_headers"/>
+            layout="@layout/fragment_headers" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
+            android:overScrollMode="never"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
             <LinearLayout
@@ -30,7 +30,8 @@
                     android:id="@+id/complete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="14dp"
                     android:background="@drawable/shape_expand_main">
 
                     <View
@@ -76,7 +77,7 @@
                         android:layout_below="@+id/rlcom"
                         android:paddingStart="18dp"
                         android:paddingEnd="18dp"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
                         <RelativeLayout
                             android:id="@+id/vichle_defect"
@@ -331,7 +332,7 @@
                                 android:letterSpacing="0.02"
                                 android:text="@string/route_name"
                                 android:textColor="#4A4A4A"
-                                android:textSize="15sp" />
+                                android:textSize="13sp" />
 
                             <TextView
                                 android:id="@+id/route_name_two"
@@ -343,7 +344,7 @@
                                 android:letterSpacing="0.02"
                                 android:text="@string/route_name"
                                 android:textColor="#4A4A4A"
-                                android:textSize="15sp" />
+                                android:textSize="13sp" />
 
                             <ImageView
                                 android:id="@+id/edt_ic"
@@ -373,7 +374,6 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="15dp"
                             android:background="@drawable/shape_edittext_mileage"
-
                             android:orientation="horizontal"
                             android:paddingStart="18dp"
                             android:paddingEnd="18dp">
@@ -394,7 +394,7 @@
                                 android:padding="18dp"
                                 android:text="Add a new route"
                                 android:textColor="#4A4A4A"
-                                android:textSize="14sp" />
+                                android:textSize="13sp" />
 
                         </RelativeLayout>
 
@@ -428,7 +428,7 @@
                                 android:padding="18dp"
                                 android:text="Add a ride along"
                                 android:textColor="#4A4A4A"
-                                android:textSize="14sp" />
+                                android:textSize="13sp" />
 
                         </RelativeLayout>
 
@@ -481,31 +481,8 @@
                     android:orientation="vertical"
                     android:visibility="visible">
 
-                    <TextView
-                        android:id="@+id/txt_upload"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:letterSpacing="0.02"
-                        android:lineHeight="27sp"
-                        android:text="Upload Vehicle Pictures"
-                        android:textAllCaps="true"
-                        android:textColor="#4A4A4A"
-                        android:textSize="18sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/task_details" />
 
-                    <View
-                        android:id="@+id/view"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="20dp"
-                        android:background="#4A4A4A"
-                        app:layout_constraintTop_toBottomOf="@+id/txt_upload" />
+
 
                     <RelativeLayout
                         android:id="@+id/rl_second"
@@ -618,7 +595,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="14dp"
                         android:layout_marginEnd="20dp"
                         android:orientation="horizontal"
                         android:visibility="gone">
@@ -721,6 +698,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
+                        android:visibility="visible"
                         android:layout_marginBottom="10dp"
                         android:gravity="center">
 
@@ -733,8 +711,8 @@
                             android:letterSpacing="0.01"
                             android:text="Start Inspection"
                             android:textColor="@color/black"
-                            android:visibility="gone"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:visibility="gone" />
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/startinspection"
@@ -748,9 +726,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:fontFamily="@font/poppins_bold"
+                                android:letterSpacing="0.05"
                                 android:paddingHorizontal="20dp"
                                 android:paddingVertical="8dp"
-                                android:letterSpacing="0.05"
                                 android:text="Start Inspection"
                                 android:textColor="@color/white"
                                 android:textSize="14sp" />
@@ -764,6 +742,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="16dp"
+                        android:visibility="gone"
                         android:layout_marginEnd="20dp"
                         android:orientation="horizontal"
                         app:layout_constraintTop_toBottomOf="@id/view">
@@ -816,152 +795,254 @@
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/clOilLevel"
-                                android:layout_width="match_parent"
-                                android:layout_height="154dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginStart="8dp"
 
-                                android:background="@drawable/shape_uploads">
-
-                                <!--                                <ImageButton-->
-                                <!--                                    android:id="@+id/imageButtonnine"-->
-                                <!--                                    android:layout_width="28dp"-->
-                                <!--                                    android:layout_height="28dp"-->
-                                <!--                                    android:src="@drawable/delete_ic"-->
-                                <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
-                                <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
-
-                                <ImageButton
-                                    android:id="@+id/ivOilLevel"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:backgroundTint="@color/white"
-                                    android:src="@drawable/upload_icc"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/inter"
-                                    android:letterSpacing="0.02"
-                                    android:text="Oil Level"
-                                    android:textColor="#4A4A4A"
-                                    android:textSize="13sp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/ivOilLevel" />
-                            </androidx.constraintlayout.widget.ConstraintLayout>
                         </LinearLayout>
 
 
                     </RelativeLayout>
 
-                    <RelativeLayout
-                        android:id="@+id/rl_six"
+                    <LinearLayout
+                        android:id="@+id/imageUploadView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="30dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@id/view">
+                        android:orientation="vertical"
+                        android:visibility="visible">
 
-                        <LinearLayout
+
+                        <TextView
+                            android:id="@+id/txt_upload"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginVertical="10dp"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:letterSpacing="0.02"
+                            android:lineHeight="27sp"
+                            android:text="Upload Vehicle Pictures"
+                            android:textAllCaps="true"
+                            android:textColor="#4A4A4A"
+                            android:textSize="18sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/task_details" />
+
+                        <View
+                            android:id="@+id/view"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="20dp"
+                            android:background="#4A4A4A"
+                            app:layout_constraintTop_toBottomOf="@+id/txt_upload" />
+
+                        <include
+                            android:id="@+id/progressContainer"
+                            layout="@layout/custom_progress" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clFaceMask"
+                            android:layout_width="match_parent"
+                            android:layout_height="154dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginHorizontal="16dp"
+                            android:background="@drawable/shape_uploads">
+
+                            <ImageButton
+                                android:id="@+id/ivFaceMask"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:backgroundTint="@color/white"
+                                android:src="@drawable/upload_icc"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter"
+                                android:letterSpacing="0.02"
+                                android:text="Face Mask"
+                                android:textColor="#4A4A4A"
+                                android:textSize="13sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/ivFaceMask" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clAddBlueImg"
+                            android:layout_width="match_parent"
+                            android:layout_height="154dp"
+                            android:visibility="gone"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginHorizontal="16dp"
+                            android:background="@drawable/shape_uploads">
+
+                            <ImageButton
+                                android:id="@+id/ivAddBlueImg"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:backgroundTint="@color/white"
+                                android:src="@drawable/upload_icc"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter"
+                                android:letterSpacing="0.02"
+                                android:text="Add Blue"
+                                android:textColor="#4A4A4A"
+                                android:textSize="13sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/ivAddBlueImg" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clOilLevel"
+                            android:layout_width="match_parent"
+                            android:layout_height="154dp"
+                            android:visibility="gone"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginHorizontal="16dp"
+                            android:background="@drawable/shape_uploads">
+
+                            <ImageButton
+                                android:id="@+id/ivOilLevel"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:backgroundTint="@color/white"
+                                android:src="@drawable/upload_icc"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter"
+                                android:letterSpacing="0.02"
+                                android:text="Oil Level"
+                                android:textColor="#4A4A4A"
+                                android:textSize="13sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/ivOilLevel" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/rl_six"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginBottom="30dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toBottomOf="@id/view">
 
-                            android:weightSum="2">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
 
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/clAddBlueImg"
-                                android:layout_width="180dp"
-                                android:layout_height="154dp"
-                                android:layout_marginEnd="10dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/shape_uploads">
+                                android:weightSum="2">
 
-
-                                <!--                                <ImageButton-->
-                                <!--                                    android:id="@+id/imageButtoneleven"-->
-                                <!--                                    android:layout_width="28dp"-->
-                                <!--                                    android:layout_height="28dp"-->
-                                <!--                                    android:src="@drawable/delete_ic"-->
-                                <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
-                                <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
-
-                                <ImageButton
-                                    android:id="@+id/ivAddBlueImg"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:backgroundTint="@color/white"
-                                    android:src="@drawable/upload_icc"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/inter"
-                                    android:letterSpacing="0.02"
-                                    android:text="Add Blue"
-                                    android:textColor="#4A4A4A"
-                                    android:textSize="13sp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/ivAddBlueImg" />
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/clFaceMask"
-                                android:layout_width="180dp"
-                                android:layout_height="154dp"
-                                android:layout_marginStart="6dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/shape_uploads">
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/clAddBlueImgOld"
+                                    android:layout_width="180dp"
+                                    android:layout_height="154dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/shape_uploads">
 
 
-                                <!--                                <ImageButton-->
-                                <!--                                    android:layout_width="28dp"-->
-                                <!--                                    android:layout_height="28dp"-->
-                                <!--                                    android:src="@drawable/delete_ic"-->
-                                <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
-                                <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
+                                    <!--                                <ImageButton-->
+                                    <!--                                    android:id="@+id/imageButtoneleven"-->
+                                    <!--                                    android:layout_width="28dp"-->
+                                    <!--                                    android:layout_height="28dp"-->
+                                    <!--                                    android:src="@drawable/delete_ic"-->
+                                    <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+                                    <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
 
-                                <ImageButton
-                                    android:id="@+id/ivFaceMask"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:backgroundTint="@color/white"
-                                    android:src="@drawable/upload_icc"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
+                                    <ImageButton
+                                        android:id="@+id/ivAddBlueImgOld"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:backgroundTint="@color/white"
+                                        android:src="@drawable/upload_icc"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/inter"
-                                    android:letterSpacing="0.02"
-                                    android:text="Face Mask"
-                                    android:textColor="#4A4A4A"
-                                    android:textSize="13sp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/ivFaceMask" />
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-                        </LinearLayout>
-                    </RelativeLayout>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/inter"
+                                        android:letterSpacing="0.02"
+                                        android:text="Add Blue"
+                                        android:textColor="#4A4A4A"
+                                        android:textSize="13sp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/ivAddBlueImgOld" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/clFaceMaskOld"
+                                    android:layout_width="180dp"
+                                    android:layout_height="154dp"
+                                    android:layout_marginStart="6dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/shape_uploads">
+
+
+                                    <!--                                <ImageButton-->
+                                    <!--                                    android:layout_width="28dp"-->
+                                    <!--                                    android:layout_height="28dp"-->
+                                    <!--                                    android:src="@drawable/delete_ic"-->
+                                    <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+                                    <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
+
+                                    <ImageButton
+                                        android:id="@+id/ivFaceMaskOld"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:backgroundTint="@color/white"
+                                        android:src="@drawable/upload_icc"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/inter"
+                                        android:letterSpacing="0.02"
+                                        android:text="Face Mask"
+                                        android:textColor="#4A4A4A"
+                                        android:textSize="13sp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/ivFaceMaskOld" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
+
                 <TextView
                     android:id="@+id/tv_next"
                     style="@style/ctaStyle1"
@@ -972,15 +1053,14 @@
                     android:layout_marginBottom="20dp"
                     android:enabled="false"
                     android:fontFamily="@font/inter"
-                    android:visibility="gone"
                     android:gravity="center_horizontal|center_vertical"
                     android:text="Save &amp; Next"
                     android:textAllCaps="false"
                     android:textColor="#F36C2E"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent" />
 
             </LinearLayout>
-
 
 
         </androidx.core.widget.NestedScrollView>

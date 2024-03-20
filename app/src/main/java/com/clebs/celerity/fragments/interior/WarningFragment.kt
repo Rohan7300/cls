@@ -20,8 +20,9 @@ class WarningFragment : BaseInteriorFragment() {
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.warningServiceLightsFragment)
         mBinding.tvNext.visibility = View.GONE
         clickListeners()
-        setDefault(mBinding.imageUploadIV,mBinding.edtDefect)
+        setDefault(mBinding.imageUploadIV, mBinding.edtDefect)
     }
+
     override fun clickListeners() {
         mBinding.run {
             edtMil.setOnClickListener {
@@ -35,15 +36,39 @@ class WarningFragment : BaseInteriorFragment() {
                 )
             }
 
-            edtMilTwo.setOnClickListener {
-             /*                editMil2Visibilty(
+            imageRadio.setOnClickListener {
+                editMil1Visibilty(
                     mBinding.tvNext,
                     mBinding.rlUploadDefect,
                     mBinding.edtMil,
                     mBinding.edtMilTwo,
                     mBinding.imageRadioTwo,
                     mBinding.imageRadio
-                )*/
+                )
+            }
+
+            edtMilTwo.setOnClickListener {
+                /*                editMil2Visibilty(
+                       mBinding.tvNext,
+                       mBinding.rlUploadDefect,
+                       mBinding.edtMil,
+                       mBinding.edtMilTwo,
+                       mBinding.imageRadioTwo,
+                       mBinding.imageRadio
+                   )*/
+                editMil2VisibilityNew(
+                    mBinding.rlUploadDefect,
+                    mBinding.edtMil,
+                    mBinding.edtMilTwo,
+                    mBinding.imageRadioTwo,
+                    mBinding.imageRadio
+                )
+                functionalView = true
+                defectView = false
+                saveNnext()
+            }
+
+            imageRadioTwo.setOnClickListener {
                 editMil2VisibilityNew(
                     mBinding.rlUploadDefect,
                     mBinding.edtMil,
@@ -60,7 +85,7 @@ class WarningFragment : BaseInteriorFragment() {
                 pictureDialogBase64(imageUploadIV)
             }
             edtDefect.doAfterTextChanged {
-                doAfterTextChanged(mBinding.tvNext,mBinding.edtDefect)
+                doAfterTextChanged(mBinding.tvNext, mBinding.edtDefect)
             }
             tvNext.setOnClickListener {
                 saveNnext()
@@ -70,9 +95,9 @@ class WarningFragment : BaseInteriorFragment() {
 
     }
 
-    fun setDefault(defaultIv: ImageView, edtDefect: EditText){
+    fun setDefault(defaultIv: ImageView, edtDefect: EditText) {
         imageViewModel.images.value.let {
-            if(it!=null){
+            if (it != null) {
                 imageEntity = imageViewModel.images.value!!
                 setImageView(defaultIv, it.inWarningServiceLights.toString())
                 if (it.dfNameWarningServiceLights!!.isNotEmpty() && it.dfNameWarningServiceLights != "f") {
@@ -83,16 +108,16 @@ class WarningFragment : BaseInteriorFragment() {
     }
 
     override fun saveNnext() {
-        if(defectView) {
+        if (defectView) {
             if (base64 != null) {
                 imageEntity.inWarningServiceLights = base64
                 imageViewModel.insertImage(imageEntity)
             }
-            if(defectName!!.toString().isNotEmpty()){
+            if (defectName!!.toString().isNotEmpty()) {
                 imageEntity.dfNameWarningServiceLights = defectName!!.toString()
                 imageViewModel.insertDefectName(imageEntity)
             }
-        }else if(functionalView){
+        } else if (functionalView) {
             imageEntity.inWarningServiceLights = "empty"
             imageViewModel.insertImage(imageEntity)
             imageEntity.dfNameWarningServiceLights = "f"

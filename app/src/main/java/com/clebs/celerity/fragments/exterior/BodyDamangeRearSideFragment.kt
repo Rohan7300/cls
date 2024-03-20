@@ -49,16 +49,38 @@ class BodyDamangeRearSideFragment : BaseInteriorFragment() {
                     mBinding.imageRadio
                 )
             }
-
-            edtMilTwo.setOnClickListener {
-             /*                editMil2Visibilty(
+            imageRadio.setOnClickListener {
+                editMil1Visibilty(
                     mBinding.tvNext,
                     mBinding.rlUploadDefect,
                     mBinding.edtMil,
                     mBinding.edtMilTwo,
                     mBinding.imageRadioTwo,
                     mBinding.imageRadio
-                )*/
+                )
+            }
+
+            edtMilTwo.setOnClickListener {
+                /*                editMil2Visibilty(
+                       mBinding.tvNext,
+                       mBinding.rlUploadDefect,
+                       mBinding.edtMil,
+                       mBinding.edtMilTwo,
+                       mBinding.imageRadioTwo,
+                       mBinding.imageRadio
+                   )*/
+                editMil2VisibilityNew(
+                    mBinding.rlUploadDefect,
+                    mBinding.edtMil,
+                    mBinding.edtMilTwo,
+                    mBinding.imageRadioTwo,
+                    mBinding.imageRadio
+                )
+                functionalView = true
+                defectView = false
+                saveNnext()
+            }
+            imageRadioTwo.setOnClickListener {
                 editMil2VisibilityNew(
                     mBinding.rlUploadDefect,
                     mBinding.edtMil,
@@ -105,7 +127,7 @@ class BodyDamangeRearSideFragment : BaseInteriorFragment() {
                 imageEntity.dfNameBodyDamageRear = defectName!!.toString()
                 imageViewModel.insertDefectName(imageEntity)
             }
-        }else if(functionalView){
+        } else if (functionalView) {
             imageEntity.exBodyDamageRear = "empty"
             imageViewModel.insertImage(imageEntity)
             imageEntity.dfNameBodyDamageRear = "f"

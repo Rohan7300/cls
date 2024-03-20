@@ -21,7 +21,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
@@ -80,25 +79,27 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             val identifier =
                 intent.getStringExtra(PublicConstants.quoteCreationFlowStatusIdentifierKeyInIntent)
                     ?: "Could not identify Identifier"
+
+
             val message =
                 intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
                     ?: "Could not identify status message"
+            Log.d("hdhsdshdsdjshhsds","main $message")
             val tempCode =
                 intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
-            Log.e("onnewintent", "onNewIntent: ", )
             if (tempCode == 200) {
-                Prefs.getInstance(applicationContext).saveBoolean("isinspectiondone",true)
-                CompleteTaskFragment.inspectionstarted = true
-                navController.popBackStack()
-
+                Log.d("hdhsdshdsdjshhsds","200 $message")
+                Prefs.getInstance(this).saveBoolean("Inspection", true)
+                //inspectionstarted = true
                 navController.navigate(R.id.completeTaskFragment)
                 showToast("inspection success", this)
             } else {
-                Log.e("onnewintent", "onNewIntenttwo: ", )
-                Prefs.getInstance(applicationContext).saveBoolean("isinspectiondone",false)
-                showToast("inspection Failed", this)
-                CompleteTaskFragment.inspectionstarted = false
+                Log.d("hdhsdshdsdjshhsds","else $message")
                 navController.navigate(R.id.completeTaskFragment)
+                showToast("inspection Failed", this)
+                Prefs.getInstance(this).saveBoolean("Inspection", false)
+                //inspectionstarted = false
+
             }
             // Check if identifier is valid
             if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
@@ -112,6 +113,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 // Update message in the dia
             }
         }
+        Log.d("hdhsdshdsdjshhsds","No Intent")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -187,7 +189,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
             ActivityHomeBinding.imgDrawer.setOnClickListener {
-
+                navController.navigate(R.id.profileFragment)
             }
             bottomNavigationView.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
@@ -205,8 +207,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         ActivityHomeBinding.title.text = ""
                         viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
                         loadingDialog.show()
-
-
                         /*        progressBarVisibility(
                                     true,
                                     ActivityHomeBinding.homeActivityPB,

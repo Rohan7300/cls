@@ -4,11 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Path
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.Factory.MyViewModelFactory
@@ -35,6 +38,7 @@ class PolicyDocsActivity : AppCompatActivity() {
     private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
     private var userId = 0
     lateinit var loadingDialog: LoadingDialog
+
 
     companion object {
         var path = Path()
@@ -68,40 +72,63 @@ class PolicyDocsActivity : AppCompatActivity() {
 
         viewModel.GetDriverSignatureInformation(userId)
 
+        mbinding.amazonHeader.setOnClickListener {
+
+                setVisibility(mbinding.amazonLayout, !mbinding.amazonLayout.isVisible)
+
+        }
+
+        mbinding.truckHeaderLL.setOnClickListener {
+
+                setVisibility(mbinding.truckLayout,!mbinding.truckLayout.isVisible)
+
+        }
+
         mbinding.checkbox.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
+                mbinding.amazonLayout.visibility = View.GONE
                 if (mbinding.llTrucks.visibility == View.GONE) {
                     showAlert()
                 } else {
                     if (!mbinding.checkbox2.isChecked) {
-                        showToast("Please check the trucks agreement to proceed",this)
+                        showToast("Please check the trucks agreement to proceed", this)
                     } else {
                         showAlert()
                     }
                 }
+            } else {
+                mbinding.amazonLayout.visibility = View.VISIBLE
             }
         }
         mbinding.checkbox2.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
+                mbinding.truckLayout.visibility = View.GONE
                 if (mbinding.llAmazon.visibility == View.GONE) {
                     showAlert()
                 } else {
                     if (!mbinding.checkbox.isChecked) {
-                        showToast("Please check the amazon agreement to proceed",this)
+                        showToast("Please check the amazon agreement to proceed", this)
                     } else {
                         showAlert()
                     }
                 }
+            } else {
+                mbinding.truckLayout.visibility = View.VISIBLE
             }
         }
     }
 
     private fun showAlert() {
+        // mbinding.llAmazon.visibility = View.GONE
+        // mbinding.llTrucks.visibility = View.GONE
+
+        //mbinding.scanll.visibility = View.VISIBLE
+
         val dialog = CustDialog()
         dialog.setSignatureListener(object : SignatureListener {
             override fun onSignatureSaved(bitmap: Bitmap) {
                 Log.d("Sign", "Bitmap $bitmap")
-              /*  progressBarVisibility(true,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)*/
+                /*  progressBarVisibility(true,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)*/
                 loadingDialog.show()
                 updateSignatureInfoApi(bitmap)
             }
@@ -115,7 +142,7 @@ class PolicyDocsActivity : AppCompatActivity() {
             /*progressBarVisibility(false,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)*/
             loadingDialog.cancel()
             if (it != null) {
-                if(it.Status=="200"){
+                if (it.Status == "200") {
                     Prefs.getInstance(applicationContext)
                         .saveBoolean("isSignatureReq", false)
                 }
@@ -132,7 +159,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                 company.DocumentList.map { document ->
                     document.CompanyDocId
                 }
-            }?: emptyList<Int>()
+            } ?: emptyList<Int>()
             val companyIDS = arrayListOf<CompanySignedDocX>()
             driverSignatureInfo!!.OtherCompanyDocuments?.map {
                 companyIDS.add(
@@ -140,7 +167,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                         it.CompanyID,
                         it.DocumentList.map { docs -> docs.CompanyDocId })
                 )
-            }?: emptyArray<CompanySignedDocX>()
+            } ?: emptyArray<CompanySignedDocX>()
 
             val driverVanHire = DriverHireAgreementX(
                 Accidents = false,
@@ -155,7 +182,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                 Signature = "",
                 UserID = 0,
             )
-val bse64 = "data:image/png;base64,"+bitmapToBase64(bitmap)
+            val bse64 = "data:image/png;base64," + bitmapToBase64(bitmap)
             Log.d("Base64", bse64)
             viewModel.UpdateDriverAgreementSignature(
                 UpdateDriverAgreementSignatureRequest(
@@ -190,12 +217,19 @@ val bse64 = "data:image/png;base64,"+bitmapToBase64(bitmap)
     }
 
 
-   /* fun progressBarVisibility(show: Boolean) {
-        if (show) {
-            mbinding.policyDocPB.bringToFront()
-            mbinding.policyDocPB.visibility = View.VISIBLE
-        } else {
-            mbinding.policyDocPB.visibility = View.GONE
-        }
-    }*/
+    /* fun progressBarVisibility(show: Boolean) {
+         if (show) {
+             mbinding.policyDocPB.bringToFront()
+             mbinding.policyDocPB.visibility = View.VISIBLE
+         } else {
+             mbinding.policyDocPB.visibility = View.GONE
+         }
+     }*/
+
+    private fun setVisibility(ll: LinearLayout, visibility: Boolean) {
+        if (visibility)
+            ll.visibility = View.VISIBLE
+        else
+            ll.visibility = View.GONE
+    }
 }
