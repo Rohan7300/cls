@@ -84,17 +84,17 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             val message =
                 intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
                     ?: "Could not identify status message"
-            Log.d("hdhsdshdsdjshhsds","main $message")
+           Log.d("hdhsdshdsdjshhsds","main $message")
             val tempCode =
                 intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
             if (tempCode == 200) {
-                Log.d("hdhsdshdsdjshhsds","200 $message")
+              Log.d("hdhsdshdsdjshhsds","200 $message")
                 Prefs.getInstance(this).saveBoolean("Inspection", true)
                 //inspectionstarted = true
                 navController.navigate(R.id.completeTaskFragment)
                 showToast("inspection success", this)
             } else {
-                Log.d("hdhsdshdsdjshhsds","else $message")
+              Log.d("hdhsdshdsdjshhsds","else $message")
                 navController.navigate(R.id.completeTaskFragment)
                 showToast("inspection Failed", this)
                 Prefs.getInstance(this).saveBoolean("Inspection", false)

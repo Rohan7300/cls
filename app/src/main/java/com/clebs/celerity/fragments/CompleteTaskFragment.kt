@@ -812,7 +812,7 @@ class CompleteTaskFragment : Fragment() {
             Timer().scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
-                        Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
+                        //Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
                         inspectionOfflineImagesCHeck = isSyncCompletedForAllQuotes
                         /*    if (isSyncCompletedForAllQuotes)
                                 //setProgress()*/

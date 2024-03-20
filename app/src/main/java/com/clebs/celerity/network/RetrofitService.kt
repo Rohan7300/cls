@@ -23,9 +23,9 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 object RetrofitService {
-//    private const val BASE_URL = "http://182.64.1.105:8119/"
-  private const val BASE_URL="http://122.176.42.96:8119/"
-//private const val BASE_URL="http://192.168.0.150:8119/"
+    //    private const val BASE_URL = "http://182.64.1.105:8119/"
+    //private const val BASE_URL="http://122.176.42.96:8119/"
+    private const val BASE_URL = "http://192.168.0.150:8119/"
 
     fun getInstance(): Retrofit {
 
@@ -40,11 +40,15 @@ object RetrofitService {
         builder.addInterceptor(logging)
 
         return Retrofit.Builder().baseUrl(BASE_URL)
-            .client(getUnSecureOkHttpClient(provideHeaderInterceptor(),
-                provideHttpLoggingInterceptor()
-            ))
+            .client(
+                getUnSecureOkHttpClient(
+                    provideHeaderInterceptor(),
+                    provideHttpLoggingInterceptor()
+                )
+            )
             .addConverterFactory(GsonConverterFactory.create()).build()
     }
+
     fun getUnSecureOkHttpClient(
         headerInterceptor: Interceptor,
         loggingInterceptor: HttpLoggingInterceptor
@@ -84,7 +88,7 @@ object RetrofitService {
 
             return builder.build()
         } catch (e: Exception) {
-                e.printStackTrace()
+            e.printStackTrace()
             return getSecureOkHttpClient(headerInterceptor, loggingInterceptor)
         }
     }
@@ -101,12 +105,13 @@ object RetrofitService {
             .addInterceptor(headerInterceptor)
             .build()
     }
+
     fun provideHeaderInterceptor(): Interceptor {
         val applicationContext = App.instance
         try {
             return Interceptor { chain ->
-                val accessToken: String =Prefs.getInstance(applicationContext).accessToken
-                Log.d("Net Interceptor","Internet Available")
+                val accessToken: String = Prefs.getInstance(applicationContext).accessToken
+                Log.d("Net Interceptor", "Internet Available")
                 if (Prefs.getInstance(applicationContext).accessToken.isNotEmpty()) {
                     val request: Request = chain.request().newBuilder()
                         .addHeader("accept", "application/json")
@@ -119,12 +124,11 @@ object RetrofitService {
                         .addHeader("Accept", "application/json").build()
                     chain.proceed(request)
                 }
-        }
-        }catch (_:Exception){
+            }
+        } catch (_: Exception) {
             throw Exception()
         }
     }
-
 
 
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
@@ -143,16 +147,16 @@ object RetrofitService {
         return httpLoggingInterceptor
     }
 
-    fun handleNetworkError(exception: Throwable,fragmentManager: FragmentManager) {
+    fun handleNetworkError(exception: Throwable, fragmentManager: FragmentManager) {
 
         if (exception is HttpException) {
-            showErrorDialog(fragmentManager,"RF-CN01","Failed to connect to server!!.")
+            showErrorDialog(fragmentManager, "RF-CN01", "Failed to connect to server!!.")
             Log.e("RetrofitService", "HTTP Error: ${exception.code()}")
         } else if (exception is java.net.ConnectException) {
-            showErrorDialog(fragmentManager,"RF-CN02","Failed to connect to server!!.")
+            showErrorDialog(fragmentManager, "RF-CN02", "Failed to connect to server!!.")
             Log.e("RetrofitService", "Connection Error: ${exception.message}")
         } else {
-            showErrorDialog(fragmentManager,"RF-CN03","Failed to connect to server!!.")
+            showErrorDialog(fragmentManager, "RF-CN03", "Failed to connect to server!!.")
             Log.e("RetrofitService", "Unknown Error: ${exception.message}")
         }
     }

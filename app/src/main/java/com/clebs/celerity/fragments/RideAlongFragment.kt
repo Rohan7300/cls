@@ -147,6 +147,8 @@ class RideAlongFragment : Fragment() {
         viewModel.livedataRideAlongSubmitApiRes.observe(viewLifecycleOwner) {
             if (it != null) {
                 findNavController().navigate(R.id.completeTaskFragment)
+                findNavController().clearBackStack(R.id.completeTaskFragment)
+
             } else {
                 showToast("Please!! try again.", requireContext())
             }
