@@ -450,7 +450,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                             this@DailyWorkFragment,
                             fragmentManager,
                             "DWF-03",
-                            "Vehicle doesn't exists. Please scan again or contact your supervisor."
+                            " This Vehicle ${if (vrn.isNotEmpty()) (vrn) else ""} doesn't exists. Please scan again or contact your supervisor."
                         )
 //                        mbinding.pb.visibility=View.GONE
                         withContext(Dispatchers.Main) {
@@ -492,8 +492,8 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 showScanErrorDialog(
                     this,
                     fragmentManager,
-                    "DWF-01",
-                    "Vehicle doesn't exists. Please scan again or contact your supervisor."
+                    "",
+                    "This Vehicle ${if (vrn.isNotEmpty()) "[$vrn]" else ""} doesn't exists. Please scan again or contact your supervisor."
                 )
                 /*     showToast(
                          "Vehicle doesn't exists. Please scan again or contact your supervisor.",

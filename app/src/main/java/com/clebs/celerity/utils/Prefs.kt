@@ -51,6 +51,32 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putInt("saveNnext",value).apply()
         }
 
+    var currRideAlongID:Int
+        get(){
+            return sharedPreferences.getInt("currRideAlongID",0)
+        }
+        set(value) {
+            sharedPreferences.edit().putInt("currRideAlongID",value).apply()
+        }
+
+    var daWID:Int
+        get(){
+            return sharedPreferences.getInt("daWID",0)
+        }
+        set(value) {
+            sharedPreferences.edit().putInt("daWID",value).apply()
+        }
+
+    var currRtId:Int
+        get(){
+            return sharedPreferences.getInt("currRtId",0)
+        }
+        set(value) {
+            sharedPreferences.edit().putInt("currRtId",value).apply()
+        }
+
+
+
     var accessTokenclearquote: String
         get() {
             return sharedPreferences.getString(USER_ACCESS_TOKEN, " ") ?: " "

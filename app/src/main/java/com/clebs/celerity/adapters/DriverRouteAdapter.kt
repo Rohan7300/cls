@@ -1,8 +1,12 @@
 package com.clebs.celerity.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
+import com.clebs.celerity.R
 import com.clebs.celerity.databinding.AdapterDriverRouteBinding
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem

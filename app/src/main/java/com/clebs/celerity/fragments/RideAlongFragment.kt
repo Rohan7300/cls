@@ -193,8 +193,8 @@ class RideAlongFragment : Fragment() {
         viewModel.AddOnRideAlongRouteInfo(
             AddOnRideAlongRouteInfoRequest(
                 IsReTraining = retraining!!,
-                LeadDriverId = selectedDriverId!!,
-                RtAddMode = "",
+                LeadDriverId = leadDriverID!!,
+                RtAddMode = "A",
                 RtComment = routeComment!!,
                 RtFinishMileage = rtFinishMileage!!,
                 RtId = selectedRouteId!!,
@@ -203,7 +203,7 @@ class RideAlongFragment : Fragment() {
                 RtNoOfParcelsDelivered = rtNoOfParcelsDelivered!!,
                 RtNoParcelsbroughtback = rtNoParcelsbroughtback!!,
                 RtType = rtType!!,
-                RtUsrId = leadDriverID!!,
+                RtUsrId = selectedDriverId!!,
                 TrainingDays = 0,
                 VehicleId = selectedVehicleId!!
             )

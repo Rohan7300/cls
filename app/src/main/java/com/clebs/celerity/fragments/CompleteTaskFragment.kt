@@ -26,11 +26,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.DriverRouteAdapter
+import com.clebs.celerity.adapters.RideAlongAdapter
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
 import com.clebs.celerity.databinding.TimePickerDialogBinding
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
+import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
@@ -117,6 +119,7 @@ class CompleteTaskFragment : Fragment() {
         showDialog()
         viewModel.GetDailyWorkInfoById(userId)
         viewModel.GetDriverRouteInfoByDate(userId)
+        viewModel.GetRideAlongDriverInfoByDate(userId)
 
 
         clientUniqueID()
@@ -139,6 +142,8 @@ class CompleteTaskFragment : Fragment() {
         mbinding.headerTop.icpnUser.setOnClickListener {
             findNavController().navigate(R.id.profileFragment)
         }
+
+
 
         if (checked.equals("0")) {
             //findNavController().navigate(R.id.vechileMileageFragment)
@@ -435,6 +440,20 @@ class CompleteTaskFragment : Fragment() {
                 adapter.notifyDataSetChanged()
             } ?: run {
             }
+        }
+
+        val rideAlongAdapter = RideAlongAdapter(RideAlongDriverInfoByDateResponse(),findNavController(),Prefs.getInstance(requireContext()))
+
+        mbinding.questionareRv.adapter = rideAlongAdapter
+        mbinding.questionareRv.layoutManager = LinearLayoutManager(requireContext())
+
+        viewModel.liveDataRideAlongDriverInfoByDateResponse.observe(viewLifecycleOwner) { rideAlongs ->
+            rideAlongs.let {
+                rideAlongAdapter.data.clear()
+                rideAlongAdapter.data.addAll(it!!)
+                rideAlongAdapter.notifyDataSetChanged()
+            }
+
         }
 
     }
