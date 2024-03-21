@@ -134,8 +134,8 @@ abstract class BaseInteriorFragment : Fragment() {
         rlUploadDefect: RelativeLayout,
         edtMil: TextView,
         edtMilTwo: TextView,
-        imageRadioTwo: ImageButton,
-        imageRadio: ImageButton
+        imageRadioTwo: ImageView,
+        imageRadio: ImageView
     ) {
         functionalView = false
         defectView = !defectView
@@ -238,8 +238,8 @@ abstract class BaseInteriorFragment : Fragment() {
         rlUploadDefect: RelativeLayout,
         edtMil: TextView,
         edtMilTwo: TextView,
-        imageRadioTwo: ImageButton,
-        imageRadio: ImageButton
+        imageRadioTwo: ImageView,
+        imageRadio: ImageView
     ) {
         defectView = false
         rlUploadDefect.visibility = View.VISIBLE
