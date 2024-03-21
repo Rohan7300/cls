@@ -15,9 +15,9 @@ import com.google.android.material.tabs.TabLayout
 
 class QuestinareFragment : Fragment() {
     lateinit var binding: FragmentQuestinareBinding
-    val TAG = "QuestinareFrag"
-    var rideAlongID = 0
-    var leadDriverID = 0
+    private val TAG = "QuestinareFrag"
+    private var rideAlongID = 0
+    private var leadDriverID = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,9 +33,9 @@ class QuestinareFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rideAlongID = arguments?.getInt("rideAlongID", 0)?:0
-        leadDriverID = arguments?.getInt("leadDriverID", 0)?:0
-val viewModel = (activity as HomeActivity).viewModel
+        rideAlongID = arguments?.getInt("rideAlongID", 0) ?: 0
+        leadDriverID = arguments?.getInt("leadDriverID", 0) ?: 0
+        val viewModel = (activity as HomeActivity).viewModel
 
         if (rideAlongID != null && leadDriverID != null) {
             Log.d(TAG, "RIDEALONGID $rideAlongID \n LEADDRIVERID $leadDriverID")
@@ -43,7 +43,7 @@ val viewModel = (activity as HomeActivity).viewModel
             Log.d(TAG, "RIDEALONGID null \n LEADDRIVERID null")
         }
 
-        val headingList = arrayOf("Preparedness", "Start Up", "Gonig On")
+        val headingList = arrayOf("Preparedness", "Start Up", "Gonig On","Delivery Procedures","Return")
         val str = "Observations and explanations must be conducted on a" +
                 " Nursery Level 1 route. The new driver should make at least 50 unassisted deliveries," +
                 " before being considered as fully trained. Where an individual is identified as not ready" +
@@ -84,13 +84,12 @@ val viewModel = (activity as HomeActivity).viewModel
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-        viewModel.currentViewPage.observe(viewLifecycleOwner){
-            it.let {currentPage->
+        viewModel.currentViewPage.observe(viewLifecycleOwner) {
+            it.let { currentPage ->
                 binding.viewPager.currentItem = currentPage!!
             }
 
         }
-
 
 
     }

@@ -12,17 +12,15 @@ import com.clebs.celerity.models.QuestionWithOption
 
 class ReturnToStation : Fragment() {
     private lateinit var binding: FragmentReturnToStationBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return FragmentReturnToStationBinding.inflate(inflater, container, false).root
+
+        binding = FragmentReturnToStationBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
