@@ -67,6 +67,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/miles"
+                android:layout_marginTop="8dp"
                 android:textColor="#626C7C"
                 android:textSize="20sp"
                 android:layout_marginBottom="40dp"

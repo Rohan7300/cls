@@ -28,7 +28,8 @@
                     android:id="@+id/scan"
                     android:layout_width="147dp"
                     android:layout_height="76dp"
-                    android:background="@color/very_light_orange"
+
+                    android:elevation="16dp"
                     android:src="@drawable/scan_area"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -38,8 +39,8 @@
                     android:layout_width="155dp"
                     android:layout_height="152dp"
                     android:layout_alignParentEnd="true"
+                    android:elevation="8dp"
                     android:src="@drawable/car"
-
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -79,7 +80,7 @@
                     android:id="@+id/rectangle_4"
                     android:layout_width="match_parent"
                     android:layout_height="123dp"
-                    android:background="@drawable/vectors"
+                    android:background="@drawable/rectanglescanarea"
                     android:foregroundGravity="fill"
                     android:tooltipText="Scan Area"
 
@@ -201,10 +202,10 @@
             android:layout_width="54dp"
             android:layout_height="54dp"
             android:layout_marginTop="36dp"
-            android:src="@drawable/camera_ivs"
+            android:backgroundTint="@color/light_orange2"
             android:clickable="true"
             android:focusable="true"
-           android:backgroundTint="@color/light_orange2"
+            android:src="@drawable/camera_ivs"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/scan_layout"
             app:layout_constraintEnd_toEndOf="@+id/scan_layout"

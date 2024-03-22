@@ -53,7 +53,7 @@
                         android:id="@+id/dp"
                         android:layout_width="115dp"
                         android:layout_height="115dp"
-                        android:src="@drawable/ic_user"
+                        android:src="@drawable/celerityimage"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

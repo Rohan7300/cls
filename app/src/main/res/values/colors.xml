@@ -16,4 +16,5 @@
     <color name="text_color">#4A4A4A</color>
     <color name="very_light_orange">#FEF0EA</color>
     <color name="pink">#03A9F4</color>
+    <color name="red">#ff0000</color>
 </resources>

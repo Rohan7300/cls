@@ -18,21 +18,17 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
-import com.clebs.celerity.adapters.DriverRouteAdapter
-import com.clebs.celerity.adapters.RideAlongAdapter
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
 import com.clebs.celerity.databinding.TimePickerDialogBinding
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
-import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
-import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
@@ -121,47 +117,48 @@ class CompleteTaskFragment : Fragment() {
         viewModel.GetDriverBreakTimeInfo(userId)
         showDialog()
         viewModel.GetDailyWorkInfoById(userId)
-        viewModel.GetDriverRouteInfoByDate(userId)
-        viewModel.GetRideAlongDriverInfoByDate(userId)
+//        if (mbinding.startinspection.visibility==View.VISIBLE && mbinding.imageUploadView.visibility==View.VISIBLE && mbinding.uploadLayouts.visibility==View.VISIBLE) {
+//            BubbleShowCaseBuilder(requireActivity()) //Activity instance
+//                .title("Start Inspection") //Any title for the bubble view
+//                .description("Click here to capture Vehicle Images") //More detailed description
+//                .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
+//                //You can force the position of the arrow to change the location of the bubble.
+//                .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
+//                //Bubble background color
+//                .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
+//                .titleTextSize(16) //Title text size in SP (default value 16sp)
+//                .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
+//                .image(requireContext().resources.getDrawable(R.drawable.baseline_image_search_24)!!) //Bubble main image
+//                .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
+//
+//                .listener(
+//                    (object : BubbleShowCaseListener { //Listener for user actions
+//                        override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
+//                            //Called when the user clicks the target
+//                            bubbleShowCase.dismiss()
+//                        }
+//
+//                        override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
+//                            //Called when the user clicks the close button
+//                            bubbleShowCase.dismiss()
+//                        }
+//
+//                        override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
+//                            //Called when the user clicks on the bubble
+//                            bubbleShowCase.dismiss()
+//                        }
+//
+//                        override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
+//                            bubbleShowCase.dismiss()
+//                            //Called when the user clicks on the background dim
+//                        }
+//                    })
+//                )
+//                .targetView(mbinding.startinspection)
+//                .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
+//                .show()
+//        }
 
-        BubbleShowCaseBuilder(requireActivity()) //Activity instance
-            .title("Start Inspection") //Any title for the bubble view
-            .description("Click here to capture Vehicle Images") //More detailed description
-            .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
-            //You can force the position of the arrow to change the location of the bubble.
-            .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
-            //Bubble background color
-            .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
-            .titleTextSize(16) //Title text size in SP (default value 16sp)
-            .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
-            .image(requireContext().resources.getDrawable(R.drawable.baseline_image_search_24)!!) //Bubble main image
-            .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
-
-            .listener(
-                (object : BubbleShowCaseListener { //Listener for user actions
-                    override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
-                        //Called when the user clicks the target
-                        bubbleShowCase.dismiss()
-                    }
-
-                    override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
-                        //Called when the user clicks the close button
-                        bubbleShowCase.dismiss()
-                    }
-
-                    override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
-                        //Called when the user clicks on the bubble
-                        bubbleShowCase.dismiss()
-                    }
-
-                    override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
-                        bubbleShowCase.dismiss()
-                        //Called when the user clicks on the background dim
-                    }
-                })
-            )
-            .targetView(mbinding.startinspection).highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
-            .show()
         clientUniqueID()
 
         mbinding.rlcomtwoClock.setOnClickListener {
@@ -182,8 +179,6 @@ class CompleteTaskFragment : Fragment() {
         mbinding.headerTop.icpnUser.setOnClickListener {
             findNavController().navigate(R.id.profileFragment)
         }
-
-
 
         if (checked.equals("0")) {
             //findNavController().navigate(R.id.vechileMileageFragment)
@@ -373,7 +368,6 @@ class CompleteTaskFragment : Fragment() {
         viewModel.uploadVehicleImageLiveData.observe(viewLifecycleOwner, Observer {
             hideDialog()
             viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
-            showDialog()
             if (it != null) {
                 if (it.Status == "200") {
                     showDialog()
@@ -466,39 +460,6 @@ class CompleteTaskFragment : Fragment() {
                 }
             }
         })
-
-
-        val adapter = DriverRouteAdapter(GetDriverRouteInfoByDateResponse())
-
-        mbinding.getDriverRouteId.adapter = adapter
-        mbinding.getDriverRouteId.layoutManager = LinearLayoutManager(requireContext())
-
-        viewModel.liveDatadriverInfobyRouteDate.observe(viewLifecycleOwner) { routes ->
-            routes?.let {
-                if(it!=null){
-                    adapter.list.clear()
-                    adapter.list.addAll(it)
-                    adapter.notifyDataSetChanged()
-                }
-            } ?: run {
-            }
-        }
-
-        val rideAlongAdapter = RideAlongAdapter(RideAlongDriverInfoByDateResponse(),findNavController(),Prefs.getInstance(requireContext()))
-
-        mbinding.questionareRv.adapter = rideAlongAdapter
-        mbinding.questionareRv.layoutManager = LinearLayoutManager(requireContext())
-
-        viewModel.liveDataRideAlongDriverInfoByDateResponse.observe(viewLifecycleOwner) { rideAlongs ->
-            rideAlongs.let {
-                if(it!=null){
-                    rideAlongAdapter.data.clear()
-                    rideAlongAdapter.data.addAll(it)
-                    rideAlongAdapter.notifyDataSetChanged()
-                }
-            }
-
-        }
 
     }
 
@@ -875,7 +836,7 @@ class CompleteTaskFragment : Fragment() {
             Timer().scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
-                        //Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
+                        Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
                         inspectionOfflineImagesCHeck = isSyncCompletedForAllQuotes
                         /*    if (isSyncCompletedForAllQuotes)
                                 //setProgress()*/
@@ -885,6 +846,46 @@ class CompleteTaskFragment : Fragment() {
             mbinding.startinspection.visibility = View.GONE
 
         } else {
+            BubbleShowCaseBuilder(requireActivity()) //Activity instance
+                .title("Start Inspection") //Any title for the bubble view
+                .description("Click here to capture Vehicle Images") //More detailed description
+                .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
+                //You can force the position of the arrow to change the location of the bubble.
+                .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
+                //Bubble background color
+                .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
+                .titleTextSize(16) //Title text size in SP (default value 16sp)
+                .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
+                .image(requireContext().resources.getDrawable(R.drawable.baseline_image_search_24)!!) //Bubble main image
+                .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
+
+                .listener(
+                    (object : BubbleShowCaseListener { //Listener for user actions
+                        override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
+                            //Called when the user clicks the target
+                            bubbleShowCase.dismiss()
+                        }
+
+                        override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
+                            //Called when the user clicks the close button
+                            bubbleShowCase.dismiss()
+                        }
+
+                        override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
+                            //Called when the user clicks on the bubble
+                            bubbleShowCase.dismiss()
+                        }
+
+                        override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
+                            bubbleShowCase.dismiss()
+                            //Called when the user clicks on the background dim
+                        }
+                    })
+                )
+                .targetView(mbinding.startinspection)
+                .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
+                .show()
+
             mbinding.startinspection.visibility = View.VISIBLE
         }
     }

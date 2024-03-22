@@ -103,11 +103,15 @@ class PolicyDocsActivity : AppCompatActivity() {
 
         mbinding.checkbox.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
+                mbinding.amazonHeader.isClickable = false
+
                 mbinding.amazonLayout.visibility = View.GONE
                 mbinding.views1.visibility=View.GONE
+
                 if (mbinding.llTrucks.visibility == View.GONE) {
                     showAlert()
-                } else {
+                }
+                else {
                     if (!mbinding.checkbox2.isChecked) {
                         showToast("Please check the trucks agreement to proceed", this)
                     } else {
@@ -122,6 +126,7 @@ class PolicyDocsActivity : AppCompatActivity() {
         mbinding.checkbox2.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
                 mbinding.truckLayout.visibility = View.GONE
+                mbinding.truckHeaderLL.isClickable = false
                 mbinding.viewss2.visibility=View.GONE
                 if (mbinding.llAmazon.visibility == View.GONE) {
                     showAlert()
@@ -145,8 +150,8 @@ class PolicyDocsActivity : AppCompatActivity() {
 
         //mbinding.scanll.visibility = View.VISIBLE
         mbinding.signLayoutll.visibility = View.VISIBLE
-        mbinding.amazonHeader.isClickable = false
-        mbinding.truckHeaderLL.isClickable = false
+
+
         val retry =mbinding.signLayout.RetryLay
         val close = mbinding.signLayout.cl
         val save = mbinding.signLayout.sv
@@ -272,5 +277,6 @@ class PolicyDocsActivity : AppCompatActivity() {
             ll.visibility = View.VISIBLE
         else
             ll.visibility = View.GONE
+
     }
 }
