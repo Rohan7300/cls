@@ -92,7 +92,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 Prefs.getInstance(this).saveBoolean("Inspection", true)
                 //inspectionstarted = true
                 navController.navigate(R.id.completeTaskFragment)
-                showToast("inspection success", this)
+                showToast("Vehicle Inspection is successfully completed ", this)
             } else {
                 Log.d("hdhsdshdsdjshhsds","else $message")
                 navController.navigate(R.id.completeTaskFragment)
