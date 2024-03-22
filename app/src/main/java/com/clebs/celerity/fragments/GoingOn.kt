@@ -57,22 +57,26 @@ class GoingOn : Fragment() {
             if (it != null) {
                 viewModel.currentViewPage.postValue(3)
                 pref.quesID = it.QuestionId
+                pref.qStage = 3
             }
         }
 
         binding.saveBtnGoinon.setOnClickListener {
-            val allQuestionsSelected = adapter.areAllQuestionsSelected()
-            val comment =
-                if (binding.goingOnCommentET.text.isNullOrEmpty()) "" else binding.goingOnCommentET.text
-            if (allQuestionsSelected) {
-                val selectedOptions = questions.map { it.selectedOption }
-                saveGoingonApi(selectedOptions, comment)
+            if(pref.qStage<2||pref.quesID==0){
+                showToast("Please complete previous assessment first", requireContext())
+            }else{
+                val allQuestionsSelected = adapter.areAllQuestionsSelected()
+                val comment =
+                    if (binding.goingOnCommentET.text.isNullOrEmpty()) "" else binding.goingOnCommentET.text
+                if (allQuestionsSelected) {
+                    val selectedOptions = questions.map { it.selectedOption }
+                    saveGoingonApi(selectedOptions, comment)
 
-            } else {
-                showToast("Not all selected", requireContext())
+                } else {
+                    showToast("Not all selected", requireContext())
+                }
             }
         }
-
     }
 
     private fun saveGoingonApi(selectedOptions: List<String>, comment: CharSequence?) {

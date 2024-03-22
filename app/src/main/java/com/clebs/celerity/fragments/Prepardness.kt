@@ -56,13 +56,14 @@ class Prepardness : Fragment() {
                 Log.d("Preparedness",it.toString())
                 viewModel.currentViewPage.postValue(1)
                 pref.quesID = it.QuestionId
+                pref.qStage = 1
             }
         }
 
         binding.prepardnessSave.setOnClickListener {
             val allQuestionsSelected = adapter.areAllQuestionsSelected()
             val comment =
-                if (binding.prepComment.text.isNullOrEmpty()) "" else binding.prepComment.text
+                if (binding.prepComment.text.isNullOrEmpty()) " " else binding.prepComment.text
             if (allQuestionsSelected) {
                 val selectedOptions = questions.map { it.selectedOption }
                 savePrepardnessApi(selectedOptions,comment)

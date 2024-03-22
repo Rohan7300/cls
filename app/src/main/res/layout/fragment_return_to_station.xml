@@ -3,11 +3,13 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:scrollbars="none"
     android:background="@color/white"
     android:padding="7dp"
     >
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,6 +18,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ReturnRV"
             android:layout_width="match_parent"
+            android:scrollbars="none"
             android:layout_height="wrap_content"
             android:layout_margin="5dp" />
 
@@ -89,4 +92,5 @@
                 android:textSize="16sp" />
         </RelativeLayout>
     </LinearLayout>
+    </RelativeLayout>
 </ScrollView>

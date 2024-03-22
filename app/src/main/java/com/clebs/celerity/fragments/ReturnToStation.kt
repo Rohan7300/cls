@@ -53,13 +53,17 @@ class ReturnToStation : Fragment() {
             if(it!=null){
                 viewModel.currentViewPage.postValue(5)
                 pref.quesID = it.QuestionId
+                pref.qStage = 5
             }
         }
 
         binding.returnSaveBtn.setOnClickListener {
+            if(pref.qStage<4||pref.quesID==0){
+                showToast("Please complete previous assessment first", requireContext())
+            }
             val allQuestionsSelected = adapter.areAllQuestionsSelected()
             val comment =
-                if (binding.etReturnComment.text.isNullOrEmpty()) "" else binding.etReturnComment.text
+                if (binding.etReturnComment.text.isNullOrEmpty()) " " else binding.etReturnComment.text
             if (allQuestionsSelected) {
                 val selectedOptions = questions.map { it.selectedOption }
                 saveReturnQuesApi(selectedOptions, comment)

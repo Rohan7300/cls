@@ -61,21 +61,26 @@ class DeliveryProcedures : Fragment() {
             if(it!=null){
                 viewModel.currentViewPage.postValue(4)
                 pref.quesID = it.QuestionId
+                pref.qStage = 4
             }else{
                 showToast("Failed to submit!!",requireContext())
             }
         }
 
         binding.deliverSaveBtn.setOnClickListener {
-            val allQuestionsSelected = adapter.areAllQuestionsSelected()
-            val comment =
-                if (binding.etDeliveryComment.text.isNullOrEmpty()) "" else binding.etDeliveryComment.text
-            if (allQuestionsSelected) {
-                val selectedOptions = questions.map { it.selectedOption }
-                saveDeliveryProcedureApi(selectedOptions, comment)
+            if(pref.qStage<3||pref.quesID==0){
+                showToast("Please complete previous assessment first", requireContext())
+            }else{
+                val allQuestionsSelected = adapter.areAllQuestionsSelected()
+                val comment =
+                    if (binding.etDeliveryComment.text.isNullOrEmpty()) "" else binding.etDeliveryComment.text
+                if (allQuestionsSelected) {
+                    val selectedOptions = questions.map { it.selectedOption }
+                    saveDeliveryProcedureApi(selectedOptions, comment)
 
-            } else {
-                showToast("Not all selected", requireContext())
+                } else {
+                    showToast("Not all selected", requireContext())
+                }
             }
         }
     }

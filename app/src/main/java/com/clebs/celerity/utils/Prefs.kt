@@ -98,6 +98,10 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getString("userName","")?:""
         set(value) = sharedPreferences.edit().putString("userName",value).apply()
 
+    var qStage:Int
+        get() = sharedPreferences.getInt("qStage",0)?:0
+        set(value) = sharedPreferences.edit().putInt("qStage",value).apply()
+
     fun save(key: String?, value: String?) {
         sharedPreferences.edit().putString(key, value).apply()
         sharedPreferences.edit().apply()

@@ -39,25 +39,32 @@ class FinalAssesmentFragment : Fragment() {
         loadingDialog = (activity as HomeActivity).loadingDialog
 
         viewModel.liveDataFinalAssesment.observe(viewLifecycleOwner){
+            loadingDialog.cancel()
             if(it!=null){
                 findNavController().navigate(R.id.completeTaskFragment)
+                pref.qStage=0
             }
         }
 
         binding.finalAssesmentSubmit.setOnClickListener {
-            val assesment =
-                if (binding.etFinalAssesmentComment.text.isNullOrEmpty()) "" else binding.etFinalAssesmentComment.text
-
-            if(assesment.isNotEmpty()){
-                viewModel.SaveQuestionaireFinalAssesment(SubmitFinalQuestionairebyLeadDriverRequest(
-                    QuestionId = pref.quesID,
-                    DaDailyWorkId = pref.daWID,
-                    LeadDriverId = pref.userID.toInt(),
-                    RoutetId = pref.currRtId,
-                    Assessment = assesment.toString()
-                ))
+            if(pref.qStage<5||pref.quesID==0){
+                showToast("Please complete previous assessment first", requireContext())
             }else{
-                showToast("Please enter the assesment",requireContext())
+                val assesment =
+                    if (binding.etFinalAssesmentComment.text.isNullOrEmpty()) " " else binding.etFinalAssesmentComment.text
+
+                if(assesment.isNotEmpty()){
+                    loadingDialog.show()
+                    viewModel.SaveQuestionaireFinalAssesment(SubmitFinalQuestionairebyLeadDriverRequest(
+                        QuestionId = pref.quesID,
+                        DaDailyWorkId = pref.daWID,
+                        LeadDriverId = pref.userID.toInt(),
+                        RoutetId = pref.currRtId,
+                        Assessment = assesment.toString()
+                    ))
+                }else{
+                    showToast("Please enter the assessment",requireContext())
+                }
             }
 
         }

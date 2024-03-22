@@ -53,18 +53,25 @@ class StartUp : Fragment() {
             if (it != null) {
                 viewModel.currentViewPage.postValue(2)
                 pref.quesID = it.QuestionId
+                pref.qStage = 2
             }
         }
 
         binding.saveBTNStartup.setOnClickListener {
-            val allQuestionsSelected = adapter.areAllQuestionsSelected()
-            val comment =
-                if (binding.startupComment.text.isNullOrEmpty()) "" else binding.startupComment.text
-            if (allQuestionsSelected) {
-                val selectedOptions = questions.map { it.selectedOption }
-                saveStartupApi(selectedOptions, comment)
-            } else {
-                showToast("Not all selected", requireContext())
+            if(pref.qStage<1||pref.quesID==0){
+                showToast("Please complete previous assessment first", requireContext())
+            }else{
+                val allQuestionsSelected = adapter.areAllQuestionsSelected()
+                val comment =
+                    if (binding.startupComment.text.isNullOrEmpty()) " " else binding.startupComment.text
+                if (allQuestionsSelected) {
+                    val selectedOptions = questions.map { it.selectedOption }
+                    if (comment != null) {
+                        saveStartupApi(selectedOptions, comment)
+                    }
+                } else {
+                    showToast("Not all selected", requireContext())
+                }
             }
         }
     }

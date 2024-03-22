@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -77,6 +78,8 @@ class CompleteTaskFragment : Fragment() {
     var breakStartTime: String = ""
     var breakEndTime: String = ""
     private lateinit var loadingDialog: LoadingDialog
+    var b1 = false
+    var b2 = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
     private var imageUploadLevel = 0
@@ -124,7 +127,7 @@ class CompleteTaskFragment : Fragment() {
         viewModel.GetDriverRouteInfoByDate(userId)
         viewModel.GetRideAlongDriverInfoByDate(userId)
 
-        BubbleShowCaseBuilder(requireActivity()) //Activity instance
+      /*  BubbleShowCaseBuilder(requireActivity()) //Activity instance
             .title("Start Inspection") //Any title for the bubble view
             .description("Click here to capture Vehicle Images") //More detailed description
             .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
@@ -161,7 +164,7 @@ class CompleteTaskFragment : Fragment() {
                 })
             )
             .targetView(mbinding.startinspection).highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
-            .show()
+            .show()*/
         clientUniqueID()
 
         mbinding.rlcomtwoClock.setOnClickListener {
@@ -506,7 +509,7 @@ class CompleteTaskFragment : Fragment() {
         return res.DaVehImgFaceMaskFileName == null || res.DaVehicleAddBlueImage == null || res.DaVehImgOilLevelFileName == null
     }
 
-    private fun chkTime(edtBreakstart: EditText, edtBreakend: EditText): Boolean {
+    private fun chkTime(edtBreakstart: TextView, edtBreakend: TextView): Boolean {
 
         val startTime = edtBreakstart.text.toString()
         val endTime = edtBreakend.text.toString()
@@ -531,14 +534,25 @@ class CompleteTaskFragment : Fragment() {
         dialogBinding.icCrossOrange.setOnClickListener {
             deleteDialog.cancel()
         }
+
         dialogBinding.edtBreakstart.setOnClickListener {
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
+            b1 = true
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart,1)
+            if(b1&&b2){
+                dialogBinding.timeTvNext.isEnabled = true
+                dialogBinding.timeTvNext.setTextColor(Color.WHITE)
+            }
         }
         dialogBinding.edtBreakend.setOnClickListener {
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
+            b2 = true
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend,2)
+            if(b1&&b2){
+                dialogBinding.timeTvNext.isEnabled = true
+                dialogBinding.timeTvNext.setTextColor(Color.WHITE)
+            }
         }
 
-        val textWatcher = object : TextWatcher {
+   /*     val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -559,7 +573,8 @@ class CompleteTaskFragment : Fragment() {
         }
 
         dialogBinding.edtBreakstart.addTextChangedListener(textWatcher)
-        dialogBinding.edtBreakend.addTextChangedListener(textWatcher)
+        dialogBinding.edtBreakend.addTextChangedListener(textWatcher)*/
+
 
         dialogBinding.timeTvNext.setOnClickListener {
             if (chkTime(dialogBinding.edtBreakstart, dialogBinding.edtBreakend)) {

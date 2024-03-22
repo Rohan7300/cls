@@ -59,7 +59,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_txt" />
 
-            <EditText
+            <TextView
             android:importantForAutofill="no"
                 android:id="@+id/edt_breakstart"
                 android:layout_width="match_parent"
@@ -98,7 +98,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edt_breakstart" />
 
-            <EditText
+            <TextView
             android:importantForAutofill="no"
                 android:id="@+id/edt_breakend"
                 android:layout_width="match_parent"
