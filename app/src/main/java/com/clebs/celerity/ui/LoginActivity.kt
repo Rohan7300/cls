@@ -1,11 +1,11 @@
 package com.clebs.celerity.ui
 
+import android.app.ActivityOptions
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,7 +17,6 @@ import com.clebs.celerity.models.requests.LoginRequest
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
-import com.clebs.celerity.utils.ErrorDialog
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.NoInternetDialog
 import com.clebs.celerity.utils.Prefs
@@ -45,11 +44,14 @@ class LoginActivity : AppCompatActivity() {
         ActivityLoginBinding.btLogin.setOnClickListener {
 
             if (ActivityLoginBinding.edtUser.text!!.isEmpty()) {
-                ActivityLoginBinding.edtUser.setError("Please enter username/email")
+               ActivityLoginBinding.textError.visibility=View.VISIBLE
             }
-            if (ActivityLoginBinding.edtPass.text!!.isEmpty()) {
-                ActivityLoginBinding.edtPass.setError("Please enter password")
+          else  if (ActivityLoginBinding.edtPass.text!!.isEmpty()) {
+              ActivityLoginBinding.textErrorTwo.visibility=View.VISIBLE
+                ActivityLoginBinding.textError.visibility=View.GONE
             } else {
+                ActivityLoginBinding.textError.visibility=View.GONE
+                ActivityLoginBinding.textErrorTwo.visibility=View.GONE
                 loadingDialog.show()
                 login()
             }
@@ -131,6 +133,7 @@ class LoginActivity : AppCompatActivity() {
                         intent.putExtra("signature_required", "0")
                         startActivity(intent)
                     } else {
+                        val options = ActivityOptions.makeSceneTransitionAnimation(this)
                         val intent = Intent(this, HomeActivity::class.java)
                         intent.putExtra("no_signature_required", "0")
                         startActivity(intent)

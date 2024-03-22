@@ -533,7 +533,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
 
             } else {
-                showToast("Please check the acknowledgment check", requireContext())
+                showToast("Please check the acknowledgement check", requireContext())
             }
         }
 

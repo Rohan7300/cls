@@ -5,8 +5,8 @@
     <string name="place_the_r">
 Place the Rectangle area as on Vehicle Reg plate as shown in the image The app will automatically detect and capture the registration number upon recognition
 </string>
-    <string name="location">location\n</string>
-    <string name="away">away</string>
+    <string name="location">Location</string>
+    <string name="away">Away</string>
     <string name="swipe_for_v">Swipe For Vehicle Reg No.</string>
     <string name="key_chain_confirmation_alert">Key Chain Confirmation Alert</string>
     <string name="keeping_you">"Keeping your vehicle safe and secure from theft of your vehicle or parcels is an important part of being a delivery driver. 90% of all vehicle thefts are when drivers leave their vehicle unattended unlocked or leave their keys in the vehicle. You as the Responsible Delivery Driver need to be aware of your responsibility and care of duty. Driver safety is important to us and we advise any driver that is threatened with violence for their vehicle and its contents to walk away from your vehicle and if your keys are taken to contact OSM immediately and contact the police and report the incident.\nPlease remember that mistakes mean £££ when not wearing your key chain. "</string>
@@ -32,4 +32,5 @@ Place the Rectangle area as on Vehicle Reg plate as shown in the image The app w
     <string name="please_confirm">Please confirm if you want to use your Email as your username for Login</string>
     <string name="use_email_as_username"><u>Use Email as Username</u></string>
     <string name="enter_defect">Enter Defect*</string>
+    <string name="enter_password">Enter your Password</string>
 </resources>
