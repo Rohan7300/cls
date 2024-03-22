@@ -8,13 +8,10 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentSpareWheelBinding
 import com.clebs.celerity.fragments.BaseInteriorFragment
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
-import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.NoInternetDialog
@@ -23,7 +20,6 @@ import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.isNetworkAvailable
 import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.showErrorDialog
-import com.clebs.celerity.utils.showToast
 
 class SpareWheelFragment : BaseInteriorFragment() {
 

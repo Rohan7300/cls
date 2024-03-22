@@ -86,6 +86,7 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.multidex:multidex:2.0.1")
+
     implementation("com.google.android.gms:play-services-vision:20.0.0")
     implementation("com.google.firebase:firebase-ml-vision:24.0.3")
 //    implementation("com.google.firebase:firebase-core:21.1.1")

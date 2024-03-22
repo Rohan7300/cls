@@ -35,7 +35,9 @@
         android:id="@+id/vechileMileageFragment"
         android:name="com.clebs.celerity.fragments.VechileMileageFragment"
         android:label="VechileMileageFragment"
-        tools:layout="@layout/fragment_vechile_mileage" />
+        tools:layout="@layout/fragment_vechile_mileage">
+
+    </fragment>
     <fragment
         android:id="@+id/spareWheelFragment"
         android:name="com.clebs.celerity.fragments.exterior.SpareWheelFragment"

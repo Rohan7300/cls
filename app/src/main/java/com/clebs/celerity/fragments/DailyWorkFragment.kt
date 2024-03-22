@@ -8,6 +8,7 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -15,12 +16,14 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.CheckBox
 import android.widget.ImageView
 import androidx.camera.core.CameraSelector
@@ -522,7 +525,12 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
             if (checkBox.isChecked) {
                 // findNavController().navigate(R.id.vechileMileageFragment)
                 navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
+//             deleteDialog.window!!.setWindowAnimations(R.style.ExplodeAnimation)
+//                val explosionField = ExplosionField.attach2Window(requireActivity())
+//                explosionField.explode(view)
+//                dismissAlertDialogWithAnimation(deleteDialog)
                 deleteDialog.dismiss()
+
 
             } else {
                 showToast("Please check the acknowledgment check", requireContext())
@@ -538,11 +546,19 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 false
             }
         }
+//        deleteDialog.window!!.getAttributes().windowAnimations = R.style.ExplodeAnimation;
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         deleteDialog.show();
 
     }
-
+//    private fun dismissAlertDialogWithAnimation(alertDialog: AlertDialog) {
+//        val explodeAnimation = AnimationUtils.loadAnimation(context, R.anim.explode)
+//        alertDialog.window?.decorView?.startAnimation(explodeAnimation)
+//
+//        Handler().postDelayed({
+//            alertDialog.dismiss()
+//        }, 300) // Delay the dismissal to match the animation duration
+//    }
     override fun onTryAgainClicked() {
         checkPermissions()
     }

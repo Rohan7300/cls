@@ -84,16 +84,15 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/image_radio"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/round_circle_white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/edt_mil"
-                        app:layout_constraintHorizontal_bias="0.933"
-                        app:layout_constraintStart_toStartOf="@+id/edt_mil"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:src="@drawable/defect_checbox_selector"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="30dp"
+                        app:layout_constraintTop_toTopOf="@id/edt_mil"
+                        app:layout_constraintBottom_toBottomOf="@id/edt_mil"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -193,17 +192,15 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/image_radio_two"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/round_circle_white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/edt_mil_two"
-                        app:layout_constraintHorizontal_bias="0.933"
-                        app:layout_constraintStart_toStartOf="@+id/edt_mil_two"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:src="@drawable/defect_checbox_selector"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@+id/edt_mil_two"
+                        app:layout_constraintTop_toTopOf="@id/edt_mil_two"
+                        android:layout_marginEnd="30dp" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

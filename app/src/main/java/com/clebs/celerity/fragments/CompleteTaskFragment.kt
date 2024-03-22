@@ -43,6 +43,9 @@ import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toRequestBody
+import com.elconfidencial.bubbleshowcase.BubbleShowCase
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
@@ -121,7 +124,44 @@ class CompleteTaskFragment : Fragment() {
         viewModel.GetDriverRouteInfoByDate(userId)
         viewModel.GetRideAlongDriverInfoByDate(userId)
 
+        BubbleShowCaseBuilder(requireActivity()) //Activity instance
+            .title("Start Inspection") //Any title for the bubble view
+            .description("Click here to capture Vehicle Images") //More detailed description
+            .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
+            //You can force the position of the arrow to change the location of the bubble.
+            .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
+            //Bubble background color
+            .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
+            .titleTextSize(16) //Title text size in SP (default value 16sp)
+            .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
+            .image(requireContext().resources.getDrawable(R.drawable.baseline_image_search_24)!!) //Bubble main image
+            .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
 
+            .listener(
+                (object : BubbleShowCaseListener { //Listener for user actions
+                    override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
+                        //Called when the user clicks the target
+                        bubbleShowCase.dismiss()
+                    }
+
+                    override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
+                        //Called when the user clicks the close button
+                        bubbleShowCase.dismiss()
+                    }
+
+                    override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
+                        //Called when the user clicks on the bubble
+                        bubbleShowCase.dismiss()
+                    }
+
+                    override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
+                        bubbleShowCase.dismiss()
+                        //Called when the user clicks on the background dim
+                    }
+                })
+            )
+            .targetView(mbinding.startinspection).highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
+            .show()
         clientUniqueID()
 
         mbinding.rlcomtwoClock.setOnClickListener {
