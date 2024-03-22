@@ -14,9 +14,9 @@
         <item name="colorOnSecondary">@color/black0</item>
 
     </style>
-    <style name="ExplodeAnimation">
+<!--    <style name="ExplodeAnimation">
         <item name="android:windowEnterAnimation">@anim/explode</item>
-    </style>
+    </style>-->
 <style name="ctanine" parent="Theme.MaterialComponents.NoActionBar">
 
 

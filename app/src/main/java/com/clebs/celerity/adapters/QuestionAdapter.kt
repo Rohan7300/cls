@@ -1,7 +1,9 @@
 package com.clebs.celerity.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.databinding.AdapterQuestionBinding
 import com.clebs.celerity.models.QuestionWithOption
@@ -14,6 +16,17 @@ class QuestionAdapter(var list:ArrayList<QuestionWithOption>):RecyclerView.Adapt
             val radio1 = binding.radio1
             val radio2 = binding.radio2
             val radio3 = binding.radio3
+
+            radio1.isChecked = false
+            radio2.isChecked = false
+            radio3.isChecked = false
+
+            binding.h1.setOnClickListener {
+                if(binding.radioLayQ1.isVisible)
+                binding.radioLayQ1.visibility = View.GONE
+                else
+                    binding.radioLayQ1.visibility = View.VISIBLE
+            }
 
             radio1.setOnClickListener {
                 item.selectedOption = "C"

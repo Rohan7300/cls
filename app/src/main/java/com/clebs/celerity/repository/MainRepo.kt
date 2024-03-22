@@ -417,7 +417,7 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun SaveQuestionaireStartup(
         request: SaveQuestionaireStartupRequest
-    ): SimpleStatusMsgResponse? {
+    ): SimpleQuestionResponse? {
         val response = ApiService.SaveQuestionaireStartup(request)
         if (response.isSuccessful)
             return response.body()
@@ -430,7 +430,7 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun SaveQuestionaireOnGoingActivities(
         request: SaveQuestionaireOnGoingActivitiesRequest
-    ): SimpleStatusMsgResponse? {
+    ): SimpleQuestionResponse? {
         val response = ApiService.SaveQuestionaireOnGoingActivities(request)
         if (response.isSuccessful)
             return response.body()
@@ -443,7 +443,7 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun SaveQuestionaireDeliverProcedures(
         request: SaveQuestionaireDeliverProceduresRequest
-    ): SimpleStatusMsgResponse? {
+    ): SimpleQuestionResponse? {
         val response = ApiService.SaveQuestionaireDeliverProcedures(request)
         if (response.isSuccessful)
             return response.body()
@@ -456,7 +456,7 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun SaveQuestionaireReturnToDeliveryStation(
         request: SaveQuestionaireReturnToDeliveryStationRequest
-    ): SimpleStatusMsgResponse? {
+    ): SimpleQuestionResponse? {
         val response = ApiService.SaveQuestionaireReturnToDeliveryStation(request)
         if (response.isSuccessful)
             return response.body()
@@ -469,7 +469,7 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun SubmitFinalQuestionairebyLeadDriver(
         request: SubmitFinalQuestionairebyLeadDriverRequest
-    ): SimpleStatusMsgResponse? {
+    ): SimpleQuestionResponse? {
         val response = ApiService.SubmitFinalQuestionairebyLeadDriver(request)
         if (response.isSuccessful)
             return response.body()

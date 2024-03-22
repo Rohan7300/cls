@@ -43,7 +43,7 @@ class QuestinareFragment : Fragment() {
             Log.d(TAG, "RIDEALONGID null \n LEADDRIVERID null")
         }
 
-        val headingList = arrayOf("Preparedness", "Start Up", "Gonig On","Delivery Procedures","Return")
+        val headingList = arrayOf("Preparedness", "Start Up", "Going On","Delivery Procedures","Return","Final Assesment")
         val str = "Observations and explanations must be conducted on a" +
                 " Nursery Level 1 route. The new driver should make at least 50 unassisted deliveries," +
                 " before being considered as fully trained. Where an individual is identified as not ready" +
@@ -69,17 +69,26 @@ class QuestinareFragment : Fragment() {
         val adapter = ViewAdaptor(
             requireContext(),
             (activity as HomeActivity).fragmentManager,
-            binding.tablay!!.tabCount,
+            headingList.size,
         )
         binding.viewPager.adapter = adapter
         binding.viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.tablay))
+
+        binding.tablay.getTabAt(0)?.select()
+
+        for (i in headingList.indices){
+            binding.tablay.getTabAt(i)?.text = headingList[i]
+        }
+
         binding.tablay!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 binding.viewPager!!.currentItem = tab.position
                 tab.text = headingList[tab.position]
             }
 
-            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+
+            }
 
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })

@@ -18,8 +18,8 @@ class RideAlongAdapter(
     inner class RideAlongViewHolder(private val binding: AdapterRideAlongBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: leadDriverIdItem) {
-            binding.tainerName.text = item.LeadDriverId.toString()
-            binding.traineeName.text = item.DriverId.toString()
+            binding.tainerName.text = prefs.userName
+            binding.traineeName.text = item.DriverName
             binding.edtIc.setOnClickListener {
                 val bundle = bundleOf(
                     "rideAlongID" to item.DriverId,

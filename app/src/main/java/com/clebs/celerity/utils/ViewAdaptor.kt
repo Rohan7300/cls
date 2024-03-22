@@ -5,15 +5,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.clebs.celerity.fragments.DeliveryProcedures
+import com.clebs.celerity.fragments.FinalAssesmentFragment
 import com.clebs.celerity.fragments.GoingOn
 import com.clebs.celerity.fragments.Prepardness
 import com.clebs.celerity.fragments.ReturnToStation
 import com.clebs.celerity.fragments.StartUp
 
-class ViewAdaptor(private val myContext: Context,
-                  fm: FragmentManager?,
-                  var totalTabs: Int
-    ) :
+class ViewAdaptor(
+    private val myContext: Context,
+    fm: FragmentManager?,
+    var totalTabs: Int
+) :
     FragmentPagerAdapter(fm!!) {
 
     init {
@@ -25,7 +27,6 @@ class ViewAdaptor(private val myContext: Context,
     }
 
     override fun getItem(position: Int): Fragment {
-
 
 
         return when (position) {
@@ -40,12 +41,19 @@ class ViewAdaptor(private val myContext: Context,
             2 -> {
                 GoingOn()
             }
-            3->{
+
+            3 -> {
                 DeliveryProcedures()
             }
-            4->{
+
+            4 -> {
                 ReturnToStation()
             }
+            5->{
+                FinalAssesmentFragment()
+            }
+
+
             else -> getItem(position)
         }
     }

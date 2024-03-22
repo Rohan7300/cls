@@ -6,13 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.QuestionAdapter
 import com.clebs.celerity.databinding.FragmentStartUpBinding
 import com.clebs.celerity.models.QuestionWithOption
+import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
+import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.showToast
 
 
 class StartUp : Fragment() {
     private lateinit var binding: FragmentStartUpBinding
+    private lateinit var viewModel: MainViewModel
+    private lateinit var pref: Prefs
+    lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,11 +40,49 @@ class StartUp : Fragment() {
             QuestionWithOption("Yard Safety *"),
             QuestionWithOption("loading Vehicle *")
         )
-
+        pref = Prefs.getInstance(requireContext())
+        viewModel = (activity as HomeActivity).viewModel
+        loadingDialog = (activity as HomeActivity).loadingDialog
 
         val adapter = QuestionAdapter(questions)
         binding.startUpRv.adapter = adapter
         binding.startUpRv.layoutManager = LinearLayoutManager(requireContext())
+
+        viewModel.liveDataQuestionaireStartup.observe(viewLifecycleOwner) {
+            loadingDialog.cancel()
+            if (it != null) {
+                viewModel.currentViewPage.postValue(2)
+                pref.quesID = it.QuestionId
+            }
+        }
+
+        binding.saveBTNStartup.setOnClickListener {
+            val allQuestionsSelected = adapter.areAllQuestionsSelected()
+            val comment =
+                if (binding.startupComment.text.isNullOrEmpty()) "" else binding.startupComment.text
+            if (allQuestionsSelected) {
+                val selectedOptions = questions.map { it.selectedOption }
+                saveStartupApi(selectedOptions, comment)
+            } else {
+                showToast("Not all selected", requireContext())
+            }
+        }
+    }
+
+    private fun saveStartupApi(selectedOptions: List<String>, comment: CharSequence) {
+        loadingDialog.show()
+        viewModel.SaveQuestionaireStartup(
+            SaveQuestionaireStartupRequest(
+                QuestionId = pref.quesID,
+                RaStartupClsDaSystem = selectedOptions[0],
+                RaStartupComments = comment.toString(),
+                RaStartupEmentor = selectedOptions[1],
+                RaStartupDvic = selectedOptions[2],
+                RaStartupUseOfTrollies = selectedOptions[3],
+                RaStartupYardSafty = selectedOptions[4],
+                RaStartupLoadingVehicle = selectedOptions[5]
+            )
+        )
     }
 
 

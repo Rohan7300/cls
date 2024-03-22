@@ -268,27 +268,27 @@ interface ApiService {
     @POST("/api/DriverQuestionnaire/SaveQuestionaireStartup")
     suspend fun SaveQuestionaireStartup(
         @Body request: SaveQuestionaireStartupRequest
-    ): Response<SimpleStatusMsgResponse>
+    ): Response<SimpleQuestionResponse>
 
     @POST("/api/DriverQuestionnaire/SaveQuestionaireOnGoingActivities")
     suspend fun SaveQuestionaireOnGoingActivities(
         @Body request: SaveQuestionaireOnGoingActivitiesRequest
-    ): Response<SimpleStatusMsgResponse>
+    ): Response<SimpleQuestionResponse>
 
     @POST("/api/DriverQuestionnaire/SaveQuestionaireDeliverProcedures")
     suspend fun SaveQuestionaireDeliverProcedures(
         @Body request: SaveQuestionaireDeliverProceduresRequest
-    ): Response<SimpleStatusMsgResponse>
+    ): Response<SimpleQuestionResponse>
 
     @POST("/api/DriverQuestionnaire/SaveQuestionaireReturnToDeliveryStation")
     suspend fun SaveQuestionaireReturnToDeliveryStation(
         @Body request: SaveQuestionaireReturnToDeliveryStationRequest
-    ): Response<SimpleStatusMsgResponse>
+    ): Response<SimpleQuestionResponse>
 
     @POST("/api/DriverQuestionnaire/SubmitFinalQuestionairebyLeadDriver")
     suspend fun SubmitFinalQuestionairebyLeadDriver(
         @Body request: SubmitFinalQuestionairebyLeadDriverRequest
-    ): Response<SimpleStatusMsgResponse>
+    ): Response<SimpleQuestionResponse>
 
     @GET("/api/RouteUpdate/GetRideAlongDriverInfoByDate/{leadDriverId}")
     suspend fun GetRideAlongDriverInfoByDate(@Path("leadDriverId") driverID: Int

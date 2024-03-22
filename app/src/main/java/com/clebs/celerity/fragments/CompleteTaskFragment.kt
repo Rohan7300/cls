@@ -475,9 +475,11 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.liveDatadriverInfobyRouteDate.observe(viewLifecycleOwner) { routes ->
             routes?.let {
-                adapter.list.clear()
-                adapter.list.addAll(it)
-                adapter.notifyDataSetChanged()
+                if(it!=null){
+                    adapter.list.clear()
+                    adapter.list.addAll(it)
+                    adapter.notifyDataSetChanged()
+                }
             } ?: run {
             }
         }
@@ -489,9 +491,11 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.liveDataRideAlongDriverInfoByDateResponse.observe(viewLifecycleOwner) { rideAlongs ->
             rideAlongs.let {
-                rideAlongAdapter.data.clear()
-                rideAlongAdapter.data.addAll(it!!)
-                rideAlongAdapter.notifyDataSetChanged()
+                if(it!=null){
+                    rideAlongAdapter.data.clear()
+                    rideAlongAdapter.data.addAll(it)
+                    rideAlongAdapter.notifyDataSetChanged()
+                }
             }
 
         }

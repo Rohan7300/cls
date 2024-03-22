@@ -273,6 +273,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                 firstName = it.firstName
                 lastName = it.lastName
+                Prefs.getInstance(this).userName = "$firstName $lastName"
+
                 isLeadDriver = it.IsLeadDriver
             }
         }

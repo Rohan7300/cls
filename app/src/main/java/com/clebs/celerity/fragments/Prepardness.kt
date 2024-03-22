@@ -15,6 +15,7 @@ import com.clebs.celerity.databinding.FragmentPrepardnessBinding
 import com.clebs.celerity.models.QuestionWithOption
 import com.clebs.celerity.models.requests.SaveQuestionairePreparednessRequest
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.ViewAdaptor
 import com.clebs.celerity.utils.showToast
@@ -23,7 +24,7 @@ class Prepardness : Fragment() {
     lateinit var binding: FragmentPrepardnessBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var pref:Prefs
-    private lateinit var viewPager: ViewAdaptor
+    private lateinit var loadingDialog:LoadingDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +43,7 @@ class Prepardness : Fragment() {
         )
         pref = Prefs.getInstance(requireContext())
         viewModel = (activity as HomeActivity).viewModel
+        loadingDialog = (activity as HomeActivity).loadingDialog
 
         val adapter = QuestionAdapter(questions)
         binding.prepRV.adapter = adapter
@@ -49,9 +51,11 @@ class Prepardness : Fragment() {
 
 
         viewModel.liveDataQuestionairePreparedness.observe(viewLifecycleOwner){
+            loadingDialog.cancel()
             if(it!=null){
                 Log.d("Preparedness",it.toString())
                 viewModel.currentViewPage.postValue(1)
+                pref.quesID = it.QuestionId
             }
         }
 
@@ -71,6 +75,7 @@ class Prepardness : Fragment() {
     }
 
     private fun savePrepardnessApi(selectedOptions: List<String>, comment: CharSequence?) {
+        loadingDialog.show()
         viewModel.SaveQuestionairePreparedness(SaveQuestionairePreparednessRequest(
             DaDailyWorkId = pref.daWID,
             LeadDriverId = pref.userID.toInt(),
