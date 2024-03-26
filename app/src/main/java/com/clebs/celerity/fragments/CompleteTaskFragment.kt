@@ -84,7 +84,6 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var fragmentManager: FragmentManager
     private var imageUploadLevel = 0
     var apiCount = 0
-
     var inspectionOfflineImagesCHeck: Boolean? = null
     private var inspectionstarted: Boolean = false
 
@@ -127,44 +126,44 @@ class CompleteTaskFragment : Fragment() {
         viewModel.GetDriverRouteInfoByDate(userId)
         viewModel.GetRideAlongDriverInfoByDate(userId)
 
-      /*  BubbleShowCaseBuilder(requireActivity()) //Activity instance
-            .title("Start Inspection") //Any title for the bubble view
-            .description("Click here to capture Vehicle Images") //More detailed description
-            .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
-            //You can force the position of the arrow to change the location of the bubble.
-            .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
-            //Bubble background color
-            .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
-            .titleTextSize(16) //Title text size in SP (default value 16sp)
-            .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
-            .image(requireContext().resources.getDrawable(R.drawable.baseline_image_search_24)!!) //Bubble main image
-            .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
+        /*  BubbleShowCaseBuilder(requireActivity()) //Activity instance
+              .title("Start Inspection") //Any title for the bubble view
+              .description("Click here to capture Vehicle Images") //More detailed description
+              .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
+              //You can force the position of the arrow to change the location of the bubble.
+              .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
+              //Bubble background color
+              .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
+              .titleTextSize(16) //Title text size in SP (default value 16sp)
+              .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
+              .image(requireContext().resources.getDrawable(R.drawable.baseline_image_search_24)!!) //Bubble main image
+              .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
 
-            .listener(
-                (object : BubbleShowCaseListener { //Listener for user actions
-                    override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
-                        //Called when the user clicks the target
-                        bubbleShowCase.dismiss()
-                    }
+              .listener(
+                  (object : BubbleShowCaseListener { //Listener for user actions
+                      override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
+                          //Called when the user clicks the target
+                          bubbleShowCase.dismiss()
+                      }
 
-                    override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
-                        //Called when the user clicks the close button
-                        bubbleShowCase.dismiss()
-                    }
+                      override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
+                          //Called when the user clicks the close button
+                          bubbleShowCase.dismiss()
+                      }
 
-                    override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
-                        //Called when the user clicks on the bubble
-                        bubbleShowCase.dismiss()
-                    }
+                      override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
+                          //Called when the user clicks on the bubble
+                          bubbleShowCase.dismiss()
+                      }
 
-                    override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
-                        bubbleShowCase.dismiss()
-                        //Called when the user clicks on the background dim
-                    }
-                })
-            )
-            .targetView(mbinding.startinspection).highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
-            .show()*/
+                      override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
+                          bubbleShowCase.dismiss()
+                          //Called when the user clicks on the background dim
+                      }
+                  })
+              )
+              .targetView(mbinding.startinspection).highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
+              .show()*/
         clientUniqueID()
 
         mbinding.rlcomtwoClock.setOnClickListener {
@@ -179,7 +178,10 @@ class CompleteTaskFragment : Fragment() {
         }
 
         mbinding.rideAlong.setOnClickListener {
-            navigateTo(R.id.rideAlongFragment, requireContext(), findNavController())
+            //navigateTo(R.id.rideAlongFragment, requireContext(), findNavController())
+            findNavController().popBackStack()
+            findNavController().navigate(R.id.rideAlongFragment)
+
         }
 
         mbinding.headerTop.icpnUser.setOnClickListener {
@@ -470,15 +472,24 @@ class CompleteTaskFragment : Fragment() {
             }
         })
 
+        viewModel.liveDataDeleteOnRideAlongRouteInfo.observe(viewLifecycleOwner) {
+            loadingDialog.cancel()
+            if (it != null) {
+                showDialog()
+                viewModel.GetRideAlongDriverInfoByDate(userId)
+            }
+        }
 
-        val adapter = DriverRouteAdapter(GetDriverRouteInfoByDateResponse())
+
+        val adapter =
+            DriverRouteAdapter(GetDriverRouteInfoByDateResponse(), loadingDialog, viewModel)
 
         mbinding.getDriverRouteId.adapter = adapter
         mbinding.getDriverRouteId.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.liveDatadriverInfobyRouteDate.observe(viewLifecycleOwner) { routes ->
             routes?.let {
-                if(it!=null){
+                if (it != null) {
                     adapter.list.clear()
                     adapter.list.addAll(it)
                     adapter.notifyDataSetChanged()
@@ -487,16 +498,34 @@ class CompleteTaskFragment : Fragment() {
             }
         }
 
-        val rideAlongAdapter = RideAlongAdapter(RideAlongDriverInfoByDateResponse(),findNavController(),Prefs.getInstance(requireContext()))
+
+        viewModel.liveDataDeleteOnRouteDetails.observe(viewLifecycleOwner) {
+            loadingDialog.cancel()
+            if (it != null) {
+                showDialog()
+                viewModel.GetDriverRouteInfoByDate(userId)
+            }
+        }
+        val rideAlongAdapter = RideAlongAdapter(
+            RideAlongDriverInfoByDateResponse(),
+            findNavController(),
+            Prefs.getInstance(requireContext()),
+            viewModel,
+            loadingDialog
+        )
 
         mbinding.questionareRv.adapter = rideAlongAdapter
         mbinding.questionareRv.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.liveDataRideAlongDriverInfoByDateResponse.observe(viewLifecycleOwner) { rideAlongs ->
+            hideDialog()
             rideAlongs.let {
-                if(it!=null){
+                if (it != null) {
                     rideAlongAdapter.data.clear()
                     rideAlongAdapter.data.addAll(it)
+                    rideAlongAdapter.notifyDataSetChanged()
+                } else {
+                    rideAlongAdapter.data.clear()
                     rideAlongAdapter.notifyDataSetChanged()
                 }
             }
@@ -537,43 +566,43 @@ class CompleteTaskFragment : Fragment() {
 
         dialogBinding.edtBreakstart.setOnClickListener {
             b1 = true
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart,1)
-            if(b1&&b2){
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart, 1)
+            if (b1 && b2) {
                 dialogBinding.timeTvNext.isEnabled = true
                 dialogBinding.timeTvNext.setTextColor(Color.WHITE)
             }
         }
         dialogBinding.edtBreakend.setOnClickListener {
             b2 = true
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend,2)
-            if(b1&&b2){
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend, 2)
+            if (b1 && b2) {
                 dialogBinding.timeTvNext.isEnabled = true
                 dialogBinding.timeTvNext.setTextColor(Color.WHITE)
             }
         }
 
-   /*     val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+        /*     val textWatcher = object : TextWatcher {
+                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                 }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
+                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                 }
 
-            override fun afterTextChanged(s: Editable?) {
-                val startText = dialogBinding.edtBreakstart.text.toString()
-                val endText = dialogBinding.edtBreakend.text.toString()
+                 override fun afterTextChanged(s: Editable?) {
+                     val startText = dialogBinding.edtBreakstart.text.toString()
+                     val endText = dialogBinding.edtBreakend.text.toString()
 
-                if (startText.isNotEmpty() && endText.isNotEmpty()) {
-                    breakStartTime = startText
-                    breakEndTime = endText
-                    dialogBinding.timeTvNext.isEnabled = true
-                    dialogBinding.timeTvNext.setTextColor(Color.WHITE)
-                }
-            }
-        }
+                     if (startText.isNotEmpty() && endText.isNotEmpty()) {
+                         breakStartTime = startText
+                         breakEndTime = endText
+                         dialogBinding.timeTvNext.isEnabled = true
+                         dialogBinding.timeTvNext.setTextColor(Color.WHITE)
+                     }
+                 }
+             }
 
-        dialogBinding.edtBreakstart.addTextChangedListener(textWatcher)
-        dialogBinding.edtBreakend.addTextChangedListener(textWatcher)*/
+             dialogBinding.edtBreakstart.addTextChangedListener(textWatcher)
+             dialogBinding.edtBreakend.addTextChangedListener(textWatcher)*/
 
 
         dialogBinding.timeTvNext.setOnClickListener {
@@ -811,7 +840,7 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.taskDetails.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.VISIBLE
-                mbinding.vehiclePicturesIB.setImageResource(R.drawable.singlecheckmark)
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
             }
 
             1 -> {

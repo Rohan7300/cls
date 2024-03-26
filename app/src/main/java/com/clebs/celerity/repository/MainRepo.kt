@@ -493,5 +493,30 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
+    suspend fun DeleteOnRideAlongRouteInfo(
+        routeID: Int
+    ):SimpleStatusMsgResponse?{
+        val response = ApiService.DeleteOnRideAlongRouteInfo(routeID)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+    suspend fun DeleteOnRouteDetails(
+        routeID: Int
+    ):SimpleStatusMsgResponse?{
+        val response = ApiService.DeleteOnRouteDetails(routeID)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
 
 }

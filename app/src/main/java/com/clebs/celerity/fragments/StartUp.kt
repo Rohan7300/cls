@@ -44,7 +44,7 @@ class StartUp : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
 
-        val adapter = QuestionAdapter(questions)
+        val adapter = QuestionAdapter(questions,requireContext())
         binding.startUpRv.adapter = adapter
         binding.startUpRv.layoutManager = LinearLayoutManager(requireContext())
 

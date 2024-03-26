@@ -131,7 +131,7 @@ class OnRoadHoursFragment : Fragment() {
                 RtComment = "$routeComment",
                 RtType = selectedRouteId,
                 RtDwId = dwID,
-                RtId = 0,
+                RtId = 1,
                 RtFinishMileage = totalMileage?.toInt() ?: 0,
                 RtLocationId = selectedLocId,
                 RtName = routeName!!,
@@ -255,7 +255,7 @@ class OnRoadHoursFragment : Fragment() {
                 parent?.let { nonNullParent ->
                     if (position != 0) { // Skip the dummy item
                         val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
-                        selectedItem.let { nonNullSelectedItem ->
+                        selectedItem.let {
                             when (spinner) {
                                 binding.spinnerLocation -> {
                                     selectedLocId = ids[position - 1]

@@ -52,7 +52,7 @@ class DeliveryProcedures : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
 
-        val adapter = QuestionAdapter(questions)
+        val adapter = QuestionAdapter(questions,requireContext())
         binding.DeliveryRV.adapter = adapter
         binding.DeliveryRV.layoutManager = LinearLayoutManager(requireContext())
 

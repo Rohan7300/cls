@@ -1,18 +1,23 @@
 package com.clebs.celerity.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.clebs.celerity.R
 import com.clebs.celerity.databinding.AdapterQuestionBinding
 import com.clebs.celerity.models.QuestionWithOption
 
-class QuestionAdapter(var list:ArrayList<QuestionWithOption>):RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder>(){
+class QuestionAdapter(var list: ArrayList<QuestionWithOption>,var context:Context) :
+    RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder>() {
 
-    inner class QuestionViewHolder(val binding:AdapterQuestionBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(item: QuestionWithOption){
-            binding.heading.text =item.question
+    inner class QuestionViewHolder(val binding: AdapterQuestionBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: QuestionWithOption) {
+            binding.heading.text = item.question
             val radio1 = binding.radio1
             val radio2 = binding.radio2
             val radio3 = binding.radio3
@@ -22,10 +27,14 @@ class QuestionAdapter(var list:ArrayList<QuestionWithOption>):RecyclerView.Adapt
             radio3.isChecked = false
 
             binding.h1.setOnClickListener {
-                if(binding.radioLayQ1.isVisible)
-                binding.radioLayQ1.visibility = View.GONE
-                else
+                if (binding.radioLayQ1.isVisible) {
+                    binding.radioLayQ1.visibility = View.GONE
+                    binding.badgeArrow.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.arrow_left))
+                } else {
                     binding.radioLayQ1.visibility = View.VISIBLE
+                    binding.badgeArrow.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.down_arrow))
+                }
+
             }
 
             radio1.setOnClickListener {

@@ -48,6 +48,7 @@ import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -293,5 +294,11 @@ interface ApiService {
     @GET("/api/RouteUpdate/GetRideAlongDriverInfoByDate/{leadDriverId}")
     suspend fun GetRideAlongDriverInfoByDate(@Path("leadDriverId") driverID: Int
     ): Response<RideAlongDriverInfoByDateResponse>
+
+    @DELETE("/api/RouteUpdate/DeleteOnRideAlongRouteInfo/{routeId}")
+    suspend fun DeleteOnRideAlongRouteInfo(@Path("routeId") routeId: Int):Response<SimpleStatusMsgResponse>
+
+    @DELETE("/api/RouteUpdate/DeleteOnRouteDetails/{routeId}")
+    suspend fun DeleteOnRouteDetails(@Path("routeId") routeId: Int):Response<SimpleStatusMsgResponse>
 
 }

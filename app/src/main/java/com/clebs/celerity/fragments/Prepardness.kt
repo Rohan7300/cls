@@ -45,7 +45,7 @@ class Prepardness : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
 
-        val adapter = QuestionAdapter(questions)
+        val adapter = QuestionAdapter(questions,requireContext())
         binding.prepRV.adapter = adapter
         binding.prepRV.layoutManager = LinearLayoutManager(requireContext())
 

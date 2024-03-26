@@ -83,6 +83,8 @@ class MainViewModel(
     val liveDataQuestionareDeliveryProcedures = MutableLiveData<SimpleQuestionResponse?>()
     val liveDataQuestionareReturn = MutableLiveData<SimpleQuestionResponse?>()
     val liveDataFinalAssesment = MutableLiveData<SimpleQuestionResponse?>()
+    val liveDataDeleteOnRideAlongRouteInfo = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataDeleteOnRouteDetails = MutableLiveData<SimpleStatusMsgResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply{
@@ -473,6 +475,33 @@ class MainViewModel(
             }
             result.onSuccess {response->
                 liveDataFinalAssesment.postValue(response)
+            }
+            result.onFailure {ex->
+                Log.e("RideAlongDriverInfo Exception","Error ${ex.message}")
+            }
+        }
+    }
+
+    fun DeleteOnRideAlongRouteInfo(routeID: Int){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.DeleteOnRideAlongRouteInfo(routeID)
+            }
+            result.onSuccess { response->
+                liveDataDeleteOnRideAlongRouteInfo.postValue(response)
+            }
+            result.onFailure {ex->
+                Log.e("RideAlongDriverInfo Exception","Error ${ex.message}")
+            }
+        }
+    }
+    fun DeleteOnRouteDetails(routeID: Int){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.DeleteOnRouteDetails(routeID)
+            }
+            result.onSuccess { response->
+                liveDataDeleteOnRouteDetails.postValue(response)
             }
             result.onFailure {ex->
                 Log.e("RideAlongDriverInfo Exception","Error ${ex.message}")

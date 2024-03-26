@@ -6,14 +6,16 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.R
+import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.AdapterRideAlongBinding
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.leadDriverIdItem
+import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 
 class RideAlongAdapter(
     var data: RideAlongDriverInfoByDateResponse,
-    var navController: NavController,var prefs: Prefs
+    var navController: NavController,var prefs: Prefs,var mainViewModel: MainViewModel,var loadingDialog: LoadingDialog
 ) : RecyclerView.Adapter<RideAlongAdapter.RideAlongViewHolder>() {
     inner class RideAlongViewHolder(private val binding: AdapterRideAlongBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -29,6 +31,10 @@ class RideAlongAdapter(
                 prefs.daWID = item.DawId
                 prefs.currRtId = item.RtId
                 navController.navigate(R.id.questinareFragment, bundle)
+            }
+            binding.deleteRideAlong.setOnClickListener {
+                loadingDialog.show()
+                mainViewModel.DeleteOnRideAlongRouteInfo(item.RtId)
             }
         }
     }

@@ -48,7 +48,7 @@ class GoingOn : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
 
-        val adapter = QuestionAdapter(questions)
+        val adapter = QuestionAdapter(questions,requireContext())
         binding.GoingOnRV.adapter = adapter
         binding.GoingOnRV.layoutManager = LinearLayoutManager(requireContext())
 

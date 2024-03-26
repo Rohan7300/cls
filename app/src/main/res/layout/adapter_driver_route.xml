@@ -39,6 +39,7 @@
 
             <ImageView
                 android:layout_width="20dp"
+                android:id="@+id/delRouteIV"
                 android:layout_height="20dp"
                 android:src="@drawable/delete_ic_red" />
         </LinearLayout>

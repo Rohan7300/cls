@@ -44,7 +44,7 @@ class ReturnToStation : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
 
-        val adapter = QuestionAdapter(questions)
+        val adapter = QuestionAdapter(questions,requireContext())
         binding.ReturnRV.adapter = adapter
         binding.ReturnRV.layoutManager = LinearLayoutManager(requireContext())
 

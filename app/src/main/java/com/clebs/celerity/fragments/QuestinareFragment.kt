@@ -84,10 +84,11 @@ class QuestinareFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 binding.viewPager!!.currentItem = tab.position
                 tab.text = headingList[tab.position]
+                tab.text = tab.contentDescription
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
-
+                tab.text = tab.contentDescription?.substring(0, 3)
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {}
