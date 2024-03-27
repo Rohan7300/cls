@@ -184,6 +184,7 @@ class RideAlongFragment : Fragment() {
                     showToast("Please!! try again.", requireContext())
                 }
             }
+
         }
     }
 

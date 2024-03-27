@@ -29,6 +29,7 @@ import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
+import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
@@ -532,5 +533,20 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
+    suspend fun GetRideAlongLeadDriverQuestion(
+        driverId: Int,
+        routeID: Int,
+        leadDriverId: Int,
+        daDailyWorkId:Int
+    ):GetRideAlongLeadDriverQuestionResponse?{
+        val response = ApiService.GetRideAlongLeadDriverQuestion(driverId,routeID,leadDriverId,daDailyWorkId)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response SubmitRideAlongDriverFeedback : $errorBody")
+        }
+        return null
+    }
 
 }

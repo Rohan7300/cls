@@ -9,13 +9,10 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -44,9 +41,6 @@ import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toRequestBody
-import com.elconfidencial.bubbleshowcase.BubbleShowCase
-import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
-import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
@@ -481,8 +475,7 @@ class CompleteTaskFragment : Fragment() {
         }
 
 
-        val adapter =
-            DriverRouteAdapter(GetDriverRouteInfoByDateResponse(), loadingDialog, viewModel)
+        val adapter = DriverRouteAdapter(GetDriverRouteInfoByDateResponse(), loadingDialog, viewModel)
 
         mbinding.getDriverRouteId.adapter = adapter
         mbinding.getDriverRouteId.layoutManager = LinearLayoutManager(requireContext())
@@ -491,6 +484,9 @@ class CompleteTaskFragment : Fragment() {
             loadingDialog.cancel()
             routes?.let {
                 if (it != null) {
+                    if(it.size>0){
+                        mbinding.routeNameTV.visibility = View.VISIBLE
+                    }
                     adapter.list.clear()
                     adapter.list.addAll(it)
                     adapter.notifyDataSetChanged()
@@ -512,7 +508,9 @@ class CompleteTaskFragment : Fragment() {
             findNavController(),
             Prefs.getInstance(requireContext()),
             viewModel,
-            loadingDialog
+            loadingDialog,
+            viewLifecycleOwner,
+            requireContext()
         )
 
         mbinding.questionareRv.adapter = rideAlongAdapter

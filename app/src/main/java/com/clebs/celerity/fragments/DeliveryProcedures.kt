@@ -33,6 +33,11 @@ class DeliveryProcedures : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        pref = Prefs.getInstance(requireContext())
+        viewModel = (activity as HomeActivity).viewModel
+        loadingDialog = (activity as HomeActivity).loadingDialog
+
         val questions = arrayListOf(
             QuestionWithOption("Age verification Deliveries *"),
             QuestionWithOption("Handle all packages with care *"),
@@ -75,7 +80,6 @@ class DeliveryProcedures : Fragment() {
                 if (allQuestionsSelected) {
                     val selectedOptions = questions.map { it.selectedOption }
                     saveDeliveryProcedureApi(selectedOptions, comment)
-
                 } else {
                     showToast("Not all selected", requireContext())
                 }

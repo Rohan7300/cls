@@ -33,6 +33,7 @@ import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
+import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
@@ -88,6 +89,8 @@ class MainViewModel(
     val liveDataDeleteOnRideAlongRouteInfo = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataDeleteOnRouteDetails = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataSubmitRideAlongDriverFeedbackRequest = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataGetRideAlongLeadDriverQuestion =
+        MutableLiveData<GetRideAlongLeadDriverQuestionResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -523,6 +526,25 @@ class MainViewModel(
             }
             result.onSuccess { response ->
                 liveDataSubmitRideAlongDriverFeedbackRequest.postValue(response)
+            }
+            result.onFailure { ex ->
+                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun GetRideAlongLeadDriverQuestion(
+        driverId: Int,
+        routeID: Int,
+        leadDriverId: Int,
+        daDailyWorkId: Int
+    ) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.GetRideAlongLeadDriverQuestion(driverId, routeID, leadDriverId, daDailyWorkId)
+            }
+            result.onSuccess { response ->
+                liveDataGetRideAlongLeadDriverQuestion.postValue(response)
             }
             result.onFailure { ex ->
                 Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")

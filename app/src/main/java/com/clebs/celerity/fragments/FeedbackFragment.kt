@@ -17,8 +17,11 @@ import com.clebs.celerity.databinding.FragmentFeedbackBinding
 import com.clebs.celerity.models.QuestionWithOption
 import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.CustDialog
+import com.clebs.celerity.utils.CustDialog2
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.SignatureListener
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.showToast
 
@@ -56,8 +59,6 @@ class FeedbackFragment : Fragment() {
         pref = Prefs.getInstance(requireContext())
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
-        val retry =binding.RetryLay
-        val drawView = binding.drawView
         pref.submittedFeedback = false
 
 
@@ -73,22 +74,25 @@ class FeedbackFragment : Fragment() {
                 }
             }
          }
-        drawView.clearSignature()
-        retry.setOnClickListener {
-            drawView.clearSignature()
-        }
-        binding.feedbackSaveBtn.setOnClickListener {
-            val areAllQuestionsSelected = adapter.areAllQuestionsSelected()
-            if(DrawViewClass.pathList.isEmpty()){
-                showToast("Please add signature!!", requireContext())
-            }
-            else if(areAllQuestionsSelected){
+
+
+        val dialog = CustDialog2()
+        dialog.setSignatureListener(object : SignatureListener {
+            override fun onSignatureSaved(bitmap: Bitmap) {
                 val selectedOptions = questions.map { it.selectedOption }
-                val signatureBitmap: Bitmap = drawView.getBitmap()
-                val bse64 = "data:image/png;base64," + bitmapToBase64(signatureBitmap)
+                val bse64 = "data:image/png;base64," + bitmapToBase64(bitmap)
                 saveFeedbackQuestions(selectedOptions,bse64)
+            }
+        })
+        dialog.isCancelable = false
+
+
+        binding.feedbackAddSignature.setOnClickListener {
+            val areAllQuestionsSelected = adapter.areAllQuestionsSelected()
+            if(areAllQuestionsSelected){
+                dialog.show((activity as HomeActivity).supportFragmentManager, "sign")
             }else{
-                showToast("Not all selected", requireContext())
+                showToast("Please complete questioner first!!", requireContext())
             }
         }
 

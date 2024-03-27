@@ -368,13 +368,37 @@
 
                         </RelativeLayout>
 
+                        <LinearLayout
+                            android:id="@+id/routeNameTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginHorizontal="16dp"
+                            android:layout_below="@+id/filled_routes"
+                            android:visibility="gone"
+                            android:padding="10dp"
+                            >
+                        <TextView
 
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
+                            android:text="Route Name"
+                            android:textSize="14sp"
+                             />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="3dp"
+                            android:background="#4A4A4A" />
+                        </LinearLayout>
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/getDriverRouteId"
                             android:layout_width="match_parent"
+                            android:layout_below="@+id/routeNameTV"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="16dp"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="4dp"
                             android:layout_marginBottom="20dp" />
 
 
@@ -415,10 +439,10 @@
                             android:id="@+id/questionare_rv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_below="@id/Add_route"
                             android:layout_marginHorizontal="16dp"
                             android:layout_marginTop="8dp"
-                            android:layout_marginBottom="20dp"
-                            android:layout_below="@id/Add_route" />
+                            android:layout_marginBottom="20dp" />
 
                         <RelativeLayout
                             android:id="@+id/ride_along"

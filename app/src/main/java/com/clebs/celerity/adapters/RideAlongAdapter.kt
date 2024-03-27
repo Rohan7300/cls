@@ -1,8 +1,11 @@
 package com.clebs.celerity.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.R
@@ -15,18 +18,62 @@ import com.clebs.celerity.utils.Prefs
 
 class RideAlongAdapter(
     var data: RideAlongDriverInfoByDateResponse,
-    var navController: NavController,var prefs: Prefs,var mainViewModel: MainViewModel,var loadingDialog: LoadingDialog
+    var navController: NavController,
+    var prefs: Prefs,
+    var mainViewModel: MainViewModel,
+    var loadingDialog: LoadingDialog,
+    var viewLifecycleOwner: LifecycleOwner,
+    var context: Context
 ) : RecyclerView.Adapter<RideAlongAdapter.RideAlongViewHolder>() {
     inner class RideAlongViewHolder(private val binding: AdapterRideAlongBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: leadDriverIdItem) {
             binding.tainerName.text = prefs.userName
             binding.traineeName.text = item.DriverName
+
+            mainViewModel.GetRideAlongLeadDriverQuestion(
+                item.DriverId,
+                item.RtId,
+                item.LeadDriverId,
+                item.DawId
+            )
+            mainViewModel.liveDataGetRideAlongLeadDriverQuestion.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    if (it.RaIsSubmitted) {
+                        binding.edtIc.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                context,
+                                R.drawable.done
+                            )
+                        )
+                        binding.edtIc.isClickable = false
+                    } else {
+                        binding.edtIc.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                context,
+                                R.drawable.edit_orange
+                            )
+                        )
+                        binding.edtIc.isClickable = false
+                    }
+                } else {
+                    binding.edtIc.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.edit_orange
+                        )
+                    )
+                    binding.edtIc.isClickable = false
+                }
+            }
+
+
             binding.edtIc.setOnClickListener {
                 val bundle = bundleOf(
                     "rideAlongID" to item.DriverId,
                     "leadDriverID" to item.LeadDriverId
                 )
+
                 prefs.currRideAlongID = item.DriverId
                 prefs.daWID = item.DawId
                 prefs.currRtId = item.RtId
