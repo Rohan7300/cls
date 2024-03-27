@@ -54,7 +54,7 @@ class RideAlongAdapter(
                                 R.drawable.edit_orange
                             )
                         )
-                        binding.edtIc.isClickable = false
+                        binding.edtIc.isClickable = true
                     }
                 } else {
                     binding.edtIc.setImageDrawable(
@@ -63,7 +63,7 @@ class RideAlongAdapter(
                             R.drawable.edit_orange
                         )
                     )
-                    binding.edtIc.isClickable = false
+                    binding.edtIc.isClickable = true
                 }
             }
 

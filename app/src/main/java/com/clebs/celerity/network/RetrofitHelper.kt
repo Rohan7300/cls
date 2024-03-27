@@ -12,9 +12,9 @@ object RetrofitHelper {
     fun getInstance(): Retrofit {
 
         val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(20, TimeUnit.SECONDS)
-            .writeTimeout(20, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(20, TimeUnit.MINUTES)
+            .writeTimeout(20, TimeUnit.MINUTES)
+            .readTimeout(30, TimeUnit.MINUTES)
             .build()
         return Retrofit.Builder().baseUrl(baseUrl)
             .client(okHttpClient)

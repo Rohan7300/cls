@@ -1,5 +1,6 @@
 package com.clebs.celerity.fragments
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -81,6 +82,21 @@ class CompleteTaskFragment : Fragment() {
     var inspectionOfflineImagesCHeck: Boolean? = null
     private var inspectionstarted: Boolean = false
 
+    companion object{
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
+            ).apply {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    add(Manifest.permission.READ_MEDIA_VIDEO)
+                    add(Manifest.permission.READ_MEDIA_IMAGES)
+                    add(Manifest.permission.READ_MEDIA_AUDIO)
+                }
+            }.toTypedArray()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
