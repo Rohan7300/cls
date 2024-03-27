@@ -79,6 +79,14 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getInt("quesID", 0)
         set(value) = sharedPreferences.edit().putInt("quesID", value).apply()
 
+    var submittedFeedback:Boolean
+        get() = sharedPreferences.getBoolean("feedback",false)
+        set(value) = sharedPreferences.edit().putBoolean("feedback",value).apply()
+
+    var submittedRideAlong:Boolean
+        get() = sharedPreferences.getBoolean("rideAlong",false)
+        set(value) = sharedPreferences.edit().putBoolean("rideAlong",value).apply()
+
     var accessTokenclearquote: String
         get() {
             return sharedPreferences.getString(USER_ACCESS_TOKEN, " ") ?: " "

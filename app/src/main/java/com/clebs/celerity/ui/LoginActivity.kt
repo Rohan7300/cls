@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
         val mainRepo = MainRepo(apiService)
         loadingDialog = LoadingDialog(this)
 
-        getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+        //getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
 
@@ -133,7 +133,7 @@ class LoginActivity : AppCompatActivity() {
                         intent.putExtra("signature_required", "0")
                         startActivity(intent)
                     } else {
-                        val options = ActivityOptions.makeSceneTransitionAnimation(this)
+                     //   val options = ActivityOptions.makeSceneTransitionAnimation(this)
                         val intent = Intent(this, HomeActivity::class.java)
                         intent.putExtra("no_signature_required", "0")
                         startActivity(intent)

@@ -30,11 +30,12 @@
                 android:id="@+id/heading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="5dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins_semibold"
-                android:text="Fit to work [PPE/ID Badge]*"
+                android:text="Does this new DA know where to fill up the oil/water/adblue/screenwash?*"
                 android:textColor="#675D5D"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -63,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:fontFamily="@font/poppins"
-                    android:text="[C] Competent  "
+                    android:text="Yes  "
                     android:textSize="14sp" />
 
                 <RadioButton
@@ -87,35 +88,11 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:fontFamily="@font/poppins"
-                    android:text="[DS] Development Required  "
+                    android:text="No  "
                     android:textSize="14sp" />
 
                 <RadioButton
                     android:id="@+id/radio2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/radioLay3Q1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/o3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:fontFamily="@font/poppins"
-                    android:text="[BS] Below Standard   "
-                    android:textSize="14sp" />
-
-                <RadioButton
-                    android:id="@+id/radio3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"

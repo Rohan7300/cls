@@ -32,6 +32,12 @@ class RideAlongAdapter(
                 prefs.currRtId = item.RtId
                 navController.navigate(R.id.questinareFragment, bundle)
             }
+            binding.trainerFeedbackIV.setOnClickListener {
+                prefs.currRideAlongID = item.DriverId
+                prefs.daWID = item.DawId
+                prefs.currRtId = item.RtId
+                navController.navigate(R.id.feedbackFragment)
+            }
             binding.deleteRideAlong.setOnClickListener {
                 loadingDialog.show()
                 mainViewModel.DeleteOnRideAlongRouteInfo(item.RtId)

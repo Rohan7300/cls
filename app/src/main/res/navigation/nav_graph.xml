@@ -210,4 +210,8 @@
         android:id="@+id/startUp"
         android:name="com.clebs.celerity.fragments.StartUp"
         android:label="StartUp" />
+    <fragment
+        android:id="@+id/feedbackFragment"
+        android:name="com.clebs.celerity.fragments.FeedbackFragment"
+        android:label="FeedbackFragment" />
 </navigation>

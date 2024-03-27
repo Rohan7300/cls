@@ -20,6 +20,7 @@ import com.clebs.celerity.models.requests.SaveQuestionaireReturnToDeliveryStatio
 import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
+import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.requests.logoutModel
@@ -300,5 +301,8 @@ interface ApiService {
 
     @DELETE("/api/RouteUpdate/DeleteOnRouteDetails/{routeId}")
     suspend fun DeleteOnRouteDetails(@Path("routeId") routeId: Int):Response<SimpleStatusMsgResponse>
+
+    @POST("/api/DriverQuestionnaire/SubmitRideAlongDriverFeedback")
+    suspend fun SubmitRideAlongDriverFeedback(@Body request: SubmitRideAlongDriverFeedbackRequest):Response<SimpleStatusMsgResponse>
 
 }

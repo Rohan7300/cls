@@ -17,6 +17,7 @@ import com.clebs.celerity.models.requests.SaveQuestionaireReturnToDeliveryStatio
 import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
+import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.response.LoginResponse
@@ -514,6 +515,19 @@ class MainRepo(private val ApiService: ApiService) {
         else{
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun SubmitRideAlongDriverFeedback(
+        request: SubmitRideAlongDriverFeedbackRequest
+    ):SimpleStatusMsgResponse?{
+        val response = ApiService.SubmitRideAlongDriverFeedback(request)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response SubmitRideAlongDriverFeedback : $errorBody")
         }
         return null
     }

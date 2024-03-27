@@ -57,7 +57,6 @@
             android:name=".ui.LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|screenSize"
             android:noHistory="true"></activity>
         <activity
             android:name=".ui.SplashActivity"

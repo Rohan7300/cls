@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".fragments.FeedbackFragment">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:padding="15dp"
+                android:text=" Feedback Questionner"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/feedbackQuestionare"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:fontFamily="@font/poppins"
+                android:text="Ride-along Driver Signature here:"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+        <LinearLayout
+            android:id="@+id/r4"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/dashed_boundry"
+            >
+
+            <com.clebs.celerity.DrawViewClass
+                android:id="@+id/drawView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp" />
+
+        </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/RetryLay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:background="@drawable/boundry"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/reImg"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/reload"
+                    app:tint="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:layout_alignLeft="@+id/reImg"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="30dp"
+                    android:text="Retry"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/cancel_button"
+                    android:ems="5"
+                    android:id="@+id/feedbackCancelBtn"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="10dp"
+                    android:text="Cancel"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/feedbackSaveBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/cancel_button"
+                    android:backgroundTint="#FD7C40"
+                    android:ems="5"
+                    android:fontFamily="@font/poppins"
+                    android:text="Save"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

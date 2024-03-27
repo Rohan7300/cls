@@ -42,7 +42,7 @@ class HomedemoFragment : Fragment() {
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentHomedemoBinding.inflate(inflater, container, false)
 
-            val pie =   AnyChart.pie3d()
+            /*val pie =   AnyChart.pie3d()
             pie.setOnClickListener(object :
                 ListenersInterface.OnClickListener(arrayOf<String>("x", "value")) {
                 override fun onClick(event: Event) {
@@ -63,7 +63,7 @@ class HomedemoFragment : Fragment() {
                 .itemsLayout(LegendLayout.HORIZONTAL)
                 .align(Align.CENTER)
 
-            mbinding.anychartview.setChart(pie)
+            mbinding.anychartview.setChart(pie)*/
 
 //            mbinding.web.loadUrl("C:\\Users\\chakshit.awasthi\\AppData\\Roaming\\Google\\AndroidStudio2023.1\\scratches\\scratch.html")
   /*          val rotateAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.anam)

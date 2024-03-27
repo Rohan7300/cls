@@ -20,6 +20,7 @@ import com.clebs.celerity.databinding.FragmentRideAlongBinding
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 
 
@@ -31,6 +32,7 @@ class RideAlongFragment : Fragment() {
     var selectedVehicleId: Int? = null
     var selectedVehicleName = ""
     var selectedRouteId: Int? = null
+    private lateinit var pref: Prefs
     private var isSpinnerTouched = false
 
     var rtAddMode: String = "A"
@@ -63,6 +65,9 @@ class RideAlongFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
         leadDriverID = (activity as HomeActivity).userId
+        pref = Prefs.getInstance(requireContext())
+        pref.submittedRideAlong = false
+
         clickListeners()
         observers()
 
@@ -172,10 +177,12 @@ class RideAlongFragment : Fragment() {
 
         viewModel.livedataRideAlongSubmitApiRes.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            if (it != null) {
-                findNavController().navigate(R.id.completeTaskFragment)
-            } else {
-                showToast("Please!! try again.", requireContext())
+            if(pref.submittedRideAlong){
+                if (it != null) {
+                    findNavController().navigate(R.id.completeTaskFragment)
+                } else {
+                    showToast("Please!! try again.", requireContext())
+                }
             }
         }
     }
@@ -219,6 +226,7 @@ class RideAlongFragment : Fragment() {
 
 
     private fun rideAlongApi() {
+        pref.submittedRideAlong = true
         loadingDialog.show()
         viewModel.AddOnRideAlongRouteInfo(
             AddOnRideAlongRouteInfoRequest(
