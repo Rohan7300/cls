@@ -134,8 +134,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         fragmentManager = this.supportFragmentManager
         bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
-        bottomNavigationView.menu.findItem(R.id.passwords).setTooltipText("Notifications")
-
+//        bottomNavigationView.menu.findItem(R.id.passwords).setTooltipText("Notifications")
+        getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         try {
             val apiService = RetrofitService.getInstance().create(ApiService::class.java)
             val mainRepo = MainRepo(apiService)
@@ -221,12 +221,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         true
                     }
 
-                    R.id.passwords -> {
-                        ActivityHomeBinding.title.text = "Notifications"
-                        navController.navigate(R.id.notifficationsFragment)
-
-                        true
-                    }
+//                    R.id.passwords -> {
+//                        ActivityHomeBinding.title.text = "Notifications"
+//                        navController.navigate(R.id.notifficationsFragment)
+//
+//                        true
+//                    }
 
                     R.id.tickets -> {
                         ActivityHomeBinding.title.text = "User Tickets"
@@ -241,7 +241,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
             }
             ActivityHomeBinding.imgLogout.setOnClickListener {
-                showAlertLogout()
+//                showAlertLogout()
             }
         } catch (e: Exception) {
             RetrofitService.handleNetworkError(e, fragmentManager)

@@ -14,10 +14,10 @@
         android:id="@+id/invoices"
         android:icon="@drawable/invoices"
         android:title="Invoices" />
-    <item
-        android:id="@+id/passwords"
-        android:icon="@drawable/passwords"
-        android:title="Alerts" />
+<!--    <item-->
+<!--        android:id="@+id/passwords"-->
+<!--        android:icon="@drawable/passwords"-->
+<!--        android:title="Alerts" />-->
     <item
         android:id="@+id/tickets"
         android:icon="@drawable/tickets_ic"

@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
         val mainRepo = MainRepo(apiService)
         loadingDialog = LoadingDialog(this)
 
-
+        getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
 

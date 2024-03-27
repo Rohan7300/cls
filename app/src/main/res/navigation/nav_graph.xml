@@ -21,11 +21,11 @@
         android:name="com.clebs.celerity.fragments.InvoicesFragment"
         android:label="fragment_invoices"
         tools:layout="@layout/fragment_invoices" />
-    <fragment
-        android:id="@+id/passwordsFragment"
-        android:name="com.clebs.celerity.fragments.PasswordsFragment"
-        android:label="fragment_passwords"
-        tools:layout="@layout/fragment_passwords" />
+<!--    <fragment-->
+<!--        android:id="@+id/passwordsFragment"-->
+<!--        android:name="com.clebs.celerity.fragments.PasswordsFragment"-->
+<!--        android:label="fragment_passwords"-->
+<!--        tools:layout="@layout/fragment_passwords" />-->
     <fragment
         android:id="@+id/ticketsFragment"
         android:name="com.clebs.celerity.fragments.TicketsFragment"

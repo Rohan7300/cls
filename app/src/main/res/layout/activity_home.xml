@@ -46,7 +46,7 @@
                 android:id="@+id/img_logout"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/baseline_login_24"
+                android:src="@drawable/baseline_notifications_none_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
