@@ -488,6 +488,7 @@ class CompleteTaskFragment : Fragment() {
         mbinding.getDriverRouteId.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.liveDatadriverInfobyRouteDate.observe(viewLifecycleOwner) { routes ->
+            loadingDialog.cancel()
             routes?.let {
                 if (it != null) {
                     adapter.list.clear()

@@ -127,11 +127,10 @@ class OnRoadHoursFragment : Fragment() {
         }
         viewModel.AddOnRouteInfo(
             AddOnRouteInfoRequest(
-                RtAddMode = "",
+                RtAddMode = "A",
                 RtComment = "$routeComment",
-                RtType = selectedRouteId,
+                RtTypeId = selectedRouteId,
                 RtDwId = dwID,
-                RtId = 1,
                 RtFinishMileage = totalMileage?.toInt() ?: 0,
                 RtLocationId = selectedLocId,
                 RtName = routeName!!,

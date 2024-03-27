@@ -5,12 +5,11 @@ data class AddOnRouteInfoRequest(
     val RtComment: String,
     val RtDwId: Int,
     val RtFinishMileage: Int,
-    val RtId: Int,
+    val RtTypeId: Int,
     val RtLocationId: Int,
     val RtName: String,
     val RtNoOfParcelsDelivered: Int,
     val RtNoParcelsbroughtback: Int,
-    val RtType: Int,
     val RtUsrId: Int,
     val VehicleId: Int
 )
