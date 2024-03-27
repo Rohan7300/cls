@@ -1,20 +1,20 @@
 package com.clebs.celerity.ui
 
-import android.R.attr
+
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.anychart.AnyChart
-import com.anychart.chart.common.dataentry.DataEntry
-import com.anychart.chart.common.dataentry.ValueDataEntry
-import com.anychart.chart.common.listener.Event
-import com.anychart.chart.common.listener.ListenersInterface
-import com.anychart.enums.Align
-import com.anychart.enums.LegendLayout
+import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentHomedemoBinding
-import com.clebs.celerity.utils.showToast
+import ir.mahozad.android.PieChart
+import java.io.IOException
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -29,7 +29,8 @@ private const val ARG_PARAM2 = "param2"
  */
 class HomedemoFragment : Fragment() {
   lateinit var mbinding:FragmentHomedemoBinding
-
+    val urlGoogleChart = "http://chart.apis.google.com/chart"
+    val urlp3Api = "?cht=p3&chs=400x150&chl=A|B|C&chd=t:"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,47 +43,27 @@ class HomedemoFragment : Fragment() {
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentHomedemoBinding.inflate(inflater, container, false)
 
-            val pie =   AnyChart.pie3d()
-            pie.setOnClickListener(object :
-                ListenersInterface.OnClickListener(arrayOf<String>("x", "value")) {
-                override fun onClick(event: Event) {
-                    showToast(
-                        event.getData().get("x") + ":" + event.getData().get("value").toString(),requireContext()
-                    )
-                }
-            })
-            val data = mutableListOf<ValueDataEntry>()
-            data.add(ValueDataEntry("Van rental", 100).apply { setValue("fill", "#f76f6f") },)
-            data.add(ValueDataEntry("Deductions", 50).apply { setValue("fill", "#fdb64e") },)
-            data.add(ValueDataEntry("Earnings", 20).apply { setValue("fill", "#77dfd8") },)
-            pie.data(data as List<DataEntry>?)
-            pie.credits().enabled(false);
-
-            pie.legend()
-                .position("center-bottom")
-                .itemsLayout(LegendLayout.HORIZONTAL)
-                .align(Align.CENTER)
-
-            mbinding.anychartview.setChart(pie)
-
-//            mbinding.web.loadUrl("C:\\Users\\chakshit.awasthi\\AppData\\Roaming\\Google\\AndroidStudio2023.1\\scratches\\scratch.html")
-  /*          val rotateAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.anam)
-            mbinding.imgCircleLogo.startAnimation(rotateAnimation)
-//            mbinding.imgCircleLogo.animate()
-//                .rotationBy(360f)
-//                .setDuration(2000)
-//
-//                .setInterpolator(AccelerateInterpolator())
-//                .setListener(null)
-
-
-            mbinding.icLoh.animate()
-                .rotationBy(360f)
-                .setDuration(2000)
-                .setInterpolator(AccelerateDecelerateInterpolator())
-                .setListener(null)*/
-
         }
+//        val urlRqs3DPie = (urlGoogleChart
+//                + urlp3Api
+//                + "Rental") + "," + "Deductions" + "," + "Earnings"
+//        val bm3DPie: Bitmap? = loadChart(urlRqs3DPie)
+//        if(bm3DPie == null){
+//
+//        }else{
+//           mbinding. pieChart.setImageBitmap(bm3DPie);
+//
+//    }
+        val pieChart = mbinding.pieChart.findViewById<PieChart>(R.id.pieChart)
+pieChart.isAnimationEnabled=true
+
+        pieChart.slices = listOf(
+            PieChart.Slice(0.3f, resources.getColor(R.color.red_light),resources.getColor(R.color.red_light),"Van rental",),
+            PieChart.Slice(0.4f, resources.getColor(R.color.peek_orange),resources.getColor(R.color.peek_orange),"Deductions"),
+            PieChart.Slice(0.3f, resources.getColor(R.color.blue_hex),resources.getColor(R.color.blue_hex),"Earnings"),
+
+        )
+
         return mbinding.root
 
     }

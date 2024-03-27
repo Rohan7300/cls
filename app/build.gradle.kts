@@ -107,14 +107,15 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     //Coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("com.github.AnyChart:AnyChart-Android:1.1.5")
+//    implementation("com.github.AnyChart:AnyChart-Android:1.1.5")
+    implementation("ir.mahozad.android:pie-chart:0.7.0")
     implementation("com.google.code.gson:gson:2.10.1")
 
 
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
 
     // CQ SDK
-    implementation ("com.github.clearquotetech:cq-android-sdk:2.0.4-test")
+    implementation ("com.github.clearquotetech:cq-android-sdk:2.0.9-test")
 
 
     //viewModel
