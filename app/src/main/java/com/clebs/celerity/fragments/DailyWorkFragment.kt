@@ -56,6 +56,7 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.showLog
+import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.ScanErrorDialogListener
 import com.clebs.celerity.utils.getFileFromUri
@@ -93,7 +94,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
     lateinit var mbinding: FragmentDailyWorkBinding
     private lateinit var mainViewModel: MainViewModel
     private val API_TOKEN = "9d04d01d5ba1997289fa28f6f544b16ab9e5a8b6"
-
+    private lateinit var loadingDialog: LoadingDialog
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
 
@@ -155,6 +156,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
             mbinding = FragmentDailyWorkBinding.inflate(inflater, container, false)
         }
         HomeActivity.Boolean = true
+        loadingDialog = (activity as HomeActivity).loadingDialog
         cameraExecutor = Executors.newSingleThreadExecutor()
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
@@ -445,7 +447,8 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
     @SuppressLint("NewApi")
     private fun takePhoto() = try {
-        mbinding.pb.visibility = View.VISIBLE
+//        mbinding.pb.visibility = View.VISIBLE
+        loadingDialog.show()
         mbinding.rectange.visibility = View.GONE
         mbinding.ivTakePhoto.visibility = View.GONE
         mbinding.rectangle4.visibility = View.VISIBLE
@@ -502,7 +505,9 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
             }
         )
     } catch (e: Exception) {
-        mbinding.pb.visibility = View.GONE
+        if (loadingDialog.isShowing) {
+            loadingDialog.dismiss()
+        }
         Log.d(TAG, "Photo capture failed: ${e.message}")
         println("Photo capture failed: ${e.message}")
     }
@@ -568,7 +573,10 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                             "DWF-03",
                             " This Vehicle ${if (vrn.isNotEmpty()) (vrn) else ""} doesn't exists. Please scan again or contact your supervisor."
                         )
-                        mbinding.pb.visibility = View.GONE
+                        if (loadingDialog.isShowing){
+                            loadingDialog.dismiss()
+                        }
+
 //                        mbinding.pb.visibility=View.GONE
                         withContext(Dispatchers.Main) {
                             Log.d(TAG, "No VRN found in image.")
@@ -588,6 +596,9 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
             Prefs.getInstance(App.instance).userID.toString().toDouble(), 0.toDouble(), vrn
         ).observe(requireActivity(), Observer {
             if (it != null) {
+                if (loadingDialog.isShowing) {
+                    loadingDialog.dismiss()
+                }
                 Prefs.getInstance(App.instance)
                     .save("vehicleLastMillage", it.vehicleLastMillage.toString())
                 mbinding.rectange.visibility = View.GONE
@@ -620,7 +631,9 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 mbinding.ivTakePhoto.visibility = View.GONE
                 mbinding.rectangle4.visibility = View.VISIBLE
 //                mbinding.imageView5.visibility = View.VISIBLE
-                mbinding.pb.visibility = View.GONE
+                if (loadingDialog.isShowing) {
+                    loadingDialog.dismiss()
+                }
             }
 
         })
