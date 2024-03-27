@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -16,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -62,6 +64,8 @@ class CompleteTaskFragment : Fragment() {
     private var userId: Int = 0
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
+    lateinit var ivX: ImageView
+    var codeX = 0
     private var requestCode: Int = 0
     private var showImageUploadLayout: Boolean = false
     private var isAllImageUploaded: Boolean = false
@@ -272,6 +276,34 @@ class CompleteTaskFragment : Fragment() {
         return mbinding.root
     }
 
+    private fun requestpermissions() {
+
+        activityResultLauncher.launch(CompleteTaskFragment.REQUIRED_PERMISSIONS)
+
+    }
+
+    private fun allPermissionsGranted() = CompleteTaskFragment.REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            requireContext(), it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        )
+        { permissions ->
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in CompleteTaskFragment.REQUIRED_PERMISSIONS && it.value == false)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                showToast("Permission denied", requireContext())
+            } else {
+                showPictureDialog(ivX,codeX)
+            }
+        }
     override fun onResume() {
         super.onResume()
 
@@ -645,7 +677,7 @@ class CompleteTaskFragment : Fragment() {
 
 
     protected fun pictureDialogBase64(iv: ImageView, codes: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             runWithPermissions(
                 android.Manifest.permission.CAMERA,
                 android.Manifest.permission.READ_MEDIA_IMAGES,
@@ -664,6 +696,14 @@ class CompleteTaskFragment : Fragment() {
             ) {
                 showPictureDialog(iv, codes)
             }
+        }*/
+
+        ivX = iv
+        if(allPermissionsGranted()){
+            showPictureDialog(iv,codes)
+        }else{
+
+            requestpermissions()
         }
     }
 
