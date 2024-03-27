@@ -3,12 +3,14 @@ package com.clebs.celerity.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.DialogInterface
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -26,12 +28,16 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.CheckBox
 import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
+import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
@@ -64,6 +70,7 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer
 import com.kotlinpermissions.KotlinPermissions
+import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import id.zelory.compressor.Compressor
 
 import kotlinx.coroutines.Dispatchers
@@ -76,6 +83,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.IOException
+import java.security.Permission
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
@@ -91,14 +99,35 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
     private var isFrontCamera = false
 
+
     var vrn: String = ""
     private var imageBitmap: Bitmap? = null
     var countryCode: String = ""
     var txt: String = ""
     var vehicleType: String = ""
+    private var counter = 0
     var score: String = ""
     var bounding: String = ""
     private lateinit var fragmentManager: FragmentManager
+
+    companion object {
+
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
+            ).apply {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    add(Manifest.permission.READ_MEDIA_VIDEO)
+                    add(Manifest.permission.READ_MEDIA_IMAGES)
+                    add(Manifest.permission.READ_MEDIA_AUDIO)
+                }
+            }.toTypedArray()
+
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,7 +138,6 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
         super.onViewCreated(view, savedInstanceState)
         fragmentManager = (activity as HomeActivity).fragmentManager
         //   cameraExecutor = Executors.newSingleThreadExecutor()
-
 
 
     }
@@ -134,6 +162,40 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
         mainViewModel.setLastVisitedScreenId(requireContext(), R.id.dailyWorkFragment)
 //
+
+
+//        Log.e(
+//            TAG,
+//            "onCreateViewhint: " + showhint + Prefs.getInstance(App.instance).get("showhint")
+//        )
+
+
+        showToolTip()
+
+
+
+        mbinding.rectangle4.setOnClickListener {
+            if (allPermissionsGranted()) {
+                mbinding.rectange.visibility = View.VISIBLE
+                mbinding.ivTakePhoto.visibility = View.VISIBLE
+                mbinding.rectangle4.visibility = View.GONE
+                startCamera()
+                initListeners()
+            } else {
+                requestpermissions()
+            }
+
+//            checkPermissions()
+            //findNavController().navigate(R.id.vechileMileageFragment)
+        }
+
+
+
+        return mbinding.root
+    }
+
+    fun showToolTip() {
+
 
         BubbleShowCaseBuilder(requireActivity()) //Activity instance
             .title("Capture") //Any title for the bubble view
@@ -171,41 +233,60 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                     }
                 })
             )
-            .targetView(mbinding.scanLayout).highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
+            .targetView(mbinding.scanLayout)
+            .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
             .show()
 
-        mbinding.rectangle4.setOnClickListener {
-            checkPermissions()
 
-            //findNavController().navigate(R.id.vechileMileageFragment)
-        }
-
-
-
-        return mbinding.root
     }
 
     fun checkPermissions() {
+
+//            runWithPermissions(
+//              Manifest.permission.CAMERA,
+////              Manifest.permission.READ_MEDIA_IMAGES,
+////               Manifest.permission.READ_MEDIA_VIDEO,
+////              Manifest.permission.READ_MEDIA_AUDIO
+//
+//            ) {
+//               startCamera()
+//                initListeners()
+//            }
+//        } else {
+//            runWithPermissions(
+//              Manifest.permission.CAMERA,
+////                Manifest.permission.READ_EXTERNAL_STORAGE,
+////                Manifest.permission.WRITE_EXTERNAL_STORAGE
+//
+//            ) {
+//               startCamera()
+//                initListeners()
+//            }
+//        }
+
+
         // Request camera permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
             KotlinPermissions.with(requireActivity()) // Where this is an FragmentActivity instance
                 .permissions(
                     Manifest.permission.CAMERA,
                     Manifest.permission.READ_MEDIA_IMAGES,
                     Manifest.permission.READ_MEDIA_VIDEO,
-                    Manifest.permission.READ_MEDIA_AUDIO
-                ).onAccepted {
+                    Manifest.permission.READ_MEDIA_AUDIO,
+
+                    ).onAccepted {
                     mbinding.rectange.visibility = View.VISIBLE
                     mbinding.ivTakePhoto.visibility = View.VISIBLE
                     mbinding.rectangle4.visibility = View.GONE
-                    mbinding.imageView5.visibility = View.GONE
+
 
                     startCamera()
                     initListeners()
                 }.onDenied {
                     mbinding.rectange.visibility = View.GONE
                     mbinding.rectangle4.visibility = View.VISIBLE
-                    mbinding.imageView5.visibility = View.VISIBLE
+
                     mbinding.ivTakePhoto.visibility = View.GONE
                     Log.d(TAG, "User denied permissions")
                 }.onForeverDenied {
@@ -217,25 +298,62 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 .permissions(
                     Manifest.permission.CAMERA,
                     Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ).onAccepted {
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+
+                    ).onAccepted {
                     mbinding.rectange.visibility = View.VISIBLE
                     mbinding.ivTakePhoto.visibility = View.VISIBLE
                     mbinding.rectangle4.visibility = View.GONE
-                    mbinding.imageView5.visibility = View.GONE
+
 
                     startCamera()
                     initListeners()
                 }.onDenied {
                     mbinding.rectange.visibility = View.GONE
                     mbinding.rectangle4.visibility = View.VISIBLE
-                    mbinding.imageView5.visibility = View.VISIBLE
+
                     mbinding.ivTakePhoto.visibility = View.GONE
                     Log.d(TAG, "User denied permissions")
                 }.onForeverDenied {
                     Log.d(TAG, "User forever denied permissions")
                 }.ask()
         }
+
+
+    }
+
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        )
+        { permissions ->
+            // Handle Permission granted/rejected
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                showToast("Permission denied", requireContext())
+            } else {
+                mbinding.rectange.visibility = View.VISIBLE
+                mbinding.ivTakePhoto.visibility = View.VISIBLE
+                mbinding.rectangle4.visibility = View.GONE
+                startCamera()
+                initListeners()
+            }
+        }
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            requireContext(), it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestpermissions() {
+
+        activityResultLauncher.launch(REQUIRED_PERMISSIONS)
+
     }
 
     override fun onDestroy() {
@@ -264,11 +382,9 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                     it.setSurfaceProvider(mbinding.rectange.surfaceProvider)
                 }
             imageCapture = ImageCapture.Builder().build()
+            PreviewView.ImplementationMode.COMPATIBLE
             val cameraSelector =
-                if (isFrontCamera)
-                    CameraSelector.DEFAULT_FRONT_CAMERA
-                else
-                    CameraSelector.DEFAULT_BACK_CAMERA
+                CameraSelector.DEFAULT_BACK_CAMERA
             try {
 
                 // Unbind use cases before rebinding
@@ -333,7 +449,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
         mbinding.rectange.visibility = View.GONE
         mbinding.ivTakePhoto.visibility = View.GONE
         mbinding.rectangle4.visibility = View.VISIBLE
-        mbinding.imageView5.visibility = View.GONE
+//        mbinding.imageView5.visibility = View.GONE
 
 
         val imageCapture = imageCapture ?: throw IOException("Camera not connected")
@@ -405,14 +521,11 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
     }
 
 
-    companion object {
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
-    }
-
-     fun uploadImageToServerAndGetResults(savedUri: Uri?) {
+    fun uploadImageToServerAndGetResults(savedUri: Uri?) {
         if (savedUri != null) {
 
-            val apiService: ApiPlateRecognizer = RetrofitHelper.getInstance().create(ApiPlateRecognizer::class.java)
+            val apiService: ApiPlateRecognizer =
+                RetrofitHelper.getInstance().create(ApiPlateRecognizer::class.java)
             GlobalScope.launch(Dispatchers.IO) {
                 val imgFile = requireContext().getFileFromUri(savedUri)
                 val compressedImageFile = Compressor.compress(requireContext(), imgFile)
@@ -455,6 +568,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                             "DWF-03",
                             " This Vehicle ${if (vrn.isNotEmpty()) (vrn) else ""} doesn't exists. Please scan again or contact your supervisor."
                         )
+                        mbinding.pb.visibility = View.GONE
 //                        mbinding.pb.visibility=View.GONE
                         withContext(Dispatchers.Main) {
                             Log.d(TAG, "No VRN found in image.")
@@ -479,7 +593,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 mbinding.rectange.visibility = View.GONE
                 mbinding.ivTakePhoto.visibility = View.GONE
                 mbinding.rectangle4.visibility = View.VISIBLE
-                mbinding.imageView5.visibility = View.VISIBLE
+//                mbinding.imageView5.visibility = View.VISIBLE
                 if (txt.isNotEmpty()) {
                     Prefs.getInstance(App.instance).save("vrn", txt)
                 }
@@ -505,7 +619,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 mbinding.rectange.visibility = View.GONE
                 mbinding.ivTakePhoto.visibility = View.GONE
                 mbinding.rectangle4.visibility = View.VISIBLE
-                mbinding.imageView5.visibility = View.VISIBLE
+//                mbinding.imageView5.visibility = View.VISIBLE
                 mbinding.pb.visibility = View.GONE
             }
 
@@ -551,7 +665,8 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
         deleteDialog.show();
 
     }
-//    private fun dismissAlertDialogWithAnimation(alertDialog: AlertDialog) {
+
+    //    private fun dismissAlertDialogWithAnimation(alertDialog: AlertDialog) {
 //        val explodeAnimation = AnimationUtils.loadAnimation(context, R.anim.explode)
 //        alertDialog.window?.decorView?.startAnimation(explodeAnimation)
 //
@@ -560,7 +675,8 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 //        }, 300) // Delay the dismissal to match the animation duration
 //    }
     override fun onTryAgainClicked() {
-        checkPermissions()
+//        checkPermissions()
+        requestpermissions()
     }
 
 

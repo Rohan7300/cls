@@ -93,9 +93,10 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
 //    implementation("com.google.firebase:firebase-core:21.1.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
-    implementation( "androidx.camera:camera-camera2:1.3.1")
-    implementation( "androidx.camera:camera-lifecycle:1.3.1")
-    implementation( "androidx.camera:camera-view:")
+    val camerax_version = "1.0.0-rc01"
+    implementation("androidx.camera:camera-camera2:$camerax_version")
+    implementation( "androidx.camera:camera-lifecycle:$camerax_version")
+    implementation("androidx.camera:camera-view:1.0.0-alpha20")
     testImplementation("junit:junit:4.13.2")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -106,7 +107,7 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     //Coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-
+    implementation("com.github.AnyChart:AnyChart-Android:1.1.5")
     implementation("com.google.code.gson:gson:2.10.1")
 
 
@@ -124,7 +125,6 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation ("com.github.quickpermissions:quickpermissions-kotlin:0.4.0")
     implementation("ru.superjob:kotlin-permissions:1.0.3")
     implementation("org.jetbrains.anko:anko-commons:0.10.4")
-    //  implementation ("com.github.dhaval2404:imagepicker:2.1'")
 
     val room_version = "2.6.1"
     implementation("androidx.room:room-ktx:2.6.1")

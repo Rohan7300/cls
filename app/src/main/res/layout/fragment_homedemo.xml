@@ -2,46 +2,239 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:scrollbars="none">
 
-        android:backgroundTint="@color/light_orange"
-
-        tools:context=".ui.SplashActivity">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_bold"
-android:textSize="30sp"
-            android:layout_marginTop="32dp"
-            android:text="@string/Dashboard"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
 
+            android:backgroundTint="@color/light_orange"
 
-            <ImageView
-                android:layout_width="103dp"
-                android:layout_height="74dp"
-                android:src="@drawable/logo_new"
-                android:id="@+id/ic_loh"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+            tools:context=".ui.SplashActivity">
+
+            <TextView
+                android:id="@+id/bt_prev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/shape_expand_main"
+                android:enabled="true"
+
+                android:paddingStart="10dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="2dp"
+                android:text="Previous week"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/bt_this_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+
+                android:layout_marginTop="16dp"
+                android:background="@drawable/shape_expand_main"
+                android:enabled="true"
+                android:paddingStart="10dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="2dp"
+                android:text="This week"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/bt_prev">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/const1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/shape_expand_main"
+                    android:padding="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bt_prev">
+
+                    <TextView
+                        android:id="@+id/txt_scorecard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Scorecard :"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/txt_avg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/inter"
+                        android:text="Average total score"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="@id/txt_scorecard"
+                        app:layout_constraintTop_toBottomOf="@id/txt_scorecard" />
+
+                    <ProgressBar
+                        android:id="@+id/ProgressBar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="8dp"
+                        android:indeterminate="false"
+                        android:progress="50"
+                        android:progressDrawable="@drawable/pb_style"
+                        android:progressTint="#fdb64e"
+                        app:layout_constraintStart_toStartOf="@+id/txt_avg"
+                        app:layout_constraintTop_toBottomOf="@id/txt_avg" />
+
+                    <TextView
+                        android:id="@+id/txt_last_week"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/inter"
+                        android:text="Last Week score"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="@id/ProgressBar"
+                        app:layout_constraintTop_toBottomOf="@id/ProgressBar" />
+
+                    <ProgressBar
+                        android:id="@+id/ProgressBartwo"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="8dp"
+                        android:indeterminate="false"
+                        android:progress="68"
+                        android:progressDrawable="@drawable/pb_style"
+                        android:progressTint="#77dfd8"
+
+                        app:layout_constraintStart_toStartOf="@+id/txt_last_week"
+                        app:layout_constraintTop_toBottomOf="@id/txt_last_week" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/consttwo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/shape_expand_main"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/txt_this_week"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Cash flow This week :"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.anychart.AnyChartView
+                        android:id="@+id/anychartview"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginTop="10dp"
+
+                        android:elevation="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/txt_this_week"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_this_week" />
+                    <!--<WebView-->
+                    <!--    android:layout_width="match_parent"-->
+                    <!--    android:layout_height="0dp"-->
+                    <!--    android:id="@+id/web"-->
+                    <!--    app:layout_constraintTop_toBottomOf="@+id/txt_this_week"-->
+                    <!--    >-->
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/shape_expand_main"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/your_next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Your next working day:"
+
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="119dp"
+                        android:layout_height="40dp"
+                        android:drawableRight="@drawable/down_arrow"
+                        android:fontFamily="@font/inter_bold"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="View full schedule"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView5"
+                        app:layout_constraintTop_toTopOf="@+id/your_next" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="24-march at 11:15 pm DXM$"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="@+id/your_next"
+                        app:layout_constraintTop_toBottomOf="@id/your_next" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
 </layout>

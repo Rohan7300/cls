@@ -6,21 +6,12 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="180dp"
-        android:layout_height="180dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:alpha="0.5"
         android:src="@drawable/nocontent" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/poppins_bold"
-        android:text="SORRY!"
-        android:textAlignment="center"
-        android:textSize="23dp" />
-
+  
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
