@@ -59,6 +59,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private var sdkkey = ""
     var userId: Int = 0
     var firstName = ""
+    var apiCount = 0
     var lastName = ""
     var isLeadDriver = false
     var date = ""
@@ -380,7 +381,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
 
-    private fun cqSDKInitializer() {
+    /*private fun cqSDKInitializer() {
         cqSDKInitializer = CQSDKInitializer(this)
         cqSDKInitializer.triggerOfflineSync()
 
@@ -394,5 +395,40 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
             }
         )
+    }*/
+
+    private fun cqSDKInitializer() {
+        cqSDKInitializer = CQSDKInitializer(this)
+        cqSDKInitializer.triggerOfflineSync()
+        if (!cqSDKInitializer.isCQSDKInitialized()) {
+            Log.e("intialized", "cqSDKInitializer: ", )
+            cqSDKInitializer.initSDK(
+                sdkKey = sdkkey,
+                result = { isInitialized, code, _ ->
+                    if (isInitialized && code == PublicConstants.sdkInitializationSuccessCode) {
+                        Prefs.getInstance(applicationContext).saveCQSdkKey(sdkkey)
+                    } else {
+                        showToast("Error initializing SDK", this)
+                    }
+                }
+            )
+        }
+
+    }
+
+
+    public fun hideDialog() {
+        apiCount--
+        if (apiCount <= 0) {
+            loadingDialog.cancel()
+            apiCount = 0
+        }
+    }
+
+    public fun showDialog() {
+        if (apiCount == 0) {
+            loadingDialog.show()
+        }
+        apiCount++
     }
 }

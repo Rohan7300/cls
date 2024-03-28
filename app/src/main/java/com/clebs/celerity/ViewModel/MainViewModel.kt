@@ -91,6 +91,7 @@ class MainViewModel(
     val liveDataSubmitRideAlongDriverFeedbackRequest = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataGetRideAlongLeadDriverQuestion =
         MutableLiveData<GetRideAlongLeadDriverQuestionResponse?>()
+    val liveDataDeleteBreakTime = MutableLiveData<SimpleStatusMsgResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -548,6 +549,22 @@ class MainViewModel(
             }
             result.onFailure { ex ->
                 Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun DeleteBreakTime(
+        dawDriverBreakId:Int
+    ){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.DeleteBreakTime(dawDriverBreakId)
+            }
+            result.onSuccess {response->
+                liveDataDeleteBreakTime.postValue(response)
+            }
+            result.onFailure {ex->
+                Log.e("DeleteBreakTime Exception", "Error ${ex.message}")
             }
         }
     }

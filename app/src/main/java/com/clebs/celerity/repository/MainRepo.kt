@@ -549,4 +549,17 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
+    suspend fun DeleteBreakTime(
+        dawDriverBreakId:Int
+    ):SimpleStatusMsgResponse?{
+        val response = ApiService.DeleteBreakTime(dawDriverBreakId)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response DeleteBreakTime : $errorBody")
+        }
+        return null
+    }
+
 }

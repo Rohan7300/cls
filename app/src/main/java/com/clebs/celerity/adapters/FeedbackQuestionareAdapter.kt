@@ -18,8 +18,24 @@ class FeedbackQuestionareAdapter(var list:ArrayList<QuestionWithOption>,var cont
             val radio1 = binding.radio1
             val radio2 = binding.radio2
 
-            radio1.isChecked = false
-            radio2.isChecked = false
+            if(item.selectedOption==""){
+                binding.radioLayQ1.visibility = View.VISIBLE
+                binding.FeedbackmainLayout.setBackgroundResource(R.drawable.shape_expand_main)
+                binding.badgeArrow.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.down_arrow))
+            }
+            else if (item.selectedOption == "Yes"){
+                radio1.isChecked = true
+                radio2.isChecked = false
+                binding.radioLayQ1.visibility = View.GONE
+                binding.badgeArrow.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.arrow_left))
+                binding.FeedbackmainLayout.setBackgroundResource(R.drawable.shape_expand_main_green)
+            }else{
+                radio2.isChecked = true
+                radio1.isChecked = false
+                binding.radioLayQ1.visibility = View.GONE
+                binding.FeedbackmainLayout.setBackgroundResource(R.drawable.shape_expand_main_green)
+            }
+
 
             binding.h1.setOnClickListener {
                 if (binding.radioLayQ1.isVisible) {
@@ -29,21 +45,24 @@ class FeedbackQuestionareAdapter(var list:ArrayList<QuestionWithOption>,var cont
                     binding.radioLayQ1.visibility = View.VISIBLE
                     binding.badgeArrow.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.down_arrow))
                 }
-
             }
 
             radio1.setOnClickListener {
                 item.selectedOption = "Yes"
+                binding.radioLayQ1.visibility = View.GONE
+                binding.badgeArrow.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.arrow_left))
+                binding.FeedbackmainLayout.setBackgroundResource(R.drawable.shape_expand_main_green)
                 radio2.isChecked = false
             }
 
             radio2.setOnClickListener {
                 item.selectedOption = "No"
+                binding.radioLayQ1.visibility = View.GONE
+                binding.badgeArrow.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.arrow_left))
+                binding.FeedbackmainLayout.setBackgroundResource(R.drawable.shape_expand_main_green)
                 radio1.isChecked = false
             }
-
         }
-
     }
 
     fun areAllQuestionsSelected(): Boolean {

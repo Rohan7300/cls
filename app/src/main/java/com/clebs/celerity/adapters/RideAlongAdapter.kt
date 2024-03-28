@@ -13,7 +13,6 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.AdapterRideAlongBinding
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.leadDriverIdItem
-import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 
 class RideAlongAdapter(
@@ -21,7 +20,7 @@ class RideAlongAdapter(
     var navController: NavController,
     var prefs: Prefs,
     var mainViewModel: MainViewModel,
-    var loadingDialog: LoadingDialog,
+    var loadingDialog: () -> Unit,
     var viewLifecycleOwner: LifecycleOwner,
     var context: Context
 ) : RecyclerView.Adapter<RideAlongAdapter.RideAlongViewHolder>() {
@@ -86,7 +85,7 @@ class RideAlongAdapter(
                 navController.navigate(R.id.feedbackFragment)
             }
             binding.deleteRideAlong.setOnClickListener {
-                loadingDialog.show()
+                loadingDialog()
                 mainViewModel.DeleteOnRideAlongRouteInfo(item.RtId)
             }
         }

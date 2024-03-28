@@ -314,4 +314,9 @@ interface ApiService {
         @Query("daDailyWorkId") daDailyWorkId:Int
     ):Response<GetRideAlongLeadDriverQuestionResponse>
 
+    @POST("/api/DaDailyWorks/DeleteBreakTime/{dawDriverBreakId}")
+    suspend fun DeleteBreakTime(
+        @Path("dawDriverBreakId") dawDriverBreakId:Int
+    ):Response<SimpleStatusMsgResponse>
+
 }

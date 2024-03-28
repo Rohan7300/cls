@@ -115,7 +115,8 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
 
     // CQ SDK
-    implementation ("com.github.clearquotetech:cq-android-sdk:2.0.9-test")
+    /*implementation ("com.github.clearquotetech:cq-android-sdk:2.0.9-test")*/
+    implementation ("com.github.clearquotetech:cq-android-sdk:2.1.3-test")
 
 
     //viewModel

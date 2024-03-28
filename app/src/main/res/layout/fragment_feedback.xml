@@ -18,18 +18,30 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             tools:context=".fragments.FeedbackFragment">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:background="@color/very_light_orange"
+    android:layout_marginBottom="8dp"
+    android:paddingVertical="15dp"
+    android:paddingHorizontal="25dp"
+    >
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:fontFamily="@font/poppins_semibold"
-                android:padding="15dp"
+                android:layout_weight="1"
                 android:text=" Feedback Questionner"
                 android:textColor="@color/black"
-                android:textSize="15sp" />
-
+                android:textSize="18sp" />
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/feedback2"/>
+</LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/feedbackQuestionare"
                 android:layout_marginVertical="10dp"

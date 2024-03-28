@@ -110,6 +110,10 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getInt("qStage",0)?:0
         set(value) = sharedPreferences.edit().putInt("qStage",value).apply()
 
+    var canClockOut:Boolean
+        get() = sharedPreferences.getBoolean("canClockOut",false)?:false
+        set(value) = sharedPreferences.edit().putBoolean("canClockOut",value).apply()
+
     fun save(key: String?, value: String?) {
         sharedPreferences.edit().putString(key, value).apply()
         sharedPreferences.edit().apply()

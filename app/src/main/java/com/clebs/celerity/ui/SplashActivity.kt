@@ -81,21 +81,14 @@ class SplashActivity : AppCompatActivity() {
                 this@SplashActivity,
                 PolicyDocsActivity::class.java
             )
-            // on below line we are
-            // starting a new activity.
             startActivity(i)
         } else {
             val i = Intent(
                 this@SplashActivity,
                 HomeActivity::class.java
             )
-            // on below line we are
-            // starting a new activity.
             startActivity(i)
         }
-        // Navigate to the home screen or any other screen that follows the login screen
-
-
     }
 
     fun GetDriverSignatureInformation() {
@@ -106,7 +99,7 @@ class SplashActivity : AppCompatActivity() {
 
         mainViewModel.getDriverSignatureInfo(userid).observe(this@SplashActivity, Observer {
             if (it != null) {
-                if (it!!.isSignatureReq.equals(true)) {
+                if (it!!.isSignatureReq.equals(true)&&(it.isAmazonSignatureReq||it.isOtherCompanySignatureReq)) {
                     Prefs.getInstance(applicationContext)
                         .saveBoolean("isSignatureReq", it.isSignatureReq)
                     Prefs.getInstance(applicationContext)
@@ -126,9 +119,7 @@ class SplashActivity : AppCompatActivity() {
                     finish()
                 }
             }
-
         })
-
     }
 
 }

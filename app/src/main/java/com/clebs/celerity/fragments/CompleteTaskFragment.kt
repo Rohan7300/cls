@@ -19,6 +19,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
@@ -26,11 +27,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.adapters.BreakTimeAdapter
 import com.clebs.celerity.adapters.DriverRouteAdapter
 import com.clebs.celerity.adapters.RideAlongAdapter
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
 import com.clebs.celerity.databinding.TimePickerDialogBinding
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
+import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
@@ -44,9 +47,11 @@ import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toRequestBody
-import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
+import io.clearquote.assessment.cq_sdk.models.CustomerDetails
+import io.clearquote.assessment.cq_sdk.models.InputDetails
+import io.clearquote.assessment.cq_sdk.models.VehicleDetails
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -73,6 +78,7 @@ class CompleteTaskFragment : Fragment() {
     private var imagesUploaded: Boolean = false
     private var isClockedIn: Boolean = false
     private var isOnRoadHours: Boolean = false
+    private var isBreakTimeAdded: Boolean = false
     private var visibilityLevel = -1
     var breakStartTime: String = ""
     var breakEndTime: String = ""
@@ -82,11 +88,16 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
     private var imageUploadLevel = 0
-    var apiCount = 0
+    val showDialog: () -> Unit = {
+        (activity as HomeActivity).showDialog()
+    }
+    val hideDialog: () -> Unit = {
+        (activity as HomeActivity).hideDialog()
+    }
     var inspectionOfflineImagesCHeck: Boolean? = null
     private var inspectionstarted: Boolean = false
 
-    companion object{
+    companion object {
         private val REQUIRED_PERMISSIONS =
             mutableListOf(
                 Manifest.permission.CAMERA,
@@ -114,8 +125,18 @@ class CompleteTaskFragment : Fragment() {
         loadingDialog = (activity as HomeActivity).loadingDialog
         userId = Prefs.getInstance(requireContext()).userID.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
+        mbinding.addBreakIV.setOnClickListener(clickListener)
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
+        mbinding.h1.setOnClickListener {
+            if (mbinding.breakH2.isVisible) {
+                mbinding.breakH2.visibility = View.GONE
+                mbinding.badgeArrow.setImageResource(R.drawable.grey_right_arrow)
+            } else {
+                mbinding.breakH2.visibility = View.VISIBLE
+                mbinding.badgeArrow.setImageResource(R.drawable.down_arrow)
+            }
+        }
         mbinding.ivFaceMask.setImageResource(R.drawable.upload_icc)
         Prefs.getInstance(requireContext()).clearNavigationHistory()
         fragmentManager = (activity as HomeActivity).fragmentManager
@@ -125,14 +146,12 @@ class CompleteTaskFragment : Fragment() {
 
         inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
         viewModel = (activity as HomeActivity).viewModel
-        //(activity as HomeActivity).getVehicleLocationInfo()
 
         showDialog()
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
 
 
         observers()
-
         showDialog()
         viewModel.GetDriverBreakTimeInfo(userId)
         showDialog()
@@ -301,9 +320,10 @@ class CompleteTaskFragment : Fragment() {
             if (!permissionGranted) {
                 showToast("Permission denied", requireContext())
             } else {
-                showPictureDialog(ivX,codeX)
+                showPictureDialog(ivX, codeX)
             }
         }
+
     override fun onResume() {
         super.onResume()
 
@@ -327,8 +347,8 @@ class CompleteTaskFragment : Fragment() {
             hideDialog()
 
             if (it != null) {
-                mbinding.headerTop.dxLoc.text = it?.locationName ?: ""
-                mbinding.headerTop.dxReg.text = it?.vmRegNo ?: ""
+                mbinding.headerTop.dxLoc.text = it.locationName ?: ""
+                mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
             }
 
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
@@ -345,6 +365,10 @@ class CompleteTaskFragment : Fragment() {
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             if (it != null) {
                 //visibilityLevel = 3
+
+                showDialog()
+                viewModel.GetDriverBreakTimeInfo(userId)
+
             } else {
                 // showToast("Something went wrong!!", requireContext())
             }
@@ -397,6 +421,12 @@ class CompleteTaskFragment : Fragment() {
             }
         }
 
+        var breakTimeadapter =
+            BreakTimeAdapter(GetDriverBreakTimeInfoResponse(), viewModel, showDialog)
+        mbinding.BreakTimeRV.adapter = breakTimeadapter
+        mbinding.BreakTimeRV.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
 
         viewModel.livedataDriverBreakInfo.observe(viewLifecycleOwner) {
             hideDialog()
@@ -407,13 +437,25 @@ class CompleteTaskFragment : Fragment() {
                     val breakTimeEnd = breakInfo.BreakTimeEnd
                     val breakTimeStart = breakInfo.BreakTimeStart
                     if (breakTimeStart.isNotEmpty() && breakTimeEnd.isNotEmpty()) {
-                        mbinding.downIvsBreak.setImageResource(R.drawable.ic_yes)
+                        val reversedList = it.reversed()
+                        breakTimeadapter.data.clear()
+                        breakTimeadapter.data.addAll(reversedList)
+                        breakTimeadapter.notifyDataSetChanged()
+                        isBreakTimeAdded = true
+                        setVisibiltyLevel()
                     } else {
                         showToast("No Break time information added!!", requireContext())
                     }
                 } ?: showToast("No Break time information added!!", requireContext())
             } else {
-
+                isBreakTimeAdded = false
+                setVisibiltyLevel()
+            }
+        }
+        viewModel.liveDataDeleteBreakTime.observe(viewLifecycleOwner) {
+            hideDialog()
+            if (it != null) {
+                viewModel.GetDriverBreakTimeInfo(userId)
             }
         }
 
@@ -515,7 +557,7 @@ class CompleteTaskFragment : Fragment() {
         })
 
         viewModel.liveDataDeleteOnRideAlongRouteInfo.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
+            hideDialog()
             if (it != null) {
                 showDialog()
                 viewModel.GetRideAlongDriverInfoByDate(userId)
@@ -523,29 +565,36 @@ class CompleteTaskFragment : Fragment() {
         }
 
 
-        val adapter = DriverRouteAdapter(GetDriverRouteInfoByDateResponse(), loadingDialog, viewModel)
+        val adapter = DriverRouteAdapter(GetDriverRouteInfoByDateResponse(), showDialog, viewModel)
 
         mbinding.getDriverRouteId.adapter = adapter
         mbinding.getDriverRouteId.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.liveDatadriverInfobyRouteDate.observe(viewLifecycleOwner) { routes ->
-            loadingDialog.cancel()
-            routes?.let {
-                if (it != null) {
-                    if(it.size>0){
-                        mbinding.routeNameTV.visibility = View.VISIBLE
-                    }
-                    adapter.list.clear()
-                    adapter.list.addAll(it)
-                    adapter.notifyDataSetChanged()
+        viewModel.liveDatadriverInfobyRouteDate.observe(viewLifecycleOwner) { it ->
+            hideDialog()
+            if (it != null) {
+                if (it.size > 0) {
+                    mbinding.routeNameTV.visibility = View.VISIBLE
                 }
-            } ?: run {
+                for (item in it) {
+                    if (item.RtFinishMileage > 0) {
+                        isOnRoadHours = true
+                        setVisibiltyLevel()
+                        break
+                    }
+                }
+                adapter.list.clear()
+                adapter.list.addAll(it)
+                adapter.notifyDataSetChanged()
+            } else {
+                isOnRoadHours = false
+                setVisibiltyLevel()
             }
         }
 
 
         viewModel.liveDataDeleteOnRouteDetails.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
+            hideDialog()
             if (it != null) {
                 showDialog()
                 viewModel.GetDriverRouteInfoByDate(userId)
@@ -556,7 +605,7 @@ class CompleteTaskFragment : Fragment() {
             findNavController(),
             Prefs.getInstance(requireContext()),
             viewModel,
-            loadingDialog,
+            showDialog,
             viewLifecycleOwner,
             requireContext()
         )
@@ -623,6 +672,7 @@ class CompleteTaskFragment : Fragment() {
             b2 = true
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakend, 2)
             if (b1 && b2) {
+
                 dialogBinding.timeTvNext.isEnabled = true
                 dialogBinding.timeTvNext.setTextColor(Color.WHITE)
             }
@@ -654,6 +704,8 @@ class CompleteTaskFragment : Fragment() {
 
         dialogBinding.timeTvNext.setOnClickListener {
             if (chkTime(dialogBinding.edtBreakstart, dialogBinding.edtBreakend)) {
+                breakStartTime = dialogBinding.edtBreakstart.text.toString()
+                breakEndTime = dialogBinding.edtBreakend.text.toString()
                 deleteDialog.cancel()
                 sendBreakTimeData()
             } else {
@@ -677,31 +729,31 @@ class CompleteTaskFragment : Fragment() {
 
 
     protected fun pictureDialogBase64(iv: ImageView, codes: Int) {
-/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            runWithPermissions(
-                android.Manifest.permission.CAMERA,
-                android.Manifest.permission.READ_MEDIA_IMAGES,
-                android.Manifest.permission.READ_MEDIA_VIDEO,
-                android.Manifest.permission.READ_MEDIA_AUDIO
+        /*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    runWithPermissions(
+                        android.Manifest.permission.CAMERA,
+                        android.Manifest.permission.READ_MEDIA_IMAGES,
+                        android.Manifest.permission.READ_MEDIA_VIDEO,
+                        android.Manifest.permission.READ_MEDIA_AUDIO
 
-            ) {
-                showPictureDialog(iv, codes)
-            }
-        } else {
-            runWithPermissions(
-                android.Manifest.permission.CAMERA,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) {
+                        showPictureDialog(iv, codes)
+                    }
+                } else {
+                    runWithPermissions(
+                        android.Manifest.permission.CAMERA,
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 
-            ) {
-                showPictureDialog(iv, codes)
-            }
-        }*/
+                    ) {
+                        showPictureDialog(iv, codes)
+                    }
+                }*/
 
         ivX = iv
-        if(allPermissionsGranted()){
-            showPictureDialog(iv,codes)
-        }else{
+        if (allPermissionsGranted()) {
+            showPictureDialog(iv, codes)
+        } else {
 
             requestpermissions()
         }
@@ -813,60 +865,131 @@ class CompleteTaskFragment : Fragment() {
         Log.e("resistrationvrnpatterhn", "clientUniqueID: " + regexPattern + inspectionID)
     }
 
-    private fun startInspection() {
+    /*private fun startInspection() {
         if (isAllImageUploaded) {
             mbinding.tvNext.visibility = View.VISIBLE
         }
 
         //if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
-            loadingDialog.show()
+        showDialog()
 
-            if (cqSDKInitializer.isCQSDKInitialized()) {
-                // Show a loading dialog
+        if (cqSDKInitializer.isCQSDKInitialized()) {
+            // Show a loading dialog
 
-                Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
-                Log.e("sdkskdkdkskdkskd", "onCreateView: ")
-                // Make request to start an inspection
-                try {
-                    cqSDKInitializer.startInspection(activityContext = requireActivity(),
-                        clientAttrs = ClientAttrs(
-                            userName = "",
-                            dealer = "",
-                            dealerIdentifier = "",
-                            client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
-                        ),
-                        result = { isStarted, msg, code ->
-
-                            Log.e("messsagesss", "startInspection: " + msg + code)
-                            if (isStarted) {
+            Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
+            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
+            // Make request to start an inspection
+            try {
+                cqSDKInitializer.startInspection(activityContext = requireActivity(),
+                    clientAttrs = ClientAttrs(
+                        userName = "",
+                        dealer = "",
+                        dealerIdentifier = "",
+                        client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                    ),
+                    result = { isStarted, msg, code ->
+                        hideDialog()
+                        Log.e("messsagesss", "startInspection: " + msg + code)
+                        if (isStarted) {
 //
-                            } else {
+                        } else {
 //
-                            }
-                            if (msg == "Success") {
-
-                                loadingDialog.cancel()
-                            }
-                            if (!isStarted) {
-
-                                loadingDialog.cancel()
-                                Log.e("startedinspection", "onCreateView: " + msg + isStarted)
+                        }
+                        if (msg == "Success") {
 
 
-                            }
-                        })
-                } catch (_: Exception) {
+                        }
+                        if (!isStarted) {
 
-                    showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
-                }
+
+                            Log.e("startedinspection", "onCreateView: " + msg + isStarted)
+
+
+                        }
+                    })
+            } catch (_: Exception) {
+
+                showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
             }
-/*        } else {
-            showErrorDialog(
-                fragmentManager,
-                "CTF-1",
-                "We are currently updating our app for Android 13+ devices. Please try again later."
-            )
-        }*/
+        }
+        *//*        } else {
+                    showErrorDialog(
+                        fragmentManager,
+                        "CTF-1",
+                        "We are currently updating our app for Android 13+ devices. Please try again later."
+                    )
+                }*//*
+
+    }*/
+
+    private fun startInspection() {
+        if (isAllImageUploaded) {
+            mbinding.tvNext.visibility = View.VISIBLE
+        }
+
+//        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
+        loadingDialog.show()
+
+        if (cqSDKInitializer.isCQSDKInitialized()) {
+
+
+            Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
+            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
+
+            try {
+                cqSDKInitializer.startInspection(activityContext = requireActivity(),
+                    clientAttrs = ClientAttrs(
+                        userName = " ",
+                        dealer = " ",
+                        dealerIdentifier = " ",
+                        client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                    ),
+                    inputDetails = InputDetails(
+                        vehicleDetails = VehicleDetails(
+                            regNumber = Prefs.getInstance(App.instance).vmRegNo , //if sent, user can't edit
+                            make = "Van", //if sent, user can't edit
+                            model = "Any Model", //if sent, user can't edit
+                            bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
+                        ),
+                        customerDetails = CustomerDetails(
+                            name = " ", //if sent, user can't edit
+                            email = " ", //if sent, user can't edit
+                            dialCode = " ", //if sent, user can't edit
+                            phoneNumber = " ", //if sent, user can't edit
+                        )
+                    ),
+                    result = { isStarted, msg, code ->
+
+                        Log.e("messsagesss", "startInspection: " + msg + code)
+                        if (isStarted) {
+//
+                        } else {
+//
+                        }
+                        if (msg == "Success") {
+
+                            loadingDialog.cancel()
+                        }
+                        if (!isStarted) {
+
+                            loadingDialog.cancel()
+                            Log.e("startedinspection", "onCreateView: " + msg + isStarted)
+
+
+                        }
+                    })
+            } catch (_: Exception) {
+
+                showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
+            }
+        }
+//        } else {
+//            showErrorDialog(
+//                fragmentManager,
+//                "CTF-1",
+//                "We are currently updating our app for Android 13+ devices. Please try again later."
+//            )
+//        }
 
     }
 
@@ -879,6 +1002,7 @@ class CompleteTaskFragment : Fragment() {
                 rlcomtwoBreak,
                 rlcomtwoClock,
                 rlcomtwoClockOut,
+                BreakTimeTable,
                 taskDetails
             ).forEach { thisView -> thisView.visibility = View.GONE }
         }
@@ -887,8 +1011,14 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.taskDetails.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.GONE
+
                 /*mbinding.clFaceMask.visibility = View.GONE
                 mbinding.clOilLevel.visibility = View.GONE*/
+       /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                mbinding.uploadLayouts.visibility = View.VISIBLE
+                mbinding.taskDetails.visibility = View.VISIBLE
+                mbinding.imageUploadView.visibility = View.VISIBLE*/
+               // mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
             }
 
             0 -> {
@@ -911,8 +1041,23 @@ class CompleteTaskFragment : Fragment() {
 
             3 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
-                mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.BreakTimeTable.visibility = View.VISIBLE
             }
+
+            4 -> {
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.BreakTimeTable.visibility = View.VISIBLE
+            }
+
+            5 -> {
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.BreakTimeTable.visibility = View.VISIBLE
+            }
+
         }
     }
 
@@ -930,10 +1075,22 @@ class CompleteTaskFragment : Fragment() {
         } else {
             visibilityLevel += 1
         }
+
         if (isClockedIn) {
-            visibilityLevel += 1
+            visibilityLevel = 2
         }
-        if (isOnRoadHours) visibilityLevel += 1
+
+        if (isBreakTimeAdded && isOnRoadHours) {
+            visibilityLevel = 5
+            visibiltyControlls()
+            return
+        }
+
+        if (isBreakTimeAdded)
+            visibilityLevel = 3
+
+        if (isOnRoadHours)
+            visibilityLevel = 4
 
         visibiltyControlls()
     }
@@ -988,18 +1145,7 @@ class CompleteTaskFragment : Fragment() {
         }
     }
 
-    private fun hideDialog() {
-        apiCount--
-        if (apiCount <= 0) {
-            loadingDialog.cancel()
-            apiCount = 0
-        }
-    }
 
-    private fun showDialog() {
-        if (apiCount == 0) {
-            loadingDialog.show()
-        }
-        apiCount++
-    }
+
+
 }

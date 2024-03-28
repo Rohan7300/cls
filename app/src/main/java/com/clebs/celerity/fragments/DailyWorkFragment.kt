@@ -145,8 +145,6 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
     override fun onResume() {
         super.onResume()
-
-
     }
 
     override fun onCreateView(
@@ -615,7 +613,8 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                     "mymileage" + it.vehicleLastMillage.toString() + Prefs.getInstance(App.instance)
                         .get("vehicleLastMillage")
                 )
-                showAlert()
+                //showAlert()
+                navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
             } else {
                 showScanErrorDialog(
                     this,
