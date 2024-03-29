@@ -1006,7 +1006,8 @@ class CompleteTaskFragment : Fragment() {
                 rlcomtwoClock,
                 rlcomtwoClockOut,
                 BreakTimeTable,
-                taskDetails
+                taskDetails,
+                view2
             ).forEach { thisView -> thisView.visibility = View.GONE }
         }
         when (visibilityLevel) {

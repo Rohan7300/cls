@@ -13,46 +13,66 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
+import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.adapters.TicketAdapter
 import com.clebs.celerity.databinding.FragmentUserTicketsBinding
+import com.clebs.celerity.models.response.Doc
+import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.ui.CreateTicketsActivity
+import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.LoginActivity
+import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.utils.Prefs
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [UserTicketsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class UserTicketsFragment : Fragment() {
     lateinit var mbinding: FragmentUserTicketsBinding
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    lateinit var viewModel: MainViewModel
+    lateinit var prefs: Prefs
+    lateinit var homeActivity:HomeActivity
+    private lateinit var loadingDialog: LoadingDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         mbinding = FragmentUserTicketsBinding.inflate(inflater, container, false)
+        homeActivity = (activity as HomeActivity)
+        viewModel = homeActivity.viewModel
+        prefs = Prefs.getInstance(requireContext())
+        loadingDialog = homeActivity.loadingDialog
 
+        homeActivity.showDialog()
+        viewModel.GetUserTickets(prefs.userID.toInt())
+
+
+        observers()
         mbinding.rlreltive.setOnClickListener {
             showAlert()
         }
+
         mbinding.addNew.setOnClickListener {
             val intent = Intent(requireContext(), CreateTicketsActivity::class.java)
             startActivity(intent)
         }
 
         return mbinding.root
+    }
+
+    private fun observers() {
+        val ticketAdapter = TicketAdapter(GetUserTicketsResponse(ArrayList()))
+        mbinding.rvTickets.adapter = ticketAdapter
+        mbinding.rvTickets.layoutManager = LinearLayoutManager(requireContext())
+        viewModel.liveDataGetUserTickets.observe(viewLifecycleOwner){
+            homeActivity.hideDialog()
+            if(it!=null){
+                ticketAdapter.ticketList.Docs.clear()
+                ticketAdapter.ticketList.Docs.addAll(it.Docs)
+                ticketAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
     fun showAlert() {

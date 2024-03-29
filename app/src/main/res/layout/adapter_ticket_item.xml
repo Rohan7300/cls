@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginVertical="5dp"
+    android:background="@drawable/shape_expand_main"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Id : "
+        android:textSize="13sp"
+        android:fontFamily="@font/poppins_semibold"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/ticketTitleTV"
+        android:textSize="14sp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text=" : CLS - 2082"
+        />
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_msgframe"
+        />
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="2dp"
+        android:background="@color/black"
+        />
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_eyeframe"
+        />
+</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginVertical="10dp"
+        android:background="@color/black"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Subject :"
+            android:textSize="13sp"
+            android:fontFamily="@font/poppins_semibold"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:textSize="14sp"
+            android:id="@+id/ticketSubjectTV"
+            android:text="Update missing classroom training proof"
+            android:fontFamily="@font/poppins_semibold"
+            />
+
+    </LinearLayout>
+</LinearLayout>
+</LinearLayout>

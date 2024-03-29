@@ -42,6 +42,7 @@ import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
+import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
@@ -324,5 +325,13 @@ interface ApiService {
     suspend fun UpdateOnRouteInfo(
         @Body request: GetDriverRouteInfoByDateResponseItem
     ):Response<SimpleStatusMsgResponse>
+
+    @GET("/api/Ticket/GetUserTickets")
+    suspend fun GetUserTickets(
+        @Query("userId") userId:Int,
+        @Query("departmentId") departmentId:Int?,
+        @Query("startDate") startDate:String?,
+        @Query("endDate") endDate:String?
+    ):Response<GetUserTicketsResponse>
 
 }

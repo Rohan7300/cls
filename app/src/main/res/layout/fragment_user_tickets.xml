@@ -7,13 +7,13 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".fragments.UserTicketsFragment"
         >
-        <include
+<!--        <include
             layout="@layout/no_data_layout"
-            />
+            />-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -59,7 +59,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_marginVertical="15dp"
+            android:layout_marginHorizontal="10dp"
             android:id="@+id/rv_tickets"
             app:layout_constraintTop_toBottomOf="@+id/rlreltive"/>
 

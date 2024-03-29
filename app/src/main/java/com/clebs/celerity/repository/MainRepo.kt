@@ -37,6 +37,7 @@ import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRideAlongVehicleListsItem
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
+import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
@@ -485,11 +486,11 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun GetRideAlongDriverInfoByDate(
         driverId: Int
-    ): RideAlongDriverInfoByDateResponse?{
+    ): RideAlongDriverInfoByDateResponse? {
         val response = ApiService.GetRideAlongDriverInfoByDate((driverId))
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
@@ -498,23 +499,24 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun DeleteOnRideAlongRouteInfo(
         routeID: Int
-    ):SimpleStatusMsgResponse?{
+    ): SimpleStatusMsgResponse? {
         val response = ApiService.DeleteOnRideAlongRouteInfo(routeID)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
         return null
     }
+
     suspend fun DeleteOnRouteDetails(
         routeID: Int
-    ):SimpleStatusMsgResponse?{
+    ): SimpleStatusMsgResponse? {
         val response = ApiService.DeleteOnRouteDetails(routeID)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
@@ -523,11 +525,11 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun SubmitRideAlongDriverFeedback(
         request: SubmitRideAlongDriverFeedbackRequest
-    ):SimpleStatusMsgResponse?{
+    ): SimpleStatusMsgResponse? {
         val response = ApiService.SubmitRideAlongDriverFeedback(request)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response SubmitRideAlongDriverFeedback : $errorBody")
         }
@@ -538,12 +540,17 @@ class MainRepo(private val ApiService: ApiService) {
         driverId: Int,
         routeID: Int,
         leadDriverId: Int,
-        daDailyWorkId:Int
-    ):GetRideAlongLeadDriverQuestionResponse?{
-        val response = ApiService.GetRideAlongLeadDriverQuestion(driverId,routeID,leadDriverId,daDailyWorkId)
-        if(response.isSuccessful)
+        daDailyWorkId: Int
+    ): GetRideAlongLeadDriverQuestionResponse? {
+        val response = ApiService.GetRideAlongLeadDriverQuestion(
+            driverId,
+            routeID,
+            leadDriverId,
+            daDailyWorkId
+        )
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response SubmitRideAlongDriverFeedback : $errorBody")
         }
@@ -551,12 +558,12 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun DeleteBreakTime(
-        dawDriverBreakId:Int
-    ):SimpleStatusMsgResponse?{
+        dawDriverBreakId: Int
+    ): SimpleStatusMsgResponse? {
         val response = ApiService.DeleteBreakTime(dawDriverBreakId)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response DeleteBreakTime : $errorBody")
         }
@@ -565,15 +572,32 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun UpdateOnRouteInfo(
         request: GetDriverRouteInfoByDateResponseItem
-    ):SimpleStatusMsgResponse?{
+    ): SimpleStatusMsgResponse? {
         val response = ApiService.UpdateOnRouteInfo(request)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response Body : $errorBody")
         }
         return null
     }
+
+    suspend fun GetUserTickets(
+        userID: Int,
+        departmentId: Int?,
+        startDate: String?,
+        endDate: String?
+    ): GetUserTicketsResponse? {
+        val response = ApiService.GetUserTickets(userID, departmentId, startDate, endDate)
+        if (response.isSuccessful)
+            return response.body()
+        else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body : $errorBody")
+        }
+        return null
+    }
+
 
 }

@@ -40,6 +40,7 @@ import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
+import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
@@ -94,6 +95,7 @@ class MainViewModel(
         MutableLiveData<GetRideAlongLeadDriverQuestionResponse?>()
     val liveDataDeleteBreakTime = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataUpdateOnRouteInfo = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataGetUserTickets = MutableLiveData<GetUserTicketsResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -583,6 +585,25 @@ class MainViewModel(
             }
             result.onFailure { ex->
                 Log.e("DeleteBreakTime Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun GetUserTickets(
+        userID: Int,
+        department:Int?=null,
+        startDate:String?=null,
+        endDate:String?=null
+    ){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.GetUserTickets(userID,department,startDate,endDate)
+            }
+            result.onSuccess {res->
+                liveDataGetUserTickets.postValue(res)
+            }
+            result.onFailure { ex->
+                Log.e("GetUserTickets","Error ${ex.message}")
             }
         }
     }
