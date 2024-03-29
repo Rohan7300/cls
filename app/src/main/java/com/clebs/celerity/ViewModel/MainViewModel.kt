@@ -31,6 +31,7 @@ import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
+import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
@@ -92,6 +93,7 @@ class MainViewModel(
     val liveDataGetRideAlongLeadDriverQuestion =
         MutableLiveData<GetRideAlongLeadDriverQuestionResponse?>()
     val liveDataDeleteBreakTime = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataUpdateOnRouteInfo = MutableLiveData<SimpleStatusMsgResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -554,16 +556,32 @@ class MainViewModel(
     }
 
     fun DeleteBreakTime(
-        dawDriverBreakId:Int
-    ){
+        dawDriverBreakId: Int
+    ) {
         viewModelScope.launch {
             val result = runCatching {
                 repo.DeleteBreakTime(dawDriverBreakId)
             }
-            result.onSuccess {response->
+            result.onSuccess { response ->
                 liveDataDeleteBreakTime.postValue(response)
             }
-            result.onFailure {ex->
+            result.onFailure { ex ->
+                Log.e("DeleteBreakTime Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun UpdateOnRouteInfo(
+        request: GetDriverRouteInfoByDateResponseItem
+    ) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.UpdateOnRouteInfo(request)
+            }
+            result.onSuccess { res ->
+                liveDataUpdateOnRouteInfo.postValue(res)
+            }
+            result.onFailure { ex->
                 Log.e("DeleteBreakTime Exception", "Error ${ex.message}")
             }
         }

@@ -2,6 +2,7 @@ package com.clebs.celerity.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.Stack
@@ -203,5 +204,19 @@ class Prefs(context: Context) {
         fun getSignaturInfo():String?{
             return sharedPreferences.getString("SignaturInfo",null)
         }*/
+
+    fun saveDriverRouteInfoByDate(data: GetDriverRouteInfoByDateResponseItem?) {
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        val gson = Gson()
+        val json = data.let { gson.toJson(it) }
+        editor.putString("CurrRouteInfo", json)
+        editor.apply()
+    }
+    fun getDriverRouteInfoByDate():GetDriverRouteInfoByDateResponseItem?{
+        val gson = Gson()
+        val data = sharedPreferences.getString("CurrRouteInfo",null)
+        return gson.fromJson(data,GetDriverRouteInfoByDateResponseItem::class.java)?:null
+    }
+
 
 }

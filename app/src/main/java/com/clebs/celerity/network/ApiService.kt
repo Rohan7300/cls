@@ -32,6 +32,7 @@ import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
+import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
@@ -317,6 +318,11 @@ interface ApiService {
     @POST("/api/DaDailyWorks/DeleteBreakTime/{dawDriverBreakId}")
     suspend fun DeleteBreakTime(
         @Path("dawDriverBreakId") dawDriverBreakId:Int
+    ):Response<SimpleStatusMsgResponse>
+
+    @PUT("/api/RouteUpdate/UpdateOnRouteInfo")
+    suspend fun UpdateOnRouteInfo(
+        @Body request: GetDriverRouteInfoByDateResponseItem
     ):Response<SimpleStatusMsgResponse>
 
 }

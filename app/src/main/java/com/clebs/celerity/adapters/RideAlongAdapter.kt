@@ -2,6 +2,7 @@ package com.clebs.celerity.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -24,7 +25,7 @@ class RideAlongAdapter(
     var viewLifecycleOwner: LifecycleOwner,
     var context: Context
 ) : RecyclerView.Adapter<RideAlongAdapter.RideAlongViewHolder>() {
-    inner class RideAlongViewHolder(private val binding: AdapterRideAlongBinding) :
+    inner class RideAlongViewHolder(val binding: AdapterRideAlongBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: leadDriverIdItem) {
             binding.tainerName.text = prefs.userName
@@ -103,6 +104,9 @@ class RideAlongAdapter(
 
     override fun onBindViewHolder(holder: RideAlongViewHolder, position: Int) {
         val item = data[position]
+        if(position!=0){
+            holder.binding.trainerHeader.visibility = View.GONE
+        }
         holder.bind(item)
     }
 }

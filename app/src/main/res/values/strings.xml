@@ -3,7 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello Home fragment</string>
     <string name="place_the_r">
-Place the Rectangle area as on Vehicle Reg plate as shown in the image and capture the registration number upon recognition
+Place the Rectangle area as on Vehicle Reg plate as shown in the image and capture the registration number
 </string>
     <string name="location">Location</string>
     <string name="away">Away</string>

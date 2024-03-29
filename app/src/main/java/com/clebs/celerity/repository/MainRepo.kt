@@ -27,6 +27,7 @@ import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
+import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
@@ -558,6 +559,19 @@ class MainRepo(private val ApiService: ApiService) {
         else{
             val errorBody = response.errorBody()?.string()
             println("Error Response DeleteBreakTime : $errorBody")
+        }
+        return null
+    }
+
+    suspend fun UpdateOnRouteInfo(
+        request: GetDriverRouteInfoByDateResponseItem
+    ):SimpleStatusMsgResponse?{
+        val response = ApiService.UpdateOnRouteInfo(request)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body : $errorBody")
         }
         return null
     }
