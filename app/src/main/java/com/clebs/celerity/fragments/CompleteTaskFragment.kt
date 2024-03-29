@@ -686,7 +686,7 @@ class CompleteTaskFragment : Fragment() {
             mbinding.tvNext.visibility = View.VISIBLE
         }
 
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
+//        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
             loadingDialog.show()
 
             if (cqSDKInitializer.isCQSDKInitialized()) {
@@ -742,13 +742,13 @@ class CompleteTaskFragment : Fragment() {
                     showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
                 }
             }
-        } else {
-            showErrorDialog(
-                fragmentManager,
-                "CTF-1",
-                "We are currently updating our app for Android 13+ devices. Please try again later."
-            )
-        }
+//        } else {
+//            showErrorDialog(
+//                fragmentManager,
+//                "CTF-1",
+//                "We are currently updating our app for Android 13+ devices. Please try again later."
+//            )
+//        }
 
     }
 

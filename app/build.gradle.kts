@@ -75,6 +75,7 @@ android {
 
 dependencies {
 
+
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -114,11 +115,7 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
 
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
 
-    // CQ SDK
-    implementation ("com.github.clearquotetech:cq-android-sdk:2.0.9-test")
 
-
-    //viewModel
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
@@ -132,8 +129,8 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
-    implementation ("com.github.clearquotetech:cq-android-sdk:2.0.4-test")
+
 
     kapt("androidx.room:room-compiler:2.6.1")
-
+    implementation ("com.github.clearquotetech:cq-android-sdk:2.1.3-test")
 }

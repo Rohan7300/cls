@@ -84,17 +84,17 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             val message =
                 intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
                     ?: "Could not identify status message"
-            Log.d("hdhsdshdsdjshhsds","main $message")
+            Log.d("hdhsdshdsdjshhsds", "main $message")
             val tempCode =
                 intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
             if (tempCode == 200) {
-                Log.d("hdhsdshdsdjshhsds","200 $message")
+                Log.d("hdhsdshdsdjshhsds", "200 $message")
                 Prefs.getInstance(this).saveBoolean("Inspection", true)
                 //inspectionstarted = true
                 navController.navigate(R.id.completeTaskFragment)
                 showToast("Vehicle Inspection is successfully completed ", this)
             } else {
-                Log.d("hdhsdshdsdjshhsds","else $message")
+                Log.d("hdhsdshdsdjshhsds", "else $message")
                 navController.navigate(R.id.completeTaskFragment)
                 showToast("inspection Failed", this)
                 Prefs.getInstance(this).saveBoolean("Inspection", false)
@@ -113,7 +113,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 // Update message in the dia
             }
         }
-        Log.d("hdhsdshdsdjshhsds","No Intent")
+        Log.d("hdhsdshdsdjshhsds", "No Intent")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -135,7 +135,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
 //        bottomNavigationView.menu.findItem(R.id.passwords).setTooltipText("Notifications")
-        getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+        getWindow().getDecorView()
+            .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         try {
             val apiService = RetrofitService.getInstance().create(ApiService::class.java)
             val mainRepo = MainRepo(apiService)
@@ -381,16 +382,19 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private fun cqSDKInitializer() {
         cqSDKInitializer = CQSDKInitializer(this)
         cqSDKInitializer.triggerOfflineSync()
-
-        cqSDKInitializer.initSDK(
-            sdkKey = sdkkey,
-            result = { isInitialized, code, _ ->
-                if (isInitialized && code == PublicConstants.sdkInitializationSuccessCode) {
-                    Prefs.getInstance(applicationContext).saveCQSdkKey(sdkkey)
-                } else {
-                    showToast("Error initializing SDK", this)
+        if (!cqSDKInitializer.isCQSDKInitialized()) {
+            Log.e("intialized", "cqSDKInitializer: ", )
+            cqSDKInitializer.initSDK(
+                sdkKey = sdkkey,
+                result = { isInitialized, code, _ ->
+                    if (isInitialized && code == PublicConstants.sdkInitializationSuccessCode) {
+                        Prefs.getInstance(applicationContext).saveCQSdkKey(sdkkey)
+                    } else {
+                        showToast("Error initializing SDK", this)
+                    }
                 }
-            }
-        )
+            )
+        }
+
     }
 }
