@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:padding="10dp"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:fontFamily="@font/poppins_semibold"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/black"
+            android:text=" Trainer Questionner"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:id="@+id/RecordInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/heading"
+            android:background="@drawable/shape_edittext_onroad"
+            android:padding="12dp">
+            <LinearLayout
+                android:id="@+id/hh1"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/icon1"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/i" />
+
+                <TextView
+                    android:id="@+id/lsDelivery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/poppins"
+                    android:text="Celebrity LS Delivery Driver training Record"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:id="@+id/arrow1"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/rightarrow" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/hiddenText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/hh1"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/Linear1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/RecordInfo"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            tools:context=".FortabLayout">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tablay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:tabIndicatorColor="@color/orange"
+                app:tabMode="scrollable"
+                app:tabGravity="fill"
+                app:tabMaxWidth="0dp"
+                >
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/prep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:text="Preparedness" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:text="Start Up" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:text="Going On" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:text="Delivery Procedures" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:text="Return" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:textSize="12dp"
+                    android:layout_height="wrap_content"
+                    android:text="Final Assesment" />
+            </com.google.android.material.tabs.TabLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

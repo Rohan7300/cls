@@ -420,7 +420,7 @@ fun bitmapToBase64(bitmap: Bitmap): String {
     }
 }*/
 
-fun showTimePickerDialog(context: Context, editText: EditText) {
+fun showTimePickerDialog(context: Context, editText: TextView,type:Int) {
     val calendar = Calendar.getInstance()
     val hour = calendar.get(Calendar.HOUR_OF_DAY)
     val minute = calendar.get(Calendar.MINUTE)
@@ -429,7 +429,7 @@ fun showTimePickerDialog(context: Context, editText: EditText) {
         context,
         { _, selectedHour, selectedMinute ->
             val time = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute)
-            editText.setText(time)
+            editText.text = time
         },
         hour,
         minute,
@@ -438,6 +438,7 @@ fun showTimePickerDialog(context: Context, editText: EditText) {
 
     timePickerDialog.show()
 }
+
 
 fun isNetworkAvailable(context: Context): Boolean {
     val connectivityManager =
@@ -469,3 +470,5 @@ fun getCurrentDateTime(): String {
     dateFormat.timeZone = TimeZone.getTimeZone("UTC")
     return dateFormat.format(Date())
 }
+
+

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    android:background="@color/white"
+    android:padding="7dp"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ReturnRV"
+            android:layout_width="match_parent"
+            android:scrollbars="none"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp" />
+
+        <TextView
+            android:id="@+id/commentHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Comment*"
+            android:textColor="#675D5D"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/r4"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/shape_edittext_onroad"
+            android:layout_marginHorizontal="2dp"
+            android:orientation="horizontal"
+            android:padding="14dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/poppins"
+                android:hint="Enter Comment"
+                android:id="@+id/etReturnComment"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@android:color/transparent"
+                android:importantForAutofill="no"
+                android:textColor="#675D5D"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="40dp"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/cancel_button"
+                android:ems="5"
+                android:fontFamily="@font/poppins_semibold"
+                android:padding="10dp"
+                android:text="Cancel"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/returnSaveBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/cancel_button"
+                android:backgroundTint="#FD7C40"
+                android:ems="5"
+                android:textStyle="bold"
+                android:fontFamily="@font/poppins"
+                android:text="Save"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </RelativeLayout>
+    </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

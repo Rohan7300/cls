@@ -10,7 +10,14 @@ import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
 import com.clebs.celerity.models.requests.LoginRequest
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
+import com.clebs.celerity.models.requests.SaveQuestionaireDeliverProceduresRequest
+import com.clebs.celerity.models.requests.SaveQuestionaireOnGoingActivitiesRequest
+import com.clebs.celerity.models.requests.SaveQuestionairePreparednessRequest
+import com.clebs.celerity.models.requests.SaveQuestionaireReturnToDeliveryStationRequest
+import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
+import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
+import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.response.LoginResponse
@@ -19,8 +26,10 @@ import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
+import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
@@ -29,7 +38,9 @@ import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
+import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
+import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.utils.NoInternetDialog
@@ -157,7 +168,7 @@ class MainRepo(private val ApiService: ApiService) {
         val response = ApiService.SaveVehDefectSheet(vehicleDefectSheetInfoResponse)
         if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response body: $errorBody")
         }
@@ -379,4 +390,176 @@ class MainRepo(private val ApiService: ApiService) {
         }
         return null
     }
+
+    suspend fun GetDriverRouteInfoByDate(
+        driverId: Int
+    ): GetDriverRouteInfoByDateResponse? {
+        val response = ApiService.GetDriverRouteInfoByDate(driverId)
+        if (response.isSuccessful)
+            return response.body()
+        else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun SaveQuestionairePreparedness(
+        request: SaveQuestionairePreparednessRequest
+    ): SimpleQuestionResponse? {
+        val response = ApiService.SaveQuestionairePreparedness(request)
+        if (response.isSuccessful)
+            return response.body()
+        else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun SaveQuestionaireStartup(
+        request: SaveQuestionaireStartupRequest
+    ): SimpleQuestionResponse? {
+        val response = ApiService.SaveQuestionaireStartup(request)
+        if (response.isSuccessful)
+            return response.body()
+        else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun SaveQuestionaireOnGoingActivities(
+        request: SaveQuestionaireOnGoingActivitiesRequest
+    ): SimpleQuestionResponse? {
+        val response = ApiService.SaveQuestionaireOnGoingActivities(request)
+        if (response.isSuccessful)
+            return response.body()
+        else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun SaveQuestionaireDeliverProcedures(
+        request: SaveQuestionaireDeliverProceduresRequest
+    ): SimpleQuestionResponse? {
+        val response = ApiService.SaveQuestionaireDeliverProcedures(request)
+        if (response.isSuccessful)
+            return response.body()
+        else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun SaveQuestionaireReturnToDeliveryStation(
+        request: SaveQuestionaireReturnToDeliveryStationRequest
+    ): SimpleQuestionResponse? {
+        val response = ApiService.SaveQuestionaireReturnToDeliveryStation(request)
+        if (response.isSuccessful)
+            return response.body()
+        else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun SubmitFinalQuestionairebyLeadDriver(
+        request: SubmitFinalQuestionairebyLeadDriverRequest
+    ): SimpleQuestionResponse? {
+        val response = ApiService.SubmitFinalQuestionairebyLeadDriver(request)
+        if (response.isSuccessful)
+            return response.body()
+        else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetRideAlongDriverInfoByDate(
+        driverId: Int
+    ): RideAlongDriverInfoByDateResponse?{
+        val response = ApiService.GetRideAlongDriverInfoByDate((driverId))
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun DeleteOnRideAlongRouteInfo(
+        routeID: Int
+    ):SimpleStatusMsgResponse?{
+        val response = ApiService.DeleteOnRideAlongRouteInfo(routeID)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+    suspend fun DeleteOnRouteDetails(
+        routeID: Int
+    ):SimpleStatusMsgResponse?{
+        val response = ApiService.DeleteOnRouteDetails(routeID)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun SubmitRideAlongDriverFeedback(
+        request: SubmitRideAlongDriverFeedbackRequest
+    ):SimpleStatusMsgResponse?{
+        val response = ApiService.SubmitRideAlongDriverFeedback(request)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response SubmitRideAlongDriverFeedback : $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetRideAlongLeadDriverQuestion(
+        driverId: Int,
+        routeID: Int,
+        leadDriverId: Int,
+        daDailyWorkId:Int
+    ):GetRideAlongLeadDriverQuestionResponse?{
+        val response = ApiService.GetRideAlongLeadDriverQuestion(driverId,routeID,leadDriverId,daDailyWorkId)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response SubmitRideAlongDriverFeedback : $errorBody")
+        }
+        return null
+    }
+
+    suspend fun DeleteBreakTime(
+        dawDriverBreakId:Int
+    ):SimpleStatusMsgResponse?{
+        val response = ApiService.DeleteBreakTime(dawDriverBreakId)
+        if(response.isSuccessful)
+            return response.body()
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response DeleteBreakTime : $errorBody")
+        }
+        return null
+    }
+
 }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".fragments.FeedbackFragment">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:background="@color/very_light_orange"
+    android:layout_marginBottom="8dp"
+    android:paddingVertical="15dp"
+    android:paddingHorizontal="25dp"
+    >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:layout_weight="1"
+                android:text=" Feedback Questionner"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/feedback2"/>
+</LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/feedbackQuestionare"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:fontFamily="@font/poppins"
+                android:text="Ride-along Driver Signature here:"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/feedbackAddSignature"
+                    android:src="@drawable/addimage"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

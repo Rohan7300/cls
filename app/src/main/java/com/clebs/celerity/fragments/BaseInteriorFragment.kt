@@ -1,7 +1,9 @@
 package com.clebs.celerity.fragments
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +14,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -23,7 +26,7 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertBitmapToBase64
 import com.clebs.celerity.utils.setImageView
-import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
+import com.clebs.celerity.utils.showToast
 import java.util.Stack
 
 abstract class BaseInteriorFragment : Fragment() {
@@ -43,6 +46,23 @@ abstract class BaseInteriorFragment : Fragment() {
     lateinit var dxReg: TextView
     lateinit var dxm5: TextView
     lateinit var ana_carolin: TextView
+    lateinit var ivX: ImageView
+
+    companion object{
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
+            ).apply {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    add(Manifest.permission.READ_MEDIA_VIDEO)
+                    add(Manifest.permission.READ_MEDIA_IMAGES)
+                    add(Manifest.permission.READ_MEDIA_AUDIO)
+                }
+            }.toTypedArray()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as HomeActivity).viewModel
@@ -91,7 +111,7 @@ abstract class BaseInteriorFragment : Fragment() {
     }
 
     protected fun pictureDialogBase64(iv: ImageView) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             runWithPermissions(
                 android.Manifest.permission.CAMERA,
                 android.Manifest.permission.READ_MEDIA_IMAGES,
@@ -111,8 +131,38 @@ abstract class BaseInteriorFragment : Fragment() {
             ) {
                 showPictureDialog(iv)
             }
+        }*/
+        ivX = iv
+        if(allPermissionsGranted()){
+            showPictureDialog(iv)
+        }else{
+
+            requestpermissions()
         }
     }
+
+    private fun requestpermissions() {
+
+        activityResultLauncher.launch(BaseInteriorFragment.REQUIRED_PERMISSIONS)
+
+    }
+
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        )
+        { permissions ->
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in BaseInteriorFragment.REQUIRED_PERMISSIONS && it.value == false)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                showToast("Permission denied", requireContext())
+            } else {
+                showPictureDialog(ivX)
+            }
+        }
 
     private fun showPictureDialog(iv: ImageView) {
         imageView = iv
@@ -283,4 +333,9 @@ abstract class BaseInteriorFragment : Fragment() {
         prefs.saveNavigationHistory(fragmentStack)
     }
 
+    private fun allPermissionsGranted() = BaseInteriorFragment.REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            requireContext(), it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
 }

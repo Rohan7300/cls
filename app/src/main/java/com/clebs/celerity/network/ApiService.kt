@@ -13,7 +13,14 @@ import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.SaveBreakStartEndTImeRequestModel
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.requests.SaveDriverDocumentSignatureRequest
+import com.clebs.celerity.models.requests.SaveQuestionaireDeliverProceduresRequest
+import com.clebs.celerity.models.requests.SaveQuestionaireOnGoingActivitiesRequest
+import com.clebs.celerity.models.requests.SaveQuestionairePreparednessRequest
+import com.clebs.celerity.models.requests.SaveQuestionaireReturnToDeliveryStationRequest
+import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
+import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
+import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.requests.logoutModel
@@ -24,8 +31,10 @@ import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
+import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfo
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
@@ -34,11 +43,14 @@ import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
+import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
+import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -236,9 +248,75 @@ interface ApiService {
         @Query("LeadDriverId") LeadDriverId: Int
     ): Response<GetRideAlongRouteInfoByIdRes>
 
-@PUT("/api/Drivers/UpdatePassword")
-suspend fun updateprofilepassword(@Query("userId") userId: Double ,@Query("oldPassword") oldpassword:String,@Query("newPassword") newpassworfd :String):Response<SimpleStatusMsgResponse>
+    @PUT("/api/Drivers/UpdatePassword")
+    suspend fun updateprofilepassword(
+        @Query("userId") userId: Double,
+        @Query("oldPassword") oldpassword: String,
+        @Query("newPassword") newpassworfd: String
+    ): Response<SimpleStatusMsgResponse>
 
-@PUT("/api/Drivers/UpdateProfile")
-suspend fun updateprofileregular(@Body request:UpdateProfileRequestBody):Response<SimpleStatusMsgResponse>
+    @PUT("/api/Drivers/UpdateProfile")
+    suspend fun updateprofileregular(@Body request: UpdateProfileRequestBody): Response<SimpleStatusMsgResponse>
+
+    @GET("/api/RouteUpdate/GetDriverRouteInfoByDate/{driverId}")
+    suspend fun GetDriverRouteInfoByDate(
+        @Path("driverId") driverId: Int
+    ): Response<GetDriverRouteInfoByDateResponse>
+
+    @POST("/api/DriverQuestionnaire/SaveQuestionairePreparedness")
+    suspend fun SaveQuestionairePreparedness(
+        @Body request: SaveQuestionairePreparednessRequest
+    ): Response<SimpleQuestionResponse>
+
+    @POST("/api/DriverQuestionnaire/SaveQuestionaireStartup")
+    suspend fun SaveQuestionaireStartup(
+        @Body request: SaveQuestionaireStartupRequest
+    ): Response<SimpleQuestionResponse>
+
+    @POST("/api/DriverQuestionnaire/SaveQuestionaireOnGoingActivities")
+    suspend fun SaveQuestionaireOnGoingActivities(
+        @Body request: SaveQuestionaireOnGoingActivitiesRequest
+    ): Response<SimpleQuestionResponse>
+
+    @POST("/api/DriverQuestionnaire/SaveQuestionaireDeliverProcedures")
+    suspend fun SaveQuestionaireDeliverProcedures(
+        @Body request: SaveQuestionaireDeliverProceduresRequest
+    ): Response<SimpleQuestionResponse>
+
+    @POST("/api/DriverQuestionnaire/SaveQuestionaireReturnToDeliveryStation")
+    suspend fun SaveQuestionaireReturnToDeliveryStation(
+        @Body request: SaveQuestionaireReturnToDeliveryStationRequest
+    ): Response<SimpleQuestionResponse>
+
+    @POST("/api/DriverQuestionnaire/SubmitFinalQuestionairebyLeadDriver")
+    suspend fun SubmitFinalQuestionairebyLeadDriver(
+        @Body request: SubmitFinalQuestionairebyLeadDriverRequest
+    ): Response<SimpleQuestionResponse>
+
+    @GET("/api/RouteUpdate/GetRideAlongDriverInfoByDate/{leadDriverId}")
+    suspend fun GetRideAlongDriverInfoByDate(@Path("leadDriverId") driverID: Int
+    ): Response<RideAlongDriverInfoByDateResponse>
+
+    @DELETE("/api/RouteUpdate/DeleteOnRideAlongRouteInfo/{routeId}")
+    suspend fun DeleteOnRideAlongRouteInfo(@Path("routeId") routeId: Int):Response<SimpleStatusMsgResponse>
+
+    @DELETE("/api/RouteUpdate/DeleteOnRouteDetails/{routeId}")
+    suspend fun DeleteOnRouteDetails(@Path("routeId") routeId: Int):Response<SimpleStatusMsgResponse>
+
+    @POST("/api/DriverQuestionnaire/SubmitRideAlongDriverFeedback")
+    suspend fun SubmitRideAlongDriverFeedback(@Body request: SubmitRideAlongDriverFeedbackRequest):Response<SimpleStatusMsgResponse>
+
+    @GET("/api/DriverQuestionnaire/GetRideAlongLeadDriverQuestion")
+    suspend fun GetRideAlongLeadDriverQuestion(
+        @Query("driverId") driverId:Int,
+        @Query("routetId") routetId:Int,
+        @Query("leadDriverId") leadDriverId:Int,
+        @Query("daDailyWorkId") daDailyWorkId:Int
+    ):Response<GetRideAlongLeadDriverQuestionResponse>
+
+    @POST("/api/DaDailyWorks/DeleteBreakTime/{dawDriverBreakId}")
+    suspend fun DeleteBreakTime(
+        @Path("dawDriverBreakId") dawDriverBreakId:Int
+    ):Response<SimpleStatusMsgResponse>
+
 }

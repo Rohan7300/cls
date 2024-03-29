@@ -1,34 +1,42 @@
 package com.clebs.celerity.fragments
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.adapters.BreakTimeAdapter
+import com.clebs.celerity.adapters.DriverRouteAdapter
+import com.clebs.celerity.adapters.RideAlongAdapter
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
 import com.clebs.celerity.databinding.TimePickerDialogBinding
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
+import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
+import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
@@ -39,10 +47,6 @@ import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toRequestBody
-import com.elconfidencial.bubbleshowcase.BubbleShowCase
-import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
-import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
-import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
 import io.clearquote.assessment.cq_sdk.models.CustomerDetails
@@ -65,6 +69,8 @@ class CompleteTaskFragment : Fragment() {
     private var userId: Int = 0
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
+    lateinit var ivX: ImageView
+    var codeX = 0
     private var requestCode: Int = 0
     private var showImageUploadLayout: Boolean = false
     private var isAllImageUploaded: Boolean = false
@@ -72,18 +78,40 @@ class CompleteTaskFragment : Fragment() {
     private var imagesUploaded: Boolean = false
     private var isClockedIn: Boolean = false
     private var isOnRoadHours: Boolean = false
+    private var isBreakTimeAdded: Boolean = false
     private var visibilityLevel = -1
     var breakStartTime: String = ""
     var breakEndTime: String = ""
     private lateinit var loadingDialog: LoadingDialog
+    var b1 = false
+    var b2 = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
     private var imageUploadLevel = 0
-    var apiCount = 0
-
+    val showDialog: () -> Unit = {
+        (activity as HomeActivity).showDialog()
+    }
+    val hideDialog: () -> Unit = {
+        (activity as HomeActivity).hideDialog()
+    }
     var inspectionOfflineImagesCHeck: Boolean? = null
     private var inspectionstarted: Boolean = false
 
+    companion object {
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
+            ).apply {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    add(Manifest.permission.READ_MEDIA_VIDEO)
+                    add(Manifest.permission.READ_MEDIA_IMAGES)
+                    add(Manifest.permission.READ_MEDIA_AUDIO)
+                }
+            }.toTypedArray()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -97,8 +125,18 @@ class CompleteTaskFragment : Fragment() {
         loadingDialog = (activity as HomeActivity).loadingDialog
         userId = Prefs.getInstance(requireContext()).userID.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
+        mbinding.addBreakIV.setOnClickListener(clickListener)
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
+        mbinding.h1.setOnClickListener {
+            if (mbinding.breakH2.isVisible) {
+                mbinding.breakH2.visibility = View.GONE
+                mbinding.badgeArrow.setImageResource(R.drawable.grey_right_arrow)
+            } else {
+                mbinding.breakH2.visibility = View.VISIBLE
+                mbinding.badgeArrow.setImageResource(R.drawable.down_arrow)
+            }
+        }
         mbinding.ivFaceMask.setImageResource(R.drawable.upload_icc)
         Prefs.getInstance(requireContext()).clearNavigationHistory()
         fragmentManager = (activity as HomeActivity).fragmentManager
@@ -108,63 +146,57 @@ class CompleteTaskFragment : Fragment() {
 
         inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
         viewModel = (activity as HomeActivity).viewModel
-        //(activity as HomeActivity).getVehicleLocationInfo()
 
         showDialog()
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
 
 
         observers()
-
         showDialog()
         viewModel.GetDriverBreakTimeInfo(userId)
         showDialog()
         viewModel.GetDailyWorkInfoById(userId)
+        viewModel.GetDriverRouteInfoByDate(userId)
+        viewModel.GetRideAlongDriverInfoByDate(userId)
 
+        /*  BubbleShowCaseBuilder(requireActivity()) //Activity instance
+              .title("Start Inspection") //Any title for the bubble view
+              .description("Click here to capture Vehicle Images") //More detailed description
+              .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
+              //You can force the position of the arrow to change the location of the bubble.
+              .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
+              //Bubble background color
+              .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
+              .titleTextSize(16) //Title text size in SP (default value 16sp)
+              .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
+              .image(requireContext().resources.getDrawable(R.drawable.baseline_image_search_24)!!) //Bubble main image
+              .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
 
+              .listener(
+                  (object : BubbleShowCaseListener { //Listener for user actions
+                      override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
+                          //Called when the user clicks the target
+                          bubbleShowCase.dismiss()
+                      }
 
-//        if (mbinding.startinspection.visibility==View.VISIBLE && mbinding.imageUploadView.visibility==View.VISIBLE && mbinding.uploadLayouts.visibility==View.VISIBLE) {
-//            BubbleShowCaseBuilder(requireActivity()) //Activity instance
-//                .title("Start Inspection") //Any title for the bubble view
-//                .description("Click here to capture Vehicle Images") //More detailed description
-//                .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
-//                //You can force the position of the arrow to change the location of the bubble.
-//                .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
-//                //Bubble background color
-//                .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
-//                .titleTextSize(16) //Title text size in SP (default value 16sp)
-//                .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
-//                .image(requireContext().resources.getDrawable(R.drawable.baseline_image_search_24)!!) //Bubble main image
-//                .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
-//
-//                .listener(
-//                    (object : BubbleShowCaseListener { //Listener for user actions
-//                        override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
-//                            //Called when the user clicks the target
-//                            bubbleShowCase.dismiss()
-//                        }
-//
-//                        override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
-//                            //Called when the user clicks the close button
-//                            bubbleShowCase.dismiss()
-//                        }
-//
-//                        override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
-//                            //Called when the user clicks on the bubble
-//                            bubbleShowCase.dismiss()
-//                        }
-//
-//                        override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
-//                            bubbleShowCase.dismiss()
-//                            //Called when the user clicks on the background dim
-//                        }
-//                    })
-//                )
-//                .targetView(mbinding.startinspection)
-//                .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
-//                .show()
-//        }
+                      override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
+                          //Called when the user clicks the close button
+                          bubbleShowCase.dismiss()
+                      }
 
+                      override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
+                          //Called when the user clicks on the bubble
+                          bubbleShowCase.dismiss()
+                      }
+
+                      override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
+                          bubbleShowCase.dismiss()
+                          //Called when the user clicks on the background dim
+                      }
+                  })
+              )
+              .targetView(mbinding.startinspection).highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
+              .show()*/
         clientUniqueID()
 
         mbinding.rlcomtwoClock.setOnClickListener {
@@ -179,12 +211,17 @@ class CompleteTaskFragment : Fragment() {
         }
 
         mbinding.rideAlong.setOnClickListener {
-            navigateTo(R.id.rideAlongFragment, requireContext(), findNavController())
+            //navigateTo(R.id.rideAlongFragment, requireContext(), findNavController())
+            findNavController().popBackStack()
+            findNavController().navigate(R.id.rideAlongFragment)
+
         }
 
         mbinding.headerTop.icpnUser.setOnClickListener {
             findNavController().navigate(R.id.profileFragment)
         }
+
+
 
         if (checked.equals("0")) {
             //findNavController().navigate(R.id.vechileMileageFragment)
@@ -258,6 +295,35 @@ class CompleteTaskFragment : Fragment() {
         return mbinding.root
     }
 
+    private fun requestpermissions() {
+
+        activityResultLauncher.launch(CompleteTaskFragment.REQUIRED_PERMISSIONS)
+
+    }
+
+    private fun allPermissionsGranted() = CompleteTaskFragment.REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            requireContext(), it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        )
+        { permissions ->
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in CompleteTaskFragment.REQUIRED_PERMISSIONS && it.value == false)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                showToast("Permission denied", requireContext())
+            } else {
+                showPictureDialog(ivX, codeX)
+            }
+        }
+
     override fun onResume() {
         super.onResume()
 
@@ -281,8 +347,8 @@ class CompleteTaskFragment : Fragment() {
             hideDialog()
 
             if (it != null) {
-                mbinding.headerTop.dxLoc.text = it?.locationName ?: ""
-                mbinding.headerTop.dxReg.text = it?.vmRegNo ?: ""
+                mbinding.headerTop.dxLoc.text = it.locationName ?: ""
+                mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
             }
 
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
@@ -299,6 +365,10 @@ class CompleteTaskFragment : Fragment() {
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             if (it != null) {
                 //visibilityLevel = 3
+
+                showDialog()
+                viewModel.GetDriverBreakTimeInfo(userId)
+
             } else {
                 // showToast("Something went wrong!!", requireContext())
             }
@@ -351,6 +421,12 @@ class CompleteTaskFragment : Fragment() {
             }
         }
 
+        var breakTimeadapter =
+            BreakTimeAdapter(GetDriverBreakTimeInfoResponse(), viewModel, showDialog)
+        mbinding.BreakTimeRV.adapter = breakTimeadapter
+        mbinding.BreakTimeRV.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
 
         viewModel.livedataDriverBreakInfo.observe(viewLifecycleOwner) {
             hideDialog()
@@ -361,19 +437,32 @@ class CompleteTaskFragment : Fragment() {
                     val breakTimeEnd = breakInfo.BreakTimeEnd
                     val breakTimeStart = breakInfo.BreakTimeStart
                     if (breakTimeStart.isNotEmpty() && breakTimeEnd.isNotEmpty()) {
-                        mbinding.downIvsBreak.setImageResource(R.drawable.ic_yes)
+                        val reversedList = it.reversed()
+                        breakTimeadapter.data.clear()
+                        breakTimeadapter.data.addAll(reversedList)
+                        breakTimeadapter.notifyDataSetChanged()
+                        isBreakTimeAdded = true
+                        setVisibiltyLevel()
                     } else {
                         showToast("No Break time information added!!", requireContext())
                     }
                 } ?: showToast("No Break time information added!!", requireContext())
             } else {
-
+                isBreakTimeAdded = false
+                setVisibiltyLevel()
+            }
+        }
+        viewModel.liveDataDeleteBreakTime.observe(viewLifecycleOwner) {
+            hideDialog()
+            if (it != null) {
+                viewModel.GetDriverBreakTimeInfo(userId)
             }
         }
 
         viewModel.uploadVehicleImageLiveData.observe(viewLifecycleOwner, Observer {
             hideDialog()
             viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
+            showDialog()
             if (it != null) {
                 if (it.Status == "200") {
                     showDialog()
@@ -467,13 +556,85 @@ class CompleteTaskFragment : Fragment() {
             }
         })
 
+        viewModel.liveDataDeleteOnRideAlongRouteInfo.observe(viewLifecycleOwner) {
+            hideDialog()
+            if (it != null) {
+                showDialog()
+                viewModel.GetRideAlongDriverInfoByDate(userId)
+            }
+        }
+
+
+        val adapter = DriverRouteAdapter(GetDriverRouteInfoByDateResponse(), showDialog, viewModel)
+
+        mbinding.getDriverRouteId.adapter = adapter
+        mbinding.getDriverRouteId.layoutManager = LinearLayoutManager(requireContext())
+
+        viewModel.liveDatadriverInfobyRouteDate.observe(viewLifecycleOwner) { it ->
+            hideDialog()
+            if (it != null) {
+                if (it.size > 0) {
+                    mbinding.routeNameTV.visibility = View.VISIBLE
+                }
+                for (item in it) {
+                    if (item.RtFinishMileage > 0) {
+                        isOnRoadHours = true
+                        setVisibiltyLevel()
+                        break
+                    }
+                }
+                adapter.list.clear()
+                adapter.list.addAll(it)
+                adapter.notifyDataSetChanged()
+            } else {
+                isOnRoadHours = false
+                setVisibiltyLevel()
+            }
+        }
+
+
+        viewModel.liveDataDeleteOnRouteDetails.observe(viewLifecycleOwner) {
+            hideDialog()
+            if (it != null) {
+                showDialog()
+                viewModel.GetDriverRouteInfoByDate(userId)
+            }
+        }
+        val rideAlongAdapter = RideAlongAdapter(
+            RideAlongDriverInfoByDateResponse(),
+            findNavController(),
+            Prefs.getInstance(requireContext()),
+            viewModel,
+            showDialog,
+            viewLifecycleOwner,
+            requireContext()
+        )
+
+        mbinding.questionareRv.adapter = rideAlongAdapter
+        mbinding.questionareRv.layoutManager = LinearLayoutManager(requireContext())
+
+        viewModel.liveDataRideAlongDriverInfoByDateResponse.observe(viewLifecycleOwner) { rideAlongs ->
+            hideDialog()
+            rideAlongs.let {
+                if (it != null) {
+                    rideAlongAdapter.data.clear()
+                    rideAlongAdapter.data.addAll(it)
+                    rideAlongAdapter.notifyDataSetChanged()
+                } else {
+                    rideAlongAdapter.data.clear()
+                    rideAlongAdapter.notifyDataSetChanged()
+                }
+            }
+
+        }
+
     }
 
     private fun checkNull(res: GetVehicleImageUploadInfoResponse): Boolean {
         return res.DaVehImgFaceMaskFileName == null || res.DaVehicleAddBlueImage == null || res.DaVehImgOilLevelFileName == null
     }
 
-    private fun chkTime(edtBreakstart: EditText, edtBreakend: EditText): Boolean {
+    private fun chkTime(edtBreakstart: TextView, edtBreakend: TextView): Boolean {
 
         val startTime = edtBreakstart.text.toString()
         val endTime = edtBreakend.text.toString()
@@ -498,38 +659,53 @@ class CompleteTaskFragment : Fragment() {
         dialogBinding.icCrossOrange.setOnClickListener {
             deleteDialog.cancel()
         }
+
         dialogBinding.edtBreakstart.setOnClickListener {
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
+            b1 = true
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart, 1)
+            if (b1 && b2) {
+                dialogBinding.timeTvNext.isEnabled = true
+                dialogBinding.timeTvNext.setTextColor(Color.WHITE)
+            }
         }
         dialogBinding.edtBreakend.setOnClickListener {
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
-        }
+            b2 = true
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend, 2)
+            if (b1 && b2) {
 
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                val startText = dialogBinding.edtBreakstart.text.toString()
-                val endText = dialogBinding.edtBreakend.text.toString()
-
-                if (startText.isNotEmpty() && endText.isNotEmpty()) {
-                    breakStartTime = startText
-                    breakEndTime = endText
-                    dialogBinding.timeTvNext.isEnabled = true
-                    dialogBinding.timeTvNext.setTextColor(Color.WHITE)
-                }
+                dialogBinding.timeTvNext.isEnabled = true
+                dialogBinding.timeTvNext.setTextColor(Color.WHITE)
             }
         }
 
-        dialogBinding.edtBreakstart.addTextChangedListener(textWatcher)
-        dialogBinding.edtBreakend.addTextChangedListener(textWatcher)
+        /*     val textWatcher = object : TextWatcher {
+                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                 }
+
+                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                 }
+
+                 override fun afterTextChanged(s: Editable?) {
+                     val startText = dialogBinding.edtBreakstart.text.toString()
+                     val endText = dialogBinding.edtBreakend.text.toString()
+
+                     if (startText.isNotEmpty() && endText.isNotEmpty()) {
+                         breakStartTime = startText
+                         breakEndTime = endText
+                         dialogBinding.timeTvNext.isEnabled = true
+                         dialogBinding.timeTvNext.setTextColor(Color.WHITE)
+                     }
+                 }
+             }
+
+             dialogBinding.edtBreakstart.addTextChangedListener(textWatcher)
+             dialogBinding.edtBreakend.addTextChangedListener(textWatcher)*/
+
 
         dialogBinding.timeTvNext.setOnClickListener {
             if (chkTime(dialogBinding.edtBreakstart, dialogBinding.edtBreakend)) {
+                breakStartTime = dialogBinding.edtBreakstart.text.toString()
+                breakEndTime = dialogBinding.edtBreakend.text.toString()
                 deleteDialog.cancel()
                 sendBreakTimeData()
             } else {
@@ -553,25 +729,33 @@ class CompleteTaskFragment : Fragment() {
 
 
     protected fun pictureDialogBase64(iv: ImageView, codes: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            runWithPermissions(
-                android.Manifest.permission.CAMERA,
-                android.Manifest.permission.READ_MEDIA_IMAGES,
-                android.Manifest.permission.READ_MEDIA_VIDEO,
-                android.Manifest.permission.READ_MEDIA_AUDIO
+        /*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    runWithPermissions(
+                        android.Manifest.permission.CAMERA,
+                        android.Manifest.permission.READ_MEDIA_IMAGES,
+                        android.Manifest.permission.READ_MEDIA_VIDEO,
+                        android.Manifest.permission.READ_MEDIA_AUDIO
 
-            ) {
-                showPictureDialog(iv, codes)
-            }
+                    ) {
+                        showPictureDialog(iv, codes)
+                    }
+                } else {
+                    runWithPermissions(
+                        android.Manifest.permission.CAMERA,
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+                    ) {
+                        showPictureDialog(iv, codes)
+                    }
+                }*/
+
+        ivX = iv
+        if (allPermissionsGranted()) {
+            showPictureDialog(iv, codes)
         } else {
-            runWithPermissions(
-                android.Manifest.permission.CAMERA,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 
-            ) {
-                showPictureDialog(iv, codes)
-            }
+            requestpermissions()
         }
     }
 
@@ -681,67 +865,124 @@ class CompleteTaskFragment : Fragment() {
         Log.e("resistrationvrnpatterhn", "clientUniqueID: " + regexPattern + inspectionID)
     }
 
+    /*private fun startInspection() {
+        if (isAllImageUploaded) {
+            mbinding.tvNext.visibility = View.VISIBLE
+        }
+
+        //if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
+        showDialog()
+
+        if (cqSDKInitializer.isCQSDKInitialized()) {
+            // Show a loading dialog
+
+            Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
+            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
+            // Make request to start an inspection
+            try {
+                cqSDKInitializer.startInspection(activityContext = requireActivity(),
+                    clientAttrs = ClientAttrs(
+                        userName = "",
+                        dealer = "",
+                        dealerIdentifier = "",
+                        client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                    ),
+                    result = { isStarted, msg, code ->
+                        hideDialog()
+                        Log.e("messsagesss", "startInspection: " + msg + code)
+                        if (isStarted) {
+//
+                        } else {
+//
+                        }
+                        if (msg == "Success") {
+
+
+                        }
+                        if (!isStarted) {
+
+
+                            Log.e("startedinspection", "onCreateView: " + msg + isStarted)
+
+
+                        }
+                    })
+            } catch (_: Exception) {
+
+                showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
+            }
+        }
+        *//*        } else {
+                    showErrorDialog(
+                        fragmentManager,
+                        "CTF-1",
+                        "We are currently updating our app for Android 13+ devices. Please try again later."
+                    )
+                }*//*
+
+    }*/
+
     private fun startInspection() {
         if (isAllImageUploaded) {
             mbinding.tvNext.visibility = View.VISIBLE
         }
 
 //        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
-            loadingDialog.show()
+        loadingDialog.show()
 
-            if (cqSDKInitializer.isCQSDKInitialized()) {
-                // Show a loading dialog
+        if (cqSDKInitializer.isCQSDKInitialized()) {
 
-                Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
-                Log.e("sdkskdkdkskdkskd", "onCreateView: ")
-                // Make request to start an inspection
-                try {
-                    cqSDKInitializer.startInspection(activityContext = requireActivity(),
-                        clientAttrs = ClientAttrs(
-                            userName = "",
-                            dealer = "",
-                            dealerIdentifier = "",
-                            client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+
+            Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
+            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
+
+            try {
+                cqSDKInitializer.startInspection(activityContext = requireActivity(),
+                    clientAttrs = ClientAttrs(
+                        userName = " ",
+                        dealer = " ",
+                        dealerIdentifier = " ",
+                        client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                    ),
+                    inputDetails = InputDetails(
+                        vehicleDetails = VehicleDetails(
+                            regNumber = Prefs.getInstance(App.instance).vmRegNo , //if sent, user can't edit
+                            make = "Van", //if sent, user can't edit
+                            model = "Any Model", //if sent, user can't edit
+                            bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
                         ),
-                        inputDetails = InputDetails(
-                            vehicleDetails = VehicleDetails(
-                                regNumber = Prefs.getInstance(App.instance).vmRegNo , //if sent, user can't edit
-                                make = "Van", //if sent, user can't edit
-                                model = "Any Model", //if sent, user can't edit
-                                bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
-                            ),
-                            customerDetails = CustomerDetails(
-                                name = "", //if sent, user can't edit
-                                email = "", //if sent, user can't edit
-                                dialCode = "", //if sent, user can't edit
-                                phoneNumber = "", //if sent, user can't edit
-                            )
-                        ),
-                        result = { isStarted, msg, code ->
+                        customerDetails = CustomerDetails(
+                            name = " ", //if sent, user can't edit
+                            email = " ", //if sent, user can't edit
+                            dialCode = " ", //if sent, user can't edit
+                            phoneNumber = " ", //if sent, user can't edit
+                        )
+                    ),
+                    result = { isStarted, msg, code ->
 
-                            Log.e("messsagesss", "startInspection: " + msg + code)
-                            if (isStarted) {
+                        Log.e("messsagesss", "startInspection: " + msg + code)
+                        if (isStarted) {
 //
-                            } else {
+                        } else {
 //
-                            }
-                            if (msg == "Success") {
+                        }
+                        if (msg == "Success") {
 
-                                loadingDialog.cancel()
-                            }
-                            if (!isStarted) {
+                            loadingDialog.cancel()
+                        }
+                        if (!isStarted) {
 
-                                loadingDialog.cancel()
-                                Log.e("startedinspection", "onCreateView: " + msg + isStarted)
+                            loadingDialog.cancel()
+                            Log.e("startedinspection", "onCreateView: " + msg + isStarted)
 
 
-                            }
-                        })
-                } catch (_: Exception) {
+                        }
+                    })
+            } catch (_: Exception) {
 
-                    showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
-                }
+                showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
             }
+        }
 //        } else {
 //            showErrorDialog(
 //                fragmentManager,
@@ -761,6 +1002,7 @@ class CompleteTaskFragment : Fragment() {
                 rlcomtwoBreak,
                 rlcomtwoClock,
                 rlcomtwoClockOut,
+                BreakTimeTable,
                 taskDetails
             ).forEach { thisView -> thisView.visibility = View.GONE }
         }
@@ -769,15 +1011,21 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.taskDetails.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.GONE
+
                 /*mbinding.clFaceMask.visibility = View.GONE
                 mbinding.clOilLevel.visibility = View.GONE*/
+       /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                mbinding.uploadLayouts.visibility = View.VISIBLE
+                mbinding.taskDetails.visibility = View.VISIBLE
+                mbinding.imageUploadView.visibility = View.VISIBLE*/
+               // mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
             }
 
             0 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.taskDetails.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.VISIBLE
-                mbinding.vehiclePicturesIB.setImageResource(R.drawable.singlecheckmark)
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
             }
 
             1 -> {
@@ -793,8 +1041,23 @@ class CompleteTaskFragment : Fragment() {
 
             3 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
-                mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.BreakTimeTable.visibility = View.VISIBLE
             }
+
+            4 -> {
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.BreakTimeTable.visibility = View.VISIBLE
+            }
+
+            5 -> {
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.BreakTimeTable.visibility = View.VISIBLE
+            }
+
         }
     }
 
@@ -812,10 +1075,22 @@ class CompleteTaskFragment : Fragment() {
         } else {
             visibilityLevel += 1
         }
+
         if (isClockedIn) {
-            visibilityLevel += 1
+            visibilityLevel = 2
         }
-        if (isOnRoadHours) visibilityLevel += 1
+
+        if (isBreakTimeAdded && isOnRoadHours) {
+            visibilityLevel = 5
+            visibiltyControlls()
+            return
+        }
+
+        if (isBreakTimeAdded)
+            visibilityLevel = 3
+
+        if (isOnRoadHours)
+            visibilityLevel = 4
 
         visibiltyControlls()
     }
@@ -856,7 +1131,7 @@ class CompleteTaskFragment : Fragment() {
             Timer().scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
-                        Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
+                        //Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
                         inspectionOfflineImagesCHeck = isSyncCompletedForAllQuotes
                         /*    if (isSyncCompletedForAllQuotes)
                                 //setProgress()*/
@@ -866,62 +1141,11 @@ class CompleteTaskFragment : Fragment() {
             mbinding.startinspection.visibility = View.GONE
 
         } else {
-//            BubbleShowCaseBuilder(requireActivity()) //Activity instance
-//                .title("Start Inspection") //Any title for the bubble view
-//                .description("Click here to capture Vehicle Images") //More detailed description
-//                .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
-//                //You can force the position of the arrow to change the location of the bubble.
-//                .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
-//                //Bubble background color
-//                .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
-//                .titleTextSize(16) //Title text size in SP (default value 16sp)
-//                .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
-//                .image(requireContext().resources.getDrawable(R.drawable.baseline_image_search_24)!!) //Bubble main image
-//                .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
-//
-//                .listener(
-//                    (object : BubbleShowCaseListener { //Listener for user actions
-//                        override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
-//                            //Called when the user clicks the target
-//                            bubbleShowCase.dismiss()
-//                        }
-//
-//                        override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
-//                            //Called when the user clicks the close button
-//                            bubbleShowCase.dismiss()
-//                        }
-//
-//                        override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
-//                            //Called when the user clicks on the bubble
-//                            bubbleShowCase.dismiss()
-//                        }
-//
-//                        override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
-//                            bubbleShowCase.dismiss()
-//                            //Called when the user clicks on the background dim
-//                        }
-//                    })
-//                )
-//                .targetView(mbinding.startinspection)
-//                .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
-//                .show()
-
             mbinding.startinspection.visibility = View.VISIBLE
         }
     }
 
-    private fun hideDialog() {
-        apiCount--
-        if (apiCount <= 0) {
-            loadingDialog.cancel()
-            apiCount = 0
-        }
-    }
 
-    private fun showDialog() {
-        if (apiCount == 0) {
-            loadingDialog.show()
-        }
-        apiCount++
-    }
+
+
 }

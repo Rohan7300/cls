@@ -3,6 +3,7 @@ package com.clebs.celerity.ViewModel
 import android.content.Context
 import android.util.Log
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +14,14 @@ import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
 import com.clebs.celerity.models.requests.LoginRequest
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
+import com.clebs.celerity.models.requests.SaveQuestionaireDeliverProceduresRequest
+import com.clebs.celerity.models.requests.SaveQuestionaireOnGoingActivitiesRequest
+import com.clebs.celerity.models.requests.SaveQuestionairePreparednessRequest
+import com.clebs.celerity.models.requests.SaveQuestionaireReturnToDeliveryStationRequest
+import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
+import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
+import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.response.LoginResponse
@@ -22,8 +30,10 @@ import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
+import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
@@ -31,7 +41,9 @@ import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
+import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
+import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
@@ -65,6 +77,27 @@ class MainViewModel(
     val updateprofilelivedata = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataRideAlongRouteInfoById = MutableLiveData<GetRideAlongRouteInfoByIdRes?>()
     val updateprofileregular = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDatadriverInfobyRouteDate = MutableLiveData<GetDriverRouteInfoByDateResponse?>()
+    val liveDataRideAlongDriverInfoByDateResponse =
+        MutableLiveData<RideAlongDriverInfoByDateResponse?>()
+    val liveDataQuestionairePreparedness = MutableLiveData<SimpleQuestionResponse?>()
+    val liveDataQuestionaireStartup = MutableLiveData<SimpleQuestionResponse?>()
+    val liveDataQuestionaireGoingOn = MutableLiveData<SimpleQuestionResponse?>()
+    val liveDataQuestionareDeliveryProcedures = MutableLiveData<SimpleQuestionResponse?>()
+    val liveDataQuestionareReturn = MutableLiveData<SimpleQuestionResponse?>()
+    val liveDataFinalAssesment = MutableLiveData<SimpleQuestionResponse?>()
+    val liveDataDeleteOnRideAlongRouteInfo = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataDeleteOnRouteDetails = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataSubmitRideAlongDriverFeedbackRequest = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataGetRideAlongLeadDriverQuestion =
+        MutableLiveData<GetRideAlongLeadDriverQuestionResponse?>()
+    val liveDataDeleteBreakTime = MutableLiveData<SimpleStatusMsgResponse?>()
+
+    private val _navigateToSecondPage = MutableLiveData<Boolean>()
+    val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
+        postValue(0)
+    }
+
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -86,10 +119,10 @@ class MainViewModel(
 
     }
 
-    fun updateprofileRegular(request:UpdateProfileRequestBody){
+    fun updateprofileRegular(request: UpdateProfileRequestBody) {
 
         viewModelScope.launch {
-            val response=repo.updteprofileregular(request)
+            val response = repo.updteprofileregular(request)
             updateprofileregular.postValue(response)
         }
 
@@ -347,5 +380,193 @@ class MainViewModel(
         }
     }
 
+    fun GetDriverRouteInfoByDate(driverId: Int) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.GetDriverRouteInfoByDate(driverId)
+            }
+            result.onSuccess { response ->
+                liveDatadriverInfobyRouteDate.postValue(response)
+            }
+            result.onFailure { ex ->
+                Log.e("GetDriverRouteInfoByDate Exception", "Error: ${ex.message}")
+            }
+        }
+    }
+
+    fun GetRideAlongDriverInfoByDate(driverId: Int) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.GetRideAlongDriverInfoByDate(driverId)
+            }
+            result.onSuccess { response ->
+                liveDataRideAlongDriverInfoByDateResponse.postValue(response)
+            }
+            result.onFailure { ex ->
+                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun SaveQuestionairePreparedness(request: SaveQuestionairePreparednessRequest) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.SaveQuestionairePreparedness(request)
+            }
+            result.onSuccess { response ->
+                liveDataQuestionairePreparedness.postValue(response)
+            }
+            result.onFailure { ex ->
+                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun SaveQuestionaireStartup(request: SaveQuestionaireStartupRequest) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.SaveQuestionaireStartup(request)
+            }
+            result.onSuccess { response ->
+                liveDataQuestionaireStartup.postValue(response)
+            }
+            result.onFailure { ex ->
+                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun SaveQuestionaireGoingOn(request: SaveQuestionaireOnGoingActivitiesRequest) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.SaveQuestionaireOnGoingActivities(request)
+            }
+            result.onSuccess { response ->
+                liveDataQuestionaireGoingOn.postValue(response)
+            }
+            result.onFailure { ex ->
+                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun SaveQuestionaireDelivery(request: SaveQuestionaireDeliverProceduresRequest) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.SaveQuestionaireDeliverProcedures(request)
+            }
+            result.onSuccess { response ->
+                liveDataQuestionareDeliveryProcedures.postValue(response)
+            }
+            result.onFailure { ex ->
+                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun SaveQuestionaireReturnToDeliveryStation(request: SaveQuestionaireReturnToDeliveryStationRequest) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.SaveQuestionaireReturnToDeliveryStation(request)
+            }
+            result.onSuccess { response ->
+                liveDataQuestionareReturn.postValue(response)
+            }
+            result.onFailure { ex ->
+                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun SaveQuestionaireFinalAssesment(request: SubmitFinalQuestionairebyLeadDriverRequest) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.SubmitFinalQuestionairebyLeadDriver(request)
+            }
+            result.onSuccess { response ->
+                liveDataFinalAssesment.postValue(response)
+            }
+            result.onFailure { ex ->
+                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun DeleteOnRideAlongRouteInfo(routeID: Int) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.DeleteOnRideAlongRouteInfo(routeID)
+            }
+            result.onSuccess { response ->
+                liveDataDeleteOnRideAlongRouteInfo.postValue(response)
+            }
+            result.onFailure { ex ->
+                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun DeleteOnRouteDetails(routeID: Int) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.DeleteOnRouteDetails(routeID)
+            }
+            result.onSuccess { response ->
+                liveDataDeleteOnRouteDetails.postValue(response)
+            }
+            result.onFailure { ex ->
+                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun SubmitRideAlongDriverFeedback(request: SubmitRideAlongDriverFeedbackRequest) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.SubmitRideAlongDriverFeedback(request)
+            }
+            result.onSuccess { response ->
+                liveDataSubmitRideAlongDriverFeedbackRequest.postValue(response)
+            }
+            result.onFailure { ex ->
+                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun GetRideAlongLeadDriverQuestion(
+        driverId: Int,
+        routeID: Int,
+        leadDriverId: Int,
+        daDailyWorkId: Int
+    ) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.GetRideAlongLeadDriverQuestion(driverId, routeID, leadDriverId, daDailyWorkId)
+            }
+            result.onSuccess { response ->
+                liveDataGetRideAlongLeadDriverQuestion.postValue(response)
+            }
+            result.onFailure { ex ->
+                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun DeleteBreakTime(
+        dawDriverBreakId:Int
+    ){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.DeleteBreakTime(dawDriverBreakId)
+            }
+            result.onSuccess {response->
+                liveDataDeleteBreakTime.postValue(response)
+            }
+            result.onFailure {ex->
+                Log.e("DeleteBreakTime Exception", "Error ${ex.message}")
+            }
+        }
+    }
 
 }

@@ -145,8 +145,6 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
     override fun onResume() {
         super.onResume()
-
-
     }
 
     override fun onCreateView(
@@ -571,7 +569,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                             this@DailyWorkFragment,
                             fragmentManager,
                             "DWF-03",
-                            "Vehicle doesn't exists. Please scan again or contact your supervisor."
+                            " This Vehicle ${if (vrn.isNotEmpty()) (vrn) else ""} doesn't exists. Please scan again or contact your supervisor."
                         )
                         if (loadingDialog.isShowing){
                             loadingDialog.dismiss()
@@ -615,13 +613,14 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                     "mymileage" + it.vehicleLastMillage.toString() + Prefs.getInstance(App.instance)
                         .get("vehicleLastMillage")
                 )
-                showAlert()
+                //showAlert()
+                navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
             } else {
                 showScanErrorDialog(
                     this,
                     fragmentManager,
-                    "DWF-01",
-                    "Vehicle doesn't exists. Please scan again or contact your supervisor."
+                    "",
+                    "This Vehicle ${if (vrn.isNotEmpty()) "[$vrn]" else ""} doesn't exists. Please scan again or contact your supervisor."
                 )
                 /*     showToast(
                          "Vehicle doesn't exists. Please scan again or contact your supervisor.",

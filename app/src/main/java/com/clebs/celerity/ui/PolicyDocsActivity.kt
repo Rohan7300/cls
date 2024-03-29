@@ -68,13 +68,12 @@ class PolicyDocsActivity : AppCompatActivity() {
                 driverSignatureInfo = it
             }
         }
+
         userId = Prefs.getInstance(this).userID.toInt()
 
         viewModel.GetDriverSignatureInformation(userId)
 
         mbinding.amazonHeader.setOnClickListener {
-
-
             if (isImage1){
                 mbinding.views1.visibility=View.GONE
             }
@@ -83,8 +82,7 @@ class PolicyDocsActivity : AppCompatActivity() {
             }
             isImage1 = !isImage1
 
-                setVisibility(mbinding.amazonLayout, !mbinding.amazonLayout.isVisible)
-
+            setVisibility(mbinding.amazonLayout, !mbinding.amazonLayout.isVisible)
 
         }
 

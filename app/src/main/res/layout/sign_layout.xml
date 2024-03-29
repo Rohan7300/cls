@@ -37,7 +37,8 @@
             android:orientation="horizontal"
             >
 
-            <include layout="@layout/paint_view_layout"
+            <include
+                layout="@layout/paint_view_layout"
                 android:id="@+id/paintView"/>
 
         </LinearLayout>

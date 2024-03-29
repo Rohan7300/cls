@@ -35,8 +35,8 @@ class OnRoadHoursFragment : Fragment() {
     private var selectedLocation: String? = null
     private var selectedRouteType: String? = null
     private var routeName: String? = null
-    private var parcelsDelivered: String? = null
-    private var totalMileage: String? = null
+    private var parcelsDelivered: String = "0"
+    private var totalMileage: String = "0"
     private var routeComment: String? = null
     private var dwID: Int = 0
     private var vehID: Int = 0
@@ -66,9 +66,9 @@ class OnRoadHoursFragment : Fragment() {
         return selectedLocation.isNullOrEmpty() ||
                 selectedRouteType.isNullOrEmpty() ||
                 routeName.isNullOrEmpty()||
-                parcelsDelivered.isNullOrEmpty()
-                || totalMileage.isNullOrEmpty()
-                || parcelsDelivered.isNullOrEmpty()
+                parcelsDelivered.isEmpty()
+                || totalMileage.isEmpty()
+                || parcelsDelivered.isEmpty()
     }
 
     private fun init() {
@@ -109,6 +109,10 @@ class OnRoadHoursFragment : Fragment() {
         binding.onRoadHoursSave.setOnClickListener {
             parcelsDelivered = binding.edtParcels.text.toString()
             totalMileage = binding.edtMileage.text.toString()
+            if(parcelsDelivered.isEmpty())
+                parcelsDelivered = "0"
+            if(totalMileage.isEmpty())
+                totalMileage = "0"
             if (chkNotNullInputs()) {
                 showToast("Please!!Complete the form first", requireContext())
             } else {
@@ -127,11 +131,10 @@ class OnRoadHoursFragment : Fragment() {
         }
         viewModel.AddOnRouteInfo(
             AddOnRouteInfoRequest(
-                RtAddMode = "",
+                RtAddMode = "A",
                 RtComment = "$routeComment",
-                RtType = selectedRouteId,
+                RtTypeId = selectedRouteId,
                 RtDwId = dwID,
-                RtId = 0,
                 RtFinishMileage = totalMileage?.toInt() ?: 0,
                 RtLocationId = selectedLocId,
                 RtName = routeName!!,
@@ -151,8 +154,8 @@ class OnRoadHoursFragment : Fragment() {
                 val value = s?.toString()
                 when (editText.id) {
                     R.id.edt_routesORH -> routeName = value
-                    R.id.edt_parcels -> parcelsDelivered = value
-                    R.id.edt_mileage -> totalMileage = value
+                    R.id.edt_parcels -> parcelsDelivered = value.toString()
+                    R.id.edt_mileage -> totalMileage = value.toString()
                     R.id.edt_route_comment -> routeComment = value
                 }
             }
@@ -220,7 +223,7 @@ class OnRoadHoursFragment : Fragment() {
 
     private fun rideAlongApiCall() {
         viewModel.liveDataRideAlongRouteTypeInfo.observe(viewLifecycleOwner) { routeData ->
-
+            loadingDialog.cancel()
             if (routeData != null) {
                 val routeNames = routeData.map { it.RtName }
                 val routeIDs = routeData.map { it.RtId }
@@ -255,7 +258,7 @@ class OnRoadHoursFragment : Fragment() {
                 parent?.let { nonNullParent ->
                     if (position != 0) { // Skip the dummy item
                         val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
-                        selectedItem.let { nonNullSelectedItem ->
+                        selectedItem.let {
                             when (spinner) {
                                 binding.spinnerLocation -> {
                                     selectedLocId = ids[position - 1]

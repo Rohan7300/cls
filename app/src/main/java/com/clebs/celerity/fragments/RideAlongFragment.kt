@@ -3,6 +3,7 @@ package com.clebs.celerity.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -19,6 +20,7 @@ import com.clebs.celerity.databinding.FragmentRideAlongBinding
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 
 
@@ -30,6 +32,10 @@ class RideAlongFragment : Fragment() {
     var selectedVehicleId: Int? = null
     var selectedVehicleName = ""
     var selectedRouteId: Int? = null
+    private lateinit var pref: Prefs
+    private var isSpinnerTouched = false
+
+    var rtAddMode: String = "A"
     var selectedLocId: Int? = null
     private var rtType: Int? = null
     var routeName: String? = null
@@ -40,47 +46,64 @@ class RideAlongFragment : Fragment() {
     private var trainingDays: Int? = null
     private var rtFinishMileage: Int? = null
     private var rtNoOfParcelsDelivered: Int? = null
+    private var vehicleListCalled: Boolean = false
     private var rtNoParcelsbroughtback: Int? = null
     lateinit var loadingDialog: LoadingDialog
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = false
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        if (!this::binding.isInitialized) {
-            binding = FragmentRideAlongBinding.inflate(inflater, container, false)
-        }
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ride_along, container, false)
+
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
+        leadDriverID = (activity as HomeActivity).userId
+        pref = Prefs.getInstance(requireContext())
+        pref.submittedRideAlong = false
+
         clickListeners()
+        observers()
+
         setInputListener(binding.edtParcels)
         setInputListener(binding.edtRouteComment)
-        observers()
-        viewModel.GetRideAlongDriversList()
+
 
         return binding.root
     }
 
+
     private fun observers() {
+
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
+
             binding.headerTop.dxLoc.text = it?.locationName ?: ""
             binding.headerTop.dxReg.text = it?.vmRegNo ?: ""
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
                 binding.headerTop.anaCarolin.text = name
             }
             binding.headerTop.dxm5.text = (activity as HomeActivity).date
-            leadDriverID = (activity as HomeActivity).userId
         }
+
         viewModel.livedataGetRideAlongVehicleLists.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            it?.let { vehicleLists ->
-                val vehIds = vehicleLists.mapNotNull { vehicleList -> vehicleList.VehicleId }
-                val vehNames = vehicleLists.mapNotNull { vehicleList -> vehicleList.VehicleName }
+            if (it != null) {
+                val vehIds = it.mapNotNull { vehicleList -> vehicleList.VehicleId }
+                val vehNames = it.mapNotNull { vehicleList -> vehicleList.VehicleName }
 
                 if (vehNames.isNotEmpty() && vehIds.isNotEmpty()) {
-                    setSpinners(binding.spinnerSelectVehicle, binding.editText, vehNames, vehIds)
+                    setSpinners(binding.spinnerSelectVehicle, vehNames, vehIds)
                 }
             }
         }
+
         viewModel.livedataGetRideAlongDriversList.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
             if (it != null) {
@@ -88,10 +111,10 @@ class RideAlongFragment : Fragment() {
                 val driverName = it.map { drivers -> drivers.Name }
 
                 if (driverId.isNotEmpty() && driverName.isNotEmpty()) setSpinners(
-                    binding.spinnerSelectDriver, binding.edtRoutes, driverName, driverId
+                    binding.spinnerSelectDriver, driverName, driverId
                 )
                 loadingDialog.cancel()
-                viewModel.GetRideAlongVehicleLists()
+
             }
         }
 
@@ -101,9 +124,12 @@ class RideAlongFragment : Fragment() {
                 val typeName = it.map { type -> type.RtName }
                 val typeId = it.map { type -> type.RtId }
 
-                if (typeName.isNotEmpty() && typeId.isNotEmpty()) setSpinners(
-                    binding.SpinnerRouteType, binding.tvRouteType, typeName, typeId
-                )
+                if (typeName.isNotEmpty() && typeId.isNotEmpty())
+                    setSpinners(
+                        binding.SpinnerRouteType, typeName, typeId
+                    )
+            } else {
+                Log.d("Exec", "NULL#1 ")
             }
         }
 
@@ -111,14 +137,15 @@ class RideAlongFragment : Fragment() {
             loadingDialog.cancel()
             if (it != null) {
                 loadingDialog.show()
-                try {
-                    viewModel.GetRouteLocationInfo(it.RtLocationId)
+                rtAddMode = it.RtAddMode
+                viewModel.GetRouteLocationInfo(it.RtLocationId)
+                if (selectedDriverId != null)
                     viewModel.GetRideAlongRouteInfoById(it.RtId, selectedDriverId!!)
-                } catch (_: Exception) {
-
-                }
+            } else {
+                Log.d("Exec", "NULL#2")
             }
         }
+
         viewModel.livedataRideAlongRouteInfoById.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
             if (it != null) {
@@ -127,8 +154,11 @@ class RideAlongFragment : Fragment() {
                 rtFinishMileage = it.RtFinishMileage
                 rtNoOfParcelsDelivered = it.RtNoOfParcelsDelivered
                 rtNoParcelsbroughtback = it.RtNoParcelsbroughtback
+            } else {
+                Log.d("Exec", "NULL#3")
             }
         }
+
         viewModel.liveDataRouteLocationResponse.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
             if (it != null) {
@@ -137,18 +167,22 @@ class RideAlongFragment : Fragment() {
 
                 if (locationNames.isNotEmpty() && locationId.isNotEmpty()) setSpinners(
                     binding.spinnerRouteLocation,
-                    binding.editTextSelectRouteLocation,
                     locationNames,
                     locationId
                 )
+            } else {
+                Log.d("Exec", "NULL#4")
             }
         }
 
         viewModel.livedataRideAlongSubmitApiRes.observe(viewLifecycleOwner) {
-            if (it != null) {
-                findNavController().navigate(R.id.completeTaskFragment)
-            } else {
-                showToast("Please!! try again.", requireContext())
+            loadingDialog.cancel()
+            if(pref.submittedRideAlong){
+                if (it != null) {
+                    findNavController().navigate(R.id.completeTaskFragment)
+                } else {
+                    showToast("Please!! try again.", requireContext())
+                }
             }
 
         }
@@ -158,41 +192,48 @@ class RideAlongFragment : Fragment() {
     private fun clickListeners() {
         var isReTrainingSelected = false
         var isTrainingSelected = false
-        binding.run {
-            rideAlongCancel.setOnClickListener {
+
+        viewModel.GetRideAlongDriversList()
+        if (!vehicleListCalled) {
+
+            viewModel.GetRideAlongVehicleLists()
+        }
+
+            binding.rideAlongCancel.setOnClickListener {
                 findNavController().navigate(R.id.completeTaskFragment)
                 findNavController().clearBackStack(R.id.completeTaskFragment)
             }
-            saveBT.setOnClickListener {
+            binding.saveBT.setOnClickListener {
                 if (chkNull()) showToast("Please fill all fields!!", requireContext())
                 else rideAlongApi()
             }
-            rbReTraining.setOnClickListener {
+            binding.rbReTraining.setOnClickListener {
                 isReTrainingSelected = !isReTrainingSelected
-                rbReTraining.isChecked = isReTrainingSelected
+                binding.rbReTraining.isChecked = isReTrainingSelected
                 retraining = true
                 training = false
-                rbTraining.isChecked = false
+                binding.rbTraining.isChecked = false
             }
 
-            rbTraining.setOnClickListener {
+            binding.rbTraining.setOnClickListener {
                 isTrainingSelected = !isTrainingSelected
                 isReTrainingSelected = false
                 retraining = false
                 training = true
-                rbReTraining.isChecked = false
-                rbTraining.isChecked = isTrainingSelected
+                binding.rbReTraining.isChecked = false
+                binding.rbTraining.isChecked = isTrainingSelected
             }
-        }
     }
 
+
     private fun rideAlongApi() {
+        pref.submittedRideAlong = true
         loadingDialog.show()
         viewModel.AddOnRideAlongRouteInfo(
             AddOnRideAlongRouteInfoRequest(
                 IsReTraining = retraining!!,
-                LeadDriverId = selectedDriverId!!,
-                RtAddMode = "",
+                LeadDriverId = leadDriverID!!,
+                RtAddMode = rtAddMode,
                 RtComment = routeComment!!,
                 RtFinishMileage = rtFinishMileage!!,
                 RtId = selectedRouteId!!,
@@ -201,7 +242,7 @@ class RideAlongFragment : Fragment() {
                 RtNoOfParcelsDelivered = rtNoOfParcelsDelivered!!,
                 RtNoParcelsbroughtback = rtNoParcelsbroughtback!!,
                 RtType = rtType!!,
-                RtUsrId = leadDriverID!!,
+                RtUsrId = selectedDriverId!!,
                 TrainingDays = 0,
                 VehicleId = selectedVehicleId!!
             )
@@ -225,70 +266,72 @@ class RideAlongFragment : Fragment() {
         ).any { it == null }
     }
 
-    private fun setSpinners(spinner: Spinner, tv: TextView, items: List<String>, ids: List<Int>) {
-
+    private fun setSpinners(spinner: Spinner, items: List<String>, ids: List<Int>) {
         val dummyItem = "Select Item"
         val itemsList = mutableListOf(dummyItem)
         itemsList.addAll(items)
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        //adapter.addAll(itemsList)
 
         spinner.adapter = adapter
 
-        spinner.setSelection(0)
+        spinner.setOnTouchListener { _, _ ->
+            isSpinnerTouched = true
+            false
+        }
 
-        try {
-            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    parent?.let { nonNullParent ->
-                        if (position != 0) { // Skip the dummy item
-                            val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
-                            selectedItem.let { nonNullSelectedItem ->
-                                tv.text = nonNullSelectedItem
-                                when (spinner) {
-                                    binding.spinnerSelectDriver -> {
-                                        selectedDriverId =
-                                            ids[position - 1] // Adjust the index for ids list
-                                        selectedDriverName = nonNullSelectedItem
-                                        loadingDialog.show()
-                                        viewModel.GetRideAlongRouteTypeInfo(selectedDriverId!!)
-                                    }
+       // spinner.setSelection(0)
 
-                                    binding.spinnerSelectVehicle -> {
-                                        selectedVehicleName = nonNullSelectedItem
-                                        selectedVehicleId =
-                                            ids[position - 1] // Adjust the index for ids list
-                                    }
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (!isSpinnerTouched) return
+                parent?.let { nonNullParent ->
+                    if (position != 0) {
+                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
+                        selectedItem.let { nonNullSelectedItem ->
+                            when (spinner) {
+                                binding.spinnerSelectDriver -> {
+                                    selectedDriverId =
+                                        ids[position - 1]
+                                    selectedDriverName = nonNullSelectedItem
+                                    loadingDialog.show()
+                                    Log.d("Exec", "SelectedDriverID $selectedDriverId")
+                                    viewModel.GetRideAlongRouteTypeInfo(selectedDriverId!!)
+                                }
 
-                                    binding.SpinnerRouteType -> {
-                                        selectedRouteId =
-                                            ids[position - 1] // Adjust the index for ids list
-                                        loadingDialog.show()
-                                        viewModel.GetRouteInfoById(selectedRouteId!!)
-                                    }
+                                binding.spinnerSelectVehicle -> {
+                                    selectedVehicleName = nonNullSelectedItem
+                                    selectedVehicleId =
+                                        ids[position - 1]
+                                }
 
-                                    binding.spinnerRouteLocation -> {
-                                        selectedLocId =
-                                            ids[position - 1] // Adjust the index for ids list
-                                    }
+                                binding.SpinnerRouteType -> {
+                                    selectedRouteId =
+                                        ids[position - 1]
+                                    loadingDialog.show()
+                                    viewModel.GetRouteInfoById(selectedRouteId!!)
+                                }
+
+                                binding.spinnerRouteLocation -> {
+                                    selectedLocId =
+                                        ids[position - 1]
                                 }
                             }
                         }
                     }
                 }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
             }
-        } catch (_: Exception) {
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
         }
+
     }
 
     private fun setInputListener(editText: EditText) {
@@ -306,4 +349,5 @@ class RideAlongFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         })
     }
+
 }

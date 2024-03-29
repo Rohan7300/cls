@@ -15,7 +15,7 @@ class LoadingDialog(context: Context) : Dialog(context) {
 
         val imageView: ImageView = findViewById<ImageView>(R.id.img_anim)
 
-            Glide.with(context).load(R.raw.celerity_loader).into(imageView)
+        Glide.with(context).load(R.raw.celerity_loader).into(imageView)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         window?.setStatusBarColor(context.resources.getColor(R.color.medium_orange))
@@ -23,7 +23,7 @@ class LoadingDialog(context: Context) : Dialog(context) {
 
     }
 
-        override fun show() {
+    override fun show() {
         if (!isShowing)
             super.show()
     }

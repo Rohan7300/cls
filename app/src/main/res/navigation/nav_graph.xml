@@ -202,4 +202,16 @@
         android:name="com.clebs.celerity.fragments.NotifficationsFragment"
         android:label="fragment_notiffications"
         tools:layout="@layout/fragment_notiffications" />
+    <fragment
+        android:id="@+id/questinareFragment"
+        android:name="com.clebs.celerity.fragments.QuestinareFragment"
+        android:label="QuestinareFragment" />
+    <fragment
+        android:id="@+id/startUp"
+        android:name="com.clebs.celerity.fragments.StartUp"
+        android:label="StartUp" />
+    <fragment
+        android:id="@+id/feedbackFragment"
+        android:name="com.clebs.celerity.fragments.FeedbackFragment"
+        android:label="FeedbackFragment" />
 </navigation>
