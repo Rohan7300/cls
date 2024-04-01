@@ -1,5 +1,6 @@
 package com.clebs.celerity.network
 
+import com.clebs.celerity.models.TicketDepartmentsResponse
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.requests.CreateDaikyworkRequestBody
@@ -18,6 +19,7 @@ import com.clebs.celerity.models.requests.SaveQuestionaireOnGoingActivitiesReque
 import com.clebs.celerity.models.requests.SaveQuestionairePreparednessRequest
 import com.clebs.celerity.models.requests.SaveQuestionaireReturnToDeliveryStationRequest
 import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
+import com.clebs.celerity.models.requests.SaveTicketDataRequestBody
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
 import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
@@ -28,6 +30,7 @@ import com.clebs.celerity.models.response.BaseResponseTwo
 
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.DepartmentRequestResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
@@ -46,6 +49,7 @@ import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
+import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
@@ -334,4 +338,18 @@ interface ApiService {
         @Query("endDate") endDate:String?
     ):Response<GetUserTicketsResponse>
 
+    @GET("/api/Ticket/GetUserDepartmentList")
+    suspend fun GetUserDepartmentList():Response<TicketDepartmentsResponse>
+
+    @GET("/api/Ticket/GetTicketRequestType")
+    suspend fun GetTicketRequestType(
+        @Query("departmentId") departmentId:Int
+    ):Response<DepartmentRequestResponse>
+
+    @POST("/api/Ticket/SaveTicketData")
+    suspend fun SaveTicketData(
+        @Query("userId") userId:Int,
+        @Body request:SaveTicketDataRequestBody
+    ):Response<SaveTicketResponse>
 }
+

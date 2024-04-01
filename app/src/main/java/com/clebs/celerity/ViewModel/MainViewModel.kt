@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.clebs.celerity.models.TicketDepartmentsResponse
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
@@ -19,6 +20,7 @@ import com.clebs.celerity.models.requests.SaveQuestionaireOnGoingActivitiesReque
 import com.clebs.celerity.models.requests.SaveQuestionairePreparednessRequest
 import com.clebs.celerity.models.requests.SaveQuestionaireReturnToDeliveryStationRequest
 import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
+import com.clebs.celerity.models.requests.SaveTicketDataRequestBody
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
 import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
@@ -29,6 +31,7 @@ import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.DepartmentRequestResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
@@ -44,6 +47,7 @@ import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
+import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
@@ -96,6 +100,9 @@ class MainViewModel(
     val liveDataDeleteBreakTime = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataUpdateOnRouteInfo = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataGetUserTickets = MutableLiveData<GetUserTicketsResponse?>()
+    val liveDataTicketDepartmentsResponse = MutableLiveData<TicketDepartmentsResponse?>()
+    val liveDataGetTicketRequestType = MutableLiveData<DepartmentRequestResponse?>()
+    val liveDataSaveTicketResponse = MutableLiveData<SaveTicketResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -604,6 +611,48 @@ class MainViewModel(
             }
             result.onFailure { ex->
                 Log.e("GetUserTickets","Error ${ex.message}")
+            }
+        }
+    }
+
+    fun GetUserDepartmentList(){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.GetUserDepartmentList()
+            }
+            result.onSuccess {res->
+                liveDataTicketDepartmentsResponse.postValue(res)
+            }
+            result.onFailure {ex->
+                Log.e("GetUserTickets","Error ${ex.message}")
+            }
+        }
+    }
+
+    fun GetTicketRequestType(deptID:Int){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.GetTicketRequestType(deptID)
+            }
+            result.onSuccess {
+                liveDataGetTicketRequestType.postValue(it)
+            }
+            result.onFailure {ex->
+                Log.e("GetTicketUserType","Error ${ex.message}")
+            }
+        }
+    }
+
+    fun SaveTicketData(userID: Int,request:SaveTicketDataRequestBody){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.SaveTicketData(userID,request)
+            }
+            result.onSuccess {res->
+                liveDataSaveTicketResponse.postValue(res)
+            }
+            result.onFailure {ex->
+                Log.e("GetTicketUserType","Error ${ex.message}")
             }
         }
     }

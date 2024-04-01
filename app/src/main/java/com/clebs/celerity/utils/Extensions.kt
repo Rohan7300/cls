@@ -25,6 +25,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
@@ -32,7 +33,6 @@ import androidx.navigation.NavController
 import com.clebs.celerity.R
 import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.fragments.DailyWorkFragment
-import com.google.android.gms.dynamic.SupportFragmentWrapper
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,6 +40,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.text.ParseException
 
 
 @SuppressLint("HardwareIds")
@@ -420,7 +421,7 @@ fun bitmapToBase64(bitmap: Bitmap): String {
     }
 }*/
 
-fun showTimePickerDialog(context: Context, editText: TextView,type:Int) {
+fun showTimePickerDialog(context: Context, tv: TextView) {
     val calendar = Calendar.getInstance()
     val hour = calendar.get(Calendar.HOUR_OF_DAY)
     val minute = calendar.get(Calendar.MINUTE)
@@ -429,14 +430,63 @@ fun showTimePickerDialog(context: Context, editText: TextView,type:Int) {
         context,
         { _, selectedHour, selectedMinute ->
             val time = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute)
-            editText.text = time
+            tv.text = time
         },
         hour,
         minute,
         true
     )
-
     timePickerDialog.show()
+}
+
+fun showDatePickerDialog(context: Context, tv1: TextView, tv2: TextView, tvNext: TextView, i: Int) {
+    val calendar = Calendar.getInstance()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _, selectedYear, selectedMonth, selectedDayOfMonth ->
+            val date = String.format(
+                Locale.getDefault(),
+                "%04d-%02d-%02d",
+                selectedYear,
+                selectedMonth + 1,
+                selectedDayOfMonth
+            )
+            if (i == 0)
+                tv1.text = date
+            else
+                tv2.text = date
+
+            if (tv1.text != "DD-MM-YYYY" && tv2.text != "DD-MM-YYYY"&& isEndDateGreaterThanStartDate(tv1.text.toString(), tv2.text.toString())) {
+                tvNext.isClickable = true
+                tvNext.isEnabled = true
+                tvNext.setTextColor(ContextCompat.getColor(context, R.color.white))
+            }else{
+                tvNext.isClickable = false
+                tvNext.isEnabled = false
+                tvNext.setTextColor(ContextCompat.getColor(context, R.color.orange))
+            }
+        },
+        year,
+        month,
+        dayOfMonth
+    )
+
+    datePickerDialog.show()
+}
+fun isEndDateGreaterThanStartDate(startDate: String, endDate: String): Boolean {
+    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    try {
+        val startDateObj = sdf.parse(startDate)
+        val endDateObj = sdf.parse(endDate)
+        return !endDateObj.before(startDateObj)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return false
 }
 
 
@@ -469,6 +519,19 @@ fun getCurrentDateTime(): String {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     dateFormat.timeZone = TimeZone.getTimeZone("UTC")
     return dateFormat.format(Date())
+}
+
+fun convertDateFormat(inputDate: String, inputFormat: String, outputFormat: String): String {
+    val inputDateFormat = SimpleDateFormat(inputFormat, Locale.getDefault())
+    val outputDateFormat = SimpleDateFormat(outputFormat, Locale.getDefault())
+
+    return try {
+        val date = inputDateFormat.parse(inputDate)
+        outputDateFormat.format(date)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        ""
+    }
 }
 
 

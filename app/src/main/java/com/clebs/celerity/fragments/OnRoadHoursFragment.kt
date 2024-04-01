@@ -96,6 +96,7 @@ class OnRoadHoursFragment : Fragment() {
                 vehicleInfoSection()
             }
         }
+
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
             binding.headerTop.dxLoc.text = it?.locationName ?: ""
