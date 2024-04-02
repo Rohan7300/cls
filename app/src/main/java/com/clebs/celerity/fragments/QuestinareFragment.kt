@@ -25,7 +25,6 @@ class QuestinareFragment : Fragment() {
         if (!this::binding.isInitialized) {
             binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_questinare, container, false)
-
         }
         return binding.root
     }
@@ -98,9 +97,7 @@ class QuestinareFragment : Fragment() {
             it.let { currentPage ->
                 binding.viewPager.currentItem = currentPage!!
             }
-
         }
-
 
     }
 

@@ -249,6 +249,7 @@ class CompleteTaskFragment : Fragment() {
         }
 
         mbinding.AddRoute.setOnClickListener {
+            Prefs.getInstance(requireContext()).saveDriverRouteInfoByDate(null)
             navigateTo(R.id.onRoadHoursFragment, requireContext(), findNavController())
         }
 
@@ -363,16 +364,15 @@ class CompleteTaskFragment : Fragment() {
 
 
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
+            hideDialog()
             if (it != null) {
-                //visibilityLevel = 3
 
                 showDialog()
                 viewModel.GetDriverBreakTimeInfo(userId)
 
             } else {
-                // showToast("Something went wrong!!", requireContext())
+
             }
-            hideDialog()
         }
 
         viewModel.livedataDailyWorkInfoByIdResponse.observe(viewLifecycleOwner) {
@@ -565,7 +565,7 @@ class CompleteTaskFragment : Fragment() {
         }
 
 
-        val adapter = DriverRouteAdapter(GetDriverRouteInfoByDateResponse(), showDialog, viewModel)
+        val adapter = DriverRouteAdapter(GetDriverRouteInfoByDateResponse(), showDialog, viewModel,findNavController(),requireContext(),Prefs.getInstance(requireContext()))
 
         mbinding.getDriverRouteId.adapter = adapter
         mbinding.getDriverRouteId.layoutManager = LinearLayoutManager(requireContext())
@@ -587,6 +587,9 @@ class CompleteTaskFragment : Fragment() {
                 adapter.list.addAll(it)
                 adapter.notifyDataSetChanged()
             } else {
+                mbinding.routeNameTV.visibility = View.GONE
+                adapter.list.clear()
+                adapter.notifyDataSetChanged()
                 isOnRoadHours = false
                 setVisibiltyLevel()
             }
@@ -662,7 +665,7 @@ class CompleteTaskFragment : Fragment() {
 
         dialogBinding.edtBreakstart.setOnClickListener {
             b1 = true
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart, 1)
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
             if (b1 && b2) {
                 dialogBinding.timeTvNext.isEnabled = true
                 dialogBinding.timeTvNext.setTextColor(Color.WHITE)
@@ -670,7 +673,7 @@ class CompleteTaskFragment : Fragment() {
         }
         dialogBinding.edtBreakend.setOnClickListener {
             b2 = true
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend, 2)
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
             if (b1 && b2) {
 
                 dialogBinding.timeTvNext.isEnabled = true
@@ -900,8 +903,6 @@ class CompleteTaskFragment : Fragment() {
 
                         }
                         if (!isStarted) {
-
-
                             Log.e("startedinspection", "onCreateView: " + msg + isStarted)
 
 
@@ -927,7 +928,7 @@ class CompleteTaskFragment : Fragment() {
             mbinding.tvNext.visibility = View.VISIBLE
         }
 
-//        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
+//      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
         loadingDialog.show()
 
         if (cqSDKInitializer.isCQSDKInitialized()) {
@@ -1003,7 +1004,8 @@ class CompleteTaskFragment : Fragment() {
                 rlcomtwoClock,
                 rlcomtwoClockOut,
                 BreakTimeTable,
-                taskDetails
+                taskDetails,
+                view2
             ).forEach { thisView -> thisView.visibility = View.GONE }
         }
         when (visibilityLevel) {
@@ -1048,7 +1050,7 @@ class CompleteTaskFragment : Fragment() {
             4 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.onRoadView.visibility = View.VISIBLE
-                mbinding.BreakTimeTable.visibility = View.VISIBLE
+                mbinding.rlcomtwoBreak.visibility = View.VISIBLE
             }
 
             5 -> {
@@ -1073,9 +1075,8 @@ class CompleteTaskFragment : Fragment() {
             visibiltyControlls()
             return
         } else {
-            visibilityLevel += 1
+            visibilityLevel = 1
         }
-
         if (isClockedIn) {
             visibilityLevel = 2
         }

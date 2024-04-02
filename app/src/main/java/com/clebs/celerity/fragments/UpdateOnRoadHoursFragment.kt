@@ -11,24 +11,22 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
-import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
-import com.clebs.celerity.databinding.FragmentOnRoadHoursBinding
-import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
+import com.clebs.celerity.databinding.FragmentUpdateOnRoadHoursBinding
+import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 
-class OnRoadHoursFragment : Fragment() {
+class UpdateOnRoadHoursFragment : Fragment() {
     private var selectedLocId: Int = 0
     private var selectedRouteId: Int = 0
-    lateinit var binding: FragmentOnRoadHoursBinding
+    lateinit var binding: FragmentUpdateOnRoadHoursBinding
     lateinit var viewModel: MainViewModel
     lateinit var prefs: Prefs
     private var locID: Int = 0
@@ -40,6 +38,7 @@ class OnRoadHoursFragment : Fragment() {
     private var routeComment: String? = null
     private var dwID: Int = 0
     private var vehID: Int = 0
+    var rtID:Int = 0
     private var parcelBack = 0
     lateinit var edtRoutes: EditText
     private lateinit var loadingDialog: LoadingDialog
@@ -50,7 +49,12 @@ class OnRoadHoursFragment : Fragment() {
     ): View {
         if (!this::binding.isInitialized) {
             binding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_on_road_hours, container, false)
+                DataBindingUtil.inflate(
+                    inflater,
+                    R.layout.fragment_update_on_road_hours,
+                    container,
+                    false
+                )
         }
 
         return binding.root
@@ -65,7 +69,7 @@ class OnRoadHoursFragment : Fragment() {
     private fun chkNotNullInputs(): Boolean {
         return selectedLocation.isNullOrEmpty() ||
                 selectedRouteType.isNullOrEmpty() ||
-                routeName.isNullOrEmpty()||
+                routeName.isNullOrEmpty() ||
                 parcelsDelivered.isEmpty()
                 || totalMileage.isEmpty()
                 || parcelsDelivered.isEmpty()
@@ -77,6 +81,21 @@ class OnRoadHoursFragment : Fragment() {
         loadingDialog = (activity as HomeActivity).loadingDialog
         parcelBack = binding.parcelsBroughtBack.text.toString().toInt()
 
+        var routeInfo = prefs.getDriverRouteInfoByDate()
+
+        if (routeInfo != null) {
+            binding.parcelsBroughtBack.text = routeInfo.RtNoParcelsbroughtback.toString()
+            binding.edtMileage.setText(routeInfo.RtFinishMileage.toString())
+            binding.edtRouteComment.setText(routeInfo.RtComment)
+            binding.edtRoutesORH.setText(routeInfo.RtName)
+            dwID = routeInfo.RtDwId
+            vehID = routeInfo.VehicleId
+            selectedLocId = routeInfo.RtLocationId
+            selectedRouteId = routeInfo.RtTypeId
+            routeName = routeInfo.RtName
+            routeComment = routeInfo.RtComment
+            rtID = routeInfo.RtId
+        }
 
         binding.pbbPlus.setOnClickListener {
             parcelBack += 1
@@ -96,7 +115,6 @@ class OnRoadHoursFragment : Fragment() {
                 vehicleInfoSection()
             }
         }
-
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
             binding.headerTop.dxLoc.text = it?.locationName ?: ""
@@ -111,9 +129,9 @@ class OnRoadHoursFragment : Fragment() {
         binding.onRoadHoursSave.setOnClickListener {
             parcelsDelivered = binding.edtParcels.text.toString()
             totalMileage = binding.edtMileage.text.toString()
-            if(parcelsDelivered.isEmpty())
+            if (parcelsDelivered.isEmpty())
                 parcelsDelivered = "0"
-            if(totalMileage.isEmpty())
+            if (totalMileage.isEmpty())
                 totalMileage = "0"
             if (chkNotNullInputs()) {
                 showToast("Please!!Complete the form first", requireContext())
@@ -125,15 +143,19 @@ class OnRoadHoursFragment : Fragment() {
 
     private fun sendData() {
         loadingDialog.show()
-        viewModel.livedataAddOnRouteInfo.observe(viewLifecycleOwner) {
+        viewModel.liveDataUpdateOnRouteInfo.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
             if (it != null) {
+                showToast("Updated Successfully",requireContext())
+                findNavController().navigate(R.id.completeTaskFragment)
+            }else{
+                showToast("Failed to Update",requireContext())
                 findNavController().navigate(R.id.completeTaskFragment)
             }
         }
-        viewModel.AddOnRouteInfo(
-            AddOnRouteInfoRequest(
-                RtAddMode = "A",
+        viewModel.UpdateOnRouteInfo(
+            GetDriverRouteInfoByDateResponseItem(
+                RtAddMode = "U",
                 RtComment = "$routeComment",
                 RtTypeId = selectedRouteId,
                 RtDwId = dwID,
@@ -143,7 +165,8 @@ class OnRoadHoursFragment : Fragment() {
                 RtNoOfParcelsDelivered = parcelsDelivered?.toInt() ?: 0,
                 RtNoParcelsbroughtback = binding.parcelsBroughtBack.text.toString().toInt(),
                 RtUsrId = prefs.userID.toInt(),
-                VehicleId = vehID
+                VehicleId = vehID,
+                RtId = rtID
             )
         )
     }

@@ -1,17 +1,27 @@
 package com.clebs.celerity.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.AdapterDriverRouteBinding
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
+import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.navigateTo
 
 class DriverRouteAdapter(
     var list: GetDriverRouteInfoByDateResponse,
     var loadingDialog: () -> Unit,
-    var mainViewModel: MainViewModel) :
+    var mainViewModel: MainViewModel,
+    var findNavController: NavController,
+    var requireContext: Context,
+    var pref: Prefs
+) :
     RecyclerView.Adapter<DriverRouteAdapter.DriverRouteAdapterViewHolder>() {
 
     inner class DriverRouteAdapterViewHolder(private val binding: AdapterDriverRouteBinding) :
@@ -22,6 +32,10 @@ class DriverRouteAdapter(
             binding.delRouteIV.setOnClickListener {
                 loadingDialog()
                 mainViewModel.DeleteOnRouteDetails(item.RtId)
+            }
+            binding.edtIc.setOnClickListener {
+                pref.saveDriverRouteInfoByDate(item)
+                navigateTo(R.id.updateOnRoadHoursFragment, requireContext, findNavController)
             }
         }
     }
