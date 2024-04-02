@@ -20,8 +20,7 @@ import java.net.URL
 
 class HomedemoFragment : Fragment() {
     lateinit var mbinding: FragmentHomedemoBinding
-    val urlGoogleChart = "http://chart.apis.google.com/chart"
-    val urlp3Api = "?cht=p3&chs=400x150&chl=A|B|C&chd=t:"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
