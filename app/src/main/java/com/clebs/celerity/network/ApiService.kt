@@ -45,6 +45,7 @@ import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
+import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -346,10 +347,23 @@ interface ApiService {
         @Query("departmentId") departmentId:Int
     ):Response<DepartmentRequestResponse>
 
-    @POST("/api/Ticket/SaveTicketData")
+    @POST("/api/Ticket/CreateUserTicket")
     suspend fun SaveTicketData(
         @Query("userId") userId:Int,
         @Body request:SaveTicketDataRequestBody
     ):Response<SaveTicketResponse>
+
+    @GET("/api/Ticket/GetTicketCommentList")
+    suspend fun GetTicketCommentList(
+        @Query("userId") userId: Int,
+        @Query("ticketId") ticketId:Int
+    ):Response<GetTicketCommentListResponse>
+
+    @POST("/api/Ticket/UploadTicketAttachmentDoc")
+    suspend fun UploadTicketAttachmentDoc(
+        @Query("userId") userId: Int,
+        @Query("ticketId") ticketId: Int,
+        @Part("UploadTicketDoc") file:MultipartBody.Part
+    ):Response<SimpleStatusMsgResponse>
 }
 

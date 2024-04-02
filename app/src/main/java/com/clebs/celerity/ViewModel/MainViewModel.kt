@@ -43,6 +43,7 @@ import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
+import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -103,6 +104,8 @@ class MainViewModel(
     val liveDataTicketDepartmentsResponse = MutableLiveData<TicketDepartmentsResponse?>()
     val liveDataGetTicketRequestType = MutableLiveData<DepartmentRequestResponse?>()
     val liveDataSaveTicketResponse = MutableLiveData<SaveTicketResponse?>()
+    val liveDataGetTicketCommentList =MutableLiveData<GetTicketCommentListResponse?>()
+    val liveDataUploadTicketAttachmentDoc = MutableLiveData<SimpleStatusMsgResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -653,6 +656,30 @@ class MainViewModel(
             }
             result.onFailure {ex->
                 Log.e("GetTicketUserType","Error ${ex.message}")
+            }
+        }
+    }
+
+    fun GetTicketCommentList(userID: Int,ticketId:Int){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.GetTicketCommentList(userID,ticketId)
+            }
+            result.onSuccess {res->
+                liveDataGetTicketCommentList.postValue(res)
+            }
+            result.onFailure { ex->
+                Log.e("GetTicketCommentList","Error ${ex.message}")
+            }
+        }
+    }
+
+    fun UploadTicketAttachmentDoc(
+        userID: Int,ticketId: Int,file:MultipartBody.Part
+    ){
+        viewModelScope.launch {
+            val result = runCatching {
+
             }
         }
     }

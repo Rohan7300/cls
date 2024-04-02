@@ -1,20 +1,30 @@
 package com.clebs.celerity.ui
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.ActivityTicketsBinding
+import com.clebs.celerity.databinding.DialogUploadAlertBinding
 import com.clebs.celerity.models.requests.SaveTicketDataRequestBody
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
@@ -23,8 +33,10 @@ import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.showToast
+import org.jetbrains.anko.startActivityForResult
 
 class CreateTicketsActivity : AppCompatActivity() {
+    private val PICK_FILE_REQUEST_CODE = 100
     lateinit var mbinding: ActivityTicketsBinding
     lateinit var viewmodel: MainViewModel
     lateinit var repo: MainRepo
@@ -35,6 +47,9 @@ class CreateTicketsActivity : AppCompatActivity() {
     lateinit var pref: Prefs
     var desc: String? = null
     lateinit var loadingDialog: LoadingDialog
+    private var selectedFileUri: Uri? = null
+    private lateinit var uploadFileLauncher: ActivityResultLauncher<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mbinding = DataBindingUtil.setContentView(this, R.layout.activity_tickets)
@@ -48,6 +63,8 @@ class CreateTicketsActivity : AppCompatActivity() {
         observers()
         viewmodel.GetUserDepartmentList()
         showDialog()
+        setInputListener(mbinding.edtTitle)
+        setInputListener(mbinding.edtDes)
 
         mbinding.saveTickets.setOnClickListener {
             if (chkNull())
@@ -56,6 +73,26 @@ class CreateTicketsActivity : AppCompatActivity() {
                 saveTicket()
         }
 
+
+        uploadFileLauncher =
+            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+
+                uri?.let { selectedFileUri ->
+
+                }
+            }
+
+        mbinding.icUpload.setOnClickListener {
+
+        }
+
+        mbinding.imageViewBack.setOnClickListener {
+            onBackPressed()
+        }
+
+        mbinding.cancel.setOnClickListener {
+            onBackPressed()
+        }
 
 
         val spinnerNamesWithPlaceholder = listOf<String>()
@@ -75,26 +112,26 @@ class CreateTicketsActivity : AppCompatActivity() {
         var currDt = getCurrentDateTime()
         val request = SaveTicketDataRequestBody(
             AssignedToUserIDs = listOf(),
-            BadgeComment ="undefined",
-            BadgeReturnedStatusId =0,
+            BadgeComment = "undefined",
+            BadgeReturnedStatusId = 0,
             DaTestDate = currDt,
-            DaTestTime =currDt,
-            Description =desc!!,
-            DriverId =pref.userID.toInt(),
-            EstCompletionDate =currDt,
-            KeepDeptInLoop =true,
-            NoofPeople =0,
-            ParentCompanyID =0,
-            PriorityId =0,
-            RequestTypeId =selectedRequestTypeID,
-            TicketDepartmentId =selectedDeptID,
-            TicketId =0,
-            TicketUTRNo ="undefined",
-            Title =title!!,
-            UserStatusId =0,
-            UserTicketRegNo ="undefined",
-            VmId =0,
-            WorkingOrder =0
+            DaTestTime = currDt,
+            Description = desc!!,
+            DriverId = pref.userID.toInt(),
+            EstCompletionDate = currDt,
+            KeepDeptInLoop = true,
+            NoofPeople = 0,
+            ParentCompanyID = 0,
+            PriorityId = 0,
+            RequestTypeId = selectedRequestTypeID,
+            TicketDepartmentId = selectedDeptID,
+            TicketId = 0,
+            TicketUTRNo = "undefined",
+            Title = title!!,
+            UserStatusId = 0,
+            UserTicketRegNo = "undefined",
+            VmId = 0,
+            WorkingOrder = 0
         )
 
         /*"TicketId": 0,
@@ -120,7 +157,7 @@ class CreateTicketsActivity : AppCompatActivity() {
         "AssignedToUserIDs": [
         0
         ]*/
-
+        showDialog()
         viewmodel.SaveTicketData(
             pref.userID.toInt(),
             request
@@ -144,8 +181,10 @@ class CreateTicketsActivity : AppCompatActivity() {
     }
 
     private fun observers() {
-        viewmodel.liveDataSaveTicketResponse.observe(this){
-            if(it!=null){
+        viewmodel.liveDataSaveTicketResponse.observe(this) {
+            hideDialog()
+            if (it != null) {
+                showUploadDialog()
 
             }
         }
@@ -153,7 +192,10 @@ class CreateTicketsActivity : AppCompatActivity() {
         viewmodel.liveDataTicketDepartmentsResponse.observe(this) { depts ->
             hideDialog()
             if (depts != null) {
-                val departmentIds = depts.map { it.DepartmentId }
+
+                val departmentIds = depts.map { tickets ->
+                    tickets.DepartmentId
+                }
                 val departmentNames = depts.map { it.DepartmentName }
                 setSpinners(mbinding.tvDepart, departmentNames, departmentIds)
             }
@@ -238,4 +280,36 @@ class CreateTicketsActivity : AppCompatActivity() {
         apiCount++
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        /*        if (requestCode == PICK_FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+                    data?.data?.let { selectedUri ->
+
+                        selectedFileUri = selectedUri
+                    }
+                } else if (requestCode == PICK_FILE_REQUEST_CODE && resultCode == Activity.RESULT_CANCELED) {
+
+                    showToast("File selection canceled", this)
+                }*/
+    }
+
+    fun showUploadDialog() {
+        val uploadDialog = AlertDialog.Builder(this).create()
+        val uploadDialogBinding = DialogUploadAlertBinding.inflate(LayoutInflater.from(this))
+        uploadDialog.setView(uploadDialogBinding.root)
+        uploadDialog.setCanceledOnTouchOutside(false)
+        uploadDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        uploadDialog.show()
+        uploadDialogBinding.upload.setOnClickListener {
+            uploadDialog.dismiss()
+            uploadDialog.cancel()
+            uploadFileLauncher.launch("*/*")
+        }
+
+        uploadDialogBinding.cancel.setOnClickListener {
+            uploadDialog.dismiss()
+        }
+
+
+    }
 }
