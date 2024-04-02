@@ -30,7 +30,7 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.ImageDatabase
 import com.clebs.celerity.database.ImagesRepo
 import com.clebs.celerity.databinding.ActivityHomeBinding
-import com.clebs.celerity.fragments.CompleteTaskFragment
+
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
@@ -62,6 +62,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var apiCount = 0
     var lastName = ""
     var isLeadDriver = false
+
     var date = ""
     lateinit var loadingDialog: LoadingDialog
 
@@ -122,6 +123,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         super.onCreate(savedInstanceState)
         ActivityHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
+
 
         loadingDialog = LoadingDialog(this)
         sdkkey = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
@@ -217,7 +219,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     }
 
                     R.id.invoices -> {
-                        ActivityHomeBinding.title.text = ""
+                        ActivityHomeBinding.title.text = "Invoices"
                         navController.navigate(R.id.invoicesFragment)
                         true
                     }

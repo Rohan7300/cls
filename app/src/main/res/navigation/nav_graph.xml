@@ -37,6 +37,9 @@
         android:label="VechileMileageFragment"
         tools:layout="@layout/fragment_vechile_mileage">
 
+
+
+
     </fragment>
     <fragment
         android:id="@+id/spareWheelFragment"

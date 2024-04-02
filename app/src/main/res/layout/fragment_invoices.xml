@@ -4,12 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragments.DailyWorkFragment">
 
 
 <include
+    android:id="@+id/nodatafound"
     layout="@layout/no_data_layout"
+    android:visibility="gone"
     />
-
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="CLS - Invoices"
+    android:layout_marginTop="60dp"
+    android:layout_marginEnd="20dp"
+    android:elevation="30dp"
+    android:textSize="20sp"
+    android:backgroundTint="@color/very_light_orange"
+    android:id="@+id/clsinvoices"
+   android:layout_marginStart="20dp"
+    android:padding="30dp"
+    android:background="@drawable/shape_expand_main"
+    android:textColor="@color/text_color"
+    android:fontFamily="@font/poppins_semibold"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="3rd Party Invoices"
+        android:backgroundTint="@color/very_light_orange"
+        android:elevation="30dp"
+        android:layout_marginEnd="20dp"
+        android:textSize="20sp"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
+        android:padding="30dp"
+        android:background="@drawable/shape_expand_main"
+        android:textColor="@color/text_color"
+        android:fontFamily="@font/poppins_semibold"/>
 
 </LinearLayout>

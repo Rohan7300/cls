@@ -234,6 +234,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 })
             )
             .targetView(mbinding.scanLayout)
+            .showOnce("2")
             .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
             .show()
 

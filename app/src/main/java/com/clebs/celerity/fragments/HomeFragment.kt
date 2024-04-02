@@ -53,7 +53,7 @@ class HomeFragment : Fragment() {
             .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
             .image(requireContext().resources.getDrawable(R.drawable.baseline_document_scanner_24)!!) //Bubble main image
             .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
-
+            .showOnce("3")
             .listener(
                 (object : BubbleShowCaseListener { //Listener for user actions
                     override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
