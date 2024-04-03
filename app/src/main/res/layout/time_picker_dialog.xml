@@ -9,24 +9,24 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginTop="100dp"
         android:background="@drawable/break_dialog"
         android:layout_marginBottom="100dp"
-        android:layout_marginStart="20dp">
+        android:layout_marginStart="30dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="23dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
                 android:id="@+id/ic_cross_orange"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:backgroundTint="@color/white"
                 android:src="@drawable/orange_cross"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +41,7 @@
                 android:text="Break Time"
                 android:textColor="@color/text_color"
 
-                android:textSize="20sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ic_cross_orange" />
@@ -55,7 +55,7 @@
                 android:letterSpacing="0.02"
                 android:text="Break Start"
                 android:textColor="@color/text_color"
-                android:textSize="18sp"
+                android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_txt" />
 
@@ -68,7 +68,7 @@
                 android:background="@drawable/shape_edittext_onroad"
                 android:fontFamily="@font/poppins"
                 android:hint="00:00"
-                android:padding="14dp"
+                android:padding="10dp"
                 android:textColorHint="#4A4A4A"
                 android:textCursorDrawable="@color/orange"
                 android:textSize="14sp"
@@ -94,7 +94,7 @@
                 android:letterSpacing="0.02"
                 android:text="Break End"
                 android:textColor="@color/text_color"
-                android:textSize="18sp"
+                android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edt_breakstart" />
 
@@ -107,7 +107,7 @@
                 android:background="@drawable/shape_edittext_onroad"
                 android:fontFamily="@font/poppins"
                 android:hint="00:00"
-                android:padding="14dp"
+                android:padding="10dp"
                 android:textColorHint="#4A4A4A"
                 android:textCursorDrawable="@color/orange"
                 android:textSize="14sp"

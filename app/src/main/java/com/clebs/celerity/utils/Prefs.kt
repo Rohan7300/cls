@@ -51,7 +51,13 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putInt("saveNnext", value).apply()
         }
-
+    var lmid: Int
+        get() {
+            return sharedPreferences.getInt("lmID", 0)
+        }
+        set(value) {
+            sharedPreferences.edit().putInt("lmID", value).apply()
+        }
     var currRideAlongID: Int
         get() {
             return sharedPreferences.getInt("currRideAlongID", 0)

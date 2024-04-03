@@ -10,11 +10,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
@@ -32,6 +34,9 @@ import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertBitmapToBase64
 import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.visible
+import com.elconfidencial.bubbleshowcase.BubbleShowCase
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 
 
@@ -54,9 +59,56 @@ class WindScreenFragment : Fragment() {
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentWindScreenBinding.inflate(inflater, container, false)
         }
+
+//        var tooltip = (activity as HomeActivity).tooltips
+//        tooltip[0].view = mbinding.lln
+//
+//                toolTip(tooltip[0].msg,tooltip[0].dec,tooltip[0].id,tooltip[0].view)
+
+
         val vm_id = arguments?.get("vm_mileage")
         Log.e("vmvmvmv", "onCreateView: $vm_id")
+       BubbleShowCaseBuilder(requireActivity())//Activity instance
+            .title("Wind screen") //Any title for the bubble view
+            .description("Provide Vehicle information") //More detailed description
+            .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
 
+            //You can force the position of the arrow to change the location of the bubble.
+            .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
+            //Bubble background color
+            .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
+            .titleTextSize(16) //Title text size in SP (default value 16sp)
+            .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
+            .image(requireContext().resources.getDrawable(R.drawable.windscreen_ic)!!) //Bubble main image
+            .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
+
+            .listener(
+                (object : BubbleShowCaseListener { //Listener for user actions
+                    override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
+                        //Called when the user clicks the target
+                        bubbleShowCase.dismiss()
+                    }
+
+                    override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
+                        //Called when the user clicks the close button
+                        bubbleShowCase.dismiss()
+                    }
+
+                    override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
+                        //Called when the user clicks on the bubble
+                        bubbleShowCase.dismiss()
+                    }
+
+                    override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
+                        bubbleShowCase.dismiss()
+                        //Called when the user clicks on the background dim
+                    }
+                })
+            )
+            .targetView(mbinding.lln)
+            .showOnce("1")
+            .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE).backgroundColor(resources.getColor(R.color.very_light_orange)) //View to point out
+            .show().finishSequence()
         viewModel = (activity as HomeActivity).viewModel
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.windScreenFragment)
         mbinding.tvNext.visibility = View.GONE
@@ -137,6 +189,49 @@ class WindScreenFragment : Fragment() {
         return mbinding.root
     }
 
+
+    fun toolTip(tittle:String,description: String,id:String,view: LinearLayout?) {
+        view?.let {
+            BubbleShowCaseBuilder(requireActivity()) //Activity instance
+                .title(tittle) //Any title for the bubble view
+                .description(description) //More detailed description
+                .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
+                //You can force the position of the arrow to change the location of the bubble.
+                .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
+                //Bubble background color
+                .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
+                .titleTextSize(16) //Title text size in SP (default value 16sp)
+                .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
+                .image(requireContext().resources.getDrawable(R.drawable.ic_info)!!) //Bubble main image
+                .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
+                .showOnce(id)
+                .listener(
+                    (object : BubbleShowCaseListener { //Listener for user actions
+                        override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
+                            //Called when the user clicks the target
+                            bubbleShowCase.dismiss()
+                        }
+
+                        override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
+                            //Called when the user clicks the close button
+                            bubbleShowCase.dismiss()
+                        }
+
+                        override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
+                            //Called when the user clicks on the bubble
+                            bubbleShowCase.dismiss()
+                        }
+
+                        override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
+                            bubbleShowCase.dismiss()
+                            //Called when the user clicks on the background dim
+                        }
+                    })
+                )
+                .targetView(it).highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
+                .show()
+        }
+    }
     private fun selectLayout1() {
         if (isupload) {
             mbinding.tvNext.visibility = View.VISIBLE
@@ -264,8 +359,14 @@ class WindScreenFragment : Fragment() {
     fun navigateTo(fragmentId: Int) {
         var prefs = Prefs.getInstance(requireContext())
         val fragmentStack = prefs.getNavigationHistory()
+        val navOptions = NavOptions.Builder()
+            .setEnterAnim(R.anim.slide_left) // Animation for entering the new fragment
+           // Animation for exiting the current fragment
+//            .setPopEnterAnim(R.anim.slide_in_right) // Animation for entering the previous fragment when navigating back
+//            .setPopExitAnim(R.anim.slide_left) // Animation for exiting the current fragment when navigating back
+            .build()
         fragmentStack.push(fragmentId)
-        findNavController().navigate(fragmentId)
+        findNavController().navigate(fragmentId,null,navOptions)
         prefs.saveNavigationHistory(fragmentStack)
     }
 

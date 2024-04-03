@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+  android:layout_marginBottom="10dp"
+    android:background="@drawable/shape_expand_main"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tv_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Location:-"
+        android:textColor="@color/text_color"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_locationShow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="location"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_view"
+        app:layout_constraintStart_toEndOf="@+id/tv_view"
+        app:layout_constraintTop_toTopOf="@+id/tv_view" />
+
+    <TextView
+        android:id="@+id/tv_date_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="date"
+        android:textColor="@color/text_color"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_locationShow"
+        app:layout_constraintStart_toEndOf="@+id/tv_locationShow"
+        app:layout_constraintTop_toTopOf="@+id/tv_locationShow" />
+
+    <TextView
+        android:id="@+id/tv_is_working"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Is working?:-"
+        android:textColor="@color/text_color"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_date_show"
+        app:layout_constraintStart_toEndOf="@id/tv_date_show"
+        app:layout_constraintTop_toTopOf="@+id/tv_date_show" />
+
+    <TextView
+        android:id="@+id/tv_is_working_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/text_color"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_is_working"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_is_working" />
+</androidx.constraintlayout.widget.ConstraintLayout>

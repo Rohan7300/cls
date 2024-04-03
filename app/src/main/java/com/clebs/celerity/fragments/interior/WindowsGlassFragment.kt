@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
+import androidx.navigation.NavOptions
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentWindowsGlassBinding
 import com.clebs.celerity.fragments.BaseInteriorFragment
@@ -123,6 +124,12 @@ class WindowsGlassFragment : BaseInteriorFragment() {
             imageViewModel.insertDefectName(imageEntity)
 
         }
+        val navOptions = NavOptions.Builder()
+            .setEnterAnim(R.anim.slide_left) // Animation for entering the new fragment
+            .setExitAnim(R.anim.slide_in_right) // Animation for exiting the current fragment
+//            .setPopEnterAnim(R.anim.slide_in_right) // Animation for entering the previous fragment when navigating back
+//            .setPopExitAnim(R.anim.slide_left) // Animation for exiting the current fragment when navigating back
+            .build()
         navigateTo(R.id.wipersScreenFragment)
         //findNavController().navigate(R.id.cabSecurityFragment)
     }

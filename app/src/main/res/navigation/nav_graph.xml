@@ -37,6 +37,9 @@
         android:label="VechileMileageFragment"
         tools:layout="@layout/fragment_vechile_mileage">
 
+
+
+
     </fragment>
     <fragment
         android:id="@+id/spareWheelFragment"
@@ -218,4 +221,13 @@
         android:id="@+id/updateOnRoadHoursFragment"
         android:name="com.clebs.celerity.fragments.UpdateOnRoadHoursFragment"
         android:label="UpdateOnRoadHoursFragment" />
+    <fragment
+        android:id="@+id/CLSInvoicesFragment"
+        android:name="com.clebs.celerity.fragments.CLSInvoicesFragment"
+        android:label="fragment_c_l_s_invoices"
+        tools:layout="@layout/fragment_c_l_s_invoices" />
+    <fragment
+        android:id="@+id/CLSThirdPartyFragment"
+        android:name="com.clebs.celerity.fragments.CLSThirdPartyFragment"
+        android:label="CLSThirdPartyFragment" />
 </navigation>

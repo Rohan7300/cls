@@ -2,7 +2,12 @@ package com.clebs.celerity.repository
 
 import android.util.Log
 import androidx.fragment.app.FragmentManager
+import com.clebs.celerity.models.CashFlowPieChartResponse
+import com.clebs.celerity.models.CashFlowPieChartResponseItem
+import com.clebs.celerity.models.GetLastWeekScore
+import com.clebs.celerity.models.GetWeekYear
 import com.clebs.celerity.models.TicketDepartmentsResponse
+import com.clebs.celerity.models.ViewFullScheduleResponse
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
@@ -28,6 +33,7 @@ import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
+import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
@@ -40,7 +46,6 @@ import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRideAlongVehicleListsItem
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
-import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -604,36 +609,33 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
-    suspend fun GetUserDepartmentList(): TicketDepartmentsResponse? {
+    suspend fun GetUserDepartmentList():TicketDepartmentsResponse?{
         val response = ApiService.GetUserDepartmentList()
-        if (response.isSuccessful)
+        if(response.isSuccessful)
             return response.body()
-        else {
+        else{
             val errorBody = response.errorBody()?.string()
             println("Error response Body : $errorBody")
         }
         return null
     }
 
-    suspend fun GetTicketRequestType(depID: Int): DepartmentRequestResponse? {
+    suspend fun GetTicketRequestType(depID:Int): DepartmentRequestResponse?{
         val response = ApiService.GetTicketRequestType(depID)
-        if (response.isSuccessful)
+        if(response.isSuccessful)
             return response.body()
-        else {
+        else{
             val errorBody = response.errorBody()?.string()
             println("Error Response Body : $errorBody")
         }
         return null
     }
 
-    suspend fun SaveTicketData(
-        userID: Int,
-        request: SaveTicketDataRequestBody
-    ): SaveTicketResponse? {
-        val response = ApiService.SaveTicketData(userID, request)
-        if (response.isSuccessful)
+    suspend fun SaveTicketData(userID: Int,request: SaveTicketDataRequestBody):SaveTicketResponse?{
+        val response = ApiService.SaveTicketData(userID,request)
+        if(response.isSuccessful)
             return response.body()
-        else {
+        else{
             val errorBody = response.errorBody()?.string()
             println("Error Response Body: $errorBody")
         }
@@ -681,4 +683,56 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
+    suspend fun GetAvgWeekScore(userID: Int, lmid: Int): GetAvgScoreResponse? {
+        val response = ApiService.GetAvgScore(userID, lmid)
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+    suspend fun GetLastWeekScrore(userID: Int, lmid: Int): GetLastWeekScore? {
+        val response = ApiService.GetLastWeekScore(userID, lmid)
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+    suspend fun GetCashFlowWeek(userID: Int, companyFilter: Int,selyear:Int,selweek:Int): CashFlowPieChartResponse? {
+        val response = ApiService.CashFLowData(userID, companyFilter,selyear,selweek)
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetWeekYear(): GetWeekYear? {
+        val response = ApiService.GetWeekAndYear()
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetVechileSchedule(userID: Int, lmid: Int,year:Int,week:Int): ViewFullScheduleResponse? {
+        val response = ApiService.GetVechileScheduleInfo(userID,lmid,year,week)
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
 }
