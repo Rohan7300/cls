@@ -46,6 +46,7 @@ import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRideAlongVehicleListsItem
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
+import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
