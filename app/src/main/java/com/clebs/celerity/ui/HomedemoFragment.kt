@@ -51,7 +51,7 @@ class HomedemoFragment : Fragment() {
 
         viewModel = (activity as HomeActivity).viewModel
         pieChart = mbinding.pieChart.findViewById<PieChart>(R.id.pieChart)
-
+//        pieChart.isAnimationEnabled=true
 
         showDialog()
         viewModel.GetWeekAndYear()
@@ -190,7 +190,7 @@ class HomedemoFragment : Fragment() {
             }
         }
         viewModel.livedataCashFlowWeek.observe(viewLifecycleOwner) { depts ->
-            hideDialog()
+
             if (depts != null) {
                 mbinding.pieChart.visibility = View.VISIBLE
                 mbinding.nodata.visibility = View.GONE
@@ -262,7 +262,9 @@ class HomedemoFragment : Fragment() {
                 pieChart.labelsColor = resources.getColor(R.color.black)
                 pieChart.holeRatio = 0f
                 pieChart.overlayRatio = 0f
+                hideDialog()
             } else {
+                hideDialog()
                 mbinding.pieChart.visibility = View.GONE
                 mbinding.nodata.visibility = View.VISIBLE
             }
