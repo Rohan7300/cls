@@ -1,6 +1,7 @@
 package com.clebs.celerity.fragments
 
 import android.Manifest
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -60,6 +61,7 @@ import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
+
 
 class CompleteTaskFragment : Fragment() {
     lateinit var mbinding: FragmentCompleteTaskBinding
@@ -158,6 +160,18 @@ class CompleteTaskFragment : Fragment() {
         viewModel.GetDailyWorkInfoById(userId)
         viewModel.GetDriverRouteInfoByDate(userId)
         viewModel.GetRideAlongDriverInfoByDate(userId)
+        if (mbinding.startinspection.isVisible){
+            val anim = ValueAnimator.ofFloat(1f, 1.2f)
+            anim.setDuration(1000)
+            anim.addUpdateListener { animation ->
+                mbinding.startinspection.setScaleX(animation.animatedValue as Float)
+                mbinding.startinspection.setScaleY(animation.animatedValue as Float)
+            }
+            anim.repeatCount = 3
+            anim.repeatMode = ValueAnimator.REVERSE
+            anim.start()
+//            mbinding.startinspection.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_up));
+        }
 
         /*  BubbleShowCaseBuilder(requireActivity()) //Activity instance
               .title("Start Inspection") //Any title for the bubble view
@@ -499,7 +513,7 @@ class CompleteTaskFragment : Fragment() {
                             imagesUploaded = false
                             setVisibiltyLevel()
                             //   mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
-                            mbinding.taskDetails.visibility = View.VISIBLE
+//                            mbinding.taskDetails.visibility = View.VISIBLE
                         } else {
                             imagesUploaded = true
                             setVisibiltyLevel()
@@ -1011,7 +1025,7 @@ class CompleteTaskFragment : Fragment() {
         when (visibilityLevel) {
             -1 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
-                mbinding.taskDetails.visibility = View.VISIBLE
+//                mbinding.taskDetails.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.GONE
 
                 /*mbinding.clFaceMask.visibility = View.GONE
@@ -1025,32 +1039,37 @@ class CompleteTaskFragment : Fragment() {
 
             0 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
-                mbinding.taskDetails.visibility = View.VISIBLE
+//                mbinding.taskDetails.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.VISIBLE
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
+                mbinding.complete.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.shape_expand_main));
             }
 
             1 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.rlcomtwoClock.visibility = View.VISIBLE
+                mbinding.complete.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.background_complete_task_done));
             }
 
             2 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.onRoadView.visibility = View.VISIBLE
                 mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+                mbinding.complete.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.background_complete_task_done));
             }
 
             3 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.onRoadView.visibility = View.VISIBLE
                 mbinding.BreakTimeTable.visibility = View.VISIBLE
+                mbinding.complete.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.background_complete_task_done));
             }
 
             4 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.onRoadView.visibility = View.VISIBLE
                 mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+                mbinding.complete.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.background_complete_task_done));
             }
 
             5 -> {
@@ -1058,6 +1077,7 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
                 mbinding.onRoadView.visibility = View.VISIBLE
                 mbinding.BreakTimeTable.visibility = View.VISIBLE
+                mbinding.complete.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.background_complete_task_done));
             }
 
         }

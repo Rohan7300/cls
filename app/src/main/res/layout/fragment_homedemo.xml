@@ -5,8 +5,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
+        android:overScrollMode="never"
         android:scrollbars="none">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,48 +18,60 @@
 
             tools:context=".ui.SplashActivity">
 
-            <TextView
-                android:id="@+id/bt_prev"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/linearLayout13"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/shape_expand_main"
-                android:enabled="true"
-
-                android:paddingStart="10dp"
-                android:paddingTop="2dp"
-                android:paddingEnd="10dp"
-                android:paddingBottom="2dp"
-                android:text="Previous week"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/bt_this_week"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-
-                android:layout_marginTop="16dp"
-                android:background="@drawable/shape_expand_main"
-                android:enabled="true"
-                android:paddingStart="10dp"
-                android:paddingTop="2dp"
-                android:paddingEnd="10dp"
-                android:paddingBottom="2dp"
-                android:text="This week"
-                android:visibility="gone"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
+                <TextView
+                    android:id="@+id/bt_prev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/shape_expand_main"
+
+                    android:fontFamily="@font/poppins"
+                    android:padding="8dp"
+                    android:text="Previous week"
+                    android:textColor="@color/text_color"
+                    android:textSize="11sp"
+                    android:visibility="visible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/bt_this_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/shape_expand_main"
+                    android:backgroundTint="@color/medium_orange"
+                    android:fontFamily="@font/poppins"
+                    android:padding="8dp"
+                    android:text="This week"
+                    android:textColor="@color/text_color"
+                    android:textSize="11sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/bt_prev">
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout13">
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -66,97 +79,129 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="26dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:elevation="20dp"
+
                     android:background="@drawable/shape_expand_main"
-                    android:padding="16dp"
+                    android:padding="10dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/bt_prev">
 
-                    <TextView
-                        android:id="@+id/txt_scorecard"
-                        android:layout_width="wrap_content"
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/txt_scorecard"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:fontFamily="@font/inter_bold"-->
+                    <!--                        android:text="Scorecard :"-->
+                    <!--                        android:textColor="@color/text_color"-->
+                    <!--                        android:textSize="17sp"-->
+                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                        app:layout_constraintTop_toTopOf="parent" />-->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_bold"
-                        android:text="Scorecard :"
-                        android:textColor="@color/text_color"
-                        android:textSize="17sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:weightSum="2"
-    app:layout_constraintTop_toBottomOf="@id/txt_scorecard"
-    android:orientation="horizontal">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_margin="4dp"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/txt_avg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/inter_semibold"
-            android:text="Average total score"
-            android:textColor="@color/text_color"
-            android:textSize="14sp"
-            />
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="10dp">
 
-        <ProgressBar
-            android:id="@+id/ProgressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginTop="8dp"
-            android:elevation="30dp"
-            android:indeterminate="false"
-            android:progress="50"
-            android:progressDrawable="@drawable/pb_style"
-            android:progressTint="@color/peek_orange"
-            />
-    </LinearLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_weight="1"
-    android:layout_margin="4dp"
-    android:orientation="vertical"
-    android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/txt_last_week"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/inter_semibold"
-        android:text="Last Week score"
-        android:textColor="@color/text_color"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/ProgressBar"
-        app:layout_constraintTop_toBottomOf="@id/ProgressBar" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/ProgressBartwo"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:elevation="30dp"
-        android:indeterminate="false"
-        android:progress="68"
-        android:progressDrawable="@drawable/pb_style"
-        android:progressTint="@color/blue_hex"
-        app:layout_constraintStart_toStartOf="@+id/txt_last_week"
-        app:layout_constraintTop_toBottomOf="@id/txt_last_week" />
-</LinearLayout>
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/tv_pbone"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:fontFamily="@font/poppins_bold"
+                                    android:textColor="@color/black"
+                                    android:textSize="11sp"
+                                    app:layout_constraintEnd_toEndOf="@+id/ProgressBar"
+                                    app:layout_constraintStart_toStartOf="@id/ProgressBar"
+                                    app:layout_constraintTop_toBottomOf="@id/ProgressBar" />
+
+                                <TextView
+                                    android:id="@+id/txt_avg"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/inter_bold"
+                                    android:text="Average total score :"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="13sp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <ProgressBar
+                                    android:id="@+id/ProgressBar"
+                                    style="?android:attr/progressBarStyleHorizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginTop="8dp"
+                                    android:elevation="30dp"
+                                    android:indeterminate="false"
+                                    android:progress="50"
+                                    android:progressDrawable="@drawable/pb_style"
+                                    android:progressTint="@color/peek_orange"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/txt_avg" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txt_last_week"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:fontFamily="@font/inter_bold"
+                                android:text="Last Week score :"
+                                android:textColor="@color/text_color"
+                                android:textSize="13sp" />
+
+                            <ProgressBar
+                                android:id="@+id/ProgressBartwo"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_below="@id/txt_last_week"
+                                android:layout_marginTop="8dp"
+                                android:elevation="30dp"
+                                android:indeterminate="false"
+                                android:progress="68"
+                                android:progressDrawable="@drawable/pb_style"
+                                android:progressTint="@color/blue_hex" />
+
+                            <TextView
+                                android:id="@+id/tv_pb_two"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/ProgressBartwo"
+                                android:layout_centerHorizontal="true"
+
+                                android:fontFamily="@font/poppins_bold"
+                                android:gravity="center"
+                                android:textColor="@color/black"
+                                android:textSize="11sp" />
+                        </RelativeLayout>
 
 
-
-
-</LinearLayout>
+                    </LinearLayout>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -167,11 +212,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="25dp"
-                    android:elevation="20dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/shape_expand_main"
-                    android:padding="16dp">
+                    android:elevation="30dp"
+                    android:padding="10dp">
 
                     <TextView
                         android:id="@+id/txt_this_week"
@@ -180,7 +225,8 @@
                         android:fontFamily="@font/inter_bold"
                         android:text="Cash flow This week :"
                         android:textColor="@color/text_color"
-                        android:textSize="17sp"
+                        android:textSize="16sp"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -189,13 +235,32 @@
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:layout_marginTop="10dp"
+                        android:visibility="gone"
 
-                        android:elevation="20dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/txt_this_week"
                         app:layout_constraintTop_toBottomOf="@+id/txt_this_week"
 
                         />
+
+                    <TextView
+                        android:id="@+id/nodata"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:drawableEnd="@drawable/baseline_error_24"
+
+                        android:fontFamily="@font/poppins_bold"
+                        android:padding="8dp"
+                        android:text="No Data found!"
+                        android:textColor="@color/text_color"
+                        android:textSize="13sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <!--                    <com.anychart.AnyChartView-->
                     <!--                        android:id="@+id/anychartview"-->
                     <!--                        android:layout_width="match_parent"-->
@@ -220,11 +285,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:elevation="20dp"
+
                     android:background="@drawable/shape_expand_main"
-                    android:padding="16dp">
+                    android:padding="10dp">
 
                     <TextView
                         android:id="@+id/your_next"
@@ -239,9 +304,11 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:layout_width="119dp"
-                        android:layout_height="40dp"
+                        android:id="@+id/viewfullschedule"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
                         android:drawableRight="@drawable/down_arrow"
+                        android:drawablePadding="10dp"
                         android:fontFamily="@font/inter_bold"
                         android:gravity="center"
                         android:maxLines="2"
@@ -250,20 +317,279 @@
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@+id/textView5"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/textView5"
                         app:layout_constraintTop_toTopOf="@+id/your_next" />
 
                     <TextView
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:fontFamily="@font/inter_bold"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/inter_semibold"
                         android:text="24-march at 11:15 pm DXM$"
                         android:textColor="@color/text_color"
-                        android:textSize="16sp"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@+id/your_next"
                         app:layout_constraintTop_toBottomOf="@id/your_next" />
+
+                    <LinearLayout
+                        android:id="@+id/llnodata"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/textView5">
+
+                        <TextView
+                            android:id="@+id/nodata2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:drawableEnd="@drawable/baseline_error_24"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="No data found !"
+                            android:textColor="@color/text_color"
+                            android:textSize="13sp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/viewfulldatalayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/llnodata">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/shape_expand_main"
+
+                            android:padding="13dp">
+
+
+                            <TextView
+                                android:id="@+id/tv_date_show1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="date"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <TextView
+                                android:id="@+id/tv_is_working_show_sunday"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/tv_date_show1" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+
+                            android:background="@drawable/shape_expand_main"
+                            android:padding="13dp">
+
+
+                            <TextView
+                                android:id="@+id/tv_date_show2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="date"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <TextView
+                                android:id="@+id/tv_is_working_show_monday"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/tv_date_show2" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+
+                            android:background="@drawable/shape_expand_main"
+                            android:padding="13dp">
+
+
+                            <TextView
+                                android:id="@+id/tv_date_show3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="date"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <TextView
+                                android:id="@+id/tv_is_working_show_tuesday"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/tv_date_show3" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+
+                            android:background="@drawable/shape_expand_main"
+                            android:padding="13dp">
+
+
+                            <TextView
+                                android:id="@+id/tv_date_show4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="date"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <TextView
+                                android:id="@+id/tv_is_working_show_wed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/tv_date_show4" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+
+                            android:background="@drawable/shape_expand_main"
+                            android:padding="13dp">
+
+
+                            <TextView
+                                android:id="@+id/tv_date_show5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="date"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <TextView
+                                android:id="@+id/tv_is_working_show_thu"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/tv_date_show5" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+
+                            android:background="@drawable/shape_expand_main"
+
+                            android:padding="13dp">
+
+
+                            <TextView
+                                android:id="@+id/tv_date_show6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="date"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_is_working_show_fri"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/tv_date_show6" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+
+                            android:background="@drawable/shape_expand_main"
+                            android:padding="13dp">
+
+
+                            <TextView
+                                android:id="@+id/tv_date_show7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="date"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <TextView
+                                android:id="@+id/tv_is_working_show_sat"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:textColor="@color/text_color"
+                                android:textSize="12sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        <!--                        <androidx.recyclerview.widget.RecyclerView-->
+                        <!--                            android:id="@+id/viewfullschedule"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_marginTop="16dp"-->
+                        <!--                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+                        <!--                            tools:itemCount="10"-->
+
+                        <!--                            tools:listitem="@layout/view_full_schedule" />-->
+
+                    </LinearLayout>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

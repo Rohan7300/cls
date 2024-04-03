@@ -1,6 +1,11 @@
 package com.clebs.celerity.network
 
+import com.clebs.celerity.models.CashFlowPieChartResponse
+import com.clebs.celerity.models.CashFlowPieChartResponseItem
+import com.clebs.celerity.models.GetLastWeekScore
+import com.clebs.celerity.models.GetWeekYear
 import com.clebs.celerity.models.TicketDepartmentsResponse
+import com.clebs.celerity.models.ViewFullScheduleResponse
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.requests.CreateDaikyworkRequestBody
@@ -31,6 +36,7 @@ import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
+import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
@@ -300,56 +306,74 @@ interface ApiService {
     ): Response<SimpleQuestionResponse>
 
     @GET("/api/RouteUpdate/GetRideAlongDriverInfoByDate/{leadDriverId}")
-    suspend fun GetRideAlongDriverInfoByDate(@Path("leadDriverId") driverID: Int
+    suspend fun GetRideAlongDriverInfoByDate(
+        @Path("leadDriverId") driverID: Int
     ): Response<RideAlongDriverInfoByDateResponse>
 
     @DELETE("/api/RouteUpdate/DeleteOnRideAlongRouteInfo/{routeId}")
-    suspend fun DeleteOnRideAlongRouteInfo(@Path("routeId") routeId: Int):Response<SimpleStatusMsgResponse>
+    suspend fun DeleteOnRideAlongRouteInfo(@Path("routeId") routeId: Int): Response<SimpleStatusMsgResponse>
 
     @DELETE("/api/RouteUpdate/DeleteOnRouteDetails/{routeId}")
-    suspend fun DeleteOnRouteDetails(@Path("routeId") routeId: Int):Response<SimpleStatusMsgResponse>
+    suspend fun DeleteOnRouteDetails(@Path("routeId") routeId: Int): Response<SimpleStatusMsgResponse>
 
     @POST("/api/DriverQuestionnaire/SubmitRideAlongDriverFeedback")
-    suspend fun SubmitRideAlongDriverFeedback(@Body request: SubmitRideAlongDriverFeedbackRequest):Response<SimpleStatusMsgResponse>
+    suspend fun SubmitRideAlongDriverFeedback(@Body request: SubmitRideAlongDriverFeedbackRequest): Response<SimpleStatusMsgResponse>
 
     @GET("/api/DriverQuestionnaire/GetRideAlongLeadDriverQuestion")
     suspend fun GetRideAlongLeadDriverQuestion(
-        @Query("driverId") driverId:Int,
-        @Query("routetId") routetId:Int,
-        @Query("leadDriverId") leadDriverId:Int,
-        @Query("daDailyWorkId") daDailyWorkId:Int
-    ):Response<GetRideAlongLeadDriverQuestionResponse>
+        @Query("driverId") driverId: Int,
+        @Query("routetId") routetId: Int,
+        @Query("leadDriverId") leadDriverId: Int,
+        @Query("daDailyWorkId") daDailyWorkId: Int
+    ): Response<GetRideAlongLeadDriverQuestionResponse>
 
     @POST("/api/DaDailyWorks/DeleteBreakTime/{dawDriverBreakId}")
     suspend fun DeleteBreakTime(
-        @Path("dawDriverBreakId") dawDriverBreakId:Int
-    ):Response<SimpleStatusMsgResponse>
+        @Path("dawDriverBreakId") dawDriverBreakId: Int
+    ): Response<SimpleStatusMsgResponse>
 
     @PUT("/api/RouteUpdate/UpdateOnRouteInfo")
     suspend fun UpdateOnRouteInfo(
         @Body request: GetDriverRouteInfoByDateResponseItem
-    ):Response<SimpleStatusMsgResponse>
+    ): Response<SimpleStatusMsgResponse>
 
     @GET("/api/Ticket/GetUserTickets")
     suspend fun GetUserTickets(
-        @Query("userId") userId:Int,
-        @Query("departmentId") departmentId:Int?,
-        @Query("startDate") startDate:String?,
-        @Query("endDate") endDate:String?
-    ):Response<GetUserTicketsResponse>
+        @Query("userId") userId: Int,
+        @Query("departmentId") departmentId: Int?,
+        @Query("startDate") startDate: String?,
+        @Query("endDate") endDate: String?
+    ): Response<GetUserTicketsResponse>
 
     @GET("/api/Ticket/GetUserDepartmentList")
-    suspend fun GetUserDepartmentList():Response<TicketDepartmentsResponse>
+    suspend fun GetUserDepartmentList(): Response<TicketDepartmentsResponse>
 
     @GET("/api/Ticket/GetTicketRequestType")
     suspend fun GetTicketRequestType(
-        @Query("departmentId") departmentId:Int
-    ):Response<DepartmentRequestResponse>
+        @Query("departmentId") departmentId: Int
+    ): Response<DepartmentRequestResponse>
 
     @POST("/api/Ticket/SaveTicketData")
     suspend fun SaveTicketData(
-        @Query("userId") userId:Int,
-        @Body request:SaveTicketDataRequestBody
-    ):Response<SaveTicketResponse>
+        @Query("userId") userId: Int,
+        @Body request: SaveTicketDataRequestBody
+    ): Response<SaveTicketResponse>
+
+
+    @GET("/api/Dashboard/GetAverageTotalScorebyId")
+    suspend fun GetAvgScore(@Query("userId") userId: Int, @Query("LmId") lmID: Int):Response<GetAvgScoreResponse>
+    @GET("/api/Dashboard/GetLastWeekScorebyId")
+    suspend fun GetLastWeekScore(@Query("userId") userId: Int, @Query("LmId") lmID: Int):Response<GetLastWeekScore>
+
+    @GET("/api/Dashboard/GetDriverWeeklyInvoice")
+    suspend fun CashFLowData(@Query("userId") userId: Int,@Query("companyFilter") companyFilter: Int,@Query("selYear") selYear: Int,@Query("selWeek") selWeek: Int):Response<CashFlowPieChartResponse>
+
+    @GET("/api/Dashboard/GetISO8601WeekandYear")
+    suspend fun GetWeekAndYear():Response<GetWeekYear>
+
+
+    @GET("/api/Dashboard/GetWeeklyLocationRotaList")
+    suspend fun GetVechileScheduleInfo(@Query("userId") userId: Int, @Query("LmId") lmID: Int,@Query("year") year:Int,@Query("weekNo") week:Int):Response<ViewFullScheduleResponse>
+
 }
 

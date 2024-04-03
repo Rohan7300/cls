@@ -7,7 +7,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.clebs.celerity.models.CashFlowPieChartResponse
+import com.clebs.celerity.models.CashFlowPieChartResponseItem
+import com.clebs.celerity.models.GetLastWeekScore
+import com.clebs.celerity.models.GetWeekYear
 import com.clebs.celerity.models.TicketDepartmentsResponse
+import com.clebs.celerity.models.ViewFullScheduleResponse
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
@@ -32,6 +37,7 @@ import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
+import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
@@ -103,7 +109,11 @@ class MainViewModel(
     val liveDataTicketDepartmentsResponse = MutableLiveData<TicketDepartmentsResponse?>()
     val liveDataGetTicketRequestType = MutableLiveData<DepartmentRequestResponse?>()
     val liveDataSaveTicketResponse = MutableLiveData<SaveTicketResponse?>()
-
+    val livedataAvgScoreResponse=MutableLiveData<GetAvgScoreResponse?>()
+    val livedatalastweekresponse=MutableLiveData<GetLastWeekScore?>()
+    val livedataCashFlowWeek=MutableLiveData<CashFlowPieChartResponse?>()
+    val livedatagetweekyear=MutableLiveData<GetWeekYear?>()
+    val livedatagetvechilescheduleinfo=MutableLiveData<ViewFullScheduleResponse?>()
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
@@ -656,5 +666,73 @@ class MainViewModel(
             }
         }
     }
+fun GetAVGscore(userID: Int,lmid:Int){
+    viewModelScope.launch {
+        val result=runCatching {
+            repo.GetAvgWeekScore(userID,lmid)
+        }
+        result.onSuccess {res->
+            livedataAvgScoreResponse.postValue(res)
+        }
+        result.onFailure {ex->
+            Log.e("GetTicketUserType","Error ${ex.message}")
+        }
+    }
+}
 
+    fun GetLastWeekSCore(userID: Int,lmid:Int){
+        viewModelScope.launch {
+            val result=runCatching {
+                repo.GetLastWeekScrore(userID,lmid)
+            }
+            result.onSuccess {res->
+                livedatalastweekresponse.postValue(res)
+            }
+            result.onFailure {ex->
+                Log.e("GetTicketUserType","Error ${ex.message}")
+            }
+        }
+    }
+
+    fun GetcashFlowWeek(userID: Int,companyFilter:Int,selYear:Int,selWeek:Int){
+        viewModelScope.launch {
+            val result=runCatching {
+                repo.GetCashFlowWeek(userID,companyFilter,selYear,selWeek)
+            }
+            result.onSuccess {res->
+                livedataCashFlowWeek.postValue(res)
+            }
+            result.onFailure {ex->
+                Log.e("GetTicketUserType","Error ${ex.message}")
+            }
+        }
+    }
+
+    fun GetWeekAndYear(){
+        viewModelScope.launch {
+            val result=runCatching {
+                repo.GetWeekYear()
+            }
+            result.onSuccess {res->
+                livedatagetweekyear.postValue(res)
+            }
+            result.onFailure {ex->
+                Log.e("GetTicketUserType","Error ${ex.message}")
+            }
+        }
+    }
+
+    fun GetViewFullScheduleInfo(userID: Int,lmid:Int,Year:Int,Week:Int){
+        viewModelScope.launch {
+            val result=runCatching {
+                repo.GetVechileSchedule(userID,lmid, Year, Week)
+            }
+            result.onSuccess {res->
+                livedatagetvechilescheduleinfo.postValue(res)
+            }
+            result.onFailure {ex->
+                Log.e("GetTicketUserType","Error ${ex.message}")
+            }
+        }
+    }
 }

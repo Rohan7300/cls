@@ -572,15 +572,20 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                             "DWF-03",
                             " This Vehicle ${if (vrn.isNotEmpty()) (vrn) else ""} doesn't exists. Please scan again or contact your supervisor."
                         )
-                        if (loadingDialog.isShowing){
-                            loadingDialog.dismiss()
-                        }
+//                        if (loadingDialog.isShowing){
+//                            loadingDialog.dismiss()
+//                        }
 
 //                        mbinding.pb.visibility=View.GONE
                         withContext(Dispatchers.Main) {
                             Log.d(TAG, "No VRN found in image.")
 
                         }
+                    }
+                }
+                else{
+                    if (loadingDialog.isShowing){
+                        loadingDialog.dismiss()
                     }
                 }
             }

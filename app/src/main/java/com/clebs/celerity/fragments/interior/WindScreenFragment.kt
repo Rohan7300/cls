@@ -70,7 +70,7 @@ class WindScreenFragment : Fragment() {
         Log.e("vmvmvmv", "onCreateView: $vm_id")
        BubbleShowCaseBuilder(requireActivity())//Activity instance
             .title("Wind screen") //Any title for the bubble view
-            .description("Provide wind screen information") //More detailed description
+            .description("Provide Vehicle information") //More detailed description
             .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
 
             //You can force the position of the arrow to change the location of the bubble.
