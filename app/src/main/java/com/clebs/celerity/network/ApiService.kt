@@ -55,6 +55,7 @@ import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import okhttp3.MultipartBody
+import org.w3c.dom.Comment
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -301,69 +302,78 @@ interface ApiService {
     ): Response<SimpleQuestionResponse>
 
     @GET("/api/RouteUpdate/GetRideAlongDriverInfoByDate/{leadDriverId}")
-    suspend fun GetRideAlongDriverInfoByDate(@Path("leadDriverId") driverID: Int
+    suspend fun GetRideAlongDriverInfoByDate(
+        @Path("leadDriverId") driverID: Int
     ): Response<RideAlongDriverInfoByDateResponse>
 
     @DELETE("/api/RouteUpdate/DeleteOnRideAlongRouteInfo/{routeId}")
-    suspend fun DeleteOnRideAlongRouteInfo(@Path("routeId") routeId: Int):Response<SimpleStatusMsgResponse>
+    suspend fun DeleteOnRideAlongRouteInfo(@Path("routeId") routeId: Int): Response<SimpleStatusMsgResponse>
 
     @DELETE("/api/RouteUpdate/DeleteOnRouteDetails/{routeId}")
-    suspend fun DeleteOnRouteDetails(@Path("routeId") routeId: Int):Response<SimpleStatusMsgResponse>
+    suspend fun DeleteOnRouteDetails(@Path("routeId") routeId: Int): Response<SimpleStatusMsgResponse>
 
     @POST("/api/DriverQuestionnaire/SubmitRideAlongDriverFeedback")
-    suspend fun SubmitRideAlongDriverFeedback(@Body request: SubmitRideAlongDriverFeedbackRequest):Response<SimpleStatusMsgResponse>
+    suspend fun SubmitRideAlongDriverFeedback(@Body request: SubmitRideAlongDriverFeedbackRequest): Response<SimpleStatusMsgResponse>
 
     @GET("/api/DriverQuestionnaire/GetRideAlongLeadDriverQuestion")
     suspend fun GetRideAlongLeadDriverQuestion(
-        @Query("driverId") driverId:Int,
-        @Query("routetId") routetId:Int,
-        @Query("leadDriverId") leadDriverId:Int,
-        @Query("daDailyWorkId") daDailyWorkId:Int
-    ):Response<GetRideAlongLeadDriverQuestionResponse>
+        @Query("driverId") driverId: Int,
+        @Query("routetId") routetId: Int,
+        @Query("leadDriverId") leadDriverId: Int,
+        @Query("daDailyWorkId") daDailyWorkId: Int
+    ): Response<GetRideAlongLeadDriverQuestionResponse>
 
     @POST("/api/DaDailyWorks/DeleteBreakTime/{dawDriverBreakId}")
     suspend fun DeleteBreakTime(
-        @Path("dawDriverBreakId") dawDriverBreakId:Int
-    ):Response<SimpleStatusMsgResponse>
+        @Path("dawDriverBreakId") dawDriverBreakId: Int
+    ): Response<SimpleStatusMsgResponse>
 
     @PUT("/api/RouteUpdate/UpdateOnRouteInfo")
     suspend fun UpdateOnRouteInfo(
         @Body request: GetDriverRouteInfoByDateResponseItem
-    ):Response<SimpleStatusMsgResponse>
+    ): Response<SimpleStatusMsgResponse>
 
     @GET("/api/Ticket/GetUserTickets")
     suspend fun GetUserTickets(
-        @Query("userId") userId:Int,
-        @Query("departmentId") departmentId:Int?,
-        @Query("startDate") startDate:String?,
-        @Query("endDate") endDate:String?
-    ):Response<GetUserTicketsResponse>
+        @Query("userId") userId: Int,
+        @Query("departmentId") departmentId: Int?,
+        @Query("startDate") startDate: String?,
+        @Query("endDate") endDate: String?
+    ): Response<GetUserTicketsResponse>
 
     @GET("/api/Ticket/GetUserDepartmentList")
-    suspend fun GetUserDepartmentList():Response<TicketDepartmentsResponse>
+    suspend fun GetUserDepartmentList(): Response<TicketDepartmentsResponse>
 
     @GET("/api/Ticket/GetTicketRequestType")
     suspend fun GetTicketRequestType(
-        @Query("departmentId") departmentId:Int
-    ):Response<DepartmentRequestResponse>
+        @Query("departmentId") departmentId: Int
+    ): Response<DepartmentRequestResponse>
 
     @POST("/api/Ticket/CreateUserTicket")
     suspend fun SaveTicketData(
-        @Query("userId") userId:Int,
-        @Body request:SaveTicketDataRequestBody
-    ):Response<SaveTicketResponse>
+        @Query("userId") userId: Int,
+        @Body request: SaveTicketDataRequestBody
+    ): Response<SaveTicketResponse>
 
     @GET("/api/Ticket/GetTicketCommentList")
     suspend fun GetTicketCommentList(
         @Query("userId") userId: Int,
-        @Query("ticketId") ticketId:Int
-    ):Response<GetTicketCommentListResponse>
+        @Query("ticketId") ticketId: Int
+    ): Response<GetTicketCommentListResponse>
 
+    @Multipart
     @POST("/api/Ticket/UploadTicketAttachmentDoc")
     suspend fun UploadTicketAttachmentDoc(
         @Query("userId") userId: Int,
         @Query("ticketId") ticketId: Int,
-        @Part("UploadTicketDoc") file:MultipartBody.Part
-    ):Response<SimpleStatusMsgResponse>
+        @Part file: MultipartBody.Part
+    ): Response<SimpleStatusMsgResponse>
+
+    @POST("/api/Ticket/SaveTicketComment")
+    suspend fun SaveTicketComment(
+        @Query("userId") userId: Int,
+        @Query("ticketId") ticketId: Int,
+        @Query("comment") comment: String
+    ): Response<SimpleStatusMsgResponse>
 }
 

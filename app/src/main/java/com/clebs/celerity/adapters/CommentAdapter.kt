@@ -23,13 +23,18 @@ class CommentAdapter(var arrayList: ArrayList<DocX>) :
                 @Suppress("DEPRECATION")
                 binding.tvDes.text = Html.fromHtml(item.CommentWithDateAndTime)
             }
+            var formattedDate = item.ActionOn
+            try {
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
 
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
-            val dateTime = LocalDateTime.parse(item.ActionOn, formatter)
+                val dateTime = LocalDateTime.parse(item.ActionOn, formatter)
 
 
-            val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-            val formattedDate = dateTime.format(outputFormatter)
+                val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                formattedDate = dateTime.format(outputFormatter)
+            }catch (_:Exception){
+            }
+
             binding.tvDate.text = formattedDate
 
         }

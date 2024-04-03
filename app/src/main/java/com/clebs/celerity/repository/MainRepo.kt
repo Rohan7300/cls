@@ -666,4 +666,19 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
+    suspend fun SaveTicketComment(
+        userID: Int,
+        ticketID: Int,
+        comment: String
+    ): SimpleStatusMsgResponse? {
+        val response = ApiService.SaveTicketComment(userID, ticketID, comment)
+        if (response.isSuccessful)
+            return response.body()
+        else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body $errorBody")
+        }
+        return null
+    }
+
 }

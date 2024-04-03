@@ -58,15 +58,26 @@ class UserTicketsFragment : Fragment() {
     }
 
     private fun observers() {
-        val ticketAdapter = TicketAdapter(GetUserTicketsResponse(ArrayList()),requireContext())
+        val ticketAdapter = TicketAdapter(GetUserTicketsResponse(ArrayList()), requireContext())
         mbinding.rvTickets.adapter = ticketAdapter
         mbinding.rvTickets.layoutManager = LinearLayoutManager(requireContext())
         viewModel.liveDataGetUserTickets.observe(viewLifecycleOwner) {
             homeActivity.hideDialog()
             if (it != null) {
+                if (it.Docs.size > 0) {
+                    mbinding.noticketLayout.visibility = View.GONE
+                    mbinding.rvTickets.visibility = View.VISIBLE
+                } else {
+                    mbinding.noticketLayout.visibility = View.VISIBLE
+                    mbinding.rvTickets.visibility = View.GONE
+                }
                 ticketAdapter.ticketList.Docs.clear()
-                ticketAdapter.ticketList.Docs.addAll(it.Docs)
+                val reversedList = it.Docs.reversed()
+                ticketAdapter.ticketList.Docs.addAll(reversedList)
                 ticketAdapter.notifyDataSetChanged()
+            } else {
+                mbinding.noticketLayout.visibility = View.VISIBLE
+                mbinding.rvTickets.visibility = View.GONE
             }
         }
     }
@@ -122,5 +133,11 @@ class UserTicketsFragment : Fragment() {
         deleteDialog.setCanceledOnTouchOutside(true);
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         deleteDialog.show();
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadingDialog.show()
+        viewModel.GetUserTickets(prefs.userID.toInt())
     }
 }

@@ -10,17 +10,27 @@ import com.clebs.celerity.models.response.Doc
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.ui.AddCommentActivity
 
-class TicketAdapter(var ticketList: GetUserTicketsResponse,var context: Context):RecyclerView.Adapter<TicketAdapter.TicketViewHolder>() {
+class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context) :
+    RecyclerView.Adapter<TicketAdapter.TicketViewHolder>() {
 
-    inner class TicketViewHolder(val binding:AdapterTicketItemBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(ticketItem:Doc){
-            binding.ticketTitleTV.text = ticketItem.TicketTitle
+    inner class TicketViewHolder(val binding: AdapterTicketItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(ticketItem: Doc) {
+            binding.ticketTitleTV.text = "CLS - ${ticketItem.UserTicketID}"
             binding.ticketSubjectTV.text = ticketItem.TicketDescription
+            var time = try {
+                ticketItem.UserTicketCreatedOn.split("T")[0] + " " + ticketItem.UserTicketCreatedOn.split(
+                    "T"
+                )[1]
+            } catch (_: Exception) {
+                ticketItem.UserTicketCreatedOn
+            }
+            binding.ticketTime.text = time
             binding.commentIV.setOnClickListener {
-                val intent =Intent(context,AddCommentActivity::class.java).apply {
-                    putExtra("ticketID",ticketItem.UserTicketID)
+                val intent = Intent(context, AddCommentActivity::class.java).apply {
+                    putExtra("ticketID", ticketItem.UserTicketID)
                 }
-                context.startActivity(Intent(context,AddCommentActivity::class.java))
+                context.startActivity(intent)
             }
         }
     }

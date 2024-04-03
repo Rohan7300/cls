@@ -36,6 +36,9 @@
         tools:replace="android:allowBackup"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".ui.CommentDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.AddCommentActivity"
             android:exported="false" />
         <activity
@@ -44,8 +47,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.CreateTicketsActivity"
-            android:exported="true"
-            android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Celerity" />
         <activity
@@ -77,7 +78,7 @@
             android:exported="false"
             android:grantUriPermissions="true"
             android:screenOrientation="portrait"
-            tools:replace="android:authorities"></provider>
+            tools:replace="android:authorities" />
 
         <meta-data
             android:name="preloaded_fonts"

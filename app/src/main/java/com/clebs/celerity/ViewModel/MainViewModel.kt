@@ -104,8 +104,9 @@ class MainViewModel(
     val liveDataTicketDepartmentsResponse = MutableLiveData<TicketDepartmentsResponse?>()
     val liveDataGetTicketRequestType = MutableLiveData<DepartmentRequestResponse?>()
     val liveDataSaveTicketResponse = MutableLiveData<SaveTicketResponse?>()
-    val liveDataGetTicketCommentList =MutableLiveData<GetTicketCommentListResponse?>()
+    val liveDataGetTicketCommentList = MutableLiveData<GetTicketCommentListResponse?>()
     val liveDataUploadTicketAttachmentDoc = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataSaveTicketComment = MutableLiveData<SimpleStatusMsgResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -593,7 +594,7 @@ class MainViewModel(
             result.onSuccess { res ->
                 liveDataUpdateOnRouteInfo.postValue(res)
             }
-            result.onFailure { ex->
+            result.onFailure { ex ->
                 Log.e("DeleteBreakTime Exception", "Error ${ex.message}")
             }
         }
@@ -601,38 +602,38 @@ class MainViewModel(
 
     fun GetUserTickets(
         userID: Int,
-        department:Int?=null,
-        startDate:String?=null,
-        endDate:String?=null
-    ){
+        department: Int? = null,
+        startDate: String? = null,
+        endDate: String? = null
+    ) {
         viewModelScope.launch {
             val result = runCatching {
-                repo.GetUserTickets(userID,department,startDate,endDate)
+                repo.GetUserTickets(userID, department, startDate, endDate)
             }
-            result.onSuccess {res->
+            result.onSuccess { res ->
                 liveDataGetUserTickets.postValue(res)
             }
-            result.onFailure { ex->
-                Log.e("GetUserTickets","Error ${ex.message}")
+            result.onFailure { ex ->
+                Log.e("GetUserTickets", "Error ${ex.message}")
             }
         }
     }
 
-    fun GetUserDepartmentList(){
+    fun GetUserDepartmentList() {
         viewModelScope.launch {
             val result = runCatching {
                 repo.GetUserDepartmentList()
             }
-            result.onSuccess {res->
+            result.onSuccess { res ->
                 liveDataTicketDepartmentsResponse.postValue(res)
             }
-            result.onFailure {ex->
-                Log.e("GetUserTickets","Error ${ex.message}")
+            result.onFailure { ex ->
+                Log.e("GetUserTickets", "Error ${ex.message}")
             }
         }
     }
 
-    fun GetTicketRequestType(deptID:Int){
+    fun GetTicketRequestType(deptID: Int) {
         viewModelScope.launch {
             val result = runCatching {
                 repo.GetTicketRequestType(deptID)
@@ -640,46 +641,70 @@ class MainViewModel(
             result.onSuccess {
                 liveDataGetTicketRequestType.postValue(it)
             }
-            result.onFailure {ex->
-                Log.e("GetTicketUserType","Error ${ex.message}")
+            result.onFailure { ex ->
+                Log.e("GetTicketUserType", "Error ${ex.message}")
             }
         }
     }
 
-    fun SaveTicketData(userID: Int,request:SaveTicketDataRequestBody){
+    fun SaveTicketData(userID: Int, request: SaveTicketDataRequestBody) {
         viewModelScope.launch {
             val result = runCatching {
-                repo.SaveTicketData(userID,request)
+                repo.SaveTicketData(userID, request)
             }
-            result.onSuccess {res->
+            result.onSuccess { res ->
                 liveDataSaveTicketResponse.postValue(res)
             }
-            result.onFailure {ex->
-                Log.e("GetTicketUserType","Error ${ex.message}")
+            result.onFailure { ex ->
+                Log.e("GetTicketUserType Ex", "Error ${ex.message}")
             }
         }
     }
 
-    fun GetTicketCommentList(userID: Int,ticketId:Int){
+    fun GetTicketCommentList(userID: Int, ticketId: Int) {
         viewModelScope.launch {
             val result = runCatching {
-                repo.GetTicketCommentList(userID,ticketId)
+                repo.GetTicketCommentList(userID, ticketId)
             }
-            result.onSuccess {res->
+            result.onSuccess { res ->
                 liveDataGetTicketCommentList.postValue(res)
             }
-            result.onFailure { ex->
-                Log.e("GetTicketCommentList","Error ${ex.message}")
+            result.onFailure { ex ->
+                Log.e("GetTicketCommentList Ex", "Error ${ex.message}")
             }
         }
     }
 
     fun UploadTicketAttachmentDoc(
-        userID: Int,ticketId: Int,file:MultipartBody.Part
+        userID: Int, ticketId: Int, file: MultipartBody.Part
+    ) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.UploadTicketAttachmentDoc(userID, ticketId, file)
+            }
+            result.onSuccess {res->
+                liveDataUploadTicketAttachmentDoc.postValue(res)
+            }
+            result.onFailure {ex->
+                Log.e("UploadTicketAttachmentDoc Ex", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun SaveTicketComment(
+        userID: Int,
+        ticketId: Int,
+        comment:String
     ){
         viewModelScope.launch {
             val result = runCatching {
-
+                repo.SaveTicketComment(userID,ticketId,comment)
+            }
+            result.onSuccess { res->
+                liveDataSaveTicketComment.postValue(res)
+            }
+            result.onFailure {ex->
+                Log.e("SaveTicketComment Ex", "Error ${ex.message}")
             }
         }
     }

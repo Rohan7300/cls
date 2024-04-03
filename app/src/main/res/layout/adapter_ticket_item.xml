@@ -62,6 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginVertical="5dp"
         >
         <TextView
             android:layout_width="wrap_content"
@@ -81,5 +82,15 @@
             />
 
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:textSize="12sp"
+        android:id="@+id/ticketTime"
+        android:text="Time"
+        android:layout_marginVertical="3dp"
+        android:fontFamily="@font/poppins_semibold"
+        />
 </LinearLayout>
 </LinearLayout>

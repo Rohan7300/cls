@@ -9,8 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
@@ -18,6 +20,7 @@ import android.widget.Spinner
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toFile
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.Factory.MyViewModelFactory
@@ -33,6 +36,10 @@ import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.showToast
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.jetbrains.anko.startActivityForResult
 
 class CreateTicketsActivity : AppCompatActivity() {
@@ -42,13 +49,13 @@ class CreateTicketsActivity : AppCompatActivity() {
     lateinit var repo: MainRepo
     var selectedDeptID: Int = -1
     var selectedRequestTypeID: Int = -1
+    var ticketID: String? = null
     var apiCount = 0
     var title: String? = null
     lateinit var pref: Prefs
     var desc: String? = null
     lateinit var loadingDialog: LoadingDialog
     private var selectedFileUri: Uri? = null
-    private lateinit var uploadFileLauncher: ActivityResultLauncher<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,15 +79,6 @@ class CreateTicketsActivity : AppCompatActivity() {
             else
                 saveTicket()
         }
-
-
-        uploadFileLauncher =
-            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-
-                uri?.let { selectedFileUri ->
-
-                }
-            }
 
         mbinding.icUpload.setOnClickListener {
 
@@ -184,8 +182,19 @@ class CreateTicketsActivity : AppCompatActivity() {
         viewmodel.liveDataSaveTicketResponse.observe(this) {
             hideDialog()
             if (it != null) {
+                ticketID = it.TicketId
                 showUploadDialog()
 
+            }
+        }
+
+        viewmodel.liveDataUploadTicketAttachmentDoc.observe(this) {
+            hideDialog()
+            if (it != null) {
+                onBackPressed()
+            } else {
+                showToast("Failed to Upload Attachment!!", this)
+                onBackPressed()
             }
         }
 
@@ -280,34 +289,81 @@ class CreateTicketsActivity : AppCompatActivity() {
         apiCount++
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        /*        if (requestCode == PICK_FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-                    data?.data?.let { selectedUri ->
-
-                        selectedFileUri = selectedUri
-                    }
-                } else if (requestCode == PICK_FILE_REQUEST_CODE && resultCode == Activity.RESULT_CANCELED) {
-
-                    showToast("File selection canceled", this)
-                }*/
+    private fun getMimeType(uri: Uri): String? {
+        val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
     }
 
-    fun showUploadDialog() {
+    private val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                Log.d("XX", "$result")
+                data?.data?.let {
+                    selectedFileUri = it
+                    if (ticketID == null || selectedFileUri == null) {
+                        showToast("Something went wrong!!", this)
+                    } else {
+                        val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
+                        val tmpFile = createTempFile("temp", null, cacheDir).apply {
+                            deleteOnExit()
+                        }
+
+                        val inputStream = contentResolver.openInputStream(selectedFileUri!!)
+                        val outputStream = tmpFile.outputStream()
+
+                        inputStream?.use { input ->
+                            outputStream.use { output ->
+                                input.copyTo(output)
+                            }
+                        }
+
+                        val fileExtension = getMimeType(selectedFileUri!!)?.let { mimeType ->
+                            MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+                        }
+
+                        val requestBody = tmpFile.asRequestBody(mimeType)
+                        val filePart = MultipartBody.Part.createFormData(
+                            "UploadTicketDoc",
+                            selectedFileUri!!.lastPathSegment+ "." + (fileExtension ?: "jpg"),
+                            requestBody
+                        )
+
+                        showDialog()
+                        viewmodel.UploadTicketAttachmentDoc(
+                            pref.userID.toInt(),
+                            ticketId = ticketID!!.toInt(),
+                            file = filePart
+                        )
+
+                    }
+
+                }
+            } else {
+                Log.d("Error", "")
+            }
+
+        }
+
+    private fun showUploadDialog() {
         val uploadDialog = AlertDialog.Builder(this).create()
         val uploadDialogBinding = DialogUploadAlertBinding.inflate(LayoutInflater.from(this))
         uploadDialog.setView(uploadDialogBinding.root)
         uploadDialog.setCanceledOnTouchOutside(false)
         uploadDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         uploadDialog.show()
+
         uploadDialogBinding.upload.setOnClickListener {
             uploadDialog.dismiss()
             uploadDialog.cancel()
-            uploadFileLauncher.launch("*/*")
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "*/*"
+            resultLauncher.launch(intent)
         }
 
+
         uploadDialogBinding.cancel.setOnClickListener {
-            uploadDialog.dismiss()
+            onBackPressed()
         }
 
 
