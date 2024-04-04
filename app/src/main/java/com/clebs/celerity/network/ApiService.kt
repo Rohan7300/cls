@@ -375,5 +375,9 @@ interface ApiService {
     @GET("/api/Dashboard/GetWeeklyLocationRotaList")
     suspend fun GetVechileScheduleInfo(@Query("userId") userId: Int, @Query("LmId") lmID: Int,@Query("year") year:Int,@Query("weekNo") week:Int):Response<ViewFullScheduleResponse>
 
+    @PUT("/api/Dashboard/CreateThirdPartyAccess")
+    suspend fun GetThirdPartyAccess(@Query("userId") userId: Int):Response<SimpleStatusMsgResponse>
+
+
 }
 

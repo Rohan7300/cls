@@ -145,7 +145,6 @@
                                 android:layout_weight="1"
                                 android:background="@color/white"
                                 android:enabled="false"
-                                android:textCursorDrawable="@color/light_orange2"
                                 android:fontFamily="@font/poppins"
                                 android:hint="ANa name"
                                 android:importantForAutofill="no"
@@ -154,6 +153,7 @@
                                 android:padding="10dp"
                                 android:paddingStart="0dp"
                                 android:textColor="@color/text_color"
+                                android:textCursorDrawable="@color/light_orange2"
                                 android:textSize="14sp" />
 
                             <ImageView
@@ -233,13 +233,13 @@
                                 android:enabled="false"
                                 android:fontFamily="@font/poppins"
                                 android:hint="ANa name"
-                                android:textCursorDrawable="@color/light_orange2"
                                 android:importantForAutofill="no"
                                 android:inputType="textEmailAddress"
                                 android:letterSpacing="0.02"
                                 android:padding="10dp"
                                 android:paddingStart="0dp"
                                 android:textColor="@color/text_color"
+                                android:textCursorDrawable="@color/light_orange2"
                                 android:textSize="15sp" />
 
 
@@ -296,13 +296,13 @@
                                 android:enabled="false"
                                 android:fontFamily="@font/poppins"
                                 android:hint="password"
-                                android:textCursorDrawable="@color/light_orange2"
                                 android:importantForAutofill="no"
                                 android:inputType="textPassword"
                                 android:letterSpacing="0.02"
                                 android:padding="10dp"
                                 android:paddingStart="0dp"
                                 android:textColor="@color/text_color"
+                                android:textCursorDrawable="@color/light_orange2"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -368,12 +368,12 @@
                                 android:fontFamily="@font/poppins"
                                 android:hint="phone number"
                                 android:importantForAutofill="no"
-                                android:textCursorDrawable="@color/light_orange2"
                                 android:inputType="phone"
                                 android:letterSpacing="0.02"
                                 android:padding="10dp"
                                 android:paddingStart="0dp"
                                 android:textColor="@color/text_color"
+                                android:textCursorDrawable="@color/light_orange2"
                                 android:textSize="15sp" />
 
 
@@ -431,11 +431,11 @@
                                 android:hint="#123 Lorem Lorem Ipsum is simply text of the printing and typesetting "
                                 android:importantForAutofill="no"
                                 android:inputType="textEmailAddress"
-                                android:textCursorDrawable="@color/light_orange2"
                                 android:letterSpacing="0.02"
                                 android:padding="10dp"
                                 android:paddingStart="0dp"
                                 android:textColor="@color/text_color"
+                                android:textCursorDrawable="@color/light_orange2"
                                 android:textSize="15sp" />
 
 
@@ -454,10 +454,41 @@
                         </RelativeLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constthirdparty"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="10dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/Tvthirdparty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_semibold"
+                            android:letterSpacing="0.01"
+                            android:text="Get Third Party Access"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <com.google.android.material.checkbox.MaterialCheckBox
+                            android:id="@+id/checkbox"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:background="@drawable/checbox_selector"
+                            android:button="@null"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/Tvthirdparty" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                     <TextView
                         android:id="@+id/save"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
                         android:background="@drawable/shape_textview_buttontwo"
                         android:fontFamily="@font/poppins_semibold"
                         android:gravity="center"
@@ -466,8 +497,7 @@
                         android:text="Save changes"
                         android:textColor="@color/white"
                         android:textSize="14sp"
-                        android:layout_margin="16dp"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />

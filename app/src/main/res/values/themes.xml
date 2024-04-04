@@ -17,6 +17,7 @@
     <style name="BottomNavigationViewTextStyle">
 
         <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">11sp</item>
 
     </style>
 <style name="ctanine" parent="Theme.MaterialComponents.NoActionBar">

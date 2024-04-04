@@ -114,6 +114,7 @@ class MainViewModel(
     val livedataCashFlowWeek=MutableLiveData<CashFlowPieChartResponse?>()
     val livedatagetweekyear=MutableLiveData<GetWeekYear?>()
     val livedatagetvechilescheduleinfo=MutableLiveData<ViewFullScheduleResponse?>()
+    val livedatathirdpartyaccess=MutableLiveData<SimpleStatusMsgResponse?>()
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
@@ -729,6 +730,20 @@ fun GetAVGscore(userID: Int,lmid:Int){
             }
             result.onSuccess {res->
                 livedatagetvechilescheduleinfo.postValue(res)
+            }
+            result.onFailure {ex->
+                Log.e("GetTicketUserType","Error ${ex.message}")
+            }
+        }
+    }
+
+    fun GetThirdPartyAccess(userID: Int){
+        viewModelScope.launch {
+            val result=runCatching {
+                repo.GetThirdPartyAccess(userID)
+            }
+            result.onSuccess {res->
+                livedatathirdpartyaccess.postValue(res)
             }
             result.onFailure {ex->
                 Log.e("GetTicketUserType","Error ${ex.message}")

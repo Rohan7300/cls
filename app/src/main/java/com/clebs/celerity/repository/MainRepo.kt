@@ -697,4 +697,16 @@ class MainRepo(private val ApiService: ApiService) {
         }
         return null
     }
+
+    suspend fun GetThirdPartyAccess(userID: Int): SimpleStatusMsgResponse? {
+        val response = ApiService.GetThirdPartyAccess(userID)
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+
 }

@@ -211,6 +211,7 @@
                     android:id="@+id/consttwo"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
@@ -326,7 +327,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/inter_semibold"
                         android:text="24-march at 11:15 pm DXM$"
-                        android:textColor="@color/text_color"
+                        android:textColor="@color/black"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@+id/your_next"
                         app:layout_constraintTop_toBottomOf="@id/your_next" />
@@ -357,15 +358,39 @@
                         android:id="@+id/viewfulldatalayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="4dp"
                         android:orientation="vertical"
                         android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@id/llnodata">
 
+                        <RelativeLayout
+                            android:id="@+id/rlicons"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="60dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="60dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:src="@drawable/schedule" />
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/map" />
+
+                        </RelativeLayout>
+
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="10dp"
                             android:background="@drawable/shape_expand_main"
 
                             android:padding="13dp">
