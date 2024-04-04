@@ -49,6 +49,7 @@ import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
+import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -114,7 +115,10 @@ class MainViewModel(
     val livedataCashFlowWeek=MutableLiveData<CashFlowPieChartResponse?>()
     val livedatagetweekyear=MutableLiveData<GetWeekYear?>()
     val livedatagetvechilescheduleinfo=MutableLiveData<ViewFullScheduleResponse?>()
-    val livedatathirdpartyaccess=MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataGetTicketCommentList = MutableLiveData<GetTicketCommentListResponse?>()
+    val liveDataUploadTicketAttachmentDoc = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataSaveTicketComment = MutableLiveData<SimpleStatusMsgResponse?>()
+
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
@@ -662,8 +666,56 @@ class MainViewModel(
             result.onSuccess {res->
                 liveDataSaveTicketResponse.postValue(res)
             }
+            result.onFailure { ex ->
+                Log.e("GetTicketUserType Ex", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun GetTicketCommentList(userID: Int, ticketId: Int) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.GetTicketCommentList(userID, ticketId)
+            }
+            result.onSuccess { res ->
+                liveDataGetTicketCommentList.postValue(res)
+            }
+            result.onFailure { ex ->
+                Log.e("GetTicketCommentList Ex", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun UploadTicketAttachmentDoc(
+        userID: Int, ticketId: Int, file: MultipartBody.Part
+    ) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.UploadTicketAttachmentDoc(userID, ticketId, file)
+            }
+            result.onSuccess {res->
+                liveDataUploadTicketAttachmentDoc.postValue(res)
+            }
             result.onFailure {ex->
-                Log.e("GetTicketUserType","Error ${ex.message}")
+                Log.e("UploadTicketAttachmentDoc Ex", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun SaveTicketComment(
+        userID: Int,
+        ticketId: Int,
+        comment:String
+    ){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.SaveTicketComment(userID,ticketId,comment)
+            }
+            result.onSuccess { res->
+                liveDataSaveTicketComment.postValue(res)
+            }
+            result.onFailure {ex->
+                Log.e("SaveTicketComment Ex", "Error ${ex.message}")
             }
         }
     }

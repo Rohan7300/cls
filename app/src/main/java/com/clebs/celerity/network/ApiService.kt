@@ -51,6 +51,7 @@ import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
+import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -60,6 +61,7 @@ import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import okhttp3.MultipartBody
+import org.w3c.dom.Comment
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -361,20 +363,58 @@ interface ApiService {
 
 
     @GET("/api/Dashboard/GetAverageTotalScorebyId")
-    suspend fun GetAvgScore(@Query("userId") userId: Int, @Query("LmId") lmID: Int):Response<GetAvgScoreResponse>
+    suspend fun GetAvgScore(
+        @Query("userId") userId: Int,
+        @Query("LmId") lmID: Int
+    ): Response<GetAvgScoreResponse>
+
     @GET("/api/Dashboard/GetLastWeekScorebyId")
-    suspend fun GetLastWeekScore(@Query("userId") userId: Int, @Query("LmId") lmID: Int):Response<GetLastWeekScore>
+    suspend fun GetLastWeekScore(
+        @Query("userId") userId: Int,
+        @Query("LmId") lmID: Int
+    ): Response<GetLastWeekScore>
 
     @GET("/api/Dashboard/GetDriverWeeklyInvoice")
-    suspend fun CashFLowData(@Query("userId") userId: Int,@Query("companyFilter") companyFilter: Int,@Query("selYear") selYear: Int,@Query("selWeek") selWeek: Int):Response<CashFlowPieChartResponse>
+    suspend fun CashFLowData(
+        @Query("userId") userId: Int,
+        @Query("companyFilter") companyFilter: Int,
+        @Query("selYear") selYear: Int,
+        @Query("selWeek") selWeek: Int
+    ): Response<CashFlowPieChartResponse>
 
     @GET("/api/Dashboard/GetISO8601WeekandYear")
-    suspend fun GetWeekAndYear():Response<GetWeekYear>
+    suspend fun GetWeekAndYear(): Response<GetWeekYear>
 
 
     @GET("/api/Dashboard/GetWeeklyLocationRotaList")
-    suspend fun GetVechileScheduleInfo(@Query("userId") userId: Int, @Query("LmId") lmID: Int,@Query("year") year:Int,@Query("weekNo") week:Int):Response<ViewFullScheduleResponse>
+    suspend fun GetVechileScheduleInfo(
+        @Query("userId") userId: Int,
+        @Query("LmId") lmID: Int,
+        @Query("year") year: Int,
+        @Query("weekNo") week: Int
+    ): Response<ViewFullScheduleResponse>
 
+
+    @GET("/api/Ticket/GetTicketCommentList")
+    suspend fun GetTicketCommentList(
+        @Query("userId") userId: Int,
+        @Query("ticketId") ticketId: Int
+    ): Response<GetTicketCommentListResponse>
+
+    @Multipart
+    @POST("/api/Ticket/UploadTicketAttachmentDoc")
+    suspend fun UploadTicketAttachmentDoc(
+        @Query("userId") userId: Int,
+        @Query("ticketId") ticketId: Int,
+        @Part file: MultipartBody.Part
+    ): Response<SimpleStatusMsgResponse>
+
+    @POST("/api/Ticket/SaveTicketComment")
+    suspend fun SaveTicketComment(
+        @Query("userId") userId: Int,
+        @Query("ticketId") ticketId: Int,
+        @Query("comment") comment: String
+    ): Response<SimpleStatusMsgResponse>
     @PUT("/api/Dashboard/CreateThirdPartyAccess")
     suspend fun GetThirdPartyAccess(@Query("userId") userId: Int):Response<SimpleStatusMsgResponse>
 
