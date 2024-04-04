@@ -51,11 +51,13 @@ import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
+import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
 import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
+import com.clebs.celerity.models.response.SaveCommentResponse
 import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
@@ -355,7 +357,7 @@ interface ApiService {
         @Query("departmentId") departmentId: Int
     ): Response<DepartmentRequestResponse>
 
-    @POST("/api/Ticket/SaveTicketData")
+    @POST("/api/Ticket/CreateUserTicket")
     suspend fun SaveTicketData(
         @Query("userId") userId: Int,
         @Body request: SaveTicketDataRequestBody
@@ -399,7 +401,7 @@ interface ApiService {
     suspend fun GetTicketCommentList(
         @Query("userId") userId: Int,
         @Query("ticketId") ticketId: Int
-    ): Response<GetTicketCommentListResponse>
+    ): Response<GetTicketCommentListNewResponse>
 
     @Multipart
     @POST("/api/Ticket/UploadTicketAttachmentDoc")
@@ -414,6 +416,14 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("ticketId") ticketId: Int,
         @Query("comment") comment: String
-    ): Response<SimpleStatusMsgResponse>
+    ): Response<SaveCommentResponse>
+
+    @Multipart
+    @POST("/api/Ticket/UploadTicketCommentAttachmentDoc")
+    suspend fun UploadTicketCommentAttachmentDoc(
+        @Query("userId") userId: Int,
+        @Query("ticketCommentId") ticketCommentId:Int,
+        @Part file:MultipartBody.Part
+    ):Response<SimpleStatusMsgResponse>
 }
 

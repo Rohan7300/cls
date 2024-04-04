@@ -2,6 +2,7 @@ package com.clebs.celerity.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.clebs.celerity.models.response.Doc
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -86,13 +87,13 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getInt("quesID", 0)
         set(value) = sharedPreferences.edit().putInt("quesID", value).apply()
 
-    var submittedFeedback:Boolean
-        get() = sharedPreferences.getBoolean("feedback",false)
-        set(value) = sharedPreferences.edit().putBoolean("feedback",value).apply()
+    var submittedFeedback: Boolean
+        get() = sharedPreferences.getBoolean("feedback", false)
+        set(value) = sharedPreferences.edit().putBoolean("feedback", value).apply()
 
-    var submittedRideAlong:Boolean
-        get() = sharedPreferences.getBoolean("rideAlong",false)
-        set(value) = sharedPreferences.edit().putBoolean("rideAlong",value).apply()
+    var submittedRideAlong: Boolean
+        get() = sharedPreferences.getBoolean("rideAlong", false)
+        set(value) = sharedPreferences.edit().putBoolean("rideAlong", value).apply()
 
     var accessTokenclearquote: String
         get() {
@@ -109,17 +110,17 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putString("userID", value).apply()
         }
 
-    var userName:String
-        get() = sharedPreferences.getString("userName","")?:""
-        set(value) = sharedPreferences.edit().putString("userName",value).apply()
+    var userName: String
+        get() = sharedPreferences.getString("userName", "") ?: ""
+        set(value) = sharedPreferences.edit().putString("userName", value).apply()
 
-    var qStage:Int
-        get() = sharedPreferences.getInt("qStage",0)?:0
-        set(value) = sharedPreferences.edit().putInt("qStage",value).apply()
+    var qStage: Int
+        get() = sharedPreferences.getInt("qStage", 0) ?: 0
+        set(value) = sharedPreferences.edit().putInt("qStage", value).apply()
 
-    var canClockOut:Boolean
-        get() = sharedPreferences.getBoolean("canClockOut",false)?:false
-        set(value) = sharedPreferences.edit().putBoolean("canClockOut",value).apply()
+    var canClockOut: Boolean
+        get() = sharedPreferences.getBoolean("canClockOut", false) ?: false
+        set(value) = sharedPreferences.edit().putBoolean("canClockOut", value).apply()
 
     fun save(key: String?, value: String?) {
         sharedPreferences.edit().putString(key, value).apply()
@@ -218,11 +219,25 @@ class Prefs(context: Context) {
         editor.putString("CurrRouteInfo", json)
         editor.apply()
     }
-    fun getDriverRouteInfoByDate():GetDriverRouteInfoByDateResponseItem?{
+
+    fun getDriverRouteInfoByDate(): GetDriverRouteInfoByDateResponseItem? {
         val gson = Gson()
-        val data = sharedPreferences.getString("CurrRouteInfo",null)
-        return gson.fromJson(data,GetDriverRouteInfoByDateResponseItem::class.java)?:null
+        val data = sharedPreferences.getString("CurrRouteInfo", null)
+        return gson.fromJson(data, GetDriverRouteInfoByDateResponseItem::class.java) ?: null
     }
 
+    fun saveCurrentTicket(data: Doc) {
+        val editor = sharedPreferences.edit()
+        val gson = Gson()
+        val json = gson.toJson(data)
+        editor.putString("CurrentTicket", json)
+        editor.apply()
+    }
+
+    fun getCurrentTicket(): Doc? {
+        val gson = Gson()
+        val data = sharedPreferences.getString("CurrentTicket", null)
+        return gson.fromJson(data, Doc::class.java) ?: null
+    }
 
 }

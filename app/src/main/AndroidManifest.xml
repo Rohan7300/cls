@@ -36,6 +36,9 @@
         tools:replace="android:allowBackup"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".ui.ViewTicketsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.CommentDetailActivity"
             android:exported="false" />
         <activity

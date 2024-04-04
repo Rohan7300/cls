@@ -46,11 +46,13 @@ import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRideAlongVehicleListsItem
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
+import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
 import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
+import com.clebs.celerity.models.response.SaveCommentResponse
 import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
@@ -643,7 +645,7 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
-    suspend fun GetTicketCommentList(userID: Int, ticketID: Int): GetTicketCommentListResponse? {
+    suspend fun GetTicketCommentList(userID: Int, ticketID: Int): GetTicketCommentListNewResponse? {
         val response = ApiService.GetTicketCommentList(userID, ticketID)
         if (response.isSuccessful)
             return response.body()
@@ -673,7 +675,7 @@ class MainRepo(private val ApiService: ApiService) {
         userID: Int,
         ticketID: Int,
         comment: String
-    ): SimpleStatusMsgResponse? {
+    ): SaveCommentResponse? {
         val response = ApiService.SaveTicketComment(userID, ticketID, comment)
         if (response.isSuccessful)
             return response.body()
@@ -731,6 +733,17 @@ class MainRepo(private val ApiService: ApiService) {
         if (response.isSuccessful) {
             return response.body()
         } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun UploadTicketCommentAttachmentDoc(userID: Int,ticketCommentId:Int,file:MultipartBody.Part):SimpleStatusMsgResponse?{
+        val response = ApiService.UploadTicketCommentAttachmentDoc(userID,ticketCommentId,file)
+        if(response.isSuccessful)
+            return response.body()
+        else{
             val errorBody = response.errorBody()?.string()
             println("Error Response Body: $errorBody")
         }

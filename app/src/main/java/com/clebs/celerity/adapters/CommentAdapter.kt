@@ -1,5 +1,6 @@
 package com.clebs.celerity.adapters
 
+import android.content.Intent
 import android.os.Build
 import android.text.Html
 import android.view.LayoutInflater
@@ -7,15 +8,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.databinding.CommentsAdapterBinding
 import com.clebs.celerity.models.response.DocX
+import com.clebs.celerity.models.response.DocXX
+import com.clebs.celerity.ui.AddCommentActivity
+import com.clebs.celerity.ui.CommentDetailActivity
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class CommentAdapter(var arrayList: ArrayList<DocX>) :
+class CommentAdapter(var arrayList: ArrayList<DocXX>, var addCommentActivity: AddCommentActivity) :
     RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
     inner class CommentViewHolder(var binding: CommentsAdapterBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: DocX) {
+        fun bind(item: DocXX) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 binding.tvDes.text =
                     Html.fromHtml(item.CommentWithDateAndTime, Html.FROM_HTML_MODE_COMPACT)
@@ -26,17 +30,23 @@ class CommentAdapter(var arrayList: ArrayList<DocX>) :
             var formattedDate = item.ActionOn
             try {
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-
                 val dateTime = LocalDateTime.parse(item.ActionOn, formatter)
-
 
                 val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
                 formattedDate = dateTime.format(outputFormatter)
-            }catch (_:Exception){
+            } catch (_: Exception) {
             }
-
             binding.tvDate.text = formattedDate
-
+            binding.icMessage.setOnClickListener {
+                var intent = Intent(
+                    addCommentActivity,
+                    CommentDetailActivity::class.java
+                )
+                intent.putExtra("ticketID", item.TicketID)
+                addCommentActivity.startActivity(
+                    intent
+                )
+            }
         }
     }
 

@@ -1,30 +1,32 @@
 package com.clebs.celerity.ui
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
-import com.clebs.celerity.adapters.DetailCommentAdapter
-import com.clebs.celerity.databinding.ActivityCommentDetailBinding
+import com.clebs.celerity.databinding.ActivityViewTicketsBinding
+import com.clebs.celerity.models.response.Doc
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 
-class CommentDetailActivity : AppCompatActivity() {
-    lateinit var binding: ActivityCommentDetailBinding
+class ViewTicketsActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
     lateinit var loadingDialog: LoadingDialog
     private var ticketID: Int? = null
     lateinit var prefs: Prefs
+    var ticketData: Doc? = null
+    lateinit var binding: ActivityViewTicketsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_comment_detail)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_view_tickets)
         setContentView(binding.root)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         viewModel = ViewModelProvider(
@@ -32,26 +34,28 @@ class CommentDetailActivity : AppCompatActivity() {
             MyViewModelFactory(MainRepo(apiService))
         )[MainViewModel::class.java]
         prefs = Prefs.getInstance(this)
-        ticketID = intent.getIntExtra("ticketID", -1)
-        val commentAdapter = DetailCommentAdapter(arrayListOf(),this)
-        loadingDialog = LoadingDialog(this)
+        ticketData = prefs.getCurrentTicket()
         binding.imageViewBack.setOnClickListener {
             onBackPressed()
         }
+        binding.commentIV.setOnClickListener {
+            if (ticketData != null) {
 
-        binding.commentDetailRV.adapter = commentAdapter
-        binding.commentDetailRV.layoutManager = LinearLayoutManager(this)
-        viewModel.liveDataGetTicketCommentList.observe(this) {
-            loadingDialog.cancel()
-            if (it != null) {
-                val reversedList = it.Docs
-                commentAdapter.arrayList.clear()
-                commentAdapter.arrayList.addAll(reversedList)
-                commentAdapter.notifyDataSetChanged()
+                val intent = Intent(this, AddCommentActivity::class.java).apply {
+                    putExtra("ticketID", ticketData!!.UserTicketID)
+                }
+                startActivity(intent)
             }
         }
 
-        loadingDialog.show()
-        viewModel.GetTicketCommentList(prefs.userID.toInt(), ticketID!!)
+        if (ticketData != null) {
+            binding.ticketID.text = ticketData!!.UserTicketID.toString()
+            if (ticketData!!.RegNo != null)
+                binding.tvRegistration.text = ticketData!!.RegNo.toString()
+            binding.edtTitle.text = ticketData!!.TicketTitle
+            binding.edtDes.text = ticketData!!.TicketDescription
+            binding.tvDepart.text = ticketData!!.DepartmentName
+            binding.tvRequests.text = ticketData!!.ReqTypeName
+        }
     }
 }

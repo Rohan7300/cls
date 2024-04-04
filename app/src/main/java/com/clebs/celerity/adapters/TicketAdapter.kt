@@ -9,8 +9,10 @@ import com.clebs.celerity.databinding.AdapterTicketItemBinding
 import com.clebs.celerity.models.response.Doc
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.ui.AddCommentActivity
+import com.clebs.celerity.ui.ViewTicketsActivity
+import com.clebs.celerity.utils.Prefs
 
-class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context) :
+class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context, var pref: Prefs) :
     RecyclerView.Adapter<TicketAdapter.TicketViewHolder>() {
 
     inner class TicketViewHolder(val binding: AdapterTicketItemBinding) :
@@ -26,10 +28,17 @@ class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context
                 ticketItem.UserTicketCreatedOn
             }
             binding.ticketTime.text = time
+
             binding.commentIV.setOnClickListener {
                 val intent = Intent(context, AddCommentActivity::class.java).apply {
                     putExtra("ticketID", ticketItem.UserTicketID)
                 }
+                context.startActivity(intent)
+            }
+
+            binding.viewTicket.setOnClickListener {
+                pref.saveCurrentTicket(ticketItem)
+                val intent = Intent(context, ViewTicketsActivity::class.java)
                 context.startActivity(intent)
             }
         }
