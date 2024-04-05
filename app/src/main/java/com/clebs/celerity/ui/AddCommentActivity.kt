@@ -19,6 +19,7 @@ import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.CommentAdapter
+import com.clebs.celerity.adapters.DetailCommentAdapter
 import com.clebs.celerity.databinding.ActivityAddCommentBinding
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
@@ -109,7 +110,7 @@ class AddCommentActivity : AppCompatActivity() {
             }
         }
 
-        val commentAdapter = CommentAdapter(arrayListOf(), this)
+        val commentAdapter = DetailCommentAdapter(arrayListOf(), this)
         binding.commentRv.adapter = commentAdapter
         binding.commentRv.layoutManager = LinearLayoutManager(this)
 

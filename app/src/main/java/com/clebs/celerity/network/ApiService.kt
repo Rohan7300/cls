@@ -1,7 +1,6 @@
 package com.clebs.celerity.network
 
 import com.clebs.celerity.models.CashFlowPieChartResponse
-import com.clebs.celerity.models.CashFlowPieChartResponseItem
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
 import com.clebs.celerity.models.TicketDepartmentsResponse
@@ -46,13 +45,12 @@ import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
-import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfo
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
-import com.clebs.celerity.models.response.GetTicketCommentListResponse
+import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -63,7 +61,6 @@ import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import okhttp3.MultipartBody
-import org.w3c.dom.Comment
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -425,5 +422,11 @@ interface ApiService {
         @Query("ticketCommentId") ticketCommentId:Int,
         @Part file:MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @GET("/api/Ticket/GetUserTicketDocuments")
+    suspend fun GetUserTicketDocuments(
+        @Query("userId") userId: Int,
+        @Query("ticketId") ticketId: Int
+    ):Response<GetUserTicketDocumentsResponse>
 }
 

@@ -37,23 +37,37 @@
                 android:layout_marginHorizontal="10dp"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
-                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_bold"
                     android:gravity="left"
-                    android:text="CLS : Ticket ID"
+                    android:text="CLS :"
                     android:textColor="@color/text_color"
                     android:textSize="16sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_bold"
+                        android:gravity="left"
+                        android:text="TICKET ID"
+                        android:id="@+id/tktID"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp" />
 
+                </LinearLayout>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_semibold"
                     android:gravity="left"
+                    android:id="@+id/tktSub"
                     android:text="Ticket Subject"
                     android:textColor="@color/text_color"
                     android:textSize="15sp" />

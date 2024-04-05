@@ -11,6 +11,8 @@ import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.ui.AddCommentActivity
 import com.clebs.celerity.ui.ViewTicketsActivity
 import com.clebs.celerity.utils.Prefs
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context, var pref: Prefs) :
     RecyclerView.Adapter<TicketAdapter.TicketViewHolder>() {
@@ -20,14 +22,27 @@ class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context
         fun bind(ticketItem: Doc) {
             binding.ticketTitleTV.text = "CLS - ${ticketItem.UserTicketID}"
             binding.ticketSubjectTV.text = ticketItem.TicketDescription
-            var time = try {
+/*            var time = try {
                 ticketItem.UserTicketCreatedOn.split("T")[0] + " " + ticketItem.UserTicketCreatedOn.split(
                     "T"
                 )[1]
             } catch (_: Exception) {
                 ticketItem.UserTicketCreatedOn
+            }*/
+            var formattedDate = ticketItem.UserTicketCreatedOn
+            try {
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+                val truncatedString =
+                    ticketItem.UserTicketCreatedOn.substring(0, 19) // Truncate to remove milliseconds
+                val dateTime = LocalDateTime.parse(truncatedString, formatter)
+
+                val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                formattedDate = dateTime.format(outputFormatter)
+
+            } catch (_: Exception) {
             }
-            binding.ticketTime.text = time
+
+            binding.ticketTime.text = formattedDate
 
             binding.commentIV.setOnClickListener {
                 val intent = Intent(context, AddCommentActivity::class.java).apply {
@@ -45,7 +60,7 @@ class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TicketViewHolder {
-        val binding = AdapterTicketItemBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = AdapterTicketItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return TicketViewHolder(binding)
     }
 

@@ -21,6 +21,7 @@ class CommentDetailActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
     lateinit var loadingDialog: LoadingDialog
     private var ticketID: Int? = null
+    private var ticketSub:String?= null
     lateinit var prefs: Prefs
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +34,14 @@ class CommentDetailActivity : AppCompatActivity() {
         )[MainViewModel::class.java]
         prefs = Prefs.getInstance(this)
         ticketID = intent.getIntExtra("ticketID", -1)
+        ticketSub = intent.getStringExtra("ticketSub")
         val commentAdapter = DetailCommentAdapter(arrayListOf(),this)
         loadingDialog = LoadingDialog(this)
         binding.imageViewBack.setOnClickListener {
             onBackPressed()
         }
+        binding.tktID.text = ticketID.toString()
+        binding.tktSub.text = ticketSub?:""
 
         binding.commentDetailRV.adapter = commentAdapter
         binding.commentDetailRV.layoutManager = LinearLayoutManager(this)

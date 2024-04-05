@@ -4,11 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.adapters.AttachmentAdapter
 import com.clebs.celerity.databinding.ActivityViewTicketsBinding
 import com.clebs.celerity.models.response.Doc
 import com.clebs.celerity.network.ApiService
@@ -49,13 +52,34 @@ class ViewTicketsActivity : AppCompatActivity() {
         }
 
         if (ticketData != null) {
-            binding.ticketID.text = ticketData!!.UserTicketID.toString()
+            binding.ticketID.text = "CLS : " + ticketData!!.UserTicketID.toString()
             if (ticketData!!.RegNo != null)
                 binding.tvRegistration.text = ticketData!!.RegNo.toString()
             binding.edtTitle.text = ticketData!!.TicketTitle
             binding.edtDes.text = ticketData!!.TicketDescription
             binding.tvDepart.text = ticketData!!.DepartmentName
             binding.tvRequests.text = ticketData!!.ReqTypeName
+
+            viewModel.GetUserTicketDocuments(
+                userID = prefs.userID.toInt(),
+                ticketId = ticketData!!.UserTicketID.toInt()
+            )
+        }
+
+
+        val attachmentAdapter = AttachmentAdapter(this@ViewTicketsActivity, ArrayList())
+        binding.attachmentRV.adapter = attachmentAdapter
+        binding.attachmentRV.layoutManager = LinearLayoutManager(this)
+        binding.llAttachment.visibility = View.GONE
+        viewModel.liveDataGetUserTicketDocuments.observe(this){
+            if(it!=null){
+                attachmentAdapter.data.clear()
+                attachmentAdapter.data.addAll(it.Docs)
+                attachmentAdapter.notifyDataSetChanged()
+                binding.llAttachment.visibility = View.VISIBLE
+            }else{
+                binding.llAttachment.visibility = View.GONE
+            }
         }
     }
 }

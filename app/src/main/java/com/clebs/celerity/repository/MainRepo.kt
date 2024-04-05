@@ -48,6 +48,7 @@ import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
 import com.clebs.celerity.models.response.GetTicketCommentListResponse
+import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -612,33 +613,36 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
-    suspend fun GetUserDepartmentList():TicketDepartmentsResponse?{
+    suspend fun GetUserDepartmentList(): TicketDepartmentsResponse? {
         val response = ApiService.GetUserDepartmentList()
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error response Body : $errorBody")
         }
         return null
     }
 
-    suspend fun GetTicketRequestType(depID:Int): DepartmentRequestResponse?{
+    suspend fun GetTicketRequestType(depID: Int): DepartmentRequestResponse? {
         val response = ApiService.GetTicketRequestType(depID)
-        if(response.isSuccessful)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response Body : $errorBody")
         }
         return null
     }
 
-    suspend fun SaveTicketData(userID: Int,request: SaveTicketDataRequestBody):SaveTicketResponse?{
-        val response = ApiService.SaveTicketData(userID,request)
-        if(response.isSuccessful)
+    suspend fun SaveTicketData(
+        userID: Int,
+        request: SaveTicketDataRequestBody
+    ): SaveTicketResponse? {
+        val response = ApiService.SaveTicketData(userID, request)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response Body: $errorBody")
         }
@@ -696,6 +700,7 @@ class MainRepo(private val ApiService: ApiService) {
         }
         return null
     }
+
     suspend fun GetLastWeekScrore(userID: Int, lmid: Int): GetLastWeekScore? {
         val response = ApiService.GetLastWeekScore(userID, lmid)
         if (response.isSuccessful) {
@@ -706,8 +711,14 @@ class MainRepo(private val ApiService: ApiService) {
         }
         return null
     }
-    suspend fun GetCashFlowWeek(userID: Int, companyFilter: Int,selyear:Int,selweek:Int): CashFlowPieChartResponse? {
-        val response = ApiService.CashFLowData(userID, companyFilter,selyear,selweek)
+
+    suspend fun GetCashFlowWeek(
+        userID: Int,
+        companyFilter: Int,
+        selyear: Int,
+        selweek: Int
+    ): CashFlowPieChartResponse? {
+        val response = ApiService.CashFLowData(userID, companyFilter, selyear, selweek)
         if (response.isSuccessful) {
             return response.body()
         } else {
@@ -728,8 +739,13 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
-    suspend fun GetVechileSchedule(userID: Int, lmid: Int,year:Int,week:Int): ViewFullScheduleResponse? {
-        val response = ApiService.GetVechileScheduleInfo(userID,lmid,year,week)
+    suspend fun GetVechileSchedule(
+        userID: Int,
+        lmid: Int,
+        year: Int,
+        week: Int
+    ): ViewFullScheduleResponse? {
+        val response = ApiService.GetVechileScheduleInfo(userID, lmid, year, week)
         if (response.isSuccessful) {
             return response.body()
         } else {
@@ -739,11 +755,29 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
-    suspend fun UploadTicketCommentAttachmentDoc(userID: Int,ticketCommentId:Int,file:MultipartBody.Part):SimpleStatusMsgResponse?{
-        val response = ApiService.UploadTicketCommentAttachmentDoc(userID,ticketCommentId,file)
-        if(response.isSuccessful)
+    suspend fun UploadTicketCommentAttachmentDoc(
+        userID: Int,
+        ticketCommentId: Int,
+        file: MultipartBody.Part
+    ): SimpleStatusMsgResponse? {
+        val response = ApiService.UploadTicketCommentAttachmentDoc(userID, ticketCommentId, file)
+        if (response.isSuccessful)
             return response.body()
-        else{
+        else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetUserTicketDocuments(
+        userID: Int,
+        ticketID: Int
+    ): GetUserTicketDocumentsResponse? {
+        val response = ApiService.GetUserTicketDocuments(userID, ticketID)
+        if (response.isSuccessful)
+            return response.body()
+        else {
             val errorBody = response.errorBody()?.string()
             println("Error Response Body: $errorBody")
         }

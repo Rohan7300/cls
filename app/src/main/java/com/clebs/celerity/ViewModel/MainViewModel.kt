@@ -51,6 +51,7 @@ import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
 import com.clebs.celerity.models.response.GetTicketCommentListResponse
+import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -121,6 +122,7 @@ class MainViewModel(
     val liveDataUploadTicketAttachmentDoc = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataSaveTicketComment = MutableLiveData<SaveCommentResponse?>()
     val liveDataUploadTicketCommentAttachmentDoc = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataGetUserTicketDocuments = MutableLiveData<GetUserTicketDocumentsResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -807,6 +809,23 @@ class MainViewModel(
             }
             result.onFailure { ex ->
                 Log.e("UploadTicketCommentAttachmentDoc", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun GetUserTicketDocuments(
+        userID: Int,
+        ticketId: Int
+    ) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.GetUserTicketDocuments(userID, ticketId)
+            }
+            result.onSuccess { res ->
+                liveDataGetUserTicketDocuments.postValue(res)
+            }
+            result.onFailure { ex ->
+                Log.e("GetUserTicketDocument", "Error ${ex.message}")
             }
         }
     }

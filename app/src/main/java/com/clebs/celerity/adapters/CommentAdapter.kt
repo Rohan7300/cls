@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.text.Html
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.databinding.CommentsAdapterBinding
@@ -20,21 +21,38 @@ class CommentAdapter(var arrayList: ArrayList<DocXX>, var addCommentActivity: Ad
     inner class CommentViewHolder(var binding: CommentsAdapterBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: DocXX) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                binding.tvDes.text =
-                    Html.fromHtml(item.CommentWithDateAndTime, Html.FROM_HTML_MODE_COMPACT)
-            } else {
-                @Suppress("DEPRECATION")
-                binding.tvDes.text = Html.fromHtml(item.CommentWithDateAndTime)
+            /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                 binding.tvDes.text =
+                     Html.fromHtml(item.CommentWithDateAndTime, Html.FROM_HTML_MODE_COMPACT)
+             } else {
+                 @Suppress("DEPRECATION")
+                 binding.tvDes.text = Html.fromHtml(item.CommentWithDateAndTime)
+             }*/
+
+            binding.tvDes.text = item.ActivityDetail
+            binding.commentUser.text = item.ActionByUserName
+
+            if(item.IsRead){
+                binding.tickRead.visibility = View.VISIBLE
+                binding.tick.visibility = View.GONE
+            }else{
+                binding.tickRead.visibility = View.GONE
+                binding.tick.visibility = View.VISIBLE
             }
+
             var formattedDate = item.ActionOn
             try {
+
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-                val dateTime = LocalDateTime.parse(item.ActionOn, formatter)
+                val truncatedString =
+                    item.ActionOn.substring(0, 19) // Truncate to remove milliseconds
+                val dateTime = LocalDateTime.parse(truncatedString, formatter)
 
                 val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
                 formattedDate = dateTime.format(outputFormatter)
+
             } catch (_: Exception) {
+
             }
             binding.tvDate.text = formattedDate
             binding.icMessage.setOnClickListener {
@@ -43,6 +61,7 @@ class CommentAdapter(var arrayList: ArrayList<DocXX>, var addCommentActivity: Ad
                     CommentDetailActivity::class.java
                 )
                 intent.putExtra("ticketID", item.TicketID)
+                intent.putExtra("ticketSub", item.TicketTitle)
                 addCommentActivity.startActivity(
                     intent
                 )
