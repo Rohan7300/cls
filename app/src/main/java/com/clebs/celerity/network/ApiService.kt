@@ -51,10 +51,13 @@ import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
+import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
+import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
+import com.clebs.celerity.models.response.SaveCommentResponse
 import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
@@ -343,7 +346,7 @@ interface ApiService {
         @Query("departmentId") departmentId: Int?,
         @Query("startDate") startDate: String?,
         @Query("endDate") endDate: String?,
-        @Query("includeCompleted") includeCompleted:Boolean?
+        //@Query("includeCompleted") includeCompleted:Boolean?
     ): Response<GetUserTicketsResponse>
 
     @GET("/api/Ticket/GetUserDepartmentList")
