@@ -6,8 +6,8 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:alpha="0.5"
         android:src="@drawable/ticket" />
 
@@ -20,5 +20,5 @@
         android:fontFamily="@font/poppins_bold"
         android:text="No ticket found."
         android:textAlignment="center"
-        android:textSize="15dp" />
+        android:textSize="13dp" />
 </LinearLayout>

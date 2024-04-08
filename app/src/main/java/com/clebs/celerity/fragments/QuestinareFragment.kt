@@ -67,11 +67,11 @@ class QuestinareFragment : Fragment() {
 
         val adapter = ViewAdaptor(
             requireContext(),
-            (activity as HomeActivity).fragmentManager,
+         childFragmentManager,
             headingList.size,
         )
         binding.viewPager.adapter = adapter
-        binding.viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.tablay))
+        binding.viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.tablay))
 
         binding.tablay.getTabAt(0)?.select()
 

@@ -89,6 +89,7 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
     implementation("com.google.android.gms:play-services-vision:20.0.0")
+    implementation("com.github.tapadoo:alerter:7.2.4")
     implementation("com.google.firebase:firebase-ml-vision:24.0.3")
 //    implementation("com.google.firebase:firebase-core:21.1.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -108,7 +109,7 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     //Coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 //    implementation("com.github.AnyChart:AnyChart-Android:1.1.5")
-    implementation("ir.mahozad.android:pie-chart:0.7.0")
+
     implementation("com.google.code.gson:gson:2.10.1")
 
 
