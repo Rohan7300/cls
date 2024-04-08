@@ -13,6 +13,7 @@ import com.clebs.celerity.ui.ViewTicketsActivity
 import com.clebs.celerity.utils.Prefs
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context, var pref: Prefs) :
     RecyclerView.Adapter<TicketAdapter.TicketViewHolder>() {
@@ -30,19 +31,24 @@ class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context
                 ticketItem.UserTicketCreatedOn
             }*/
             var formattedDate = ticketItem.UserTicketCreatedOn
+            var formattedTime = "00:00"
             try {
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
                 val truncatedString =
                     ticketItem.UserTicketCreatedOn.substring(0, 19) // Truncate to remove milliseconds
                 val dateTime = LocalDateTime.parse(truncatedString, formatter)
 
-                val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-                formattedDate = dateTime.format(outputFormatter)
+                val outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH)
+                formattedDate = dateTime.format(outputFormatter).toUpperCase()
+
+                val outputTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+                formattedTime = dateTime.format(outputTimeFormatter)
 
             } catch (_: Exception) {
             }
 
-            binding.ticketTime.text = formattedDate
+            binding.date.text = formattedDate
+            binding.ticketTime.text = formattedTime
 
             binding.commentIV.setOnClickListener {
                 val intent = Intent(context, AddCommentActivity::class.java).apply {

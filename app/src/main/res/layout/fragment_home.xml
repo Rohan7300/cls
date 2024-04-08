@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -173,31 +174,31 @@ Marian Ionut Malasincu"
             android:id="@+id/swipe_for_v"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-           android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins_semibold"
-            app:layout_constraintTop_toBottomOf="@id/daily_work_"
             android:gravity="center_horizontal|top"
             android:letterSpacing="0.05"
             android:text="@string/swipe_for_v"
             android:textColor="@color/text_color"
             android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/fm"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintBottom_toTopOf="@+id/fm" />
+            app:layout_constraintTop_toBottomOf="@id/daily_work_" />
 
         <FrameLayout
+            android:id="@+id/fm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="8dp"
-            android:id="@+id/fm"
 
             android:layout_marginEnd="30dp"
+            android:layout_marginBottom="90dp"
             android:backgroundTint="@color/white"
             android:clipChildren="true"
-            android:layout_marginBottom="90dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
