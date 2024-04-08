@@ -609,9 +609,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
             Prefs.getInstance(App.instance).userID.toString().toDouble(), 0.toDouble(), vrn
         ).observe(requireActivity(), Observer {
             if (it != null) {
-                if (loadingDialog.isShowing) {
-                    loadingDialog.dismiss()
-                }
+
                 Prefs.getInstance(App.instance)
                     .save("vehicleLastMillage", it.vehicleLastMillage.toString())
                 mbinding.rectange.visibility = View.GONE
@@ -630,6 +628,9 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 )
                 //showAlert()
                 navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
+                if (loadingDialog.isShowing) {
+                    loadingDialog.dismiss()
+                }
             } else {
                 showScanErrorDialog(
                     this,
