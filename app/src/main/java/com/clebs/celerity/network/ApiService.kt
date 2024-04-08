@@ -343,7 +343,8 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("departmentId") departmentId: Int?,
         @Query("startDate") startDate: String?,
-        @Query("endDate") endDate: String?
+        @Query("endDate") endDate: String?,
+        @Query("includeCompleted") includeCompleted:Boolean?
     ): Response<GetUserTicketsResponse>
 
     @GET("/api/Ticket/GetUserDepartmentList")
