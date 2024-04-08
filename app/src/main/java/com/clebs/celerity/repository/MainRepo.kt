@@ -694,8 +694,8 @@ class MainRepo(private val ApiService: ApiService) {
         }
         return null
     }
-    suspend fun GetLastWeekScrore(userID: Int, lmid: Int): GetLastWeekScore? {
-        val response = ApiService.GetLastWeekScore(userID, lmid)
+    suspend fun GetLastWeekScrore(userID: Int, Weekno:Int,Year:Int): GetLastWeekScore? {
+        val response = ApiService.GetLastWeekScore(userID, Weekno,Year)
         if (response.isSuccessful) {
             return response.body()
         } else {
@@ -739,6 +739,18 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun GetThirdPartyAccess(userID: Int): SimpleStatusMsgResponse? {
         val response = ApiService.GetThirdPartyAccess(userID)
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun RemoveThirdPartyAccess(userID: Int):SimpleStatusMsgResponse?{
+
+        val response=ApiService.RemoveThirdPartyAccess(userID)
         if (response.isSuccessful) {
             return response.body()
         } else {

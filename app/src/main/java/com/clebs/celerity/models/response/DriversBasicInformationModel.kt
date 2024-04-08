@@ -28,6 +28,7 @@ data class DriversBasicInformationModel(
     val IsUsrProfileUpdateReqin90days: Boolean,
     @SerializedName("IsLeadDriver")
     val IsLeadDriver: Boolean,
-
+    @SerializedName("IsThirdPartyChargeAccessAllowed")
+    val IsThirdPartyChargeAccessAllowed: Boolean,
 
 )

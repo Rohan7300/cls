@@ -11,7 +11,13 @@ import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentHomedemoBinding
 import com.clebs.celerity.utils.Prefs
-import ir.mahozad.android.PieChart
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.PercentFormatter
+import com.github.mikephil.charting.utils.MPPointF
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -26,6 +32,17 @@ class HomedemoFragment : Fragment() {
     var thirdpartydeductions: Float = 0.0f
     var week: Int = 0
     var year: Int = 0
+
+    protected val months = arrayOf(
+        "Jan", "Feb", "Mar"
+    )
+
+    protected val parties = arrayOf(
+        "Party A", "Party B", "Party C"
+
+    )
+
+
     var totalearning: String = ""
     var totaldedecutions: String = ""
     var thirdparty: String = ""
@@ -35,7 +52,7 @@ class HomedemoFragment : Fragment() {
     val hideDialog: () -> Unit = {
         (activity as HomeActivity).hideDialog()
     }
-    lateinit var pieChart: PieChart
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -50,7 +67,7 @@ class HomedemoFragment : Fragment() {
         }
 
         viewModel = (activity as HomeActivity).viewModel
-        pieChart = mbinding.pieChart.findViewById<PieChart>(R.id.pieChart)
+
 //        pieChart.isAnimationEnabled=true
 
         showDialog()
@@ -64,16 +81,41 @@ class HomedemoFragment : Fragment() {
         currentDate.set(Calendar.MILLISECOND, 0)
         currentDate.add(Calendar.DAY_OF_YEAR, 1)
 
-// Get tomorrow's date
         val tomorrowDate = currentDate.time
         val dateFormat = SimpleDateFormat("EEE MMM dd yyyy", Locale.US)
 
-// Format the date
-
-// Format the date
         val formattedDate: String = dateFormat.format(tomorrowDate)
-        mbinding.textView5.text=formattedDate
-        Log.e("tomotmoit", "onCreateView: "+formattedDate )
+        mbinding.textView5.text = formattedDate
+        Log.e("tomotmoit", "onCreateView: " + formattedDate)
+//        mbinding.pieChart.setUsePercentValues(true);
+        mbinding.pieChart.getDescription().setEnabled(false);
+
+
+        mbinding.pieChart.setDragDecelerationFrictionCoef(0.95f);
+
+//
+//
+        mbinding.pieChart.setDrawCenterText(false);
+
+        mbinding.pieChart.setRotationEnabled(true);
+        mbinding.pieChart.setHighlightPerTapEnabled(false);
+        mbinding.pieChart.isDrawHoleEnabled = false
+        mbinding.pieChart.setHoleRadius(0f);
+        mbinding.pieChart.setRotationAngle(0f);
+        mbinding.pieChart.animateY(1400, Easing.EaseInOutQuad)
+        mbinding.pieChart.setEntryLabelColor(resources.getColor(R.color.black))
+
+        mbinding.pieChart.setEntryLabelTextSize(12f)
+        val l: Legend = mbinding.pieChart.getLegend()
+        l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+        l.orientation = Legend.LegendOrientation.HORIZONTAL
+        l.setDrawInside(false)
+        l.xEntrySpace = 7f
+        l.yEntrySpace = 0f
+        l.yOffset = 0f
+
+
+
 
         mbinding.viewfullschedule.setOnClickListener {
             if (isclicked) {
@@ -87,11 +129,6 @@ class HomedemoFragment : Fragment() {
         }
 
         viewModel.GetAVGscore(
-            Prefs.getInstance(requireContext()).userID.toInt(),
-            Prefs.getInstance(requireContext()).lmid
-        )
-
-        viewModel.GetLastWeekSCore(
             Prefs.getInstance(requireContext()).userID.toInt(),
             Prefs.getInstance(requireContext()).lmid
         )
@@ -110,6 +147,9 @@ class HomedemoFragment : Fragment() {
             viewModel.GetcashFlowWeek(
                 Prefs.getInstance(requireContext()).userID.toInt(), 0, year, week - 3
             )
+            viewModel.GetLastWeekSCore(
+                Prefs.getInstance(requireContext()).userID.toInt(), week - 3, year
+            )
         }
 
 
@@ -125,6 +165,9 @@ class HomedemoFragment : Fragment() {
             viewModel.GetcashFlowWeek(
                 Prefs.getInstance(requireContext()).userID.toInt(), 0, year, week - 2
             )
+            viewModel.GetLastWeekSCore(
+                Prefs.getInstance(requireContext()).userID.toInt(), week - 2, year
+            )
 
         }
 
@@ -135,7 +178,7 @@ class HomedemoFragment : Fragment() {
 
     private fun Observers() {
         viewModel.livedatagetweekyear.observe(viewLifecycleOwner) {
-
+            hideDialog()
             if (it != null) {
                 week = it.weekNO
                 year = it.year
@@ -147,6 +190,12 @@ class HomedemoFragment : Fragment() {
                 viewModel.GetViewFullScheduleInfo(
                     Prefs.getInstance(requireContext()).userID.toInt(), 0, year, week
                 )
+
+                viewModel.GetLastWeekSCore(
+                    Prefs.getInstance(requireContext()).userID.toInt(), week - 2, year
+                )
+
+
                 val bt_text = (week - 3).toString()
                 mbinding.btPrev.text = "Week: $bt_text"
 
@@ -157,7 +206,7 @@ class HomedemoFragment : Fragment() {
         }
 
         viewModel.livedataAvgScoreResponse.observe(viewLifecycleOwner) {
-
+            hideDialog()
             if (it != null) {
 
                 if (it.status.equals("200")) {
@@ -174,7 +223,7 @@ class HomedemoFragment : Fragment() {
             }
         }
         viewModel.livedatalastweekresponse.observe(viewLifecycleOwner) {
-
+            hideDialog()
             if (it != null) {
                 if (it.status.equals("200")) {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
@@ -190,8 +239,8 @@ class HomedemoFragment : Fragment() {
             }
         }
         viewModel.livedataCashFlowWeek.observe(viewLifecycleOwner) { depts ->
-hideDialog()
-            mbinding.consttwo.visibility=View.VISIBLE
+            hideDialog()
+            mbinding.consttwo.visibility = View.VISIBLE
             if (depts != null) {
                 mbinding.pieChart.visibility = View.VISIBLE
                 mbinding.nodata.visibility = View.GONE
@@ -212,57 +261,95 @@ hideDialog()
                         thirdpartydeductions = 0f
                     }
                 }
+                val entries = ArrayList<PieEntry>()
 
-                val slices = mutableListOf<PieChart.Slice>()
+                // NOTE: The order of the entries when being added to the entries array determines their position around the center of
+                // the chart.
+                entries.add(PieEntry(avprofit, "Profits" + "\n" + totalearning))
 
-                slices.add(
-                    PieChart.Slice(
+                entries.add(PieEntry(avdeductions, "Deductions" + "\n" + totaldedecutions))
+                entries.add(
+                    PieEntry(
                         thirdpartydeductions,
-                        resources.getColor(R.color.red_light),
-                        resources.getColor(R.color.red_light),
-                        "Third Party Deductions " + thirdparty,
-                        labelSize = 30f
-
+                        "3rd party Deductions" + "\n" + thirdparty
                     )
                 )
-                slices.add(
-                    PieChart.Slice(
-                        avprofit,
-                        resources.getColor(R.color.blue_hex),
-                        resources.getColor(R.color.blue_hex),
-                        "Profits " + totalearning,
-                        labelSize = 30f
-                    )
-                )
+                val dataSet = PieDataSet(entries, "")
+//
+                val colors = ArrayList<Int>()
+                colors.add(resources.getColor(R.color.blue_hex))
+                colors.add(resources.getColor(R.color.peek_orange))
+                colors.add(resources.getColor(R.color.red_light))
+
+                dataSet.colors = colors
+                dataSet.sliceSpace = 3f
+                dataSet.iconsOffset = MPPointF(0f, 40f)
+                dataSet.selectionShift = 5f
+                val data = PieData(dataSet)
 
 
-                slices.add(
-                    PieChart.Slice(
-                        avdeductions,
-                        resources.getColor(R.color.peek_orange),
-                        resources.getColor(R.color.peek_orange),
-                        legend = "12",
-                        legendColor = resources.getColor(R.color.black),
-                        label = "Deductions " + totaldedecutions,
-                        labelSize = 30f,
-                    )
-                )
+                data.setValueFormatter(PercentFormatter())
+                data.setValueTextSize(11f)
+                data.setValueTextColor(resources.getColor(io.clearquote.assessment.cq_sdk.R.color.transparent))
 
-                pieChart.slices = slices
+                mbinding.pieChart.setData(data)
+
+                // undo all highlights
+                mbinding.pieChart.highlightValues(null)
+                mbinding.pieChart.invalidate()
+//                val slices = mutableListOf<PieChart.Slice>()
+//
+//                slices.add(
+//                    PieChart.Slice(
+//                        thirdpartydeductions,
+//                        resources.getColor(R.color.red_light),
+//                        resources.getColor(R.color.red_light),
+//                        "Third Party Deductions " + thirdparty,
+//                        labelSize = 30f
+//
+//                    )
+//                )
+//                slices.add(
+//                    PieChart.Slice(
+//                        avprofit,
+//                        resources.getColor(R.color.blue_hex),
+//                        resources.getColor(R.color.blue_hex),
+//                        "Profits " + totalearning,
+//                        labelSize = 30f
+//                    )
+//                )
+//
+//
+//                slices.add(
+//                    PieChart.Slice(
+//                        avdeductions,
+//                        resources.getColor(R.color.peek_orange),
+//                        resources.getColor(R.color.peek_orange),
+//                        legend = "12",
+//                        legendColor = resources.getColor(R.color.black),
+//                        label = "Deductions " + totaldedecutions,
+//                        labelSize = 30f,
+//                    )
+//                )
+//
+//                pieChart.slices = slices
 
                 if (thirdpartydeductions.equals(0.0f)) {
-                    slices.remove(pieChart.slices[0])
+                    entries.removeAt(2)
+//                    slices.remove(pieChart.slices[0])
                 } else if (avprofit.equals(0.0f)) {
-                    slices.remove(pieChart.slices[1])
+                    entries.removeAt(0)
+//                    slices.remove(pieChart.slices[1])
                 } else if (avdeductions.equals(0.0f)) {
-                    slices.remove(pieChart.slices[2])
+                    entries.removeAt(1)
+//                    slices.remove(pieChart.slices[2])
                 }
 
-                pieChart.slices = slices
-                pieChart.labelType = PieChart.LabelType.OUTSIDE_CIRCULAR_OUTWARD
-                pieChart.labelsColor = resources.getColor(R.color.black)
-                pieChart.holeRatio = 0f
-                pieChart.overlayRatio = 0f
+//                pieChart.slices = slices
+//                pieChart.labelType = PieChart.LabelType.INSIDE
+//                pieChart.labelsColor = resources.getColor(R.color.black)
+//                pieChart.holeRatio = 0f
+//                pieChart.overlayRatio = 0f
 
             } else {
                 hideDialog()
@@ -280,15 +367,32 @@ hideDialog()
                 mbinding.viewfullschedule.isClickable = true
                 mbinding.viewfullschedule.isEnabled = true
                 mbinding.llnodata.visibility = View.GONE
-                mbinding.rlicons.visibility=View.VISIBLE
+                mbinding.rlicons.visibility = View.VISIBLE
                 it.map {
-                    mbinding.tvDateShow1.text = it.sundayDate
-                    mbinding.tvDateShow2.text = it.mondayDate
-                    mbinding.tvDateShow3.text = it.tuesdayDate
-                    mbinding.tvDateShow4.text = it.wednesdayDate
-                    mbinding.tvDateShow5.text = it.thursdayDate
-                    mbinding.tvDateShow6.text = it.fridayDate
-                    mbinding.tvDateShow7.text = it.saturdayDate
+
+
+                    val formattedDate = convertDateFormat(it.sundayDate)
+                    mbinding.tvDateShow1.text = "SUN $formattedDate"
+                    val formattedDate2 = convertDateFormat(it.mondayDate)
+                    mbinding.tvDateShow2.text = "MON $formattedDate2"
+
+                    val formattedDate3 = convertDateFormat(it.tuesdayDate)
+                    mbinding.tvDateShow3.text = "TUE " + formattedDate3
+
+
+                    val formattedDate4 = convertDateFormat(it.wednesdayDate)
+                    mbinding.tvDateShow4.text = "WED " + formattedDate4
+
+                    val formattedDate5 = convertDateFormat(it.thursdayDate)
+
+                    mbinding.tvDateShow5.text = "THU " + formattedDate5
+
+                    val formattedDate6 = convertDateFormat(it.fridayDate)
+
+                    mbinding.tvDateShow6.text = "FRI " + formattedDate6
+
+                    val formattedDate7 = convertDateFormat(it.saturdayDate)
+                    mbinding.tvDateShow7.text = "SAT "+formattedDate7
                     mbinding.tvIsWorkingShowSunday.text = it.sundayLocation
                     mbinding.tvIsWorkingShowTuesday.text = it.tuesdayLocation
                     mbinding.tvIsWorkingShowWed.text = it.wednesdayLocation
@@ -303,11 +407,17 @@ hideDialog()
                 mbinding.viewfullschedule.isEnabled = false
                 mbinding.viewfulldatalayout.visibility = View.GONE
                 mbinding.llnodata.visibility = View.VISIBLE
-                mbinding.rlicons.visibility=View.GONE
+                mbinding.rlicons.visibility = View.GONE
             }
 
         }
     }
 
+    fun convertDateFormat(inputDate: String): String {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val date = inputFormat.parse(inputDate)
+        return outputFormat.format(date!!)
+    }
 
 }

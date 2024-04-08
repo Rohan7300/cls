@@ -118,6 +118,9 @@ class MainViewModel(
     val liveDataGetTicketCommentList = MutableLiveData<GetTicketCommentListResponse?>()
     val liveDataUploadTicketAttachmentDoc = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataSaveTicketComment = MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedatathirdpartyaccess=MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataremovethirdpartyaccess=MutableLiveData<SimpleStatusMsgResponse?>()
+
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -733,10 +736,10 @@ fun GetAVGscore(userID: Int,lmid:Int){
     }
 }
 
-    fun GetLastWeekSCore(userID: Int,lmid:Int){
+    fun GetLastWeekSCore(userID: Int,weekno:Int,year:Int){
         viewModelScope.launch {
             val result=runCatching {
-                repo.GetLastWeekScrore(userID,lmid)
+                repo.GetLastWeekScrore(userID,weekno,year)
             }
             result.onSuccess {res->
                 livedatalastweekresponse.postValue(res)
@@ -796,6 +799,20 @@ fun GetAVGscore(userID: Int,lmid:Int){
             }
             result.onSuccess {res->
                 livedatathirdpartyaccess.postValue(res)
+            }
+            result.onFailure {ex->
+                Log.e("GetTicketUserType","Error ${ex.message}")
+            }
+        }
+    }
+
+    fun RemoveThirdPartyAccess(userID: Int){
+        viewModelScope.launch {
+            val result=runCatching {
+                repo.RemoveThirdPartyAccess(userID)
+            }
+            result.onSuccess {res->
+                livedataremovethirdpartyaccess.postValue(res)
             }
             result.onFailure {ex->
                 Log.e("GetTicketUserType","Error ${ex.message}")

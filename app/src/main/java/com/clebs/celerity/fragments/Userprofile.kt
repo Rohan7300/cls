@@ -38,6 +38,7 @@ class Userprofile : Fragment() {
     var edtnew: String? = null
     var firstname: String? = null
     var lastname: String? = null
+    var isthirdpartyAccess:Boolean?=null
     private lateinit var fragmentManager: FragmentManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,11 +61,15 @@ class Userprofile : Fragment() {
 
         GetDriversBasicInformation()
 
+
         mbinding.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
 
             if (isChecked) {
                 mainViewModel.GetThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
-                mbinding.checkbox.isChecked=true
+
+            }
+            else{
+                mainViewModel.RemoveThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
             }
 
         }
@@ -75,16 +80,36 @@ class Userprofile : Fragment() {
             if (it != null) {
                 if (it.Status.equals("200")) {
                     showToast("Third Party Access Is Provided To User", requireContext())
-                    mbinding.checkbox.isChecked = true
+
                 } else {
                     showToast(it.Message, requireContext())
-                    mbinding.checkbox.isChecked = false
+
                 }
 
 
             } else {
                 showToast("Failed to provide third party Access", requireContext())
                 mbinding.checkbox.isChecked = false
+            }
+
+
+        }
+
+        mainViewModel.livedataremovethirdpartyaccess.observe(viewLifecycleOwner){
+            if (it!=null){
+                if (it.Status.equals("200")){
+
+                    showToast("Third Party Access Is Removed for This User", requireContext())
+
+
+                }
+                else{
+                    showToast(it.Message, requireContext())
+                }
+
+            }
+            else{
+                showToast("Failed to Remove third party Access", requireContext())
             }
 
 
@@ -263,6 +288,7 @@ class Userprofile : Fragment() {
                 Log.e("responseprofile", "GetDriversBasicInformation: ")
                 mbinding.name.text = it.firstName + " " + it.lastName
                 mbinding.usertext.setText(it.firstName + " " + it.lastName)
+                isthirdpartyAccess=it.IsThirdPartyChargeAccessAllowed
                 firstname = it.firstName
                 lastname = it.lastName
                 mbinding.emailtext.setText(it.emailID)
@@ -272,6 +298,7 @@ class Userprofile : Fragment() {
                 mbinding.pb.visibility = View.GONE
                 mbinding.FormLayout.alpha = 1f
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
+                mbinding.checkbox.isChecked = it.IsThirdPartyChargeAccessAllowed.equals(true)
 //                if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
 //                    showAlertChangePasword90dys()
 //                }
