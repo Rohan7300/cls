@@ -38,10 +38,11 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/ic_filter"
                     android:fontFamily="@font/poppins"
+                    android:padding="4dp"
                     android:letterSpacing="0.01"
                     android:text="filters"
                     android:textColor="@color/text_color"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/add_new"
@@ -52,7 +53,7 @@
                     android:drawablePadding="10dp"
                     android:drawableTint="@color/orange"
                     android:gravity="center"
-                    android:padding="10dp"
+                    android:padding="9dp"
                     android:text="Add new"
                     android:textColor="@color/orange"
                     app:drawableEndCompat="@drawable/tickets_ic" />
@@ -65,9 +66,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="15dp"
+                android:layout_marginVertical="25dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
