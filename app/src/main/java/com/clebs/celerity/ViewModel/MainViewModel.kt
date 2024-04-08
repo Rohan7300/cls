@@ -113,9 +113,6 @@ class MainViewModel(
     val liveDataTicketDepartmentsResponse = MutableLiveData<TicketDepartmentsResponse?>()
     val liveDataGetTicketRequestType = MutableLiveData<DepartmentRequestResponse?>()
     val liveDataSaveTicketResponse = MutableLiveData<SaveTicketResponse?>()
-    val liveDataGetTicketCommentList = MutableLiveData<GetTicketCommentListNewResponse?>()
-    val liveDataUploadTicketAttachmentDoc = MutableLiveData<SimpleStatusMsgResponse?>()
-    val liveDataSaveTicketComment = MutableLiveData<SaveCommentResponse?>()
     val liveDataUploadTicketCommentAttachmentDoc = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataGetUserTicketDocuments = MutableLiveData<GetUserTicketDocumentsResponse?>()
 
@@ -124,9 +121,9 @@ class MainViewModel(
     val livedataCashFlowWeek=MutableLiveData<CashFlowPieChartResponse?>()
     val livedatagetweekyear=MutableLiveData<GetWeekYear?>()
     val livedatagetvechilescheduleinfo=MutableLiveData<ViewFullScheduleResponse?>()
-    val liveDataGetTicketCommentList = MutableLiveData<GetTicketCommentListResponse?>()
+    val liveDataGetTicketCommentList = MutableLiveData<GetTicketCommentListNewResponse?>()
     val liveDataUploadTicketAttachmentDoc = MutableLiveData<SimpleStatusMsgResponse?>()
-    val liveDataSaveTicketComment = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataSaveTicketComment = MutableLiveData<SaveCommentResponse?>()
     val livedatathirdpartyaccess=MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataremovethirdpartyaccess=MutableLiveData<SimpleStatusMsgResponse?>()
 
@@ -746,10 +743,10 @@ class MainViewModel(
         }
     }
 
-    fun GetLastWeekSCore(userID: Int, lmid: Int) {
+    fun GetLastWeekSCore(userID: Int, lmid: Int,year:Int) {
         viewModelScope.launch {
             val result = runCatching {
-                repo.GetLastWeekScrore(userID, lmid)
+                repo.GetLastWeekScrore(userID, lmid,year)
             }
             result.onSuccess { res ->
                 livedatalastweekresponse.postValue(res)

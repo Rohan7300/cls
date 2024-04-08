@@ -52,6 +52,7 @@ import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
+import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
@@ -395,13 +396,11 @@ interface ApiService {
         @Query("weekNo") week: Int
     ): Response<ViewFullScheduleResponse>
 
-<<<<<<<<< Temporary merge branch 1
-
     @GET("/api/Ticket/GetTicketCommentList")
     suspend fun GetTicketCommentList(
         @Query("userId") userId: Int,
         @Query("ticketId") ticketId: Int
-    ): Response<GetTicketCommentListResponse>
+    ): Response<GetTicketCommentListNewResponse>
 
     @Multipart
     @POST("/api/Ticket/UploadTicketAttachmentDoc")
@@ -416,7 +415,6 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("ticketId") ticketId: Int,
         @Query("comment") comment: String
-    ): Response<SimpleStatusMsgResponse>
     ): Response<SaveCommentResponse>
 
     @Multipart
@@ -438,6 +436,5 @@ interface ApiService {
     @PUT("/api/Dashboard/RemoveThirdPartyAccess")
     suspend fun RemoveThirdPartyAccess(@Query("userId") userId: Int):Response<SimpleStatusMsgResponse>
 
->>>>>>>>> Temporary merge branch 2
 }
 
