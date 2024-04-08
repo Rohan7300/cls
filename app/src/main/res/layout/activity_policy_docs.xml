@@ -36,8 +36,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_policy"
-                android:layout_width="179dp"
-                android:layout_height="154dp"
+                android:layout_width="159dp"
+                android:layout_height="134dp"
                 android:src="@drawable/policy_img"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -129,7 +129,7 @@
                                 android:id="@+id/llones"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="16dp"
+                                android:layout_margin="14dp"
                                 android:layout_marginTop="10dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@id/views1">
@@ -176,7 +176,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="16dp"
+                                android:layout_margin="14dp"
 
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@+id/llones">
@@ -223,7 +223,7 @@
                                 android:id="@+id/ll3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="16dp"
+                                android:layout_margin="14dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@+id/lltwos">
 
@@ -269,7 +269,7 @@
                                 android:id="@+id/ll4"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="16dp"
+                                android:layout_margin="14dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@+id/ll3">
 
@@ -315,7 +315,7 @@
                                 android:id="@+id/llsix"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="16dp"
+                                android:layout_margin="14dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@+id/ll4">
 
@@ -465,7 +465,7 @@
                                 android:id="@+id/llseven"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="16dp"
+                                android:layout_margin="14dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@+id/ll4">
 
@@ -511,7 +511,7 @@
                                 android:id="@+id/lleight"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="16dp"
+                                android:layout_margin="14dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@+id/ll4">
 
@@ -557,7 +557,7 @@
                                 android:id="@+id/llnine"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="16dp"
+                                android:layout_margin="14dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@+id/ll4">
 
@@ -603,7 +603,7 @@
                                 android:id="@+id/ll10"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="16dp"
+                                android:layout_margin="14dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@+id/ll4">
 
@@ -649,7 +649,7 @@
                                 android:id="@+id/ll11"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="16dp"
+                                android:layout_margin="14dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@+id/ll4">
 
@@ -760,7 +760,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+                        android:layout_margin="14dp"
                         android:background="@drawable/scan_area_background"
                         android:nestedScrollingEnabled="false">
 
@@ -769,10 +769,10 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+                        android:layout_margin="14dp"
                         android:background="@drawable/shape_edittext_onroad"
                         android:orientation="horizontal"
-                        android:padding="10dp">
+                        android:padding="8dp">
 
                         <ImageView
                             android:layout_width="25dp"
@@ -796,7 +796,7 @@
                         style="@style/ctaStyle1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+                        android:layout_margin="14dp"
                         android:fontFamily="@font/poppins"
                         android:gravity="center"
                         android:letterSpacing="0.02"
@@ -814,7 +814,7 @@
             android:id="@+id/signLayoutll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="14dp"
             android:visibility="gone">
 
             <include

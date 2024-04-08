@@ -36,20 +36,27 @@ class CLSThirdPartyFragment : Fragment() {
         viewModel = homeActivity.viewModel
         showDialog()
         observers()
-        viewModel.DownloadThirdPartyInvoicePDF(prefs.userID.toInt(),2024)
+        viewModel.DownloadThirdPartyInvoicePDF(prefs.userID.toInt(), 2024)
         return binding.root
     }
 
     private fun observers() {
-        val adapter = CLSThirdPartyInvoiceAdapter(ArrayList(),requireContext())
+        val adapter = CLSThirdPartyInvoiceAdapter(ArrayList(), requireContext())
         binding.clsInvoicesThirdParty.adapter = adapter
         binding.clsInvoicesThirdParty.layoutManager = LinearLayoutManager(requireContext())
-        viewModel.liveDataDownloadThirdPartyInvoicePDF.observe(viewLifecycleOwner){
+        viewModel.liveDataDownloadThirdPartyInvoicePDF.observe(viewLifecycleOwner) {
             hideDialog()
-            if(it!=null){
+            if (it != null) {
+                if (it.Invoices.size > 0) {
+                    binding.noinvoices.visibility = View.GONE
+                    binding.clsInvoicesThirdParty.visibility = View.VISIBLE
+                }
                 adapter.data.clear()
                 adapter.data.addAll(it.Invoices)
                 adapter.notifyDataSetChanged()
+            } else {
+                binding.noinvoices.visibility = View.VISIBLE
+                binding.clsInvoicesThirdParty.visibility = View.GONE
             }
         }
     }

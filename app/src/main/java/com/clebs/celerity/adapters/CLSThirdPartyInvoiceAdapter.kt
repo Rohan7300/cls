@@ -25,11 +25,7 @@ class CLSThirdPartyInvoiceAdapter(var data:ArrayList<InvoiceX>,var context: Cont
 
             binding.flname.text =  "${item.FileName}"
             binding.download.setOnClickListener {
-                var fileContent = item.FileContent
-                var filetype = item.FileType
-                var flName = item.FileName
-
-                downloadPDF(item.FileName, item.FileContent)
+                 downloadPDF(item.FileName, item.FileContent)
             }
         }
     }

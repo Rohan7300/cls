@@ -337,6 +337,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         try {
             val prefs = Prefs.getInstance(applicationContext)
             val fragmentStack = prefs.getNavigationHistory()
+
             if (navController.currentDestination?.id == R.id.completeTaskFragment) {
                 prefs.clearNavigationHistory()
             } else if (fragmentStack.size > 1) {

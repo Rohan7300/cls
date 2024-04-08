@@ -50,9 +50,16 @@ class CLSInvoicesFragment : Fragment() {
         viewModel.liveDataDownloadInvoicePDF.observe(viewLifecycleOwner) {
             hideDialog()
             if(it!=null){
+                if(it.Invoices.size>0){
+                    binding.clsInvoices.visibility = View.VISIBLE
+                    binding.noinvoices.visibility = View.GONE
+                }
                 adapter.data.clear()
                 adapter.data.addAll(it.Invoices)
                 adapter.notifyDataSetChanged()
+            }else{
+                    binding.clsInvoices.visibility = View.GONE
+                    binding.noinvoices.visibility = View.VISIBLE
             }
         }
     }
