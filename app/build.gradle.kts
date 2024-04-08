@@ -92,7 +92,7 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("com.google.firebase:firebase-ml-vision:24.0.3")
 //    implementation("com.google.firebase:firebase-core:21.1.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     val camerax_version = "1.0.0-rc01"
     implementation("androidx.camera:camera-camera2:$camerax_version")
     implementation( "androidx.camera:camera-lifecycle:$camerax_version")

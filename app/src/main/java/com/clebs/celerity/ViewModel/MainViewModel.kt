@@ -124,7 +124,13 @@ class MainViewModel(
     val livedataCashFlowWeek=MutableLiveData<CashFlowPieChartResponse?>()
     val livedatagetweekyear=MutableLiveData<GetWeekYear?>()
     val livedatagetvechilescheduleinfo=MutableLiveData<ViewFullScheduleResponse?>()
+    val liveDataGetTicketCommentList = MutableLiveData<GetTicketCommentListResponse?>()
+    val liveDataUploadTicketAttachmentDoc = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataSaveTicketComment = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedatathirdpartyaccess=MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataremovethirdpartyaccess=MutableLiveData<SimpleStatusMsgResponse?>()
+
+
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
@@ -838,6 +844,20 @@ class MainViewModel(
             }
             result.onSuccess {res->
                 livedatathirdpartyaccess.postValue(res)
+            }
+            result.onFailure {ex->
+                Log.e("GetTicketUserType","Error ${ex.message}")
+            }
+        }
+    }
+
+    fun RemoveThirdPartyAccess(userID: Int){
+        viewModelScope.launch {
+            val result=runCatching {
+                repo.RemoveThirdPartyAccess(userID)
+            }
+            result.onSuccess {res->
+                livedataremovethirdpartyaccess.postValue(res)
             }
             result.onFailure {ex->
                 Log.e("GetTicketUserType","Error ${ex.message}")

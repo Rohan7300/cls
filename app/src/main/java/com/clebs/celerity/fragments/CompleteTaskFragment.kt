@@ -462,6 +462,7 @@ class CompleteTaskFragment : Fragment() {
                     }
                 } ?: showToast("No Break time information added!!", requireContext())
             } else {
+                hideDialog()
                 isBreakTimeAdded = false
                 setVisibiltyLevel()
             }

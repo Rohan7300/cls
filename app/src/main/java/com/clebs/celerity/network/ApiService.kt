@@ -63,6 +63,7 @@ import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import okhttp3.MultipartBody
+import org.w3c.dom.Comment
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -368,6 +369,11 @@ interface ApiService {
     suspend fun GetAvgScore(@Query("userId") userId: Int, @Query("LmId") lmID: Int):Response<GetAvgScoreResponse>
     @GET("/api/Dashboard/GetLastWeekScorebyId")
     suspend fun GetLastWeekScore(@Query("userId") userId: Int, @Query("LmId") lmID: Int):Response<GetLastWeekScore>
+    suspend fun GetLastWeekScore(
+        @Query("userId") userId: Int,
+        @Query("WeekNo") WeekNo: Int,
+        @Query("Year") Year:Int
+    ): Response<GetLastWeekScore>
 
     @GET("/api/Dashboard/GetDriverWeeklyInvoice")
     suspend fun CashFLowData(
@@ -389,12 +395,13 @@ interface ApiService {
         @Query("weekNo") week: Int
     ): Response<ViewFullScheduleResponse>
 
+<<<<<<<<< Temporary merge branch 1
 
     @GET("/api/Ticket/GetTicketCommentList")
     suspend fun GetTicketCommentList(
         @Query("userId") userId: Int,
         @Query("ticketId") ticketId: Int
-    ): Response<GetTicketCommentListNewResponse>
+    ): Response<GetTicketCommentListResponse>
 
     @Multipart
     @POST("/api/Ticket/UploadTicketAttachmentDoc")
@@ -409,6 +416,7 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("ticketId") ticketId: Int,
         @Query("comment") comment: String
+    ): Response<SimpleStatusMsgResponse>
     ): Response<SaveCommentResponse>
 
     @Multipart
@@ -427,6 +435,9 @@ interface ApiService {
     @PUT("/api/Dashboard/CreateThirdPartyAccess")
     suspend fun GetThirdPartyAccess(@Query("userId") userId: Int):Response<SimpleStatusMsgResponse>
 
+    @PUT("/api/Dashboard/RemoveThirdPartyAccess")
+    suspend fun RemoveThirdPartyAccess(@Query("userId") userId: Int):Response<SimpleStatusMsgResponse>
 
+>>>>>>>>> Temporary merge branch 2
 }
 

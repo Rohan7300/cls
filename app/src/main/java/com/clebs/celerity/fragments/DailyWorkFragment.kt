@@ -581,6 +581,9 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                             Log.d(TAG, "No VRN found in image.")
 
                         }
+                        if (loadingDialog.isShowing){
+                            loadingDialog.dismiss()
+                        }
                     }
                 }
                 else{
