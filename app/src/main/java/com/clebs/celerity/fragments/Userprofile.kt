@@ -60,6 +60,37 @@ class Userprofile : Fragment() {
 
         GetDriversBasicInformation()
 
+        mbinding.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            if (isChecked) {
+                mainViewModel.GetThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
+                mbinding.checkbox.isChecked=true
+            }
+
+        }
+
+
+        mainViewModel.livedatathirdpartyaccess.observe(viewLifecycleOwner) {
+
+            if (it != null) {
+                if (it.Status.equals("200")) {
+                    showToast("Third Party Access Is Provided To User", requireContext())
+                    mbinding.checkbox.isChecked = true
+                } else {
+                    showToast(it.Message, requireContext())
+                    mbinding.checkbox.isChecked = false
+                }
+
+
+            } else {
+                showToast("Failed to provide third party Access", requireContext())
+                mbinding.checkbox.isChecked = false
+            }
+
+
+        }
+
+
         mbinding.editImg.setOnClickListener {
             if (isedit) {
                 mbinding.save.visibility = View.VISIBLE
@@ -130,7 +161,7 @@ class Userprofile : Fragment() {
 //                updateProfile90dys()
 //
 //            } else {
-                updateprofileregular()
+            updateprofileregular()
 //            }
 //            updateProfile90dys()
         }
@@ -304,8 +335,7 @@ class Userprofile : Fragment() {
 //                    showToast("Password has been changed", requireContext())
                 }
 
-            }
-            else {
+            } else {
                 showErrorDialog(fragmentManager, "0", "Error in changing password.")
                 Log.e("succcessssss", "updateProfilePassword1: ")
 //                    showToast("Error in changing password", requireContext())
@@ -333,7 +363,7 @@ class Userprofile : Fragment() {
                     showToast("profile successfully updated", requireContext())
 
                 } else {
-                    showErrorDialog(fragmentManager,"0","Error in updating profile")
+                    showErrorDialog(fragmentManager, "0", "Error in updating profile")
 
                 }
             }

@@ -1,6 +1,7 @@
 package com.clebs.celerity.network
 
 import com.clebs.celerity.models.CashFlowPieChartResponse
+import com.clebs.celerity.models.CashFlowPieChartResponseItem
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
 import com.clebs.celerity.models.TicketDepartmentsResponse
@@ -45,17 +46,15 @@ import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
+import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfo
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
-import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
-import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
-import com.clebs.celerity.models.response.SaveCommentResponse
 import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
@@ -363,16 +362,9 @@ interface ApiService {
 
 
     @GET("/api/Dashboard/GetAverageTotalScorebyId")
-    suspend fun GetAvgScore(
-        @Query("userId") userId: Int,
-        @Query("LmId") lmID: Int
-    ): Response<GetAvgScoreResponse>
-
+    suspend fun GetAvgScore(@Query("userId") userId: Int, @Query("LmId") lmID: Int):Response<GetAvgScoreResponse>
     @GET("/api/Dashboard/GetLastWeekScorebyId")
-    suspend fun GetLastWeekScore(
-        @Query("userId") userId: Int,
-        @Query("LmId") lmID: Int
-    ): Response<GetLastWeekScore>
+    suspend fun GetLastWeekScore(@Query("userId") userId: Int, @Query("LmId") lmID: Int):Response<GetLastWeekScore>
 
     @GET("/api/Dashboard/GetDriverWeeklyInvoice")
     suspend fun CashFLowData(
@@ -429,5 +421,9 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("ticketId") ticketId: Int
     ):Response<GetUserTicketDocumentsResponse>
+    @PUT("/api/Dashboard/CreateThirdPartyAccess")
+    suspend fun GetThirdPartyAccess(@Query("userId") userId: Int):Response<SimpleStatusMsgResponse>
+
+
 }
 

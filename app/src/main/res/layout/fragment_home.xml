@@ -9,8 +9,8 @@
 
         <RelativeLayout
             android:id="@+id/daily_work_"
-            android:layout_width="328dp"
-            android:layout_height="257dp"
+            android:layout_width="300dp"
+            android:layout_height="240dp"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="36dp"
             android:layout_marginTop="16dp"
@@ -27,7 +27,7 @@
                 android:layout_width="70dp"
                 android:layout_height="100dp"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="28dp"
                 android:layout_marginTop="32dp"
 
                 android:src="@drawable/login_pic"
@@ -42,7 +42,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="2dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginEnd="28dp"
                 android:layout_marginBottom="10dp"
                 android:layout_toEndOf="@+id/profile_image"
                 android:fontFamily="@font/poppins_semibold"
@@ -54,14 +54,14 @@
                 android:text="Marian Ionut Malasincu
 Marian Ionut Malasincu"
                 android:textColor="#343131"
-                android:textSize="19sp" />
+                android:textSize="17sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/marian_ionu"
                 android:layout_marginStart="37dp"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="37dp"
                 android:layout_marginBottom="8dp"
                 android:orientation="horizontal">

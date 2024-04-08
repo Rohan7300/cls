@@ -700,7 +700,6 @@ class MainRepo(private val ApiService: ApiService) {
         }
         return null
     }
-
     suspend fun GetLastWeekScrore(userID: Int, lmid: Int): GetLastWeekScore? {
         val response = ApiService.GetLastWeekScore(userID, lmid)
         if (response.isSuccessful) {
@@ -711,14 +710,8 @@ class MainRepo(private val ApiService: ApiService) {
         }
         return null
     }
-
-    suspend fun GetCashFlowWeek(
-        userID: Int,
-        companyFilter: Int,
-        selyear: Int,
-        selweek: Int
-    ): CashFlowPieChartResponse? {
-        val response = ApiService.CashFLowData(userID, companyFilter, selyear, selweek)
+    suspend fun GetCashFlowWeek(userID: Int, companyFilter: Int,selyear:Int,selweek:Int): CashFlowPieChartResponse? {
+        val response = ApiService.CashFLowData(userID, companyFilter,selyear,selweek)
         if (response.isSuccessful) {
             return response.body()
         } else {
@@ -783,4 +776,16 @@ class MainRepo(private val ApiService: ApiService) {
         }
         return null
     }
+
+    suspend fun GetThirdPartyAccess(userID: Int): SimpleStatusMsgResponse? {
+        val response = ApiService.GetThirdPartyAccess(userID)
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+
 }

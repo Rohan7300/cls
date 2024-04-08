@@ -51,7 +51,7 @@ class HomedemoFragment : Fragment() {
 
         viewModel = (activity as HomeActivity).viewModel
         pieChart = mbinding.pieChart.findViewById<PieChart>(R.id.pieChart)
-
+//        pieChart.isAnimationEnabled=true
 
         showDialog()
         viewModel.GetWeekAndYear()
@@ -85,12 +85,12 @@ class HomedemoFragment : Fragment() {
 
 
         }
-        showDialog()
+
         viewModel.GetAVGscore(
             Prefs.getInstance(requireContext()).userID.toInt(),
             Prefs.getInstance(requireContext()).lmid
         )
-        showDialog()
+
         viewModel.GetLastWeekSCore(
             Prefs.getInstance(requireContext()).userID.toInt(),
             Prefs.getInstance(requireContext()).lmid
@@ -135,7 +135,7 @@ class HomedemoFragment : Fragment() {
 
     private fun Observers() {
         viewModel.livedatagetweekyear.observe(viewLifecycleOwner) {
-            hideDialog()
+
             if (it != null) {
                 week = it.weekNO
                 year = it.year
@@ -157,7 +157,7 @@ class HomedemoFragment : Fragment() {
         }
 
         viewModel.livedataAvgScoreResponse.observe(viewLifecycleOwner) {
-            hideDialog()
+
             if (it != null) {
 
                 if (it.status.equals("200")) {
@@ -174,7 +174,7 @@ class HomedemoFragment : Fragment() {
             }
         }
         viewModel.livedatalastweekresponse.observe(viewLifecycleOwner) {
-            hideDialog()
+
             if (it != null) {
                 if (it.status.equals("200")) {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
@@ -190,7 +190,8 @@ class HomedemoFragment : Fragment() {
             }
         }
         viewModel.livedataCashFlowWeek.observe(viewLifecycleOwner) { depts ->
-            hideDialog()
+hideDialog()
+            mbinding.consttwo.visibility=View.VISIBLE
             if (depts != null) {
                 mbinding.pieChart.visibility = View.VISIBLE
                 mbinding.nodata.visibility = View.GONE
@@ -262,7 +263,9 @@ class HomedemoFragment : Fragment() {
                 pieChart.labelsColor = resources.getColor(R.color.black)
                 pieChart.holeRatio = 0f
                 pieChart.overlayRatio = 0f
+
             } else {
+                hideDialog()
                 mbinding.pieChart.visibility = View.GONE
                 mbinding.nodata.visibility = View.VISIBLE
             }
@@ -277,6 +280,7 @@ class HomedemoFragment : Fragment() {
                 mbinding.viewfullschedule.isClickable = true
                 mbinding.viewfullschedule.isEnabled = true
                 mbinding.llnodata.visibility = View.GONE
+                mbinding.rlicons.visibility=View.VISIBLE
                 it.map {
                     mbinding.tvDateShow1.text = it.sundayDate
                     mbinding.tvDateShow2.text = it.mondayDate
@@ -299,6 +303,7 @@ class HomedemoFragment : Fragment() {
                 mbinding.viewfullschedule.isEnabled = false
                 mbinding.viewfulldatalayout.visibility = View.GONE
                 mbinding.llnodata.visibility = View.VISIBLE
+                mbinding.rlicons.visibility=View.GONE
             }
 
         }

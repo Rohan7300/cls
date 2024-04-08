@@ -967,10 +967,10 @@ class CompleteTaskFragment : Fragment() {
                             bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
                         ),
                         customerDetails = CustomerDetails(
-                            name = " ", //if sent, user can't edit
-                            email = " ", //if sent, user can't edit
-                            dialCode = " ", //if sent, user can't edit
-                            phoneNumber = " ", //if sent, user can't edit
+                            name = "", //if sent, user can't edit
+                            email = "", //if sent, user can't edit
+                            dialCode = "", //if sent, user can't edit
+                            phoneNumber = "", //if sent, user can't edit
                         )
                     ),
                     result = { isStarted, msg, code ->

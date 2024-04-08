@@ -71,6 +71,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/layer"
             android:paddingVertical="4dp"
+
             app:itemBackground="@drawable/bg_selected_item"
             app:itemIconSize="22dp"
             app:itemIconTint="@color/selectedcolor"
