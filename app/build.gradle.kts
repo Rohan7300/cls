@@ -135,7 +135,7 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
     implementation ("com.github.clearquotetech:cq-android-sdk:2.0.4-test")
-
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     kapt("androidx.room:room-compiler:2.6.1")
 
 }

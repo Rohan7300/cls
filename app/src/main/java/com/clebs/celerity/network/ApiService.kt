@@ -51,11 +51,14 @@ import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
+import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
 import com.clebs.celerity.models.response.GetTicketCommentListResponse
+import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
+import com.clebs.celerity.models.response.SaveCommentResponse
 import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
@@ -344,7 +347,8 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("departmentId") departmentId: Int?,
         @Query("startDate") startDate: String?,
-        @Query("endDate") endDate: String?
+        @Query("endDate") endDate: String?,
+        //@Query("includeCompleted") includeCompleted:Boolean?
     ): Response<GetUserTicketsResponse>
 
     @GET("/api/Ticket/GetUserDepartmentList")
@@ -363,12 +367,9 @@ interface ApiService {
 
 
     @GET("/api/Dashboard/GetAverageTotalScorebyId")
-    suspend fun GetAvgScore(
-        @Query("userId") userId: Int,
-        @Query("LmId") lmID: Int
-    ): Response<GetAvgScoreResponse>
-
+    suspend fun GetAvgScore(@Query("userId") userId: Int, @Query("LmId") lmID: Int):Response<GetAvgScoreResponse>
     @GET("/api/Dashboard/GetLastWeekScorebyId")
+    suspend fun GetLastWeekScore(@Query("userId") userId: Int, @Query("LmId") lmID: Int):Response<GetLastWeekScore>
     suspend fun GetLastWeekScore(
         @Query("userId") userId: Int,
         @Query("WeekNo") WeekNo: Int,
@@ -395,12 +396,11 @@ interface ApiService {
         @Query("weekNo") week: Int
     ): Response<ViewFullScheduleResponse>
 
-
     @GET("/api/Ticket/GetTicketCommentList")
     suspend fun GetTicketCommentList(
         @Query("userId") userId: Int,
         @Query("ticketId") ticketId: Int
-    ): Response<GetTicketCommentListResponse>
+    ): Response<GetTicketCommentListNewResponse>
 
     @Multipart
     @POST("/api/Ticket/UploadTicketAttachmentDoc")
@@ -415,7 +415,21 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("ticketId") ticketId: Int,
         @Query("comment") comment: String
-    ): Response<SimpleStatusMsgResponse>
+    ): Response<SaveCommentResponse>
+
+    @Multipart
+    @POST("/api/Ticket/UploadTicketCommentAttachmentDoc")
+    suspend fun UploadTicketCommentAttachmentDoc(
+        @Query("userId") userId: Int,
+        @Query("ticketCommentId") ticketCommentId:Int,
+        @Part file:MultipartBody.Part
+    ):Response<SimpleStatusMsgResponse>
+
+    @GET("/api/Ticket/GetUserTicketDocuments")
+    suspend fun GetUserTicketDocuments(
+        @Query("userId") userId: Int,
+        @Query("ticketId") ticketId: Int
+    ):Response<GetUserTicketDocumentsResponse>
     @PUT("/api/Dashboard/CreateThirdPartyAccess")
     suspend fun GetThirdPartyAccess(@Query("userId") userId: Int):Response<SimpleStatusMsgResponse>
 
