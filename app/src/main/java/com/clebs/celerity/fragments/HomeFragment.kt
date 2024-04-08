@@ -1,38 +1,34 @@
 package com.clebs.celerity.fragments
 
-import android.annotation.SuppressLint
-import android.content.Context
+
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.compose.ui.graphics.Color
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
+import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentHomeBinding
+import com.clebs.celerity.databinding.FragmentInvoicesBinding
+import com.clebs.celerity.ui.HomeActivity
 import com.elconfidencial.bubbleshowcase.BubbleShowCase
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
 import com.ncorti.slidetoact.SlideToActView
 
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class HomeFragment : Fragment() {
     lateinit var mbinding: FragmentHomeBinding
+    private lateinit var viewModel: MainViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    val showDialog: () -> Unit = {
+        (activity as HomeActivity).showDialog()
     }
-
+    val hideDialog: () -> Unit = {
+        (activity as HomeActivity).hideDialog()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,6 +36,23 @@ class HomeFragment : Fragment() {
 
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentHomeBinding.inflate(inflater, container, false)
+        }
+
+        viewModel = (activity as HomeActivity).viewModel
+        showDialog()
+        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+
+            hideDialog()
+
+            if (it != null) {
+                mbinding.location.text = it.locationName ?: ""
+                mbinding.truckNumber.text = it.vmRegNo ?: ""
+            }
+
+            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+                mbinding.marianIonu.text = name
+            }
+            mbinding.ticketNumber.text = (activity as HomeActivity).date
         }
         BubbleShowCaseBuilder(requireActivity()) //Activity instance
             .title("Swipe") //Any title for the bubble view

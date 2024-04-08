@@ -37,6 +37,8 @@ import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
+import com.clebs.celerity.models.response.DownloadInvoicePDFResponse
+import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
@@ -116,16 +118,18 @@ class MainViewModel(
     val liveDataUploadTicketCommentAttachmentDoc = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataGetUserTicketDocuments = MutableLiveData<GetUserTicketDocumentsResponse?>()
 
-    val livedataAvgScoreResponse=MutableLiveData<GetAvgScoreResponse?>()
-    val livedatalastweekresponse=MutableLiveData<GetLastWeekScore?>()
-    val livedataCashFlowWeek=MutableLiveData<CashFlowPieChartResponse?>()
-    val livedatagetweekyear=MutableLiveData<GetWeekYear?>()
-    val livedatagetvechilescheduleinfo=MutableLiveData<ViewFullScheduleResponse?>()
+    val livedataAvgScoreResponse = MutableLiveData<GetAvgScoreResponse?>()
+    val livedatalastweekresponse = MutableLiveData<GetLastWeekScore?>()
+    val livedataCashFlowWeek = MutableLiveData<CashFlowPieChartResponse?>()
+    val livedatagetweekyear = MutableLiveData<GetWeekYear?>()
+    val livedatagetvechilescheduleinfo = MutableLiveData<ViewFullScheduleResponse?>()
     val liveDataGetTicketCommentList = MutableLiveData<GetTicketCommentListNewResponse?>()
     val liveDataUploadTicketAttachmentDoc = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataSaveTicketComment = MutableLiveData<SaveCommentResponse?>()
-    val livedatathirdpartyaccess=MutableLiveData<SimpleStatusMsgResponse?>()
-    val livedataremovethirdpartyaccess=MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedatathirdpartyaccess = MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataremovethirdpartyaccess = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataDownloadInvoicePDF = MutableLiveData<DownloadInvoicePDFResponse?>()
+    val liveDataDownloadThirdPartyInvoicePDF= MutableLiveData<DownloadThirdPartyInvoicePDFResponse?>()
 
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
@@ -743,10 +747,10 @@ class MainViewModel(
         }
     }
 
-    fun GetLastWeekSCore(userID: Int, lmid: Int,year:Int) {
+    fun GetLastWeekSCore(userID: Int, lmid: Int, year: Int) {
         viewModelScope.launch {
             val result = runCatching {
-                repo.GetLastWeekScrore(userID, lmid,year)
+                repo.GetLastWeekScrore(userID, lmid, year)
             }
             result.onSuccess { res ->
                 livedatalastweekresponse.postValue(res)
@@ -834,30 +838,61 @@ class MainViewModel(
         }
     }
 
-    fun GetThirdPartyAccess(userID: Int){
+    fun GetThirdPartyAccess(userID: Int) {
         viewModelScope.launch {
-            val result=runCatching {
+            val result = runCatching {
                 repo.GetThirdPartyAccess(userID)
             }
-            result.onSuccess {res->
+            result.onSuccess { res ->
                 livedatathirdpartyaccess.postValue(res)
             }
-            result.onFailure {ex->
-                Log.e("GetTicketUserType","Error ${ex.message}")
+            result.onFailure { ex ->
+                Log.e("GetTicketUserType", "Error ${ex.message}")
             }
         }
     }
 
-    fun RemoveThirdPartyAccess(userID: Int){
+    fun RemoveThirdPartyAccess(userID: Int) {
         viewModelScope.launch {
-            val result=runCatching {
+            val result = runCatching {
                 repo.RemoveThirdPartyAccess(userID)
             }
-            result.onSuccess {res->
+            result.onSuccess { res ->
                 livedataremovethirdpartyaccess.postValue(res)
             }
-            result.onFailure {ex->
-                Log.e("GetTicketUserType","Error ${ex.message}")
+            result.onFailure { ex ->
+                Log.e("GetTicketUserType", "Error ${ex.message}")
+            }
+        }
+    }
+
+    fun DownloadInvoicePDF(
+        userID: Int, selYear: Int
+    ) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.DownloadInvoicePDF(userID, selYear)
+            }
+            result.onSuccess { res ->
+                liveDataDownloadInvoicePDF.postValue(res)
+            }
+            result.onFailure { ex ->
+                Log.e("DownloadInvoicePDF ", "Error ${ex.message}")
+            }
+        }
+    }
+    fun DownloadThirdPartyInvoicePDF(
+        userID: Int, selYear: Int
+    ) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.DownloadThirdPartyInvoicePDF(userID, selYear)
+            }
+            result.onSuccess { res ->
+                liveDataDownloadThirdPartyInvoicePDF.postValue(res)
+            }
+            result.onFailure { ex ->
+                Log.e("DownloadInvoicePDF ", "Error ${ex.message}")
             }
         }
     }

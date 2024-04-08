@@ -8,35 +8,54 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
+import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.databinding.FragmentInvoicesBinding
+import com.clebs.celerity.ui.HomeActivity
 
-/**
- * A simple [Fragment] subclass.
- * Use the [InvoicesFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class InvoicesFragment : Fragment() {
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    private lateinit var viewModel: MainViewModel
+    val showDialog: () -> Unit = {
+        (activity as HomeActivity).showDialog()
     }
+    val hideDialog: () -> Unit = {
+        (activity as HomeActivity).hideDialog()
+    }
+    lateinit var binding: FragmentInvoicesBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view:View= inflater.inflate(R.layout.fragment_invoices, container, false)
-        val clsinvoices=view.findViewById<TextView>(R.id.clsinvoices)
-        val thirdparty=view.findViewById<TextView>(R.id.otherinvoices)
-        clsinvoices.setOnClickListener {
+        binding = FragmentInvoicesBinding.inflate(layoutInflater)
+        viewModel = (activity as HomeActivity).viewModel
+        showDialog()
+        observers()
+        binding.clsinvoices.setOnClickListener {
             findNavController().navigate(R.id.CLSInvoicesFragment)
         }
-        thirdparty.setOnClickListener {
+        binding.otherinvoices.setOnClickListener {
             findNavController().navigate(R.id.CLSThirdPartyFragment)
         }
-        return view
+
+        return binding.root
+    }
+
+    private fun observers() {
+        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+
+            hideDialog()
+
+            if (it != null) {
+                binding.headerTop.dxLoc.text = it.locationName ?: ""
+                binding.headerTop.dxReg.text = it.vmRegNo ?: ""
+            }
+
+            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+                binding.headerTop.anaCarolin.text = name
+            }
+            binding.headerTop.dxm5.text = (activity as HomeActivity).date
+        }
     }
 
 

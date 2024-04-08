@@ -1,54 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:padding="16dp"
-    android:background="@drawable/shape_expand_main"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:orientation="horizontal">
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <TextView
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/shape_expand_main"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date:"
-            android:fontFamily="@font/inter_semibold"
-            android:id="@+id/date"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/date"
-            android:text="Location:"
-            android:id="@+id/week"
-            android:fontFamily="@font/inter_semibold"
-            android:layout_marginStart="2dp"/>
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:id="@+id/download"
-            android:layout_alignParentEnd="true"
-            android:src="@drawable/download_icon"/>
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="185dp"
-            android:textSize="12sp"
-      android:layout_toLeftOf="@+id/download"
-            android:layout_toEndOf="@+id/week"
-            android:fontFamily="@font/inter"
-            android:text="description" />
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_semibold"
+                android:text="Date:" />
+
+            <TextView
+                android:id="@+id/flname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="201dp"
+                android:layout_marginEnd="27dp"
+                android:layout_toStartOf="@+id/download"
+                android:layout_toEndOf="@+id/date"
+                android:layout_toRightOf="@id/date"
+                android:fontFamily="@font/inter_semibold"
+                android:text="File Name:" />
+
+            <ImageView
+                android:id="@+id/download"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/download_icon" />
 
 
-    </RelativeLayout>
 
-</LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
