@@ -33,6 +33,8 @@ import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
+import com.clebs.celerity.models.response.DownloadInvoicePDFResponse
+import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
@@ -794,6 +796,31 @@ class MainRepo(private val ApiService: ApiService) {
         if (response.isSuccessful) {
             return response.body()
         } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun DownloadInvoicePDF(
+        userID: Int,selyear: Int
+    ): DownloadInvoicePDFResponse? {
+        val response = ApiService.DownloadInvoicePDF(userID,selyear)
+        if(response.isSuccessful){
+            return response.body()
+        }else{
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+    suspend fun DownloadThirdPartyInvoicePDF(
+        userID: Int,selyear: Int
+    ): DownloadThirdPartyInvoicePDFResponse? {
+        val response = ApiService.DownloadThirdPartyInvoicePDF(userID,selyear)
+        if(response.isSuccessful){
+            return response.body()
+        }else{
             val errorBody = response.errorBody()?.string()
             println("Error Response Body: $errorBody")
         }

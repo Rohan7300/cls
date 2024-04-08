@@ -35,6 +35,19 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup"
         tools:targetApi="tiramisu">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file2_paths"
+                tools:replace="android:resource"/>
+        </provider>
+
+
         <activity
             android:name=".ui.ViewTicketsActivity"
             android:exported="false" />

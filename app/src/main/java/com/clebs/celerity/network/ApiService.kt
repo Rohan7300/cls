@@ -36,6 +36,8 @@ import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
+import com.clebs.celerity.models.response.DownloadInvoicePDFResponse
+import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
@@ -367,13 +369,21 @@ interface ApiService {
 
 
     @GET("/api/Dashboard/GetAverageTotalScorebyId")
-    suspend fun GetAvgScore(@Query("userId") userId: Int, @Query("LmId") lmID: Int):Response<GetAvgScoreResponse>
+    suspend fun GetAvgScore(
+        @Query("userId") userId: Int,
+        @Query("LmId") lmID: Int
+    ): Response<GetAvgScoreResponse>
+
     @GET("/api/Dashboard/GetLastWeekScorebyId")
-    suspend fun GetLastWeekScore(@Query("userId") userId: Int, @Query("LmId") lmID: Int):Response<GetLastWeekScore>
+    suspend fun GetLastWeekScore(
+        @Query("userId") userId: Int,
+        @Query("LmId") lmID: Int
+    ): Response<GetLastWeekScore>
+
     suspend fun GetLastWeekScore(
         @Query("userId") userId: Int,
         @Query("WeekNo") WeekNo: Int,
-        @Query("Year") Year:Int
+        @Query("Year") Year: Int
     ): Response<GetLastWeekScore>
 
     @GET("/api/Dashboard/GetDriverWeeklyInvoice")
@@ -421,20 +431,33 @@ interface ApiService {
     @POST("/api/Ticket/UploadTicketCommentAttachmentDoc")
     suspend fun UploadTicketCommentAttachmentDoc(
         @Query("userId") userId: Int,
-        @Query("ticketCommentId") ticketCommentId:Int,
-        @Part file:MultipartBody.Part
-    ):Response<SimpleStatusMsgResponse>
+        @Query("ticketCommentId") ticketCommentId: Int,
+        @Part file: MultipartBody.Part
+    ): Response<SimpleStatusMsgResponse>
 
     @GET("/api/Ticket/GetUserTicketDocuments")
     suspend fun GetUserTicketDocuments(
         @Query("userId") userId: Int,
         @Query("ticketId") ticketId: Int
-    ):Response<GetUserTicketDocumentsResponse>
+    ): Response<GetUserTicketDocumentsResponse>
+
     @PUT("/api/Dashboard/CreateThirdPartyAccess")
-    suspend fun GetThirdPartyAccess(@Query("userId") userId: Int):Response<SimpleStatusMsgResponse>
+    suspend fun GetThirdPartyAccess(@Query("userId") userId: Int): Response<SimpleStatusMsgResponse>
 
     @PUT("/api/Dashboard/RemoveThirdPartyAccess")
-    suspend fun RemoveThirdPartyAccess(@Query("userId") userId: Int):Response<SimpleStatusMsgResponse>
+    suspend fun RemoveThirdPartyAccess(@Query("userId") userId: Int): Response<SimpleStatusMsgResponse>
+
+    @GET("/api/HtmlToPDF/DownloadInvoicePDF")
+    suspend fun DownloadInvoicePDF(
+        @Query("UserId") userId: Int,
+        @Query("selYear") selYear: Int
+    ): Response<DownloadInvoicePDFResponse>
+
+    @GET("/api/HtmlToPDF/DownloadThirdPartyInvoicePDF")
+    suspend fun DownloadThirdPartyInvoicePDF(
+        @Query("UserId") userId: Int,
+        @Query("selYear") selYear: Int
+    ): Response<DownloadThirdPartyInvoicePDFResponse>
 
 }
 
