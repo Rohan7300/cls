@@ -72,6 +72,7 @@ import com.google.firebase.ml.vision.text.FirebaseVisionText
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer
 import com.kotlinpermissions.KotlinPermissions
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
+import com.tapadoo.alerter.Alerter
 import id.zelory.compressor.Compressor
 
 import kotlinx.coroutines.Dispatchers
@@ -527,7 +528,12 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
     fun uploadImageToServerAndGetResults(savedUri: Uri?) {
         if (savedUri != null) {
-
+            Alerter.create(requireActivity())
+                .setTitle("Analysing")
+                .setIcon(R.drawable.logo_new)
+                .setText("Photo is been analysed")
+                .setBackgroundColorInt(resources.getColor(R.color.medium_orange))
+                .show()
             val apiService: ApiPlateRecognizer =
                 RetrofitHelper.getInstance().create(ApiPlateRecognizer::class.java)
             GlobalScope.launch(Dispatchers.IO) {
