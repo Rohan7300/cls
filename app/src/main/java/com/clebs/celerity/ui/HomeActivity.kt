@@ -7,10 +7,12 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -60,6 +62,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var userId: Int = 0
     var firstName = ""
     var apiCount = 0
+    var ninetydaysBoolean: Boolean? = null
     var lastName = ""
     var isLeadDriver = false
 
@@ -150,7 +153,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel =
                 ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
 
+            GetDriversBasicInformation()
+            if (ninetydaysBoolean?.equals(true) == true) {
+                showAlertChangePasword90dys()
 
+            }
             getVehicleLocationInfo()
             viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
                 Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
@@ -304,7 +311,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onBackPressed() {
         //super.onBackPressed()
         screenid = viewModel.getLastVisitedScreenId(this)
-        backNav()
+        if (Prefs.getInstance(App.instance).get("90days")
+                .equals("1") && navController.currentDestination?.id == R.id.profileFragment
+        ) {
+            showToast("Please do profile changes first", this)
+
+        }
+//        backNav()
     }
 
 
@@ -347,6 +360,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     prefs.saveNavigationHistory(fragmentStack)
                 }
             }
+
         } catch (_: Exception) {
 
         }
@@ -435,5 +449,72 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             loadingDialog.show()
         }
         apiCount++
+    }
+
+    fun GetDriversBasicInformation() {
+        loadingDialog.show()
+        viewModel.GetDriversBasicInformation(
+            Prefs.getInstance(App.instance).userID.toDouble()
+        ).observe(this, Observer {
+            if (it != null) {
+                ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
+                if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
+                    if (loadingDialog.isShowing) {
+                        loadingDialog.dismiss()
+
+                    }
+                    Prefs.getInstance(applicationContext).days = "1"
+                    showAlertChangePasword90dys()
+                }
+                else{
+                    Prefs.getInstance(applicationContext).days = "0"
+                }
+                Log.e("responseprofile", "GetDriversBasicInformation: ")
+
+//                if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
+//                    showAlertChangePasword90dys()
+//                }
+            }
+        })
+    }
+
+    fun showAlertChangePasword90dys() {
+        val factory = LayoutInflater.from(this)
+        val view: View = factory.inflate(R.layout.change_passwordninetydays, null)
+        val deleteDialog: android.app.AlertDialog = android.app.AlertDialog.Builder(this).create()
+        deleteDialog.setView(view)
+
+        val button: TextView = view.findViewById(R.id.save)
+        button.setOnClickListener {
+            navController.navigate(R.id.profileFragment)
+//            Prefs.getInstance(App.instance).save("90days", "1")
+            deleteDialog.dismiss()
+
+
+        }
+        deleteDialog.setOnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                true
+            } else {
+                false
+            }
+        }
+        deleteDialog.setCancelable(false)
+        deleteDialog.setCanceledOnTouchOutside(false);
+        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        deleteDialog.show();
+
+    }
+
+    fun disableBottomNavigationView() {
+        bottomNavigationView.visibility = View.GONE
+//        bottomNavigationView. = false
+//        bottomNavigationView.isClickable=false
+    }
+
+    fun enableBottomNavigationView() {
+        bottomNavigationView.visibility = View.VISIBLE
+//        bottomNavigationView.isEnabled = true
+//        bottomNavigationView.isClickable=true
     }
 }

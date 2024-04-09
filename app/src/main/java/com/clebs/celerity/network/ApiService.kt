@@ -122,7 +122,7 @@ interface ApiService {
     @PUT("/api/Drivers/UpdateDAProfileIn90Days")
     suspend fun updateDAProfile90days(
         @Query("userId") userId: Double,
-        @Query("emailAddress") emailAddress: String,
+        @Query("emailId") emailAddress: String,
         @Query("phonenumber") phonenumber: String
     ): Response<BaseResponseTwo>
 
