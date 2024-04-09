@@ -77,7 +77,6 @@ class OnRoadHoursFragment : Fragment() {
         loadingDialog = (activity as HomeActivity).loadingDialog
         parcelBack = binding.parcelsBroughtBack.text.toString().toInt()
 
-
         binding.pbbPlus.setOnClickListener {
             parcelBack += 1
             binding.parcelsBroughtBack.text = parcelBack.toString()

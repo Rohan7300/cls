@@ -129,6 +129,9 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("ru.superjob:kotlin-permissions:1.0.3")
     implementation("org.jetbrains.anko:anko-commons:0.10.4")
 
+    implementation("com.github.tapadoo:alerter:7.2.4")
+
+
     val room_version = "2.6.1"
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:$room_version")

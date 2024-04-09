@@ -128,6 +128,7 @@ class CompleteTaskFragment : Fragment() {
         userId = Prefs.getInstance(requireContext()).userID.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.addBreakIV.setOnClickListener(clickListener)
+
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
         mbinding.h1.setOnClickListener {
@@ -148,7 +149,7 @@ class CompleteTaskFragment : Fragment() {
 
         inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
         viewModel = (activity as HomeActivity).viewModel
-
+        viewModel.setLastVisitedScreenId(requireActivity(), R.id.completeTaskFragment)
         showDialog()
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
 

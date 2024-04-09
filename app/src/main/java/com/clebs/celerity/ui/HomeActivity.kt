@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -189,6 +190,29 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 ImageViewModelProviderFactory(imagesRepo)
             )[ImageViewModel::class.java]
 
+            onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    try {
+                        val prefs = Prefs.getInstance(applicationContext)
+                        val fragmentStack = prefs.getNavigationHistory()
+                        Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
+                        if (navController.currentDestination?.id == R.id.completeTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
+                            prefs.clearNavigationHistory()
+                        } else if (fragmentStack.size > 1) {
+                            fragmentStack.pop()
+                            val previousFragment = fragmentStack.peek()
+                            if (previousFragment != R.id.dailyWorkFragment) {
+                                navController.navigate(previousFragment)
+                                prefs.saveNavigationHistory(fragmentStack)
+                            }
+                        }
+                    } catch (_: Exception) {
+
+                    }
+                }
+            })
+
+
             imageViewModel.images.observe(this) { imageEntity ->
                 dbLog(imageEntity)
             }
@@ -299,12 +323,30 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
     }
 
-    @SuppressLint("MissingSuperCall")
 
     override fun onBackPressed() {
-        //super.onBackPressed()
         screenid = viewModel.getLastVisitedScreenId(this)
-        backNav()
+        Log.d("NavCurrScreenID", "screenid ${screenid}")
+        try {
+            val prefs = Prefs.getInstance(applicationContext)
+            val fragmentStack = prefs.getNavigationHistory()
+            Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
+            if (navController.currentDestination?.id == R.id.completeTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
+                prefs.clearNavigationHistory()
+            } else if (fragmentStack.size > 1) {
+                fragmentStack.pop()
+                val previousFragment = fragmentStack.peek()
+                if (previousFragment != R.id.dailyWorkFragment) {
+                    navController.navigate(previousFragment)
+                    prefs.saveNavigationHistory(fragmentStack)
+                }
+            }
+            else{
+                super.onBackPressed()
+            }
+        } catch (_: Exception) {
+
+        }
     }
 
 
@@ -337,8 +379,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         try {
             val prefs = Prefs.getInstance(applicationContext)
             val fragmentStack = prefs.getNavigationHistory()
-
-            if (navController.currentDestination?.id == R.id.completeTaskFragment) {
+            Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
+            if (navController.currentDestination?.id == R.id.completeTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
                 prefs.clearNavigationHistory()
             } else if (fragmentStack.size > 1) {
                 fragmentStack.pop()
@@ -351,7 +393,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         } catch (_: Exception) {
 
         }
-
     }
 
     private fun showAlertLogout() {

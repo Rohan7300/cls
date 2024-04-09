@@ -8,8 +8,10 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.webkit.MimeTypeMap
@@ -20,6 +22,7 @@ import android.widget.Spinner
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.ui.unit.dp
 import androidx.core.net.toFile
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -73,6 +76,7 @@ class CreateTicketsActivity : AppCompatActivity() {
         setInputListener(mbinding.edtTitle)
         setInputListener(mbinding.edtDes)
 
+
         mbinding.saveTickets.setOnClickListener {
             if (chkNull())
                 showToast("Please complete form first!!", this)
@@ -80,9 +84,7 @@ class CreateTicketsActivity : AppCompatActivity() {
                 saveTicket()
         }
 
-        mbinding.icUpload.setOnClickListener {
 
-        }
 
         mbinding.imageViewBack.setOnClickListener {
             onBackPressed()
@@ -325,7 +327,7 @@ class CreateTicketsActivity : AppCompatActivity() {
                         val requestBody = tmpFile.asRequestBody(mimeType)
                         val filePart = MultipartBody.Part.createFormData(
                             "UploadTicketDoc",
-                            selectedFileUri!!.lastPathSegment+ "." + (fileExtension ?: "jpg"),
+                            selectedFileUri!!.lastPathSegment + "." + (fileExtension ?: "jpg"),
                             requestBody
                         )
 
@@ -368,4 +370,10 @@ class CreateTicketsActivity : AppCompatActivity() {
 
 
     }
+
+    fun Int.dpToPx(): Int {
+        val scale = resources.displayMetrics.density
+        return (this * scale + 0.5f).toInt()
+    }
+
 }

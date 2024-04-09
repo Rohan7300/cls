@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.clebs.celerity.models.response.Doc
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
+import com.clebs.celerity.models.response.Invoice
+import com.clebs.celerity.models.response.InvoiceX
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.Stack
@@ -238,6 +240,32 @@ class Prefs(context: Context) {
         val gson = Gson()
         val data = sharedPreferences.getString("CurrentTicket", null)
         return gson.fromJson(data, Doc::class.java) ?: null
+    }
+
+    fun saveInvoice(item: Invoice) {
+        val editor = sharedPreferences.edit()
+        val gson = Gson()
+        val json = gson.toJson(item)
+        editor.putString("CurrInvoice", json)
+        editor.apply()
+    }
+    fun getInvoice():Invoice?{
+        val gson = Gson()
+        val data = sharedPreferences.getString("CurrInvoice",null)
+        return gson.fromJson(data,Invoice::class.java)?:null
+    }
+
+    fun saveInvoiceX(item: InvoiceX) {
+        val editor = sharedPreferences.edit()
+        val gson = Gson()
+        val json = gson.toJson(item)
+        editor.putString("CurrInvoiceX", json)
+        editor.apply()
+    }
+    fun getInvoiceX():InvoiceX?{
+        val gson = Gson()
+        val data = sharedPreferences.getString("CurrInvoiceX",null)
+        return gson.fromJson(data,InvoiceX::class.java)?:null
     }
 
 }

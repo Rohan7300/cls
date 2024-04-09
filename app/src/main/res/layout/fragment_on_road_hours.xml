@@ -14,6 +14,7 @@
 
         <include
             android:id="@+id/headerTop"
+
             layout="@layout/fragment_headers" />
 
         <androidx.core.widget.NestedScrollView
