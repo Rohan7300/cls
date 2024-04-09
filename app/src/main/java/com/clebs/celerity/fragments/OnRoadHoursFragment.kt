@@ -107,6 +107,10 @@ class OnRoadHoursFragment : Fragment() {
         }
         inputListeners()
         viewModel.GetDailyWorkInfoById(prefs.userID.toInt())
+        binding.cancel.setOnClickListener {
+            findNavController().navigate(R.id.completeTaskFragment)
+            findNavController().clearBackStack(R.id.completeTaskFragment)
+        }
         binding.onRoadHoursSave.setOnClickListener {
             parcelsDelivered = binding.edtParcels.text.toString()
             totalMileage = binding.edtMileage.text.toString()

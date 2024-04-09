@@ -163,11 +163,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
                 Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
                 loadingDialog.cancel()
-                /*progressBarVisibility(
-                    false,
-                    ActivityHomeBinding.homeActivityPB,
-                    ActivityHomeBinding.overlayViewHomeActivity
-                )*/
+
                 if (it != null) {
                     completeTaskScreen = it.IsSubmited
                     if (!completeTaskScreen) {
@@ -202,7 +198,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     try {
                         val prefs = Prefs.getInstance(applicationContext)
                         val fragmentStack = prefs.getNavigationHistory()
-                        Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
+                        if (prefs.get("90days")
+                                .equals("1") && navController.currentDestination?.id == R.id.profileFragment
+                        ) {
+                            showToast("Please do profile changes first", this@HomeActivity)
+                        }
                         if (navController.currentDestination?.id == R.id.completeTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
                             prefs.clearNavigationHistory()
                         } else if (fragmentStack.size > 1) {
@@ -214,7 +214,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             }
                         }
                     } catch (_: Exception) {
-
                     }
                 }
             })
@@ -339,9 +338,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 .equals("1") && navController.currentDestination?.id == R.id.profileFragment
         ) {
             showToast("Please do profile changes first", this)
-
         }
-//        backNav()
         Log.d("NavCurrScreenID", "screenid ${screenid}")
         try {
             val prefs = Prefs.getInstance(applicationContext)

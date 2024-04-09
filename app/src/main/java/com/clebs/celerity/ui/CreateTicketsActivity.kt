@@ -97,7 +97,7 @@ class CreateTicketsActivity : AppCompatActivity() {
 
         val spinnerNamesWithPlaceholder = listOf<String>()
         val spinnerIdsWithPlaceholder = listOf<Int>()
-        setSpinners(mbinding.tvRequests, spinnerNamesWithPlaceholder, spinnerIdsWithPlaceholder)
+        setSpinners("Select Request Type",mbinding.tvRequests, spinnerNamesWithPlaceholder, spinnerIdsWithPlaceholder)
 
         mbinding.tvdepart.setOnClickListener {
             mbinding.rvList.visibility = View.VISIBLE
@@ -208,7 +208,7 @@ class CreateTicketsActivity : AppCompatActivity() {
                     tickets.DepartmentId
                 }
                 val departmentNames = depts.map { it.DepartmentName }
-                setSpinners(mbinding.tvDepart, departmentNames, departmentIds)
+                setSpinners("Select Departments",mbinding.tvDepart, departmentNames, departmentIds)
             }
         }
         viewmodel.liveDataGetTicketRequestType.observe(this) { requests ->
@@ -216,11 +216,12 @@ class CreateTicketsActivity : AppCompatActivity() {
             if (requests != null) {
                 val requestIDs = requests.map { it.RequestId }
                 val requestNames = requests.map { it.RequestName }
-                setSpinners(mbinding.tvRequests, requestNames, requestIDs)
+                setSpinners("Request Type",mbinding.tvRequests, requestNames, requestIDs)
             } else {
                 val spinnerNamesWithPlaceholder = listOf<String>()
                 val spinnerIdsWithPlaceholder = listOf<Int>()
                 setSpinners(
+                    "Request Type",
                     mbinding.tvRequests,
                     spinnerNamesWithPlaceholder,
                     spinnerIdsWithPlaceholder
@@ -229,9 +230,8 @@ class CreateTicketsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setSpinners(spinner: Spinner, items: List<String>, ids: List<Int>) {
+    private fun setSpinners(dummyItem:String,spinner: Spinner, items: List<String>, ids: List<Int>) {
 
-        val dummyItem = "Select Item"
         val itemsList = mutableListOf(dummyItem)
         itemsList.addAll(items)
         val adapter =
