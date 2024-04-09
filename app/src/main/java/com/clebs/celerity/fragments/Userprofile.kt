@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -38,7 +39,7 @@ class Userprofile : Fragment() {
     var edtnew: String? = null
     var firstname: String? = null
     var lastname: String? = null
-    var isthirdpartyAccess:Boolean?=null
+    var isthirdpartyAccess: Boolean? = null
     private lateinit var fragmentManager: FragmentManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,15 +61,50 @@ class Userprofile : Fragment() {
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
 
         GetDriversBasicInformation()
+        if (Prefs.getInstance(App.instance).days.equals("1")) {
+            mbinding.editImg.performClick()
 
+                mbinding.save.visibility = View.VISIBLE
+                mbinding.emailtext.isEnabled = true
+                mbinding.emailtext.isFocusable = true
+                mbinding.emailtext.isFocusableInTouchMode = true
+//                mbinding.usertext.isEnabled = true
+//                mbinding.usertext.isFocusable = true
+//                mbinding.usertext.isFocusableInTouchMode = true
+
+//                mbinding.passtext.isEnabled = true
+//                mbinding.passtext.isFocusable = true
+//                mbinding.passtext.isFocusableInTouchMode = true
+
+                mbinding.phonetext.isEnabled = true
+                mbinding.phonetext.isFocusable = true
+                mbinding.phonetext.isFocusableInTouchMode = true
+
+                mbinding.addresstext.isEnabled = true
+                mbinding.addresstext.isFocusable = true
+                mbinding.addresstext.isFocusableInTouchMode = true
+
+                mbinding.editImg.alpha = 0.5f
+
+                mbinding.icInfos.visibility = View.VISIBLE
+                mbinding.useEmailas.visibility = View.VISIBLE
+
+
+            (activity as HomeActivity).disableBottomNavigationView()
+
+            mbinding.emailtext.isFocusable = true
+
+
+        } else {
+            (activity as HomeActivity).enableBottomNavigationView()
+        }
 
         mbinding.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
 
             if (isChecked) {
                 mainViewModel.GetThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
 
-            }
-            else{
+            } else {
                 mainViewModel.RemoveThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
             }
 
@@ -95,20 +131,18 @@ class Userprofile : Fragment() {
 
         }
 
-        mainViewModel.livedataremovethirdpartyaccess.observe(viewLifecycleOwner){
-            if (it!=null){
-                if (it.Status.equals("200")){
+        mainViewModel.livedataremovethirdpartyaccess.observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it.Status.equals("200")) {
 
                     showToast("Third Party Access Is Removed for This User", requireContext())
 
 
-                }
-                else{
+                } else {
                     showToast(it.Message, requireContext())
                 }
 
-            }
-            else{
+            } else {
                 showToast("Failed to Remove third party Access", requireContext())
             }
 
@@ -186,7 +220,12 @@ class Userprofile : Fragment() {
 //                updateProfile90dys()
 //
 //            } else {
-            updateprofileregular()
+            if (Prefs.getInstance(App.instance).days.equals("1")) {
+                updateProfile90dys()
+            } else {
+                updateprofileregular()
+            }
+
 //            }
 //            updateProfile90dys()
         }
@@ -288,7 +327,7 @@ class Userprofile : Fragment() {
                 Log.e("responseprofile", "GetDriversBasicInformation: ")
                 mbinding.name.text = it.firstName + " " + it.lastName
                 mbinding.usertext.setText(it.firstName + " " + it.lastName)
-                isthirdpartyAccess=it.IsThirdPartyChargeAccessAllowed
+                isthirdpartyAccess = it.IsThirdPartyChargeAccessAllowed
                 firstname = it.firstName
                 lastname = it.lastName
                 mbinding.emailtext.setText(it.emailID)
@@ -332,8 +371,11 @@ class Userprofile : Fragment() {
                 isedit = false
                 mbinding.save.visibility = View.GONE
                 if (it?.Status!!.equals(200)) {
-
+                    Log.e("90daysdisdjskjds", "updateProfile90dys: ")
                     showToast("ProfileUpdated", requireContext())
+                    Prefs.getInstance(App.instance).days="0"
+//                    Prefs.getInstance(App.instance).save("90days", "0")
+                    findNavController().navigate(R.id.homedemoFragment)
 
                 }
             }

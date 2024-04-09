@@ -111,7 +111,13 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putString("userID", value).apply()
         }
-
+    var days: String
+        get() {
+            return sharedPreferences.getString("90days", " ") ?: " "
+        }
+        set(value) {
+            sharedPreferences.edit().putString("90days", value).apply()
+        }
     var userName: String
         get() = sharedPreferences.getString("userName", "") ?: ""
         set(value) = sharedPreferences.edit().putString("userName", value).apply()

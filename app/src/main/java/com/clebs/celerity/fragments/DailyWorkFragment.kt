@@ -113,14 +113,14 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
         private val REQUIRED_PERMISSIONS =
             mutableListOf(
                 Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO
+//                Manifest.permission.RECORD_AUDIO
             ).apply {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
                     add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    add(Manifest.permission.READ_MEDIA_VIDEO)
-                    add(Manifest.permission.READ_MEDIA_IMAGES)
-                    add(Manifest.permission.READ_MEDIA_AUDIO)
+//                    add(Manifest.permission.READ_MEDIA_VIDEO)
+//                    add(Manifest.permission.READ_MEDIA_IMAGES)
+//                    add(Manifest.permission.READ_MEDIA_AUDIO)
                 }
             }.toTypedArray()
 
