@@ -9,10 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.Spinner
-import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
@@ -24,6 +23,7 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
+
 
 class OnRoadHoursFragment : Fragment() {
     private var selectedLocId: Int = 0
@@ -65,7 +65,7 @@ class OnRoadHoursFragment : Fragment() {
     private fun chkNotNullInputs(): Boolean {
         return selectedLocation.isNullOrEmpty() ||
                 selectedRouteType.isNullOrEmpty() ||
-                routeName.isNullOrEmpty()||
+                routeName.isNullOrEmpty() ||
                 parcelsDelivered.isEmpty()
                 || totalMileage.isEmpty()
                 || parcelsDelivered.isEmpty()
@@ -114,9 +114,9 @@ class OnRoadHoursFragment : Fragment() {
         binding.onRoadHoursSave.setOnClickListener {
             parcelsDelivered = binding.edtParcels.text.toString()
             totalMileage = binding.edtMileage.text.toString()
-            if(parcelsDelivered.isEmpty())
+            if (parcelsDelivered.isEmpty())
                 parcelsDelivered = "0"
-            if(totalMileage.isEmpty())
+            if (totalMileage.isEmpty())
                 totalMileage = "0"
             if (chkNotNullInputs()) {
                 showToast("Please!!Complete the form first", requireContext())
@@ -216,10 +216,11 @@ class OnRoadHoursFragment : Fragment() {
                 rideAlongApiCall()
                 val locNames = locationData.map { it.LocationName }
                 val locIds = locationData.map { it.LocId }
-                setSpinners(
+
+                setSpinnerNew(
                     binding.spinnerLocation,
                     locNames,
-                    locIds
+                    locIds, "Select Route Type"
                 )
             }
         }
@@ -232,7 +233,7 @@ class OnRoadHoursFragment : Fragment() {
             if (routeData != null) {
                 val routeNames = routeData.map { it.RtName }
                 val routeIDs = routeData.map { it.RtId }
-                setSpinners(binding.spinnerRouteType, routeNames, routeIDs)
+                setSpinnerNew(binding.spinnerRouteType, routeNames, routeIDs, "Select Route Type")
             }
         }
         viewModel.GetRideAlongRouteTypeInfo(prefs.userID.toInt())
@@ -281,6 +282,42 @@ class OnRoadHoursFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+    }
+
+    private fun setSpinnerNew(
+        spinner: AutoCompleteTextView,
+        items: List<String>,
+        ids: List<Int>, dummyItem: String,
+    ) {
+        val itemsList = mutableListOf(dummyItem)
+        itemsList.addAll(items)
+        val adapter =
+            ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, itemsList)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spinner.setAdapter(adapter)
+        spinner.setOnItemClickListener { parent, view, position, id ->
+            run {
+                parent?.let { nonNullParent ->
+                    if (position != 0) {
+                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
+                        selectedItem.let {
+                            when (spinner) {
+                                binding.spinnerLocation -> {
+                                    selectedLocId = ids[position - 1]
+                                    selectedLocation = selectedItem
+                                }
+
+                                binding.spinnerRouteType -> {
+                                    selectedRouteType = selectedItem
+                                    selectedRouteId = ids[position - 1]
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

@@ -66,52 +66,26 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tvdepart"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:letterSpacing="0.01"
-                        android:text="Department*"
-                        android:textColor="@color/text_color"
-                        android:textSize="14sp" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/const1"
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/tvdepart"
-                        android:layout_marginTop="10dp">
+                        android:id="@+id/selectDepartmentTIL"
+                        android:layout_height="match_parent"
+                        android:hint="Select Department">
 
-                        <Spinner
-                            android:id="@+id/tv_depart"
+                        <AutoCompleteTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/shape_edittext_onroad"
-                            android:fontFamily="@font/poppins"
-                            android:letterSpacing="0.01"
-                            android:padding="12dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:layout_marginTop="4dp"
+                            android:importantForAutofill="no"
+                            android:id="@+id/selectDepartmentET"
+                            android:inputType="none"
+                            android:padding="14dp"
+                            android:textColorHint="@color/hintColor"
+                            android:textSize="14sp" />
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="8dp"
-                            android:src="@drawable/arrow_left"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@id/tv_depart"
-                            app:layout_constraintTop_toTopOf="@+id/tv_depart" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rv_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_depart" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
                         android:id="@+id/view2"
@@ -122,52 +96,25 @@
                         android:background="@color/black" />
 
 
-                    <TextView
-                        android:id="@+id/tv_request"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:letterSpacing="0.01"
-                        android:text="Request Type*"
-                        android:textColor="@color/text_color"
-                        android:textSize="14sp" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/const2"
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/tv_request"
-                        android:layout_marginTop="10dp">
+                        android:layout_height="match_parent"
+                        android:hint="Select Request Type">
 
-                        <Spinner
-                            android:id="@+id/tv_requests"
+                        <AutoCompleteTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/shape_edittext_onroad"
-                            android:fontFamily="@font/poppins"
-                            android:letterSpacing="0.01"
-                            android:padding="12dp"
-                            android:text="Select Request Type"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:layout_marginTop="4dp"
+                            android:importantForAutofill="no"
+                            android:id="@+id/spinnerRequestAT"
+                            android:inputType="none"
+                            android:padding="14dp"
+                            android:textColorHint="@color/hintColor"
+                            android:textSize="14sp" />
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="8dp"
-                            android:src="@drawable/arrow_left"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@id/tv_requests"
-                            app:layout_constraintTop_toTopOf="@+id/tv_requests" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rv_list2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_requests" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
                     <View
@@ -251,8 +198,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:expandedHintEnabled="false"
-                            android:hint="Enter Title*">
+                            android:hint="Enter Ticket Title*">
 
                             <EditText
                                 android:id="@+id/edt_title"
@@ -261,7 +207,7 @@
                                 android:layout_marginTop="4dp"
                                 android:importantForAutofill="no"
                                 android:padding="14dp"
-                                android:hint="Enter Ticket Title"
+
                                 android:textColorHint="@color/hintColor"
                                 android:textSize="14sp" />
 
@@ -339,7 +285,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:expandedHintEnabled="false"
+
                             android:hint="Add Description*">
 
                             <EditText
@@ -349,7 +295,6 @@
                                 android:layout_marginTop="4dp"
                                 android:importantForAutofill="no"
                                 android:padding="14dp"
-                                android:hint="Enter ticket description"
                                 android:textColorHint="@color/hintColor"
                                 android:textSize="14sp" />
 

@@ -86,7 +86,7 @@ class CLSThirdPartyFragment : Fragment(),PermissionCallback {
 
     override fun onStoragePermissionResult(granted: Boolean) {
         if (granted) {
-            val item = prefs.getInvoice()!!
+            val item = prefs.getInvoiceX()!!
             adapter.downloadPDF(item.FileName, item.FileContent)
         }else{
             showToast("Please allow storag permission to download and view pdf",requireContext())

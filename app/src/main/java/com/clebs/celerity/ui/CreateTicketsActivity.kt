@@ -5,25 +5,21 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.Spinner
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.compose.ui.unit.dp
-import androidx.core.net.toFile
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.Factory.MyViewModelFactory
@@ -42,8 +38,7 @@ import com.clebs.celerity.utils.showToast
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.jetbrains.anko.startActivityForResult
+
 
 class CreateTicketsActivity : AppCompatActivity() {
     private val PICK_FILE_REQUEST_CODE = 100
@@ -76,15 +71,12 @@ class CreateTicketsActivity : AppCompatActivity() {
         setInputListener(mbinding.edtTitle)
         setInputListener(mbinding.edtDes)
 
-
         mbinding.saveTickets.setOnClickListener {
             if (chkNull())
                 showToast("Please complete form first!!", this)
             else
                 saveTicket()
         }
-
-
 
         mbinding.imageViewBack.setOnClickListener {
             onBackPressed()
@@ -94,14 +86,21 @@ class CreateTicketsActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-
         val spinnerNamesWithPlaceholder = listOf<String>()
         val spinnerIdsWithPlaceholder = listOf<Int>()
-        setSpinners("Select Request Type",mbinding.tvRequests, spinnerNamesWithPlaceholder, spinnerIdsWithPlaceholder)
 
-        mbinding.tvdepart.setOnClickListener {
-            mbinding.rvList.visibility = View.VISIBLE
-        }
+        setSpinnerNew(
+            spinnerNamesWithPlaceholder,
+            spinnerIdsWithPlaceholder,
+            "Select Request Type",
+            mbinding.spinnerRequestAT
+        )
+        setSpinnerNew(
+            spinnerNamesWithPlaceholder,
+            spinnerIdsWithPlaceholder,
+            "Select Department",
+            mbinding.selectDepartmentET
+        )
     }
 
     private fun chkNull(): Boolean {
@@ -134,29 +133,6 @@ class CreateTicketsActivity : AppCompatActivity() {
             WorkingOrder = 0
         )
 
-        /*"TicketId": 0,
-        "Title": "title",
-        "Description": "Description",
-        "TicketDepartmentId": 3,
-        "PriorityId": 0,
-        "DriverId": 0,
-        "VmId": 0,
-        "RequestTypeId": 16,
-        "UserTicketRegNo": "string",
-        "KeepDeptInLoop": true,
-        "TicketUTRNo": "string",
-        "DaTestDate": "2024-04-01T12:30:27.826Z",
-        "DaTestTime": "2024-04-01T12:30:27.826Z",
-        "NoofPeople": 0,
-        "EstCompletionDate": "2024-04-01T12:30:27.826Z",
-        "UserStatusId": 0,
-        "WorkingOrder": 0,
-        "ParentCompanyID": 0,
-        "BadgeReturnedStatusId": 0,
-        "BadgeComment": "string",
-        "AssignedToUserIDs": [
-        0
-        ]*/
         showDialog()
         viewmodel.SaveTicketData(
             pref.userID.toInt(),
@@ -208,7 +184,12 @@ class CreateTicketsActivity : AppCompatActivity() {
                     tickets.DepartmentId
                 }
                 val departmentNames = depts.map { it.DepartmentName }
-                setSpinners("Select Departments",mbinding.tvDepart, departmentNames, departmentIds)
+
+                setSpinnerNew(
+                    departmentNames, departmentIds,
+                    "Select Request Type",
+                    mbinding.selectDepartmentET
+                )
             }
         }
         viewmodel.liveDataGetTicketRequestType.observe(this) { requests ->
@@ -216,67 +197,86 @@ class CreateTicketsActivity : AppCompatActivity() {
             if (requests != null) {
                 val requestIDs = requests.map { it.RequestId }
                 val requestNames = requests.map { it.RequestName }
-                setSpinners("Request Type",mbinding.tvRequests, requestNames, requestIDs)
+                setSpinnerNew(
+                    requestNames,
+                    requestIDs,
+                    "Select Request Type",
+                    mbinding.spinnerRequestAT
+                )
             } else {
                 val spinnerNamesWithPlaceholder = listOf<String>()
                 val spinnerIdsWithPlaceholder = listOf<Int>()
-                setSpinners(
-                    "Request Type",
-                    mbinding.tvRequests,
+
+                setSpinnerNew(
                     spinnerNamesWithPlaceholder,
-                    spinnerIdsWithPlaceholder
+                    spinnerIdsWithPlaceholder, "Select Request Type", mbinding.spinnerRequestAT
                 )
             }
         }
     }
 
-    private fun setSpinners(dummyItem:String,spinner: Spinner, items: List<String>, ids: List<Int>) {
+    /*    private fun setSpinners(
+            dummyItem: String,
+            spinner: Spinner,
+            items: List<String>,
+            ids: List<Int>
+        ) {
 
-        val itemsList = mutableListOf(dummyItem)
-        itemsList.addAll(items)
-        val adapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_item, itemsList)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        //adapter.addAll(itemsList)
+            val itemsList = mutableListOf(dummyItem)
+            itemsList.addAll(items)
+            val adapter =
+                ArrayAdapter(this, android.R.layout.simple_spinner_item, itemsList)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            //adapter.addAll(itemsList)
 
-        spinner.adapter = adapter
+            spinner.adapter = adapter
 
-        spinner.setSelection(0)
+            spinner.setSelection(0)
 
 
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                parent?.let { nonNullParent ->
-                    if (position != 0) { // Skip the dummy item
-                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
-                        selectedItem.let {
-                            when (spinner) {
-                                mbinding.tvDepart -> {
-                                    selectedDeptID = ids[position - 1]
-                                    showDialog()
-                                    viewmodel.GetTicketRequestType(selectedDeptID)
-                                }
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    parent?.let { nonNullParent ->
+                        if (position != 0) { // Skip the dummy item
+                            val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
+                            selectedItem.let {
+                                when (spinner) {
+                                    mbinding.tvDepart -> {
 
-                                mbinding.tvRequests -> {
-                                    selectedRequestTypeID = ids[position - 1]
+                                        selectedDeptID = ids[position - 1]
+                                        mbinding.selectDepartmentET.setText(items[position - 1])
+                                        mbinding.selectDepartmentTIL.visibility = View.VISIBLE
+                                        mbinding.tvDepart.visibility = View.GONE
+                                        showDialog()
+                                        viewmodel.GetTicketRequestType(selectedDeptID)
+                                    }
+
+                                    mbinding.tvRequests -> {
+                                        selectedRequestTypeID = ids[position - 1]
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    when (spinner) {
+                        mbinding.tvDepart -> {
+                            mbinding.selectDepartmentTIL.visibility = View.GONE
+                            mbinding.tvDepart.visibility = View.VISIBLE
+                        }
+                    }
+                }
             }
-        }
-    }
+        }*/
 
-    public fun hideDialog() {
+    fun hideDialog() {
         apiCount--
         if (apiCount <= 0) {
             loadingDialog.cancel()
@@ -284,7 +284,7 @@ class CreateTicketsActivity : AppCompatActivity() {
         }
     }
 
-    public fun showDialog() {
+    fun showDialog() {
         if (apiCount == 0) {
             loadingDialog.show()
         }
@@ -374,6 +374,43 @@ class CreateTicketsActivity : AppCompatActivity() {
     fun Int.dpToPx(): Int {
         val scale = resources.displayMetrics.density
         return (this * scale + 0.5f).toInt()
+    }
+
+    private fun setSpinnerNew(
+        items: List<String>,
+        ids: List<Int>, dummyItem: String,
+        spinner: AutoCompleteTextView
+    ) {
+        val itemsList = mutableListOf(dummyItem)
+        itemsList.addAll(items)
+        val adapter =
+            ArrayAdapter(this, R.layout.dropdown_menu_popup_item, itemsList)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spinner.setAdapter(adapter)
+        spinner.setOnItemClickListener { parent, view, position, id ->
+            run {
+                parent?.let { nonNullParent ->
+                    if (position != 0) {
+                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
+                        selectedItem.let {
+                            when (spinner) {
+                                mbinding.selectDepartmentET -> {
+                                    selectedDeptID = ids[position - 1]
+                                    showDialog()
+                                    viewmodel.GetTicketRequestType(selectedDeptID)
+                                }
+
+                                mbinding.spinnerRequestAT -> {
+                                    selectedRequestTypeID = ids[position - 1]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
 }

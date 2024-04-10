@@ -8,6 +8,8 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.AdapterBreaktimeBinding
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponseItem
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class BreakTimeAdapter(
     val data: GetDriverBreakTimeInfoResponse,
@@ -16,8 +18,16 @@ class BreakTimeAdapter(
 ):RecyclerView.Adapter<BreakTimeAdapter.BreakTimeViewHolder>() {
     inner class BreakTimeViewHolder(val binding:AdapterBreaktimeBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(item: GetDriverBreakTimeInfoResponseItem){
-            binding.breakStartTime.text = item.BreakTimeStart
-            binding.breakEndTime.text = item.BreakTimeEnd
+            val startTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).parse(item.BreakTimeStart)
+            val endTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).parse(item.BreakTimeEnd)
+
+            // Format the parsed times to display only hours and minutes
+            val startTimeFormatted = SimpleDateFormat("HH:mm", Locale.getDefault()).format(startTime)
+            val endTimeFormatted = SimpleDateFormat("HH:mm", Locale.getDefault()).format(endTime)
+
+            binding.breakStartTime.text = startTimeFormatted
+            binding.breakEndTime.text = endTimeFormatted
+
             binding.breakDelete.setOnClickListener {
                 loadingDialog()
                 viewModel.DeleteBreakTime(item.DawDriverBreakId)

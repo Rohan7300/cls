@@ -274,4 +274,5 @@ class Prefs(context: Context) {
         return gson.fromJson(data,InvoiceX::class.java)?:null
     }
 
+
 }

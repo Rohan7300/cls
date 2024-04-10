@@ -14,7 +14,6 @@
 
         <include
             android:id="@+id/headerTop"
-
             layout="@layout/fragment_headers" />
 
         <androidx.core.widget.NestedScrollView
@@ -141,9 +140,8 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-
                             app:hintTextColor="@color/black"
-                            android:hint="Registration Number">
+                            android:hint="Route Name *">
                         <EditText
                             android:id="@+id/edt_routesORH"
                             android:layout_width="match_parent"
@@ -181,41 +179,37 @@
 <!--                            app:layout_constraintStart_toStartOf="parent"-->
 <!--                            app:layout_constraintTop_toTopOf="parent" />-->
 
+
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/textInputLayout3"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
+                            android:id="@+id/selectDepartmentTIL"
                             android:layout_height="match_parent"
-                            android:hint="Registration Number"
+                            android:hint="Select route type">
 
-                            app:hintTextColor="@color/black"
-                            tools:layout_editor_absoluteX="10dp"
-                            tools:layout_editor_absoluteY="10dp">
-
-                            <EditText
-                                android:id="@+id/edt_routetype"
+                            <AutoCompleteTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-
-                                android:fontFamily="@font/poppins"
-
                                 android:importantForAutofill="no"
-                                android:inputType="text"
+                                android:id="@+id/spinnerRouteType"
+                                android:inputType="none"
                                 android:padding="14dp"
+                                android:textColorHint="@color/hintColor"
                                 android:textSize="14sp" />
+
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <Spinner
-                            android:id="@+id/spinnerRouteType"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="@+id/textInputLayout3"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/textInputLayout3" />
+<!--                        <Spinner-->
+<!--                            android:id="@+id/spinnerRouteType"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:visibility="gone"-->
+<!--                            app:layout_constraintBottom_toBottomOf="@+id/textInputLayout3"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintHorizontal_bias="0.5"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintTop_toTopOf="@+id/textInputLayout3" />-->
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -238,39 +232,27 @@
 <!--                            app:layout_constraintStart_toStartOf="parent"-->
 <!--                            app:layout_constraintTop_toTopOf="parent" />-->
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout4"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Select route location"
 
-                    app:hintTextColor="@color/black"
-                    tools:layout_editor_absoluteX="10dp"
-                    tools:layout_editor_absoluteY="10dp">
-
-                    <EditText
-                        android:id="@+id/edt_routelocation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-
-                        android:fontFamily="@font/poppins"
-
-                        android:importantForAutofill="no"
-                        android:inputType="text"
-                        android:padding="14dp"
-                        android:textSize="14sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                        <Spinner
-                            android:id="@+id/spinnerLocation"
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="@+id/textInputLayout4"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:layout_height="match_parent"
+                            android:hint="Select Location">
+
+                            <AutoCompleteTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:importantForAutofill="no"
+                                android:id="@+id/spinnerLocation"
+                                android:inputType="none"
+                                android:padding="14dp"
+                                android:textColorHint="@color/hintColor"
+                                android:textSize="14sp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -301,7 +283,6 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-
                             android:hint="Number of parcels delivered Number">
                         <EditText
                             android:id="@+id/edt_parcels"
@@ -310,7 +291,6 @@
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/poppins"
                             android:gravity="center"
-                            android:hint="0"
                             android:importantForAutofill="no"
                             android:inputType="number"
                             android:padding="14dp"
@@ -414,8 +394,8 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            app:expandedHintEnabled="false"
                             android:hint="Total mileage"
-
                             tools:layout_editor_absoluteX="12dp"
                             tools:layout_editor_absoluteY="12dp">
 
