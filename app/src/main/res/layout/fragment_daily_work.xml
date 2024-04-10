@@ -183,7 +183,7 @@
                     android:textAlignment="center"
                     android:textAppearance="@style/place_the_r"
                     android:textColor="@color/text_color"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
 
                     app:layout_constraintStart_toStartOf="parent"

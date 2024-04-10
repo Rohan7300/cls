@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/very_light_orange">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
@@ -24,20 +24,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:letterSpacing="0.04"
-                    android:text="User Profile"
-                    android:textColor="@color/black"
-                    android:textSize="22sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <!--                <TextView-->
+                <!--                    android:id="@+id/textView4"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginTop="4dp"-->
+                <!--                    android:fontFamily="@font/poppins_bold"-->
+                <!--                    android:letterSpacing="0.04"-->
+                <!--                    android:text="User Profile"-->
+                <!--                    android:textColor="@color/black"-->
+                <!--                    android:textSize="22sp"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintHorizontal_bias="0.5"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/dpLayout"
@@ -46,7 +46,6 @@
                     android:layout_marginTop="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4"
                     tools:ignore="MissingConstraints">
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -54,6 +53,7 @@
                         android:layout_width="115dp"
                         android:layout_height="115dp"
                         android:src="@drawable/celerityimage"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -63,7 +63,7 @@
                         android:layout_height="24dp"
                         android:layout_marginTop="68dp"
                         android:src="@drawable/vector__5_"
-
+                        android:visibility="gone"
                         app:civ_border_color="@color/white"
                         app:civ_border_width="2dp"
                         app:layout_constraintEnd_toEndOf="@+id/dp"
@@ -77,11 +77,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="27dp"
-                    android:fontFamily="@font/poppins_semibold"
+                    android:fontFamily="@font/poppins_bold"
+                    android:letterSpacing="0.03"
                     android:text="Ana Carolina Souza Dos Santos"
                     android:textColor="@color/black"
-                    android:textSize="19sp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textSize="21sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/dpLayout" />
 
@@ -90,18 +90,17 @@
                     android:id="@+id/editImg"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="47dp"
-                    android:padding="4dp"
+                    android:padding="6dp"
                     android:src="@drawable/edit_orange"
+                    app:layout_constraintBottom_toBottomOf="@+id/name"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/name" />
+                    app:layout_constraintTop_toTopOf="@+id/name" />
 
                 <LinearLayout
                     android:id="@+id/FormLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="14dp"
+                    android:layout_margin="16dp"
                     android:layout_marginBottom="16dp"
                     android:orientation="vertical"
                     android:padding="10dp"
@@ -114,7 +113,9 @@
                         android:id="@+id/firstconst"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_profile"
+                        android:padding="16dp">
 
                         <TextView
                             android:id="@+id/emailHint"
@@ -124,7 +125,7 @@
                             android:letterSpacing="0.01"
                             android:text="Email"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -142,8 +143,10 @@
                                 android:id="@+id/emailtext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+
                                 android:layout_weight="1"
-                                android:background="@color/white"
+                                android:background="@drawable/edt_profile"
                                 android:enabled="false"
                                 android:fontFamily="@font/poppins"
                                 android:hint="ANa name"
@@ -151,19 +154,19 @@
                                 android:inputType="textEmailAddress"
                                 android:letterSpacing="0.01"
                                 android:padding="10dp"
-                                android:paddingStart="0dp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/text_color"
                                 android:textCursorDrawable="@color/light_orange2"
-                                android:textSize="14sp" />
+                                android:textSize="12sp" />
 
-                            <ImageView
-                                android:id="@+id/ic_infos"
-                                android:layout_width="wrap_content"
-                                android:layout_height="25dp"
-                                android:layout_gravity="center"
-                                android:layout_weight="1"
-                                android:src="@drawable/ic_info"
-                                android:visibility="gone" />
+                            <!--                            <ImageView-->
+                            <!--                                android:id="@+id/ic_infos"-->
+                            <!--                                android:layout_width="wrap_content"-->
+                            <!--                                android:layout_height="25dp"-->
+                            <!--                                android:layout_gravity="center"-->
+                            <!--                                android:layout_weight="1"-->
+                            <!--                                android:src="@drawable/ic_info"-->
+                            <!--                                android:visibility="gone" />-->
 
                         </LinearLayout>
 
@@ -172,11 +175,11 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintTop_toBottomOf="@id/ll2">
 
-                            <View
-                                android:id="@+id/view"
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:background="@color/black0" />
+<!--                            <View-->
+<!--                                android:id="@+id/view"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="0.5dp"-->
+<!--                                android:background="@color/black0" />-->
 
                             <TextView
                                 android:id="@+id/useEmailas"
@@ -194,6 +197,7 @@
                         </RelativeLayout>
 
 
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <!--username-->
@@ -201,7 +205,9 @@
                         android:id="@+id/usecc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_profile"
+                        android:padding="16dp">
 
                         <TextView
                             android:id="@+id/usernameHint"
@@ -211,7 +217,7 @@
                             android:letterSpacing="0.01"
                             android:text="Username"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -229,7 +235,8 @@
                                 android:id="@+id/usertext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@color/white"
+                                android:layout_marginTop="4dp"
+                                android:background="@drawable/edt_profile"
                                 android:enabled="false"
                                 android:fontFamily="@font/poppins"
                                 android:hint="ANa name"
@@ -237,10 +244,10 @@
                                 android:inputType="textEmailAddress"
                                 android:letterSpacing="0.02"
                                 android:padding="10dp"
-                                android:paddingStart="0dp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/text_color"
                                 android:textCursorDrawable="@color/light_orange2"
-                                android:textSize="15sp" />
+                                android:textSize="12sp" />
 
 
                         </LinearLayout>
@@ -250,11 +257,11 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintTop_toBottomOf="@id/llthree">
 
-                            <View
-                                android:id="@+id/viewtwo"
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:background="@color/text_color" />
+<!--                            <View-->
+<!--                                android:id="@+id/viewtwo"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="0.5dp"-->
+<!--                                android:background="@color/text_color" />-->
                         </RelativeLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -262,7 +269,9 @@
                         android:id="@+id/usepassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_profile"
+                        android:padding="16dp">
 
                         <TextView
                             android:id="@+id/passwHint"
@@ -273,7 +282,7 @@
 
                             android:text="Password"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -291,8 +300,9 @@
                                 android:id="@+id/passtext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
                                 android:layout_weight="1"
-                                android:background="@color/white"
+                                android:background="@drawable/edt_profile"
                                 android:enabled="false"
                                 android:fontFamily="@font/poppins"
                                 android:hint="password"
@@ -300,10 +310,10 @@
                                 android:inputType="textPassword"
                                 android:letterSpacing="0.02"
                                 android:padding="10dp"
-                                android:paddingStart="0dp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/text_color"
                                 android:textCursorDrawable="@color/light_orange2"
-                                android:textSize="15sp" />
+                                android:textSize="12sp" />
 
                             <TextView
                                 android:id="@+id/txt_change_password"
@@ -312,9 +322,10 @@
                                 android:layout_weight="1"
                                 android:alpha="0.8"
                                 android:gravity="end"
-                                android:text="change password"
+                                android:text="@string/change_password"
                                 android:textColor="@color/orange"
-                                android:textSize="12sp" />
+                                android:textSize="13sp"
+                                android:visibility="gone" />
 
                         </LinearLayout>
 
@@ -323,11 +334,11 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintTop_toBottomOf="@id/llfour">
 
-                            <View
-                                android:id="@+id/viewthree"
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:background="@color/text_color" />
+<!--                            <View-->
+<!--                                android:id="@+id/viewthree"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="0.5dp"-->
+<!--                                android:background="@color/text_color" />-->
                         </RelativeLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -335,7 +346,9 @@
                         android:id="@+id/usephone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_profile"
+                        android:padding="16dp">
 
                         <TextView
                             android:id="@+id/phonetvHint"
@@ -345,7 +358,7 @@
                             android:letterSpacing="0.01"
                             android:text="Phone number"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -363,7 +376,8 @@
                                 android:id="@+id/phonetext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@color/white"
+                                android:layout_marginTop="4dp"
+                                android:background="@drawable/edt_profile"
                                 android:enabled="false"
                                 android:fontFamily="@font/poppins"
                                 android:hint="phone number"
@@ -371,10 +385,11 @@
                                 android:inputType="phone"
                                 android:letterSpacing="0.02"
                                 android:padding="10dp"
-                                android:paddingStart="0dp"
+                                android:paddingStart="4dp"
+
                                 android:textColor="@color/text_color"
                                 android:textCursorDrawable="@color/light_orange2"
-                                android:textSize="15sp" />
+                                android:textSize="12sp" />
 
 
                         </LinearLayout>
@@ -384,11 +399,11 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintTop_toBottomOf="@id/llfive">
 
-                            <View
-                                android:id="@+id/viewfour"
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:background="@color/text_color" />
+<!--                            <View-->
+<!--                                android:id="@+id/viewfour"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="0.5dp"-->
+<!--                                android:background="@color/text_color" />-->
                         </RelativeLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -396,7 +411,9 @@
                         android:id="@+id/useaddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp">
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/shape_profile"
+                        android:padding="16dp">
 
                         <TextView
                             android:id="@+id/AddressHint"
@@ -407,7 +424,7 @@
 
                             android:text="Address"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -425,7 +442,9 @@
                                 android:id="@+id/addresstext"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@color/white"
+
+                                android:layout_marginTop="4dp"
+                                android:background="@drawable/edt_profile"
                                 android:enabled="false"
                                 android:fontFamily="@font/poppins"
                                 android:hint="#123 Lorem Lorem Ipsum is simply text of the printing and typesetting "
@@ -433,10 +452,10 @@
                                 android:inputType="textEmailAddress"
                                 android:letterSpacing="0.02"
                                 android:padding="10dp"
-                                android:paddingStart="0dp"
+                                android:paddingStart="4dp"
                                 android:textColor="@color/text_color"
                                 android:textCursorDrawable="@color/light_orange2"
-                                android:textSize="15sp" />
+                                android:textSize="12sp" />
 
 
                         </LinearLayout>
@@ -446,19 +465,21 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintTop_toBottomOf="@id/llsix">
 
-                            <View
-                                android:id="@+id/viewsix"
-                                android:layout_width="match_parent"
-                                android:layout_height="0.5dp"
-                                android:background="@color/text_color" />
+<!--                            <View-->
+<!--                                android:id="@+id/viewsix"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="0.5dp"-->
+<!--                                android:background="@color/text_color" />-->
                         </RelativeLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constthirdparty"
                         android:layout_width="match_parent"
-                        android:layout_marginBottom="10dp"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/shape_profile"
+                        android:padding="12dp">
 
                         <TextView
                             android:id="@+id/Tvthirdparty"
@@ -466,9 +487,9 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_semibold"
                             android:letterSpacing="0.01"
-                            android:text="Get Third Party Access"
+                            android:text="Request Third Party Access"
                             android:textColor="@color/black"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -493,11 +514,11 @@
                         android:fontFamily="@font/poppins_semibold"
                         android:gravity="center"
                         android:letterSpacing="0.02"
-                        android:padding="16dp"
+                        android:padding="10dp"
                         android:text="Save changes"
                         android:textColor="@color/white"
                         android:textSize="14sp"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />

@@ -30,5 +30,9 @@ data class DriversBasicInformationModel(
     val IsLeadDriver: Boolean,
     @SerializedName("IsThirdPartyChargeAccessAllowed")
     val IsThirdPartyChargeAccessAllowed: Boolean,
+    @SerializedName("CurrentLocation")
+    val currentlocation:String,
+    @SerializedName("WorkingLocation")
+    val workinglocation:String
 
 )

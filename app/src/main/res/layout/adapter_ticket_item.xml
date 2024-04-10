@@ -21,18 +21,19 @@
             android:orientation="horizontal"
             android:padding="5dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_bold"
-                android:text="Id : "
-                android:textSize="13sp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:fontFamily="@font/poppins_bold"-->
+<!--                android:text="Id : "-->
+<!--                android:textSize="13sp" />-->
 
             <TextView
                 android:id="@+id/ticketTitleTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginStart="2dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:text=" CLS - 2082"
                 android:textColor="@color/text_color"
@@ -41,21 +42,22 @@
             <ImageView
                 android:id="@+id/commentIV"
                 android:layout_width="25dp"
+                android:layout_marginEnd="3dp"
                 android:layout_height="25dp"
                 android:src="@drawable/ic_msgframe" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="2dp"
-                android:background="@color/text_color" />
+<!--            <View-->
+<!--                android:layout_width="1dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginHorizontal="8dp"-->
+<!--                android:layout_marginVertical="2dp"-->
+<!--                android:background="@color/text_color" />-->
 
-            <ImageView
-                android:id="@+id/viewTicket"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_eyeframe" />
+<!--            <ImageView-->
+<!--                android:id="@+id/viewTicket"-->
+<!--                android:layout_width="25dp"-->
+<!--                android:layout_height="25dp"-->
+<!--                android:src="@drawable/ic_eyeframe" />-->
         </LinearLayout>
 
         <View
@@ -245,6 +247,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginEnd="2dp"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"

@@ -374,12 +374,13 @@ interface ApiService {
         @Query("LmId") lmID: Int
     ): Response<GetAvgScoreResponse>
 
-    @GET("/api/Dashboard/GetLastWeekScorebyId")
+
     suspend fun GetLastWeekScore(
         @Query("userId") userId: Int,
         @Query("LmId") lmID: Int
     ): Response<GetLastWeekScore>
 
+    @GET("/api/Dashboard/GetLastWeekScorebyId")
     suspend fun GetLastWeekScore(
         @Query("userId") userId: Int,
         @Query("WeekNo") WeekNo: Int,
