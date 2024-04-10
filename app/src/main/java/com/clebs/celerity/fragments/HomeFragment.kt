@@ -155,8 +155,6 @@ class HomeFragment : Fragment() {
                 override fun onSlideComplete(view: SlideToActView) {
                     mbinding.arroww.alpha = 0f
                     findNavController().navigate(R.id.dailyWorkFragment)
-
-
                 }
 
             })

@@ -128,6 +128,7 @@ class CompleteTaskFragment : Fragment() {
         userId = Prefs.getInstance(requireContext()).userID.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.addBreakIV.setOnClickListener(clickListener)
+
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
         mbinding.h1.setOnClickListener {
@@ -139,7 +140,7 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.badgeArrow.setImageResource(R.drawable.down_arrow)
             }
         }
-        mbinding.ivFaceMask.setImageResource(R.drawable.upload_icc)
+        mbinding.ivFaceMask.setImageResource(R.drawable.camera)
         Prefs.getInstance(requireContext()).clearNavigationHistory()
         fragmentManager = (activity as HomeActivity).fragmentManager
         cqSDKInitializer = CQSDKInitializer(requireContext())
@@ -148,10 +149,9 @@ class CompleteTaskFragment : Fragment() {
 
         inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
         viewModel = (activity as HomeActivity).viewModel
-
         showDialog()
+        viewModel.setLastVisitedScreenId(requireActivity(), R.id.completeTaskFragment)
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
-
 
         observers()
         showDialog()
@@ -462,7 +462,6 @@ class CompleteTaskFragment : Fragment() {
                     }
                 } ?: showToast("No Break time information added!!", requireContext())
             } else {
-                hideDialog()
                 isBreakTimeAdded = false
                 setVisibiltyLevel()
             }
@@ -476,8 +475,6 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.uploadVehicleImageLiveData.observe(viewLifecycleOwner, Observer {
             hideDialog()
-            viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
-            showDialog()
             if (it != null) {
                 if (it.Status == "200") {
                     showDialog()

@@ -1,5 +1,6 @@
 package com.clebs.celerity.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
@@ -99,7 +101,8 @@ class RideAlongFragment : Fragment() {
                 val vehNames = it.mapNotNull { vehicleList -> vehicleList.VehicleName }
 
                 if (vehNames.isNotEmpty() && vehIds.isNotEmpty()) {
-                    setSpinners(binding.spinnerSelectVehicle, vehNames, vehIds)
+                    //setSpinners(binding.spinnerSelectVehicle, vehNames, vehIds)
+                    setSpinnerNew(binding.spinnerSelectVehicle,vehNames,vehIds,"Select Vehicle")
                 }
             }
         }
@@ -110,9 +113,14 @@ class RideAlongFragment : Fragment() {
                 val driverId = it.map { drivers -> drivers.Id }
                 val driverName = it.map { drivers -> drivers.Name }
 
-                if (driverId.isNotEmpty() && driverName.isNotEmpty()) setSpinners(
+                if (driverId.isNotEmpty() && driverName.isNotEmpty()){
+                    setSpinnerNew(
+                        binding.spinnerSelectDriver,driverName,driverId,"Select Driver"
+                    )
+                }/*
+                    setSpinners(
                     binding.spinnerSelectDriver, driverName, driverId
-                )
+                )*/
                 loadingDialog.cancel()
 
             }
@@ -124,10 +132,12 @@ class RideAlongFragment : Fragment() {
                 val typeName = it.map { type -> type.RtName }
                 val typeId = it.map { type -> type.RtId }
 
-                if (typeName.isNotEmpty() && typeId.isNotEmpty())
+                if (typeName.isNotEmpty() && typeId.isNotEmpty()){
+                    setSpinnerNew(binding.SpinnerRouteType,typeName,typeId,"Select Route Type")
+                }/*
                     setSpinners(
                         binding.SpinnerRouteType, typeName, typeId
-                    )
+                    )*/
             } else {
                 Log.d("Exec", "NULL#1 ")
             }
@@ -165,11 +175,15 @@ class RideAlongFragment : Fragment() {
                 val locationNames = it.map { loc -> loc.LocationName }
                 val locationId = it.map { loc -> loc.LocId }
 
-                if (locationNames.isNotEmpty() && locationId.isNotEmpty()) setSpinners(
+                if (locationNames.isNotEmpty() && locationId.isNotEmpty()) {
+                    setSpinnerNew(binding.spinnerRouteLocation,locationNames,locationId,"Select Route Location")
+                }
+/*                    setSpinners(
                     binding.spinnerRouteLocation,
                     locationNames,
                     locationId
-                )
+                )*/
+
             } else {
                 Log.d("Exec", "NULL#4")
             }
@@ -266,6 +280,7 @@ class RideAlongFragment : Fragment() {
         ).any { it == null }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setSpinners(spinner: Spinner, items: List<String>, ids: List<Int>) {
         val dummyItem = "Select Item"
         val itemsList = mutableListOf(dummyItem)
@@ -350,4 +365,57 @@ class RideAlongFragment : Fragment() {
         })
     }
 
+
+    private fun setSpinnerNew(
+        spinner: AutoCompleteTextView,
+        items: List<String>,
+        ids: List<Int>, dummyItem: String,
+    ) {
+        val itemsList = mutableListOf(dummyItem)
+        itemsList.addAll(items)
+        val adapter =
+            ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, itemsList)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spinner.setAdapter(adapter)
+        spinner.setOnItemClickListener { parent, view, position, id ->
+            run {
+                parent?.let { nonNullParent ->
+                    if (position != 0) {
+                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
+                        selectedItem.let { nonNullSelectedItem ->
+                            when (spinner) {
+                                binding.spinnerSelectDriver -> {
+                                    selectedDriverId =
+                                        ids[position - 1]
+                                    selectedDriverName = nonNullSelectedItem
+                                    loadingDialog.show()
+                                    Log.d("Exec", "SelectedDriverID $selectedDriverId")
+                                    viewModel.GetRideAlongRouteTypeInfo(selectedDriverId!!)
+                                }
+
+                                binding.spinnerSelectVehicle -> {
+                                    selectedVehicleName = nonNullSelectedItem
+                                    selectedVehicleId =
+                                        ids[position - 1]
+                                }
+
+                                binding.SpinnerRouteType -> {
+                                    selectedRouteId =
+                                        ids[position - 1]
+                                    loadingDialog.show()
+                                    viewModel.GetRouteInfoById(selectedRouteId!!)
+                                }
+
+                                binding.spinnerRouteLocation -> {
+                                    selectedLocId =
+                                        ids[position - 1]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

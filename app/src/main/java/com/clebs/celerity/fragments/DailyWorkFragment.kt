@@ -74,18 +74,14 @@ import com.kotlinpermissions.KotlinPermissions
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.tapadoo.alerter.Alerter
 import id.zelory.compressor.Compressor
-
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.Call
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.IOException
-import java.security.Permission
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService

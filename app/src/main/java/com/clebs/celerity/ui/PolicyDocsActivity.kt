@@ -74,11 +74,10 @@ class PolicyDocsActivity : AppCompatActivity() {
         viewModel.GetDriverSignatureInformation(userId)
 
         mbinding.amazonHeader.setOnClickListener {
-            if (isImage1){
-                mbinding.views1.visibility=View.GONE
-            }
-            else{
-                mbinding.views1.visibility=View.VISIBLE
+            if (isImage1) {
+                mbinding.views1.visibility = View.GONE
+            } else {
+                mbinding.views1.visibility = View.VISIBLE
             }
             isImage1 = !isImage1
 
@@ -87,15 +86,14 @@ class PolicyDocsActivity : AppCompatActivity() {
         }
 
         mbinding.truckHeaderLL.setOnClickListener {
-            if (isImage2){
-                mbinding.viewss2.visibility=View.GONE
-            }
-            else{
-                mbinding.viewss2.visibility=View.VISIBLE
+            if (isImage2) {
+                mbinding.viewss2.visibility = View.GONE
+            } else {
+                mbinding.viewss2.visibility = View.VISIBLE
             }
             isImage2 = !isImage2
 
-                setVisibility(mbinding.truckLayout,!mbinding.truckLayout.isVisible)
+            setVisibility(mbinding.truckLayout, !mbinding.truckLayout.isVisible)
 
         }
 
@@ -104,12 +102,11 @@ class PolicyDocsActivity : AppCompatActivity() {
                 mbinding.amazonHeader.isClickable = false
 
                 mbinding.amazonLayout.visibility = View.GONE
-                mbinding.views1.visibility=View.GONE
+                mbinding.views1.visibility = View.GONE
 
                 if (mbinding.llTrucks.visibility == View.GONE) {
                     showAlert()
-                }
-                else {
+                } else {
                     if (!mbinding.checkbox2.isChecked) {
                         showToast("Please check the trucks agreement to proceed", this)
                     } else {
@@ -118,14 +115,14 @@ class PolicyDocsActivity : AppCompatActivity() {
                 }
             } else {
                 mbinding.amazonLayout.visibility = View.VISIBLE
-                mbinding.views1.visibility=View.VISIBLE
+                mbinding.views1.visibility = View.VISIBLE
             }
         }
         mbinding.checkbox2.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
                 mbinding.truckLayout.visibility = View.GONE
                 mbinding.truckHeaderLL.isClickable = false
-                mbinding.viewss2.visibility=View.GONE
+                mbinding.viewss2.visibility = View.GONE
                 if (mbinding.llAmazon.visibility == View.GONE) {
                     showAlert()
                 } else {
@@ -137,7 +134,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                 }
             } else {
                 mbinding.truckLayout.visibility = View.VISIBLE
-                mbinding.viewss2.visibility=View.VISIBLE
+                mbinding.viewss2.visibility = View.VISIBLE
             }
         }
     }
@@ -150,7 +147,7 @@ class PolicyDocsActivity : AppCompatActivity() {
         mbinding.signLayoutll.visibility = View.VISIBLE
 
 
-        val retry =mbinding.signLayout.RetryLay
+        val retry = mbinding.signLayout.RetryLay
         val close = mbinding.signLayout.cl
         val save = mbinding.signLayout.sv
         val testIV = mbinding.signLayout.textIV
@@ -159,14 +156,14 @@ class PolicyDocsActivity : AppCompatActivity() {
         save.setOnClickListener {
             if (DrawViewClass.pathList.isEmpty()) {
                 // Show a toast indicating that the user has not signed
-                showToast("Please sign before saving",this)
+                showToast("Please sign before saving", this)
             } else {
                 val signatureBitmap: Bitmap = drawView.getBitmap()
                 testIV.setImageBitmap(signatureBitmap)
-             //   signatureListener?.onSignatureSaved(signatureBitmap)
+                //   signatureListener?.onSignatureSaved(signatureBitmap)
                 loadingDialog.show()
                 updateSignatureInfoApi(signatureBitmap)
-               // dismiss()
+                // dismiss()
             }
         }
 
@@ -174,11 +171,11 @@ class PolicyDocsActivity : AppCompatActivity() {
             drawView.clearSignature()
         }
 
-/*        val dialog = CustDialog()
-        dialog.setSignatureListener(object : SignatureListener {
-            override fun onSignatureSaved(bitmap: Bitmap) {
-                Log.d("Sign", "Bitmap $bitmap")
-                *//*  progressBarVisibility(true,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)*//*
+        /*        val dialog = CustDialog()
+                dialog.setSignatureListener(object : SignatureListener {
+                    override fun onSignatureSaved(bitmap: Bitmap) {
+                        Log.d("Sign", "Bitmap $bitmap")
+                        *//*  progressBarVisibility(true,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)*//*
                 loadingDialog.show()
                 updateSignatureInfoApi(bitmap)
             }

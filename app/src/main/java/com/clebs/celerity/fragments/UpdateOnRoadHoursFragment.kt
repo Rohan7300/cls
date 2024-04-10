@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
@@ -38,7 +39,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
     private var routeComment: String? = null
     private var dwID: Int = 0
     private var vehID: Int = 0
-    var rtID:Int = 0
+    var rtID: Int = 0
     private var parcelBack = 0
     lateinit var edtRoutes: EditText
     private lateinit var loadingDialog: LoadingDialog
@@ -146,10 +147,10 @@ class UpdateOnRoadHoursFragment : Fragment() {
         viewModel.liveDataUpdateOnRouteInfo.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
             if (it != null) {
-                showToast("Updated Successfully",requireContext())
+                showToast("Updated Successfully", requireContext())
                 findNavController().navigate(R.id.completeTaskFragment)
-            }else{
-                showToast("Failed to Update",requireContext())
+            } else {
+                showToast("Failed to Update", requireContext())
                 findNavController().navigate(R.id.completeTaskFragment)
             }
         }
@@ -236,10 +237,15 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 rideAlongApiCall()
                 val locNames = locationData.map { it.LocationName }
                 val locIds = locationData.map { it.LocId }
-                setSpinners(
+                /*            setSpinners(
+                                binding.spinnerLocation,
+                                locNames,
+                                locIds
+                            )*/
+                setSpinnerNew(
                     binding.spinnerLocation,
                     locNames,
-                    locIds
+                    locIds, "Select Location"
                 )
             }
         }
@@ -252,7 +258,8 @@ class UpdateOnRoadHoursFragment : Fragment() {
             if (routeData != null) {
                 val routeNames = routeData.map { it.RtName }
                 val routeIDs = routeData.map { it.RtId }
-                setSpinners(binding.spinnerRouteType, routeNames, routeIDs)
+                //setSpinners(binding.spinnerRouteType, routeNames, routeIDs)
+                setSpinnerNew(binding.spinnerRouteType, routeNames, routeIDs, "Select Route Type")
             }
         }
         viewModel.GetRideAlongRouteTypeInfo(prefs.userID.toInt())
@@ -301,6 +308,42 @@ class UpdateOnRoadHoursFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+    }
+
+    private fun setSpinnerNew(
+        spinner: AutoCompleteTextView,
+        items: List<String>,
+        ids: List<Int>, dummyItem: String,
+    ) {
+        val itemsList = mutableListOf(dummyItem)
+        itemsList.addAll(items)
+        val adapter =
+            ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, itemsList)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spinner.setAdapter(adapter)
+        spinner.setOnItemClickListener { parent, view, position, id ->
+            run {
+                parent?.let { nonNullParent ->
+                    if (position != 0) { // Skip the dummy item
+                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
+                        selectedItem.let {
+                            when (spinner) {
+                                binding.spinnerLocation -> {
+                                    selectedLocId = ids[position - 1]
+                                    selectedLocation = selectedItem
+                                }
+
+                                binding.spinnerRouteType -> {
+                                    selectedRouteType = selectedItem
+                                    selectedRouteId = ids[position - 1]
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
