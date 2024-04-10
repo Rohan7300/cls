@@ -57,7 +57,7 @@ class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context
                 context.startActivity(intent)
             }
 
-            binding.viewTicket.setOnClickListener {
+            binding.ticketTitleTV.setOnClickListener {
                 pref.saveCurrentTicket(ticketItem)
                 val intent = Intent(context, ViewTicketsActivity::class.java)
                 context.startActivity(intent)

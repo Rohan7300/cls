@@ -48,7 +48,7 @@ import java.time.format.DateTimeFormatter
 
 
 class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
-    private lateinit var ActivityHomeBinding: ActivityHomeBinding
+
     private lateinit var bottomNavigationView: BottomNavigationView
     lateinit var imageViewModel: ImageViewModel
     private var screenid: Int = 0
@@ -73,7 +73,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         fun showLog(tag: String, message: String) {
             Log.e(tag, message)
         }
-
+      lateinit var ActivityHomeBinding: ActivityHomeBinding
         var checked: String? = ""
         var Boolean: Boolean = false
         var lmId: Int = 0
@@ -144,6 +144,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 //        bottomNavigationView.menu.findItem(R.id.passwords).setTooltipText("Notifications")
         getWindow().getDecorView()
             .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+
+
+//        if (navController.currentDestination!!.id.equals(R.id.profileFragment)){
+//
+//            ActivityHomeBinding.title.setText("User Profile")
+//        }
         try {
             val apiService = RetrofitService.getInstance().create(ApiService::class.java)
             val mainRepo = MainRepo(apiService)
@@ -201,6 +207,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
             ActivityHomeBinding.imgDrawer.setOnClickListener {
+
                 navController.navigate(R.id.profileFragment)
             }
             bottomNavigationView.setOnNavigationItemSelectedListener { item ->
@@ -252,9 +259,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
             }
-            ActivityHomeBinding.imgLogout.setOnClickListener {
-//                showAlertLogout()
-            }
+//            ActivityHomeBinding.imgLogout.setOnClickListener {
+////                showAlertLogout()
+//            }
         } catch (e: Exception) {
             RetrofitService.handleNetworkError(e, fragmentManager)
         }
@@ -487,6 +494,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val button: TextView = view.findViewById(R.id.save)
         button.setOnClickListener {
             navController.navigate(R.id.profileFragment)
+
 //            Prefs.getInstance(App.instance).save("90days", "1")
             deleteDialog.dismiss()
 

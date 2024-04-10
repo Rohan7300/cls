@@ -7,71 +7,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
+        android:background="@color/very_light_orange"
         android:overScrollMode="never"
         android:scrollbars="none">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+         android:id="@+id/constmains"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:backgroundTint="@color/light_orange"
 
             tools:context=".ui.SplashActivity">
 
-            <LinearLayout
-                android:id="@+id/linearLayout13"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/bt_prev"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/shape_expand_main"
-
-                    android:fontFamily="@font/poppins"
-                    android:padding="8dp"
-                    android:text="Previous week"
-                    android:textColor="@color/text_color"
-                    android:textSize="11sp"
-                    android:visibility="visible"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/bt_this_week"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:background="@drawable/shape_expand_main"
-                    android:backgroundTint="@color/medium_orange"
-                    android:fontFamily="@font/poppins"
-                    android:padding="8dp"
-                    android:text="This week"
-                    android:textColor="@color/text_color"
-                    android:textSize="11sp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/llmain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout13">
+
+                app:layout_constraintTop_toTopOf="parent">
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -81,8 +36,8 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-
                     android:background="@drawable/shape_expand_main"
+
                     android:padding="10dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/bt_prev">
@@ -136,7 +91,7 @@
                                     android:fontFamily="@font/inter_bold"
                                     android:text="Average total score :"
                                     android:textColor="@color/text_color"
-                                    android:textSize="13sp"
+                                    android:textSize="14sp"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -172,7 +127,7 @@
                                 android:fontFamily="@font/inter_bold"
                                 android:text="Last Week score :"
                                 android:textColor="@color/text_color"
-                                android:textSize="13sp" />
+                                android:textSize="14sp" />
 
                             <ProgressBar
                                 android:id="@+id/ProgressBartwo"
@@ -251,7 +206,7 @@
                         android:fontFamily="@font/poppins_bold"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="No Data found!"
+                        android:text="No Data cash flow found!"
                         android:textColor="@color/text_color"
                         android:textSize="13sp"
                         android:visibility="gone"
@@ -281,12 +236,12 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutfullschedule"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-
                     android:background="@drawable/shape_expand_main"
                     android:padding="10dp">
 
@@ -337,7 +292,7 @@
                         android:layout_marginTop="30dp"
                         android:layout_marginBottom="30dp"
                         android:gravity="center"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/textView5"
                         tools:layout_editor_absoluteX="10dp">
@@ -349,7 +304,7 @@
                             android:layout_marginTop="5dp"
                             android:drawableEnd="@drawable/baseline_error_24"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="No data found !"
+                            android:text="No schedule data found !"
                             android:textColor="@color/text_color"
                             android:textSize="13sp" />
 
@@ -620,6 +575,55 @@
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout13"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <TextView
+                        android:id="@+id/bt_prev"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/home_button_shape"
+
+                        android:fontFamily="@font/poppins"
+                        android:padding="8dp"
+                        android:text="Previous week"
+                        android:textColor="@color/text_color"
+                        android:textSize="11sp"
+                        android:visibility="visible"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/bt_this_week"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:background="@drawable/home_button_shape"
+                        android:backgroundTint="@color/medium_orange"
+                        android:fontFamily="@font/poppins"
+                        android:padding="8dp"
+                        android:text="This week"
+                        android:textColor="@color/text_color"
+                        android:textSize="11sp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </LinearLayout>
+
+
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

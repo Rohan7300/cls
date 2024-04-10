@@ -36,6 +36,12 @@ class Userprofile : Fragment() {
     lateinit var mainViewModel: MainViewModel
     var ninetydaysBoolean: Boolean? = null
     var edtold: String? = null
+    val showDialog: () -> Unit = {
+        (activity as HomeActivity).showDialog()
+    }
+    val hideDialog: () -> Unit = {
+        (activity as HomeActivity).hideDialog()
+    }
     var edtnew: String? = null
     var firstname: String? = null
     var lastname: String? = null
@@ -57,10 +63,12 @@ class Userprofile : Fragment() {
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         fragmentManager = (activity as HomeActivity).fragmentManager
+
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
 
         GetDriversBasicInformation()
+HomeActivity.ActivityHomeBinding.title.setText("")
         if (Prefs.getInstance(App.instance).days.equals("1")) {
             mbinding.editImg.performClick()
 
@@ -86,7 +94,7 @@ class Userprofile : Fragment() {
 
                 mbinding.editImg.alpha = 0.5f
 
-                mbinding.icInfos.visibility = View.VISIBLE
+//                mbinding.icInfos.visibility = View.VISIBLE
                 mbinding.useEmailas.visibility = View.VISIBLE
 
 
@@ -156,7 +164,7 @@ class Userprofile : Fragment() {
                 mbinding.emailtext.isEnabled = true
                 mbinding.emailtext.isFocusable = true
                 mbinding.emailtext.isFocusableInTouchMode = true
-
+mbinding.txtChangePassword.visibility=View.VISIBLE
 
 //                mbinding.usertext.isEnabled = true
 //                mbinding.usertext.isFocusable = true
@@ -176,7 +184,7 @@ class Userprofile : Fragment() {
 
                 mbinding.editImg.alpha = 0.5f
 
-                mbinding.icInfos.visibility = View.VISIBLE
+//                mbinding.icInfos.visibility = View.VISIBLE
                 mbinding.useEmailas.visibility = View.VISIBLE
             } else {
                 mbinding.save.visibility = View.GONE
@@ -184,7 +192,7 @@ class Userprofile : Fragment() {
                 mbinding.emailtext.isFocusable = false
                 mbinding.emailtext.isFocusableInTouchMode = false
 
-
+                mbinding.txtChangePassword.visibility=View.GONE
                 mbinding.usertext.isEnabled = false
                 mbinding.usertext.isFocusable = false
                 mbinding.usertext.isFocusableInTouchMode = false
@@ -202,7 +210,7 @@ class Userprofile : Fragment() {
                 mbinding.addresstext.isFocusableInTouchMode = false
 
                 mbinding.editImg.alpha = 1f
-                mbinding.icInfos.visibility = View.GONE
+//                mbinding.icInfos.visibility = View.GONE
                 mbinding.useEmailas.visibility = View.GONE
             }
             isedit = !isedit
@@ -318,7 +326,8 @@ class Userprofile : Fragment() {
     }
 
     fun GetDriversBasicInformation() {
-        mbinding.pb.visibility = View.VISIBLE
+//        mbinding.pb.visibility = View.VISIBLE
+        showDialog()
         mbinding.FormLayout.alpha = 0.5f
         mainViewModel.GetDriversBasicInformation(
             Prefs.getInstance(App.instance).userID.toDouble()
@@ -334,8 +343,9 @@ class Userprofile : Fragment() {
                 mbinding.passtext.setText("**********")
                 mbinding.phonetext.setText(it.PhoneNumber)
                 mbinding.addresstext.setText(it.Address)
-                mbinding.pb.visibility = View.GONE
+//                mbinding.pb.visibility = View.GONE
                 mbinding.FormLayout.alpha = 1f
+                hideDialog()
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
                 mbinding.checkbox.isChecked = it.IsThirdPartyChargeAccessAllowed.equals(true)
 //                if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
