@@ -202,9 +202,11 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
             .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
             //Bubble background color
             .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
-            .titleTextSize(16) //Title text size in SP (default value 16sp)
-            .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
-            .image(requireContext().resources.getDrawable(R.drawable.baseline_document_scanner_24)!!) //Bubble main image
+            .titleTextSize(14)
+            //Title text size in SP (default value 16sp)
+            .descriptionTextSize(10) //Subtitle text size in SP (default value 14sp)
+            .image(requireContext().resources.getDrawable(R.drawable.scanner)!!)
+            //Bubble main image
             .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
 
             .listener(

@@ -11,12 +11,13 @@ import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentHomeBinding
 import com.clebs.celerity.databinding.FragmentInvoicesBinding
+import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.Prefs
 import com.elconfidencial.bubbleshowcase.BubbleShowCase
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
 import com.ncorti.slidetoact.SlideToActView
-
 
 
 class HomeFragment : Fragment() {
@@ -29,6 +30,7 @@ class HomeFragment : Fragment() {
     val hideDialog: () -> Unit = {
         (activity as HomeActivity).hideDialog()
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,19 +42,45 @@ class HomeFragment : Fragment() {
 
         viewModel = (activity as HomeActivity).viewModel
         showDialog()
+        viewModel.GetDriversBasicInformation(
+            Prefs.getInstance(App.instance).userID.toInt().toDouble()
+        ).observe(viewLifecycleOwner) {
+            hideDialog()
+            if (it != null) {
+             if (it.currentlocation!=null){
+                 mbinding.location.text=it.currentlocation
+             }
+                else{
+                    mbinding.location.setText("Not assigned")
+                }
+                if (it.workinglocation!=null){
+                    mbinding.away.text=it.workinglocation
+                }
+                else{
+                    mbinding.away.setText("Not assigned")
+                }
+                mbinding.truckNumber.text = it.vmRegNo
+                mbinding.ticketNumber.text = it.userID.toString()
+
+
+            }
+
+
+        }
+
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
 
             hideDialog()
 
-            if (it != null) {
-                mbinding.location.text = it.locationName ?: ""
-                mbinding.truckNumber.text = it.vmRegNo ?: ""
-            }
+//            if (it != null) {
+//                mbinding.location.text = it.locationName ?: ""
+//                mbinding.truckNumber.text = it.vmRegNo ?: ""
+//            }
 
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
                 mbinding.marianIonu.text = name
             }
-            mbinding.ticketNumber.text = (activity as HomeActivity).date
+//            mbinding.ticketNumber.text = (activity as HomeActivity).date
         }
         BubbleShowCaseBuilder(requireActivity()) //Activity instance
             .title("Swipe") //Any title for the bubble view
@@ -61,10 +89,10 @@ class HomeFragment : Fragment() {
             //You can force the position of the arrow to change the location of the bubble.
             .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
             //Bubble background color
-            .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
-            .titleTextSize(16) //Title text size in SP (default value 16sp)
-            .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
-            .image(requireContext().resources.getDrawable(R.drawable.baseline_document_scanner_24)!!) //Bubble main image
+            .textColor(requireContext().getColor(R.color.text_color)) //Bubble Text color
+            .titleTextSize(14)
+            .descriptionTextSize(10)
+            .image(requireContext().resources.getDrawable(R.drawable.scanner))//Bubble main image
             .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
             .showOnce("3")
             .listener(
@@ -90,7 +118,8 @@ class HomeFragment : Fragment() {
                     }
                 })
             )
-            .targetView(mbinding.fm).highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
+            .targetView(mbinding.fm)
+            .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
             .show()
 
 

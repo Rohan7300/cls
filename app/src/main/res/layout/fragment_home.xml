@@ -10,8 +10,8 @@
 
         <RelativeLayout
             android:id="@+id/daily_work_"
-            android:layout_width="300dp"
-            android:layout_height="240dp"
+            android:layout_width="350dp"
+            android:layout_height="200dp"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="36dp"
             android:layout_marginTop="16dp"
@@ -26,12 +26,12 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="70dp"
-                android:layout_height="100dp"
+                android:layout_height="70dp"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="32dp"
 
-                android:src="@drawable/login_pic"
+                android:src="@drawable/camerahome"
                 app:civ_border_color="#FF000000" />
 
             <TextView
@@ -42,12 +42,11 @@
                 android:layout_alignBottom="@+id/profile_image"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="2dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="28dp"
                 android:layout_marginBottom="10dp"
                 android:layout_toEndOf="@+id/profile_image"
-                android:fontFamily="@font/poppins_semibold"
-                android:gravity="center_horizontal"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center"
                 android:letterSpacing="0.01"
                 android:lineHeight="26sp"
                 android:lineSpacingExtra="4sp"
@@ -55,16 +54,16 @@
                 android:text="Marian Ionut Malasincu
 Marian Ionut Malasincu"
                 android:textColor="#343131"
-                android:textSize="17sp" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/marian_ionu"
                 android:layout_marginStart="37dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="22dp"
                 android:layout_marginEnd="37dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
 
@@ -75,6 +74,7 @@ Marian Ionut Malasincu"
 
                     <RelativeLayout
                         android:layout_width="match_parent"
+
                         android:layout_height="wrap_content">
 
                         <ImageView
@@ -100,17 +100,20 @@ Marian Ionut Malasincu"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_below="@+id/ic_location"
-                            android:layout_marginStart="2dp"
+
                             android:layout_marginTop="16dp"
                             android:src="@drawable/pin_alt_light" />
 
                         <TextView
                             android:id="@+id/away"
                             android:layout_width="wrap_content"
-                            android:layout_height="20dp"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/location"
+                            android:layout_alignEnd="@+id/location"
+
                             android:layout_marginStart="4dp"
-                            android:layout_marginTop="16dp"
+
+                            android:layout_marginTop="15dp"
                             android:layout_toEndOf="@+id/ic_location"
                             android:fontFamily="@font/poppins"
                             android:text="@string/away"
@@ -141,9 +144,11 @@ Marian Ionut Malasincu"
                             android:layout_width="wrap_content"
                             android:layout_height="20dp"
                             android:layout_below="@+id/ic_truck"
-                            android:layout_alignParentEnd="true"
+                            android:layout_alignStart="@+id/truck_number"
+                         android:layout_alignEnd="@+id/truck_number"
                             android:layout_marginStart="4dp"
                             android:layout_marginTop="16dp"
+
                             android:fontFamily="@font/poppins"
                             android:text="121343445"
                             android:textColor="#231F20"
@@ -157,7 +162,7 @@ Marian Ionut Malasincu"
                             android:layout_marginStart="2dp"
                             android:layout_marginTop="16dp"
                             android:layout_toStartOf="@+id/truck_number"
-                            android:src="@drawable/tickets_ic" />
+                            android:src="@drawable/userd" />
 
                     </RelativeLayout>
 
@@ -181,7 +186,7 @@ Marian Ionut Malasincu"
             android:letterSpacing="0.05"
             android:text="@string/swipe_for_v"
             android:textColor="@color/text_color"
-            android:textSize="15sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/fm"
 
             app:layout_constraintEnd_toEndOf="parent"

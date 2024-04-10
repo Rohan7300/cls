@@ -71,6 +71,9 @@ class HomedemoFragment : Fragment() {
 //        pieChart.isAnimationEnabled=true
 
         showDialog()
+//            mbinding.constmains.visibility=View.GONE
+
+
         viewModel.GetWeekAndYear()
 
         val currentDate = Calendar.getInstance()
@@ -196,8 +199,8 @@ class HomedemoFragment : Fragment() {
                 )
 
 
-                val bt_text = (week - 3).toString()
-                mbinding.btPrev.text = "Week: $bt_text"
+                val bt_text = (week - 2).toString()
+                mbinding.btPrev.text = "Load Week: $bt_text"+" data"
 
 
             }
@@ -217,9 +220,11 @@ class HomedemoFragment : Fragment() {
                     mbinding.ProgressBar.tooltipText = it.avgTotalScore.toDouble().toString() + "%"
                 } else {
                     mbinding.ProgressBar.setProgress(0)
+                    mbinding.tvPbone.setText("0%")
                 }
             } else {
                 mbinding.ProgressBar.setProgress(0)
+                mbinding.tvPbone.setText("0%")
             }
         }
         viewModel.livedatalastweekresponse.observe(viewLifecycleOwner) {
@@ -236,6 +241,7 @@ class HomedemoFragment : Fragment() {
                 }
             } else {
                 mbinding.ProgressBartwo.setProgress(0)
+                mbinding.tvPbTwo.setText("0%")
             }
         }
         viewModel.livedataCashFlowWeek.observe(viewLifecycleOwner) { depts ->
