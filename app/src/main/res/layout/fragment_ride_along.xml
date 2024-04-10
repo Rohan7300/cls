@@ -433,6 +433,7 @@
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:gravity="center"
+                                    android:layout_marginEnd="5dp"
                                     android:layout_toEndOf="@id/edt_traing"
                                     android:background="@color/white"
                                     android:src="@drawable/circle_grey_ic" />
@@ -466,6 +467,7 @@
                                     android:layout_width="25dp"
                                     android:layout_height="25dp"
                                     android:layout_alignParentEnd="true"
+                                    android:layout_marginEnd="5dp"
                                     android:layout_centerVertical="true"
                                     android:layout_toRightOf="@id/edt_traingtwo"
                                     android:background="@color/white"
