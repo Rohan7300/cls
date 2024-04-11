@@ -152,17 +152,17 @@
                                         android:textColor="@color/text_color" />
 
                                     <ImageView
-                                        android:id="@+id/img"
+                                        android:id="@+id/imgSLA1"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
-                                        android:layout_alignStart="@id/downloadic"
+                                        android:layout_alignStart="@id/downloadSLA1"
                                         android:layout_marginStart="-55dp"
                                         android:layout_toEndOf="@id/txtSla"
                                         android:src="@drawable/baseline_remove_red_eye_24" />
 
 
                                     <ImageView
-                                        android:id="@+id/downloadic"
+                                        android:id="@+id/downloadSLA1"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
                                         android:layout_alignParentEnd="true"
@@ -198,17 +198,17 @@
                                         android:textColor="@color/text_color" />
 
                                     <ImageView
-                                        android:id="@+id/img2"
+                                        android:id="@+id/imgPrivacyPolicy1"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
-                                        android:layout_alignStart="@id/downloadic2"
+                                        android:layout_alignStart="@id/downloadPrivacyPolicy1"
                                         android:layout_marginStart="-55dp"
                                         android:layout_toEndOf="@id/txtprivacy"
                                         android:src="@drawable/baseline_remove_red_eye_24" />
 
 
                                     <ImageView
-                                        android:id="@+id/downloadic2"
+                                        android:id="@+id/downloadPrivacyPolicy1"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
                                         android:layout_alignParentEnd="true"
@@ -244,17 +244,17 @@
                                         android:textColor="@color/text_color" />
 
                                     <ImageView
-                                        android:id="@+id/img3"
+                                        android:id="@+id/imgGDPR1"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
-                                        android:layout_alignStart="@id/downloadic3"
+                                        android:layout_alignStart="@id/downloadGDPR1"
                                         android:layout_marginStart="-55dp"
                                         android:layout_toEndOf="@id/txtgdpr"
                                         android:src="@drawable/baseline_remove_red_eye_24" />
 
 
                                     <ImageView
-                                        android:id="@+id/downloadic3"
+                                        android:id="@+id/downloadGDPR1"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
                                         android:layout_alignParentEnd="true"
@@ -290,17 +290,17 @@
                                         android:textColor="@color/text_color" />
 
                                     <ImageView
-                                        android:id="@+id/img4"
+                                        android:id="@+id/imgDAEngagement1"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
-                                        android:layout_alignStart="@id/downloadic4"
+                                        android:layout_alignStart="@id/downloadDAEngagement1"
                                         android:layout_marginStart="-55dp"
                                         android:layout_toEndOf="@id/txtDA"
                                         android:src="@drawable/baseline_remove_red_eye_24" />
 
 
                                     <ImageView
-                                        android:id="@+id/downloadic4"
+                                        android:id="@+id/downloadDAEngagement1"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
                                         android:layout_alignParentEnd="true"
@@ -337,17 +337,17 @@
                                         android:textColor="@color/text_color" />
 
                                     <ImageView
-                                        android:id="@+id/img5"
+                                        android:id="@+id/imgHandBookPolicy1"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
-                                        android:layout_alignStart="@id/downloadic5"
+                                        android:layout_alignStart="@id/downloadHandBookPolicy1"
                                         android:layout_marginStart="-55dp"
                                         android:layout_toEndOf="@id/txtDAhand"
                                         android:src="@drawable/baseline_remove_red_eye_24" />
 
 
                                     <ImageView
-                                        android:id="@+id/downloadic5"
+                                        android:id="@+id/downloadHandBookPolicy1"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
                                         android:layout_alignParentEnd="true"
@@ -486,17 +486,17 @@
                                         android:textColor="@color/text_color" />
 
                                     <ImageView
-                                        android:id="@+id/img6"
+                                        android:id="@+id/imgHandBookPolicy2"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
-                                        android:layout_alignStart="@id/downloadic6"
+                                        android:layout_alignStart="@id/downloadHandBookPolicy2"
                                         android:layout_marginStart="-55dp"
                                         android:layout_toEndOf="@id/txtslapolicy"
                                         android:src="@drawable/baseline_remove_red_eye_24" />
 
 
                                     <ImageView
-                                        android:id="@+id/downloadic6"
+                                        android:id="@+id/downloadHandBookPolicy2"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
                                         android:layout_alignParentEnd="true"
@@ -528,21 +528,21 @@
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/poppins"
                                         android:letterSpacing="0.02"
-                                        android:text="DA Hand Book Policy"
+                                        android:text="SLA"
                                         android:textColor="@color/text_color" />
 
                                     <ImageView
-                                        android:id="@+id/img7"
+                                        android:id="@+id/imgSLA2"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
-                                        android:layout_alignStart="@id/downloadic7"
+                                        android:layout_alignStart="@id/downloadSLA2"
                                         android:layout_marginStart="-55dp"
                                         android:layout_toEndOf="@id/txteight"
                                         android:src="@drawable/baseline_remove_red_eye_24" />
 
 
                                     <ImageView
-                                        android:id="@+id/downloadic7"
+                                        android:id="@+id/downloadSLA2"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
                                         android:layout_alignParentEnd="true"
@@ -574,21 +574,21 @@
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/poppins"
                                         android:letterSpacing="0.02"
-                                        android:text="DA Hand Book Policy"
+                                        android:text="Privacy Policy"
                                         android:textColor="@color/text_color" />
 
                                     <ImageView
-                                        android:id="@+id/img9"
+                                        android:id="@+id/imgPrivacyPolicy2"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
-                                        android:layout_alignStart="@id/downloadic9"
+                                        android:layout_alignStart="@id/downloadPrivacyPolicy2"
                                         android:layout_marginStart="-55dp"
                                         android:layout_toEndOf="@id/txtnine"
                                         android:src="@drawable/baseline_remove_red_eye_24" />
 
 
                                     <ImageView
-                                        android:id="@+id/downloadic9"
+                                        android:id="@+id/downloadPrivacyPolicy2"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
                                         android:layout_alignParentEnd="true"
@@ -620,21 +620,21 @@
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/poppins"
                                         android:letterSpacing="0.02"
-                                        android:text="DA Hand Book Policy"
+                                        android:text="GDPR Policy"
                                         android:textColor="@color/text_color" />
 
                                     <ImageView
-                                        android:id="@+id/img10"
+                                        android:id="@+id/imgGDPR2"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
-                                        android:layout_alignStart="@id/downloadic10"
+                                        android:layout_alignStart="@id/downloadGDPR2"
                                         android:layout_marginStart="-55dp"
                                         android:layout_toEndOf="@id/txt10"
                                         android:src="@drawable/baseline_remove_red_eye_24" />
 
 
                                     <ImageView
-                                        android:id="@+id/downloadic10"
+                                        android:id="@+id/downloadGDPR2"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
                                         android:layout_alignParentEnd="true"
@@ -670,17 +670,17 @@
                                         android:textColor="@color/text_color" />
 
                                     <ImageView
-                                        android:id="@+id/img11"
+                                        android:id="@+id/imgDAEngagement2"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
-                                        android:layout_alignStart="@id/downloadic11"
+                                        android:layout_alignStart="@id/downloadDAEngagement2"
                                         android:layout_marginStart="-55dp"
                                         android:layout_toEndOf="@id/txtDA11"
                                         android:src="@drawable/baseline_remove_red_eye_24" />
 
 
                                     <ImageView
-                                        android:id="@+id/downloadic11"
+                                        android:id="@+id/downloadDAEngagement2"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
                                         android:layout_alignParentEnd="true"

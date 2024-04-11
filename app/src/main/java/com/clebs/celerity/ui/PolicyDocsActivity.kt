@@ -1,15 +1,23 @@
 package com.clebs.celerity.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Path
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -26,9 +34,17 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.utils.OpenMode
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.showToast
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.UUID
 
 class PolicyDocsActivity : AppCompatActivity() {
     lateinit var mbinding: ActivityPolicyDocsBinding
@@ -36,9 +52,18 @@ class PolicyDocsActivity : AppCompatActivity() {
     private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
     private var userId = 0
     var isImage1 = true
+    private var handbookID: Int = 0
+    var openModeDAHandBook: OpenMode = OpenMode.VIEW
+    var openModeSignedGDPRPOLICY: OpenMode = OpenMode.VIEW
+    var openModeSignedServiceLevelAgreement: OpenMode = OpenMode.VIEW
+    var openModeSignedPrivacyPolicy: OpenMode = OpenMode.VIEW
+    var openModeSignedDAEngagement: OpenMode = OpenMode.VIEW
     var isImage2 = true
     lateinit var loadingDialog: LoadingDialog
-
+    var REQUEST_STORAGE_PERMISSION_CODE = 101
+    lateinit var currentfileName: String
+    lateinit var currentFileContent: InputStream
+    lateinit var currentMode: OpenMode
 
     companion object {
         var path = Path()
@@ -63,15 +88,30 @@ class PolicyDocsActivity : AppCompatActivity() {
         val mainRepo = MainRepo(apiService)
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
 
+        userId = Prefs.getInstance(this).userID.toInt()
+        handbookID = Prefs.getInstance(this).handbookId
         viewModel.liveDataGetDriverSignatureInformation.observe(this) {
             if (it != null) {
                 driverSignatureInfo = it
+
+            }
+        }
+        viewModel.getDriverSignatureInfo(userId.toDouble()).observe(this) {
+            if (it != null) {
+                handbookID = it.handbookId
+                Prefs.getInstance(this).handbookId = handbookID
+                loadingDialog.dismiss()
+
+            } else {
+                handbookID = Prefs.getInstance(this).handbookId
             }
         }
 
-        userId = Prefs.getInstance(this).userID.toInt()
-
         viewModel.GetDriverSignatureInformation(userId)
+
+        observers()
+        clickListeners()
+
 
         mbinding.amazonHeader.setOnClickListener {
             if (isImage1) {
@@ -82,7 +122,6 @@ class PolicyDocsActivity : AppCompatActivity() {
             isImage1 = !isImage1
 
             setVisibility(mbinding.amazonLayout, !mbinding.amazonLayout.isVisible)
-
         }
 
         mbinding.truckHeaderLL.setOnClickListener {
@@ -92,18 +131,14 @@ class PolicyDocsActivity : AppCompatActivity() {
                 mbinding.viewss2.visibility = View.VISIBLE
             }
             isImage2 = !isImage2
-
             setVisibility(mbinding.truckLayout, !mbinding.truckLayout.isVisible)
-
         }
 
         mbinding.checkbox.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
                 mbinding.amazonHeader.isClickable = false
-
                 mbinding.amazonLayout.visibility = View.GONE
                 mbinding.views1.visibility = View.GONE
-
                 if (mbinding.llTrucks.visibility == View.GONE) {
                     showAlert()
                 } else {
@@ -139,31 +174,178 @@ class PolicyDocsActivity : AppCompatActivity() {
         }
     }
 
-    private fun showAlert() {
-        // mbinding.llAmazon.visibility = View.GONE
-        // mbinding.llTrucks.visibility = View.GONE
+    private fun observers() {
+        viewModel.liveDataDownloadSignedServiceLevelAgreement.observe(this) {
+            loadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF(
+                    "SignedServiceLevelAgreement",
+                    it.byteStream(),
+                    openModeSignedServiceLevelAgreement
+                )
+            }
+        }
 
-        //mbinding.scanll.visibility = View.VISIBLE
+
+        viewModel.liveDataDownloadSignedDAHandbook.observe(this) {
+            loadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF("DAHandbook", it.byteStream(), openModeDAHandBook)
+            }
+        }
+
+        viewModel.liveDataDownloadSignedGDPRPOLICY.observe(this) {
+            loadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF("GDPRPOLICY", it.byteStream(), openModeSignedGDPRPOLICY)
+            }
+        }
+
+        viewModel.liveDataDownloadSignedPrivacyPolicy.observe(this) {
+            loadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
+            }
+        }
+
+        viewModel.liveDataDownloadSignedDAEngagement.observe(this) {
+            loadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF("DAEngagement", it.byteStream(), openModeSignedDAEngagement)
+            }
+        }
+    }
+
+    private fun clickListeners() {
+
+        mbinding.downloadHandBookPolicy1.setOnClickListener {
+            loadingDialog.show()
+            openModeDAHandBook = OpenMode.DOWNLOAD
+            viewModel.DownloadSignedDAHandbook(handbookID)
+        }
+        mbinding.imgHandBookPolicy1.setOnClickListener {
+            loadingDialog.show()
+            openModeDAHandBook = OpenMode.VIEW
+            viewModel.DownloadSignedDAHandbook(handbookID)
+        }
+        mbinding.downloadHandBookPolicy2.setOnClickListener {
+            loadingDialog.show()
+            openModeDAHandBook = OpenMode.DOWNLOAD
+            viewModel.DownloadSignedDAHandbook(handbookID)
+        }
+        mbinding.imgHandBookPolicy2.setOnClickListener {
+            loadingDialog.show()
+            openModeDAHandBook = OpenMode.VIEW
+            viewModel.DownloadSignedDAHandbook(handbookID)
+        }
+
+
+        mbinding.downloadSLA1.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedServiceLevelAgreement = OpenMode.DOWNLOAD
+            viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+        }
+        mbinding.imgSLA1.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedServiceLevelAgreement = OpenMode.VIEW
+            viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+        }
+        mbinding.downloadSLA2.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedServiceLevelAgreement = OpenMode.DOWNLOAD
+            viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+        }
+        mbinding.imgSLA2.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedServiceLevelAgreement = OpenMode.VIEW
+            viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+        }
+
+
+        mbinding.downloadPrivacyPolicy1.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+            viewModel.DownloadSignedPrivacyPolicy(handbookID)
+        }
+        mbinding.imgPrivacyPolicy1.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedPrivacyPolicy = OpenMode.VIEW
+            viewModel.DownloadSignedPrivacyPolicy(handbookID)
+        }
+        mbinding.downloadPrivacyPolicy2.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+            viewModel.DownloadSignedPrivacyPolicy(handbookID)
+        }
+        mbinding.imgPrivacyPolicy2.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedPrivacyPolicy = OpenMode.VIEW
+            viewModel.DownloadSignedPrivacyPolicy(handbookID)
+        }
+
+
+        mbinding.downloadDAEngagement1.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+            viewModel.DownloadSignedDAEngagement(handbookID)
+        }
+        mbinding.imgDAEngagement1.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+            viewModel.DownloadSignedDAEngagement(handbookID)
+        }
+        mbinding.downloadDAEngagement2.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+            viewModel.DownloadSignedDAEngagement(handbookID)
+        }
+        mbinding.imgDAEngagement2.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+            viewModel.DownloadSignedDAEngagement(handbookID)
+        }
+
+
+        mbinding.downloadGDPR1.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+            viewModel.DownloadSignedGDPRPOLICY(handbookID)
+        }
+        mbinding.downloadGDPR2.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+            viewModel.DownloadSignedGDPRPOLICY(handbookID)
+        }
+        mbinding.imgGDPR1.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedPrivacyPolicy = OpenMode.VIEW
+            viewModel.DownloadSignedGDPRPOLICY(handbookID)
+        }
+        mbinding.imgGDPR2.setOnClickListener {
+            loadingDialog.show()
+            openModeSignedPrivacyPolicy = OpenMode.VIEW
+            viewModel.DownloadSignedGDPRPOLICY(handbookID)
+        }
+    }
+
+    private fun showAlert() {
         mbinding.signLayoutll.visibility = View.VISIBLE
 
 
         val retry = mbinding.signLayout.RetryLay
-        val close = mbinding.signLayout.cl
         val save = mbinding.signLayout.sv
         val testIV = mbinding.signLayout.textIV
         val drawView = mbinding.signLayout.paintView.drawView
 
         save.setOnClickListener {
             if (DrawViewClass.pathList.isEmpty()) {
-                // Show a toast indicating that the user has not signed
                 showToast("Please sign before saving", this)
             } else {
                 val signatureBitmap: Bitmap = drawView.getBitmap()
                 testIV.setImageBitmap(signatureBitmap)
-                //   signatureListener?.onSignatureSaved(signatureBitmap)
+
                 loadingDialog.show()
                 updateSignatureInfoApi(signatureBitmap)
-                // dismiss()
             }
         }
 
@@ -188,7 +370,6 @@ class PolicyDocsActivity : AppCompatActivity() {
 
     private fun updateSignatureInfoApi(bitmap: Bitmap) {
         viewModel.livedataupdateDriverAgreementSignature.observe(this) {
-            /*progressBarVisibility(false,mbinding.policyDocPB,mbinding.overlayViewPolicyActivity)*/
             loadingDialog.cancel()
             if (it != null) {
                 if (it.Status == "200") {
@@ -202,8 +383,6 @@ class PolicyDocsActivity : AppCompatActivity() {
             }
         }
         if (driverSignatureInfo != null) {
-
-
             val companyDocIds = driverSignatureInfo!!.OtherCompanyDocuments?.flatMap { company ->
                 company.DocumentList.map { document ->
                     document.CompanyDocId
@@ -268,10 +447,101 @@ class PolicyDocsActivity : AppCompatActivity() {
 
     private fun setVisibility(ll: LinearLayout, visibility: Boolean) {
         if (visibility)
-
             ll.visibility = View.VISIBLE
         else
             ll.visibility = View.GONE
 
+    }
+
+    private fun downloadPDF(fileName: String, fileContent: InputStream, mode: OpenMode) {
+        currentfileName = fileName
+        currentMode = mode
+        currentFileContent = fileContent
+        if (checkForStoragePermission()) {
+            try {
+                val currentDate = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
+                    Date()
+                )
+                val uniqueId = UUID.randomUUID().toString()
+                val uniqueFileName = "$fileName-$currentDate-$uniqueId.pdf"
+                val file = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    uniqueFileName
+                )
+                FileOutputStream(file).use { outputStream ->
+                    fileContent.use { input ->
+                        input.copyTo(outputStream)
+                    }
+                }
+                showToast("PDF Downloaded!", this)
+                openPDF(file, mode)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                showToast("Failed to download PDF", this)
+            }
+        } else {
+            showToast("Storage Permission Required", this)
+        }
+    }
+
+    private fun checkForStoragePermission(): Boolean {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    REQUEST_STORAGE_PERMISSION_CODE
+                )
+            } else {
+                return true
+            }
+        } else {
+            return true
+        }
+        return false
+    }
+
+
+    private fun openPDF(file: File, mode: OpenMode) {
+        val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            FileProvider.getUriForFile(this, "${this.packageName}.fileprovider", file)
+        } else {
+            Uri.fromFile(file)
+        }
+
+        if (mode == OpenMode.VIEW) {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(uri, "application/pdf")
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            try {
+                this.startActivity(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                showToast("No PDF viewer found", this)
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_STORAGE_PERMISSION_CODE) {
+            val granted = grantResults.isNotEmpty() &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED
+            if (granted) {
+                downloadPDF(currentfileName, currentFileContent, currentMode)
+            } else {
+                showToast("Storage Permission Required", this)
+
+            }
+        }
     }
 }

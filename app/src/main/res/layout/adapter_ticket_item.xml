@@ -21,12 +21,6 @@
             android:orientation="horizontal"
             android:padding="5dp">
 
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:fontFamily="@font/poppins_bold"-->
-<!--                android:text="Id : "-->
-<!--                android:textSize="13sp" />-->
 
             <TextView
                 android:id="@+id/ticketTitleTV"
@@ -41,10 +35,11 @@
 
             <ImageView
                 android:id="@+id/commentIV"
-                android:layout_width="25dp"
+                android:layout_width="20dp"
                 android:layout_marginEnd="3dp"
                 android:layout_height="25dp"
-                android:src="@drawable/ic_msgframe" />
+                android:src="@drawable/comment3"
+                app:tint="@color/white" />
 
 <!--            <View-->
 <!--                android:layout_width="1dp"-->

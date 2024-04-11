@@ -64,6 +64,7 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.utils.NoInternetDialog
 import com.google.gson.Gson
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Response
 import java.lang.IllegalArgumentException
 
@@ -702,8 +703,9 @@ class MainRepo(private val ApiService: ApiService) {
         }
         return null
     }
-    suspend fun GetLastWeekScrore(userID: Int, Weekno:Int,Year:Int): GetLastWeekScore? {
-        val response = ApiService.GetLastWeekScore(userID, Weekno,Year)
+
+    suspend fun GetLastWeekScrore(userID: Int, Weekno: Int, Year: Int): GetLastWeekScore? {
+        val response = ApiService.GetLastWeekScore(userID, Weekno, Year)
         if (response.isSuccessful) {
             return response.body()
         } else {
@@ -712,8 +714,14 @@ class MainRepo(private val ApiService: ApiService) {
         }
         return null
     }
-    suspend fun GetCashFlowWeek(userID: Int, companyFilter: Int,selyear:Int,selweek:Int): CashFlowPieChartResponse? {
-        val response = ApiService.CashFLowData(userID, companyFilter,selyear,selweek)
+
+    suspend fun GetCashFlowWeek(
+        userID: Int,
+        companyFilter: Int,
+        selyear: Int,
+        selweek: Int
+    ): CashFlowPieChartResponse? {
+        val response = ApiService.CashFLowData(userID, companyFilter, selyear, selweek)
         if (response.isSuccessful) {
             return response.body()
         } else {
@@ -790,9 +798,9 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
-    suspend fun RemoveThirdPartyAccess(userID: Int):SimpleStatusMsgResponse?{
+    suspend fun RemoveThirdPartyAccess(userID: Int): SimpleStatusMsgResponse? {
 
-        val response=ApiService.RemoveThirdPartyAccess(userID)
+        val response = ApiService.RemoveThirdPartyAccess(userID)
         if (response.isSuccessful) {
             return response.body()
         } else {
@@ -803,28 +811,91 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun DownloadInvoicePDF(
-        userID: Int,selyear: Int
+        userID: Int, selyear: Int
     ): DownloadInvoicePDFResponse? {
-        val response = ApiService.DownloadInvoicePDF(userID,selyear)
-        if(response.isSuccessful){
+        val response = ApiService.DownloadInvoicePDF(userID, selyear)
+        if (response.isSuccessful) {
             return response.body()
-        }else{
+        } else {
             val errorBody = response.errorBody()?.string()
             println("Error Response Body: $errorBody")
         }
         return null
     }
+
     suspend fun DownloadThirdPartyInvoicePDF(
-        userID: Int,selyear: Int
+        userID: Int, selyear: Int
     ): DownloadThirdPartyInvoicePDFResponse? {
-        val response = ApiService.DownloadThirdPartyInvoicePDF(userID,selyear)
-        if(response.isSuccessful){
+        val response = ApiService.DownloadThirdPartyInvoicePDF(userID, selyear)
+        if (response.isSuccessful) {
             return response.body()
-        }else{
+        } else {
             val errorBody = response.errorBody()?.string()
             println("Error Response Body: $errorBody")
         }
         return null
     }
+
+    suspend fun DownloadSignedDAHandbook(
+        handbookId: Int
+    ): ResponseBody? {
+        val response = ApiService.DownloadSignedDAHandbook(handbookId)
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+    suspend fun DownloadSignedGDPRPOLICY(
+        handbookId: Int
+    ): ResponseBody? {
+        val response = ApiService.DownloadSignedGDPRPOLICY(handbookId)
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+    suspend fun DownloadSignedServiceLevelAgreement(
+        handbookId: Int
+    ): ResponseBody? {
+        val response = ApiService.DownloadSignedServiceLevelAgreement(handbookId)
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+    suspend fun DownloadSignedPrivacyPolicy(
+        handbookId: Int
+    ): ResponseBody? {
+        val response = ApiService.DownloadSignedPrivacyPolicy(handbookId)
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+    suspend fun DownloadSignedDAEngagement(
+        handbookId: Int
+    ): ResponseBody? {
+        val response = ApiService.DownloadSignedDAEngagement(handbookId)
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+
 
 }

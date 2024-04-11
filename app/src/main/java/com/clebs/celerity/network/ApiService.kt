@@ -66,6 +66,8 @@ import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import org.w3c.dom.Comment
 import retrofit2.Response
 import retrofit2.http.Body
@@ -459,6 +461,31 @@ interface ApiService {
         @Query("UserId") userId: Int,
         @Query("selYear") selYear: Int
     ): Response<DownloadThirdPartyInvoicePDFResponse>
+
+    @GET("/api/HtmlToPDF/DownloadSignedDAHandbook/{handBookId}")
+    suspend fun DownloadSignedDAHandbook(
+        @Path("handBookId") handbookId: Int
+    ): Response<ResponseBody>
+
+    @GET("/api/HtmlToPDF/DownloadSignedDAEngagement/{handBookId}")
+    suspend fun DownloadSignedDAEngagement(
+        @Path("handBookId") handbookId: Int
+    ):Response<ResponseBody>
+
+    @GET("/api/HtmlToPDF/DownloadSignedGDPRPOLICY/{handBookId}")
+    suspend fun DownloadSignedGDPRPOLICY(
+        @Path("handBookId") handbookId: Int
+    ):Response<ResponseBody>
+
+    @GET("/api/HtmlToPDF/DownloadSignedServiceLevelAgreement/{handBookId}")
+    suspend fun DownloadSignedServiceLevelAgreement(
+        @Path("handBookId") handbookId: Int
+    ):Response<ResponseBody>
+    @GET("/api/HtmlToPDF/DownloadSignedPrivacyPolicy/{handBookId}")
+    suspend fun DownloadSignedPrivacyPolicy(
+        @Path("handBookId") handbookId: Int
+    ):Response<ResponseBody>
+
 
 }
 

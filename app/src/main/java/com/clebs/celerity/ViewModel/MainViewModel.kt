@@ -68,6 +68,7 @@ import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.Prefs
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 
 class MainViewModel(
     private val repo: MainRepo
@@ -130,6 +131,11 @@ class MainViewModel(
     val livedataremovethirdpartyaccess = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataDownloadInvoicePDF = MutableLiveData<DownloadInvoicePDFResponse?>()
     val liveDataDownloadThirdPartyInvoicePDF= MutableLiveData<DownloadThirdPartyInvoicePDFResponse?>()
+    val liveDataDownloadSignedDAHandbook = MutableLiveData<ResponseBody?>()
+    val liveDataDownloadSignedGDPRPOLICY = MutableLiveData<ResponseBody?>()
+    val liveDataDownloadSignedServiceLevelAgreement = MutableLiveData<ResponseBody?>()
+    val liveDataDownloadSignedPrivacyPolicy = MutableLiveData<ResponseBody?>()
+    val liveDataDownloadSignedDAEngagement = MutableLiveData<ResponseBody?>()
 
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
@@ -896,4 +902,81 @@ class MainViewModel(
             }
         }
     }
+
+    fun DownloadSignedDAHandbook(
+        handbookId:Int
+    ){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.DownloadSignedDAHandbook(handbookId)
+            }
+            result.onSuccess { res->
+                liveDataDownloadSignedDAHandbook.postValue(res)
+            }
+            result.onFailure { ex->
+                Log.e("Download Signed Da Handbook","Error ${ex.message}")
+            }
+        }
+    }
+    fun DownloadSignedGDPRPOLICY(
+        handbookId:Int
+    ){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.DownloadSignedGDPRPOLICY(handbookId)
+            }
+            result.onSuccess { res->
+                liveDataDownloadSignedGDPRPOLICY.postValue(res)
+            }
+            result.onFailure { ex->
+                Log.e("Download Signed Da Handbook","Error ${ex.message}")
+            }
+        }
+    }
+    fun DownloadSignedServiceLevelAgreement(
+        handbookId:Int
+    ){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.DownloadSignedServiceLevelAgreement(handbookId)
+            }
+            result.onSuccess { res->
+                liveDataDownloadSignedServiceLevelAgreement.postValue(res)
+            }
+            result.onFailure { ex->
+                Log.e("Download Signed Da Handbook","Error ${ex.message}")
+            }
+        }
+    }
+    fun DownloadSignedPrivacyPolicy(
+        handbookId:Int
+    ){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.DownloadSignedPrivacyPolicy(handbookId)
+            }
+            result.onSuccess { res->
+                liveDataDownloadSignedPrivacyPolicy.postValue(res)
+            }
+            result.onFailure { ex->
+                Log.e("Download Signed Da Handbook","Error ${ex.message}")
+            }
+        }
+    }
+    fun DownloadSignedDAEngagement(
+        handbookId:Int
+    ){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.DownloadSignedDAEngagement(handbookId)
+            }
+            result.onSuccess { res->
+                liveDataDownloadSignedDAEngagement.postValue(res)
+            }
+            result.onFailure { ex->
+                Log.e("Download Signed Da Handbook","Error ${ex.message}")
+            }
+        }
+    }
+
 }

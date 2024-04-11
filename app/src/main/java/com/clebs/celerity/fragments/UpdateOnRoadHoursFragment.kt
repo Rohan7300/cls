@@ -103,6 +103,11 @@ class UpdateOnRoadHoursFragment : Fragment() {
             binding.parcelsBroughtBack.text = parcelBack.toString()
         }
 
+        binding.cancel.setOnClickListener {
+            findNavController().navigate(R.id.completeTaskFragment)
+            findNavController().clearBackStack(R.id.completeTaskFragment)
+        }
+
         binding.pbbMinus.setOnClickListener {
             if (parcelBack > 0) {
                 parcelBack -= 1
@@ -327,7 +332,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
         spinner.setOnItemClickListener { parent, view, position, id ->
             run {
                 parent?.let { nonNullParent ->
-                    if (position != 0) { // Skip the dummy item
+                    if (position != 0) {
                         val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
                         selectedItem.let {
                             when (spinner) {

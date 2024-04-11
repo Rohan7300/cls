@@ -107,6 +107,8 @@ class SplashActivity : AppCompatActivity() {
                     Prefs.getInstance(applicationContext)
                         .saveBoolean("isother", it.isOtherCompanySignatureReq)
 
+
+
                     val intent = Intent(this, PolicyDocsActivity::class.java)
 
                     intent.putExtra("signature_required", "0")
