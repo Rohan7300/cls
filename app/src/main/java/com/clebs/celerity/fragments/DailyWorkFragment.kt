@@ -601,7 +601,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
 
     fun getVichleinformation() {
-        Prefs.getInstance(App.instance).vmRegNo = vrn
+        Prefs.getInstance(App.instance).scannedVmRegNo = vrn
         (activity as HomeActivity).GetDriversBasicInformation()
         mainViewModel.getVichelinformationResponse(
             Prefs.getInstance(App.instance).userID.toString().toDouble(), 0.toDouble(), vrn

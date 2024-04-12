@@ -960,7 +960,7 @@ class CompleteTaskFragment : Fragment() {
         if (cqSDKInitializer.isCQSDKInitialized()) {
 
 
-            Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
+            Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID+"VmReg ${Prefs.getInstance(App.instance).vmRegNo}")
             Log.e("sdkskdkdkskdkskd", "onCreateView: ")
 
             try {
@@ -973,7 +973,7 @@ class CompleteTaskFragment : Fragment() {
                     ),
                     inputDetails = InputDetails(
                         vehicleDetails = VehicleDetails(
-                            regNumber = Prefs.getInstance(App.instance).vmRegNo , //if sent, user can't edit
+                            regNumber = Prefs.getInstance(App.instance).vmRegNo.replace(" ",""), //if sent, user can't edit
                             make = "Van", //if sent, user can't edit
                             model = "Any Model", //if sent, user can't edit
                             bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]

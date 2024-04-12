@@ -266,7 +266,12 @@ class UpdateOnRoadHoursFragment : Fragment() {
             if (routeData != null) {
                 val routeNames = routeData.map { it.RtName }
                 val routeIDs = routeData.map { it.RtId }
-                binding.selectDepartmentTIL.hint = routeNames[routeIDs.indexOf(selectedRouteId)]
+                try {
+                    binding.selectDepartmentTIL.hint = routeNames[routeIDs.indexOf(selectedRouteId)]
+                }catch (_:Exception){
+
+                }
+
                 selectedRouteType = routeNames[routeIDs.indexOf(selectedRouteId)]
                 setSpinnerNew(
                     binding.spinnerRouteType,
@@ -299,12 +304,12 @@ class UpdateOnRoadHoursFragment : Fragment() {
                         selectedItem.let {
                             when (spinner) {
                                 binding.spinnerLocation -> {
-                                    selectedLocId = ids[position - 1]
+                                    selectedLocId = ids[position]
                                 }
 
                                 binding.spinnerRouteType -> {
                                     selectedRouteType = selectedItem
-                                    selectedRouteId = ids[position - 1]
+                                    selectedRouteId = ids[position]
                                 }
                             }
                         }
