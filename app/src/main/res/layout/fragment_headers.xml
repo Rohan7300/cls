@@ -5,13 +5,14 @@
     android:id="@+id/rlinfo"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/very_light_orange"
+    android:layout_marginTop="10dp"
+    android:background="#ffceb3"
     android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
     <com.google.android.material.appbar.CollapsingToolbarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:contentScrim="@color/light_orange2"
+        app:contentScrim="@color/medium_orange"
         app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
         <RelativeLayout

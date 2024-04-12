@@ -185,12 +185,25 @@
                         android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+<ImageView
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:alpha="0.1"
+    android:id="@+id/demo"
+    android:visibility="gone"
+    android:backgroundTint="@color/gray"
+    android:src="@drawable/demochart"
+    app:layout_constraintStart_toStartOf="@id/txt_this_week"
+    app:layout_constraintTop_toBottomOf="@+id/txt_this_week"/>
+
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/pieChart"
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:layout_marginTop="10dp"
+
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/txt_this_week"
@@ -198,22 +211,22 @@
 
                         />
 
-                    <TextView
-                        android:id="@+id/nodata"
-                        android:layout_width="wrap_content"
-                        android:layout_height="100dp"
-                        android:drawableEnd="@drawable/baseline_error_24"
-                        android:fontFamily="@font/poppins_bold"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:text="No Data cash flow found!"
-                        android:textColor="@color/text_color"
-                        android:textSize="13sp"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/nodata"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="100dp"-->
+<!--                        android:drawableEnd="@drawable/baseline_error_24"-->
+<!--                        android:fontFamily="@font/poppins_bold"-->
+<!--                        android:gravity="center"-->
+<!--                        android:padding="8dp"-->
+<!--                        android:text="No Data cash flow found!"-->
+<!--                        android:textColor="@color/text_color"-->
+<!--                        android:textSize="13sp"-->
+<!--                        android:visibility="gone"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
                     <!--                    <com.anychart.AnyChartView-->
                     <!--                        android:id="@+id/anychartview"-->
@@ -289,11 +302,9 @@
                         android:id="@+id/llnodata"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginBottom="30dp"
                         android:gravity="center"
+                        android:layout_marginTop="20dp"
                         android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/textView5"
                         tools:layout_editor_absoluteX="10dp">
 

@@ -51,6 +51,7 @@
                     android:layout_marginHorizontal="5dp"
                     android:layout_marginVertical="5dp"
                     android:text="Comment"
+                    android:fontFamily="@font/poppins_semibold"
                     android:textColor="@color/text_color"
                     android:textSize="15sp" />
 
@@ -62,6 +63,8 @@
                     android:layout_marginVertical="10dp"
                     android:background="@drawable/shape_edittext_onroad"
                     android:gravity="start"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/poppins"
                     android:hint="Enter Comment"
                     android:padding="15dp" />
 
@@ -122,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="10dp"
-                    android:fontFamily="@font/poppins_semibold"
+                    android:fontFamily="@font/poppins_bold"
                     android:gravity="center"
                     android:text="Comment History"
                     android:textColor="@color/black"

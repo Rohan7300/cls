@@ -48,6 +48,7 @@ import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toRequestBody
+import com.tapadoo.alerter.Alerter
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
 import io.clearquote.assessment.cq_sdk.models.CustomerDetails
@@ -419,7 +420,16 @@ class CompleteTaskFragment : Fragment() {
             viewModel.GetDailyWorkInfoById(userId)
             showDialog()
             if (it != null) {
+
                 isClockedIn = true
+//                if (isClockedIn){
+//                    Alerter.create(requireActivity())
+//                        .setTitle("")
+//                        .setIcon(R.drawable.logo_new)
+//                        .setText("Clocked in successfully")
+//                        .setBackgroundColorInt(resources.getColor(R.color.medium_orange))
+//                        .show()
+//                }
                 setVisibiltyLevel()
             } else {
                 showToast("Please add face mask image first", requireContext())

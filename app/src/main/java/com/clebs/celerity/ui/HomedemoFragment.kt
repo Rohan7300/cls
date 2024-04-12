@@ -200,7 +200,7 @@ class HomedemoFragment : Fragment() {
 
 
                 val bt_text = (week - 2).toString()
-                mbinding.btPrev.text = "Load Week: $bt_text"+" data"
+                mbinding.btPrev.text = "Load Week: $bt_text" + " data"
 
 
             }
@@ -248,8 +248,9 @@ class HomedemoFragment : Fragment() {
             hideDialog()
             mbinding.consttwo.visibility = View.VISIBLE
             if (depts != null) {
+                mbinding.demo.visibility = View.GONE
                 mbinding.pieChart.visibility = View.VISIBLE
-                mbinding.nodata.visibility = View.GONE
+//                mbinding.nodata.visibility = View.GONE
                 depts.map {
 
 
@@ -359,8 +360,12 @@ class HomedemoFragment : Fragment() {
 
             } else {
                 hideDialog()
-                mbinding.pieChart.visibility = View.GONE
-                mbinding.nodata.visibility = View.VISIBLE
+                mbinding.demo.visibility = View.VISIBLE
+                mbinding.pieChart.setNoDataText("No cash flow data found!")
+                mbinding.pieChart.setNoDataTextColor(resources.getColor(R.color.red))
+                mbinding.pieChart.setCenterTextSize(1.0f)
+                mbinding.pieChart.visibility = View.VISIBLE
+
             }
 
 
@@ -398,7 +403,7 @@ class HomedemoFragment : Fragment() {
                     mbinding.tvDateShow6.text = "FRI " + formattedDate6
 
                     val formattedDate7 = convertDateFormat(it.saturdayDate)
-                    mbinding.tvDateShow7.text = "SAT "+formattedDate7
+                    mbinding.tvDateShow7.text = "SAT " + formattedDate7
                     mbinding.tvIsWorkingShowSunday.text = it.sundayLocation
                     mbinding.tvIsWorkingShowTuesday.text = it.tuesdayLocation
                     mbinding.tvIsWorkingShowWed.text = it.wednesdayLocation

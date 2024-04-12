@@ -48,16 +48,16 @@ class HomeFragment : Fragment() {
             hideDialog()
             if (it != null) {
              if (it.currentlocation!=null){
-                 mbinding.location.text=it.currentlocation
+                 mbinding.location.text="[H]"+it.currentlocation
              }
                 else{
-                    mbinding.location.setText("Not assigned")
+                    mbinding.location.setText("[H]"+"Not assigned")
                 }
                 if (it.workinglocation!=null){
-                    mbinding.away.text=it.workinglocation
+                    mbinding.away.text="[W]"+it.workinglocation
                 }
                 else{
-                    mbinding.away.setText("Not assigned")
+                    mbinding.away.setText("[W]"+"Not assigned")
                 }
                 mbinding.truckNumber.text = it.vmRegNo
                 mbinding.ticketNumber.text = it.userID.toString()
