@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -40,6 +41,7 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.dbLog
+import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.showToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
@@ -124,6 +126,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         Log.d("hdhsdshdsdjshhsds", "No Intent")
     }
 
+    @SuppressLint("HardwareIds")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -147,7 +150,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         getWindow().getDecorView()
             .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
 
-
+        getDeviceID()
+       val deviceID= Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()
+        Log.e("kjkcjkvckvck", "onCreate: "+deviceID )
 //        if (navController.currentDestination!!.id.equals(R.id.profileFragment)){
 //
 //            ActivityHomeBinding.title.setText("User Profile")
@@ -232,6 +237,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             ActivityHomeBinding.imgDrawer.setOnClickListener {
 
                 navController.navigate(R.id.profileFragment)
+
             }
             bottomNavigationView.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {

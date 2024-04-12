@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
+import com.clebs.celerity.R
 import com.clebs.celerity.databinding.AdapterTicketItemBinding
 import com.clebs.celerity.models.response.Doc
 import com.clebs.celerity.models.response.GetUserTicketsResponse
@@ -81,7 +83,10 @@ class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context
     }
 
     override fun onBindViewHolder(holder: TicketViewHolder, position: Int) {
+//        holder.itemView.animation=AnimationUtils.loadAnimation(holder.itemView.context,R.anim.slide_down)
         val item = ticketList.Docs[position]
+
+
         holder.bind(item)
     }
 }

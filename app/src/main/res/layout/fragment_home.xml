@@ -11,12 +11,13 @@
         <RelativeLayout
             android:id="@+id/daily_work_"
             android:layout_width="350dp"
-            android:layout_height="200dp"
+            android:layout_height="210dp"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="36dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="36dp"
-            android:background="@drawable/daily_works"
+            android:background="@drawable/card_layout"
+
             android:clipToOutline="true"
             app:layout_constraintBottom_toTopOf="@id/swipe_for_v"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,9 +61,9 @@ Marian Ionut Malasincu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/marian_ionu"
-                android:layout_marginStart="37dp"
+                android:layout_marginStart="34dp"
                 android:layout_marginTop="22dp"
-                android:layout_marginEnd="37dp"
+                android:layout_marginEnd="34dp"
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
@@ -100,7 +101,7 @@ Marian Ionut Malasincu"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_below="@+id/ic_location"
-
+android:layout_marginStart="2dp"
                             android:layout_marginTop="16dp"
                             android:src="@drawable/pin_alt_light" />
 
@@ -109,7 +110,6 @@ Marian Ionut Malasincu"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/location"
-                            android:layout_alignEnd="@+id/location"
 
                             android:layout_marginStart="4dp"
 
@@ -227,7 +227,7 @@ Marian Ionut Malasincu"
                     app:inner_color="#FD844D"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:outer_color="#FFF1EB"
+                    app:outer_color="@color/white"
                     app:rotate_icon="false"
                     app:slider_height="80dp"
                     app:slider_icon="@drawable/scan_id"

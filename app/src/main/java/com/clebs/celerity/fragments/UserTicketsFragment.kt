@@ -58,7 +58,8 @@ class UserTicketsFragment : Fragment() {
     }
 
     private fun observers() {
-        val ticketAdapter = TicketAdapter(GetUserTicketsResponse(ArrayList()), requireContext(),prefs)
+        val ticketAdapter =
+            TicketAdapter(GetUserTicketsResponse(ArrayList()), requireContext(), prefs)
         mbinding.rvTickets.adapter = ticketAdapter
         mbinding.rvTickets.layoutManager = LinearLayoutManager(requireContext())
         viewModel.liveDataGetUserTickets.observe(viewLifecycleOwner) {

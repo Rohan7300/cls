@@ -38,6 +38,7 @@
     <style name="place_the_r">
         <item name="android:textSize">15sp</item>
         <item name="android:letterSpacing">-0.02</item>
+        <item name="android:gravity">center_horizontal</item>
         <item name="android:textColor">#4A4A4A</item>
     </style>
     <style name="ctaStyle1" parent="Theme.AppCompat">

@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="7dp"
-
-    android:background="@color/white">
+  android:background="@color/transparent"
+   >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -103,11 +103,12 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="20dp"
+                android:layout_width="23dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="-8dp"
                 android:src="@drawable/circleleft"
-                app:tint="@color/white" />
+                android:background="@drawable/ticket_round"
+                app:tint="@color/very_light_orange" />
 
             <View
                 android:layout_width="10dp"
@@ -211,11 +212,12 @@
                 android:background="@color/text_color" />
 
             <ImageView
-                android:layout_width="20dp"
+                android:layout_width="23dp"
                 android:layout_height="25dp"
                 android:layout_marginEnd="-8dp"
+                android:background="@drawable/ticket_round"
                 android:src="@drawable/circleright"
-                app:tint="@color/white" />
+                app:tint="@color/very_light_orange" />
         </LinearLayout>
 
         <LinearLayout
