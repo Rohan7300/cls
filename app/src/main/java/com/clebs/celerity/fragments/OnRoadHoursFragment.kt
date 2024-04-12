@@ -3,6 +3,7 @@ package com.clebs.celerity.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +33,7 @@ class OnRoadHoursFragment : Fragment() {
     lateinit var viewModel: MainViewModel
     lateinit var prefs: Prefs
     private var locID: Int = 0
-    private var selectedLocation: String? = null
+
     private var selectedRouteType: String? = null
     private var routeName: String? = null
     private var parcelsDelivered: String = "0"
@@ -63,8 +64,7 @@ class OnRoadHoursFragment : Fragment() {
     }
 
     private fun chkNotNullInputs(): Boolean {
-        return selectedLocation.isNullOrEmpty() ||
-                selectedRouteType.isNullOrEmpty() ||
+        return selectedRouteType.isNullOrEmpty() ||
                 routeName.isNullOrEmpty() ||
                 parcelsDelivered.isEmpty()
                 || totalMileage.isEmpty()
@@ -194,7 +194,12 @@ class OnRoadHoursFragment : Fragment() {
             ).observe(viewLifecycleOwner) {
                 if (it != null) {
                     if (it.vmRegNo != null) {
-                        viewModel.GetVehicleInformation(prefs.userID.toInt(), it.vmRegNo)
+                        prefs.vmRegNo = it.vmRegNo!!
+                        try {
+                            viewModel.GetVehicleInformation(prefs.userID.toInt(), it.vmRegNo)
+                        } catch (e: Exception) {
+                            Log.e("GetVehicleInformation Exception", "$e")
+                        }
                     }
                 }
             }
@@ -268,7 +273,6 @@ class OnRoadHoursFragment : Fragment() {
                             when (spinner) {
                                 binding.spinnerLocation -> {
                                     selectedLocId = ids[position - 1]
-                                    selectedLocation = selectedItem
                                 }
 
                                 binding.spinnerRouteType -> {
@@ -307,7 +311,6 @@ class OnRoadHoursFragment : Fragment() {
                             when (spinner) {
                                 binding.spinnerLocation -> {
                                     selectedLocId = ids[position - 1]
-                                    selectedLocation = selectedItem
                                 }
 
                                 binding.spinnerRouteType -> {

@@ -1,0 +1,32 @@
+package com.clebs.celerity.models.response
+
+data class GetRideAlongDriverFeedbackQuestionResponse(
+    val CreatedBy: Any,
+    val CreatedOn: String,
+    val DriverId: Int,
+    val IsActive: Boolean,
+    val LeadDriverId: Int,
+    val RaAdditionalComments: Any,
+    val RaDawId: Any,
+    val RaDriverAdoptCircumstances: Any,
+    val RaDriverChangeGear: Any,
+    val RaDriverConfident: Any,
+    val RaDriverDrivingAnyVan: Any,
+    val RaDriverDwId: Any,
+    val RaDriverFeelSafe: Any,
+    val RaDriverFillDaWater: Any,
+    val RaDriverIdentifyDiffVehParts: Any,
+    val RaDriverObserveLocalTrafficRegulations: Any,
+    val RaDriverParking: Any,
+    val RaDriverQuestId: Int,
+    val RaDriverReactRoadHazard: Any,
+    val RaDriverReversing: Any,
+    val RaDriverRtId: Any,
+    val RaDriverSign: Any,
+    val RaDriverSpatialAwareness: Any,
+    val RaDriverToolSpareWheel: Any,
+    val RaDriverUseOfMirrors: Any,
+    val RaIsSubmitted: Any,
+    val RaIsSubmittedOn: Any,
+    val RaIssubmittedBy: Any
+)

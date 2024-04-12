@@ -602,12 +602,11 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
     fun getVichleinformation() {
         Prefs.getInstance(App.instance).vmRegNo = vrn
-        (activity as HomeActivity).getVehicleLocationInfo()
+        (activity as HomeActivity).GetDriversBasicInformation()
         mainViewModel.getVichelinformationResponse(
             Prefs.getInstance(App.instance).userID.toString().toDouble(), 0.toDouble(), vrn
         ).observe(requireActivity(), Observer {
             if (it != null) {
-
                 Prefs.getInstance(App.instance)
                     .save("vehicleLastMillage", it.vehicleLastMillage.toString())
                 mbinding.rectange.visibility = View.GONE

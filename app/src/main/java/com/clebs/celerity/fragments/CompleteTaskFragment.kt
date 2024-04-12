@@ -402,7 +402,8 @@ class CompleteTaskFragment : Fragment() {
                 }
 
                 if (it.ClockedOutTime != null) {
-                    mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
+                    mbinding.clockOutMark.setImageResource(R.drawable.checked)
+                    mbinding.rlcomtwoClockOut.isClickable = false
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
                 }
             } else {
@@ -431,7 +432,10 @@ class CompleteTaskFragment : Fragment() {
             viewModel.GetDailyWorkInfoById(userId)
             showDialog()
             if (it != null) {
-                mbinding.clockOutMark.setImageResource(R.drawable.ic_yes)
+                mbinding.clockOutMark.setImageResource(R.drawable.checked)
+                mbinding.rlcomtwoClockOut.isClickable = false
+
+
             }
         }
 
