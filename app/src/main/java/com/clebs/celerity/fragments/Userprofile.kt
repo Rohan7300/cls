@@ -1,6 +1,7 @@
 package com.clebs.celerity.fragments
 
 import android.app.AlertDialog
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
@@ -46,6 +48,8 @@ class Userprofile : Fragment() {
     var firstname: String? = null
     var lastname: String? = null
     var isthirdpartyAccess: Boolean? = null
+    var isthirdpartyAccessRequested: Boolean? = null
+    var isthirdpartyAccessRemoved: Boolean? = null
     private lateinit var fragmentManager: FragmentManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,14 +72,18 @@ class Userprofile : Fragment() {
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
 
         GetDriversBasicInformation()
-HomeActivity.ActivityHomeBinding.title.setText("")
+        HomeActivity.ActivityHomeBinding.title.setText("")
+
+
+
+
         if (Prefs.getInstance(App.instance).days.equals("1")) {
             mbinding.editImg.performClick()
 
-                mbinding.save.visibility = View.VISIBLE
-                mbinding.emailtext.isEnabled = true
-                mbinding.emailtext.isFocusable = true
-                mbinding.emailtext.isFocusableInTouchMode = true
+            mbinding.save.visibility = View.VISIBLE
+            mbinding.emailtext.isEnabled = true
+            mbinding.emailtext.isFocusable = true
+            mbinding.emailtext.isFocusableInTouchMode = true
 //                mbinding.usertext.isEnabled = true
 //                mbinding.usertext.isFocusable = true
 //                mbinding.usertext.isFocusableInTouchMode = true
@@ -84,18 +92,18 @@ HomeActivity.ActivityHomeBinding.title.setText("")
 //                mbinding.passtext.isFocusable = true
 //                mbinding.passtext.isFocusableInTouchMode = true
 
-                mbinding.phonetext.isEnabled = true
-                mbinding.phonetext.isFocusable = true
-                mbinding.phonetext.isFocusableInTouchMode = true
+            mbinding.phonetext.isEnabled = true
+            mbinding.phonetext.isFocusable = true
+            mbinding.phonetext.isFocusableInTouchMode = true
 
-                mbinding.addresstext.isEnabled = true
-                mbinding.addresstext.isFocusable = true
-                mbinding.addresstext.isFocusableInTouchMode = true
+            mbinding.addresstext.isEnabled = true
+            mbinding.addresstext.isFocusable = true
+            mbinding.addresstext.isFocusableInTouchMode = true
 
-                mbinding.editImg.alpha = 0.5f
+            mbinding.editImg.alpha = 0.5f
 
 //                mbinding.icInfos.visibility = View.VISIBLE
-                mbinding.useEmailas.visibility = View.VISIBLE
+            mbinding.useEmailas.visibility = View.VISIBLE
 
 
             (activity as HomeActivity).disableBottomNavigationView()
@@ -107,32 +115,39 @@ HomeActivity.ActivityHomeBinding.title.setText("")
             (activity as HomeActivity).enableBottomNavigationView()
         }
 
-        mbinding.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+//        mbinding.checkbox.setOnCheckedChangeListener { _, isChecked ->
+//
+//            if (isChecked) {
+//                mainViewModel.GetThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
+//
+//            } else {
+//                mainViewModel.RemoveThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
+//            }
+//
+//        }
 
-            if (isChecked) {
+        mbinding.checkbox.setOnClickListener {
+            if (mbinding.checkbox.isChecked) {
                 mainViewModel.GetThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
-
             } else {
                 mainViewModel.RemoveThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
             }
-
         }
-
-
         mainViewModel.livedatathirdpartyaccess.observe(viewLifecycleOwner) {
 
             if (it != null) {
                 if (it.Status.equals("200")) {
-                    showToast("Third Party Access Is Provided To User", requireContext())
+//                    Prefs.getInstance(App.instance).save("requestedthirdparty", "1")
+////                    showToast("Third Party Access Is Requested.", requireContext())
 
                 } else {
-                    showToast(it.Message, requireContext())
+//                    showToast(it.Message, requireContext())
 
                 }
 
 
             } else {
-                showToast("Failed to provide third party Access", requireContext())
+                showToast("Failed to provide third party Access.", requireContext())
                 mbinding.checkbox.isChecked = false
             }
 
@@ -142,8 +157,9 @@ HomeActivity.ActivityHomeBinding.title.setText("")
         mainViewModel.livedataremovethirdpartyaccess.observe(viewLifecycleOwner) {
             if (it != null) {
                 if (it.Status.equals("200")) {
-
-                    showToast("Third Party Access Is Removed for This User", requireContext())
+//                    Prefs.getInstance(App.instance).save("removethirdparty", "1")
+////                    mbinding.Tvthirdparty.text = "Third Party Access Is Requested to remove."
+//                    showToast("Third Party Access Is Removed for This User", requireContext())
 
 
                 } else {
@@ -164,8 +180,16 @@ HomeActivity.ActivityHomeBinding.title.setText("")
                 mbinding.emailtext.isEnabled = true
                 mbinding.emailtext.isFocusable = true
                 mbinding.emailtext.isFocusableInTouchMode = true
-mbinding.txtChangePassword.visibility=View.VISIBLE
+                mbinding.txtChangePassword.visibility = View.VISIBLE
+                val colorRes = R.color.white
+                val color = ContextCompat.getColor(requireContext(), colorRes)
+                mbinding.firstconst.backgroundTintList = ContextCompat.getColorStateList(requireContext(), colorRes)
 
+                // Set background tint using a specific color
+                mbinding.firstconst.backgroundTintList =ColorStateList.valueOf(color)
+                mbinding.usepassword.backgroundTintList=ColorStateList.valueOf(color)
+                mbinding.usephone.backgroundTintList=ColorStateList.valueOf(color)
+                mbinding.useaddress.backgroundTintList=ColorStateList.valueOf(color)
 //                mbinding.usertext.isEnabled = true
 //                mbinding.usertext.isFocusable = true
 //                mbinding.usertext.isFocusableInTouchMode = true
@@ -187,12 +211,25 @@ mbinding.txtChangePassword.visibility=View.VISIBLE
 //                mbinding.icInfos.visibility = View.VISIBLE
                 mbinding.useEmailas.visibility = View.VISIBLE
             } else {
+                val newColor = resources.getColor(R.color.very_light_grey_two)
+                mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(newColor)
+                mbinding.passtext.backgroundTintList = ColorStateList.valueOf(newColor)
+                mbinding.phonetext.backgroundTintList=ColorStateList.valueOf(newColor)
+                mbinding.addresstext.backgroundTintList=ColorStateList.valueOf(newColor)
                 mbinding.save.visibility = View.GONE
                 mbinding.emailtext.isEnabled = false
                 mbinding.emailtext.isFocusable = false
                 mbinding.emailtext.isFocusableInTouchMode = false
+                val colorRes = R.color.very_light_grey_two
+                val color = ContextCompat.getColor(requireContext(), colorRes)
+                mbinding.firstconst.backgroundTintList = ContextCompat.getColorStateList(requireContext(), colorRes)
+                mbinding.firstconst.backgroundTintList =ColorStateList.valueOf(color)
 
-                mbinding.txtChangePassword.visibility=View.GONE
+
+                mbinding.usepassword.backgroundTintList=ColorStateList.valueOf(color)
+                mbinding.usephone.backgroundTintList=ColorStateList.valueOf(color)
+                mbinding.useaddress.backgroundTintList=ColorStateList.valueOf(color)
+                mbinding.txtChangePassword.visibility = View.GONE
                 mbinding.usertext.isEnabled = false
                 mbinding.usertext.isFocusable = false
                 mbinding.usertext.isFocusableInTouchMode = false
@@ -348,6 +385,21 @@ mbinding.txtChangePassword.visibility=View.VISIBLE
                 hideDialog()
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
                 mbinding.checkbox.isChecked = it.IsThirdPartyChargeAccessAllowed.equals(true)
+                isthirdpartyAccess = it.IsThirdPartyChargeAccessAllowed
+            if ( it.IsThirdPartyChargeAccessAllowed){
+                mbinding.Tvthirdparty.text="Third party access is granted"
+                mbinding.checkbox.isChecked=true
+            }
+                else if (it.IsThirdPartyChargeAccessAllowed.equals(false)){
+                    mbinding.Tvthirdparty.text
+                }
+//                if (it.IsThirdPartyChargeAccessAllowed.equals(true)) {
+//                    mbinding.Tvthirdparty.setText("Third party Access has been granted")
+//                } else {
+//                    mbinding.Tvthirdparty.setText("Third party Access is not granted")
+//                }
+
+
 //                if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
 //                    showAlertChangePasword90dys()
 //                }
@@ -383,7 +435,7 @@ mbinding.txtChangePassword.visibility=View.VISIBLE
                 if (it?.Status!!.equals(200)) {
                     Log.e("90daysdisdjskjds", "updateProfile90dys: ")
                     showToast("ProfileUpdated", requireContext())
-                    Prefs.getInstance(App.instance).days="0"
+                    Prefs.getInstance(App.instance).days = "0"
 //                    Prefs.getInstance(App.instance).save("90days", "0")
                     findNavController().navigate(R.id.homedemoFragment)
 
