@@ -151,8 +151,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
 
         getDeviceID()
-       val deviceID= Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()
-        Log.e("kjkcjkvckvck", "onCreate: "+deviceID )
+        val deviceID =
+            Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()
+        Log.e("kjkcjkvckvck", "onCreate: " + deviceID)
 //        if (navController.currentDestination!!.id.equals(R.id.profileFragment)){
 //
 //            ActivityHomeBinding.title.setText("User Profile")
@@ -288,9 +289,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
             }
-//            ActivityHomeBinding.imgLogout.setOnClickListener {
-////                showAlertLogout()
-//            }
+            ActivityHomeBinding.imgLogoutMain.setOnClickListener {
+                showAlertLogout()
+            }
         } catch (e: Exception) {
             RetrofitService.handleNetworkError(e, fragmentManager)
         }
@@ -418,7 +419,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         deleteDialog.setCancelable(false)
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         deleteDialog.show()
-
     }
 
 

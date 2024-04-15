@@ -44,6 +44,7 @@ import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
+import com.clebs.celerity.models.response.GetRideAlongDriverFeedbackQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
@@ -136,6 +137,8 @@ class MainViewModel(
     val liveDataDownloadSignedServiceLevelAgreement = MutableLiveData<ResponseBody?>()
     val liveDataDownloadSignedPrivacyPolicy = MutableLiveData<ResponseBody?>()
     val liveDataDownloadSignedDAEngagement = MutableLiveData<ResponseBody?>()
+
+    val liveDataGetRideAlongDriverFeedbackQuestion = MutableLiveData<GetRideAlongDriverFeedbackQuestionResponse?>()
 
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
@@ -976,6 +979,26 @@ class MainViewModel(
             result.onFailure { ex->
                 Log.e("Download Signed Da Handbook","Error ${ex.message}")
             }
+        }
+    }
+
+    fun GetRideAlongDriverFeedbackQuestion(
+        driverId: Int,
+        routeID: Int,
+        leadDriverId: Int,
+        daDailyWorkId: Int
+    ){
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.GetRideAlongDriverFeedbackQuestion(driverId,routeID,leadDriverId,daDailyWorkId)
+            }
+            result.onSuccess {res->
+                liveDataGetRideAlongDriverFeedbackQuestion.postValue(res)
+            }
+            result.onFailure { ex->
+                Log.e("GetRideAlongDriverFeedBackQuestionRes ","${ex.message}")
+            }
+
         }
     }
 

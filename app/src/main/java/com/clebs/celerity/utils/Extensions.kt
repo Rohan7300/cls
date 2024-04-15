@@ -436,8 +436,8 @@ fun showTimePickerDialog(context: Context, tv: TextView) {
         minute,
         true
     )
-    timePickerDialog.getButton(TimePickerDialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.orange))
-    timePickerDialog.getButton(TimePickerDialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.orange))
+    //timePickerDialog.getButton(TimePickerDialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.orange))
+    //timePickerDialog.getButton(TimePickerDialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.orange))
     timePickerDialog.show()
 }
 
@@ -476,8 +476,8 @@ fun showDatePickerDialog(context: Context, tv1: TextView, tv2: TextView, tvNext:
         month,
         dayOfMonth
     )
-    datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.orange))
-    datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.orange))
+    //datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.orange))
+    //datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.orange))
     datePickerDialog.show()
 }
 fun isEndDateGreaterThanStartDate(startDate: String, endDate: String): Boolean {

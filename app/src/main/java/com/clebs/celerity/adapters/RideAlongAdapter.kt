@@ -30,6 +30,15 @@ class RideAlongAdapter(
         fun bind(item: leadDriverIdItem) {
             binding.tainerName.text = prefs.userName
             binding.traineeName.text = item.DriverName
+            mainViewModel.GetRideAlongDriverFeedbackQuestion(item.DriverId,item.RtId,item.LeadDriverId,item.DawId)
+            mainViewModel.liveDataGetRideAlongDriverFeedbackQuestion.observe(viewLifecycleOwner){
+                if(it!=null){
+                    if(it.RaIsSubmitted==true){
+                        binding.trainerFeedbackIV.isClickable = false
+                        binding.trainerFeedbackImage.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.done))
+                    }
+                }
+            }
 
             mainViewModel.GetRideAlongLeadDriverQuestion(
                 item.DriverId,

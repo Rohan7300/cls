@@ -420,7 +420,7 @@
                                 android:padding="14dp"
                                 android:text="New route"
                                 android:textColor="#4A4A4A"
-                                android:textSize="13sp" />
+                                android:textSize="11sp" />
 
                         </RelativeLayout>
 
@@ -456,7 +456,7 @@
                                 android:padding="14dp"
                                 android:text="Ride along"
                                 android:textColor="#4A4A4A"
-                                android:textSize="13sp" />
+                                android:textSize="11sp" />
 
                         </RelativeLayout>
                         </LinearLayout>

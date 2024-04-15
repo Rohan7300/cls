@@ -45,6 +45,7 @@ import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
+import com.clebs.celerity.models.response.GetRideAlongDriverFeedbackQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
@@ -486,6 +487,13 @@ interface ApiService {
         @Path("handBookId") handbookId: Int
     ):Response<ResponseBody>
 
+    @GET("/api/DriverQuestionnaire/GetRideAlongDriverFeedbackQuestion")
+    suspend fun GetRideAlongDriverFeedbackQuestion(
+        @Query("driverId") driverId:Int,
+        @Query("routeId") routeId:Int,
+        @Query("leadDriverId") leadDriverId: Int,
+        @Query("daDailyWorkId") daDailyWorkId:Int
+    ):Response<GetRideAlongDriverFeedbackQuestionResponse>
 
 }
 
