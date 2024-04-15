@@ -85,6 +85,14 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putInt("currRtId", value).apply()
         }
 
+    var handbookId: Int
+        get() {
+            return sharedPreferences.getInt("currHandbook", 0)
+        }
+        set(value) {
+            sharedPreferences.edit().putInt("currHandbook", value).apply()
+        }
+
     var quesID: Int
         get() = sharedPreferences.getInt("quesID", 0)
         set(value) = sharedPreferences.edit().putInt("quesID", value).apply()
@@ -256,10 +264,11 @@ class Prefs(context: Context) {
         editor.putString("CurrInvoice", json)
         editor.apply()
     }
-    fun getInvoice():Invoice?{
+
+    fun getInvoice(): Invoice? {
         val gson = Gson()
-        val data = sharedPreferences.getString("CurrInvoice",null)
-        return gson.fromJson(data,Invoice::class.java)?:null
+        val data = sharedPreferences.getString("CurrInvoice", null)
+        return gson.fromJson(data, Invoice::class.java) ?: null
     }
 
     fun saveInvoiceX(item: InvoiceX) {
@@ -269,10 +278,11 @@ class Prefs(context: Context) {
         editor.putString("CurrInvoiceX", json)
         editor.apply()
     }
-    fun getInvoiceX():InvoiceX?{
+
+    fun getInvoiceX(): InvoiceX? {
         val gson = Gson()
-        val data = sharedPreferences.getString("CurrInvoiceX",null)
-        return gson.fromJson(data,InvoiceX::class.java)?:null
+        val data = sharedPreferences.getString("CurrInvoiceX", null)
+        return gson.fromJson(data, InvoiceX::class.java) ?: null
     }
 
 

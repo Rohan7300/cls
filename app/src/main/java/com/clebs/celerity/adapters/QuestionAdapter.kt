@@ -34,22 +34,24 @@ class QuestionAdapter(var list: ArrayList<QuestionWithOption>,var context:Contex
                     binding.radioLayQ1.visibility = View.VISIBLE
                     binding.badgeArrow.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.down_arrow))
                 }
-
             }
 
             radio1.setOnClickListener {
+                visibilityCollapse(binding)
                 item.selectedOption = "C"
                 radio2.isChecked = false
                 radio3.isChecked = false
             }
 
             radio2.setOnClickListener {
+                visibilityCollapse(binding)
                 item.selectedOption = "DR"
                 radio1.isChecked = false
                 radio3.isChecked = false
             }
 
             radio3.setOnClickListener {
+                visibilityCollapse(binding)
                 item.selectedOption = "BS"
                 radio1.isChecked = false
                 radio2.isChecked = false
@@ -58,6 +60,11 @@ class QuestionAdapter(var list: ArrayList<QuestionWithOption>,var context:Contex
 
     }
 
+    fun visibilityCollapse(binding:AdapterQuestionBinding){
+        binding.radioLayQ1.visibility = View.GONE
+        binding.badgeArrow.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.arrow_left))
+        binding.mainLayout.setBackgroundResource(R.drawable.shape_green_new)
+    }
     fun areAllQuestionsSelected(): Boolean {
         for (question in list) {
             if (question.selectedOption.isEmpty()) {
@@ -68,7 +75,7 @@ class QuestionAdapter(var list: ArrayList<QuestionWithOption>,var context:Contex
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionViewHolder {
-        val binding = AdapterQuestionBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = AdapterQuestionBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return QuestionViewHolder(binding)
     }
 

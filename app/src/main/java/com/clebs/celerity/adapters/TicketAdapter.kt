@@ -25,6 +25,12 @@ class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context
         fun bind(ticketItem: Doc) {
             binding.ticketTitleTV.text = "CLS - ${ticketItem.UserTicketID}"
             binding.ticketSubjectTV.text = ticketItem.TicketDescription
+            if(ticketItem.IsActive){
+                binding.ticketStatus.text = "Active"
+            }
+            if(!ticketItem.IsActive&&ticketItem.IsCompleted!=null){
+                binding.ticketStatus.text = "Completed"
+            }
 /*            var time = try {
                 ticketItem.UserTicketCreatedOn.split("T")[0] + " " + ticketItem.UserTicketCreatedOn.split(
                     "T"

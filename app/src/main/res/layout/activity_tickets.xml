@@ -141,7 +141,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:expandedHintEnabled="false"
+
                         android:hint="Registration Number">
 
                         <EditText
@@ -151,7 +151,6 @@
                             android:layout_marginTop="4dp"
                             android:importantForAutofill="no"
                             android:padding="14dp"
-                            android:hint="Enter vehicle registration number"
                             android:textColorHint="@color/hintColor"
                             android:textSize="14sp" />
 

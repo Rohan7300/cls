@@ -76,7 +76,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         fun showLog(tag: String, message: String) {
             Log.e(tag, message)
         }
-      lateinit var ActivityHomeBinding: ActivityHomeBinding
+
+        lateinit var ActivityHomeBinding: ActivityHomeBinding
         var checked: String? = ""
         var Boolean: Boolean = false
         var lmId: Int = 0
@@ -168,9 +169,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             GetDriversBasicInformation()
             if (ninetydaysBoolean?.equals(true) == true) {
                 showAlertChangePasword90dys()
-
             }
-            getVehicleLocationInfo()
+
             viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
                 Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
                 loadingDialog.cancel()
@@ -204,7 +204,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 ImageViewModelProviderFactory(imagesRepo)
             )[ImageViewModel::class.java]
 
-            onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
+            onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     try {
                         val prefs = Prefs.getInstance(applicationContext)
@@ -298,38 +298,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     }
 
-    fun getVehicleLocationInfo() {
-        val today = LocalDate.now()
-        val formatter = DateTimeFormatter.ofPattern("dd/MM")
-        date = today.format(formatter)
-
-        loadingDialog.show()
-
-        viewModel.GetDriversBasicInformation(
-            userId.toDouble()
-        ).observe(this) {
-            loadingDialog.cancel()
-            if (it != null) {
-                try {
-                    //if (it.vmRegNo != null)
-                    viewModel.GetVehicleInformation(userId, Prefs.getInstance(this).vmRegNo)
-                    Prefs.getInstance(this).lmid = it.lmID
-
-                    lmId = it.lmID
-                } catch (e: Exception) {
-                    Log.d("sds", e.toString())
-                }
-
-                firstName = it.firstName
-                lastName = it.lastName
-                Prefs.getInstance(this).userName = "$firstName $lastName"
-
-                isLeadDriver = it.IsLeadDriver
-            }
-        }
-    }
-
-
     private fun logout() {
         viewModel.Logout().observe(this@HomeActivity) {
             if (it!!.responseType == "Success") {
@@ -366,8 +334,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     navController.navigate(previousFragment)
                     prefs.saveNavigationHistory(fragmentStack)
                 }
-            }
-            else{
+            } else {
                 super.onBackPressed()
             }
         } catch (_: Exception) {
@@ -507,28 +474,38 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     fun GetDriversBasicInformation() {
+        val today = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("dd/MM")
+        date = today.format(formatter)
         loadingDialog.show()
         viewModel.GetDriversBasicInformation(
             Prefs.getInstance(App.instance).userID.toDouble()
         ).observe(this, Observer {
+            loadingDialog.cancel()
             if (it != null) {
+                try {
+                    try {
+                        Prefs.getInstance(this).vmRegNo = it.vmRegNo!!
+                        viewModel.GetVehicleInformation(userId, it.vmRegNo)
+                    } catch (e: Exception) {
+                        Log.e("GetVehicleInformation Exception", "$e")
+                    }
+                    Prefs.getInstance(this).lmid = it.lmID
+                    lmId = it.lmID
+                } catch (e: Exception) {
+                    Log.d("sds", e.toString())
+                }
+                firstName = it.firstName
+                lastName = it.lastName
+                Prefs.getInstance(this).userName = "$firstName $lastName"
+                isLeadDriver = it.IsLeadDriver
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
                 if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
-                    if (loadingDialog.isShowing) {
-                        loadingDialog.dismiss()
-
-                    }
                     Prefs.getInstance(applicationContext).days = "1"
                     showAlertChangePasword90dys()
-                }
-                else{
+                } else {
                     Prefs.getInstance(applicationContext).days = "0"
                 }
-                Log.e("responseprofile", "GetDriversBasicInformation: ")
-
-//                if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
-//                    showAlertChangePasword90dys()
-//                }
             }
         })
     }

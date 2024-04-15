@@ -27,7 +27,7 @@ import com.clebs.celerity.utils.showErrorDialog
 class LoginActivity : AppCompatActivity() {
     lateinit var ActivityLoginBinding: ActivityLoginBinding
     lateinit var mainViewModel: MainViewModel
-    lateinit var loadingDialog:LoadingDialog
+    lateinit var loadingDialog: LoadingDialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,14 +44,13 @@ class LoginActivity : AppCompatActivity() {
         ActivityLoginBinding.btLogin.setOnClickListener {
 
             if (ActivityLoginBinding.edtUser.text!!.isEmpty()) {
-               ActivityLoginBinding.textError.visibility=View.VISIBLE
-            }
-          else  if (ActivityLoginBinding.edtPass.text!!.isEmpty()) {
-              ActivityLoginBinding.textErrorTwo.visibility=View.VISIBLE
-                ActivityLoginBinding.textError.visibility=View.GONE
+                ActivityLoginBinding.textError.visibility = View.VISIBLE
+            } else if (ActivityLoginBinding.edtPass.text!!.isEmpty()) {
+                ActivityLoginBinding.textErrorTwo.visibility = View.VISIBLE
+                ActivityLoginBinding.textError.visibility = View.GONE
             } else {
-                ActivityLoginBinding.textError.visibility=View.GONE
-                ActivityLoginBinding.textErrorTwo.visibility=View.GONE
+                ActivityLoginBinding.textError.visibility = View.GONE
+                ActivityLoginBinding.textErrorTwo.visibility = View.GONE
                 loadingDialog.show()
                 login()
             }
@@ -82,11 +81,15 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         ActivityLoginBinding.progressbar.visibility = View.GONE
                         //Toast.makeText(this, "Error in login", Toast.LENGTH_SHORT).show()
-                        showErrorDialog(fragmentManager,"LS-01",it.message)
+                        showErrorDialog(fragmentManager, "LS-01", it.message)
                         setLoggedIn(false)
                     }
                 } else {
-                    showErrorDialog(fragmentManager,"LS-02","Please check your email and password and try again.")
+                    showErrorDialog(
+                        fragmentManager,
+                        "LS-02",
+                        "Please check your email and password and try again."
+                    )
                     //Toast.makeText(this, "Error in login", Toast.LENGTH_SHORT).show()
                     loadingDialog.dismiss()
                 }
@@ -107,19 +110,19 @@ class LoginActivity : AppCompatActivity() {
     fun GetDriverSignatureInformation() {
         loadingDialog.show()
         var userid: Double = 0.0
-        if (!Prefs.getInstance(applicationContext).userID.equals(0.0)) {
-            userid = Prefs.getInstance(applicationContext).userID.toDouble()
+        var pref = Prefs.getInstance(applicationContext)
+        if (!pref.userID.equals(0.0)) {
+            userid = pref.userID.toDouble()
         }
 
         mainViewModel.getDriverSignatureInfo(userid).observe(this@LoginActivity, Observer {
             if (it != null) {
                 //     Prefs.getInstance(applicationContext).saveSignatureInfo(it.toString())
-                Prefs.getInstance(applicationContext)
-                    .saveBoolean("isSignatureReq", it.isSignatureReq)
-                Prefs.getInstance(applicationContext)
-                    .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
-                Prefs.getInstance(applicationContext)
-                    .saveBoolean("isother", it.isOtherCompanySignatureReq)
+                pref.saveBoolean("isSignatureReq", it.isSignatureReq)
+                pref.saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
+                pref.saveBoolean("isother", it.isOtherCompanySignatureReq)
+                pref.handbookId = it.handbookId
+
                 loadingDialog.dismiss()
                 if (it.isSignatureReq) {
 
@@ -133,7 +136,7 @@ class LoginActivity : AppCompatActivity() {
                         intent.putExtra("signature_required", "0")
                         startActivity(intent)
                     } else {
-                     //   val options = ActivityOptions.makeSceneTransitionAnimation(this)
+                        //   val options = ActivityOptions.makeSceneTransitionAnimation(this)
                         val intent = Intent(this, HomeActivity::class.java)
                         intent.putExtra("no_signature_required", "0")
                         startActivity(intent)

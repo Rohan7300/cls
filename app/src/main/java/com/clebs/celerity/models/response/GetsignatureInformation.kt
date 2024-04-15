@@ -29,5 +29,7 @@ data class GetsignatureInformation(
     @SerializedName("UserID")
     val userID: Int,
     @SerializedName("UserRole")
-    val userRole: String
+    val userRole: String,
+    @SerializedName("HandbookId")
+    val handbookId:Int
 )
