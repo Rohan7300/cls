@@ -33,6 +33,9 @@ data class DriversBasicInformationModel(
     @SerializedName("CurrentLocation")
     val currentlocation:String,
     @SerializedName("WorkingLocation")
-    val workinglocation:String
+    val workinglocation:String,
+    @SerializedName("IsThirdPartyChargeAccessApplied")
+val IsThirdPartyChargeAccessApplied:Boolean
+
 
 )

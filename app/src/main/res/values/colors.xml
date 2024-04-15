@@ -23,5 +23,6 @@
     <color name="commentbg">#E5ECF5</color>
     <color name="darkcommentbg">#A6BBDC</color>
     <color name="hintColor">#676C74</color>
-    <color name="very_light_grey_two">#e0e0e0</color>
+    <color name="very_light_grey_two">#f8f8ff</color>
+
 </resources>

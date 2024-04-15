@@ -292,7 +292,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/inter_semibold"
-                        android:text="24-march at 11:15 pm DXM$"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="@+id/your_next"

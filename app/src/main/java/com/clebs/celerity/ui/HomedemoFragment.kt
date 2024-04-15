@@ -76,20 +76,7 @@ class HomedemoFragment : Fragment() {
 
         viewModel.GetWeekAndYear()
 
-        val currentDate = Calendar.getInstance()
 
-        currentDate.set(Calendar.HOUR_OF_DAY, 0)
-        currentDate.set(Calendar.MINUTE, 0)
-        currentDate.set(Calendar.SECOND, 0)
-        currentDate.set(Calendar.MILLISECOND, 0)
-        currentDate.add(Calendar.DAY_OF_YEAR, 1)
-
-        val tomorrowDate = currentDate.time
-        val dateFormat = SimpleDateFormat("EEE MMM dd yyyy", Locale.US)
-
-        val formattedDate: String = dateFormat.format(tomorrowDate)
-        mbinding.textView5.text = formattedDate
-        Log.e("tomotmoit", "onCreateView: " + formattedDate)
 //        mbinding.pieChart.setUsePercentValues(true);
         mbinding.pieChart.getDescription().setEnabled(false);
 
@@ -374,7 +361,20 @@ class HomedemoFragment : Fragment() {
         viewModel.livedatagetvechilescheduleinfo.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
+                val currentDate = Calendar.getInstance()
 
+                currentDate.set(Calendar.HOUR_OF_DAY, 0)
+                currentDate.set(Calendar.MINUTE, 0)
+                currentDate.set(Calendar.SECOND, 0)
+                currentDate.set(Calendar.MILLISECOND, 0)
+                currentDate.add(Calendar.DAY_OF_YEAR, 1)
+
+                val tomorrowDate = currentDate.time
+                val dateFormat = SimpleDateFormat("EEE MMM dd yyyy", Locale.US)
+
+                val formattedDate: String = dateFormat.format(tomorrowDate)
+                mbinding.textView5.text = formattedDate
+                Log.e("tomotmoit", "onCreateView: " + formattedDate)
                 mbinding.viewfullschedule.isClickable = true
                 mbinding.viewfullschedule.isEnabled = true
                 mbinding.llnodata.visibility = View.GONE
