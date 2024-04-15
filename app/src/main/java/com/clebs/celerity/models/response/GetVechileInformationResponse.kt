@@ -11,7 +11,7 @@ import kotlinx.parcelize.Parcelize
 data class GetVechileInformationResponse(
 
     @SerializedName("Status")
-    val status:String,
+    val status:String? = "200",
     @SerializedName("VehicleLastMillage")
     val vehicleLastMillage: Int,
     @SerializedName("VmDaVehStatusId")

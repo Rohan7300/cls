@@ -28,6 +28,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
     private var VdhDaId = 0
     private var VdhVmId = 0
     private var VdhLmId = 0
+    var secondTry = false
     private var VdhOdoMeterReading = 0
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
@@ -161,8 +162,9 @@ class SpareWheelFragment : BaseInteriorFragment() {
             viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
                 hideDialog()
                 if (it != null) {
-                    if (it.status != "200") {
-                        if (prefs.scannedVmRegNo.isNotEmpty()) {
+                    if (it.status != "200"&&it.status!=null) {
+                        if (prefs.scannedVmRegNo.isNotEmpty()&&!secondTry) {
+                            secondTry = true
                             showDialog()
                             viewModel.GetVehicleInformation(
                                 prefs.userID.toInt(),
@@ -171,7 +173,6 @@ class SpareWheelFragment : BaseInteriorFragment() {
                             Log.d("VehicleInfo", "if2 ${prefs.userID} ${prefs.scannedVmRegNo}")
                         }
                     } else {
-                        Log.d("VehicleInfo", "ifelse $it")
                         if (!isApiCallInProgress) {
                             isApiCallInProgress = true
                             VdhVmId = it.vmId
@@ -250,16 +251,13 @@ class SpareWheelFragment : BaseInteriorFragment() {
                             viewModel.SaveVehDefectSheet(request)
                         }
                     }
-
                 } else {
-                    Log.d("VehicleInfo", "else")
-                    if (prefs.scannedVmRegNo.isNotEmpty()) {
+                    if (prefs.scannedVmRegNo.isNotEmpty()&&!secondTry) {
                         showDialog()
+                        secondTry = true
                         viewModel.GetVehicleInformation(prefs.userID.toInt(), prefs.scannedVmRegNo)
-                        Log.d("VehicleInfo", "else2 ${prefs.userID} ${prefs.scannedVmRegNo}")
                     }
                 }
-
             }
 
             viewModel.GetVehicleInformation(prefs.userID.toInt(), prefs.vmRegNo)
