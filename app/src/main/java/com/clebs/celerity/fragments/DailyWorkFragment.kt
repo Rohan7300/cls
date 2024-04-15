@@ -97,7 +97,6 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
     private var isFrontCamera = false
 
-
     var vrn: String = ""
     private var imageBitmap: Bitmap? = null
     var countryCode: String = ""
@@ -585,13 +584,12 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                             Log.d(TAG, "No VRN found in image.")
 
                         }
-                        if (loadingDialog.isShowing){
+                        if (loadingDialog.isShowing) {
                             loadingDialog.dismiss()
                         }
                     }
-                }
-                else{
-                    if (loadingDialog.isShowing){
+                } else {
+                    if (loadingDialog.isShowing) {
                         loadingDialog.dismiss()
                     }
                 }
