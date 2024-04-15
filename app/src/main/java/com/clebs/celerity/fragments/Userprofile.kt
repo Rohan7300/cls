@@ -98,11 +98,9 @@ class Userprofile : Fragment() {
             mbinding.emailtext.isFocusable = true
             mbinding.emailtext.isFocusableInTouchMode = true
             mbinding.emailtext.requestFocus()
-            mbinding.emailtext.isInEditMode
-            if (mbinding.emailtext.hasFocus()) {
+
                 val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
                 imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-            }
 //                mbinding.usertext.isEnabled = true
 //                mbinding.usertext.isFocusable = true
 //                mbinding.usertext.isFocusableInTouchMode = true
@@ -190,16 +188,12 @@ class Userprofile : Fragment() {
                 mbinding.save.visibility = View.VISIBLE
                 mbinding.emailtext.isEnabled = true
                 mbinding.emailtext.isClickable = true
-
-
                 mbinding.emailtext.isFocusable = true
                 mbinding.emailtext.isFocusableInTouchMode = true
                 mbinding.emailtext.requestFocus()
-                mbinding.emailtext.isInEditMode
-                if (mbinding.emailtext.hasFocus()) {
-                    val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
-                    imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
-                }
+
+                val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+                imm!!.showSoftInput(mbinding.emailtext, InputMethodManager.SHOW_FORCED)
 
                 mbinding.txtChangePassword.visibility = View.VISIBLE
                 val colorRes = R.color.white
@@ -419,13 +413,14 @@ class Userprofile : Fragment() {
 
 
                 if (it.IsThirdPartyChargeAccessAllowed!=null && it.IsThirdPartyChargeAccessAllowed.equals(true)){
-                    mbinding.Tvthirdparty.text="Third party Access Has been Provided."
-                    mbinding.checkbox.isChecked=true
+                    mbinding.Tvthirdparty.text="Third party Access Has been Provided"
                     mbinding.checkbox.visibility=View.VISIBLE
+                    mbinding.checkbox.isChecked=true
+
                 }
                 else if (it.IsThirdPartyChargeAccessAllowed!=null && it.IsThirdPartyChargeAccessAllowed.equals(false) && it.IsThirdPartyChargeAccessApplied.equals(false)){
                     mbinding.Tvthirdparty.text="Request for third party Access."
-                    mbinding.checkbox.visibility=View.VISIBLE
+                    mbinding.checkbox.visibility=View.GONE
                     mbinding.checkbox.isChecked=false
                 }
                 else if (it.IsThirdPartyChargeAccessAllowed.equals(false) && it.IsThirdPartyChargeAccessApplied.equals(true)){

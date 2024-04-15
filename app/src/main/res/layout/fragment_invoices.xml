@@ -40,7 +40,7 @@
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/shape_expand_main"
 
-                android:drawableEnd="@drawable/cls_invoices"
+                android:drawableEnd="@drawable/third_party_invoices"
                 android:fontFamily="@font/poppins_semibold"
                 android:padding="30dp"
                 android:text="CLS - Invoices"

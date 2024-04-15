@@ -202,16 +202,16 @@ class HomedemoFragment : Fragment() {
                 if (it.status.equals("200")) {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBar.setProgress(it.avgTotalScore.toDouble().toInt())
-                    mbinding.tvPbone.text = it.avgTotalScore.toDouble().toInt().toString() + "%"
+                    mbinding.tvPbone.text = it.avgTotalScore.toDouble().toInt().toString() + "%"+" Score"
 
                     mbinding.ProgressBar.tooltipText = it.avgTotalScore.toDouble().toString() + "%"
                 } else {
                     mbinding.ProgressBar.setProgress(0)
-                    mbinding.tvPbone.setText("0%")
+                    mbinding.tvPbone.setText("0%"+" Score")
                 }
             } else {
                 mbinding.ProgressBar.setProgress(0)
-                mbinding.tvPbone.setText("0%")
+                mbinding.tvPbone.setText("0%"+" Score")
             }
         }
         viewModel.livedatalastweekresponse.observe(viewLifecycleOwner) {
@@ -220,7 +220,7 @@ class HomedemoFragment : Fragment() {
                 if (it.status.equals("200")) {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBartwo.setProgress(it.avgTotalScore.toDouble().toInt())
-                    mbinding.tvPbTwo.text = it.avgTotalScore.toDouble().toInt().toString() + "%"
+                    mbinding.tvPbTwo.text = it.avgTotalScore.toDouble().toInt().toString() + "%"+" Score"
                     mbinding.ProgressBartwo.tooltipText =
                         it.avgTotalScore.toDouble().toString() + "%"
                 } else {
@@ -228,7 +228,7 @@ class HomedemoFragment : Fragment() {
                 }
             } else {
                 mbinding.ProgressBartwo.setProgress(0)
-                mbinding.tvPbTwo.setText("0%")
+                mbinding.tvPbTwo.setText("0%"+" Score")
             }
         }
         viewModel.livedataCashFlowWeek.observe(viewLifecycleOwner) { depts ->

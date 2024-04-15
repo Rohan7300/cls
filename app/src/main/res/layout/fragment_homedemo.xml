@@ -89,7 +89,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/inter_bold"
-                                    android:text="Average total score :"
+                                    android:text="Av total:"
                                     android:textColor="@color/text_color"
                                     android:textSize="14sp"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -125,7 +125,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:fontFamily="@font/inter_bold"
-                                android:text="Last Week score :"
+                                android:text="Last Week:"
                                 android:textColor="@color/text_color"
                                 android:textSize="14sp" />
 
@@ -602,7 +602,7 @@
                         android:layout_margin="16dp"
                         android:layout_marginTop="20dp"
                         android:background="@drawable/home_button_shape"
-
+android:backgroundTint="@color/medium_orange"
                         android:fontFamily="@font/poppins"
                         android:padding="8dp"
                         android:text="Previous week"
