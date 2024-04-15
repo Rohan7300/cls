@@ -56,6 +56,7 @@
                 android:id="@+id/img_logout_main"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:visibility="gone"
                 android:src="@drawable/baseline_logout_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

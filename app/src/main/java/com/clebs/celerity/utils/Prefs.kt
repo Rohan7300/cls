@@ -101,6 +101,22 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putInt("currHandbook", value).apply()
         }
 
+    var currLocationName:String
+        get() {
+            return sharedPreferences.getString("currLocationName", "") ?: ""
+        }
+        set(value) {
+            sharedPreferences.edit().putString("currLocationName", value).apply()
+        }
+
+    var workLocationName:String
+        get() {
+            return sharedPreferences.getString("workLocationName", "") ?: ""
+        }
+        set(value) {
+            sharedPreferences.edit().putString("workLocationName", value).apply()
+        }
+
     var quesID: Int
         get() = sharedPreferences.getInt("quesID", 0)
         set(value) = sharedPreferences.edit().putInt("quesID", value).apply()

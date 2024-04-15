@@ -48,8 +48,6 @@ class Userprofile : Fragment() {
     var firstname: String? = null
     var lastname: String? = null
     var isthirdpartyAccess: Boolean? = null
-    var isthirdpartyAccessRequested: Boolean? = null
-    var isthirdpartyAccessRemoved: Boolean? = null
     private lateinit var fragmentManager: FragmentManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +97,9 @@ class Userprofile : Fragment() {
             mbinding.addresstext.isEnabled = true
             mbinding.addresstext.isFocusable = true
             mbinding.addresstext.isFocusableInTouchMode = true
+            mbinding.logout.setOnClickListener {
+                (activity as HomeActivity).showAlertLogout()
+            }
 
             mbinding.editImg.alpha = 0.5f
 
@@ -142,16 +143,11 @@ class Userprofile : Fragment() {
 
                 } else {
 //                    showToast(it.Message, requireContext())
-
                 }
-
-
             } else {
                 showToast("Failed to provide third party Access.", requireContext())
                 mbinding.checkbox.isChecked = false
             }
-
-
         }
 
         mainViewModel.livedataremovethirdpartyaccess.observe(viewLifecycleOwner) {

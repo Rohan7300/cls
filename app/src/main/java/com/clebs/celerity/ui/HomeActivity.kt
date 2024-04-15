@@ -390,7 +390,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     }
 
-    private fun showAlertLogout() {
+     fun showAlertLogout() {
         val factory = LayoutInflater.from(this)
         val view: View = factory.inflate(R.layout.logout_layout, null)
         val deleteDialog: AlertDialog = AlertDialog.Builder(this).create()
@@ -487,6 +487,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     try {
                         Prefs.getInstance(this).vmRegNo = it.vmRegNo!!
                         viewModel.GetVehicleInformation(userId, it.vmRegNo)
+                        if (it.currentlocation != null)
+                            Prefs.getInstance(this).currLocationName = it.currentlocation
+                        if (it.workinglocation != null)
+                            Prefs.getInstance(this).workLocationName = it.workinglocation
                     } catch (e: Exception) {
                         Log.e("GetVehicleInformation Exception", "$e")
                     }
