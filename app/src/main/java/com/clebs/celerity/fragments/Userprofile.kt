@@ -1,7 +1,7 @@
 package com.clebs.celerity.fragments
 
-import A.H
 import android.app.AlertDialog
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,10 +10,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
@@ -33,12 +35,14 @@ import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showToast
 
+
 class Userprofile : Fragment() {
     lateinit var mbinding: FragmentUserprofileBinding
     private var isedit: Boolean = false
     lateinit var mainViewModel: MainViewModel
     var ninetydaysBoolean: Boolean? = null
     var edtold: String? = null
+    var thirdpartyaccessrequested: Boolean? = null
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
     }
@@ -49,6 +53,8 @@ class Userprofile : Fragment() {
     var firstname: String? = null
     var lastname: String? = null
     var isthirdpartyAccess: Boolean? = null
+    var isthirdpartyAccessRequested: Boolean? = null
+    var isthirdpartyAccessRemoved: Boolean? = null
     private lateinit var fragmentManager: FragmentManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,19 +80,27 @@ class Userprofile : Fragment() {
         HomeActivity.ActivityHomeBinding.title.setText("")
 
 
-        mbinding.logout.setOnClickListener {
-
-            (activity as HomeActivity).showAlertLogout()
-        }
-
+//        if (isthirdpartyAccessRequested != null && isthirdpartyAccessRequested!!.equals(true)) {
+//
+//            mbinding.Tvthirdparty.setText("Third party Access is Requested")
+//        } else if (isthirdpartyAccessRequested != null && isthirdpartyAccessRequested!!.equals(false)) {
+//            mbinding.Tvthirdparty.setText("Request Third Party Access")
+//        }
 
         if (Prefs.getInstance(App.instance).days.equals("1")) {
             mbinding.editImg.performClick()
 
             mbinding.save.visibility = View.VISIBLE
             mbinding.emailtext.isEnabled = true
+            mbinding.emailtext.isClickable = true
+
+
             mbinding.emailtext.isFocusable = true
             mbinding.emailtext.isFocusableInTouchMode = true
+            mbinding.emailtext.requestFocus()
+
+                val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+                imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 //                mbinding.usertext.isEnabled = true
 //                mbinding.usertext.isFocusable = true
 //                mbinding.usertext.isFocusableInTouchMode = true
@@ -118,16 +132,6 @@ class Userprofile : Fragment() {
             (activity as HomeActivity).enableBottomNavigationView()
         }
 
-//        mbinding.checkbox.setOnCheckedChangeListener { _, isChecked ->
-//
-//            if (isChecked) {
-//                mainViewModel.GetThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
-//
-//            } else {
-//                mainViewModel.RemoveThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
-//            }
-//
-//        }
 
         mbinding.checkbox.setOnClickListener {
             if (mbinding.checkbox.isChecked) {
@@ -140,16 +144,23 @@ class Userprofile : Fragment() {
 
             if (it != null) {
                 if (it.Status.equals("200")) {
+
+
 //                    Prefs.getInstance(App.instance).save("requestedthirdparty", "1")
 ////                    showToast("Third Party Access Is Requested.", requireContext())
 
                 } else {
 //                    showToast(it.Message, requireContext())
+
                 }
+
+
             } else {
                 showToast("Failed to provide third party Access.", requireContext())
                 mbinding.checkbox.isChecked = false
             }
+
+
         }
 
         mainViewModel.livedataremovethirdpartyaccess.observe(viewLifecycleOwner) {
@@ -157,7 +168,7 @@ class Userprofile : Fragment() {
                 if (it.Status.equals("200")) {
 //                    Prefs.getInstance(App.instance).save("removethirdparty", "1")
 ////                    mbinding.Tvthirdparty.text = "Third Party Access Is Requested to remove."
-//                    showToast("Third Party Access Is Removed for This User", requireContext())
+                    showToast("Third Party Access Has been removed", requireContext())
 
 
                 } else {
@@ -176,18 +187,25 @@ class Userprofile : Fragment() {
             if (isedit) {
                 mbinding.save.visibility = View.VISIBLE
                 mbinding.emailtext.isEnabled = true
+                mbinding.emailtext.isClickable = true
                 mbinding.emailtext.isFocusable = true
                 mbinding.emailtext.isFocusableInTouchMode = true
+                mbinding.emailtext.requestFocus()
+
+                val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+                imm!!.showSoftInput(mbinding.emailtext, InputMethodManager.SHOW_FORCED)
+
                 mbinding.txtChangePassword.visibility = View.VISIBLE
                 val colorRes = R.color.white
                 val color = ContextCompat.getColor(requireContext(), colorRes)
-                mbinding.firstconst.backgroundTintList = ContextCompat.getColorStateList(requireContext(), colorRes)
+                mbinding.firstconst.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), colorRes)
 
                 // Set background tint using a specific color
-                mbinding.firstconst.backgroundTintList =ColorStateList.valueOf(color)
-                mbinding.usepassword.backgroundTintList=ColorStateList.valueOf(color)
-                mbinding.usephone.backgroundTintList=ColorStateList.valueOf(color)
-                mbinding.useaddress.backgroundTintList=ColorStateList.valueOf(color)
+                mbinding.firstconst.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.usepassword.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.usephone.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.useaddress.backgroundTintList = ColorStateList.valueOf(color)
 //                mbinding.usertext.isEnabled = true
 //                mbinding.usertext.isFocusable = true
 //                mbinding.usertext.isFocusableInTouchMode = true
@@ -212,21 +230,22 @@ class Userprofile : Fragment() {
                 val newColor = resources.getColor(R.color.very_light_grey_two)
                 mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(newColor)
                 mbinding.passtext.backgroundTintList = ColorStateList.valueOf(newColor)
-                mbinding.phonetext.backgroundTintList=ColorStateList.valueOf(newColor)
-                mbinding.addresstext.backgroundTintList=ColorStateList.valueOf(newColor)
+                mbinding.phonetext.backgroundTintList = ColorStateList.valueOf(newColor)
+                mbinding.addresstext.backgroundTintList = ColorStateList.valueOf(newColor)
                 mbinding.save.visibility = View.GONE
                 mbinding.emailtext.isEnabled = false
                 mbinding.emailtext.isFocusable = false
                 mbinding.emailtext.isFocusableInTouchMode = false
                 val colorRes = R.color.very_light_grey_two
                 val color = ContextCompat.getColor(requireContext(), colorRes)
-                mbinding.firstconst.backgroundTintList = ContextCompat.getColorStateList(requireContext(), colorRes)
-                mbinding.firstconst.backgroundTintList =ColorStateList.valueOf(color)
+                mbinding.firstconst.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), colorRes)
+                mbinding.firstconst.backgroundTintList = ColorStateList.valueOf(color)
 
 
-                mbinding.usepassword.backgroundTintList=ColorStateList.valueOf(color)
-                mbinding.usephone.backgroundTintList=ColorStateList.valueOf(color)
-                mbinding.useaddress.backgroundTintList=ColorStateList.valueOf(color)
+                mbinding.usepassword.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.usephone.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.useaddress.backgroundTintList = ColorStateList.valueOf(color)
                 mbinding.txtChangePassword.visibility = View.GONE
                 mbinding.usertext.isEnabled = false
                 mbinding.usertext.isFocusable = false
@@ -273,6 +292,12 @@ class Userprofile : Fragment() {
 //            updateProfile90dys()
         }
         return mbinding.root
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val imm = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(mbinding.emailtext.getWindowToken(), 0)
     }
 
     fun showAlert() {
@@ -378,19 +403,33 @@ class Userprofile : Fragment() {
                 mbinding.passtext.setText("**********")
                 mbinding.phonetext.setText(it.PhoneNumber)
                 mbinding.addresstext.setText(it.Address)
+                thirdpartyaccessrequested = it.IsThirdPartyChargeAccessApplied
 //                mbinding.pb.visibility = View.GONE
                 mbinding.FormLayout.alpha = 1f
-                hideDialog()
+
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
                 mbinding.checkbox.isChecked = it.IsThirdPartyChargeAccessAllowed.equals(true)
                 isthirdpartyAccess = it.IsThirdPartyChargeAccessAllowed
-            if ( it.IsThirdPartyChargeAccessAllowed){
-                mbinding.Tvthirdparty.text="Third party access is granted"
-                mbinding.checkbox.isChecked=true
-            }
-                else if (it.IsThirdPartyChargeAccessAllowed.equals(false)){
-                    mbinding.Tvthirdparty.text
+
+
+                if (it.IsThirdPartyChargeAccessAllowed!=null && it.IsThirdPartyChargeAccessAllowed.equals(true)){
+                    mbinding.Tvthirdparty.text="Third party Access Has been Provided"
+                    mbinding.checkbox.visibility=View.VISIBLE
+                    mbinding.checkbox.isChecked=true
+
                 }
+                else if (it.IsThirdPartyChargeAccessAllowed!=null && it.IsThirdPartyChargeAccessAllowed.equals(false) && it.IsThirdPartyChargeAccessApplied.equals(false)){
+                    mbinding.Tvthirdparty.text="Request for third party Access."
+                    mbinding.checkbox.visibility=View.GONE
+                    mbinding.checkbox.isChecked=false
+                }
+                else if (it.IsThirdPartyChargeAccessAllowed.equals(false) && it.IsThirdPartyChargeAccessApplied.equals(true)){
+                    mbinding.Tvthirdparty.text="Third party Access is Requested."
+                    mbinding.checkbox.visibility=View.GONE
+                }
+
+
+
 //                if (it.IsThirdPartyChargeAccessAllowed.equals(true)) {
 //                    mbinding.Tvthirdparty.setText("Third party Access has been granted")
 //                } else {
@@ -401,10 +440,10 @@ class Userprofile : Fragment() {
 //                if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
 //                    showAlertChangePasword90dys()
 //                }
+                hideDialog()
             }
         })
     }
-
 
     fun UseEmailAsUSername() {
 

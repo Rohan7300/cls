@@ -91,7 +91,7 @@
                         android:id="@+id/commentIV"
                         android:layout_width="25dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_msgframe" />
+                        android:src="@drawable/baseline_message_24" />
 
                 </LinearLayout>
 
@@ -123,14 +123,14 @@
                             android:letterSpacing="0.01"
                             android:text="Department"
                             android:textColor="@color/text_color"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/const1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/tvdepart"
-                            android:layout_marginTop="10dp">
+                            android:layout_marginTop="8dp">
 
                             <TextView
                                 android:id="@+id/tv_depart"
@@ -139,7 +139,7 @@
                                 android:background="@drawable/shape_edittext_onroad"
                                 android:fontFamily="@font/poppins"
                                 android:letterSpacing="0.01"
-                                android:padding="15dp"
+                                android:padding="10dp"
                                 android:text="Department Name"
                                 android:textColor="@color/text_color"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -169,14 +169,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="0.05dp"
                             android:layout_below="@+id/const1"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="16dp"
                             android:background="@color/black" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/view2"
-                            android:layout_marginTop="20dp">
+                            android:layout_marginTop="16dp">
 
                             <TextView
                                 android:id="@+id/tv_request"
@@ -186,14 +186,14 @@
                                 android:letterSpacing="0.01"
                                 android:text="Request Type"
                                 android:textColor="@color/text_color"
-                                android:textSize="16sp" />
+                                android:textSize="14sp" />
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/const2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/tv_request"
-                                android:layout_marginTop="10dp">
+                                android:layout_marginTop="8dp">
 
                                 <TextView
                                     android:id="@+id/tv_requests"
@@ -202,7 +202,7 @@
                                     android:background="@drawable/shape_edittext_onroad"
                                     android:fontFamily="@font/poppins"
                                     android:letterSpacing="0.01"
-                                    android:padding="15dp"
+                                    android:padding="10dp"
                                     android:text="Request Type"
                                     android:textColor="@color/text_color"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -231,14 +231,14 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="0.05dp"
                                 android:layout_below="@+id/const2"
-                                android:layout_marginTop="20dp"
+                                android:layout_marginTop="16dp"
                                 android:background="@color/black" />
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/view3"
-                                android:layout_marginTop="20dp">
+                                android:layout_marginTop="16dp">
 
                                 <TextView
                                     android:id="@+id/tv_reg"
@@ -248,14 +248,14 @@
                                     android:letterSpacing="0.01"
                                     android:text="Reg No. ( if applicable)"
                                     android:textColor="@color/text_color"
-                                    android:textSize="16sp" />
+                                    android:textSize="14sp" />
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
                                     android:id="@+id/const3"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/tv_reg"
-                                    android:layout_marginTop="10dp">
+                                    android:layout_marginTop="8dp">
 
                                     <TextView
                                         android:id="@+id/tv_registration"
@@ -266,7 +266,7 @@
                                         android:hint="Vehicle registration number"
                                         android:importantForAutofill="no"
                                         android:letterSpacing="0.01"
-                                        android:padding="13dp"
+                                        android:padding="10dp"
                                         android:textColor="@color/text_color"
                                         android:textSize="14sp"
                                         app:layout_constraintStart_toStartOf="parent"
@@ -286,7 +286,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="0.05dp"
                                     android:layout_below="@+id/const3"
-                                    android:layout_marginTop="20dp"
+                                    android:layout_marginTop="16dp"
                                     android:background="@color/black" />
 
                                 <RelativeLayout
@@ -294,7 +294,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/view4"
-                                    android:layout_marginTop="20dp">
+                                    android:layout_marginTop="16dp">
 
                                     <TextView
                                         android:id="@+id/tv_title"
@@ -304,21 +304,21 @@
                                         android:letterSpacing="0.01"
                                         android:text="Title*"
                                         android:textColor="@color/text_color"
-                                        android:textSize="16sp" />
+                                        android:textSize="14sp" />
 
                                     <TextView
                                         android:id="@+id/edt_title"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_below="@+id/tv_title"
-                                        android:layout_marginTop="10dp"
+                                        android:layout_marginTop="8dp"
                                         android:background="@drawable/shape_edittext_onroad"
                                         android:fontFamily="@font/poppins"
                                         android:gravity="top"
                                         android:hint="Title"
                                         android:importantForAutofill="no"
                                         android:letterSpacing="0.01"
-                                        android:padding="13dp"
+                                        android:padding="10dp"
                                         android:textColor="@color/text_color"
                                         android:textSize="14sp" />
                                 </RelativeLayout>
@@ -327,7 +327,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/viewx"
-                                    android:layout_marginTop="20dp">
+                                    android:layout_marginTop="16dp">
 
                                     <TextView
                                         android:id="@+id/tv_des"
@@ -337,7 +337,7 @@
                                         android:letterSpacing="0.01"
                                         android:text="Description"
                                         android:textColor="@color/text_color"
-                                        android:textSize="16sp" />
+                                        android:textSize="14sp" />
 
                                     <TextView
                                         android:id="@+id/edt_des"
