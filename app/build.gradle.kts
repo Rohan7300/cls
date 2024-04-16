@@ -1,3 +1,5 @@
+import org.gradle.internal.impldep.bsh.commands.dir
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -74,7 +76,8 @@ android {
 }
 
 dependencies {
-
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation(files("libs/achartengine-1.2.0.jar"))
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -139,6 +142,10 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
 
     implementation ("com.github.clearquotetech:cq-android-sdk:2.0.4-test")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.andkulikov:transitionseverywhere:1.8.1")
+
     kapt("androidx.room:room-compiler:2.6.1")
+
+
 
 }

@@ -1,6 +1,8 @@
 package com.clebs.celerity.ui
 
 import android.Manifest
+import android.R.attr.visible
+import android.R.id.text2
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,6 +22,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.DrawViewClass
 import com.clebs.celerity.Factory.MyViewModelFactory
@@ -38,6 +42,10 @@ import com.clebs.celerity.utils.OpenMode
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.showToast
+import com.transitionseverywhere.Fade
+import com.transitionseverywhere.TransitionManager
+import com.transitionseverywhere.TransitionSet
+import com.transitionseverywhere.extra.Scale
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -45,6 +53,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
+
 
 class PolicyDocsActivity : AppCompatActivity() {
     lateinit var mbinding: ActivityPolicyDocsBinding
@@ -83,7 +92,13 @@ class PolicyDocsActivity : AppCompatActivity() {
         } else {
             mbinding.llAmazon.visibility = View.VISIBLE
         }
-
+//        val set: TransitionSet = TransitionSet()
+//            .addTransition(Scale(0.7f))
+//            .addTransition(Fade())
+//            .setInterpolator(if (visible) LinearOutSlowInInterpolator() else FastOutLinearInInterpolator())
+//
+//        TransitionManager.beginDelayedTransition(transitionsContainer, set)
+//        text2.(if (visible) View.VISIBLE else View.INVISIBLE)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
@@ -446,10 +461,16 @@ class PolicyDocsActivity : AppCompatActivity() {
 
 
     private fun setVisibility(ll: LinearLayout, visibility: Boolean) {
-        if (visibility)
+
+
+        if (visibility) {
             ll.visibility = View.VISIBLE
-        else
+
+        } else {
             ll.visibility = View.GONE
+
+        }
+
 
     }
 
@@ -544,4 +565,6 @@ class PolicyDocsActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }
