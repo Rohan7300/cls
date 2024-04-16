@@ -174,7 +174,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
             viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
                 Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
-                loadingDialog.cancel()
+                hideDialog()
 
                 if (it != null) {
                     completeTaskScreen = it.IsSubmited
@@ -255,7 +255,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
          */
                         ActivityHomeBinding.title.text = ""
                         viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
-                        loadingDialog.show()
+                        showDialog()
                         /*        progressBarVisibility(
                                     true,
                                     ActivityHomeBinding.homeActivityPB,
@@ -458,19 +458,20 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
 
-    public fun hideDialog() {
+    fun hideDialog() {
         apiCount--
         if (apiCount <= 0) {
             loadingDialog.cancel()
             apiCount = 0
+            viewModel.ldcompleteTaskLayoutObserver.postValue(-1)
         }
-
     }
 
     public fun showDialog() {
         if (apiCount == 0) {
             loadingDialog.show()
         }
+        viewModel.ldcompleteTaskLayoutObserver.postValue(0)
         apiCount++
     }
 
@@ -478,11 +479,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val today = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("dd/MM")
         date = today.format(formatter)
-        loadingDialog.show()
+        showDialog()
         viewModel.GetDriversBasicInformation(
             Prefs.getInstance(App.instance).userID.toDouble()
         ).observe(this, Observer {
-            loadingDialog.cancel()
+            hideDialog()
             if (it != null) {
                 try {
                     try {

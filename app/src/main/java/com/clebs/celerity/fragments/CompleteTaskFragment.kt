@@ -314,6 +314,8 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.linerlcomtwo.visibility = View.GONE
             }
         }
+
+
         return mbinding.root
     }
 
@@ -434,6 +436,17 @@ class CompleteTaskFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.ldcompleteTaskLayoutObserver.observe(viewLifecycleOwner){
+                if(it==-1){
+                    mbinding.mainCompleteTask.visibility = View.VISIBLE
+                    mbinding.searchLayout.visibility = View.GONE
+                }else{
+                    mbinding.mainCompleteTask.visibility = View.GONE
+                    mbinding.searchLayout.visibility = View.VISIBLE
+                }
+        }
+
 
         viewModel.livedataClockInTime.observe(viewLifecycleOwner) {
             hideDialog()
@@ -1042,120 +1055,112 @@ class CompleteTaskFragment : Fragment() {
                 showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
             }
         }
-//        } else {
-//            showErrorDialog(
-//                fragmentManager,
-//                "CTF-1",
-//                "We are currently updating our app for Android 13+ devices. Please try again later."
-//            )
-//        }
 
     }
 
     private fun visibiltyControlls() {
-        with(mbinding) {
-            listOf(
-                uploadLayouts,
-                rlcomtwoBreak,
-                onRoadView,
-                rlcomtwoBreak,
-                rlcomtwoClock,
-                rlcomtwoClockOut,
-                BreakTimeTable,
-                taskDetails,
-                view2
-            ).forEach { thisView -> thisView.visibility = View.GONE }
-        }
-        when (visibilityLevel) {
-            -1 -> {
-                mbinding.uploadLayouts.visibility = View.VISIBLE
+            with(mbinding) {
+                listOf(
+                    uploadLayouts,
+                    rlcomtwoBreak,
+                    onRoadView,
+                    rlcomtwoBreak,
+                    rlcomtwoClock,
+                    rlcomtwoClockOut,
+                    BreakTimeTable,
+                    taskDetails,
+                    view2
+                ).forEach { thisView -> thisView.visibility = View.GONE }
+            }
+            when (visibilityLevel) {
+                -1 -> {
+                    mbinding.uploadLayouts.visibility = View.VISIBLE
+                    mbinding.imageUploadView.visibility = View.GONE
+
+                    /*mbinding.clFaceMask.visibility = View.GONE
+                    mbinding.clOilLevel.visibility = View.GONE*/
+                    /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                             mbinding.uploadLayouts.visibility = View.VISIBLE
+                             mbinding.taskDetails.visibility = View.VISIBLE
+                             mbinding.imageUploadView.visibility = View.VISIBLE*/
+                    // mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
+                }
+
+                0 -> {
+                    mbinding.uploadLayouts.visibility = View.VISIBLE
 //                mbinding.taskDetails.visibility = View.VISIBLE
-                mbinding.imageUploadView.visibility = View.GONE
+                    mbinding.imageUploadView.visibility = View.VISIBLE
+                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
+                    mbinding.complete.setBackground(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.shape_expand_main
+                        )
+                    );
+                }
 
-                /*mbinding.clFaceMask.visibility = View.GONE
-                mbinding.clOilLevel.visibility = View.GONE*/
-                /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
-                         mbinding.uploadLayouts.visibility = View.VISIBLE
-                         mbinding.taskDetails.visibility = View.VISIBLE
-                         mbinding.imageUploadView.visibility = View.VISIBLE*/
-                // mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
+                1 -> {
+                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                    mbinding.rlcomtwoClock.visibility = View.VISIBLE
+                    mbinding.complete.setBackground(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.background_complete_task_done
+                        )
+                    );
+                }
+
+                2 -> {
+                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                    mbinding.onRoadView.visibility = View.VISIBLE
+                    mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+                    mbinding.complete.setBackground(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.background_complete_task_done
+                        )
+                    );
+                }
+
+                3 -> {
+                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                    mbinding.onRoadView.visibility = View.VISIBLE
+                    mbinding.BreakTimeTable.visibility = View.VISIBLE
+                    mbinding.complete.setBackground(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.background_complete_task_done
+                        )
+                    );
+                }
+
+                4 -> {
+                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                    mbinding.onRoadView.visibility = View.VISIBLE
+                    mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+                    mbinding.complete.setBackground(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.background_complete_task_done
+                        )
+                    );
+                }
+
+                5 -> {
+                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                    mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                    mbinding.onRoadView.visibility = View.VISIBLE
+                    mbinding.BreakTimeTable.visibility = View.VISIBLE
+                    mbinding.complete.setBackground(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.background_complete_task_done
+                        )
+                    );
+                }
+
             }
-
-            0 -> {
-                mbinding.uploadLayouts.visibility = View.VISIBLE
-//                mbinding.taskDetails.visibility = View.VISIBLE
-                mbinding.imageUploadView.visibility = View.VISIBLE
-                mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
-                mbinding.complete.setBackground(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.shape_expand_main
-                    )
-                );
-            }
-
-            1 -> {
-                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
-                mbinding.rlcomtwoClock.visibility = View.VISIBLE
-                mbinding.complete.setBackground(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.background_complete_task_done
-                    )
-                );
-            }
-
-            2 -> {
-                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
-                mbinding.onRoadView.visibility = View.VISIBLE
-                mbinding.rlcomtwoBreak.visibility = View.VISIBLE
-                mbinding.complete.setBackground(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.background_complete_task_done
-                    )
-                );
-            }
-
-            3 -> {
-                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
-                mbinding.onRoadView.visibility = View.VISIBLE
-                mbinding.BreakTimeTable.visibility = View.VISIBLE
-                mbinding.complete.setBackground(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.background_complete_task_done
-                    )
-                );
-            }
-
-            4 -> {
-                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
-                mbinding.onRoadView.visibility = View.VISIBLE
-                mbinding.rlcomtwoBreak.visibility = View.VISIBLE
-                mbinding.complete.setBackground(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.background_complete_task_done
-                    )
-                );
-            }
-
-            5 -> {
-                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
-                mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
-                mbinding.onRoadView.visibility = View.VISIBLE
-                mbinding.BreakTimeTable.visibility = View.VISIBLE
-                mbinding.complete.setBackground(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.background_complete_task_done
-                    )
-                );
-            }
-
-        }
-    }
+           }
 
     private fun setVisibiltyLevel() {
         visibilityLevel = 0
