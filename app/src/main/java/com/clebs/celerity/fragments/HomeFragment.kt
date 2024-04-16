@@ -40,6 +40,9 @@ class HomeFragment : Fragment() {
             mbinding = FragmentHomeBinding.inflate(inflater, container, false)
         }
 
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+            mbinding.marianIonu.text = name
+        }
         viewModel = (activity as HomeActivity).viewModel
         showDialog()
         viewModel.GetDriversBasicInformation(
@@ -77,9 +80,6 @@ class HomeFragment : Fragment() {
 //                mbinding.truckNumber.text = it.vmRegNo ?: ""
 //            }
 
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-                mbinding.marianIonu.text = name
-            }
 //            mbinding.ticketNumber.text = (activity as HomeActivity).date
         }
         BubbleShowCaseBuilder(requireActivity()) //Activity instance
