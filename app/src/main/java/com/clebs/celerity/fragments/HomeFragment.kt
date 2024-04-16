@@ -47,10 +47,10 @@ class HomeFragment : Fragment() {
         ).observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
+
              if (it.currentlocation!=null){
                  mbinding.location.text=it.currentlocation
-             }
-                else{
+             } else{
                     mbinding.location.setText("Not assigned")
                 }
                 if (it.workinglocation!=null){

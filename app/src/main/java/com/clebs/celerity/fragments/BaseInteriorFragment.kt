@@ -83,6 +83,18 @@ abstract class BaseInteriorFragment : Fragment() {
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             dxLoc.text = it?.locationName ?: ""
             dxReg.text = it?.vmRegNo ?: ""
+            if (Prefs.getInstance(requireContext()).currLocationName != null) {
+                dxLoc.text =
+                    Prefs.getInstance(requireContext()).currLocationName ?: ""
+            } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+                dxLoc.text =
+                    Prefs.getInstance(requireContext()).workLocationName ?: ""
+            } else {
+                if (it != null) {
+                    dxLoc.text = it.locationName ?: ""
+                }
+            }
+
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
                 .also { name -> ana_carolin.text = name }
             dxm5.text = (activity as HomeActivity).date

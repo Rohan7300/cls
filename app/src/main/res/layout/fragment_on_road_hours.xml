@@ -314,7 +314,7 @@
                             android:fontFamily="@font/poppins"
                             android:letterSpacing="0.02"
                             android:text="No of Parcel Brought Back"
-                            android:textColor="#4A4A4A"
+                            android:textColor="@color/text_color"
                             android:textSize="14sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />

@@ -161,7 +161,7 @@ class CompleteTaskFragment : Fragment() {
         viewModel.GetDailyWorkInfoById(userId)
         viewModel.GetDriverRouteInfoByDate(userId)
         viewModel.GetRideAlongDriverInfoByDate(userId)
-        if (mbinding.startinspection.isVisible){
+        if (mbinding.startinspection.isVisible) {
             val anim = ValueAnimator.ofFloat(1f, 1.2f)
             anim.setDuration(1000)
             anim.addUpdateListener { animation ->
@@ -304,9 +304,15 @@ class CompleteTaskFragment : Fragment() {
         }
 
         mbinding.rlcomtwoRoad.setOnClickListener {
-            if (mbinding.routeLayout.visibility == View.GONE) mbinding.routeLayout.visibility =
-                View.VISIBLE
-            else mbinding.routeLayout.visibility = View.GONE
+            if (mbinding.routeLayout.visibility == View.GONE) {
+                mbinding.routeLayout.visibility =
+                    View.VISIBLE
+                mbinding.linerlcomtwo.visibility = View.VISIBLE
+            }
+            else{
+                mbinding.routeLayout.visibility = View.GONE
+                mbinding.linerlcomtwo.visibility = View.GONE
+            }
         }
         return mbinding.root
     }
@@ -363,7 +369,15 @@ class CompleteTaskFragment : Fragment() {
             hideDialog()
 
             if (it != null) {
-                mbinding.headerTop.dxLoc.text = it.locationName ?: ""
+                if (Prefs.getInstance(requireContext()).currLocationName != null) {
+                    mbinding.headerTop.dxLoc.text =
+                        Prefs.getInstance(requireContext()).currLocationName ?: ""
+                } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+                    mbinding.headerTop.dxLoc.text =
+                        Prefs.getInstance(requireContext()).workLocationName ?: ""
+                } else {
+                    mbinding.headerTop.dxLoc.text = it.locationName ?: ""
+                }
                 mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
             }
 
@@ -381,7 +395,12 @@ class CompleteTaskFragment : Fragment() {
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
-
+                Alerter.create(requireActivity())
+                        .setTitle("")
+                        .setIcon(R.drawable.logo_new)
+                        .setText("Break Time Added successfully")
+                        .setBackgroundColorInt(resources.getColor(R.color.medium_orange))
+                        .show()
                 showDialog()
                 viewModel.GetDriverBreakTimeInfo(userId)
 
@@ -591,7 +610,14 @@ class CompleteTaskFragment : Fragment() {
         }
 
 
-        val adapter = DriverRouteAdapter(GetDriverRouteInfoByDateResponse(), showDialog, viewModel,findNavController(),requireContext(),Prefs.getInstance(requireContext()))
+        val adapter = DriverRouteAdapter(
+            GetDriverRouteInfoByDateResponse(),
+            showDialog,
+            viewModel,
+            findNavController(),
+            requireContext(),
+            Prefs.getInstance(requireContext())
+        )
 
         mbinding.getDriverRouteId.adapter = adapter
         mbinding.getDriverRouteId.layoutManager = LinearLayoutManager(requireContext())
@@ -960,7 +986,10 @@ class CompleteTaskFragment : Fragment() {
         if (cqSDKInitializer.isCQSDKInitialized()) {
 
 
-            Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID+"VmReg ${Prefs.getInstance(App.instance).vmRegNo}")
+            Log.e(
+                "totyototyotoytroitroi",
+                "startInspection: " + inspectionID + "VmReg ${Prefs.getInstance(App.instance).vmRegNo}"
+            )
             Log.e("sdkskdkdkskdkskd", "onCreateView: ")
 
             try {
@@ -973,7 +1002,10 @@ class CompleteTaskFragment : Fragment() {
                     ),
                     inputDetails = InputDetails(
                         vehicleDetails = VehicleDetails(
-                            regNumber = Prefs.getInstance(App.instance).vmRegNo.replace(" ",""), //if sent, user can't edit
+                            regNumber = Prefs.getInstance(App.instance).vmRegNo.replace(
+                                " ",
+                                ""
+                            ), //if sent, user can't edit
                             make = "Van", //if sent, user can't edit
                             model = "Any Model", //if sent, user can't edit
                             bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
@@ -1042,11 +1074,11 @@ class CompleteTaskFragment : Fragment() {
 
                 /*mbinding.clFaceMask.visibility = View.GONE
                 mbinding.clOilLevel.visibility = View.GONE*/
-       /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
-                mbinding.uploadLayouts.visibility = View.VISIBLE
-                mbinding.taskDetails.visibility = View.VISIBLE
-                mbinding.imageUploadView.visibility = View.VISIBLE*/
-               // mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
+                /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                         mbinding.uploadLayouts.visibility = View.VISIBLE
+                         mbinding.taskDetails.visibility = View.VISIBLE
+                         mbinding.imageUploadView.visibility = View.VISIBLE*/
+                // mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
             }
 
             0 -> {
@@ -1054,34 +1086,59 @@ class CompleteTaskFragment : Fragment() {
 //                mbinding.taskDetails.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.VISIBLE
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
-                mbinding.complete.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.shape_expand_main));
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.shape_expand_main
+                    )
+                );
             }
 
             1 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.rlcomtwoClock.visibility = View.VISIBLE
-                mbinding.complete.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.background_complete_task_done));
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
             }
 
             2 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.onRoadView.visibility = View.VISIBLE
                 mbinding.rlcomtwoBreak.visibility = View.VISIBLE
-                mbinding.complete.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.background_complete_task_done));
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
             }
 
             3 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.onRoadView.visibility = View.VISIBLE
                 mbinding.BreakTimeTable.visibility = View.VISIBLE
-                mbinding.complete.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.background_complete_task_done));
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
             }
 
             4 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.onRoadView.visibility = View.VISIBLE
                 mbinding.rlcomtwoBreak.visibility = View.VISIBLE
-                mbinding.complete.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.background_complete_task_done));
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
             }
 
             5 -> {
@@ -1089,7 +1146,12 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
                 mbinding.onRoadView.visibility = View.VISIBLE
                 mbinding.BreakTimeTable.visibility = View.VISIBLE
-                mbinding.complete.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.background_complete_task_done));
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
             }
 
         }
@@ -1177,8 +1239,6 @@ class CompleteTaskFragment : Fragment() {
             mbinding.startinspection.visibility = View.VISIBLE
         }
     }
-
-
 
 
 }

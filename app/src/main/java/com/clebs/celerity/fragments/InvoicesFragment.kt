@@ -1,6 +1,7 @@
 package com.clebs.celerity.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,9 @@ import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentInvoicesBinding
+import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.Prefs
 
 
 class InvoicesFragment : Fragment() {
@@ -37,8 +40,28 @@ class InvoicesFragment : Fragment() {
         binding.otherinvoices.setOnClickListener {
             findNavController().navigate(R.id.CLSThirdPartyFragment)
         }
-
+        binding.otherinvoices.visibility = View.GONE
+        GetDriversBasicInformation()
         return binding.root
+    }
+
+    fun GetDriversBasicInformation() {
+//        binding.pb.visibility = View.VISIBLE
+        showDialog()
+
+        viewModel.GetDriversBasicInformation(
+            Prefs.getInstance(App.instance).userID.toDouble()
+        ).observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it.IsThirdPartyChargeAccessAllowed) {
+                    binding.otherinvoices.visibility = View.VISIBLE
+                } else {
+                    binding.otherinvoices.visibility = View.GONE
+                }
+
+                hideDialog()
+            }
+        }
     }
 
     private fun observers() {

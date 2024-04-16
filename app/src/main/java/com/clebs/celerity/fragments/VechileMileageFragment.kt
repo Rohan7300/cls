@@ -74,8 +74,21 @@ class VechileMileageFragment : Fragment() {
         }
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner){
-            mbinding.headerTop.dxLoc.text = it?.locationName?:""
-            mbinding.headerTop.dxReg.text = it?.vmRegNo?:""
+            if (Prefs.getInstance(requireContext()).currLocationName != null) {
+                mbinding.headerTop.dxLoc.text =
+                    Prefs.getInstance(requireContext()).currLocationName ?: ""
+            } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+                mbinding.headerTop.dxLoc.text =
+                    Prefs.getInstance(requireContext()).workLocationName ?: ""
+            } else {
+                if (it != null) {
+                    mbinding.headerTop.dxLoc.text = it.locationName ?: ""
+                }
+            }
+            if (it != null) {
+                mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
+            }
+
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
                 .also { name -> mbinding.headerTop.anaCarolin.text = name }
             mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
