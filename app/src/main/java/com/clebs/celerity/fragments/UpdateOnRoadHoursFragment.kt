@@ -125,8 +125,20 @@ class UpdateOnRoadHoursFragment : Fragment() {
         }
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            binding.headerTop.dxLoc.text = it?.locationName ?: ""
-            binding.headerTop.dxReg.text = it?.vmRegNo ?: ""
+            if (Prefs.getInstance(requireContext()).currLocationName != null) {
+                binding.headerTop.dxLoc.text =
+                    Prefs.getInstance(requireContext()).currLocationName ?: ""
+            } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+                binding.headerTop.dxLoc.text =
+                    Prefs.getInstance(requireContext()).workLocationName ?: ""
+            } else {
+                if (it != null) {
+                    binding.headerTop.dxLoc.text = it.locationName ?: ""
+                }
+            }
+            if (it != null) {
+                binding.headerTop.dxReg.text = it.vmRegNo ?: ""
+            }
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
                 binding.headerTop.anaCarolin.text = name
             }
