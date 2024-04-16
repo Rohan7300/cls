@@ -1,5 +1,6 @@
 package com.clebs.celerity.fragments
 
+import A.H
 import android.app.AlertDialog
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -73,6 +74,10 @@ class Userprofile : Fragment() {
         HomeActivity.ActivityHomeBinding.title.setText("")
 
 
+        mbinding.logout.setOnClickListener {
+
+            (activity as HomeActivity).showAlertLogout()
+        }
 
 
         if (Prefs.getInstance(App.instance).days.equals("1")) {
@@ -97,9 +102,6 @@ class Userprofile : Fragment() {
             mbinding.addresstext.isEnabled = true
             mbinding.addresstext.isFocusable = true
             mbinding.addresstext.isFocusableInTouchMode = true
-            mbinding.logout.setOnClickListener {
-                (activity as HomeActivity).showAlertLogout()
-            }
 
             mbinding.editImg.alpha = 0.5f
 
@@ -402,6 +404,7 @@ class Userprofile : Fragment() {
             }
         })
     }
+
 
     fun UseEmailAsUSername() {
 
