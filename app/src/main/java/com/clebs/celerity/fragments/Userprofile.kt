@@ -34,6 +34,7 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showToast
+import com.tapadoo.alerter.Alerter
 
 
 class Userprofile : Fragment() {
@@ -79,6 +80,10 @@ class Userprofile : Fragment() {
         GetDriversBasicInformation()
         HomeActivity.ActivityHomeBinding.title.setText("")
 
+        mbinding.logout.setOnClickListener {
+            (activity as HomeActivity).showAlertLogout()
+        }
+
 
 //        if (isthirdpartyAccessRequested != null && isthirdpartyAccessRequested!!.equals(true)) {
 //
@@ -99,8 +104,8 @@ class Userprofile : Fragment() {
             mbinding.emailtext.isFocusableInTouchMode = true
             mbinding.emailtext.requestFocus()
 
-                val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
-                imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+            val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+            imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 //                mbinding.usertext.isEnabled = true
 //                mbinding.usertext.isFocusable = true
 //                mbinding.usertext.isFocusableInTouchMode = true
@@ -144,7 +149,14 @@ class Userprofile : Fragment() {
 
             if (it != null) {
                 if (it.Status.equals("200")) {
-
+                    Alerter.create(requireActivity())
+                        .setTitle("")
+                        .setIcon(R.drawable.logo_new)
+                        .setText("Third Party access has been requested")
+                        .setBackgroundColorInt(resources.getColor(R.color.medium_orange))
+                        .show()
+                    GetDriversBasicInformation()
+//                    mainViewModel.GetDriversBasicInformation(Prefs.getInstance(requireContext()).userID.toDouble())
 
 //                    Prefs.getInstance(App.instance).save("requestedthirdparty", "1")
 ////                    showToast("Third Party Access Is Requested.", requireContext())
@@ -168,8 +180,14 @@ class Userprofile : Fragment() {
                 if (it.Status.equals("200")) {
 //                    Prefs.getInstance(App.instance).save("removethirdparty", "1")
 ////                    mbinding.Tvthirdparty.text = "Third Party Access Is Requested to remove."
-                    showToast("Third Party Access Has been removed", requireContext())
-
+                    Alerter.create(requireActivity())
+                        .setTitle("")
+                        .setIcon(R.drawable.logo_new)
+                        .setText("Third Party access has been removed successfully.")
+                        .setBackgroundColorInt(resources.getColor(R.color.medium_orange))
+                        .show()
+                    GetDriversBasicInformation()
+//                    mainViewModel.GetDriversBasicInformation(Prefs.getInstance(requireContext()).userID.toDouble())
 
                 } else {
                     showToast(it.Message, requireContext())
@@ -412,22 +430,60 @@ class Userprofile : Fragment() {
                 isthirdpartyAccess = it.IsThirdPartyChargeAccessAllowed
 
 
-                if (it.IsThirdPartyChargeAccessAllowed!=null && it.IsThirdPartyChargeAccessAllowed.equals(true)){
-                    mbinding.Tvthirdparty.text="Third party Access Has been Provided"
-                    mbinding.checkbox.visibility=View.VISIBLE
-                    mbinding.checkbox.isChecked=true
+                /*if (it.IsThirdPartyChargeAccessAllowed != null && it.IsThirdPartyChargeAccessAllowed.equals(
+                        true
+                    )
+                ) {
+                    mbinding.Tvthirdparty.text = "Third party Access Has been Provided"
+                    mbinding.checkbox.visibility = View.VISIBLE
+                    mbinding.checkbox.isChecked = true
 
-                }
-                else if (it.IsThirdPartyChargeAccessAllowed!=null && it.IsThirdPartyChargeAccessAllowed.equals(false) && it.IsThirdPartyChargeAccessApplied.equals(false)){
-                    mbinding.Tvthirdparty.text="Request for third party Access."
-                    mbinding.checkbox.visibility=View.GONE
-                    mbinding.checkbox.isChecked=false
-                }
-                else if (it.IsThirdPartyChargeAccessAllowed.equals(false) && it.IsThirdPartyChargeAccessApplied.equals(true)){
-                    mbinding.Tvthirdparty.text="Third party Access is Requested."
-                    mbinding.checkbox.visibility=View.GONE
-                }
+                } else if (it.IsThirdPartyChargeAccessAllowed != null && it.IsThirdPartyChargeAccessAllowed.equals(
+                        false
+                    ) && it.IsThirdPartyChargeAccessApplied.equals(false) || it.IsThirdPartyChargeAccessApplied.equals(
+                        null
+                    )
+                ) {
+                    mbinding.Tvthirdparty.text = "Request for third party Access."
+                    mbinding.checkbox.visibility = View.VISIBLE
+                    mbinding.checkbox.isChecked = false
+                } else if (it.IsThirdPartyChargeAccessAllowed.equals(false) && it.IsThirdPartyChargeAccessApplied.equals(
+                        true
+                    )
+                ) {
+                    mbinding.Tvthirdparty.text = "Third party Access is Requested."
+                    mbinding.checkbox.visibility = View.GONE
+                }else if (it.IsThirdPartyChargeAccessAllowed.equals(false) && it.IsThirdPartyChargeAccessApplied.equals(
+                        null
+                    )
+                ) {
+                    mbinding.Tvthirdparty.text = "Request for third party Access."
+                    mbinding.checkbox.visibility = View.VISIBLE
+                }*/
 
+                if(it.IsThirdPartyChargeAccessAllowed==false && it.IsThirdPartyChargeAccessApplied==null){
+                    mbinding.Tvthirdparty.text = "Request for third party Access."
+                    mbinding.checkbox.visibility = View.VISIBLE
+                    mbinding.checkbox.isChecked = false
+                }
+                else if(it.IsThirdPartyChargeAccessAllowed.equals(false) && it.IsThirdPartyChargeAccessApplied.equals(true)){
+                    mbinding.Tvthirdparty.text = "Third party Access is Requested."
+                    mbinding.checkbox.visibility = View.GONE
+                    //mbinding.checkbox.isChecked =
+                }
+                else if (it.IsThirdPartyChargeAccessAllowed==true){
+                    mbinding.Tvthirdparty.text = "Third party Access is Granted."
+                    mbinding.checkbox.visibility = View.GONE
+                }
+                else if(it.IsThirdPartyChargeAccessAllowed==false && it.IsThirdPartyChargeAccessApplied==false){
+                    mbinding.Tvthirdparty.text = "Request for third party Access."
+                    mbinding.checkbox.visibility = View.VISIBLE
+                    mbinding.checkbox.isChecked = false
+                }else{
+                    mbinding.Tvthirdparty.text = "Request for third party Access."
+                    mbinding.checkbox.visibility = View.VISIBLE
+                    mbinding.checkbox.isChecked = false
+                }
 
 
 //                if (it.IsThirdPartyChargeAccessAllowed.equals(true)) {

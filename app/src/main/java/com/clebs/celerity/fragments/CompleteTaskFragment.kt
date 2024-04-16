@@ -304,9 +304,15 @@ class CompleteTaskFragment : Fragment() {
         }
 
         mbinding.rlcomtwoRoad.setOnClickListener {
-            if (mbinding.routeLayout.visibility == View.GONE) mbinding.routeLayout.visibility =
-                View.VISIBLE
-            else mbinding.routeLayout.visibility = View.GONE
+            if (mbinding.routeLayout.visibility == View.GONE) {
+                mbinding.routeLayout.visibility =
+                    View.VISIBLE
+                mbinding.linerlcomtwo.visibility = View.VISIBLE
+            }
+            else{
+                mbinding.routeLayout.visibility = View.GONE
+                mbinding.linerlcomtwo.visibility = View.GONE
+            }
         }
         return mbinding.root
     }
@@ -389,7 +395,12 @@ class CompleteTaskFragment : Fragment() {
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
-
+                Alerter.create(requireActivity())
+                        .setTitle("")
+                        .setIcon(R.drawable.logo_new)
+                        .setText("Break Time Added successfully")
+                        .setBackgroundColorInt(resources.getColor(R.color.medium_orange))
+                        .show()
                 showDialog()
                 viewModel.GetDriverBreakTimeInfo(userId)
 

@@ -464,6 +464,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             loadingDialog.cancel()
             apiCount = 0
         }
+
     }
 
     public fun showDialog() {
