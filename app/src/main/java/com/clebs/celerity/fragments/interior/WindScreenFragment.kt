@@ -68,7 +68,7 @@ class WindScreenFragment : Fragment() {
 
         val vm_id = arguments?.get("vm_mileage")
         Log.e("vmvmvmv", "onCreateView: $vm_id")
-       BubbleShowCaseBuilder(requireActivity())//Activity instance
+        BubbleShowCaseBuilder(requireActivity())//Activity instance
             .title("Wind screen") //Any title for the bubble view
             .description("Provide Vehicle information") //More detailed description
             .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
@@ -107,7 +107,8 @@ class WindScreenFragment : Fragment() {
             )
             .targetView(mbinding.lln)
             .showOnce("1")
-            .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE).backgroundColor(resources.getColor(R.color.very_light_orange)) //View to point out
+            .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE)
+            .backgroundColor(resources.getColor(R.color.very_light_orange)) //View to point out
             .show().finishSequence()
         viewModel = (activity as HomeActivity).viewModel
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.windScreenFragment)
@@ -123,8 +124,23 @@ class WindScreenFragment : Fragment() {
             }
         }
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-            mbinding.headerTop.dxLoc.text = it?.locationName ?: ""
-            mbinding.headerTop.dxReg.text = it?.vmRegNo ?: ""
+
+            if (Prefs.getInstance(requireContext()).currLocationName != null) {
+                mbinding.headerTop.dxLoc.text =
+                    Prefs.getInstance(requireContext()).currLocationName ?: ""
+            } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+                mbinding.headerTop.dxLoc.text =
+                    Prefs.getInstance(requireContext()).workLocationName ?: ""
+            } else {
+                if (it != null) {
+                    mbinding.headerTop.dxLoc.text = it.locationName ?: ""
+                }
+            }
+            if (it != null) {
+                mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
+            }
+
+
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
                 .also { name -> mbinding.headerTop.anaCarolin.text = name }
             mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
@@ -190,7 +206,7 @@ class WindScreenFragment : Fragment() {
     }
 
 
-    fun toolTip(tittle:String,description: String,id:String,view: LinearLayout?) {
+    fun toolTip(tittle: String, description: String, id: String, view: LinearLayout?) {
         view?.let {
             BubbleShowCaseBuilder(requireActivity()) //Activity instance
                 .title(tittle) //Any title for the bubble view
@@ -228,10 +244,12 @@ class WindScreenFragment : Fragment() {
                         }
                     })
                 )
-                .targetView(it).highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
+                .targetView(it)
+                .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
                 .show()
         }
     }
+
     private fun selectLayout1() {
         if (isupload) {
             mbinding.tvNext.visibility = View.VISIBLE
@@ -361,12 +379,12 @@ class WindScreenFragment : Fragment() {
         val fragmentStack = prefs.getNavigationHistory()
         val navOptions = NavOptions.Builder()
             .setEnterAnim(R.anim.slide_left) // Animation for entering the new fragment
-           // Animation for exiting the current fragment
+            // Animation for exiting the current fragment
 //            .setPopEnterAnim(R.anim.slide_in_right) // Animation for entering the previous fragment when navigating back
 //            .setPopExitAnim(R.anim.slide_left) // Animation for exiting the current fragment when navigating back
             .build()
         fragmentStack.push(fragmentId)
-        findNavController().navigate(fragmentId,null,navOptions)
+        findNavController().navigate(fragmentId, null, navOptions)
         prefs.saveNavigationHistory(fragmentStack)
     }
 
