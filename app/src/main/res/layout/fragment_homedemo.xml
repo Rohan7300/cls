@@ -89,7 +89,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/inter_bold"
-                                    android:text="Av total:"
+                                    android:text="Avg total:"
                                     android:textColor="@color/text_color"
                                     android:textSize="14sp"
                                     app:layout_constraintStart_toStartOf="parent"

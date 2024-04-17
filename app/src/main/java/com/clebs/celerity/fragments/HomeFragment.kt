@@ -52,12 +52,12 @@ class HomeFragment : Fragment() {
             if (it != null) {
                 if (it.currentlocation != null) {
                     mbinding.location.text = it.currentlocation
-                } else {
-                    mbinding.location.setText("Not assigned")
-                }
-                if (it.workinglocation != null) {
+                    mbinding.away.text = it.currentlocation
+                } else if (it.workinglocation != null) {
+                    mbinding.location.text = it.workinglocation
                     mbinding.away.text = it.workinglocation
                 } else {
+                    mbinding.location.setText("Not assigned")
                     mbinding.away.setText("Not assigned")
                 }
                 mbinding.truckNumber.text = it.vmRegNo

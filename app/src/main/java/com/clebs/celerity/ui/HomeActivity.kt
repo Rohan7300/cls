@@ -487,6 +487,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (it != null) {
                 try {
                     it.vmRegNo?.let { it1 ->
+                        prefs.vmRegNo = it1
                         viewModel.GetVehicleInformation(
                             prefs.userID.toInt(),
                             it1

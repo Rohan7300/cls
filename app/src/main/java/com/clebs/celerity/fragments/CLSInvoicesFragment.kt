@@ -3,11 +3,14 @@ package com.clebs.celerity.fragments
 import android.Manifest
 import android.app.DatePickerDialog
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
@@ -71,7 +74,7 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
                     binding.noinvoices.visibility = View.GONE
                 }
                 adapter.data.clear()
-                adapter.data.addAll(it.Invoices)
+                adapter.data.addAll(it.Invoices.reversed())
                 adapter.notifyDataSetChanged()
             } else {
                 binding.clsInvoices.visibility = View.GONE
@@ -127,7 +130,9 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
             0,
             1
         )
-        yearPickerDialog.datePicker.maxDate = System.currentTimeMillis()
+
+
+
         yearPickerDialog.show()
     }
 }

@@ -217,7 +217,7 @@ class HomedemoFragment : Fragment() {
         viewModel.livedatalastweekresponse.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
-                if (it.status.equals("200")) {
+                if (it.status == "200") {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBartwo.setProgress(it.avgTotalScore.toDouble().toInt())
                     mbinding.tvPbTwo.text = it.avgTotalScore.toDouble().toInt().toString() + "%"+" Score"

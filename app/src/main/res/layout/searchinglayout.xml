@@ -18,7 +18,7 @@
         android:layout_marginHorizontal="25dp"
         android:layout_marginVertical="10dp"
         android:fontFamily="@font/poppins_bold"
-        android:text="Please wait . . . "
+        android:text="Please wait . . "
         android:textAlignment="center"
         android:textSize="15dp" />
 </LinearLayout>

@@ -88,6 +88,7 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var loadingDialog: LoadingDialog
     var b1 = false
     var b2 = false
+    var breakTimeSent = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
     private var imageUploadLevel = 0
@@ -308,10 +309,12 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.routeLayout.visibility =
                     View.VISIBLE
                 mbinding.linerlcomtwo.visibility = View.VISIBLE
+                mbinding.downIvsRoad.setImageResource(R.drawable.down_arrow)
             }
             else{
                 mbinding.routeLayout.visibility = View.GONE
                 mbinding.linerlcomtwo.visibility = View.GONE
+                mbinding.downIvsRoad.setImageResource(R.drawable.grey_right_arrow)
             }
         }
 
@@ -366,10 +369,24 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun observers() {
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+            mbinding.headerTop.anaCarolin.text = name
+        }
+        if (Prefs.getInstance(requireContext()).currLocationName != null) {
+            mbinding.headerTop.dxLoc.text =
+                Prefs.getInstance(requireContext()).currLocationName ?: ""
+        } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+            mbinding.headerTop.dxLoc.text =
+                Prefs.getInstance(requireContext()).workLocationName ?: ""
+        }
+        mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
+        val isLeadDriver = (activity as HomeActivity).isLeadDriver
+        if (!isLeadDriver) {
+            mbinding.rideAlong.visibility = View.GONE
+        }
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
 
             hideDialog()
-
             if (it != null) {
                 if (Prefs.getInstance(requireContext()).currLocationName != null) {
                     mbinding.headerTop.dxLoc.text =
@@ -382,31 +399,30 @@ class CompleteTaskFragment : Fragment() {
                 }
                 mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
             }
-
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
                 mbinding.headerTop.anaCarolin.text = name
             }
+
             mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
-            val isLeadDriver = (activity as HomeActivity).isLeadDriver
-            if (!isLeadDriver) {
-                mbinding.rideAlong.visibility = View.GONE
-            }
         }
 
 
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
-                Alerter.create(requireActivity())
+                if(breakTimeSent){
+                    breakTimeSent = false
+                    Alerter.create(requireActivity())
                         .setTitle("")
                         .setIcon(R.drawable.logo_new)
                         .setText("Break Time Added successfully")
                         .setBackgroundColorInt(resources.getColor(R.color.medium_orange))
                         .show()
+                }
                 showDialog()
                 viewModel.GetDriverBreakTimeInfo(userId)
-
-            } else {
+            }
+            else {
 
             }
         }
@@ -784,6 +800,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun sendBreakTimeData() {
+        breakTimeSent = true
         showDialog()
         viewModel.SaveBreakTime(
             SaveBreakTimeRequest(
@@ -998,11 +1015,14 @@ class CompleteTaskFragment : Fragment() {
 
         if (cqSDKInitializer.isCQSDKInitialized()) {
 
-
+var vmReg=Prefs.getInstance(App.instance).vmRegNo?:""
             Log.e(
                 "totyototyotoytroitroi",
                 "startInspection: " + inspectionID + "VmReg ${Prefs.getInstance(App.instance).vmRegNo}"
             )
+            if(vmReg.isEmpty()){
+                vmReg = Prefs.getInstance(App.instance).scannedVmRegNo
+            }
             Log.e("sdkskdkdkskdkskd", "onCreateView: ")
 
             try {
@@ -1015,7 +1035,7 @@ class CompleteTaskFragment : Fragment() {
                     ),
                     inputDetails = InputDetails(
                         vehicleDetails = VehicleDetails(
-                            regNumber = Prefs.getInstance(App.instance).vmRegNo.replace(
+                            regNumber = vmReg.replace(
                                 " ",
                                 ""
                             ), //if sent, user can't edit

@@ -101,6 +101,10 @@ class InvoicesFragment : Fragment() {
                     binding.headerTop.dxLoc.text = it.locationName ?: ""
                 }
             }
+            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+                binding.headerTop.anaCarolin.text = name
+            }
+            binding.headerTop.dxm5.text = (activity as HomeActivity).date
         }
     }
 

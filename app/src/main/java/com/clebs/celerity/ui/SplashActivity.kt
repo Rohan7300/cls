@@ -77,7 +77,12 @@ class SplashActivity : AppCompatActivity() {
 
         val rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.anam)
 
-        askNotificationPermission()
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU){
+            askNotificationPermission()
+        }else{
+            next()
+        }
+
 
         ActivitySplashBinding.imgCircleLogo.startAnimation(rotateAnimation)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
@@ -98,14 +103,12 @@ class SplashActivity : AppCompatActivity() {
 
     fun next(){
         android.os.Handler().postDelayed({
-
             if (isLoggedIn()) {
                 retrieveAndSaveFCMToken()
                 navigateToHomeScreen()
             } else {
                 navigateToLoginScreen()
             }
-
             finish()
         }, 2000)
     }
