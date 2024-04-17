@@ -233,13 +233,19 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 Prefs.getInstance(App.instance).userID.toDouble()
             ).observe(viewLifecycleOwner) {
                 if (it != null) {
-                    if (it.vmRegNo != null) {
-                        prefs.vmRegNo = it.vmRegNo!!
-                        try {
-                            viewModel.GetVehicleInformation(prefs.userID.toInt(), it.vmRegNo)
-                        } catch (e: Exception) {
-                            Log.e("GetVehicleInformation Exception", "$e")
-                        }
+                    it.vmRegNo?.let { it1 ->
+                        binding.headerTop.dxReg.text = it1?:"Not Assigned"
+                        viewModel.GetVehicleInformation(Prefs.getInstance(requireContext()).userID.toInt(),
+                            it1
+                        )
+                    }
+                    prefs.workLocationName = it.workinglocation
+                    prefs.currLocationName = it.currentlocation
+                    if (prefs.currLocationName.isNotEmpty()) {
+                        binding.headerTop.dxLoc.text = prefs.currLocationName ?: ""
+                    } else if (prefs.workLocationName.isNotEmpty()) {
+                        binding.headerTop.dxLoc.text =
+                            prefs.workLocationName ?: ""
                     }
                 }
             }
@@ -280,7 +286,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 val routeIDs = routeData.map { it.RtId }
                 try {
                     binding.selectDepartmentTIL.hint = routeNames[routeIDs.indexOf(selectedRouteId)]
-                }catch (_:Exception){
+                } catch (_: Exception) {
 
                 }
 
@@ -312,19 +318,19 @@ class UpdateOnRoadHoursFragment : Fragment() {
         spinner.setOnItemClickListener { parent, view, position, id ->
             run {
                 parent?.let { nonNullParent ->
-                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
-                        selectedItem.let {
-                            when (spinner) {
-                                binding.spinnerLocation -> {
-                                    selectedLocId = ids[position]
-                                }
+                    val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
+                    selectedItem.let {
+                        when (spinner) {
+                            binding.spinnerLocation -> {
+                                selectedLocId = ids[position]
+                            }
 
-                                binding.spinnerRouteType -> {
-                                    selectedRouteType = selectedItem
-                                    selectedRouteId = ids[position]
-                                }
+                            binding.spinnerRouteType -> {
+                                selectedRouteType = selectedItem
+                                selectedRouteId = ids[position]
                             }
                         }
+                    }
                 }
             }
         }

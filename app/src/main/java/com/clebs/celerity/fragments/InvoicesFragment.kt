@@ -25,6 +25,7 @@ class InvoicesFragment : Fragment() {
         (activity as HomeActivity).hideDialog()
     }
     lateinit var binding: FragmentInvoicesBinding
+    lateinit var prefs: Prefs
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +33,7 @@ class InvoicesFragment : Fragment() {
     ): View? {
         binding = FragmentInvoicesBinding.inflate(layoutInflater)
         viewModel = (activity as HomeActivity).viewModel
-
+        prefs = Prefs.getInstance(requireContext())
         observers()
         binding.clsinvoices.setOnClickListener {
             findNavController().navigate(R.id.CLSInvoicesFragment)
@@ -55,11 +56,25 @@ class InvoicesFragment : Fragment() {
             hideDialog()
             if (it != null) {
                 it.vmRegNo?.let { it1 ->
+                    binding.headerTop.dxReg.text = it1?:"Not Assigned"
                     viewModel.GetVehicleInformation(Prefs.getInstance(requireContext()).userID.toInt(),
                         it1
                     )
                 }
+                if(it.workinglocation!=null){
+                    prefs.workLocationName = it.workinglocation
+                }
+                if(it.currentlocation!=null){
+                    prefs.currLocationName = it.currentlocation
+                }
 
+
+                if (prefs.currLocationName.isNotEmpty()) {
+                    binding.headerTop.dxLoc.text = prefs.currLocationName ?: ""
+                } else if (prefs.workLocationName.isNotEmpty()) {
+                    binding.headerTop.dxLoc.text =
+                        prefs.workLocationName ?: ""
+                }
                 if (it.IsThirdPartyChargeAccessAllowed) {
                     binding.otherinvoices.visibility = View.VISIBLE
                 } else {
@@ -76,19 +91,15 @@ class InvoicesFragment : Fragment() {
         binding.headerTop.dxm5.text = (activity as HomeActivity).date
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             hideDialog()
-            if (Prefs.getInstance(requireContext()).currLocationName != null) {
+            if (prefs.currLocationName.isNotEmpty()) {
+                binding.headerTop.dxLoc.text = prefs.currLocationName ?: ""
+            } else if (prefs.workLocationName.isNotEmpty()) {
                 binding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).currLocationName ?: ""
-            } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
-                binding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).workLocationName ?: ""
+                   prefs.workLocationName ?: ""
             } else {
                 if (it != null) {
                     binding.headerTop.dxLoc.text = it.locationName ?: ""
                 }
-            }
-            if (it != null) {
-                binding.headerTop.dxReg.text = it.vmRegNo ?: ""
             }
         }
     }

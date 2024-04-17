@@ -79,6 +79,16 @@ abstract class BaseInteriorFragment : Fragment() {
         dxm5 = view.findViewById(R.id.dxm5)
         ana_carolin = view.findViewById(R.id.ana_carolin)
 
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
+            .also { name -> ana_carolin.text = name }
+        dxm5.text = (activity as HomeActivity).date
+        if (Prefs.getInstance(requireContext()).currLocationName != null) {
+            dxLoc.text =
+                Prefs.getInstance(requireContext()).currLocationName ?: ""
+        } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+            dxLoc.text =
+                Prefs.getInstance(requireContext()).workLocationName ?: ""
+        }
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             dxLoc.text = it?.locationName ?: ""
@@ -95,9 +105,6 @@ abstract class BaseInteriorFragment : Fragment() {
                 }
             }
 
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-                .also { name -> ana_carolin.text = name }
-            dxm5.text = (activity as HomeActivity).date
         }
 //        var tooltip = (activity as HomeActivity).tooltips
 //        if (findNavController().currentDestination?.id==R.id.windowsGlassFragment){

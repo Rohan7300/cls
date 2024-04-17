@@ -461,25 +461,25 @@ class Userprofile : Fragment() {
                     mbinding.checkbox.visibility = View.VISIBLE
                 }*/
 
-                if(it.IsThirdPartyChargeAccessAllowed==false && it.IsThirdPartyChargeAccessApplied==null){
+                if (it.IsThirdPartyChargeAccessAllowed == false && it.IsThirdPartyChargeAccessApplied == null) {
                     mbinding.Tvthirdparty.text = "Request for third party Access."
                     mbinding.checkbox.visibility = View.VISIBLE
                     mbinding.checkbox.isChecked = false
-                }
-                else if(it.IsThirdPartyChargeAccessAllowed.equals(false) && it.IsThirdPartyChargeAccessApplied.equals(true)){
+                } else if (it.IsThirdPartyChargeAccessAllowed.equals(false) && it.IsThirdPartyChargeAccessApplied.equals(
+                        true
+                    )
+                ) {
                     mbinding.Tvthirdparty.text = "Third party Access is Requested."
                     mbinding.checkbox.visibility = View.GONE
                     //mbinding.checkbox.isChecked =
-                }
-                else if (it.IsThirdPartyChargeAccessAllowed==true){
+                } else if (it.IsThirdPartyChargeAccessAllowed == true) {
                     mbinding.Tvthirdparty.text = "Third party Access is Granted."
                     mbinding.checkbox.visibility = View.GONE
-                }
-                else if(it.IsThirdPartyChargeAccessAllowed==false && it.IsThirdPartyChargeAccessApplied==false){
+                } else if (it.IsThirdPartyChargeAccessAllowed == false && it.IsThirdPartyChargeAccessApplied == false) {
                     mbinding.Tvthirdparty.text = "Request for third party Access."
                     mbinding.checkbox.visibility = View.VISIBLE
                     mbinding.checkbox.isChecked = false
-                }else{
+                } else {
                     mbinding.Tvthirdparty.text = "Request for third party Access."
                     mbinding.checkbox.visibility = View.VISIBLE
                     mbinding.checkbox.isChecked = false
@@ -531,6 +531,7 @@ class Userprofile : Fragment() {
                     showToast("ProfileUpdated", requireContext())
                     Prefs.getInstance(App.instance).days = "0"
 //                    Prefs.getInstance(App.instance).save("90days", "0")
+                    (activity as HomeActivity).enableBottomNavigationView()
                     findNavController().navigate(R.id.homedemoFragment)
 
                 }

@@ -68,7 +68,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var ninetydaysBoolean: Boolean? = null
     var lastName = ""
     var isLeadDriver = false
-
+    lateinit var prefs: Prefs
     var date = ""
     lateinit var loadingDialog: LoadingDialog
 
@@ -99,7 +99,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
             if (tempCode == 200) {
                 Log.d("hdhsdshdsdjshhsds", "200 $message")
-                Prefs.getInstance(this).saveBoolean("Inspection", true)
+                prefs.saveBoolean("Inspection", true)
                 //inspectionstarted = true
                 navController.navigate(R.id.completeTaskFragment)
                 showToast("Vehicle Inspection is successfully completed ", this)
@@ -107,7 +107,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 Log.d("hdhsdshdsdjshhsds", "else $message")
                 navController.navigate(R.id.completeTaskFragment)
                 showToast("inspection Failed", this)
-                Prefs.getInstance(this).saveBoolean("Inspection", false)
+                prefs.saveBoolean("Inspection", false)
                 //inspectionstarted = false
 
             }
@@ -133,11 +133,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         ActivityHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
 
-
+        prefs = Prefs.getInstance(this)
         loadingDialog = LoadingDialog(this)
         sdkkey = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
         cqSDKInitializer()
-        userId = Prefs.getInstance(this).userID.toInt()
+        userId = prefs.userID.toInt()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -390,7 +390,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     }
 
-     fun showAlertLogout() {
+    fun showAlertLogout() {
         val factory = LayoutInflater.from(this)
         val view: View = factory.inflate(R.layout.logout_layout, null)
         val deleteDialog: AlertDialog = AlertDialog.Builder(this).create()
@@ -486,24 +486,25 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             hideDialog()
             if (it != null) {
                 try {
-                    try {
-                        Prefs.getInstance(this).vmRegNo = it.vmRegNo!!
-                        viewModel.GetVehicleInformation(userId, it.vmRegNo)
-                        if (it.currentlocation != null)
-                            Prefs.getInstance(this).currLocationName = it.currentlocation
-                        if (it.workinglocation != null)
-                            Prefs.getInstance(this).workLocationName = it.workinglocation
-                    } catch (e: Exception) {
-                        Log.e("GetVehicleInformation Exception", "$e")
+                    it.vmRegNo?.let { it1 ->
+                        viewModel.GetVehicleInformation(
+                            prefs.userID.toInt(),
+                            it1
+                        )
                     }
-                    Prefs.getInstance(this).lmid = it.lmID
+
+                    if (it.currentlocation != null)
+                        prefs.currLocationName = it.currentlocation
+                    if (it.workinglocation != null)
+                        prefs.workLocationName = it.workinglocation
+                    prefs.lmid = it.lmID
                     lmId = it.lmID
                 } catch (e: Exception) {
                     Log.d("sds", e.toString())
                 }
                 firstName = it.firstName
                 lastName = it.lastName
-                Prefs.getInstance(this).userName = "$firstName $lastName"
+                prefs.userName = "$firstName $lastName"
                 isLeadDriver = it.IsLeadDriver
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
                 if (it.IsUsrProfileUpdateReqin90days.equals(true)) {

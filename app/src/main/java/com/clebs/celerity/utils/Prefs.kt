@@ -16,8 +16,8 @@ class Prefs(context: Context) {
     private lateinit var sharedPreferences: SharedPreferences
 
     companion object {
-        private const val USER_ACCESS_TOKEN = "sybyl_shared_pref"
-        private const val USER_ACCESS_TOKEN_TWO = "sybyl_shared_prefs"
+        private const val USER_ACCESS_TOKEN = "celerity_shared_prefs"
+        private const val USER_ACCESS_TOKEN_TWO = "celerity_shared_prefs"
         private var instance: Prefs? = null
 
         fun getInstance(context: Context): Prefs {
