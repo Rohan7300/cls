@@ -1,8 +1,8 @@
 package com.clebs.celerity.ui
 
 import android.Manifest
-import android.R.attr.visible
-import android.R.id.text2
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,8 +22,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator
-import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.DrawViewClass
 import com.clebs.celerity.Factory.MyViewModelFactory
@@ -42,10 +40,6 @@ import com.clebs.celerity.utils.OpenMode
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.showToast
-import com.transitionseverywhere.Fade
-import com.transitionseverywhere.TransitionManager
-import com.transitionseverywhere.TransitionSet
-import com.transitionseverywhere.extra.Scale
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -58,6 +52,7 @@ import java.util.UUID
 class PolicyDocsActivity : AppCompatActivity() {
     lateinit var mbinding: ActivityPolicyDocsBinding
     lateinit var viewModel: MainViewModel
+
     private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
     private var userId = 0
     var isImage1 = true
@@ -73,6 +68,7 @@ class PolicyDocsActivity : AppCompatActivity() {
     lateinit var currentfileName: String
     lateinit var currentFileContent: InputStream
     lateinit var currentMode: OpenMode
+
 
     companion object {
         var path = Path()
@@ -92,13 +88,7 @@ class PolicyDocsActivity : AppCompatActivity() {
         } else {
             mbinding.llAmazon.visibility = View.VISIBLE
         }
-//        val set: TransitionSet = TransitionSet()
-//            .addTransition(Scale(0.7f))
-//            .addTransition(Fade())
-//            .setInterpolator(if (visible) LinearOutSlowInInterpolator() else FastOutLinearInInterpolator())
-//
-//        TransitionManager.beginDelayedTransition(transitionsContainer, set)
-//        text2.(if (visible) View.VISIBLE else View.INVISIBLE)
+
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
@@ -127,7 +117,6 @@ class PolicyDocsActivity : AppCompatActivity() {
         observers()
         clickListeners()
 
-
         mbinding.amazonHeader.setOnClickListener {
             if (isImage1) {
                 mbinding.views1.visibility = View.GONE
@@ -151,9 +140,12 @@ class PolicyDocsActivity : AppCompatActivity() {
 
         mbinding.checkbox.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
+
                 mbinding.amazonHeader.isClickable = false
-                mbinding.amazonLayout.visibility = View.GONE
-                mbinding.views1.visibility = View.GONE
+           viewGoneAnimator(mbinding.amazonLayout)
+               viewGoneAnimator(mbinding.views1)
+mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
+
                 if (mbinding.llTrucks.visibility == View.GONE) {
                     showAlert()
                 } else {
@@ -166,12 +158,15 @@ class PolicyDocsActivity : AppCompatActivity() {
             } else {
                 mbinding.amazonLayout.visibility = View.VISIBLE
                 mbinding.views1.visibility = View.VISIBLE
+                mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.chevron))
             }
         }
         mbinding.checkbox2.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
-                mbinding.truckLayout.visibility = View.GONE
+                viewGoneAnimator(mbinding.truckLayout)
+                viewGoneAnimator(mbinding.viewss2)
                 mbinding.truckHeaderLL.isClickable = false
+                mbinding.truckArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
                 mbinding.viewss2.visibility = View.GONE
                 if (mbinding.llAmazon.visibility == View.GONE) {
                     showAlert()
@@ -185,6 +180,7 @@ class PolicyDocsActivity : AppCompatActivity() {
             } else {
                 mbinding.truckLayout.visibility = View.VISIBLE
                 mbinding.viewss2.visibility = View.VISIBLE
+                mbinding.truckArrow.setImageDrawable(resources.getDrawable(R.drawable.chevron))
             }
         }
     }
@@ -566,5 +562,15 @@ class PolicyDocsActivity : AppCompatActivity() {
         }
     }
 
+    private fun viewGoneAnimator(view: View) {
+        view.animate()
+            .alpha(0f)
+            .setDuration(1000)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    view.visibility = View.GONE
+                }
+            })
+    }
 
 }

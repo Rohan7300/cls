@@ -77,7 +77,8 @@ android {
 
 dependencies {
 //    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation(files("libs/achartengine-1.2.0.jar"))
+//    implementation(files("libs/android-support-v4.jar"))
+
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

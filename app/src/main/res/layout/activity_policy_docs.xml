@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
-        android:backgroundTint="@color/very_light_orange"
+        android:background="@color/very_light_orange"
         android:orientation="vertical"
         android:paddingBottom="10dp"
         tools:context=".fragments.PolicyDocsFragment">
@@ -16,7 +16,8 @@
             android:id="@+id/constss"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:backgroundTint="@color/white"
+            android:background="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -29,15 +30,16 @@
                 android:letterSpacing="0.02"
                 android:text="Policy Documents"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="21sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_policy"
-                android:layout_width="159dp"
+                android:layout_width="119dp"
                 android:layout_height="134dp"
+
                 android:src="@drawable/policy_img"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -751,11 +753,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
-                        android:fontFamily="@font/poppins"
-                        android:letterSpacing="0.02"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="Sign here"
                         android:textColor="@color/text_color"
-                        android:textSize="16sp" />
+                        android:textSize="15sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

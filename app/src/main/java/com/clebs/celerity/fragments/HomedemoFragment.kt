@@ -1,15 +1,18 @@
-package com.clebs.celerity.ui
-
+package com.clebs.celerity.fragments
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentHomedemoBinding
+import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.PieChart3DView
+import com.clebs.celerity.utils.PieChart3DView.Sector
 import com.clebs.celerity.utils.Prefs
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
@@ -18,7 +21,6 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.MPPointF
-import org.achartengine.chart.RoundChart
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -34,6 +36,9 @@ class HomedemoFragment : Fragment() {
     var week: Int = 0
     var year: Int = 0
 
+
+
+    var flag = false
     protected val months = arrayOf(
         "Jan", "Feb", "Mar"
     )
