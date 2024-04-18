@@ -260,7 +260,6 @@ class Userprofile : Fragment() {
                     ContextCompat.getColorStateList(requireContext(), colorRes)
                 mbinding.firstconst.backgroundTintList = ColorStateList.valueOf(color)
 
-
                 mbinding.usepassword.backgroundTintList = ColorStateList.valueOf(color)
                 mbinding.usephone.backgroundTintList = ColorStateList.valueOf(color)
                 mbinding.useaddress.backgroundTintList = ColorStateList.valueOf(color)

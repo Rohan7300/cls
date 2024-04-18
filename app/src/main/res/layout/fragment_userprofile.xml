@@ -77,29 +77,38 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="27dp"
-                    android:elevation="12dp"
                     android:background="@drawable/shape_profile"
+                    android:backgroundTint="@color/very_light_orange"
+                    android:elevation="12dp"
                     android:fontFamily="@font/poppins_bold"
                     android:letterSpacing="0.05"
                     android:padding="8dp"
-                    android:backgroundTint="@color/very_light_orange"
                     android:text=""
                     android:textColor="@color/black"
                     android:textSize="21sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/dpLayout" />
 
+                <ImageView
+                    android:id="@+id/logout"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+
+                    android:src="@drawable/baseline_logout_24"
+                    app:layout_constraintBottom_toBottomOf="@+id/name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/name" />
 
                 <ImageView
                     android:id="@+id/editImg"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:padding="4dp"
                     android:elevation="12dp"
+                    android:padding="4dp"
+                    android:layout_marginEnd="20dp"
                     android:src="@drawable/edit_orange"
-                    app:layout_constraintBottom_toBottomOf="@+id/name"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/name" />
+                    app:layout_constraintBottom_toBottomOf="@+id/logout"
+                    app:layout_constraintEnd_toStartOf="@+id/logout" />
 
                 <LinearLayout
                     android:id="@+id/FormLayout"
@@ -118,11 +127,11 @@
                         android:id="@+id/firstconst"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="#f3f3f3"
                         android:layout_marginBottom="14dp"
-android:elevation="-12dp"
-                        android:background="@drawable/shape_profile"
-                        android:padding="16dp">
+
+                        android:backgroundTint="#f3f3f3"
+                        android:elevation="-12dp"
+                        android:paddingVertical="10dp">
 
                         <!--                        <TextView-->
                         <!--                            android:id="@+id/emailHint"-->
@@ -147,28 +156,24 @@ android:elevation="-12dp"
                             >
 
                             <com.google.android.material.textfield.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
                                 android:id="@+id/edtemaillayout"
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                                app:expandedHintEnabled="false"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Email"
+                                app:boxBackgroundColor="@color/very_light_grey_two"
                                 android:padding="2dp"
-
-
-                                app:hintTextColor="@color/black"
-                                android:hint="Email">
+                                app:expandedHintEnabled="false"
+                                app:hintTextColor="@color/black">
 
                                 <EditText
                                     android:id="@+id/emailtext"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
-
                                     android:layout_weight="1"
-
                                     android:enabled="false"
                                     android:fontFamily="@font/poppins"
-
                                     android:importantForAutofill="no"
                                     android:inputType="textEmailAddress"
                                     android:letterSpacing="0.01"
@@ -228,9 +233,7 @@ android:elevation="-12dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="14dp"
                         android:backgroundTint="#f3f3f3"
-
-                        android:background="@drawable/shape_profile"
-                        android:padding="16dp">
+                        android:paddingVertical="10dp">
 
                         <!--                        <TextView-->
                         <!--                            android:id="@+id/usernameHint"-->
@@ -254,14 +257,15 @@ android:elevation="-12dp"
                             >
 
                             <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/edtuserlayout"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/edtuserlayout"
+                                android:hint="Username"
                                 android:padding="2dp"
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 app:expandedHintEnabled="false"
-                                app:hintTextColor="@color/black"
-                                android:hint="Username">
+                                app:boxBackgroundColor="@color/very_light_grey_two"
+                                app:hintTextColor="@color/black">
 
                                 <EditText
                                     android:id="@+id/usertext"
@@ -302,9 +306,7 @@ android:elevation="-12dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="14dp"
                         android:backgroundTint="#f3f3f3"
-
-                        android:background="@drawable/shape_profile"
-                        android:padding="16dp">
+                        android:paddingVertical="10dp">
 
                         <!--                        <TextView-->
                         <!--                            android:id="@+id/passwHint"-->
@@ -330,15 +332,16 @@ android:elevation="-12dp"
                             >
 
                             <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/edtpasslayout"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/edtpasslayout"
                                 android:layout_weight="1"
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                                app:expandedHintEnabled="false"
+                                android:hint="Password"
+                                app:boxBackgroundColor="@color/very_light_grey_two"
                                 android:padding="2dp"
-                                app:hintTextColor="@color/black"
-                                android:hint="Password">
+                                app:expandedHintEnabled="false"
+                                app:hintTextColor="@color/black">
 
                                 <EditText
                                     android:id="@+id/passtext"
@@ -364,8 +367,8 @@ android:elevation="-12dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:alpha="0.8"
-                                android:gravity="end"
                                 android:fontFamily="@font/poppins"
+                                android:gravity="end"
                                 android:text="@string/change_password"
                                 android:textColor="@color/orange"
                                 android:textSize="11sp"
@@ -392,9 +395,7 @@ android:elevation="-12dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="14dp"
                         android:backgroundTint="#f3f3f3"
-
-                        android:background="@drawable/shape_profile"
-                        android:padding="16dp">
+                        android:paddingVertical="10dp">
 
                         <!--                        <TextView-->
                         <!--                            android:id="@+id/phonetvHint"-->
@@ -413,21 +414,20 @@ android:elevation="-12dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-
                             app:layout_constraintTop_toTopOf="parent"
-
                             >
 
                             <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/edtnumberlayout"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/edtnumberlayout"
+                                app:boxBackgroundColor="@color/very_light_grey_two"
                                 android:layout_weight="1"
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                                app:expandedHintEnabled="false"
+                                android:hint="Phone Number"
                                 android:padding="2dp"
-                                app:hintTextColor="@color/black"
-                                android:hint="Phone Number">
+                                app:expandedHintEnabled="false"
+                                app:hintTextColor="@color/black">
 
                                 <EditText
                                     android:id="@+id/phonetext"
@@ -470,8 +470,7 @@ android:elevation="-12dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:backgroundTint="#f3f3f3"
-                        android:background="@drawable/shape_profile"
-                        android:padding="16dp">
+                        android:paddingVertical="10dp">
 
                         <!--                        <TextView-->
                         <!--                            android:id="@+id/AddressHint"-->
@@ -497,15 +496,15 @@ android:elevation="-12dp"
                             >
 
                             <com.google.android.material.textfield.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
                                 android:id="@+id/edtAddresslayout"
-
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                                app:expandedHintEnabled="false"
+                                android:layout_width="match_parent"
+                                app:boxBackgroundColor="@color/very_light_grey_two"
+                                android:layout_height="wrap_content"
+                                android:hint="Address"
                                 android:padding="2dp"
-                                app:hintTextColor="@color/black"
-                                android:hint="Address">
+                                app:expandedHintEnabled="false"
+                                app:hintTextColor="@color/black">
 
                                 <EditText
                                     android:id="@+id/addresstext"
@@ -546,9 +545,10 @@ android:elevation="-12dp"
                         android:id="@+id/constthirdparty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-android:elevation="4dp"
+                        android:layout_marginBottom="14dp"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/shape_profile"
+                        android:elevation="4dp"
                         android:padding="12dp">
 
                         <TextView
@@ -576,14 +576,15 @@ android:elevation="4dp"
                             app:layout_constraintTop_toTopOf="@+id/Tvthirdparty" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
                     <androidx.constraintlayout.widget.ConstraintLayout
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
                         android:layout_marginTop="20dp"
-                        android:id="@+id/logout"
-                        android:background="@drawable/shape_logout"
-                        >
+                        android:layout_marginBottom="16dp"
+                        android:visibility="gone"
+                        android:background="@drawable/shape_logout">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -599,27 +600,25 @@ android:elevation="4dp"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.5">
 
-
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_bold"
                                 android:text="Logout"
-                                android:textColor="@color/red"
-                                />
+                                android:textColor="@color/red" />
+
                             <ImageView
                                 android:id="@+id/img_logout_main"
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
-                                android:tint="@color/red"
                                 android:layout_marginHorizontal="10dp"
                                 android:src="@drawable/baseline_logout_24"
                                 android:visibility="visible"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.5" />
+                                app:layout_constraintVertical_bias="0.5"
+                                app:tint="@color/red" />
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
