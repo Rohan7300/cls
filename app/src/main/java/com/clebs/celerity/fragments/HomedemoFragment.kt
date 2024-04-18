@@ -1,10 +1,13 @@
 package com.clebs.celerity.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
+import android.webkit.WebView
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.clebs.celerity.R
@@ -21,6 +24,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.MPPointF
+import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -35,7 +39,7 @@ class HomedemoFragment : Fragment() {
     var thirdpartydeductions: Float = 0.0f
     var week: Int = 0
     var year: Int = 0
-
+    private lateinit var webView: WebView
 
 
     var flag = false
@@ -64,6 +68,7 @@ class HomedemoFragment : Fragment() {
 
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -81,9 +86,14 @@ class HomedemoFragment : Fragment() {
 
 
         viewModel.GetWeekAndYear()
-
-
-//        mbinding.pieChart.setUsePercentValues(true);
+//        webView = mbinding.pieChart.findViewById(R.id.pieChart)
+//        val webSettings: WebSettings = webView.settings
+//        webSettings.javaScriptEnabled = true
+//        webView.setRendererPriorityPolicy(WebView.RENDERER_PRIORITY_IMPORTANT, false);
+//
+//        // Load the HTML file from assets folder
+//        webView.loadUrl("file:///android_asset/googlechart.html")
+        mbinding.pieChart.setUsePercentValues(true);
         mbinding.pieChart.getDescription().setEnabled(false);
 
 
@@ -109,8 +119,6 @@ class HomedemoFragment : Fragment() {
         l.xEntrySpace = 7f
         l.yEntrySpace = 0f
         l.yOffset = 0f
-
-
 
 
         mbinding.viewfullschedule.setOnClickListener {
@@ -193,7 +201,7 @@ class HomedemoFragment : Fragment() {
 
 
                 val bt_text = (week - 2).toString()
-                mbinding.btPrev.text = "Load Week: $bt_text" + " data"
+                mbinding.btPrev.text = "Previous Week: $bt_text"
 
 
             }
@@ -208,16 +216,17 @@ class HomedemoFragment : Fragment() {
                 if (it.status.equals("200")) {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBar.setProgress(it.avgTotalScore.toDouble().toInt())
-                    mbinding.tvPbone.text = it.avgTotalScore.toDouble().toInt().toString() + "%"+" Score"
+                    mbinding.tvPbone.text =
+                        it.avgTotalScore.toDouble().toInt().toString() + "%" + " Score"
 
                     mbinding.ProgressBar.tooltipText = it.avgTotalScore.toDouble().toString() + "%"
                 } else {
                     mbinding.ProgressBar.setProgress(0)
-                    mbinding.tvPbone.setText("0%"+" Score")
+                    mbinding.tvPbone.setText("0%" + " Score")
                 }
             } else {
                 mbinding.ProgressBar.setProgress(0)
-                mbinding.tvPbone.setText("0%"+" Score")
+                mbinding.tvPbone.setText("0%" + " Score")
             }
         }
         viewModel.livedatalastweekresponse.observe(viewLifecycleOwner) {
@@ -226,7 +235,8 @@ class HomedemoFragment : Fragment() {
                 if (it.status.equals("200")) {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBartwo.setProgress(it.avgTotalScore.toDouble().toInt())
-                    mbinding.tvPbTwo.text = it.avgTotalScore.toDouble().toInt().toString() + "%"+" Score"
+                    mbinding.tvPbTwo.text =
+                        it.avgTotalScore.toDouble().toInt().toString() + "%" + " Score"
                     mbinding.ProgressBartwo.tooltipText =
                         it.avgTotalScore.toDouble().toString() + "%"
                 } else {
@@ -234,7 +244,7 @@ class HomedemoFragment : Fragment() {
                 }
             } else {
                 mbinding.ProgressBartwo.setProgress(0)
-                mbinding.tvPbTwo.setText("0%"+" Score")
+                mbinding.tvPbTwo.setText("0%" + " Score")
             }
         }
         viewModel.livedataCashFlowWeek.observe(viewLifecycleOwner) { depts ->
@@ -261,6 +271,11 @@ class HomedemoFragment : Fragment() {
                         thirdpartydeductions = 0f
                     }
                 }
+//                passValuesToHtml(
+//                    avprofit.toString(),
+//                    avdeductions.toInt(),
+//                    thirdpartydeductions.toInt()
+//                )
                 val entries = ArrayList<PieEntry>()
 
                 // NOTE: The order of the entries when being added to the entries array determines their position around the center of
@@ -295,8 +310,8 @@ class HomedemoFragment : Fragment() {
                 mbinding.pieChart.setData(data)
 
                 // undo all highlights
-                mbinding.pieChart.highlightValues(null)
-                mbinding.pieChart.invalidate()
+//                mbinding.pieChart.highlightValues(null)
+//                mbinding.pieChart.invalidate()
 //                val slices = mutableListOf<PieChart.Slice>()
 //
 //                slices.add(
@@ -437,4 +452,8 @@ class HomedemoFragment : Fragment() {
         return outputFormat.format(date!!)
     }
 
+    private fun passValuesToHtml(task: String, work: Int, eat: Int) {
+        val javascriptCode = "drawChart('$task', $work, $eat);"
+        webView.evaluateJavascript(javascriptCode, null)
+    }
 }
