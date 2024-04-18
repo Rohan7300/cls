@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.CLSThirdPartyInvoiceAdapter
 import com.clebs.celerity.databinding.FragmentCLSThirdPartyBinding
@@ -18,10 +20,11 @@ import com.clebs.celerity.utils.PermissionCallback
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 import com.google.android.material.datepicker.MaterialDatePicker
+import java.time.Year
 import java.util.Calendar
 
 
-class CLSThirdPartyFragment : Fragment(),PermissionCallback {
+class CLSThirdPartyFragment : Fragment(), PermissionCallback {
     lateinit var binding: FragmentCLSThirdPartyBinding
     private lateinit var viewModel: MainViewModel
     lateinit var prefs: Prefs
@@ -44,11 +47,13 @@ class CLSThirdPartyFragment : Fragment(),PermissionCallback {
         prefs = Prefs.getInstance(requireContext())
         homeActivity = (activity as HomeActivity)
         viewModel = homeActivity.viewModel
-        binding.dateTV.text = selectedYear.toString()
-        binding.dateUpdater.setOnClickListener {
-            showYearPicker()
-        }
-
+        /*
+                binding.dateTV.text = selectedYear.toString()
+            binding.dateUpdater.setOnClickListener {
+                    showYearPicker()
+                }*/
+        selectedYear = Year.now().value
+        binding.selectYearET.setText(selectedYear.toString())
         showDialog()
         observers()
         viewModel.DownloadThirdPartyInvoicePDF(prefs.userID.toInt(), selectedYear)
@@ -56,7 +61,7 @@ class CLSThirdPartyFragment : Fragment(),PermissionCallback {
     }
 
     private fun observers() {
-        adapter = CLSThirdPartyInvoiceAdapter(ArrayList(), requireContext(),prefs,this)
+        adapter = CLSThirdPartyInvoiceAdapter(ArrayList(), requireContext(), prefs, this)
         binding.clsInvoicesThirdParty.adapter = adapter
         binding.clsInvoicesThirdParty.layoutManager = LinearLayoutManager(requireContext())
         viewModel.liveDataDownloadThirdPartyInvoicePDF.observe(viewLifecycleOwner) {
@@ -88,10 +93,11 @@ class CLSThirdPartyFragment : Fragment(),PermissionCallback {
         if (granted) {
             val item = prefs.getInvoiceX()!!
             adapter.downloadPDF(item.FileName, item.FileContent)
-        }else{
-            showToast("Please allow storag permission to download and view pdf",requireContext())
+        } else {
+            showToast("Please allow storag permission to download and view pdf", requireContext())
         }
     }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -104,6 +110,7 @@ class CLSThirdPartyFragment : Fragment(),PermissionCallback {
             onStoragePermissionResult(granted)
         }
     }
+
     private fun showYearPicker() {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val yearPickerDialog = DatePickerDialog(
@@ -114,7 +121,7 @@ class CLSThirdPartyFragment : Fragment(),PermissionCallback {
                     binding.dateTV.text = year.toString()
                     showDialog()
                     viewModel.DownloadThirdPartyInvoicePDF(prefs.userID.toInt(), selectedYear)
-                  //  showToast("Selected Year: $selectedYear", requireContext())
+                    //  showToast("Selected Year: $selectedYear", requireContext())
                 }
             },
             currentYear,
@@ -123,7 +130,29 @@ class CLSThirdPartyFragment : Fragment(),PermissionCallback {
         )
         yearPickerDialog.datePicker.maxDate = System.currentTimeMillis()
         yearPickerDialog.show()
+    }
 
+    private fun showYearPickerNew() {
+        val itemsList = mutableListOf<Int>()
+        val currentYear = Year.now().value
+        for (year in prefs.UsrCreatedOn..currentYear)
+            itemsList.add(year)
+        val adapter =
+            ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, itemsList)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        binding.selectYearET.setAdapter(adapter)
+        binding.selectYearET.setOnItemClickListener { parent, view, position, id ->
+            run {
+                parent?.let { nonNullParent ->
+                    if (position != 0) {
+                        selectedYear = nonNullParent.getItemAtPosition(position) as Int
+                        showDialog()
+                        viewModel.DownloadThirdPartyInvoicePDF(prefs.userID.toInt(), selectedYear)
+                    }
+                }
+            }
+        }
     }
 
 }

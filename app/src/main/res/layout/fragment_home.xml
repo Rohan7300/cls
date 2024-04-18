@@ -77,18 +77,20 @@ Marian Ionut Malasincu"
                         android:layout_width="match_parent"
 
                         android:layout_height="wrap_content">
+
                         <TextView
+                            android:id="@+id/h"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="H"
                             android:fontFamily="@font/poppins_semibold"
-                            android:id="@+id/h"/>
+                            android:text="H" />
+
                         <ImageView
                             android:id="@+id/ic_location"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:layout_toEndOf="@+id/h"
                             android:layout_marginStart="2dp"
+                            android:layout_toEndOf="@+id/h"
                             android:src="@drawable/pin_alt_light" />
 
                         <TextView
@@ -101,15 +103,16 @@ Marian Ionut Malasincu"
                             android:text="@string/location"
                             android:textColor="#231F20"
                             android:textSize="14sp" />
+
                         <TextView
+                            android:id="@+id/W"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/ic_location"
-                            android:text="W"
-                            android:fontFamily="@font/poppins_semibold"
-
                             android:layout_marginTop="16dp"
-                            android:id="@+id/W"/>
+
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="W" />
 
                         <ImageView
                             android:id="@+id/ic_locations"
@@ -126,15 +129,14 @@ Marian Ionut Malasincu"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/location"
-
                             android:layout_marginStart="4dp"
-
                             android:layout_marginTop="15dp"
                             android:layout_toEndOf="@+id/ic_location"
                             android:fontFamily="@font/poppins"
                             android:text="@string/away"
                             android:textColor="#231F20"
                             android:textSize="14sp" />
+
 
                         <ImageView
                             android:id="@+id/ic_truck"
@@ -170,16 +172,32 @@ Marian Ionut Malasincu"
                             android:textColor="#231F20"
                             android:textSize="14sp" />
 
-                        <ImageView
-                            android:id="@+id/ic_tickets"
-                            android:layout_width="25dp"
-                            android:layout_height="19dp"
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/truck_number"
                             android:layout_marginStart="2dp"
                             android:layout_marginTop="16dp"
-                            android:layout_toStartOf="@+id/truck_number"
-                            android:src="@drawable/userd" />
+                            android:layout_toStartOf="@+id/truck_number">
 
+                            <ImageView
+                                android:id="@+id/ic_tickets"
+                                android:layout_width="25dp"
+                                android:layout_height="19dp"
+                                android:src="@drawable/userd" />
+
+                            <LinearLayout
+                                android:layout_width="25dp"
+                                android:layout_height="19dp"
+
+                                android:gravity="center">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="2dp"
+                                    android:background="@color/red" />
+                            </LinearLayout>
+                        </FrameLayout>
                     </RelativeLayout>
 
 

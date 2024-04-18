@@ -78,25 +78,23 @@ class HomedemoFragment : Fragment() {
 
 
 //        mbinding.pieChart.setUsePercentValues(true);
-        mbinding.pieChart.getDescription().setEnabled(false);
+        mbinding.pieChart.description.isEnabled = false;
 
 
-        mbinding.pieChart.setDragDecelerationFrictionCoef(0.95f);
+        mbinding.pieChart.dragDecelerationFrictionCoef = 0.95f;
 
-//
-//
         mbinding.pieChart.setDrawCenterText(false);
 
-        mbinding.pieChart.setRotationEnabled(true);
-        mbinding.pieChart.setHighlightPerTapEnabled(false);
+        mbinding.pieChart.isRotationEnabled = true;
+        mbinding.pieChart.isHighlightPerTapEnabled = false;
         mbinding.pieChart.isDrawHoleEnabled = false
-        mbinding.pieChart.setHoleRadius(0f);
-        mbinding.pieChart.setRotationAngle(0f);
+        mbinding.pieChart.holeRadius = 0f;
+        mbinding.pieChart.rotationAngle = 0f;
         mbinding.pieChart.animateY(1400, Easing.EaseInOutQuad)
         mbinding.pieChart.setEntryLabelColor(resources.getColor(R.color.black))
 
         mbinding.pieChart.setEntryLabelTextSize(12f)
-        val l: Legend = mbinding.pieChart.getLegend()
+        val l: Legend = mbinding.pieChart.legend
         l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         l.orientation = Legend.LegendOrientation.HORIZONTAL
         l.setDrawInside(false)
@@ -114,8 +112,6 @@ class HomedemoFragment : Fragment() {
                 mbinding.viewfulldatalayout.visibility = View.GONE
             }
             isclicked = !isclicked
-
-
         }
 
         viewModel.GetAVGscore(
@@ -174,7 +170,7 @@ class HomedemoFragment : Fragment() {
                 year = it.year
                 showDialog()
                 viewModel.GetcashFlowWeek(
-                    Prefs.getInstance(requireContext()).userID.toInt(), 0, year, week - 2
+                    Prefs.getInstance(requireContext()).userID.toInt(), 0, year, 12
                 )
                 showDialog()
                 viewModel.GetViewFullScheduleInfo(

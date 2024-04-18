@@ -394,7 +394,7 @@ interface ApiService {
     @GET("/api/Dashboard/GetDriverWeeklyInvoice")
     suspend fun CashFLowData(
         @Query("userId") userId: Int,
-        @Query("companyFilter") companyFilter: Int,
+        //@Query("companyFilter") companyFilter: Int,
         @Query("selYear") selYear: Int,
         @Query("selWeek") selWeek: Int
     ): Response<CashFlowPieChartResponse>

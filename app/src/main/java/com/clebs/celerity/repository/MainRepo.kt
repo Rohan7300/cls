@@ -724,7 +724,10 @@ class MainRepo(private val ApiService: ApiService) {
         selyear: Int,
         selweek: Int
     ): CashFlowPieChartResponse? {
-        val response = ApiService.CashFLowData(userID, companyFilter, selyear, selweek)
+        val response = ApiService.CashFLowData(userID,
+            //companyFilter,
+            selyear,
+            selweek)
         if (response.isSuccessful) {
             return response.body()
         } else {

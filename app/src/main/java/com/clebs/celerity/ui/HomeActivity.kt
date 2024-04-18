@@ -493,7 +493,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             it1
                         )
                     }
-
                     if (it.currentlocation != null)
                         prefs.currLocationName = it.currentlocation
                     if (it.workinglocation != null)
@@ -503,6 +502,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 } catch (e: Exception) {
                     Log.d("sds", e.toString())
                 }
+                prefs.UsrCreatedOn = it.UsrCreatedOn
                 firstName = it.firstName
                 lastName = it.lastName
                 prefs.userName = "$firstName $lastName"
