@@ -287,50 +287,17 @@ class HomedemoFragment : Fragment() {
                 // undo all highlights
                 mbinding.pieChart.highlightValues(null)
                 mbinding.pieChart.invalidate()
-//                val slices = mutableListOf<PieChart.Slice>()
-//
-//                slices.add(
-//                    PieChart.Slice(
-//                        thirdpartydeductions,
-//                        resources.getColor(R.color.red_light),
-//                        resources.getColor(R.color.red_light),
-//                        "Third Party Deductions " + thirdparty,
-//                        labelSize = 30f
-//
-//                    )
-//                )
-//                slices.add(
-//                    PieChart.Slice(
-//                        avprofit,
-//                        resources.getColor(R.color.blue_hex),
-//                        resources.getColor(R.color.blue_hex),
-//                        "Profits " + totalearning,
-//                        labelSize = 30f
-//                    )
-//                )
-//
-//
-//                slices.add(
-//                    PieChart.Slice(
-//                        avdeductions,
-//                        resources.getColor(R.color.peek_orange),
-//                        resources.getColor(R.color.peek_orange),
-//                        legend = "12",
-//                        legendColor = resources.getColor(R.color.black),
-//                        label = "Deductions " + totaldedecutions,
-//                        labelSize = 30f,
-//                    )
-//                )
-//
-//                pieChart.slices = slices
+
 
                 if (thirdpartydeductions.equals(0.0f)) {
                     entries.removeAt(2)
 //                    slices.remove(pieChart.slices[0])
-                } else if (avprofit.equals(0.0f)) {
+                }
+                if (avprofit.equals(0.0f)) {
                     entries.removeAt(0)
 //                    slices.remove(pieChart.slices[1])
-                } else if (avdeductions.equals(0.0f)) {
+                }
+                if (avdeductions.equals(0.0f)) {
                     entries.removeAt(1)
 //                    slices.remove(pieChart.slices[2])
                 }
@@ -350,8 +317,6 @@ class HomedemoFragment : Fragment() {
                 mbinding.pieChart.visibility = View.VISIBLE
 
             }
-
-
         }
 
         viewModel.livedatagetvechilescheduleinfo.observe(viewLifecycleOwner) {

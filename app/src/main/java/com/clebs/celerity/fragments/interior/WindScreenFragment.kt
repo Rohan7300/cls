@@ -139,6 +139,14 @@ class WindScreenFragment : Fragment() {
             if (it != null) {
                 mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
             }
+            if(mbinding.headerTop.dxReg.text.isEmpty())
+                mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+            else
+                mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+            if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text=="")
+                mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
+            else
+                mbinding.headerTop.strikedxLoc.visibility = View.GONE
 
 
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"

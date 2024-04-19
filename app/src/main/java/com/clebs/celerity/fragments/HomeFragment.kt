@@ -60,6 +60,12 @@ class HomeFragment : Fragment() {
                     mbinding.location.setText("Not assigned")
                     mbinding.away.setText("Not assigned")
                 }
+                if (it.vmRegNo.isNullOrEmpty()) {
+                    mbinding.striketruckImage.visibility = View.VISIBLE
+                }
+                if (it.userID.toString().isEmpty()) {
+                    mbinding.striketicketNumber.visibility = View.VISIBLE
+                }
                 mbinding.truckNumber.text = it.vmRegNo
                 mbinding.ticketNumber.text = it.userID.toString()
             }

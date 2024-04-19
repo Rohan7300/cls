@@ -104,8 +104,8 @@ class Userprofile : Fragment() {
             mbinding.emailtext.isFocusableInTouchMode = true
             mbinding.emailtext.requestFocus()
 
-            val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
-            imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+/*            val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+            imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)*/
 //                mbinding.usertext.isEnabled = true
 //                mbinding.usertext.isFocusable = true
 //                mbinding.usertext.isFocusableInTouchMode = true
@@ -210,27 +210,20 @@ class Userprofile : Fragment() {
                 mbinding.emailtext.isFocusableInTouchMode = true
                 mbinding.emailtext.requestFocus()
 
-                val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
-                imm!!.showSoftInput(mbinding.emailtext, InputMethodManager.SHOW_FORCED)
+             /*   val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+                imm!!.showSoftInput(mbinding.emailtext, InputMethodManager.SHOW_FORCED)*/
 
                 mbinding.txtChangePassword.visibility = View.VISIBLE
                 val colorRes = R.color.white
                 val color = ContextCompat.getColor(requireContext(), colorRes)
-                mbinding.firstconst.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), colorRes)
+
 
                 // Set background tint using a specific color
-                mbinding.firstconst.backgroundTintList = ColorStateList.valueOf(color)
-                mbinding.usepassword.backgroundTintList = ColorStateList.valueOf(color)
-                mbinding.usephone.backgroundTintList = ColorStateList.valueOf(color)
-                mbinding.useaddress.backgroundTintList = ColorStateList.valueOf(color)
-//                mbinding.usertext.isEnabled = true
-//                mbinding.usertext.isFocusable = true
-//                mbinding.usertext.isFocusableInTouchMode = true
+                mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.passtext.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.phonetext.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.addresstext.backgroundTintList = ColorStateList.valueOf(color)
 
-//                mbinding.passtext.isEnabled = true
-//                mbinding.passtext.isFocusable = true
-//                mbinding.passtext.isFocusableInTouchMode = true
 
                 mbinding.phonetext.isEnabled = true
                 mbinding.phonetext.isFocusable = true
@@ -256,14 +249,13 @@ class Userprofile : Fragment() {
                 mbinding.emailtext.isFocusableInTouchMode = false
                 val colorRes = R.color.very_light_grey_two
                 val color = ContextCompat.getColor(requireContext(), colorRes)
-                mbinding.firstconst.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), colorRes)
-                mbinding.firstconst.backgroundTintList = ColorStateList.valueOf(color)
 
-                mbinding.usepassword.backgroundTintList = ColorStateList.valueOf(color)
-                mbinding.usephone.backgroundTintList = ColorStateList.valueOf(color)
-                mbinding.useaddress.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.passtext.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.phonetext.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.addresstext.backgroundTintList = ColorStateList.valueOf(color)
                 mbinding.txtChangePassword.visibility = View.GONE
+
                 mbinding.usertext.isEnabled = false
                 mbinding.usertext.isFocusable = false
                 mbinding.usertext.isFocusableInTouchMode = false

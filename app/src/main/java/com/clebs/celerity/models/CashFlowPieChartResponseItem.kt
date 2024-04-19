@@ -15,7 +15,7 @@ data class CashFlowPieChartResponseItem(
     @SerializedName("IsAmazonVerified")
     val isAmazonVerified: Boolean,
     @SerializedName("MilesRateperLt")
-    val milesRateperLt: Int,
+    val milesRateperLt: Double,
     @SerializedName("RouteCounter")
     val routeCounter: Int,
     @SerializedName("TotalDeduction")

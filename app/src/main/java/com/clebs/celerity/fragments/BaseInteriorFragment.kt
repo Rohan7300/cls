@@ -79,6 +79,9 @@ abstract class BaseInteriorFragment : Fragment() {
         dxm5 = view.findViewById(R.id.dxm5)
         ana_carolin = view.findViewById(R.id.ana_carolin)
 
+        var strikedxRegNo =view.findViewById<LinearLayout>(R.id.strikedxRegNo)
+        var strikedxLoc =view.findViewById<LinearLayout>(R.id.strikedxRegNo)
+
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
             .also { name -> ana_carolin.text = name }
         dxm5.text = (activity as HomeActivity).date
@@ -104,7 +107,14 @@ abstract class BaseInteriorFragment : Fragment() {
                     dxLoc.text = it.locationName ?: ""
                 }
             }
-
+            if(dxReg.text.isEmpty())
+                strikedxRegNo.visibility = View.VISIBLE
+            else
+                strikedxRegNo.visibility = View.GONE
+            if(dxLoc.text.isEmpty()||dxLoc.text=="")
+                strikedxLoc.visibility = View.VISIBLE
+            else
+                strikedxLoc.visibility = View.GONE
         }
 //        var tooltip = (activity as HomeActivity).tooltips
 //        if (findNavController().currentDestination?.id==R.id.windowsGlassFragment){

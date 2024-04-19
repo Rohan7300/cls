@@ -16,6 +16,7 @@
             android:layout_marginStart="36dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="36dp"
+
             android:background="@drawable/card_layout"
 
             android:clipToOutline="true"
@@ -137,14 +138,32 @@ Marian Ionut Malasincu"
                             android:textColor="#231F20"
                             android:textSize="14sp" />
 
-
-                        <ImageView
-                            android:id="@+id/ic_truck"
-                            android:layout_width="25dp"
-                            android:layout_height="19dp"
+                        <FrameLayout
+                            android:id="@+id/idtuckFL"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
-                            android:layout_toStartOf="@+id/truck_number"
-                            android:src="@drawable/truck_ic" />
+                            android:layout_toStartOf="@+id/truck_number">
+
+                            <ImageView
+                                android:id="@+id/ic_truck"
+                                android:layout_width="25dp"
+                                android:layout_height="19dp"
+                                android:src="@drawable/truck_ic" />
+
+                            <LinearLayout
+                                android:layout_width="25dp"
+                                android:layout_height="19dp"
+                                android:id="@+id/striketruckImage"
+                                android:visibility="gone"
+                                android:gravity="center">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="2dp"
+                                    android:background="@color/red" />
+                            </LinearLayout>
+                        </FrameLayout>
 
                         <TextView
                             android:id="@+id/truck_number"
@@ -161,7 +180,7 @@ Marian Ionut Malasincu"
                             android:id="@+id/ticket_number"
                             android:layout_width="wrap_content"
                             android:layout_height="20dp"
-                            android:layout_below="@+id/ic_truck"
+                            android:layout_below="@+id/idtuckFL"
                             android:layout_alignStart="@+id/truck_number"
                             android:layout_alignEnd="@+id/truck_number"
                             android:layout_marginStart="4dp"
@@ -189,7 +208,8 @@ Marian Ionut Malasincu"
                             <LinearLayout
                                 android:layout_width="25dp"
                                 android:layout_height="19dp"
-
+                                android:id="@+id/striketicketNumber"
+                                android:visibility="gone"
                                 android:gravity="center">
 
                                 <View

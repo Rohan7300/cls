@@ -85,7 +85,7 @@
                     android:padding="8dp"
                     android:text=""
                     android:textColor="@color/black"
-                    android:textSize="21sp"
+                    android:textSize="17sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/dpLayout" />
 

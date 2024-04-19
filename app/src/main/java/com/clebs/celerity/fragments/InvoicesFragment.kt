@@ -89,6 +89,14 @@ class InvoicesFragment : Fragment() {
             binding.headerTop.anaCarolin.text = name
         }
         binding.headerTop.dxm5.text = (activity as HomeActivity).date
+        if(binding.headerTop.dxReg.text.isEmpty())
+           binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxRegNo.visibility = View.GONE
+        if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text=="")
+            binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxLoc.visibility = View.GONE
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             hideDialog()
             if (prefs.currLocationName.isNotEmpty()) {
@@ -101,6 +109,15 @@ class InvoicesFragment : Fragment() {
                     binding.headerTop.dxLoc.text = it.locationName ?: ""
                 }
             }
+            if(binding.headerTop.dxReg.text.isEmpty())
+                binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+            else
+                binding.headerTop.strikedxRegNo.visibility = View.GONE
+            if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text=="")
+                binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+            else
+                binding.headerTop.strikedxLoc.visibility = View.GONE
+
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
                 binding.headerTop.anaCarolin.text = name
             }

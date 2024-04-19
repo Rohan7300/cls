@@ -384,6 +384,14 @@ class CompleteTaskFragment : Fragment() {
         if (!isLeadDriver) {
             mbinding.rideAlong.visibility = View.GONE
         }
+        if(mbinding.headerTop.dxReg.text.isEmpty())
+            mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        else
+            mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+        if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text=="")
+            mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
+        else
+            mbinding.headerTop.strikedxLoc.visibility = View.GONE
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
 
             hideDialog()
@@ -398,6 +406,14 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.headerTop.dxLoc.text = it.locationName ?: ""
                 }
                 mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
+                if(mbinding.headerTop.dxReg.text.isEmpty())
+                    mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+                else
+                    mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+                if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text=="")
+                    mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
+                else
+                    mbinding.headerTop.strikedxLoc.visibility = View.GONE
             }
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
                 mbinding.headerTop.anaCarolin.text = name
