@@ -1,21 +1,15 @@
-package com.clebs.celerity.fragments
+package com.clebs.celerity.ui
 
-import android.annotation.SuppressLint
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentHomedemoBinding
-import com.clebs.celerity.ui.HomeActivity
-import com.clebs.celerity.utils.PieChart3DView
-import com.clebs.celerity.utils.PieChart3DView.Sector
 import com.clebs.celerity.utils.Prefs
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
@@ -24,7 +18,6 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.MPPointF
-import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -39,10 +32,7 @@ class HomedemoFragment : Fragment() {
     var thirdpartydeductions: Float = 0.0f
     var week: Int = 0
     var year: Int = 0
-    private lateinit var webView: WebView
 
-
-    var flag = false
     protected val months = arrayOf(
         "Jan", "Feb", "Mar"
     )
@@ -68,7 +58,6 @@ class HomedemoFragment : Fragment() {
 
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -86,39 +75,34 @@ class HomedemoFragment : Fragment() {
 
 
         viewModel.GetWeekAndYear()
-//        webView = mbinding.pieChart.findViewById(R.id.pieChart)
-//        val webSettings: WebSettings = webView.settings
-//        webSettings.javaScriptEnabled = true
-//        webView.setRendererPriorityPolicy(WebView.RENDERER_PRIORITY_IMPORTANT, false);
-//
-//        // Load the HTML file from assets folder
-//        webView.loadUrl("file:///android_asset/googlechart.html")
-        mbinding.pieChart.setUsePercentValues(true);
-        mbinding.pieChart.getDescription().setEnabled(false);
 
 
-        mbinding.pieChart.setDragDecelerationFrictionCoef(0.95f);
+//        mbinding.pieChart.setUsePercentValues(true);
+        mbinding.pieChart.description.isEnabled = false;
 
-//
-//
+
+        mbinding.pieChart.dragDecelerationFrictionCoef = 0.95f;
+
         mbinding.pieChart.setDrawCenterText(false);
 
-        mbinding.pieChart.setRotationEnabled(true);
-        mbinding.pieChart.setHighlightPerTapEnabled(false);
+        mbinding.pieChart.isRotationEnabled = true;
+        mbinding.pieChart.isHighlightPerTapEnabled = false;
         mbinding.pieChart.isDrawHoleEnabled = false
-        mbinding.pieChart.setHoleRadius(0f);
-        mbinding.pieChart.setRotationAngle(0f);
+        mbinding.pieChart.holeRadius = 0f;
+        mbinding.pieChart.rotationAngle = 0f;
         mbinding.pieChart.animateY(1400, Easing.EaseInOutQuad)
         mbinding.pieChart.setEntryLabelColor(resources.getColor(R.color.black))
 
         mbinding.pieChart.setEntryLabelTextSize(12f)
-        val l: Legend = mbinding.pieChart.getLegend()
+        val l: Legend = mbinding.pieChart.legend
         l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         l.orientation = Legend.LegendOrientation.HORIZONTAL
         l.setDrawInside(false)
         l.xEntrySpace = 7f
         l.yEntrySpace = 0f
         l.yOffset = 0f
+
+
 
 
         mbinding.viewfullschedule.setOnClickListener {
@@ -128,8 +112,6 @@ class HomedemoFragment : Fragment() {
                 mbinding.viewfulldatalayout.visibility = View.GONE
             }
             isclicked = !isclicked
-
-
         }
 
         viewModel.GetAVGscore(
@@ -188,7 +170,7 @@ class HomedemoFragment : Fragment() {
                 year = it.year
                 showDialog()
                 viewModel.GetcashFlowWeek(
-                    Prefs.getInstance(requireContext()).userID.toInt(), 0, year, week - 2
+                    Prefs.getInstance(requireContext()).userID.toInt(), 0, year, 12
                 )
                 showDialog()
                 viewModel.GetViewFullScheduleInfo(
@@ -201,7 +183,7 @@ class HomedemoFragment : Fragment() {
 
 
                 val bt_text = (week - 2).toString()
-                mbinding.btPrev.text = "Previous Week: $bt_text"
+                mbinding.btPrev.text = "Load Week: $bt_text" + " data"
 
 
             }
@@ -216,27 +198,25 @@ class HomedemoFragment : Fragment() {
                 if (it.status.equals("200")) {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBar.setProgress(it.avgTotalScore.toDouble().toInt())
-                    mbinding.tvPbone.text =
-                        it.avgTotalScore.toDouble().toInt().toString() + "%" + " Score"
+                    mbinding.tvPbone.text = it.avgTotalScore.toDouble().toInt().toString() + "%"+" Score"
 
                     mbinding.ProgressBar.tooltipText = it.avgTotalScore.toDouble().toString() + "%"
                 } else {
                     mbinding.ProgressBar.setProgress(0)
-                    mbinding.tvPbone.setText("0%" + " Score")
+                    mbinding.tvPbone.setText("0%"+" Score")
                 }
             } else {
                 mbinding.ProgressBar.setProgress(0)
-                mbinding.tvPbone.setText("0%" + " Score")
+                mbinding.tvPbone.setText("0%"+" Score")
             }
         }
         viewModel.livedatalastweekresponse.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
-                if (it.status.equals("200")) {
+                if (it.status == "200") {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBartwo.setProgress(it.avgTotalScore.toDouble().toInt())
-                    mbinding.tvPbTwo.text =
-                        it.avgTotalScore.toDouble().toInt().toString() + "%" + " Score"
+                    mbinding.tvPbTwo.text = it.avgTotalScore.toDouble().toInt().toString() + "%"+" Score"
                     mbinding.ProgressBartwo.tooltipText =
                         it.avgTotalScore.toDouble().toString() + "%"
                 } else {
@@ -244,7 +224,7 @@ class HomedemoFragment : Fragment() {
                 }
             } else {
                 mbinding.ProgressBartwo.setProgress(0)
-                mbinding.tvPbTwo.setText("0%" + " Score")
+                mbinding.tvPbTwo.setText("0%"+" Score")
             }
         }
         viewModel.livedataCashFlowWeek.observe(viewLifecycleOwner) { depts ->
@@ -271,11 +251,6 @@ class HomedemoFragment : Fragment() {
                         thirdpartydeductions = 0f
                     }
                 }
-//                passValuesToHtml(
-//                    avprofit.toString(),
-//                    avdeductions.toInt(),
-//                    thirdpartydeductions.toInt()
-//                )
                 val entries = ArrayList<PieEntry>()
 
                 // NOTE: The order of the entries when being added to the entries array determines their position around the center of
@@ -310,8 +285,8 @@ class HomedemoFragment : Fragment() {
                 mbinding.pieChart.setData(data)
 
                 // undo all highlights
-//                mbinding.pieChart.highlightValues(null)
-//                mbinding.pieChart.invalidate()
+                mbinding.pieChart.highlightValues(null)
+                mbinding.pieChart.invalidate()
 //                val slices = mutableListOf<PieChart.Slice>()
 //
 //                slices.add(
@@ -452,8 +427,4 @@ class HomedemoFragment : Fragment() {
         return outputFormat.format(date!!)
     }
 
-    private fun passValuesToHtml(task: String, work: Int, eat: Int) {
-        val javascriptCode = "drawChart('$task', $work, $eat);"
-        webView.evaluateJavascript(javascriptCode, null)
-    }
 }

@@ -10,103 +10,112 @@
         android:backgroundTint="@color/very_light_orange"
         tools:context=".ui.HomeActivity">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/medium_orange"
-            android:elevation="30dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/consts" />
+<!--        <WebView-->
+<!--            android:id="@+id/pieChart"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="300dp"-->
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/consts"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginStart="16dp"
+<!--            app:layout_constraintBottom_toBottomOf="@+id/nav_fragment"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/consts" />-->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/medium_orange"
+                        android:elevation="30dp"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/consts" />
 
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/consts"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="16dp"
 
-            <ImageView
-                android:id="@+id/img_drawer"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/status_list"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_semibold"
-                android:letterSpacing="0.02"
-                android:textColor="@color/text_color"
-                android:textSize="20sp"
+                        <ImageView
+                            android:id="@+id/img_drawer"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/status_list"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                        <TextView
+                            android:id="@+id/title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:letterSpacing="0.02"
+                            android:textColor="@color/text_color"
+                            android:textSize="20sp"
 
-            <ImageView
-                android:id="@+id/img_logout"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                android:src="@drawable/baseline_notifications_none_24"
-                app:layout_constraintEnd_toStartOf="@+id/img_logout_main"
-                app:layout_constraintTop_toTopOf="parent" />
+                        <ImageView
+                            android:id="@+id/img_logout"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
 
-            <ImageView
-                android:id="@+id/img_logout_main"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:visibility="gone"
-                android:background="@drawable/baseline_logout_24"
-                android:backgroundTint="@color/orange"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                            android:src="@drawable/baseline_notifications_none_24"
+                            app:layout_constraintEnd_toStartOf="@+id/img_logout_main"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                        <ImageView
+                            android:id="@+id/img_logout_main"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:visibility="gone"
+                            android:background="@drawable/baseline_logout_24"
+                            android:backgroundTint="@color/orange"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/nav_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="4dp"
-            app:defaultNavHost="true"
-            app:layout_constraintBottom_toTopOf="@id/bottom_navigatin_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/consts"
-            app:navGraph="@navigation/nav_graph" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigatin_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/layer"
-            android:paddingVertical="4dp"
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/nav_fragment"
+                        android:name="androidx.navigation.fragment.NavHostFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="4dp"
+                        app:defaultNavHost="true"
+                        app:layout_constraintBottom_toTopOf="@id/bottom_navigatin_view"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/consts"
+                        app:navGraph="@navigation/nav_graph" />
 
-            app:itemBackground="@drawable/bg_selected_item"
-            app:itemIconSize="22dp"
-            app:itemIconTint="@color/selectedcolor"
-            app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"
-            app:itemTextColor="@color/selectedcolor"
+                    <com.google.android.material.bottomnavigation.BottomNavigationView
+                        android:id="@+id/bottom_navigatin_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/layer"
+                        android:paddingVertical="4dp"
 
-            app:labelVisibilityMode="labeled"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+                        app:itemBackground="@drawable/bg_selected_item"
+                        app:itemIconSize="22dp"
+                        app:itemIconTint="@color/selectedcolor"
+                        app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"
+                        app:itemTextColor="@color/selectedcolor"
 
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/nav_fragment"
-            app:menu="@menu/bottom_nav" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                        app:labelVisibilityMode="labeled"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
 
-</layout>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/nav_fragment"
+                        app:menu="@menu/bottom_nav" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </layout>

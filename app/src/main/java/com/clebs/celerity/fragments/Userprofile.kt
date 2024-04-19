@@ -99,9 +99,6 @@ class Userprofile : Fragment() {
             mbinding.emailtext.isEnabled = true
             mbinding.emailtext.isClickable = true
 
-
-
-
             mbinding.emailtext.isFocusable = true
             mbinding.emailtext.isFocusableInTouchMode = true
             mbinding.emailtext.requestFocus()
