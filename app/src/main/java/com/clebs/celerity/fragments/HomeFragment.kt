@@ -76,13 +76,14 @@ class HomeFragment : Fragment() {
         }
 
         BubbleShowCaseBuilder(requireActivity()) //Activity instance
-            .title("Swipe") //Any title for the bubble view
+            .title("Swipe Right") //Any title for the bubble view
             .description("Swipe right to scan vehicle Registration number") //More detailed description
             .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
             //You can force the position of the arrow to change the location of the bubble.
             .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
             //Bubble background color
-            .textColor(requireContext().getColor(R.color.text_color)) //Bubble Text color
+            .textColor(requireContext().getColor(R.color.text_color))
+            //Bubble Text color
             .titleTextSize(14)
             .descriptionTextSize(10)
             .image(requireContext().resources.getDrawable(R.drawable.scanner))//Bubble main image

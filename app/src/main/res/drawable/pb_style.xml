@@ -3,11 +3,13 @@
     <item android:id="@android:id/background">
         <shape>
             <corners android:radius="5dip" />
+            <stroke android:color="@color/orange"
+                android:width="1.2dp"/>
             <gradient
-                android:startColor="@color/very_light_orange"
-                android:centerColor="@color/very_light_orange"
-                android:centerY="0.75"
-                android:endColor="@color/very_light_orange"
+                android:startColor="@color/white"
+                android:centerColor="@color/white"
+
+                android:endColor="@color/white"
                 android:angle="270"
                 />
         </shape>

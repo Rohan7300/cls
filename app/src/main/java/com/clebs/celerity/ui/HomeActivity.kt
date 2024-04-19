@@ -147,9 +147,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
 //        bottomNavigationView.menu.findItem(R.id.passwords).setTooltipText("Notifications")
-        getWindow().getDecorView()
-            .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
-
+//        getWindow().getDecorView()
+//            .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+        window.getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         getDeviceID()
         val deviceID =
             Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()

@@ -29,6 +29,8 @@ object RetrofitService {
     //private const val BASE_URL = "https://api.clsdasystem.com/" //Do not use this url in testing
 
 
+//    private const val BASE_URL = "https://api.clsdasystem.com/"
+
     fun getInstance(): Retrofit {
 
         val builder = OkHttpClient.Builder()

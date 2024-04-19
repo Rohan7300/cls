@@ -1,3 +1,5 @@
+import org.gradle.internal.impldep.bsh.commands.dir
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -12,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.clebs.celerity"
-        minSdk = 26
+        minSdk = 27
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -74,17 +76,22 @@ android {
 }
 
 dependencies {
-
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    implementation(files("libs/android-support-v4.jar"))
+    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
+//    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("id.zelory:compressor:3.0.1")
+
+
 implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
     implementation("androidx.multidex:multidex:2.0.1")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.firebase:firebase-messaging:23.4.1")
@@ -134,7 +141,7 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("org.jetbrains.anko:anko-commons:0.10.4")
 
     implementation("com.github.tapadoo:alerter:7.2.4")
-
+    implementation("com.github.oky2abbas:chainChart:v0+")
 
     val room_version = "2.6.1"
     implementation("androidx.room:room-ktx:2.6.1")
@@ -143,6 +150,10 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
 
     implementation ("com.github.clearquotetech:cq-android-sdk:2.0.4-test")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.andkulikov:transitionseverywhere:1.8.1")
+
     kapt("androidx.room:room-compiler:2.6.1")
+
+
 
 }

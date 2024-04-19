@@ -1,6 +1,8 @@
 package com.clebs.celerity.ui
 
 import android.Manifest
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -46,9 +48,11 @@ import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
+
 class PolicyDocsActivity : AppCompatActivity() {
     lateinit var mbinding: ActivityPolicyDocsBinding
     lateinit var viewModel: MainViewModel
+
     private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
     private var userId = 0
     var isImage1 = true
@@ -64,6 +68,7 @@ class PolicyDocsActivity : AppCompatActivity() {
     lateinit var currentfileName: String
     lateinit var currentFileContent: InputStream
     lateinit var currentMode: OpenMode
+
 
     companion object {
         var path = Path()
@@ -112,7 +117,6 @@ class PolicyDocsActivity : AppCompatActivity() {
         observers()
         clickListeners()
 
-
         mbinding.amazonHeader.setOnClickListener {
             if (isImage1) {
                 mbinding.views1.visibility = View.GONE
@@ -136,9 +140,12 @@ class PolicyDocsActivity : AppCompatActivity() {
 
         mbinding.checkbox.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
+
                 mbinding.amazonHeader.isClickable = false
-                mbinding.amazonLayout.visibility = View.GONE
-                mbinding.views1.visibility = View.GONE
+           viewGoneAnimator(mbinding.amazonLayout)
+               viewGoneAnimator(mbinding.views1)
+mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
+
                 if (mbinding.llTrucks.visibility == View.GONE) {
                     showAlert()
                 } else {
@@ -151,12 +158,15 @@ class PolicyDocsActivity : AppCompatActivity() {
             } else {
                 mbinding.amazonLayout.visibility = View.VISIBLE
                 mbinding.views1.visibility = View.VISIBLE
+                mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.chevron))
             }
         }
         mbinding.checkbox2.addOnCheckedStateChangedListener { checkBox, _ ->
             if (checkBox.isChecked) {
-                mbinding.truckLayout.visibility = View.GONE
+                viewGoneAnimator(mbinding.truckLayout)
+                viewGoneAnimator(mbinding.viewss2)
                 mbinding.truckHeaderLL.isClickable = false
+                mbinding.truckArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
                 mbinding.viewss2.visibility = View.GONE
                 if (mbinding.llAmazon.visibility == View.GONE) {
                     showAlert()
@@ -170,6 +180,7 @@ class PolicyDocsActivity : AppCompatActivity() {
             } else {
                 mbinding.truckLayout.visibility = View.VISIBLE
                 mbinding.viewss2.visibility = View.VISIBLE
+                mbinding.truckArrow.setImageDrawable(resources.getDrawable(R.drawable.chevron))
             }
         }
     }
@@ -446,10 +457,16 @@ class PolicyDocsActivity : AppCompatActivity() {
 
 
     private fun setVisibility(ll: LinearLayout, visibility: Boolean) {
-        if (visibility)
+
+
+        if (visibility) {
             ll.visibility = View.VISIBLE
-        else
+
+        } else {
             ll.visibility = View.GONE
+
+        }
+
 
     }
 
@@ -544,4 +561,16 @@ class PolicyDocsActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun viewGoneAnimator(view: View) {
+        view.animate()
+            .alpha(0f)
+            .setDuration(1000)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    view.visibility = View.GONE
+                }
+            })
+    }
+
 }
