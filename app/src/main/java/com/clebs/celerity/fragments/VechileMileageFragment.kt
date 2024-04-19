@@ -56,6 +56,14 @@ class VechileMileageFragment : Fragment() {
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
             .also { name -> mbinding.headerTop.anaCarolin.text = name }
         mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
+        if(mbinding.headerTop.dxReg.text.isEmpty()||mbinding.headerTop.dxReg.text=="")
+            mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        else
+            mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+        if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text==""||mbinding.headerTop.dxLoc.text=="Not Allocated")
+            mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
+        else
+            mbinding.headerTop.strikedxLoc.visibility = View.GONE
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) { it ->
             it?.let {
@@ -78,6 +86,16 @@ class VechileMileageFragment : Fragment() {
                     mbinding.headerTop.dxLoc.text = it.locationName ?: ""
                 }
             }
+            if(mbinding.headerTop.dxReg.text.isEmpty()||mbinding.headerTop.dxReg.text=="")
+                mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+            else
+                mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+            if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text==""||mbinding.headerTop.dxLoc.text=="Not Allocated")
+                mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
+            else
+                mbinding.headerTop.strikedxLoc.visibility = View.GONE
+
+
         }
 
         mbinding.edtMilvm.doAfterTextChanged { edtMilText ->

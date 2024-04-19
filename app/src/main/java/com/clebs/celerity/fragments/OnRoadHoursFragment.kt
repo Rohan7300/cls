@@ -95,6 +95,25 @@ class OnRoadHoursFragment : Fragment() {
                 vehicleInfoSection()
             }
         }
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+            binding.headerTop.anaCarolin.text = name
+        }
+        if (Prefs.getInstance(requireContext()).currLocationName != null) {
+            binding.headerTop.dxLoc.text =
+                Prefs.getInstance(requireContext()).currLocationName ?: ""
+        } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+            binding.headerTop.dxLoc.text =
+                Prefs.getInstance(requireContext()).workLocationName ?: ""
+        }
+        if(binding.headerTop.dxReg.text.isEmpty()||binding.headerTop.dxReg.text=="")
+            binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxRegNo.visibility = View.GONE
+        if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text==""||binding.headerTop.dxLoc.text=="Not Allocated")
+            binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxLoc.visibility = View.GONE
+        binding.headerTop.dxm5.text = (activity as HomeActivity).date
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             loadingDialog.cancel()

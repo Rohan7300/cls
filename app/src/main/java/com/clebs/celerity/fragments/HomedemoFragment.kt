@@ -183,7 +183,7 @@ class HomedemoFragment : Fragment() {
 
 
                 val bt_text = (week - 2).toString()
-                mbinding.btPrev.text = "Load Week: $bt_text" + " data"
+                mbinding.btPrev.text = "Previous Week: $bt_text"
 
 
             }

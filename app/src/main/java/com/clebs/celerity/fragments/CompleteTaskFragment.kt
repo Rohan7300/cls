@@ -310,8 +310,7 @@ class CompleteTaskFragment : Fragment() {
                     View.VISIBLE
                 mbinding.linerlcomtwo.visibility = View.VISIBLE
                 mbinding.downIvsRoad.setImageResource(R.drawable.down_arrow)
-            }
-            else{
+            } else {
                 mbinding.routeLayout.visibility = View.GONE
                 mbinding.linerlcomtwo.visibility = View.GONE
                 mbinding.downIvsRoad.setImageResource(R.drawable.grey_right_arrow)
@@ -379,16 +378,17 @@ class CompleteTaskFragment : Fragment() {
             mbinding.headerTop.dxLoc.text =
                 Prefs.getInstance(requireContext()).workLocationName ?: ""
         }
+
         mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
         val isLeadDriver = (activity as HomeActivity).isLeadDriver
         if (!isLeadDriver) {
             mbinding.rideAlong.visibility = View.GONE
         }
-        if(mbinding.headerTop.dxReg.text.isEmpty())
+        if(mbinding.headerTop.dxReg.text.isEmpty()||mbinding.headerTop.dxReg.text=="")
             mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
             mbinding.headerTop.strikedxRegNo.visibility = View.GONE
-        if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text=="")
+        if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text==""||mbinding.headerTop.dxLoc.text=="Not Allocated")
             mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
             mbinding.headerTop.strikedxLoc.visibility = View.GONE
@@ -406,11 +406,11 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.headerTop.dxLoc.text = it.locationName ?: ""
                 }
                 mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
-                if(mbinding.headerTop.dxReg.text.isEmpty())
+                if (mbinding.headerTop.dxReg.text.isEmpty())
                     mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
                 else
                     mbinding.headerTop.strikedxRegNo.visibility = View.GONE
-                if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text=="")
+                if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "")
                     mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
                 else
                     mbinding.headerTop.strikedxLoc.visibility = View.GONE
@@ -426,7 +426,7 @@ class CompleteTaskFragment : Fragment() {
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
-                if(breakTimeSent){
+                if (breakTimeSent) {
                     breakTimeSent = false
                     Alerter.create(requireActivity())
                         .setTitle("")
@@ -437,8 +437,7 @@ class CompleteTaskFragment : Fragment() {
                 }
                 showDialog()
                 viewModel.GetDriverBreakTimeInfo(userId)
-            }
-            else {
+            } else {
 
             }
         }
@@ -469,14 +468,14 @@ class CompleteTaskFragment : Fragment() {
             }
         }
 
-        viewModel.ldcompleteTaskLayoutObserver.observe(viewLifecycleOwner){
-                if(it==-1){
-                    mbinding.mainCompleteTask.visibility = View.VISIBLE
-                    mbinding.searchLayout.visibility = View.GONE
-                }else{
-                    mbinding.mainCompleteTask.visibility = View.GONE
-                    mbinding.searchLayout.visibility = View.VISIBLE
-                }
+        viewModel.ldcompleteTaskLayoutObserver.observe(viewLifecycleOwner) {
+            if (it == -1) {
+                mbinding.mainCompleteTask.visibility = View.VISIBLE
+                mbinding.searchLayout.visibility = View.GONE
+            } else {
+                mbinding.mainCompleteTask.visibility = View.GONE
+                mbinding.searchLayout.visibility = View.VISIBLE
+            }
         }
 
 
@@ -595,34 +594,46 @@ class CompleteTaskFragment : Fragment() {
                             setVisibiltyLevel()
                             isAllImageUploaded = true
                         }
-                        if (it.DaVehImgFaceMaskFileName != null) {
+
+                        if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
+                            // All images uploaded
+                            imageUploadLevel = 3
+                            mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
+                            mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
+                            mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
+                        } else if (it.DaVehicleAddBlueImage == null && it.DaVehImgFaceMaskFileName == null) {
+                            imageUploadLevel = 0
+                        } else if (it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage == null) {
+                            imageUploadLevel = 1
+                            mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
+                        } else if (it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName == null) {
+                            imageUploadLevel = 0
+                            mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
+                        }else if(it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage != null){
+                            imageUploadLevel = 2
+                            mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
+                            mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
+                        }
+                        else {
+                            imageUploadLevel = 0
+                        }
+
+                        setProgress()
+
+                        /*else if (it.DaVehImgFaceMaskFileName != null) {
                             imageUploadLevel = 1
                             setProgress()
                             mbinding.ivFaceMask.setImageResource(
                                 R.drawable.ic_yes
                             )
-                        }
-
-                        if (it.DaVehicleAddBlueImage != null) {
+                        } else if (it.DaVehicleAddBlueImage != null) {
                             imageUploadLevel = 2
                             setProgress()
 
                             mbinding.ivAddBlueImg.setImageResource(
                                 R.drawable.ic_yes
                             )
-                        }
-
-                        if (it.DaVehImgOilLevelFileName != null) {
-                            imageUploadLevel = 3
-                            setProgress()
-                            mbinding.ivOilLevel.setImageResource(
-                                R.drawable.ic_yes
-                            )
-                        }
-
-                        if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
-                            imageUploadLevel = 3
-                        }
+                        }*/
 
                         mbinding.run {
                             mbinding.tvNext.isEnabled =
@@ -1031,12 +1042,12 @@ class CompleteTaskFragment : Fragment() {
 
         if (cqSDKInitializer.isCQSDKInitialized()) {
 
-var vmReg=Prefs.getInstance(App.instance).vmRegNo?:""
+            var vmReg = Prefs.getInstance(App.instance).vmRegNo ?: ""
             Log.e(
                 "totyototyotoytroitroi",
                 "startInspection: " + inspectionID + "VmReg ${Prefs.getInstance(App.instance).vmRegNo}"
             )
-            if(vmReg.isEmpty()){
+            if (vmReg.isEmpty()) {
                 vmReg = Prefs.getInstance(App.instance).scannedVmRegNo
             }
             Log.e("sdkskdkdkskdkskd", "onCreateView: ")
@@ -1095,108 +1106,108 @@ var vmReg=Prefs.getInstance(App.instance).vmRegNo?:""
     }
 
     private fun visibiltyControlls() {
-            with(mbinding) {
-                listOf(
-                    uploadLayouts,
-                    rlcomtwoBreak,
-                    onRoadView,
-                    rlcomtwoBreak,
-                    rlcomtwoClock,
-                    rlcomtwoClockOut,
-                    BreakTimeTable,
-                    taskDetails,
-                    view2
-                ).forEach { thisView -> thisView.visibility = View.GONE }
+        with(mbinding) {
+            listOf(
+                uploadLayouts,
+                rlcomtwoBreak,
+                onRoadView,
+                rlcomtwoBreak,
+                rlcomtwoClock,
+                rlcomtwoClockOut,
+                BreakTimeTable,
+                taskDetails,
+                view2
+            ).forEach { thisView -> thisView.visibility = View.GONE }
+        }
+        when (visibilityLevel) {
+            -1 -> {
+                mbinding.uploadLayouts.visibility = View.VISIBLE
+                mbinding.imageUploadView.visibility = View.GONE
+
+                /*mbinding.clFaceMask.visibility = View.GONE
+                mbinding.clOilLevel.visibility = View.GONE*/
+                /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                         mbinding.uploadLayouts.visibility = View.VISIBLE
+                         mbinding.taskDetails.visibility = View.VISIBLE
+                         mbinding.imageUploadView.visibility = View.VISIBLE*/
+                // mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
             }
-            when (visibilityLevel) {
-                -1 -> {
-                    mbinding.uploadLayouts.visibility = View.VISIBLE
-                    mbinding.imageUploadView.visibility = View.GONE
 
-                    /*mbinding.clFaceMask.visibility = View.GONE
-                    mbinding.clOilLevel.visibility = View.GONE*/
-                    /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
-                             mbinding.uploadLayouts.visibility = View.VISIBLE
-                             mbinding.taskDetails.visibility = View.VISIBLE
-                             mbinding.imageUploadView.visibility = View.VISIBLE*/
-                    // mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
-                }
-
-                0 -> {
-                    mbinding.uploadLayouts.visibility = View.VISIBLE
+            0 -> {
+                mbinding.uploadLayouts.visibility = View.VISIBLE
 //                mbinding.taskDetails.visibility = View.VISIBLE
-                    mbinding.imageUploadView.visibility = View.VISIBLE
-                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
-                    mbinding.complete.setBackground(
-                        ContextCompat.getDrawable(
-                            requireContext(),
-                            R.drawable.shape_expand_main
-                        )
-                    );
-                }
-
-                1 -> {
-                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
-                    mbinding.rlcomtwoClock.visibility = View.VISIBLE
-                    mbinding.complete.setBackground(
-                        ContextCompat.getDrawable(
-                            requireContext(),
-                            R.drawable.background_complete_task_done
-                        )
-                    );
-                }
-
-                2 -> {
-                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
-                    mbinding.onRoadView.visibility = View.VISIBLE
-                    mbinding.rlcomtwoBreak.visibility = View.VISIBLE
-                    mbinding.complete.setBackground(
-                        ContextCompat.getDrawable(
-                            requireContext(),
-                            R.drawable.background_complete_task_done
-                        )
-                    );
-                }
-
-                3 -> {
-                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
-                    mbinding.onRoadView.visibility = View.VISIBLE
-                    mbinding.BreakTimeTable.visibility = View.VISIBLE
-                    mbinding.complete.setBackground(
-                        ContextCompat.getDrawable(
-                            requireContext(),
-                            R.drawable.background_complete_task_done
-                        )
-                    );
-                }
-
-                4 -> {
-                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
-                    mbinding.onRoadView.visibility = View.VISIBLE
-                    mbinding.rlcomtwoBreak.visibility = View.VISIBLE
-                    mbinding.complete.setBackground(
-                        ContextCompat.getDrawable(
-                            requireContext(),
-                            R.drawable.background_complete_task_done
-                        )
-                    );
-                }
-
-                5 -> {
-                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
-                    mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
-                    mbinding.onRoadView.visibility = View.VISIBLE
-                    mbinding.BreakTimeTable.visibility = View.VISIBLE
-                    mbinding.complete.setBackground(
-                        ContextCompat.getDrawable(
-                            requireContext(),
-                            R.drawable.background_complete_task_done
-                        )
-                    );
-                }
-
+                mbinding.imageUploadView.visibility = View.VISIBLE
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.shape_expand_main
+                    )
+                );
             }
-           }
+
+            1 -> {
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                mbinding.rlcomtwoClock.visibility = View.VISIBLE
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
+            }
+
+            2 -> {
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
+            }
+
+            3 -> {
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.BreakTimeTable.visibility = View.VISIBLE
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
+            }
+
+            4 -> {
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
+            }
+
+            5 -> {
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
+                mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.BreakTimeTable.visibility = View.VISIBLE
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
+            }
+
+        }
+    }
 
     private fun setVisibiltyLevel() {
         visibilityLevel = 0
@@ -1255,7 +1266,6 @@ var vmReg=Prefs.getInstance(App.instance).vmRegNo?:""
             }
 
             else -> {
-                //    mbinding.clFaceMask.visibility = View.VISIBLE
                 progressBar.setProgress(100, true)
                 progressBar.setBackgroundColor(Color.GREEN)
             }

@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
                 if (it.vmRegNo.isNullOrEmpty()) {
                     mbinding.striketruckImage.visibility = View.VISIBLE
                 }
-                if (it.userID.toString().isEmpty()) {
+                if (it.userID.toString().isEmpty() || it.userID ==null||it.userID==0) {
                     mbinding.striketicketNumber.visibility = View.VISIBLE
                 }
                 mbinding.truckNumber.text = it.vmRegNo
