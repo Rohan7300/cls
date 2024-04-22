@@ -1,6 +1,7 @@
 package com.clebs.celerity.ui
 
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,13 +12,15 @@ import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentHomedemoBinding
 import com.clebs.celerity.utils.Prefs
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.MPPointF
+
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -78,31 +81,29 @@ class HomedemoFragment : Fragment() {
 
 
 //        mbinding.pieChart.setUsePercentValues(true);
-        mbinding.pieChart.description.isEnabled = false;
-
-
-        mbinding.pieChart.dragDecelerationFrictionCoef = 0.95f;
-
-        mbinding.pieChart.setDrawCenterText(false);
-
-        mbinding.pieChart.isRotationEnabled = true;
-        mbinding.pieChart.isHighlightPerTapEnabled = false;
-        mbinding.pieChart.isDrawHoleEnabled = false
-        mbinding.pieChart.holeRadius = 0f;
-        mbinding.pieChart.rotationAngle = 0f;
-        mbinding.pieChart.animateY(1400, Easing.EaseInOutQuad)
-        mbinding.pieChart.setEntryLabelColor(resources.getColor(R.color.black))
-
-        mbinding.pieChart.setEntryLabelTextSize(12f)
-        val l: Legend = mbinding.pieChart.legend
-        l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-        l.orientation = Legend.LegendOrientation.HORIZONTAL
-        l.setDrawInside(false)
-        l.xEntrySpace = 7f
-        l.yEntrySpace = 0f
-        l.yOffset = 0f
-
-
+//        mbinding.pieChart.description.isEnabled = false;
+//
+//
+//        mbinding.pieChart.dragDecelerationFrictionCoef = 0.95f;
+//
+//        mbinding.pieChart.setDrawCenterText(false);
+//
+//        mbinding.pieChart.isRotationEnabled = true;
+//        mbinding.pieChart.isHighlightPerTapEnabled = false;
+//        mbinding.pieChart.isDrawHoleEnabled = false
+//        mbinding.pieChart.holeRadius = 0f;
+//        mbinding.pieChart.rotationAngle = 0f;
+//        mbinding.pieChart.animateY(1400, Easing.EaseInOutQuad)
+//        mbinding.pieChart.setEntryLabelColor(resources.getColor(R.color.black))
+//
+//        mbinding.pieChart.setEntryLabelTextSize(12f)
+//        val l: Legend = mbinding.pieChart.legend
+//        l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+//        l.orientation = Legend.LegendOrientation.HORIZONTAL
+//        l.setDrawInside(false)
+//        l.xEntrySpace = 7f
+//        l.yEntrySpace = 0f
+//        l.yOffset = 0f
 
 
         mbinding.viewfullschedule.setOnClickListener {
@@ -198,16 +199,17 @@ class HomedemoFragment : Fragment() {
                 if (it.status.equals("200")) {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBar.setProgress(it.avgTotalScore.toDouble().toInt())
-                    mbinding.tvPbone.text = it.avgTotalScore.toDouble().toInt().toString() + "%"+" Score"
+                    mbinding.tvPbone.text =
+                        it.avgTotalScore.toDouble().toInt().toString() + "%" + " Score"
 
                     mbinding.ProgressBar.tooltipText = it.avgTotalScore.toDouble().toString() + "%"
                 } else {
                     mbinding.ProgressBar.setProgress(0)
-                    mbinding.tvPbone.setText("0%"+" Score")
+                    mbinding.tvPbone.setText("0%" + " Score")
                 }
             } else {
                 mbinding.ProgressBar.setProgress(0)
-                mbinding.tvPbone.setText("0%"+" Score")
+                mbinding.tvPbone.setText("0%" + " Score")
             }
         }
         viewModel.livedatalastweekresponse.observe(viewLifecycleOwner) {
@@ -216,7 +218,8 @@ class HomedemoFragment : Fragment() {
                 if (it.status == "200") {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBartwo.setProgress(it.avgTotalScore.toDouble().toInt())
-                    mbinding.tvPbTwo.text = it.avgTotalScore.toDouble().toInt().toString() + "%"+" Score"
+                    mbinding.tvPbTwo.text =
+                        it.avgTotalScore.toDouble().toInt().toString() + "%" + " Score"
                     mbinding.ProgressBartwo.tooltipText =
                         it.avgTotalScore.toDouble().toString() + "%"
                 } else {
@@ -224,7 +227,7 @@ class HomedemoFragment : Fragment() {
                 }
             } else {
                 mbinding.ProgressBartwo.setProgress(0)
-                mbinding.tvPbTwo.setText("0%"+" Score")
+                mbinding.tvPbTwo.setText("0%" + " Score")
             }
         }
         viewModel.livedataCashFlowWeek.observe(viewLifecycleOwner) { depts ->
@@ -283,10 +286,10 @@ class HomedemoFragment : Fragment() {
                 data.setValueTextColor(resources.getColor(io.clearquote.assessment.cq_sdk.R.color.transparent))
 
                 mbinding.pieChart.setData(data)
-
-                // undo all highlights
-                mbinding.pieChart.highlightValues(null)
-                mbinding.pieChart.invalidate()
+//
+//                // undo all highlights
+//                mbinding.pieChart.highlightValues(null)
+//                mbinding.pieChart.invalidate()
 //                val slices = mutableListOf<PieChart.Slice>()
 //
 //                slices.add(
@@ -346,7 +349,6 @@ class HomedemoFragment : Fragment() {
                 mbinding.demo.visibility = View.VISIBLE
                 mbinding.pieChart.setNoDataText("No cash flow data found!")
                 mbinding.pieChart.setNoDataTextColor(resources.getColor(R.color.red))
-                mbinding.pieChart.setCenterTextSize(1.0f)
                 mbinding.pieChart.visibility = View.VISIBLE
 
             }
@@ -426,5 +428,8 @@ class HomedemoFragment : Fragment() {
         val date = inputFormat.parse(inputDate)
         return outputFormat.format(date!!)
     }
+
+
+
 
 }

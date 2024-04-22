@@ -143,7 +143,7 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
-
+//    implementation("org.mozilla.geckoview:geckoview-nightly:100.0.20220308100756")
     implementation ("com.github.clearquotetech:cq-android-sdk:2.0.4-test")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.andkulikov:transitionseverywhere:1.8.1")
