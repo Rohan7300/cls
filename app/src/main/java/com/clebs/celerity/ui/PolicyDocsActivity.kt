@@ -388,6 +388,7 @@ mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
                         .saveBoolean("isSignatureReq", false)
                 }
                 val intent = Intent(this, HomeActivity::class.java)
+                intent.putExtra("destinationFragment", "HomeFragment")
 
                 startActivity(intent)
 

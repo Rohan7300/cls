@@ -55,6 +55,7 @@ import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
+import com.clebs.celerity.models.response.NotificationResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.SaveCommentResponse
 import com.clebs.celerity.models.response.SaveDeviceInformationRequest
@@ -934,5 +935,18 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
+    suspend fun GetNotificationListByUserId(
+        userID: Int
+    ):NotificationResponse?{
+        val response = ApiService.GetNotificationListByUserId(userID)
+        if(response.isSuccessful){
+            return response.body()
+        }
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("GetNotificationListByUserIId: Error Response Body: $errorBody")
+        }
+        return null
+    }
 
 }

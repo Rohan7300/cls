@@ -146,18 +146,15 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         fragmentManager = this.supportFragmentManager
         bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
-//        bottomNavigationView.menu.findItem(R.id.passwords).setTooltipText("Notifications")
-//        getWindow().getDecorView()
-//            .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
-        window.getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+
+        window.getDecorView()
+            .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         getDeviceID()
         val deviceID =
             Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()
         Log.e("kjkcjkvckvck", "onCreate: " + deviceID)
-//        if (navController.currentDestination!!.id.equals(R.id.profileFragment)){
-//
-//            ActivityHomeBinding.title.setText("User Profile")
-//        }
+
+
         try {
             val apiService = RetrofitService.getInstance().create(ApiService::class.java)
             val mainRepo = MainRepo(apiService)
@@ -236,10 +233,18 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
             ActivityHomeBinding.imgDrawer.setOnClickListener {
-
                 navController.navigate(R.id.profileFragment)
-
             }
+
+            ActivityHomeBinding.imgNotification.setOnClickListener {
+                ActivityHomeBinding.title.text = "Notifications"
+                navController.navigate(R.id.notifficationsFragment)
+            }
+
+
+
+
+
             bottomNavigationView.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
 
@@ -256,11 +261,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         ActivityHomeBinding.title.text = ""
                         viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
                         showDialog()
-                        /*        progressBarVisibility(
-                                    true,
-                                    ActivityHomeBinding.homeActivityPB,
-                                    ActivityHomeBinding.overlayViewHomeActivity
-                                )*/
                         true
                     }
 
@@ -269,13 +269,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         navController.navigate(R.id.invoicesFragment)
                         true
                     }
-
-//                    R.id.passwords -> {
-//                        ActivityHomeBinding.title.text = "Notifications"
-//                        navController.navigate(R.id.notifficationsFragment)
-//
-//                        true
-//                    }
 
                     R.id.tickets -> {
                         ActivityHomeBinding.title.text = "User Tickets"
@@ -295,7 +288,15 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         } catch (e: Exception) {
             RetrofitService.handleNetworkError(e, fragmentManager)
         }
+        val destinationFragment = intent.getStringExtra("destinationFragment")
+        if(destinationFragment!=null){
 
+            Log.d("HomeActivityX", destinationFragment!!)
+            if (destinationFragment == "NotificationsFragment") {
+                ActivityHomeBinding.title.text = "Notifications"
+                navController.navigate(R.id.notifficationsFragment)
+            }
+        }
 
     }
 
