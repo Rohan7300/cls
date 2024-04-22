@@ -122,6 +122,16 @@ class RideAlongFragment : Fragment() {
                 binding.headerTop.anaCarolin.text = name
             }
             binding.headerTop.dxm5.text = (activity as HomeActivity).date
+
+            if(binding.headerTop.dxReg.text.isEmpty()||binding.headerTop.dxReg.text=="")
+                binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+            else
+                binding.headerTop.strikedxRegNo.visibility = View.GONE
+            if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text==""||binding.headerTop.dxLoc.text=="Not Allocated")
+                binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+            else
+                binding.headerTop.strikedxLoc.visibility = View.GONE
+            binding.headerTop.dxm5.text = (activity as HomeActivity).date
         }
 
         viewModel.livedataGetRideAlongVehicleLists.observe(viewLifecycleOwner) {

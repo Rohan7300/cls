@@ -131,7 +131,6 @@ Marian Ionut Malasincu"
                                 <ImageView
                                     android:id="@+id/ic_truck"
                                     android:layout_width="25dp"
-
                                     android:layout_height="19dp"
                                     android:src="@drawable/truck_ic" />
 
@@ -139,18 +138,16 @@ Marian Ionut Malasincu"
                                     android:layout_width="25dp"
                                     android:layout_height="19dp"
                                     android:id="@+id/striketruckImage"
-
                                     android:visibility="gone"
                                     android:gravity="center">
 
-                                    <View
+                                    <ImageView
                                         android:layout_width="match_parent"
-                                        android:layout_height="2dp"
-                                        android:background="@color/red" />
+                                        android:layout_height="match_parent"
+                                        android:src="@drawable/diagonalred"
+                                         />
                                 </LinearLayout>
                             </FrameLayout>
-
-
 
                             <TextView
                                 android:id="@+id/truck_number"
@@ -238,10 +235,11 @@ Marian Ionut Malasincu"
                                 android:gravity="center"
                                 android:visibility="gone">
 
-                                <View
+                                <ImageView
                                     android:layout_width="match_parent"
-                                    android:layout_height="2dp"
-                                    android:background="@color/red" />
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/diagonalred"
+                                    />
                             </LinearLayout>
                         </FrameLayout>
 

@@ -95,6 +95,18 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
                     ?: "Could not identify status message"
             Log.d("hdhsdshdsdjshhsds", "main $message")
+
+            val destinationFragment = intent.getStringExtra("destinationFragment")
+            if(destinationFragment!=null){
+
+                Log.d("HomeActivityX", destinationFragment!!)
+                if (destinationFragment == "NotificationsFragment") {
+                    ActivityHomeBinding.title.text = "Notifications"
+                    navController.navigate(R.id.notifficationsFragment)
+                }
+            }
+
+
             val tempCode =
                 intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
             if (tempCode == 200) {
@@ -179,9 +191,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         screenid = viewModel.getLastVisitedScreenId(this)
                         if (screenid == 0) {
                             navController.navigate(R.id.homeFragment)
-                            // navigateTo(R.id.homeFragment)
                             navController.currentDestination!!.id = R.id.homeFragment
-
                         } else {
                             try {
                                 navController.navigate(screenid)
@@ -194,6 +204,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     } else {
                         navController.navigate(R.id.completeTaskFragment)
                     }
+                }else{
+                    navController.navigate(R.id.homeFragment)
+                    navController.currentDestination!!.id = R.id.homeFragment
                 }
             }
 
@@ -550,12 +563,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     fun disableBottomNavigationView() {
         bottomNavigationView.visibility = View.GONE
+        ActivityHomeBinding.imgNotification.visibility = View.GONE
 //        bottomNavigationView. = false
 //        bottomNavigationView.isClickable=false
     }
 
     fun enableBottomNavigationView() {
         bottomNavigationView.visibility = View.VISIBLE
+        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
 //        bottomNavigationView.isEnabled = true
 //        bottomNavigationView.isClickable=true
     }

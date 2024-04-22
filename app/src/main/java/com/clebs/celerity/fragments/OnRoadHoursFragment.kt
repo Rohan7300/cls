@@ -95,6 +95,7 @@ class OnRoadHoursFragment : Fragment() {
                 vehicleInfoSection()
             }
         }
+        rideAlongApiCall()
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
             binding.headerTop.anaCarolin.text = name
         }
@@ -109,6 +110,7 @@ class OnRoadHoursFragment : Fragment() {
             binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
             binding.headerTop.strikedxRegNo.visibility = View.GONE
+
         if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text==""||binding.headerTop.dxLoc.text=="Not Allocated")
             binding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
@@ -135,6 +137,17 @@ class OnRoadHoursFragment : Fragment() {
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
                 binding.headerTop.anaCarolin.text = name
             }
+            binding.headerTop.dxm5.text = (activity as HomeActivity).date
+
+            if(binding.headerTop.dxReg.text.isEmpty()||binding.headerTop.dxReg.text=="")
+                binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+            else
+                binding.headerTop.strikedxRegNo.visibility = View.GONE
+
+            if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text==""||binding.headerTop.dxLoc.text=="Not Allocated")
+                binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+            else
+                binding.headerTop.strikedxLoc.visibility = View.GONE
             binding.headerTop.dxm5.text = (activity as HomeActivity).date
         }
         inputListeners()
@@ -247,6 +260,7 @@ class OnRoadHoursFragment : Fragment() {
     }
 
     private fun locationSection() {
+
         viewModel.liveDataRouteLocationResponse.observe(viewLifecycleOwner) { locationData ->
             if (locationData != null) {
                 loadingDialog.show()

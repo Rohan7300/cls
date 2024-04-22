@@ -779,7 +779,27 @@ class CompleteTaskFragment : Fragment() {
                 dialogBinding.timeTvNext.setTextColor(Color.WHITE)
             }
         }
+
+        dialogBinding.icBreakstart.setOnClickListener {
+            b1 = true
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
+            if (b1 && b2) {
+                dialogBinding.timeTvNext.isEnabled = true
+                dialogBinding.timeTvNext.setTextColor(Color.WHITE)
+            }
+        }
+
         dialogBinding.edtBreakend.setOnClickListener {
+            b2 = true
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
+            if (b1 && b2) {
+
+                dialogBinding.timeTvNext.isEnabled = true
+                dialogBinding.timeTvNext.setTextColor(Color.WHITE)
+            }
+        }
+
+        dialogBinding.icBreakend.setOnClickListener {
             b2 = true
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
             if (b1 && b2) {
@@ -866,7 +886,6 @@ class CompleteTaskFragment : Fragment() {
         if (allPermissionsGranted()) {
             showPictureDialog(iv, codes)
         } else {
-
             requestpermissions()
         }
     }

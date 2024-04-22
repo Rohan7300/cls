@@ -100,6 +100,8 @@ class UpdateOnRoadHoursFragment : Fragment() {
             rtID = routeInfo.RtId
         }
 
+        rideAlongApiCall()
+
         binding.pbbPlus.setOnClickListener {
             parcelBack += 1
             binding.parcelsBroughtBack.text = parcelBack.toString()
