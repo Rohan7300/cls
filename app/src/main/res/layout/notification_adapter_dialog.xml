@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="8dp"
     app:cardElevation="8dp"
     app:cardMaxElevation="10dp"
+    android:layout_margin="4dp"
     app:cardPreventCornerOverlap="true"
-    app:cardUseCompatPadding="true">
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp">
+        android:layout_margin="10dp">
 
         <TextView
             android:id="@+id/title"
@@ -23,7 +23,7 @@
             android:fontFamily="@font/poppins_semibold"
             android:text="Deduction Agreement "
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,7 +34,7 @@
             android:fontFamily="@font/poppins"
             android:text="Noew"
             android:textColor="@color/text_color"
-            android:textSize="14sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/title" />
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            android:weightSum="2"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title">
 
@@ -57,15 +57,15 @@
                 android:fontFamily="@font/poppins"
                 android:text="@string/lorem_ipsum_is_simply_dummy_text_of_the_printing_and_typesetting"
                 android:textColor="@color/text_color"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/title"
                 app:layout_constraintTop_toBottomOf="@id/title" />
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
+
                 android:src="@drawable/arrow_left" />
 
 

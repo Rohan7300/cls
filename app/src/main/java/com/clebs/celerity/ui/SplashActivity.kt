@@ -163,6 +163,7 @@ class SplashActivity : AppCompatActivity() {
                 this@SplashActivity,
                 HomeActivity::class.java
             )
+            intent.putExtra("destinationFragment", "HomeFragment")
             startActivity(i)
         }
     }
@@ -191,6 +192,7 @@ class SplashActivity : AppCompatActivity() {
                     finish()
                 } else {
                     val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("destinationFragment", "HomeFragment")
                     intent.putExtra("no_signature_required", "0")
                     startActivity(intent)
                     finish()

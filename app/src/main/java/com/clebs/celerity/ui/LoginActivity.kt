@@ -174,11 +174,13 @@ class LoginActivity : AppCompatActivity() {
                         //   val options = ActivityOptions.makeSceneTransitionAnimation(this)
                         val intent = Intent(this, HomeActivity::class.java)
                         intent.putExtra("no_signature_required", "0")
+                        intent.putExtra("destinationFragment", "HomeFragment")
                         startActivity(intent)
                         finish()
                     }
                 } else {
                     val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("destinationFragment", "HomeFragment")
                     intent.putExtra("no_signature_required", "0")
                     startActivity(intent)
                     finish()

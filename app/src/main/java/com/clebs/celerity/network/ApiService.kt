@@ -60,6 +60,7 @@ import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
+import com.clebs.celerity.models.response.NotificationResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.SaveCommentResponse
 import com.clebs.celerity.models.response.SaveDeviceInformationRequest
@@ -500,5 +501,10 @@ interface ApiService {
     suspend fun SaveDeviceInformation(
         @Body body:SaveDeviceInformationRequest
     ):Response<SimpleStatusMsgResponse>
+
+    @GET("/api/Notification/GetNotificationsListByUserId")
+    suspend fun GetNotificationListByUserId(
+        @Query("userId") userId: Int
+    ):Response<NotificationResponse>
 }
 
