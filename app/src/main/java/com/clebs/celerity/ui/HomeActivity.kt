@@ -189,7 +189,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     completeTaskScreen = it.IsSubmited
                     if (!completeTaskScreen) {
                         screenid = viewModel.getLastVisitedScreenId(this)
-                        if (screenid == 0) {
+                        if (screenid == 0||screenid == R.id.completeTaskFragment) {
                             navController.navigate(R.id.homeFragment)
                             navController.currentDestination!!.id = R.id.homeFragment
                         } else {
