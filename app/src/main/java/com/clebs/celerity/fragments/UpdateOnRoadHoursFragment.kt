@@ -123,6 +123,27 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 vehicleInfoSection()
             }
         }
+
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+            binding.headerTop.anaCarolin.text = name
+        }
+        if (Prefs.getInstance(requireContext()).currLocationName != null) {
+            binding.headerTop.dxLoc.text =
+                Prefs.getInstance(requireContext()).currLocationName ?: ""
+        } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+            binding.headerTop.dxLoc.text =
+                Prefs.getInstance(requireContext()).workLocationName ?: ""
+        }
+        if(binding.headerTop.dxReg.text.isEmpty()||binding.headerTop.dxReg.text=="")
+            binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxRegNo.visibility = View.GONE
+        if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text==""||binding.headerTop.dxLoc.text=="Not Allocated")
+            binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxLoc.visibility = View.GONE
+        binding.headerTop.dxm5.text = (activity as HomeActivity).date
+
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
             if (Prefs.getInstance(requireContext()).currLocationName != null) {
@@ -233,13 +254,19 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 Prefs.getInstance(App.instance).userID.toDouble()
             ).observe(viewLifecycleOwner) {
                 if (it != null) {
-                    if (it.vmRegNo != null) {
-                        prefs.vmRegNo = it.vmRegNo!!
-                        try {
-                            viewModel.GetVehicleInformation(prefs.userID.toInt(), it.vmRegNo)
-                        } catch (e: Exception) {
-                            Log.e("GetVehicleInformation Exception", "$e")
-                        }
+                    it.vmRegNo?.let { it1 ->
+                        binding.headerTop.dxReg.text = it1?:"Not Assigned"
+                        viewModel.GetVehicleInformation(Prefs.getInstance(requireContext()).userID.toInt(),
+                            it1
+                        )
+                    }
+                    prefs.workLocationName = it.workinglocation
+                    prefs.currLocationName = it.currentlocation
+                    if (prefs.currLocationName.isNotEmpty()) {
+                        binding.headerTop.dxLoc.text = prefs.currLocationName ?: ""
+                    } else if (prefs.workLocationName.isNotEmpty()) {
+                        binding.headerTop.dxLoc.text =
+                            prefs.workLocationName ?: ""
                     }
                 }
             }
@@ -280,7 +307,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 val routeIDs = routeData.map { it.RtId }
                 try {
                     binding.selectDepartmentTIL.hint = routeNames[routeIDs.indexOf(selectedRouteId)]
-                }catch (_:Exception){
+                } catch (_: Exception) {
 
                 }
 
@@ -312,19 +339,19 @@ class UpdateOnRoadHoursFragment : Fragment() {
         spinner.setOnItemClickListener { parent, view, position, id ->
             run {
                 parent?.let { nonNullParent ->
-                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
-                        selectedItem.let {
-                            when (spinner) {
-                                binding.spinnerLocation -> {
-                                    selectedLocId = ids[position]
-                                }
+                    val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
+                    selectedItem.let {
+                        when (spinner) {
+                            binding.spinnerLocation -> {
+                                selectedLocId = ids[position]
+                            }
 
-                                binding.spinnerRouteType -> {
-                                    selectedRouteType = selectedItem
-                                    selectedRouteId = ids[position]
-                                }
+                            binding.spinnerRouteType -> {
+                                selectedRouteType = selectedItem
+                                selectedRouteId = ids[position]
                             }
                         }
+                    }
                 }
             }
         }

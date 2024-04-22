@@ -25,6 +25,7 @@ class InvoicesFragment : Fragment() {
         (activity as HomeActivity).hideDialog()
     }
     lateinit var binding: FragmentInvoicesBinding
+    lateinit var prefs: Prefs
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +33,7 @@ class InvoicesFragment : Fragment() {
     ): View? {
         binding = FragmentInvoicesBinding.inflate(layoutInflater)
         viewModel = (activity as HomeActivity).viewModel
-        showDialog()
+        prefs = Prefs.getInstance(requireContext())
         observers()
         binding.clsinvoices.setOnClickListener {
             findNavController().navigate(R.id.CLSInvoicesFragment)
@@ -45,34 +46,77 @@ class InvoicesFragment : Fragment() {
         return binding.root
     }
 
-    fun GetDriversBasicInformation() {
-//        binding.pb.visibility = View.VISIBLE
+    private fun GetDriversBasicInformation() {
+
         showDialog()
 
         viewModel.GetDriversBasicInformation(
             Prefs.getInstance(App.instance).userID.toDouble()
         ).observe(viewLifecycleOwner) {
+            hideDialog()
             if (it != null) {
+                it.vmRegNo?.let { it1 ->
+                    binding.headerTop.dxReg.text = it1?:"Not Assigned"
+                    viewModel.GetVehicleInformation(Prefs.getInstance(requireContext()).userID.toInt(),
+                        it1
+                    )
+                }
+                if(it.workinglocation!=null){
+                    prefs.workLocationName = it.workinglocation
+                }
+                if(it.currentlocation!=null){
+                    prefs.currLocationName = it.currentlocation
+                }
+
+
+                if (prefs.currLocationName.isNotEmpty()) {
+                    binding.headerTop.dxLoc.text = prefs.currLocationName ?: ""
+                } else if (prefs.workLocationName.isNotEmpty()) {
+                    binding.headerTop.dxLoc.text =
+                        prefs.workLocationName ?: ""
+                }
                 if (it.IsThirdPartyChargeAccessAllowed) {
                     binding.otherinvoices.visibility = View.VISIBLE
                 } else {
                     binding.otherinvoices.visibility = View.GONE
                 }
-
-                hideDialog()
             }
         }
     }
 
     private fun observers() {
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+            binding.headerTop.anaCarolin.text = name
+        }
+        binding.headerTop.dxm5.text = (activity as HomeActivity).date
+        if(binding.headerTop.dxReg.text.isEmpty())
+           binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxRegNo.visibility = View.GONE
+        if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text=="")
+            binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxLoc.visibility = View.GONE
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-
             hideDialog()
-
-            if (it != null) {
-                binding.headerTop.dxLoc.text = it.locationName ?: ""
-                binding.headerTop.dxReg.text = it.vmRegNo ?: ""
+            if (prefs.currLocationName.isNotEmpty()) {
+                binding.headerTop.dxLoc.text = prefs.currLocationName ?: ""
+            } else if (prefs.workLocationName.isNotEmpty()) {
+                binding.headerTop.dxLoc.text =
+                   prefs.workLocationName ?: ""
+            } else {
+                if (it != null) {
+                    binding.headerTop.dxLoc.text = it.locationName ?: ""
+                }
             }
+            if(binding.headerTop.dxReg.text.isEmpty())
+                binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+            else
+                binding.headerTop.strikedxRegNo.visibility = View.GONE
+            if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text=="")
+                binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+            else
+                binding.headerTop.strikedxLoc.visibility = View.GONE
 
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
                 binding.headerTop.anaCarolin.text = name

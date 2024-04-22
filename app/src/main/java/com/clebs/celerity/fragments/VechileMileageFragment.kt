@@ -46,6 +46,24 @@ class VechileMileageFragment : Fragment() {
             append("${Prefs.getInstance(App.instance).vehicleLastMileage} ")
             append("Miles")
         }
+        if (Prefs.getInstance(requireContext()).currLocationName != null) {
+            mbinding.headerTop.dxLoc.text =
+                Prefs.getInstance(requireContext()).currLocationName ?: ""
+        } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+            mbinding.headerTop.dxLoc.text =
+                Prefs.getInstance(requireContext()).workLocationName ?: ""
+        }
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
+            .also { name -> mbinding.headerTop.anaCarolin.text = name }
+        mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
+        if(mbinding.headerTop.dxReg.text.isEmpty()||mbinding.headerTop.dxReg.text=="")
+            mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        else
+            mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+        if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text==""||mbinding.headerTop.dxLoc.text=="Not Allocated")
+            mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
+        else
+            mbinding.headerTop.strikedxLoc.visibility = View.GONE
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) { it ->
             it?.let {
@@ -55,7 +73,29 @@ class VechileMileageFragment : Fragment() {
                     append("${it.vehicleLastMillage} ")
                     append("Miles")
                 }
+                mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
             }
+            if (Prefs.getInstance(requireContext()).currLocationName != null) {
+                mbinding.headerTop.dxLoc.text =
+                    Prefs.getInstance(requireContext()).currLocationName ?: ""
+            } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+                mbinding.headerTop.dxLoc.text =
+                    Prefs.getInstance(requireContext()).workLocationName ?: ""
+            } else {
+                if (it != null) {
+                    mbinding.headerTop.dxLoc.text = it.locationName ?: ""
+                }
+            }
+            if(mbinding.headerTop.dxReg.text.isEmpty()||mbinding.headerTop.dxReg.text=="")
+                mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+            else
+                mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+            if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text==""||mbinding.headerTop.dxLoc.text=="Not Allocated")
+                mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
+            else
+                mbinding.headerTop.strikedxLoc.visibility = View.GONE
+
+
         }
 
         mbinding.edtMilvm.doAfterTextChanged { edtMilText ->
@@ -73,26 +113,7 @@ class VechileMileageFragment : Fragment() {
             }
         }
 
-        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner){
-            if (Prefs.getInstance(requireContext()).currLocationName != null) {
-                mbinding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).currLocationName ?: ""
-            } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
-                mbinding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).workLocationName ?: ""
-            } else {
-                if (it != null) {
-                    mbinding.headerTop.dxLoc.text = it.locationName ?: ""
-                }
-            }
-            if (it != null) {
-                mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
-            }
 
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-                .also { name -> mbinding.headerTop.anaCarolin.text = name }
-            mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
-        }
 
         mbinding.headerTop.headings.setOnClickListener {
             navigateTo(R.id.profileFragment,requireContext(),findNavController())

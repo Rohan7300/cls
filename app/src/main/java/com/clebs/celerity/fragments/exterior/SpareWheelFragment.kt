@@ -28,7 +28,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
     private var VdhDaId = 0
     private var VdhVmId = 0
     private var VdhLmId = 0
-    var secondTry = false
+    private var secondTry = false
     private var VdhOdoMeterReading = 0
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
@@ -81,14 +81,6 @@ class SpareWheelFragment : BaseInteriorFragment() {
             }
 
             edtMilTwo.setOnClickListener {
-                /*                editMil2Visibilty(
-                       mBinding.tvNext,
-                       mBinding.rlUploadDefect,
-                       mBinding.edtMil,
-                       mBinding.edtMilTwo,
-                       mBinding.imageRadioTwo,
-                       mBinding.imageRadio
-                   )*/
                 editMil2VisibilityNew(
                     mBinding.rlUploadDefect,
                     mBinding.edtMil,
@@ -162,17 +154,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
             viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
                 hideDialog()
                 if (it != null) {
-                    if (it.status != "200"&&it.status!=null) {
-                        if (prefs.scannedVmRegNo.isNotEmpty()&&!secondTry) {
-                            secondTry = true
-                            showDialog()
-                            viewModel.GetVehicleInformation(
-                                prefs.userID.toInt(),
-                                prefs.scannedVmRegNo
-                            )
-                            Log.d("VehicleInfo", "if2 ${prefs.userID} ${prefs.scannedVmRegNo}")
-                        }
-                    } else {
+
                         if (!isApiCallInProgress) {
                             isApiCallInProgress = true
                             VdhVmId = it.vmId
@@ -250,7 +232,6 @@ class SpareWheelFragment : BaseInteriorFragment() {
 
                             viewModel.SaveVehDefectSheet(request)
                         }
-                    }
                 } else {
                     if (prefs.scannedVmRegNo.isNotEmpty()&&!secondTry) {
                         showDialog()
@@ -267,7 +248,6 @@ class SpareWheelFragment : BaseInteriorFragment() {
                     navigateTo(R.id.completeTaskFragment)
                 } else {
                     showErrorDialog(fragmentManager, "SPW-01", "Failed to Save")
-                    //showToast("Failed to save!!",requireContext())
                 }
             }
         } else {

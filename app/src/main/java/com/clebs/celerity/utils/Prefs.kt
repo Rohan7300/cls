@@ -16,8 +16,8 @@ class Prefs(context: Context) {
     private lateinit var sharedPreferences: SharedPreferences
 
     companion object {
-        private const val USER_ACCESS_TOKEN = "sybyl_shared_pref"
-        private const val USER_ACCESS_TOKEN_TWO = "sybyl_shared_prefs"
+        private const val USER_ACCESS_TOKEN = "celerity_shared_prefs"
+        private const val USER_ACCESS_TOKEN_TWO = "celerity_shared_prefs"
         private var instance: Prefs? = null
 
         fun getInstance(context: Context): Prefs {
@@ -47,7 +47,7 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putString("vmRegNo", value).apply()
         }
 
-    var scannedVmRegNo:String
+    var scannedVmRegNo: String
         get() {
             return sharedPreferences.getString("scannedVmRegNo", "") ?: ""
         }
@@ -101,7 +101,7 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putInt("currHandbook", value).apply()
         }
 
-    var currLocationName:String
+    var currLocationName: String
         get() {
             return sharedPreferences.getString("currLocationName", "") ?: ""
         }
@@ -109,7 +109,7 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putString("currLocationName", value).apply()
         }
 
-    var workLocationName:String
+    var workLocationName: String
         get() {
             return sharedPreferences.getString("workLocationName", "") ?: ""
         }
@@ -158,6 +158,10 @@ class Prefs(context: Context) {
     var qStage: Int
         get() = sharedPreferences.getInt("qStage", 0) ?: 0
         set(value) = sharedPreferences.edit().putInt("qStage", value).apply()
+
+    var UsrCreatedOn: Int
+        get() = sharedPreferences.getInt("UsrCreatedOn", 2024)
+        set(value) = sharedPreferences.edit().putInt("UsrCreatedOn", value).apply()
 
     var canClockOut: Boolean
         get() = sharedPreferences.getBoolean("canClockOut", false) ?: false

@@ -40,6 +40,9 @@ class HomeFragment : Fragment() {
             mbinding = FragmentHomeBinding.inflate(inflater, container, false)
         }
 
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+            mbinding.marianIonu.text = name
+        }
         viewModel = (activity as HomeActivity).viewModel
         showDialog()
         viewModel.GetDriversBasicInformation(
@@ -47,41 +50,31 @@ class HomeFragment : Fragment() {
         ).observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
-
-             if (it.currentlocation!=null){
-                 mbinding.location.text=it.currentlocation
-             } else{
+                if (it.currentlocation != null) {
+                    mbinding.location.text = it.currentlocation
+                    mbinding.away.text = it.currentlocation
+                } else if (it.workinglocation != null) {
+                    mbinding.location.text = it.workinglocation
+                    mbinding.away.text = it.workinglocation
+                } else {
                     mbinding.location.setText("Not assigned")
-                }
-                if (it.workinglocation!=null){
-                    mbinding.away.text=it.workinglocation
-                }
-                else{
                     mbinding.away.setText("Not assigned")
+                }
+                if (it.vmRegNo.isNullOrEmpty()) {
+                    mbinding.striketruckImage.visibility = View.VISIBLE
+                }
+                if (it.userID.toString().isEmpty() || it.userID ==null||it.userID==0) {
+                    mbinding.striketicketNumber.visibility = View.VISIBLE
                 }
                 mbinding.truckNumber.text = it.vmRegNo
                 mbinding.ticketNumber.text = it.userID.toString()
-
-
             }
-
-
         }
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-
             hideDialog()
-
-//            if (it != null) {
-//                mbinding.location.text = it.locationName ?: ""
-//                mbinding.truckNumber.text = it.vmRegNo ?: ""
-//            }
-
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-                mbinding.marianIonu.text = name
-            }
-//            mbinding.ticketNumber.text = (activity as HomeActivity).date
         }
+
         BubbleShowCaseBuilder(requireActivity()) //Activity instance
             .title("Swipe Right") //Any title for the bubble view
             .description("Swipe right to scan vehicle Registration number") //More detailed description

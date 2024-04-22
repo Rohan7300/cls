@@ -14,14 +14,18 @@ import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.ActivityLoginBinding
 import com.clebs.celerity.models.requests.LoginRequest
+import com.clebs.celerity.models.response.SaveDeviceInformationRequest
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.NoInternetDialog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.isNetworkAvailable
 import com.clebs.celerity.utils.showErrorDialog
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 class LoginActivity : AppCompatActivity() {
@@ -55,6 +59,14 @@ class LoginActivity : AppCompatActivity() {
                 login()
             }
         }
+
+        mainViewModel.liveDataSaveDeviceInformation.observe(this) {
+            if (it != null) {
+                Log.d("SaveDeviceInformation", "Submitted $it")
+            } else {
+                Log.d("SaveDeviceInformation", "Submitted $it")
+            }
+        }
     }
 
     fun login() {
@@ -69,6 +81,29 @@ class LoginActivity : AppCompatActivity() {
                 if (it != null) {
 
                     if (it.message.equals("Success")) {
+
+                        FirebaseMessaging.getInstance().token.addOnCompleteListener(
+                            OnCompleteListener { task ->
+                                if (!task.isSuccessful) {
+                                    Log.w(
+                                        "LoginActivity",
+                                        "Fetching FCM registration token failed",
+                                        task.exception
+                                    )
+                                    return@OnCompleteListener
+                                }
+
+                                val token = task.result
+                                mainViewModel.SaveDeviceInformation(
+                                    SaveDeviceInformationRequest(
+                                        FcmToken = token,
+                                        UsrId = Prefs.getInstance(this).userID.toInt(),
+                                        UsrDeviceId = getDeviceID(),
+                                        UsrDeviceType = "Android"
+                                    )
+                                )
+                                Log.d("LoginActivity", "FCM Token $token")
+                            })
 
                         Prefs.getInstance(applicationContext).accessToken = it.token
                         Prefs.getInstance(applicationContext).userID = it.userID.toString()

@@ -57,6 +57,7 @@ import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.SaveCommentResponse
+import com.clebs.celerity.models.response.SaveDeviceInformationRequest
 import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
@@ -67,6 +68,7 @@ import com.google.gson.Gson
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response
+import retrofit2.http.Body
 import java.lang.IllegalArgumentException
 
 class MainRepo(private val ApiService: ApiService) {
@@ -722,7 +724,10 @@ class MainRepo(private val ApiService: ApiService) {
         selyear: Int,
         selweek: Int
     ): CashFlowPieChartResponse? {
-        val response = ApiService.CashFLowData(userID, companyFilter, selyear, selweek)
+        val response = ApiService.CashFLowData(userID,
+            //companyFilter,
+            selyear,
+            selweek)
         if (response.isSuccessful) {
             return response.body()
         } else {
@@ -910,6 +915,21 @@ class MainRepo(private val ApiService: ApiService) {
         }else{
             val errorBody = response.errorBody()?.string()
             println("Error Response Body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun SaveDeviceInformation(
+        body: SaveDeviceInformationRequest
+    ):SimpleStatusMsgResponse?{
+        val response = ApiService.SaveDeviceInformation(body)
+        if(response.isSuccessful){
+            println("MainRepo SaveDeviceInformationApi Success")
+            return response.body()
+        }
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("SaveDeviceInformation: Error Response Bpdy: $errorBody")
         }
         return null
     }

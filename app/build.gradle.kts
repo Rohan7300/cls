@@ -94,13 +94,18 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
 
     implementation("androidx.multidex:multidex:2.0.1")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.google.firebase:firebase-messaging:23.4.1")
+    //implementation("com.google.firebase:firebase-messaging:23.4.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
-    implementation("com.google.android.gms:play-services-vision:20.0.0")
+    implementation("com.google.android.gms:play-services-vision:20.1.3")
     implementation("com.github.tapadoo:alerter:7.2.4")
-    implementation("com.google.firebase:firebase-ml-vision:24.0.3")
+    implementation("com.google.firebase:firebase-ml-vision:24.1.0")
 //    implementation("com.google.firebase:firebase-core:21.1.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+
     val camerax_version = "1.0.0-rc01"
     implementation("androidx.camera:camera-camera2:$camerax_version")
     implementation( "androidx.camera:camera-lifecycle:$camerax_version")
@@ -120,7 +125,6 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("com.google.code.gson:gson:2.10.1")
 
 
-    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
 
     // CQ SDK
     /*implementation ("com.github.clearquotetech:cq-android-sdk:2.0.9-test")*/

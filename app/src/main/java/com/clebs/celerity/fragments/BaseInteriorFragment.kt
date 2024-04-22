@@ -79,6 +79,28 @@ abstract class BaseInteriorFragment : Fragment() {
         dxm5 = view.findViewById(R.id.dxm5)
         ana_carolin = view.findViewById(R.id.ana_carolin)
 
+        var strikedxRegNo =view.findViewById<LinearLayout>(R.id.strikedxRegNo)
+        var strikedxLoc =view.findViewById<LinearLayout>(R.id.strikedxLoc)
+
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
+            .also { name -> ana_carolin.text = name }
+        dxm5.text = (activity as HomeActivity).date
+        if (Prefs.getInstance(requireContext()).currLocationName != null) {
+            dxLoc.text =
+                Prefs.getInstance(requireContext()).currLocationName ?: ""
+        } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+            dxLoc.text =
+                Prefs.getInstance(requireContext()).workLocationName ?: ""
+        }
+
+        if(dxReg.text.isEmpty()||dxReg.text=="")
+            strikedxRegNo.visibility = View.VISIBLE
+        else
+            strikedxRegNo.visibility = View.GONE
+        if(dxLoc.text.isEmpty()||dxLoc.text==""||dxLoc.text=="Not Allocated")
+            strikedxLoc.visibility = View.VISIBLE
+        else
+            strikedxLoc.visibility = View.GONE
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             dxLoc.text = it?.locationName ?: ""
@@ -94,6 +116,14 @@ abstract class BaseInteriorFragment : Fragment() {
                     dxLoc.text = it.locationName ?: ""
                 }
             }
+            if(dxReg.text.isEmpty()||dxReg.text=="")
+                strikedxRegNo.visibility = View.VISIBLE
+            else
+                strikedxRegNo.visibility = View.GONE
+            if(dxLoc.text.isEmpty()||dxLoc.text==""||dxLoc.text=="Not Allocated")
+                strikedxLoc.visibility = View.VISIBLE
+            else
+                strikedxLoc.visibility = View.GONE
 
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
                 .also { name -> ana_carolin.text = name }

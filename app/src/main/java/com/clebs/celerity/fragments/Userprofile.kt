@@ -103,8 +103,8 @@ class Userprofile : Fragment() {
             mbinding.emailtext.isFocusableInTouchMode = true
             mbinding.emailtext.requestFocus()
 
-            val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
-            imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+/*            val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+            imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)*/
 //                mbinding.usertext.isEnabled = true
 //                mbinding.usertext.isFocusable = true
 //                mbinding.usertext.isFocusableInTouchMode = true
@@ -209,27 +209,20 @@ class Userprofile : Fragment() {
                 mbinding.emailtext.isFocusableInTouchMode = true
                 mbinding.emailtext.requestFocus()
 
-                val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
-                imm!!.showSoftInput(mbinding.emailtext, InputMethodManager.SHOW_FORCED)
+             /*   val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+                imm!!.showSoftInput(mbinding.emailtext, InputMethodManager.SHOW_FORCED)*/
 
                 mbinding.txtChangePassword.visibility = View.VISIBLE
                 val colorRes = R.color.white
                 val color = ContextCompat.getColor(requireContext(), colorRes)
-                mbinding.firstconst.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), colorRes)
+
 
                 // Set background tint using a specific color
-                mbinding.firstconst.backgroundTintList = ColorStateList.valueOf(color)
-                mbinding.usepassword.backgroundTintList = ColorStateList.valueOf(color)
-                mbinding.usephone.backgroundTintList = ColorStateList.valueOf(color)
-                mbinding.useaddress.backgroundTintList = ColorStateList.valueOf(color)
-//                mbinding.usertext.isEnabled = true
-//                mbinding.usertext.isFocusable = true
-//                mbinding.usertext.isFocusableInTouchMode = true
+                mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.passtext.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.phonetext.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.addresstext.backgroundTintList = ColorStateList.valueOf(color)
 
-//                mbinding.passtext.isEnabled = true
-//                mbinding.passtext.isFocusable = true
-//                mbinding.passtext.isFocusableInTouchMode = true
 
                 mbinding.phonetext.isEnabled = true
                 mbinding.phonetext.isFocusable = true
@@ -255,15 +248,13 @@ class Userprofile : Fragment() {
                 mbinding.emailtext.isFocusableInTouchMode = false
                 val colorRes = R.color.very_light_grey_two
                 val color = ContextCompat.getColor(requireContext(), colorRes)
-                mbinding.firstconst.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), colorRes)
-                mbinding.firstconst.backgroundTintList = ColorStateList.valueOf(color)
 
-
-                mbinding.usepassword.backgroundTintList = ColorStateList.valueOf(color)
-                mbinding.usephone.backgroundTintList = ColorStateList.valueOf(color)
-                mbinding.useaddress.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.passtext.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.phonetext.backgroundTintList = ColorStateList.valueOf(color)
+                mbinding.addresstext.backgroundTintList = ColorStateList.valueOf(color)
                 mbinding.txtChangePassword.visibility = View.GONE
+
                 mbinding.usertext.isEnabled = false
                 mbinding.usertext.isFocusable = false
                 mbinding.usertext.isFocusableInTouchMode = false
@@ -460,25 +451,25 @@ class Userprofile : Fragment() {
                     mbinding.checkbox.visibility = View.VISIBLE
                 }*/
 
-                if(it.IsThirdPartyChargeAccessAllowed==false && it.IsThirdPartyChargeAccessApplied==null){
+                if (it.IsThirdPartyChargeAccessAllowed == false && it.IsThirdPartyChargeAccessApplied == null) {
                     mbinding.Tvthirdparty.text = "Request for third party Access."
                     mbinding.checkbox.visibility = View.VISIBLE
                     mbinding.checkbox.isChecked = false
-                }
-                else if(it.IsThirdPartyChargeAccessAllowed.equals(false) && it.IsThirdPartyChargeAccessApplied.equals(true)){
+                } else if (it.IsThirdPartyChargeAccessAllowed.equals(false) && it.IsThirdPartyChargeAccessApplied.equals(
+                        true
+                    )
+                ) {
                     mbinding.Tvthirdparty.text = "Third party Access is Requested."
                     mbinding.checkbox.visibility = View.GONE
                     //mbinding.checkbox.isChecked =
-                }
-                else if (it.IsThirdPartyChargeAccessAllowed==true){
+                } else if (it.IsThirdPartyChargeAccessAllowed == true) {
                     mbinding.Tvthirdparty.text = "Third party Access is Granted."
                     mbinding.checkbox.visibility = View.GONE
-                }
-                else if(it.IsThirdPartyChargeAccessAllowed==false && it.IsThirdPartyChargeAccessApplied==false){
+                } else if (it.IsThirdPartyChargeAccessAllowed == false && it.IsThirdPartyChargeAccessApplied == false) {
                     mbinding.Tvthirdparty.text = "Request for third party Access."
                     mbinding.checkbox.visibility = View.VISIBLE
                     mbinding.checkbox.isChecked = false
-                }else{
+                } else {
                     mbinding.Tvthirdparty.text = "Request for third party Access."
                     mbinding.checkbox.visibility = View.VISIBLE
                     mbinding.checkbox.isChecked = false
@@ -530,6 +521,7 @@ class Userprofile : Fragment() {
                     showToast("ProfileUpdated", requireContext())
                     Prefs.getInstance(App.instance).days = "0"
 //                    Prefs.getInstance(App.instance).save("90days", "0")
+                    (activity as HomeActivity).enableBottomNavigationView()
                     findNavController().navigate(R.id.homedemoFragment)
 
                 }

@@ -6,17 +6,18 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/mainCompleteTask"
-        android:visibility="gone"
         tools:context=".fragments.CompleteTaskFragment">
+
         <include
             android:id="@+id/headerTop"
             layout="@layout/fragment_headers" />
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/mainCompleteTask"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
+            android:visibility="gone"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -64,7 +65,7 @@
                         <ImageButton
                             android:id="@+id/down_iv"
                             android:layout_width="20dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="20dp"
                             android:layout_alignParentRight="true"
                             android:layout_centerHorizontal="true"
                             android:backgroundTint="@color/white"
@@ -212,16 +213,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:fontFamily="@font/inter"
+                        android:fontFamily="@font/poppins_bold"
                         android:letterSpacing="0.02"
                         android:text="Clocked in"
                         android:textColor="@color/text_color"
-                        android:textSize="15sp" />
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:id="@+id/tv_time"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
                         android:src="@drawable/clock_in" />
@@ -260,7 +261,7 @@
                             android:letterSpacing="0.02"
                             android:text="On Road Hours"
                             android:textColor="@color/text_color"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -268,25 +269,27 @@
                             android:fontFamily="@font/poppins_semibold"
                             android:textColor="@color/orange" />
 
-                        <ImageButton
+                        <ImageView
                             android:id="@+id/down_ivs_road"
                             android:layout_width="20dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="20dp"
                             android:layout_alignParentRight="true"
                             android:layout_centerHorizontal="true"
                             android:backgroundTint="@color/white"
                             android:src="@drawable/grey_right_arrow" />
 
                     </RelativeLayout>
+
                     <View
+                        android:id="@+id/linerlcomtwo"
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
-                        android:id="@+id/linerlcomtwo"
                         android:layout_below="@+id/rlcomtwo_road"
                         android:layout_marginHorizontal="3dp"
-                        android:visibility="gone"
                         android:layout_marginBottom="4dp"
-                        android:background="#4A4A4A" />
+                        android:background="#4A4A4A"
+                        android:visibility="gone" />
+
                     <LinearLayout
                         android:id="@+id/route_layout"
                         android:layout_width="match_parent"
@@ -350,35 +353,37 @@
                             android:id="@+id/routeNameTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginHorizontal="16dp"
                             android:layout_below="@+id/filled_routes"
-                            android:visibility="gone"
+                            android:layout_marginHorizontal="16dp"
+                            android:orientation="vertical"
                             android:padding="10dp"
-                            >
-                        <TextView
+                            android:visibility="gone">
 
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Route Name"
-                            android:textColor="@color/text_color"
-                            android:textSize="14sp"
-                             />
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="3dp"
-                            android:background="#4A4A4A" />
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_semibold"
+                                android:text="Route Name"
+                                android:textColor="@color/text_color"
+                                android:textSize="14sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="3dp"
+                                android:background="#4A4A4A" />
                         </LinearLayout>
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/getDriverRouteId"
                             android:layout_width="match_parent"
-                            android:layout_below="@+id/routeNameTV"
                             android:layout_height="wrap_content"
+                            android:layout_below="@+id/routeNameTV"
                             android:layout_marginHorizontal="16dp"
                             android:layout_marginTop="4dp"
                             android:layout_marginBottom="10dp" />
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/questionare_rv"
                             android:layout_width="match_parent"
@@ -391,79 +396,79 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
-                        <RelativeLayout
-                            android:id="@+id/Add_route"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/getDriverRouteId"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginEnd="15dp"
-                            android:layout_weight="1"
-                            android:layout_marginBottom="16dp"
-                            android:layout_marginTop="3dp"
-                            android:background="@drawable/shape_edittext_mileage"
-                            android:orientation="horizontal"
-                            android:paddingStart="14dp"
-                            android:paddingEnd="14dp">
+                            android:orientation="horizontal">
 
-                            <ImageView
-                                android:layout_width="15dp"
-                                android:layout_height="15dp"
-                                android:layout_alignParentStart="true"
-                                android:layout_centerVertical="true"
-                                android:src="@drawable/add_ic_grey"
-                                app:tint="@color/orange" />
-
-                            <TextView
+                            <RelativeLayout
+                                android:id="@+id/Add_route"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:fontFamily="@font/poppins_semibold"
-                                android:letterSpacing="0.02"
-                                android:padding="14dp"
-                                android:text="New route"
-                                android:textColor="#4A4A4A"
-                                android:textSize="11sp" />
+                                android:layout_below="@+id/getDriverRouteId"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_edittext_mileage"
+                                android:orientation="horizontal"
+                                android:paddingStart="14dp"
+                                android:paddingEnd="14dp">
 
-                        </RelativeLayout>
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    android:src="@drawable/add_ic_grey"
+                                    app:tint="@color/orange" />
 
-                        <RelativeLayout
-                            android:id="@+id/ride_along"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/questionare_rv"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="16dp"
-                            android:background="@drawable/shape_edittext_mileage"
-                            android:orientation="horizontal"
-                            android:paddingStart="14dp"
-                            android:paddingEnd="14dp">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:fontFamily="@font/poppins_semibold"
+                                    android:letterSpacing="0.02"
+                                    android:padding="14dp"
+                                    android:text="New route"
+                                    android:textColor="#4A4A4A"
+                                    android:textSize="11sp" />
 
-                            <ImageView
-                                android:layout_width="15dp"
-                                android:layout_height="15dp"
-                                android:layout_alignParentStart="true"
-                                android:layout_centerVertical="true"
-                                app:tint="@color/orange"
-                                android:src="@drawable/add_ic_grey" />
+                            </RelativeLayout>
 
-                            <TextView
+                            <RelativeLayout
+                                android:id="@+id/ride_along"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:fontFamily="@font/poppins_semibold"
-                                android:letterSpacing="0.02"
-                                android:padding="14dp"
-                                android:text="Ride along"
-                                android:textColor="#4A4A4A"
-                                android:textSize="11sp" />
+                                android:layout_below="@id/questionare_rv"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_edittext_mileage"
+                                android:orientation="horizontal"
+                                android:paddingStart="14dp"
+                                android:paddingEnd="14dp">
 
-                        </RelativeLayout>
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    android:src="@drawable/add_ic_grey"
+                                    app:tint="@color/orange" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:fontFamily="@font/poppins_semibold"
+                                    android:letterSpacing="0.02"
+                                    android:padding="14dp"
+                                    android:text="Ride along"
+                                    android:textColor="#4A4A4A"
+                                    android:textSize="11sp" />
+
+                            </RelativeLayout>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -487,7 +492,7 @@
                         android:letterSpacing="0.02"
                         android:text="Break Time"
                         android:textColor="@color/text_color"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -510,67 +515,69 @@
                     android:id="@+id/BreakTimeTable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_margin="20dp"
-                    android:orientation="vertical"
                     android:background="@drawable/shape_expand_main"
-                    android:padding="18dp"
-                    >
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
                     <LinearLayout
                         android:id="@+id/h1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_marginBottom="10dp">
+                        android:gravity="center">
 
                         <TextView
                             android:id="@+id/heading"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
+                            android:fontFamily="@font/poppins_bold"
                             android:text="Break Information"
                             android:textColor="@color/text_color"
-                            android:textSize="18sp"
-                            />
+                            android:textSize="16sp" />
 
                         <ImageView
                             android:id="@+id/badgeArrow"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:src="@drawable/arrow_left"
                             app:tint="@color/black" />
                     </LinearLayout>
+
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:id="@+id/breakH2"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:visibility="gone"
-                        android:background="@drawable/shape_edittext_onroad"
-                        android:padding="1dp"
-                        >
-                    <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:id="@+id/BreakTimeRV"/>
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/shape_edittext_onroad"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="1dp"
+                        android:visibility="gone">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/BreakTimeRV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
                             android:layout_weight="3"
-                            >
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:id="@+id/addBreakIV"
-                            android:src="@drawable/add_ic"
-                            app:tint="@color/orange" />
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/addBreakIV"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/add_ic"
+                                app:tint="@color/orange" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+
                 <RelativeLayout
                     android:id="@+id/rlcomtwo_ClockOut"
                     android:layout_width="match_parent"
@@ -1193,5 +1200,12 @@
 
         </androidx.core.widget.NestedScrollView>
 
+        <LinearLayout
+            android:id="@+id/searchLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/searchinglayout" />
+        </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

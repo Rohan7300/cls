@@ -62,6 +62,7 @@ import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.SaveCommentResponse
+import com.clebs.celerity.models.response.SaveDeviceInformationRequest
 import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
@@ -393,7 +394,7 @@ interface ApiService {
     @GET("/api/Dashboard/GetDriverWeeklyInvoice")
     suspend fun CashFLowData(
         @Query("userId") userId: Int,
-        @Query("companyFilter") companyFilter: Int,
+        //@Query("companyFilter") companyFilter: Int,
         @Query("selYear") selYear: Int,
         @Query("selWeek") selWeek: Int
     ): Response<CashFlowPieChartResponse>
@@ -495,5 +496,9 @@ interface ApiService {
         @Query("daDailyWorkId") daDailyWorkId:Int
     ):Response<GetRideAlongDriverFeedbackQuestionResponse>
 
+    @POST("/api/Authentication/SaveDeviceInformation")
+    suspend fun SaveDeviceInformation(
+        @Body body:SaveDeviceInformationRequest
+    ):Response<SimpleStatusMsgResponse>
 }
 

@@ -65,11 +65,13 @@
 <!--                android:src="@drawable/ic_eyeframe" />-->
         </LinearLayout>
 
+<!--
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginHorizontal="1dp"
             android:background="@color/text_color" />
+-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,13 +105,19 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="23dp"
-                android:layout_height="25dp"
+                android:layout_width="18dp"
+                android:layout_height="22dp"
                 android:layout_marginStart="-8dp"
                 android:src="@drawable/circleleft"
                 android:background="@drawable/ticket_round"
                 app:tint="@color/very_light_orange" />
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:background="@drawable/dotted"
+                />
 
+<!--
             <View
                 android:layout_width="10dp"
                 android:layout_height="1.5dp"
@@ -152,6 +160,19 @@
                 android:layout_marginBottom="3dp"
 
                 android:layout_weight="1" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1.5dp"
+                android:layout_marginHorizontal="4dp"
+                android:background="@color/text_color" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1.5dp"
+                android:layout_marginHorizontal="4dp"
+                android:background="@color/text_color" />
+
             <View
                 android:layout_width="10dp"
                 android:layout_height="1.5dp"
@@ -170,9 +191,7 @@
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-
                 android:layout_marginBottom="3dp"
-
                 android:layout_weight="1" />
 
             <View
@@ -210,10 +229,11 @@
                 android:layout_height="1.5dp"
                 android:layout_marginHorizontal="1dp"
                 android:background="@color/text_color" />
+-->
 
             <ImageView
-                android:layout_width="23dp"
-                android:layout_height="25dp"
+                android:layout_width="18dp"
+                android:layout_height="22dp"
                 android:layout_marginEnd="-8dp"
                 android:background="@drawable/ticket_round"
                 android:src="@drawable/circleright"

@@ -17,7 +17,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="36dp"
             android:background="@drawable/card_layout"
-
             android:clipToOutline="true"
             app:layout_constraintBottom_toTopOf="@id/swipe_for_v"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,124 +61,202 @@ Marian Ionut Malasincu"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/marian_ionu"
                 android:layout_marginStart="34dp"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="17dp"
                 android:layout_marginEnd="34dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="15dp"
                 android:orientation="horizontal">
 
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:orientation="horizontal">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-
                         android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
                         <TextView
+                            android:id="@+id/h"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="H"
                             android:fontFamily="@font/poppins_semibold"
-                            android:id="@+id/h"/>
+                            android:text="H" />
+
                         <ImageView
                             android:id="@+id/ic_location"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:layout_toEndOf="@+id/h"
                             android:layout_marginStart="2dp"
+                            android:layout_toEndOf="@+id/h"
                             android:src="@drawable/pin_alt_light" />
 
                         <TextView
                             android:id="@+id/location"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="20dp"
-                            android:layout_marginStart="4dp"
+                            android:layout_margin="4dp"
                             android:layout_toEndOf="@+id/ic_location"
                             android:fontFamily="@font/poppins"
                             android:text="@string/location"
                             android:textColor="#231F20"
-                            android:textSize="14sp" />
+                            android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+                            <FrameLayout
+                                android:id="@+id/idtuckFL"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:layout_toStartOf="@+id/truck_number">
+
+                                <ImageView
+                                    android:id="@+id/ic_truck"
+                                    android:layout_width="25dp"
+
+                                    android:layout_height="19dp"
+                                    android:src="@drawable/truck_ic" />
+
+                                <LinearLayout
+                                    android:layout_width="25dp"
+                                    android:layout_height="19dp"
+                                    android:id="@+id/striketruckImage"
+
+                                    android:visibility="gone"
+                                    android:gravity="center">
+
+                                    <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="2dp"
+                                        android:background="@color/red" />
+                                </LinearLayout>
+                            </FrameLayout>
+
+
+
+                            <TextView
+                                android:id="@+id/truck_number"
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:layout_margin="4dp"
+                                android:fontFamily="@font/poppins"
+                                android:layout_weight="1"
+                                android:text="sdfgsdfgsdfgsdfg"
+                                android:textColor="#231F20"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginTop="35dp"
+                            android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
                         <TextView
+                            android:id="@+id/W"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/ic_location"
-                            android:text="W"
-                            android:fontFamily="@font/poppins_semibold"
 
-                            android:layout_marginTop="16dp"
-                            android:id="@+id/W"/>
+
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="W" />
 
                         <ImageView
                             android:id="@+id/ic_locations"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:layout_below="@+id/ic_location"
 
-                            android:layout_marginTop="16dp"
-                            android:layout_toEndOf="@+id/W"
+
                             android:src="@drawable/pin_alt_light" />
 
                         <TextView
                             android:id="@+id/away"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/location"
-
-                            android:layout_marginStart="4dp"
-
-                            android:layout_marginTop="15dp"
-                            android:layout_toEndOf="@+id/ic_location"
                             android:fontFamily="@font/poppins"
                             android:text="@string/away"
+                            android:layout_weight="1"
+                            android:layout_margin="4dp"
                             android:textColor="#231F20"
-                            android:textSize="14sp" />
+                            android:textSize="13sp" />
 
-                        <ImageView
-                            android:id="@+id/ic_truck"
-                            android:layout_width="25dp"
-                            android:layout_height="19dp"
-                            android:layout_marginStart="2dp"
-                            android:layout_toStartOf="@+id/truck_number"
-                            android:src="@drawable/truck_ic" />
 
-                        <TextView
-                            android:id="@+id/truck_number"
+</LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:id="@+id/frameLayout"
                             android:layout_width="wrap_content"
-                            android:layout_height="20dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginStart="4dp"
-                            android:fontFamily="@font/poppins"
-                            android:text="121343445"
-                            android:textColor="#231F20"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/ticket_number"
-                            android:layout_width="wrap_content"
-                            android:layout_height="20dp"
-                            android:layout_below="@+id/ic_truck"
-                            android:layout_alignStart="@+id/truck_number"
-                            android:layout_alignEnd="@+id/truck_number"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginTop="16dp"
-
-                            android:fontFamily="@font/poppins"
-                            android:text="121343445"
-                            android:textColor="#231F20"
-                            android:textSize="14sp" />
-
-                        <ImageView
-                            android:id="@+id/ic_tickets"
-                            android:layout_width="25dp"
-                            android:layout_height="19dp"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/truck_number"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_toStartOf="@+id/truck_number"
-                            android:src="@drawable/userd" />
 
+                            android:layout_toStartOf="@+id/truck_number">
+                            <ImageView
+                                android:id="@+id/ic_tickets"
+                                android:layout_width="25dp"
+                                android:layout_height="19dp"
+                                android:src="@drawable/userd" />
+
+
+                            <LinearLayout
+                                android:id="@+id/striketicketNumber"
+                                android:layout_width="25dp"
+                                android:layout_height="19dp"
+                                android:gravity="center"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="2dp"
+                                    android:background="@color/red" />
+                            </LinearLayout>
+                        </FrameLayout>
+
+                            <TextView
+                                android:id="@+id/ticket_number"
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:fontFamily="@font/poppins"
+                                android:layout_margin="4dp"
+                                android:layout_weight="1"
+                                android:text="121343445"
+                                android:textColor="#231F20"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                        </LinearLayout>
                     </RelativeLayout>
 
 

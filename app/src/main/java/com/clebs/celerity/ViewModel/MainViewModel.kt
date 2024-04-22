@@ -60,6 +60,7 @@ import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.SaveCommentResponse
+import com.clebs.celerity.models.response.SaveDeviceInformationRequest
 import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
@@ -131,14 +132,20 @@ class MainViewModel(
     val livedatathirdpartyaccess = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataremovethirdpartyaccess = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataDownloadInvoicePDF = MutableLiveData<DownloadInvoicePDFResponse?>()
-    val liveDataDownloadThirdPartyInvoicePDF= MutableLiveData<DownloadThirdPartyInvoicePDFResponse?>()
+    val liveDataDownloadThirdPartyInvoicePDF =
+        MutableLiveData<DownloadThirdPartyInvoicePDFResponse?>()
     val liveDataDownloadSignedDAHandbook = MutableLiveData<ResponseBody?>()
     val liveDataDownloadSignedGDPRPOLICY = MutableLiveData<ResponseBody?>()
     val liveDataDownloadSignedServiceLevelAgreement = MutableLiveData<ResponseBody?>()
     val liveDataDownloadSignedPrivacyPolicy = MutableLiveData<ResponseBody?>()
     val liveDataDownloadSignedDAEngagement = MutableLiveData<ResponseBody?>()
+    val liveDataSaveDeviceInformation = MutableLiveData<SimpleStatusMsgResponse?>()
 
-    val liveDataGetRideAlongDriverFeedbackQuestion = MutableLiveData<GetRideAlongDriverFeedbackQuestionResponse?>()
+    val liveDataGetRideAlongDriverFeedbackQuestion =
+        MutableLiveData<GetRideAlongDriverFeedbackQuestionResponse?>()
+    val ldcompleteTaskLayoutObserver = MutableLiveData<Int>().apply {
+        postValue(0)
+    }
 
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
@@ -890,6 +897,7 @@ class MainViewModel(
             }
         }
     }
+
     fun DownloadThirdPartyInvoicePDF(
         userID: Int, selYear: Int
     ) {
@@ -907,77 +915,81 @@ class MainViewModel(
     }
 
     fun DownloadSignedDAHandbook(
-        handbookId:Int
-    ){
+        handbookId: Int
+    ) {
         viewModelScope.launch {
             val result = runCatching {
                 repo.DownloadSignedDAHandbook(handbookId)
             }
-            result.onSuccess { res->
+            result.onSuccess { res ->
                 liveDataDownloadSignedDAHandbook.postValue(res)
             }
-            result.onFailure { ex->
-                Log.e("Download Signed Da Handbook","Error ${ex.message}")
+            result.onFailure { ex ->
+                Log.e("Download Signed Da Handbook", "Error ${ex.message}")
             }
         }
     }
+
     fun DownloadSignedGDPRPOLICY(
-        handbookId:Int
-    ){
+        handbookId: Int
+    ) {
         viewModelScope.launch {
             val result = runCatching {
                 repo.DownloadSignedGDPRPOLICY(handbookId)
             }
-            result.onSuccess { res->
+            result.onSuccess { res ->
                 liveDataDownloadSignedGDPRPOLICY.postValue(res)
             }
-            result.onFailure { ex->
-                Log.e("Download Signed Da Handbook","Error ${ex.message}")
+            result.onFailure { ex ->
+                Log.e("Download Signed Da Handbook", "Error ${ex.message}")
             }
         }
     }
+
     fun DownloadSignedServiceLevelAgreement(
-        handbookId:Int
-    ){
+        handbookId: Int
+    ) {
         viewModelScope.launch {
             val result = runCatching {
                 repo.DownloadSignedServiceLevelAgreement(handbookId)
             }
-            result.onSuccess { res->
+            result.onSuccess { res ->
                 liveDataDownloadSignedServiceLevelAgreement.postValue(res)
             }
-            result.onFailure { ex->
-                Log.e("Download Signed Da Handbook","Error ${ex.message}")
+            result.onFailure { ex ->
+                Log.e("Download Signed Da Handbook", "Error ${ex.message}")
             }
         }
     }
+
     fun DownloadSignedPrivacyPolicy(
-        handbookId:Int
-    ){
+        handbookId: Int
+    ) {
         viewModelScope.launch {
             val result = runCatching {
                 repo.DownloadSignedPrivacyPolicy(handbookId)
             }
-            result.onSuccess { res->
+            result.onSuccess { res ->
                 liveDataDownloadSignedPrivacyPolicy.postValue(res)
             }
-            result.onFailure { ex->
-                Log.e("Download Signed Da Handbook","Error ${ex.message}")
+            result.onFailure { ex ->
+                Log.e("Download Signed Da Handbook", "Error ${ex.message}")
             }
         }
     }
+
     fun DownloadSignedDAEngagement(
-        handbookId:Int
-    ){
+        handbookId: Int
+    ) {
         viewModelScope.launch {
             val result = runCatching {
                 repo.DownloadSignedDAEngagement(handbookId)
             }
-            result.onSuccess { res->
+            result.onSuccess { res ->
                 liveDataDownloadSignedDAEngagement.postValue(res)
             }
-            result.onFailure { ex->
-                Log.e("Download Signed Da Handbook","Error ${ex.message}")
+            result.onFailure { ex ->
+                Log.e("Download Signed Da Handbook", "Error ${ex.message}")
             }
         }
     }
@@ -987,19 +999,37 @@ class MainViewModel(
         routeID: Int,
         leadDriverId: Int,
         daDailyWorkId: Int
-    ){
+    ) {
         viewModelScope.launch {
             val result = runCatching {
-                repo.GetRideAlongDriverFeedbackQuestion(driverId,routeID,leadDriverId,daDailyWorkId)
+                repo.GetRideAlongDriverFeedbackQuestion(
+                    driverId,
+                    routeID,
+                    leadDriverId,
+                    daDailyWorkId
+                )
             }
-            result.onSuccess {res->
+            result.onSuccess { res ->
                 liveDataGetRideAlongDriverFeedbackQuestion.postValue(res)
             }
-            result.onFailure { ex->
-                Log.e("GetRideAlongDriverFeedBackQuestionRes ","${ex.message}")
+            result.onFailure { ex ->
+                Log.e("GetRideAlongDriverFeedBackQuestionRes ", "${ex.message}")
             }
 
         }
     }
 
+    fun SaveDeviceInformation(body: SaveDeviceInformationRequest) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.SaveDeviceInformation(body)
+            }
+            result.onSuccess { res ->
+                liveDataSaveDeviceInformation.postValue(res)
+            }
+            result.onFailure { ex ->
+                Log.e("SaveDeviceInformation ", "${ex.message}")
+            }
+        }
+    }
 }
