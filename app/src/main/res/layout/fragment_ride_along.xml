@@ -128,7 +128,7 @@
                             android:layout_width="match_parent"
                             android:id="@+id/selectDepartmentTIL"
                             android:layout_height="match_parent"
-                            android:hint="Select Driver">
+                            android:hint="Select Driver*">
 
                             <AutoCompleteTextView
                                 android:layout_width="match_parent"
@@ -174,7 +174,7 @@
                             android:layout_width="match_parent"
 
                             android:layout_height="match_parent"
-                            android:hint="Select Vehicle">
+                            android:hint="Select Vehicle*">
 
                             <AutoCompleteTextView
                                 android:layout_width="match_parent"
@@ -257,7 +257,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="Select Route Type">
+                            android:hint="Select Route Type*">
 
                             <AutoCompleteTextView
                                 android:layout_width="match_parent"
@@ -307,7 +307,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="Select Route Location">
+                            android:hint="Select Route Location*">
 
                             <AutoCompleteTextView
                                 android:layout_width="match_parent"
@@ -504,7 +504,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
 
-                            android:hint="Route Comment">
+                            android:hint="Route Comment*">
 
                         <EditText
                             android:importantForAutofill="no"
