@@ -92,6 +92,7 @@ class RideAlongFragment : Fragment() {
             binding.headerTop.dxLoc.text =
                 Prefs.getInstance(requireContext()).workLocationName ?: ""
         }
+        binding.headerTop.dxReg.text = Prefs.getInstance(requireContext()).vmRegNo
         if(binding.headerTop.dxReg.text.isEmpty()||binding.headerTop.dxReg.text=="")
             binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
@@ -123,7 +124,7 @@ class RideAlongFragment : Fragment() {
             }
             binding.headerTop.dxm5.text = (activity as HomeActivity).date
 
-            if(binding.headerTop.dxReg.text.isEmpty()||binding.headerTop.dxReg.text=="")
+        if(binding.headerTop.dxReg.text.isEmpty()||binding.headerTop.dxReg.text=="")
                 binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
             else
                 binding.headerTop.strikedxRegNo.visibility = View.GONE

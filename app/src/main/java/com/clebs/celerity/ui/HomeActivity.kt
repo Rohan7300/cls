@@ -499,6 +499,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         ).observe(this, Observer {
             hideDialog()
             if (it != null) {
+
+                if (it.workingLocationId != null)
+                    prefs.workLocationId = it.workingLocationId
+                if (it.currentLocationId != null)
+                    prefs.currLocationId = it.currentLocationId
                 try {
                     it.vmRegNo?.let { it1 ->
                         prefs.vmRegNo = it1
