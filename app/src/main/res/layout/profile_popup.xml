@@ -88,7 +88,7 @@
                 android:id="@+id/tv_next_yes"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:text="yes"
+                android:text="Yes"
                 android:layout_weight="1"
                 android:textAllCaps="false"
                 android:fontFamily="@font/inter"

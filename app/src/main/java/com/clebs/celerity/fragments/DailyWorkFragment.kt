@@ -212,6 +212,15 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 (object : BubbleShowCaseListener { //Listener for user actions
                     override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
                         //Called when the user clicks the target
+                        if (allPermissionsGranted()) {
+                            mbinding.rectange.visibility = View.VISIBLE
+                            mbinding.ivTakePhoto.visibility = View.VISIBLE
+                            mbinding.rectangle4.visibility = View.GONE
+                            startCamera()
+                            initListeners()
+                        } else {
+                            requestpermissions()
+                        }
                         bubbleShowCase.dismiss()
                     }
 
@@ -222,7 +231,15 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
                     override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
                         //Called when the user clicks on the bubble
-                        bubbleShowCase.dismiss()
+                        if (allPermissionsGranted()) {
+                            mbinding.rectange.visibility = View.VISIBLE
+                            mbinding.ivTakePhoto.visibility = View.VISIBLE
+                            mbinding.rectangle4.visibility = View.GONE
+                            startCamera()
+                            initListeners()
+                        } else {
+                            requestpermissions()
+                        }
                     }
 
                     override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {

@@ -1,6 +1,8 @@
 package com.clebs.celerity.fragments
 
 import android.Manifest
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.AlertDialog
@@ -108,11 +110,11 @@ class CompleteTaskFragment : Fragment() {
                 Manifest.permission.RECORD_AUDIO
             ).apply {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    add(Manifest.permission.READ_MEDIA_VIDEO)
-                    add(Manifest.permission.READ_MEDIA_IMAGES)
-                    add(Manifest.permission.READ_MEDIA_AUDIO)
+//                    add(Manifest.permission.READ_MEDIA_VIDEO)
+//                    add(Manifest.permission.READ_MEDIA_IMAGES)
+//                    add(Manifest.permission.READ_MEDIA_AUDIO)
                 }
             }.toTypedArray()
     }
@@ -142,7 +144,7 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.badgeArrow.setImageResource(R.drawable.down_arrow)
             }
         }
-        mbinding.ivFaceMask.setImageResource(R.drawable.camera)
+        mbinding.ivFaceMask.setImageResource(io.clearquote.assessment.cq_sdk.R.drawable.camera_icon)
         Prefs.getInstance(requireContext()).clearNavigationHistory()
         fragmentManager = (activity as HomeActivity).fragmentManager
         cqSDKInitializer = CQSDKInitializer(requireContext())
@@ -272,12 +274,16 @@ class CompleteTaskFragment : Fragment() {
         mbinding.rlcom.setOnClickListener {
             if (isclicked) {
                 mbinding.taskDetails.visibility = View.VISIBLE
+//                viewVisibleAnimator( mbinding.taskDetails)
                 mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
                 mbinding.view2.visibility = View.VISIBLE
+//                viewVisibleAnimator(mbinding.view2)
             } else {
                 mbinding.taskDetails.visibility = View.GONE
+//                viewGoneAnimator(mbinding.taskDetails)
                 mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
                 mbinding.view2.visibility = View.GONE
+//                viewGoneAnimator(mbinding.view2)
                 //mbinding.uploadLayouts.visibility = View.VISIBLE
             }
             isclicked = !isclicked
@@ -1290,6 +1296,25 @@ class CompleteTaskFragment : Fragment() {
             mbinding.startinspection.visibility = View.VISIBLE
         }
     }
-
+    private fun viewGoneAnimator(view: View) {
+        view.animate()
+            .alpha(0f)
+            .setDuration(500)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    view.visibility = View.GONE
+                }
+            })
+    }
+    private fun viewVisibleAnimator(view: View) {
+        view.animate()
+            .alpha(1f)
+            .setDuration(1000)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    view.visibility = View.VISIBLE
+                }
+            })
+    }
 
 }

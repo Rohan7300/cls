@@ -169,6 +169,12 @@ class HomedemoFragment : Fragment() {
                 week = it.weekNO
                 year = it.year
                 showDialog()
+                //subtract weekNo by 2
+                val weeknew = it.weekNO - 2
+                mbinding.viewfullschedule.text = "Week "+it.weekNO.toString()+"\nSchedule"
+
+
+                mbinding.txtLastWeek.text = "Week " + weeknew
                 viewModel.GetcashFlowWeek(
                     Prefs.getInstance(requireContext()).userID.toInt(), 0, year, 12
                 )
@@ -183,7 +189,7 @@ class HomedemoFragment : Fragment() {
 
 
                 val bt_text = (week - 2).toString()
-                mbinding.btPrev.text = "Previous Week: $bt_text"
+                mbinding.btPrev.text = "Previous"
 
 
             }
@@ -198,16 +204,17 @@ class HomedemoFragment : Fragment() {
                 if (it.status.equals("200")) {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBar.setProgress(it.avgTotalScore.toDouble().toInt())
-                    mbinding.tvPbone.text = it.avgTotalScore.toDouble().toInt().toString() + "%"+" Score"
+                    mbinding.tvPbone.text =
+                        it.avgTotalScore.toDouble().toInt().toString() + "%" + " Score"
 
                     mbinding.ProgressBar.tooltipText = it.avgTotalScore.toDouble().toString() + "%"
                 } else {
                     mbinding.ProgressBar.setProgress(0)
-                    mbinding.tvPbone.setText("0%"+" Score")
+                    mbinding.tvPbone.setText("0%" + " Score")
                 }
             } else {
                 mbinding.ProgressBar.setProgress(0)
-                mbinding.tvPbone.setText("0%"+" Score")
+                mbinding.tvPbone.setText("0%" + " Score")
             }
         }
         viewModel.livedatalastweekresponse.observe(viewLifecycleOwner) {
@@ -216,7 +223,8 @@ class HomedemoFragment : Fragment() {
                 if (it.status == "200") {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBartwo.setProgress(it.avgTotalScore.toDouble().toInt())
-                    mbinding.tvPbTwo.text = it.avgTotalScore.toDouble().toInt().toString() + "%"+" Score"
+                    mbinding.tvPbTwo.text =
+                        it.avgTotalScore.toDouble().toInt().toString() + "%" + " Score"
                     mbinding.ProgressBartwo.tooltipText =
                         it.avgTotalScore.toDouble().toString() + "%"
                 } else {
@@ -224,7 +232,7 @@ class HomedemoFragment : Fragment() {
                 }
             } else {
                 mbinding.ProgressBartwo.setProgress(0)
-                mbinding.tvPbTwo.setText("0%"+" Score")
+                mbinding.tvPbTwo.setText("0%" + " Score")
             }
         }
         viewModel.livedataCashFlowWeek.observe(viewLifecycleOwner) { depts ->

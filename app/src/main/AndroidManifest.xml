@@ -38,7 +38,7 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup"
         tools:targetApi="tiramisu">
-        
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -122,5 +122,9 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
     </application>
-
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
 </manifest>

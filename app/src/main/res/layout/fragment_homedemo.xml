@@ -103,7 +103,7 @@
                                     android:layout_marginTop="8dp"
                                     android:elevation="30dp"
                                     android:indeterminate="false"
-                                    android:progress="50"
+
                                     android:progressDrawable="@drawable/pb_style"
                                     android:progressTint="@color/peek_orange"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -138,7 +138,6 @@
                                 android:layout_marginTop="8dp"
                                 android:elevation="30dp"
                                 android:indeterminate="false"
-                                android:progress="68"
                                 android:progressDrawable="@drawable/pb_style"
                                 android:progressTint="@color/blue_hex" />
 
@@ -604,7 +603,7 @@
 android:backgroundTint="@color/medium_orange"
                         android:fontFamily="@font/poppins"
                         android:padding="8dp"
-                        android:text="Previous week"
+                        android:text="Previous"
                         android:textColor="@color/text_color"
                         android:textSize="11sp"
                         android:visibility="visible"
