@@ -1,5 +1,7 @@
 package com.clebs.celerity.adapters
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -28,10 +30,12 @@ class QuestionAdapter(var list: ArrayList<QuestionWithOption>,var context:Contex
 
             binding.h1.setOnClickListener {
                 if (binding.radioLayQ1.isVisible) {
-                    binding.radioLayQ1.visibility = View.GONE
+//                    binding.radioLayQ1.visibility = View.GONE
+                    viewGoneAnimator(binding.radioLayQ1)
                     binding.badgeArrow.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.arrow_left))
                 } else {
-                    binding.radioLayQ1.visibility = View.VISIBLE
+//                    binding.radioLayQ1.visibility = View.VISIBLE
+                    viewVisibleAnimator(binding.radioLayQ1)
                     binding.badgeArrow.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.down_arrow))
                 }
             }
@@ -61,7 +65,7 @@ class QuestionAdapter(var list: ArrayList<QuestionWithOption>,var context:Contex
     }
 
     fun visibilityCollapse(binding:AdapterQuestionBinding){
-        binding.radioLayQ1.visibility = View.GONE
+        viewGoneAnimator(binding.radioLayQ1)
         binding.badgeArrow.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.arrow_left))
         binding.mainLayout.setBackgroundResource(R.drawable.shape_green_new)
     }
@@ -71,6 +75,7 @@ class QuestionAdapter(var list: ArrayList<QuestionWithOption>,var context:Contex
                 return false
             }
         }
+
         return true
     }
 
@@ -85,6 +90,27 @@ class QuestionAdapter(var list: ArrayList<QuestionWithOption>,var context:Contex
 
     override fun onBindViewHolder(holder: QuestionViewHolder, position: Int) {
         val item = list[position]
+
         holder.bind(item)
+    }
+    private fun viewGoneAnimator(view: View) {
+        view.animate()
+            .alpha(0f)
+            .setDuration(600)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    view.visibility = View.GONE
+                }
+            })
+    }
+    private fun viewVisibleAnimator(view: View) {
+        view.animate()
+            .alpha(1f)
+            .setDuration(500)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    view.visibility = View.VISIBLE
+                }
+            })
     }
 }

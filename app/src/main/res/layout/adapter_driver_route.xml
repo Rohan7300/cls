@@ -17,7 +17,7 @@ android:layout_marginHorizontal="16dp"
         <TextView
             android:id="@+id/route_name_two"
             android:layout_width="0dp"
-            android:layout_height="18dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:fontFamily="@font/poppins"
             android:letterSpacing="0.02"

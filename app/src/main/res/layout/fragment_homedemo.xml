@@ -12,7 +12,7 @@
         android:scrollbars="none">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-         android:id="@+id/constmains"
+            android:id="@+id/constmains"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
@@ -185,17 +185,18 @@
                         android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-<ImageView
-    android:layout_width="match_parent"
-    android:layout_height="300dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    android:alpha="0.1"
-    android:id="@+id/demo"
-    android:visibility="gone"
-    android:backgroundTint="@color/gray"
-    android:src="@drawable/demochart"
-    app:layout_constraintStart_toStartOf="@id/txt_this_week"
-    app:layout_constraintTop_toBottomOf="@+id/txt_this_week"/>
+
+                    <ImageView
+                        android:id="@+id/demo"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:alpha="0.1"
+                        android:backgroundTint="@color/gray"
+                        android:src="@drawable/demochart"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/txt_this_week"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_this_week" />
 
 
                     <com.github.mikephil.charting.charts.PieChart
@@ -210,22 +211,22 @@
 
                         />
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/nodata"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="100dp"-->
-<!--                        android:drawableEnd="@drawable/baseline_error_24"-->
-<!--                        android:fontFamily="@font/poppins_bold"-->
-<!--                        android:gravity="center"-->
-<!--                        android:padding="8dp"-->
-<!--                        android:text="No Data cash flow found!"-->
-<!--                        android:textColor="@color/text_color"-->
-<!--                        android:textSize="13sp"-->
-<!--                        android:visibility="gone"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent" />-->
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/nodata"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="100dp"-->
+                    <!--                        android:drawableEnd="@drawable/baseline_error_24"-->
+                    <!--                        android:fontFamily="@font/poppins_bold"-->
+                    <!--                        android:gravity="center"-->
+                    <!--                        android:padding="8dp"-->
+                    <!--                        android:text="No Data cash flow found!"-->
+                    <!--                        android:textColor="@color/text_color"-->
+                    <!--                        android:textSize="13sp"-->
+                    <!--                        android:visibility="gone"-->
+                    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
                     <!--                    <com.anychart.AnyChartView-->
                     <!--                        android:id="@+id/anychartview"-->
@@ -301,8 +302,8 @@
                         android:id="@+id/llnodata"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_marginTop="20dp"
+                        android:gravity="center"
                         android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@id/textView5"
                         tools:layout_editor_absoluteX="10dp">
@@ -586,7 +587,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/linearLayout13"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -601,7 +602,7 @@
                         android:layout_margin="16dp"
                         android:layout_marginTop="20dp"
                         android:background="@drawable/home_button_shape"
-android:backgroundTint="@color/medium_orange"
+                        android:backgroundTint="@color/medium_orange"
                         android:fontFamily="@font/poppins"
                         android:padding="8dp"
                         android:text="Previous"
@@ -623,15 +624,14 @@ android:backgroundTint="@color/medium_orange"
                         android:background="@drawable/home_button_shape"
                         android:backgroundTint="@color/medium_orange"
                         android:fontFamily="@font/poppins"
+
                         android:padding="8dp"
                         android:text="This week"
                         android:textColor="@color/text_color"
                         android:textSize="11sp"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:visibility="gone" />
 
-                </LinearLayout>
+                </RelativeLayout>
 
 
             </LinearLayout>

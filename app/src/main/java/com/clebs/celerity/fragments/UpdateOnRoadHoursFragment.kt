@@ -96,7 +96,13 @@ class UpdateOnRoadHoursFragment : Fragment() {
 
             selectedRouteId = routeInfo.RtTypeId
             routeName = routeInfo.RtName
-            routeComment = routeInfo.RtComment
+            if (routeInfo.RtComment.equals("null")) {
+                binding.edtRouteComment.setText("No Comment")
+            }
+            else{
+                binding.edtRouteComment.setText(routeInfo.RtComment)
+            }
+
             rtID = routeInfo.RtId
         }
 

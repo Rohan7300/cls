@@ -245,7 +245,10 @@ class CompleteTaskFragment : Fragment() {
             //findNavController().navigate(R.id.vechileMileageFragment)
             navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
         }
-
+        mbinding.ivFaceMask.setOnClickListener {
+            requestCode = 0
+            pictureDialogBase64(mbinding.ivFaceMask, requestCode)
+        }
         mbinding.clFaceMask.setOnClickListener {
             requestCode = 0
             pictureDialogBase64(mbinding.ivFaceMask, requestCode)
@@ -253,13 +256,19 @@ class CompleteTaskFragment : Fragment() {
         mbinding.startinspection.setOnClickListener {
             startInspection()
         }
-
+        mbinding.ivOilLevel.setOnClickListener {
+            requestCode = 5
+            pictureDialogBase64(mbinding.ivOilLevel, requestCode)
+        }
         mbinding.clOilLevel.setOnClickListener {
             requestCode = 5
             pictureDialogBase64(mbinding.ivOilLevel, requestCode)
 //            startInspection()
         }
-
+        mbinding.ivAddBlueImg.setOnClickListener {
+            requestCode = 7
+            pictureDialogBase64(mbinding.ivAddBlueImg, requestCode)
+        }
         mbinding.clAddBlueImg.setOnClickListener {
             requestCode = 7
             pictureDialogBase64(mbinding.ivAddBlueImg, requestCode)
@@ -390,11 +399,11 @@ class CompleteTaskFragment : Fragment() {
         if (!isLeadDriver) {
             mbinding.rideAlong.visibility = View.GONE
         }
-        if(mbinding.headerTop.dxReg.text.isEmpty()||mbinding.headerTop.dxReg.text=="")
+        if (mbinding.headerTop.dxReg.text.isEmpty() || mbinding.headerTop.dxReg.text == "")
             mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
             mbinding.headerTop.strikedxRegNo.visibility = View.GONE
-        if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text==""||mbinding.headerTop.dxLoc.text=="Not Allocated")
+        if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "" || mbinding.headerTop.dxLoc.text == "Not Allocated")
             mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
             mbinding.headerTop.strikedxLoc.visibility = View.GONE
@@ -615,12 +624,11 @@ class CompleteTaskFragment : Fragment() {
                         } else if (it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName == null) {
                             imageUploadLevel = 0
                             mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
-                        }else if(it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage != null){
+                        } else if (it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage != null) {
                             imageUploadLevel = 2
                             mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
                             mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
-                        }
-                        else {
+                        } else {
                             imageUploadLevel = 0
                         }
 
@@ -1315,6 +1323,7 @@ class CompleteTaskFragment : Fragment() {
             mbinding.startinspection.visibility = View.VISIBLE
         }
     }
+
     private fun viewGoneAnimator(view: View) {
         view.animate()
             .alpha(0f)
@@ -1325,6 +1334,7 @@ class CompleteTaskFragment : Fragment() {
                 }
             })
     }
+
     private fun viewVisibleAnimator(view: View) {
         view.animate()
             .alpha(1f)
