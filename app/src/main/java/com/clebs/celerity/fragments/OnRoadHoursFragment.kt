@@ -372,21 +372,21 @@ class OnRoadHoursFragment : Fragment() {
         spinner.setOnItemClickListener { parent, view, position, id ->
             run {
                 parent?.let { nonNullParent ->
-                    if (position != 0) {
+
                         val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
                         selectedItem.let {
                             when (spinner) {
                                 binding.spinnerLocation -> {
-                                    selectedLocId = ids[position - 1]
+                                    selectedLocId = ids[position]
                                 }
 
                                 binding.spinnerRouteType -> {
                                     selectedRouteType = selectedItem
-                                    selectedRouteId = ids[position - 1]
+                                    selectedRouteId = ids[position]
                                 }
                             }
                         }
-                    }
+
                 }
             }
         }

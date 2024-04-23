@@ -422,13 +422,13 @@ class RideAlongFragment : Fragment() {
         spinner.setOnItemClickListener { parent, view, position, id ->
             run {
                 parent?.let { nonNullParent ->
-                    if (position != 0) {
+
                         val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
                         selectedItem.let { nonNullSelectedItem ->
                             when (spinner) {
                                 binding.spinnerSelectDriver -> {
                                     selectedDriverId =
-                                        ids[position - 1]
+                                        ids[position]
                                     selectedDriverName = nonNullSelectedItem
                                     loadingDialog.show()
                                     Log.d("Exec", "SelectedDriverID $selectedDriverId")
@@ -438,23 +438,23 @@ class RideAlongFragment : Fragment() {
                                 binding.spinnerSelectVehicle -> {
                                     selectedVehicleName = nonNullSelectedItem
                                     selectedVehicleId =
-                                        ids[position - 1]
+                                        ids[position]
                                 }
 
                                 binding.SpinnerRouteType -> {
                                     selectedRouteId =
-                                        ids[position - 1]
+                                        ids[position]
                                     loadingDialog.show()
                                     viewModel.GetRouteInfoById(selectedRouteId!!)
                                 }
 
                                 binding.spinnerRouteLocation -> {
                                     selectedLocId =
-                                        ids[position - 1]
+                                        ids[position]
                                 }
                             }
                         }
-                    }
+
                 }
             }
         }
