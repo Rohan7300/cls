@@ -46,6 +46,11 @@ class FinalAssesmentFragment : Fragment() {
             }
         }
 
+        binding.cancelBtn.setOnClickListener {
+            findNavController().navigate(R.id.completeTaskFragment)
+            findNavController().clearBackStack(R.id.completeTaskFragment)
+        }
+
         binding.finalAssesmentSubmit.setOnClickListener {
             if(pref.qStage<5||pref.quesID==0){
                 showToast("Please complete previous assessment first", requireContext())
