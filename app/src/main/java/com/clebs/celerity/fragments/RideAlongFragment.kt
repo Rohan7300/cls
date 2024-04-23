@@ -324,7 +324,7 @@ class RideAlongFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun setSpinners(spinner: Spinner, items: List<String>, ids: List<Int>) {
         val dummyItem = "Select Item"
-        val itemsList = mutableListOf(dummyItem)
+        val itemsList = mutableListOf<String>()
         itemsList.addAll(items)
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsList)
@@ -412,7 +412,7 @@ class RideAlongFragment : Fragment() {
         items: List<String>,
         ids: List<Int>, dummyItem: String,
     ) {
-        val itemsList = mutableListOf(dummyItem)
+        val itemsList = mutableListOf<String>()
         itemsList.addAll(items)
         val adapter =
             ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, itemsList)

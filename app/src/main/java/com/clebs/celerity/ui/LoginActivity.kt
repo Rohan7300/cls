@@ -152,13 +152,8 @@ class LoginActivity : AppCompatActivity() {
 
         mainViewModel.getDriverSignatureInfo(userid).observe(this@LoginActivity, Observer {
             if (it != null) {
-                //     Prefs.getInstance(applicationContext).saveSignatureInfo(it.toString())
-                pref.saveBoolean("isSignatureReq", it.isSignatureReq)
-                pref.saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
-                pref.saveBoolean("isother", it.isOtherCompanySignatureReq)
-                pref.handbookId = it.handbookId
-
                 loadingDialog.dismiss()
+                pref.handbookId = it.handbookId
                 if (it!!.isSignatureReq.equals(true) && (it.isAmazonSignatureReq || it.isOtherCompanySignatureReq)) {
                     Prefs.getInstance(applicationContext)
                         .saveBoolean("isSignatureReq", it.isSignatureReq)
