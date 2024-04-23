@@ -573,5 +573,14 @@ mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
                 }
             })
     }
-
+    private fun viewVisibleAnimator(view: View) {
+        view.animate()
+            .alpha(1f)
+            .setDuration(500)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    view.visibility = View.VISIBLE
+                }
+            })
+    }
 }

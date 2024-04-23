@@ -6,15 +6,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    android:background="#ffceb3"
+android:elevation="30dp"
+    android:background="#FFE9E6"
     android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
     <com.google.android.material.appbar.CollapsingToolbarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:contentScrim="@color/medium_orange"
+        app:contentScrim="@color/very_light_orange"
         app:layout_scrollFlags="scroll|exitUntilCollapsed">
+<!--<TextView-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:visibility="gone"-->
+<!--    android:layout_height="match_parent">-->
+<!--   #FFE9E6  -->
 
+<!--</TextView>-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +42,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="4dp"
-                    android:src="@drawable/ic_user" />
+                    android:src="@drawable/user_profile_icon" />
 
                 <TextView
                     android:id="@+id/ana_carolin"

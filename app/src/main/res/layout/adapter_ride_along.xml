@@ -59,8 +59,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/very_light_orange"
+        android:background="@drawable/routedraw"
         android:gravity="center"
+        android:backgroundTint="@color/very_light_orange"
         android:orientation="horizontal"
         android:padding="3dp">
 
@@ -75,6 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginStart="2dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="Trainee" />
 
@@ -135,8 +137,8 @@
 
                 <ImageView
                     android:id="@+id/edt_ic"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@drawable/edit_orange" />
             </LinearLayout>
 
@@ -177,8 +179,8 @@
                 android:gravity="right">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:id="@+id/trainerFeedbackImage"
                     android:src="@drawable/edit_orange" />
             </LinearLayout>

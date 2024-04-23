@@ -15,6 +15,8 @@
          android:id="@+id/constmains"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+
             tools:context=".ui.SplashActivity">
 
 
@@ -63,33 +65,36 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
-                            android:gravity="center"
                             android:layout_weight="1"
                             android:orientation="vertical">
 
-                            <LinearLayout
+                            <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
-                                android:orientation="vertical"
                                 android:layout_height="wrap_content">
 
+                                <TextView
+                                    android:id="@+id/tv_pbone"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
 
+                                    android:fontFamily="@font/poppins_bold"
+                                    android:textColor="@color/black"
+                                    android:textSize="11sp"
+                                    app:layout_constraintEnd_toEndOf="@+id/ProgressBar"
+                                    app:layout_constraintStart_toStartOf="@id/ProgressBar"
+                                    app:layout_constraintTop_toBottomOf="@id/ProgressBar" />
 
                                 <TextView
                                     android:id="@+id/txt_avg"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
                                     android:fontFamily="@font/inter_bold"
                                     android:text="Avg Total:"
                                     android:textColor="@color/text_color"
-                                    android:textSize="14sp" />
-                                <TextView
-                                    android:id="@+id/tv_pbone"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_bold"
-                                    android:textColor="@color/black"
-                                    android:textSize="11sp" />
+                                    android:textSize="14sp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
                                 <ProgressBar
                                     android:id="@+id/ProgressBar"
                                     style="?android:attr/progressBarStyleHorizontal"
@@ -98,51 +103,56 @@
                                     android:layout_marginTop="8dp"
                                     android:elevation="30dp"
                                     android:indeterminate="false"
+
                                     android:progressDrawable="@drawable/pb_style"
-                                    android:progressTint="@color/peek_orange" />
-                            </LinearLayout>
+                                    android:progressTint="@color/peek_orange"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/txt_avg" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </LinearLayout>
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
 
-
                             <TextView
                                 android:id="@+id/txt_last_week"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/inter_bold"
                                 android:layout_marginTop="2dp"
+                                android:fontFamily="@font/inter_bold"
                                 android:text="Last Week:"
                                 android:textColor="@color/text_color"
                                 android:textSize="14sp" />
-                            <TextView
-                                android:id="@+id/tv_pb_two"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/poppins_bold"
-                                android:gravity="center"
-                                android:textColor="@color/black"
-                                android:textSize="11sp" />
+
                             <ProgressBar
                                 android:id="@+id/ProgressBartwo"
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="30dp"
-                                android:layout_below="@+id/txt_last_week"
+                                android:layout_below="@id/txt_last_week"
                                 android:layout_marginTop="8dp"
                                 android:elevation="30dp"
                                 android:indeterminate="false"
                                 android:progressDrawable="@drawable/pb_style"
                                 android:progressTint="@color/blue_hex" />
 
+                            <TextView
+                                android:id="@+id/tv_pb_two"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/ProgressBartwo"
+                                android:layout_centerHorizontal="true"
 
-                        </LinearLayout>
+                                android:fontFamily="@font/poppins_bold"
+                                android:gravity="center"
+                                android:textColor="@color/black"
+                                android:textSize="11sp" />
+                        </RelativeLayout>
 
 
                     </LinearLayout>
@@ -192,7 +202,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
                         android:layout_marginTop="10dp"
-
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/txt_this_week"
@@ -594,7 +603,7 @@
 android:backgroundTint="@color/medium_orange"
                         android:fontFamily="@font/poppins"
                         android:padding="8dp"
-                        android:text="Previous week"
+                        android:text="Previous"
                         android:textColor="@color/text_color"
                         android:textSize="11sp"
                         android:visibility="visible"
