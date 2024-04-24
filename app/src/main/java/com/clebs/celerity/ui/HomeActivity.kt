@@ -518,6 +518,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         prefs.workLocationName = it.workinglocation
                     prefs.lmid = it.lmID
                     lmId = it.lmID
+                    prefs.vmId = it.vmID
                 } catch (e: Exception) {
                     Log.d("sds", e.toString())
                 }

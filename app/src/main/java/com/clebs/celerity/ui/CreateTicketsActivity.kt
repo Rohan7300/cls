@@ -52,8 +52,10 @@ class CreateTicketsActivity : AppCompatActivity() {
     var title: String? = null
     lateinit var pref: Prefs
     var desc: String? = null
+    var uploadWithAttachement:Boolean = false
     lateinit var loadingDialog: LoadingDialog
     private var selectedFileUri: Uri? = null
+    lateinit var filePart: MultipartBody.Part
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +77,7 @@ class CreateTicketsActivity : AppCompatActivity() {
             if (chkNull())
                 showToast("Please complete form first!!", this)
             else
-                saveTicket()
+                showUploadDialog()
         }
 
         mbinding.imageViewBack.setOnClickListener {
@@ -132,7 +134,6 @@ class CreateTicketsActivity : AppCompatActivity() {
             VmId = 0,
             WorkingOrder = 0
         )
-
         showDialog()
         viewmodel.SaveTicketData(
             pref.userID.toInt(),
@@ -161,8 +162,15 @@ class CreateTicketsActivity : AppCompatActivity() {
             hideDialog()
             if (it != null) {
                 ticketID = it.TicketId
-                showUploadDialog()
-
+                if(uploadWithAttachement){
+                    viewmodel.UploadTicketAttachmentDoc(
+                        pref.userID.toInt(),
+                        ticketId = ticketID!!.toInt(),
+                        file = filePart
+                    )
+                }else{
+                    onBackPressed()
+                }
             }
         }
 
@@ -215,66 +223,6 @@ class CreateTicketsActivity : AppCompatActivity() {
         }
     }
 
-    /*    private fun setSpinners(
-            dummyItem: String,
-            spinner: Spinner,
-            items: List<String>,
-            ids: List<Int>
-        ) {
-
-            val itemsList = mutableListOf(dummyItem)
-            itemsList.addAll(items)
-            val adapter =
-                ArrayAdapter(this, android.R.layout.simple_spinner_item, itemsList)
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            //adapter.addAll(itemsList)
-
-            spinner.adapter = adapter
-
-            spinner.setSelection(0)
-
-
-            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    parent?.let { nonNullParent ->
-                        if (position != 0) { // Skip the dummy item
-                            val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
-                            selectedItem.let {
-                                when (spinner) {
-                                    mbinding.tvDepart -> {
-
-                                        selectedDeptID = ids[position - 1]
-                                        mbinding.selectDepartmentET.setText(items[position - 1])
-                                        mbinding.selectDepartmentTIL.visibility = View.VISIBLE
-                                        mbinding.tvDepart.visibility = View.GONE
-                                        showDialog()
-                                        viewmodel.GetTicketRequestType(selectedDeptID)
-                                    }
-
-                                    mbinding.tvRequests -> {
-                                        selectedRequestTypeID = ids[position - 1]
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    when (spinner) {
-                        mbinding.tvDepart -> {
-                            mbinding.selectDepartmentTIL.visibility = View.GONE
-                            mbinding.tvDepart.visibility = View.VISIBLE
-                        }
-                    }
-                }
-            }
-        }*/
 
     fun hideDialog() {
         apiCount--
@@ -306,6 +254,7 @@ class CreateTicketsActivity : AppCompatActivity() {
                     if (ticketID == null || selectedFileUri == null) {
                         showToast("Something went wrong!!", this)
                     } else {
+
                         val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
                         val tmpFile = createTempFile("temp", null, cacheDir).apply {
                             deleteOnExit()
@@ -325,26 +274,23 @@ class CreateTicketsActivity : AppCompatActivity() {
                         }
 
                         val requestBody = tmpFile.asRequestBody(mimeType)
-                        val filePart = MultipartBody.Part.createFormData(
+                        filePart = MultipartBody.Part.createFormData(
                             "UploadTicketDoc",
                             selectedFileUri!!.lastPathSegment + "." + (fileExtension ?: "jpg"),
                             requestBody
                         )
 
                         showDialog()
-                        viewmodel.UploadTicketAttachmentDoc(
-                            pref.userID.toInt(),
-                            ticketId = ticketID!!.toInt(),
-                            file = filePart
-                        )
-
+                        uploadWithAttachement = true
+                        saveTicket()
                     }
 
                 }
             } else {
-                Log.d("Error", "")
+                //saveTicket()
+                showToast("Attachment not selected!!",this)
+                //onBackPressed()
             }
-
         }
 
     private fun showUploadDialog() {
@@ -365,10 +311,11 @@ class CreateTicketsActivity : AppCompatActivity() {
 
 
         uploadDialogBinding.cancel.setOnClickListener {
-            onBackPressed()
+            uploadDialog.dismiss()
+            uploadDialog.cancel()
+            uploadWithAttachement = false
+            saveTicket()
         }
-
-
     }
 
     fun Int.dpToPx(): Int {

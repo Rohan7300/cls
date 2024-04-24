@@ -193,13 +193,13 @@ class OnRoadHoursFragment : Fragment() {
                 RtComment = "$routeComment",
                 RtTypeId = selectedRouteId,
                 RtDwId = dwID,
-                RtFinishMileage = totalMileage?.toInt() ?: 0,
+                RtFinishMileage = totalMileage.toLongOrNull() ?: 0,
                 RtLocationId = locationID,
                 RtName = routeName!!,
-                RtNoOfParcelsDelivered = parcelsDelivered?.toInt() ?: 0,
+                RtNoOfParcelsDelivered = parcelsDelivered?.toLongOrNull() ?: 0,
                 RtNoParcelsbroughtback = binding.parcelsBroughtBack.text.toString().toInt(),
                 RtUsrId = prefs.userID.toInt(),
-                VehicleId = vehID
+                VehicleId = prefs.vmId
             )
         )
     }
@@ -238,7 +238,7 @@ class OnRoadHoursFragment : Fragment() {
                 if (it != null) {
                     prefs.saveLocationID(it.vmLocId)
                     locID = it.vmLocId
-                    vehID = it.vmId
+
                     locationSection()
                 }
             }
@@ -246,6 +246,7 @@ class OnRoadHoursFragment : Fragment() {
                 Prefs.getInstance(App.instance).userID.toDouble()
             ).observe(viewLifecycleOwner) {
                 if (it != null) {
+                    prefs.vmId = it.vmID
                     if (it.vmRegNo != null) {
                         prefs.vmRegNo = it.vmRegNo!!
 

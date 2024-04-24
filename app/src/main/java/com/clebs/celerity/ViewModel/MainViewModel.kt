@@ -652,11 +652,12 @@ class MainViewModel(
         userID: Int,
         department: Int? = null,
         startDate: String? = null,
-        endDate: String? = null
+        endDate: String? = null,
+        includeCompleted:Boolean?=null
     ) {
         viewModelScope.launch {
             val result = runCatching {
-                repo.GetUserTickets(userID, department, startDate, endDate)
+                repo.GetUserTickets(userID, department, startDate, endDate,includeCompleted)
             }
             result.onSuccess { res ->
                 liveDataGetUserTickets.postValue(res)

@@ -232,7 +232,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 RtNoOfParcelsDelivered = parcelsDelivered?.toInt() ?: 0,
                 RtNoParcelsbroughtback = binding.parcelsBroughtBack.text.toString().toInt(),
                 RtUsrId = prefs.userID.toInt(),
-                VehicleId = vehID,
+                VehicleId = prefs.vmId,
                 RtId = rtID
             )
         )
@@ -280,6 +280,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 Prefs.getInstance(App.instance).userID.toDouble()
             ).observe(viewLifecycleOwner) {
                 if (it != null) {
+                    prefs.vmId = it.vmID
                     it.vmRegNo?.let { it1 ->
                         binding.headerTop.dxReg.text = it1 ?: "Not Assigned"
                         viewModel.GetVehicleInformation(

@@ -360,7 +360,7 @@ interface ApiService {
         @Query("departmentId") departmentId: Int?,
         @Query("startDate") startDate: String?,
         @Query("endDate") endDate: String?,
-        //@Query("includeCompleted") includeCompleted:Boolean?
+        @Query("includeCompleted") includeCompleted:Boolean?
     ): Response<GetUserTicketsResponse>
 
     @GET("/api/Ticket/GetUserDepartmentList")
@@ -507,9 +507,9 @@ interface ApiService {
         @Body body:SaveDeviceInformationRequest
     ):Response<SimpleStatusMsgResponse>
 
-    @GET("/api/Notification/GetNotificationsListByUserId")
+    @GET("/api/Notification/GetNotificationsListByUserId/{userId}")
     suspend fun GetNotificationListByUserId(
-        @Query("userId") userId: Int
+        @Path("userId") userId: Int
     ):Response<NotificationResponse>
 }
 

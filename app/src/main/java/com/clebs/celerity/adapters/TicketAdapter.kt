@@ -1,5 +1,6 @@
 package com.clebs.celerity.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -22,9 +23,22 @@ class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context
 
     inner class TicketViewHolder(val binding: AdapterTicketItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(ticketItem: Doc) {
             binding.ticketTitleTV.text = "CLS - ${ticketItem.UserTicketID}"
-            binding.ticketSubjectTV.text = ticketItem.TicketDescription
+            val maxWords = 20
+            val ticketDescription = ticketItem.TicketDescription
+
+            val words = ticketDescription.split("\\s+".toRegex())
+            val wordCount = words.size
+
+            if (wordCount > maxWords) {
+                val truncatedDescription = words.take(maxWords).joinToString(" ")
+                binding.ticketSubjectTV.text = "$truncatedDescription ..."
+            } else {
+                binding.ticketSubjectTV.text = ticketDescription
+            }
+
             if(ticketItem.IsActive){
                 binding.ticketStatus.text = "Active"
             }

@@ -91,6 +91,7 @@
                 android:id="@+id/ticketSubjectTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="Update missing classroom training proof"
                 android:textSize="11sp" />

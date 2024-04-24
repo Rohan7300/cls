@@ -74,7 +74,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
                     binding.clsInvoicesThirdParty.visibility = View.VISIBLE
                 }
                 adapter.data.clear()
-                adapter.data.addAll(it.Invoices)
+                adapter.data.addAll(it.Invoices.reversed())
                 adapter.notifyDataSetChanged()
             } else {
                 binding.noinvoices.visibility = View.VISIBLE

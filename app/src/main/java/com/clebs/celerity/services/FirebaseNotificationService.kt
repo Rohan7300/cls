@@ -108,7 +108,7 @@ class FirebaseNotificationService : FirebaseMessagingService() {
 
         val remoteViews = RemoteViews(packageName, R.layout.notification_layout)
         remoteViews.setTextViewText(R.id.title, title)
-        remoteViews.setTextViewText(R.id.descripotion, message)
+        remoteViews.setTextViewText(R.id.descripotionX, message)
         remoteViews.setImageViewResource(R.id.icons, R.drawable.logo_new)
         return remoteViews
     }

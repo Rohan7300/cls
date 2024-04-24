@@ -619,9 +619,10 @@ class MainRepo(private val ApiService: ApiService) {
         userID: Int,
         departmentId: Int?,
         startDate: String?,
-        endDate: String?
+        endDate: String?,
+        includeCompleted:Boolean?
     ): GetUserTicketsResponse? {
-        val response = ApiService.GetUserTickets(userID, departmentId, startDate, endDate)
+        val response = ApiService.GetUserTickets(userID, departmentId, startDate, endDate,includeCompleted)
         if (response.isSuccessful)
             return response.body()
         else {

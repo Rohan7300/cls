@@ -12,9 +12,9 @@
         android:layout_height="match_parent"
         tools:context=".fragments.OnRoadHoursFragment">
 
-        <include
-            android:id="@+id/headerTop"
-            layout="@layout/fragment_headers" />
+                <include
+                    android:id="@+id/headerTop"
+                    layout="@layout/fragment_headers" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -139,8 +139,9 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:hintTextColor="@color/black"
-                            android:hint="Route Name *">
+                            android:hint="Route Name *"
+                            app:hintTextColor="@color/black">
+
                             <EditText
                                 android:id="@+id/edt_routesORH"
                                 android:layout_width="match_parent"
@@ -180,18 +181,18 @@
 
 
                         <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/selectDepartmentTIL"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
-                            android:id="@+id/selectDepartmentTIL"
                             android:layout_height="match_parent"
                             android:hint="Select route type">
 
                             <AutoCompleteTextView
+                                android:id="@+id/spinnerRouteType"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:importantForAutofill="no"
-                                android:id="@+id/spinnerRouteType"
                                 android:inputType="none"
                                 android:padding="14dp"
                                 android:textColorHint="@color/hintColor"
@@ -214,10 +215,10 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/select_route_location"
                         android:layout_width="match_parent"
-                        android:visibility="gone"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:padding="12dp"
+                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@id/const_select_route">
 
                         <!--                        <TextView-->
@@ -240,11 +241,11 @@
                             android:hint="Select Location">
 
                             <AutoCompleteTextView
+                                android:id="@+id/spinnerLocation"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:importantForAutofill="no"
-                                android:id="@+id/spinnerLocation"
 
                                 android:inputType="none"
                                 android:padding="14dp"
@@ -252,8 +253,6 @@
                                 android:textSize="14sp" />
 
                         </com.google.android.material.textfield.TextInputLayout>
-
-
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -285,6 +284,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:hint="Number of parcels delivered Number">
+
                             <EditText
                                 android:id="@+id/edt_parcels"
                                 android:layout_width="match_parent"
@@ -294,6 +294,7 @@
                                 android:gravity="center"
                                 android:importantForAutofill="no"
                                 android:inputType="number"
+                                android:maxLength="3"
                                 android:padding="14dp"
                                 android:textCursorDrawable="@color/orange"
                                 android:textSize="14sp"
@@ -395,8 +396,8 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:expandedHintEnabled="false"
                             android:hint="Total mileage"
+                            app:expandedHintEnabled="false"
                             tools:layout_editor_absoluteX="12dp"
                             tools:layout_editor_absoluteY="12dp">
 
@@ -405,12 +406,12 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autoLink="none"
-
                                 android:fontFamily="@font/poppins"
                                 android:gravity="center"
                                 android:hint="0"
                                 android:importantForAutofill="no"
                                 android:inputType="number"
+                                android:maxLength="3"
                                 android:padding="14dp"
                                 android:textCursorDrawable="@color/orange"
                                 android:textSize="14sp"
@@ -448,6 +449,7 @@
                             android:layout_height="match_parent"
 
                             android:hint="Route comment">
+
                             <EditText
                                 android:id="@+id/edt_route_comment"
                                 android:layout_width="match_parent"
@@ -475,10 +477,10 @@
                         app:layout_constraintTop_toBottomOf="@id/constcomment">
 
                         <ImageView
+                            android:id="@+id/cancel"
                             android:layout_width="120dp"
                             android:layout_height="40dp"
                             android:layout_alignParentStart="true"
-                            android:id="@+id/cancel"
                             android:layout_marginStart="12dp"
                             android:src="@drawable/cancel_bt" />
 
