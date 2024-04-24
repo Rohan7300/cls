@@ -16,7 +16,13 @@ import com.clebs.celerity.DrawViewClass.Companion.pathList
 import com.clebs.celerity.R
 
 class CustDialog2 : DialogFragment() {
-    private lateinit var drawView: DrawViewClass
+
+    companion object{
+
+
+
+    }
+    lateinit var drawView: DrawViewClass
     private var signatureListener: SignatureListener? = null
 
 

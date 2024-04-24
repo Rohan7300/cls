@@ -164,7 +164,7 @@ class OnRoadHoursFragment : Fragment() {
             if (totalMileage.isEmpty())
                 totalMileage = "0"
             if (chkNotNullInputs()) {
-                showToast("Please!!Complete the form first", requireContext())
+                showToast("Please fill above information first.", requireContext())
             } else {
                 sendData()
             }

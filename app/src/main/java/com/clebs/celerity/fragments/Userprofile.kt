@@ -103,8 +103,8 @@ class Userprofile : Fragment() {
             mbinding.emailtext.isFocusableInTouchMode = true
             mbinding.emailtext.requestFocus()
 
-/*            val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
-            imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)*/
+            /*            val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+                        imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)*/
 //                mbinding.usertext.isEnabled = true
 //                mbinding.usertext.isFocusable = true
 //                mbinding.usertext.isFocusableInTouchMode = true
@@ -209,8 +209,8 @@ class Userprofile : Fragment() {
                 mbinding.emailtext.isFocusableInTouchMode = true
                 mbinding.emailtext.requestFocus()
 
-             /*   val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
-                imm!!.showSoftInput(mbinding.emailtext, InputMethodManager.SHOW_FORCED)*/
+                /*   val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+                   imm!!.showSoftInput(mbinding.emailtext, InputMethodManager.SHOW_FORCED)*/
 
                 mbinding.txtChangePassword.visibility = View.VISIBLE
                 val colorRes = R.color.white
@@ -402,8 +402,12 @@ class Userprofile : Fragment() {
         ).observe(requireActivity(), Observer {
             if (it != null) {
                 Log.e("responseprofile", "GetDriversBasicInformation: ")
+//                mbinding.name.text = it.firstName + " " + it.lastName
+//
+//
+//                mbinding.usertext.setText(it.firstName + " " + it.lastName)
                 mbinding.name.text = it.firstName + " " + it.lastName
-                mbinding.usertext.setText(it.firstName + " " + it.lastName)
+                mbinding.usertext.setText(it.UserName)
                 isthirdpartyAccess = it.IsThirdPartyChargeAccessAllowed
                 firstname = it.firstName
                 lastname = it.lastName
@@ -493,12 +497,15 @@ class Userprofile : Fragment() {
 
     fun UseEmailAsUSername() {
 
+
         mainViewModel.UseEmailasUsername(
-            Prefs.getInstance(App.instance).userID.toDouble(), "chakshit@gmail.com"
+            Prefs.getInstance(App.instance).userID.toDouble(), mbinding.emailtext.text.toString()
         ).observe(requireActivity(), Observer {
             Log.e("dkfjdkfjdfkj", "UseEmailAsUSername: ")
             if (it?.Status!!.equals(200)) {
-                mbinding.usertext.setText(mbinding.emailtext.text.toString())
+//                mbinding.usertext.setText(mbinding.emailtext.text.toString())
+
+                showToast("Email has been used as username", requireContext())
 
                 Log.e("dlkfdlkfl", "UseEmailAsUSernamesuccess: " + it.Status + it.message)
             }

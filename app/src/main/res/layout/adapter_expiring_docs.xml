@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins"
-                android:gravity="center"
+             android:layout_marginStart="5dp"
                 android:padding="10dp"
                 android:text="Date"
                 android:textColor="@color/text_color"

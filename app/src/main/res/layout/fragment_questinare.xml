@@ -133,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:textSize="12dp"
                     android:layout_height="wrap_content"
-                    android:text="Final Assesment" />
+                    android:text="Final Assessment" />
             </com.google.android.material.tabs.TabLayout>
 
             <androidx.viewpager.widget.ViewPager

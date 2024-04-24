@@ -18,7 +18,7 @@
         android:padding="25dp">
 
         <ImageView
-            android:layout_width="200dp"
+            android:layout_width="159dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_marginBottom="16dp"
@@ -30,10 +30,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/poppins_bold"
+            android:fontFamily="@font/inter_bold"
             android:text="Upload Ticket Image(Optional)"
             android:textAlignment="center"
-            android:textColor="@color/text_color"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <LinearLayout
@@ -61,7 +61,7 @@
                     android:paddingVertical="8dp"
                     android:text="Save Anyways"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView

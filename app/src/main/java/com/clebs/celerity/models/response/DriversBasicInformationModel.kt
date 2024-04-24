@@ -41,5 +41,7 @@ data class DriversBasicInformationModel(
     @SerializedName("IsThirdPartyChargeAccessApplied")
     val IsThirdPartyChargeAccessApplied: Boolean,
     @SerializedName("UsrCreatedOn")
-    val UsrCreatedOn: Int
+    val UsrCreatedOn: Int,
+    @SerializedName("UserName")
+    val UserName: String,
 )

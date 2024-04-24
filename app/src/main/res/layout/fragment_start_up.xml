@@ -30,7 +30,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="30dp"
             android:fontFamily="@font/poppins_semibold"
-            android:text="Comment*"
+            android:text="Comment"
             android:textColor="#675D5D"
             android:textSize="16sp"
             android:textStyle="bold" />

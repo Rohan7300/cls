@@ -45,6 +45,7 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.hideKeyboardInputInTimePicker
 import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog
@@ -107,7 +108,7 @@ class CompleteTaskFragment : Fragment() {
         private val REQUIRED_PERMISSIONS =
             mutableListOf(
                 Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO
+
             ).apply {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
 //                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -788,6 +789,7 @@ class CompleteTaskFragment : Fragment() {
         dialogBinding.edtBreakstart.setOnClickListener {
             b1 = true
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
+
             if (b1 && b2) {
                 dialogBinding.timeTvNext.isEnabled = true
                 dialogBinding.timeTvNext.setTextColor(Color.WHITE)
@@ -1170,7 +1172,7 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
 //                mbinding.taskDetails.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.VISIBLE
-                mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.not_uploaded)
                 mbinding.complete.setBackground(
                     ContextCompat.getDrawable(
                         requireContext(),

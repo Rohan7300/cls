@@ -427,6 +427,7 @@
                                     android:id="@+id/rbReTraining"
                                     android:layout_width="25dp"
                                     android:layout_height="25dp"
+
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:gravity="center"
@@ -468,7 +469,7 @@
                                     android:layout_centerVertical="true"
                                     android:layout_toRightOf="@id/edt_traingtwo"
                                     android:background="@color/white"
-                                    android:src="@drawable/radio_button_blue" />
+                                 />
 
                             </RelativeLayout>
 

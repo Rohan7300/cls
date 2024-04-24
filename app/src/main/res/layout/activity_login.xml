@@ -80,13 +80,13 @@
                     android:layout_marginRight="16dp"
                     android:background="@drawable/shape_edittext"
                     android:fontFamily="@font/poppins"
-                    android:hint="Enter your Email"
+                    android:hint="Enter your Email/Username"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
                     android:singleLine="true"
                     android:textColor="@color/text_color"
                     android:cursorVisible="true"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.21"
                     app:layout_constraintStart_toStartOf="parent"
@@ -97,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Please enter username/email"
+                    android:text="Please enter Email/Username"
                     android:textColor="@color/red"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="@id/edt_user"
@@ -151,7 +151,7 @@
                         android:paddingEnd="8dp"
                         android:singleLine="true"
                         android:textColor="@color/text_color"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
