@@ -998,7 +998,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/inter"
                                 android:letterSpacing="0.02"
-                                android:text="Selfiee with Badge"
+                                android:text="selfie with Badge"
                                 android:textColor="#4A4A4A"
                                 android:textSize="13sp"
                                 app:layout_constraintEnd_toEndOf="parent"
