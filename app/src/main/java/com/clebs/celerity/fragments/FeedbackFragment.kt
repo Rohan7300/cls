@@ -41,7 +41,7 @@ class FeedbackFragment : Fragment() {
 
 
         val questions = arrayListOf(
-            QuestionWithOption("Does the new DA know where to fillup the oil/water/adblue/screenwsh?*"),
+            QuestionWithOption("Does the new DA know where to fillup the oil/water/adblue/screenwash?*"),
             QuestionWithOption("Does the new DA know where the tool and spare wheel is?*"),
             QuestionWithOption("Does the new DA hae experience driving any type of van?*"),
             QuestionWithOption("How confident do you feel the new DA driving the van? *"),
@@ -62,18 +62,18 @@ class FeedbackFragment : Fragment() {
         pref.submittedFeedback = false
 
 
-        val adapter = FeedbackQuestionareAdapter(questions,requireContext())
+        val adapter = FeedbackQuestionareAdapter(questions, requireContext())
         binding.feedbackQuestionare.adapter = adapter
         binding.feedbackQuestionare.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.liveDataSubmitRideAlongDriverFeedbackRequest.observe(viewLifecycleOwner){
+        viewModel.liveDataSubmitRideAlongDriverFeedbackRequest.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            if(pref.submittedFeedback){
-                if(it!=null){
+            if (pref.submittedFeedback) {
+                if (it != null) {
                     findNavController().navigate(R.id.completeTaskFragment)
                 }
             }
-         }
+        }
 
 
         val dialog = CustDialog2()
@@ -81,18 +81,20 @@ class FeedbackFragment : Fragment() {
             override fun onSignatureSaved(bitmap: Bitmap) {
                 val selectedOptions = questions.map { it.selectedOption }
                 val bse64 = "data:image/png;base64," + bitmapToBase64(bitmap)
-                saveFeedbackQuestions(selectedOptions,bse64)
+                saveFeedbackQuestions(selectedOptions, bse64)
             }
         })
         dialog.isCancelable = false
 
 
         binding.feedbackAddSignature.setOnClickListener {
+
+
             val areAllQuestionsSelected = adapter.areAllQuestionsSelected()
-            if(areAllQuestionsSelected){
+            if (areAllQuestionsSelected) {
                 dialog.show((activity as HomeActivity).supportFragmentManager, "sign")
-            }else{
-                showToast("Please complete questioner first!!", requireContext())
+            } else {
+                showToast("Please complete Questionnaire first!!", requireContext())
             }
         }
 
@@ -105,7 +107,7 @@ class FeedbackFragment : Fragment() {
         var request = SubmitRideAlongDriverFeedbackRequest(
             DaDailyWorkId = pref.daWID,
             LeadDriverId = pref.userID.toInt(),
-            QuestionId=0,
+            QuestionId = 0,
             RoutetId = pref.currRtId,
             Signature = bse64,
             RideAlongDriverId = pref.currRideAlongID,

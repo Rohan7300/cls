@@ -276,9 +276,9 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
             KotlinPermissions.with(requireActivity()) // Where this is an FragmentActivity instance
                 .permissions(
                     Manifest.permission.CAMERA,
-                    Manifest.permission.READ_MEDIA_IMAGES,
-                    Manifest.permission.READ_MEDIA_VIDEO,
-                    Manifest.permission.READ_MEDIA_AUDIO,
+//                    Manifest.permission.READ_MEDIA_IMAGES,
+//                    Manifest.permission.READ_MEDIA_VIDEO,
+//                    Manifest.permission.READ_MEDIA_AUDIO,
 
                     ).onAccepted {
                     mbinding.rectange.visibility = View.VISIBLE
@@ -302,8 +302,8 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
             KotlinPermissions.with(requireActivity()) // Where this is an FragmentActivity instance
                 .permissions(
                     Manifest.permission.CAMERA,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                    Manifest.permission.READ_EXTERNAL_STORAGE,
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
 
                     ).onAccepted {
                     mbinding.rectange.visibility = View.VISIBLE

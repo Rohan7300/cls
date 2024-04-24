@@ -97,7 +97,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
             selectedRouteId = routeInfo.RtTypeId
             routeName = routeInfo.RtName
             if (routeInfo.RtComment.equals("null")) {
-                binding.edtRouteComment.setText("No Comment")
+                binding.edtRouteComment.setText(" ")
             }
             else{
                 binding.edtRouteComment.setText(routeInfo.RtComment)
@@ -192,7 +192,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
             if (totalMileage.isEmpty())
                 totalMileage = "0"
             if (chkNotNullInputs()) {
-                showToast("Please!!Complete the form first", requireContext())
+                showToast("Please fill above information first.", requireContext())
             } else {
                 sendData()
             }

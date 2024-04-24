@@ -552,7 +552,7 @@
                         android:background="@drawable/shape_edittext_onroad"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="1dp"
+                        android:padding="3dp"
                         android:visibility="gone">
 
                         <androidx.recyclerview.widget.RecyclerView
@@ -590,21 +590,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:fontFamily="@font/inter"
-                        android:letterSpacing="0.02"
+                        android:fontFamily="@font/poppins_bold"
                         android:text="Clock Out"
                         android:textColor="@color/text_color"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/clock_out_mark"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
                         android:backgroundTint="@color/white"
-                        android:src="@drawable/clockout"
+                        android:src="@drawable/baseline_access_time_filled_24"
                         android:visibility="visible" />
 
                 </RelativeLayout>

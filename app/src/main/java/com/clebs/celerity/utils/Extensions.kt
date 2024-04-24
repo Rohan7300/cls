@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.res.Configuration
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -33,6 +34,7 @@ import androidx.navigation.NavController
 import com.clebs.celerity.R
 import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.fragments.DailyWorkFragment
+import com.google.android.material.timepicker.MaterialTimePicker
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -429,17 +431,95 @@ fun showTimePickerDialog(context: Context, tv: TextView) {
     val timePickerDialog = TimePickerDialog(
         context,
         { _, selectedHour, selectedMinute ->
-            val time = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute)
-            tv.text = time
+            val formattedTime: String = when {
+                selectedHour == 0 -> {
+                    if (minute < 10) {
+                        "${selectedHour + 12}:0${selectedMinute} am"
+                    } else {
+                        "${selectedHour + 12}:${selectedMinute} am"
+                    }
+                }
+
+                selectedHour > 12 -> {
+                    if (minute < 10) {
+                        "${selectedHour - 12}:0${selectedMinute} pm"
+                    } else {
+                        "${selectedHour - 12}:${selectedMinute} pm"
+                    }
+                }
+
+                selectedHour == 12 -> {
+                    if (minute < 10) {
+                        "${selectedHour}:0${selectedMinute} pm"
+                    } else {
+                        "${selectedHour}:${selectedMinute} pm"
+                    }
+                }
+
+                else -> {
+                    if (minute < 10) {
+                        "${selectedHour}:${selectedMinute} am"
+                    } else {
+                        "${selectedHour}:${selectedMinute} am"
+                    }
+                }
+            }
+            tv.text = formattedTime
+//            val time = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute)
+//            tv.text = time
         },
         hour,
         minute,
-        true
+        false
     )
+
     //timePickerDialog.getButton(TimePickerDialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.orange))
     //timePickerDialog.getButton(TimePickerDialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.orange))
     timePickerDialog.show()
 }
+
+private val timePickerDialogListener: TimePickerDialog.OnTimeSetListener =
+    object : TimePickerDialog.OnTimeSetListener {
+        override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+
+            // logic to properly handle
+            // the picked timings by user
+            val formattedTime: String = when {
+                hourOfDay == 0 -> {
+                    if (minute < 10) {
+                        "${hourOfDay + 12}:0${minute} am"
+                    } else {
+                        "${hourOfDay + 12}:${minute} am"
+                    }
+                }
+
+                hourOfDay > 12 -> {
+                    if (minute < 10) {
+                        "${hourOfDay - 12}:0${minute} pm"
+                    } else {
+                        "${hourOfDay - 12}:${minute} pm"
+                    }
+                }
+
+                hourOfDay == 12 -> {
+                    if (minute < 10) {
+                        "${hourOfDay}:0${minute} pm"
+                    } else {
+                        "${hourOfDay}:${minute} pm"
+                    }
+                }
+
+                else -> {
+                    if (minute < 10) {
+                        "${hourOfDay}:${minute} am"
+                    } else {
+                        "${hourOfDay}:${minute} am"
+                    }
+                }
+            }
+
+        }
+    }
 
 fun showDatePickerDialog(context: Context, tv1: TextView, tv2: TextView, tvNext: TextView, i: Int) {
     val calendar = Calendar.getInstance()
@@ -462,11 +542,15 @@ fun showDatePickerDialog(context: Context, tv1: TextView, tv2: TextView, tvNext:
             else
                 tv2.text = date
 
-            if (tv1.text != "DD-MM-YYYY" && tv2.text != "DD-MM-YYYY"&& isEndDateGreaterThanStartDate(tv1.text.toString(), tv2.text.toString())) {
+            if (tv1.text != "DD-MM-YYYY" && tv2.text != "DD-MM-YYYY" && isEndDateGreaterThanStartDate(
+                    tv1.text.toString(),
+                    tv2.text.toString()
+                )
+            ) {
                 tvNext.isClickable = true
                 tvNext.isEnabled = true
                 tvNext.setTextColor(ContextCompat.getColor(context, R.color.white))
-            }else{
+            } else {
                 tvNext.isClickable = false
                 tvNext.isEnabled = false
                 tvNext.setTextColor(ContextCompat.getColor(context, R.color.orange))
@@ -480,6 +564,25 @@ fun showDatePickerDialog(context: Context, tv1: TextView, tv2: TextView, tvNext:
     //datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.orange))
     datePickerDialog.show()
 }
+
+fun hideKeyboardInputInTimePicker(orientation: Int, timePicker: TimePicker) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        try {
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                ((timePicker.getChildAt(0) as LinearLayout).getChildAt(4) as LinearLayout).getChildAt(
+                    0
+                ).visibility = View.GONE
+            } else {
+                (((timePicker.getChildAt(0) as LinearLayout).getChildAt(2) as LinearLayout).getChildAt(
+                    2
+                ) as LinearLayout).getChildAt(0).visibility = View.GONE
+            }
+        } catch (ex: Exception) {
+        }
+
+    }
+}
+
 fun isEndDateGreaterThanStartDate(startDate: String, endDate: String): Boolean {
     val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     try {

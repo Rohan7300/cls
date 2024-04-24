@@ -283,7 +283,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="Number of parcels delivered Number">
+                            android:hint="No of Parcel Delivered">
                         <EditText
                             android:id="@+id/edt_parcels"
                             android:layout_width="match_parent"
@@ -336,8 +336,9 @@
 
                             <ImageView
                                 android:id="@+id/pbb_minus"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:padding="3dp"
                                 android:layout_marginStart="16dp"
                                 android:src="@drawable/minus_ic"
 
@@ -356,8 +357,9 @@
 
                             <ImageView
                                 android:id="@+id/pbb_plus"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:padding="3dp"
                                 android:layout_alignParentEnd="true"
                                 android:layout_marginEnd="16dp"
                                 android:src="@drawable/add_ic" />

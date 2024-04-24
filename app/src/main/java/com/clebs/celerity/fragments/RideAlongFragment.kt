@@ -236,7 +236,7 @@ class RideAlongFragment : Fragment() {
                 if (it != null) {
                     findNavController().navigate(R.id.completeTaskFragment)
                 } else {
-                    showToast("Please!! try again.", requireContext())
+                    showToast("Please try again!.", requireContext())
                 }
             }
 
