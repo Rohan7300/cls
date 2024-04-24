@@ -33,6 +33,8 @@ class UserTicketsFragment : Fragment() {
     private lateinit var loadingDialog: LoadingDialog
     var d1: Boolean = false
     var d2: Boolean = false
+    lateinit var deleteDialog: AlertDialog
+    lateinit var deleteDailogBinding:DialogSortFiltersBinding
     var includeCompleted = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +49,10 @@ class UserTicketsFragment : Fragment() {
         homeActivity.showDialog()
         viewModel.GetUserTickets(prefs.userID.toInt())
 
+        deleteDialog = AlertDialog.Builder(requireContext()).create()
+
+        deleteDailogBinding =
+            DialogSortFiltersBinding.inflate(LayoutInflater.from(requireContext()))
 
         observers()
         mbinding.rlreltive.setOnClickListener {
@@ -88,12 +94,13 @@ class UserTicketsFragment : Fragment() {
     }
 
     fun showAlert() {
-        val factory = LayoutInflater.from(requireActivity())
+/*        val factory = LayoutInflater.from(requireActivity())
         //val view: View = factory.inflate(R.layout.dialog_sort_filters, null)
         val deleteDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
 
         val deleteDailogBinding =
-            DialogSortFiltersBinding.inflate(LayoutInflater.from(requireContext()))
+            DialogSortFiltersBinding.inflate(LayoutInflater.from(requireContext()))*/
+
         deleteDailogBinding.tvNext.isClickable = false
         deleteDailogBinding.icCrossOrange.setOnClickListener {
             deleteDialog.cancel()
