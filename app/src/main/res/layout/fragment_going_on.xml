@@ -83,6 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/cancel_button"
+                android:textAllCaps="false"
                 android:backgroundTint="#FD7C40"
                 android:ems="5"
                 android:fontFamily="@font/poppins"

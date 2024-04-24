@@ -92,6 +92,7 @@ class RideAlongFragment : Fragment() {
             binding.headerTop.dxLoc.text =
                 Prefs.getInstance(requireContext()).workLocationName ?: ""
         }
+        binding.headerTop.dxReg.text = Prefs.getInstance(requireContext()).vmRegNo
         if(binding.headerTop.dxReg.text.isEmpty()||binding.headerTop.dxReg.text=="")
             binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
@@ -121,6 +122,16 @@ class RideAlongFragment : Fragment() {
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
                 binding.headerTop.anaCarolin.text = name
             }
+            binding.headerTop.dxm5.text = (activity as HomeActivity).date
+
+        if(binding.headerTop.dxReg.text.isEmpty()||binding.headerTop.dxReg.text=="")
+                binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+            else
+                binding.headerTop.strikedxRegNo.visibility = View.GONE
+            if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text==""||binding.headerTop.dxLoc.text=="Not Allocated")
+                binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+            else
+                binding.headerTop.strikedxLoc.visibility = View.GONE
             binding.headerTop.dxm5.text = (activity as HomeActivity).date
         }
 
@@ -313,7 +324,7 @@ class RideAlongFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun setSpinners(spinner: Spinner, items: List<String>, ids: List<Int>) {
         val dummyItem = "Select Item"
-        val itemsList = mutableListOf(dummyItem)
+        val itemsList = mutableListOf<String>()
         itemsList.addAll(items)
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsList)
@@ -401,7 +412,7 @@ class RideAlongFragment : Fragment() {
         items: List<String>,
         ids: List<Int>, dummyItem: String,
     ) {
-        val itemsList = mutableListOf(dummyItem)
+        val itemsList = mutableListOf<String>()
         itemsList.addAll(items)
         val adapter =
             ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, itemsList)
@@ -411,13 +422,13 @@ class RideAlongFragment : Fragment() {
         spinner.setOnItemClickListener { parent, view, position, id ->
             run {
                 parent?.let { nonNullParent ->
-                    if (position != 0) {
+
                         val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
                         selectedItem.let { nonNullSelectedItem ->
                             when (spinner) {
                                 binding.spinnerSelectDriver -> {
                                     selectedDriverId =
-                                        ids[position - 1]
+                                        ids[position]
                                     selectedDriverName = nonNullSelectedItem
                                     loadingDialog.show()
                                     Log.d("Exec", "SelectedDriverID $selectedDriverId")
@@ -427,23 +438,23 @@ class RideAlongFragment : Fragment() {
                                 binding.spinnerSelectVehicle -> {
                                     selectedVehicleName = nonNullSelectedItem
                                     selectedVehicleId =
-                                        ids[position - 1]
+                                        ids[position]
                                 }
 
                                 binding.SpinnerRouteType -> {
                                     selectedRouteId =
-                                        ids[position - 1]
+                                        ids[position]
                                     loadingDialog.show()
                                     viewModel.GetRouteInfoById(selectedRouteId!!)
                                 }
 
                                 binding.spinnerRouteLocation -> {
                                     selectedLocId =
-                                        ids[position - 1]
+                                        ids[position]
                                 }
                             }
                         }
-                    }
+
                 }
             }
         }

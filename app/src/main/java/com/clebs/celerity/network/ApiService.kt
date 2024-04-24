@@ -232,6 +232,11 @@ interface ApiService {
         @Path("driverId") userId: Int
     ): Response<GetRideAlongRouteTypeInfoResponse>
 
+    @GET("/api/RouteUpdate/GetDriverRouteTypeInfo/{driverId}")
+    suspend fun GetDriverRouteTypeInfo(
+        @Path("driverId") userId: Int
+    ):Response<GetRideAlongRouteTypeInfoResponse>
+
     @GET("/api/Drivers/GetDriverSignatureInformation/{userId}")
     suspend fun GetDriverSignatureInformation(@Path("userId") userId: Int): Response<GetDriverSignatureInformationResponse>
 

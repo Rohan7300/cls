@@ -80,6 +80,15 @@ class InvoicesFragment : Fragment() {
                 } else {
                     binding.otherinvoices.visibility = View.GONE
                 }
+
+                if(binding.headerTop.dxReg.text.isEmpty())
+                    binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+                else
+                    binding.headerTop.strikedxRegNo.visibility = View.GONE
+                if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text=="")
+                    binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+                else
+                    binding.headerTop.strikedxLoc.visibility = View.GONE
             }
         }
     }
@@ -97,6 +106,7 @@ class InvoicesFragment : Fragment() {
             binding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
             binding.headerTop.strikedxLoc.visibility = View.GONE
+
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             hideDialog()
             if (prefs.currLocationName.isNotEmpty()) {

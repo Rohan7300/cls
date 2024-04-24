@@ -99,9 +99,9 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
     var vrn: String = ""
     private var imageBitmap: Bitmap? = null
-    var countryCode: String = ""
-    var txt: String = ""
-    var vehicleType: String = ""
+    private var countryCode: String = ""
+    private var txt: String = ""
+    private var vehicleType: String = ""
     private var counter = 0
     var score: String = ""
     var bounding: String = ""
@@ -157,18 +157,8 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
         mainViewModel.setLastVisitedScreenId(requireContext(), R.id.dailyWorkFragment)
-//
-
-
-//        Log.e(
-//            TAG,
-//            "onCreateViewhint: " + showhint + Prefs.getInstance(App.instance).get("showhint")
-//        )
-
 
         showToolTip()
-
-
 
         mbinding.rectangle4.setOnClickListener {
             if (allPermissionsGranted()) {
@@ -181,8 +171,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 requestpermissions()
             }
 
-//            checkPermissions()
-            //findNavController().navigate(R.id.vechileMileageFragment)
+
         }
 
 
@@ -462,7 +451,12 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
     @SuppressLint("NewApi")
     private fun takePhoto() = try {
 //        mbinding.pb.visibility = View.VISIBLE
-        loadingDialog.show()
+        try {
+            loadingDialog.show()
+        } catch (_: Exception) {
+            //showToast("Loading",requireContext())
+        }
+
         mbinding.rectange.visibility = View.GONE
         mbinding.ivTakePhoto.visibility = View.GONE
         mbinding.rectangle4.visibility = View.VISIBLE

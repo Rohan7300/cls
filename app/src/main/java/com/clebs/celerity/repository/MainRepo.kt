@@ -279,6 +279,17 @@ class MainRepo(private val ApiService: ApiService) {
         return null
     }
 
+    suspend fun GetDriverRouteTypeInfo(userID: Int):GetRideAlongRouteTypeInfoResponse?{
+        val response = ApiService.GetDriverRouteTypeInfo(userID)
+        if (response.isSuccessful)
+            return response.body()
+        else {
+            val errorBody = response.errorBody()?.string()
+            println("Error response body: $errorBody")
+        }
+        return null
+    }
+
     suspend fun GetDriverSignatureInformation(userID: Int): GetDriverSignatureInformationResponse? {
         val response = ApiService.GetDriverSignatureInformation(userID)
         if (response.isSuccessful)

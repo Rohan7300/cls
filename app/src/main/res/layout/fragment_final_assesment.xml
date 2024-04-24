@@ -60,6 +60,7 @@
             android:layout_alignParentStart="true"
             android:background="@drawable/cancel_button"
             android:ems="5"
+            android:id="@+id/cancelBtn"
             android:fontFamily="@font/poppins_semibold"
             android:padding="10dp"
             android:text="Cancel"
@@ -77,6 +78,7 @@
             android:ems="5"
             android:fontFamily="@font/poppins"
             android:text="Save"
+            android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />

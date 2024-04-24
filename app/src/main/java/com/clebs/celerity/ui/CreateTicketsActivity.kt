@@ -381,7 +381,7 @@ class CreateTicketsActivity : AppCompatActivity() {
         ids: List<Int>, dummyItem: String,
         spinner: AutoCompleteTextView
     ) {
-        val itemsList = mutableListOf(dummyItem)
+        val itemsList = mutableListOf<String>()
         itemsList.addAll(items)
         val adapter =
             ArrayAdapter(this, R.layout.dropdown_menu_popup_item, itemsList)
@@ -391,22 +391,20 @@ class CreateTicketsActivity : AppCompatActivity() {
         spinner.setOnItemClickListener { parent, view, position, id ->
             run {
                 parent?.let { nonNullParent ->
-                    if (position != 0) {
                         val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
                         selectedItem.let {
                             when (spinner) {
                                 mbinding.selectDepartmentET -> {
-                                    selectedDeptID = ids[position - 1]
+                                    selectedDeptID = ids[position]
                                     showDialog()
                                     viewmodel.GetTicketRequestType(selectedDeptID)
                                 }
 
                                 mbinding.spinnerRequestAT -> {
-                                    selectedRequestTypeID = ids[position - 1]
+                                    selectedRequestTypeID = ids[position]
                                 }
                             }
                         }
-                    }
                 }
             }
         }

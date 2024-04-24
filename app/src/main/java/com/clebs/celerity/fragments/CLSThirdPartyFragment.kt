@@ -52,8 +52,10 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
             binding.dateUpdater.setOnClickListener {
                     showYearPicker()
                 }*/
+
         selectedYear = Year.now().value
         binding.selectYearET.setText(selectedYear.toString())
+        showYearPickerNew()
         showDialog()
         observers()
         viewModel.DownloadThirdPartyInvoicePDF(prefs.userID.toInt(), selectedYear)

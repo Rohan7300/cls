@@ -146,7 +146,7 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
         for (year in prefs.UsrCreatedOn..currentYear)
             itemsList.add(year)
         val adapter =
-            ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, itemsList)
+            ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, itemsList.reversed())
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         binding.selectYearET.setAdapter(adapter)

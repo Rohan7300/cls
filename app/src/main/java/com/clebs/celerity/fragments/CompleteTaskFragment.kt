@@ -88,8 +88,8 @@ class CompleteTaskFragment : Fragment() {
     var breakStartTime: String = ""
     var breakEndTime: String = ""
     private lateinit var loadingDialog: LoadingDialog
-    var b1 = false
-    var b2 = false
+    private var b1 = false
+    private var b2 = false
     var breakTimeSent = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
@@ -793,7 +793,27 @@ class CompleteTaskFragment : Fragment() {
                 dialogBinding.timeTvNext.setTextColor(Color.WHITE)
             }
         }
+
+        dialogBinding.icBreakstart.setOnClickListener {
+            b1 = true
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
+            if (b1 && b2) {
+                dialogBinding.timeTvNext.isEnabled = true
+                dialogBinding.timeTvNext.setTextColor(Color.WHITE)
+            }
+        }
+
         dialogBinding.edtBreakend.setOnClickListener {
+            b2 = true
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
+            if (b1 && b2) {
+
+                dialogBinding.timeTvNext.isEnabled = true
+                dialogBinding.timeTvNext.setTextColor(Color.WHITE)
+            }
+        }
+
+        dialogBinding.icBreakend.setOnClickListener {
             b2 = true
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
             if (b1 && b2) {
@@ -880,7 +900,6 @@ class CompleteTaskFragment : Fragment() {
         if (allPermissionsGranted()) {
             showPictureDialog(iv, codes)
         } else {
-
             requestpermissions()
         }
     }
@@ -1199,6 +1218,7 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.onRoadView.visibility = View.VISIBLE
                 mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+                mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
                 mbinding.complete.setBackground(
                     ContextCompat.getDrawable(
                         requireContext(),

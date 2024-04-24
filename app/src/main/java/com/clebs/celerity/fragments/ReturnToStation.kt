@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.QuestionAdapter
 import com.clebs.celerity.databinding.FragmentReturnToStationBinding
@@ -55,6 +57,11 @@ class ReturnToStation : Fragment() {
                 pref.quesID = it.QuestionId
                 pref.qStage = 5
             }
+        }
+
+        binding.cancelBtn.setOnClickListener {
+            findNavController().navigate(R.id.completeTaskFragment)
+            findNavController().clearBackStack(R.id.completeTaskFragment)
         }
 
         binding.returnSaveBtn.setOnClickListener {

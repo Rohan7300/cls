@@ -95,6 +95,7 @@ class OnRoadHoursFragment : Fragment() {
                 vehicleInfoSection()
             }
         }
+        rideAlongApiCall()
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
             binding.headerTop.anaCarolin.text = name
         }
@@ -105,11 +106,12 @@ class OnRoadHoursFragment : Fragment() {
             binding.headerTop.dxLoc.text =
                 Prefs.getInstance(requireContext()).workLocationName ?: ""
         }
-        if(binding.headerTop.dxReg.text.isEmpty()||binding.headerTop.dxReg.text=="")
+        if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
             binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
             binding.headerTop.strikedxRegNo.visibility = View.GONE
-        if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text==""||binding.headerTop.dxLoc.text=="Not Allocated")
+
+        if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
             binding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
             binding.headerTop.strikedxLoc.visibility = View.GONE
@@ -135,6 +137,17 @@ class OnRoadHoursFragment : Fragment() {
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
                 binding.headerTop.anaCarolin.text = name
             }
+            binding.headerTop.dxm5.text = (activity as HomeActivity).date
+
+            if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
+                binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+            else
+                binding.headerTop.strikedxRegNo.visibility = View.GONE
+
+            if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
+                binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+            else
+                binding.headerTop.strikedxLoc.visibility = View.GONE
             binding.headerTop.dxm5.text = (activity as HomeActivity).date
         }
         inputListeners()
@@ -166,6 +179,14 @@ class OnRoadHoursFragment : Fragment() {
                 findNavController().navigate(R.id.completeTaskFragment)
             }
         }
+        var locationID =0
+
+        locationID = if(prefs.workLocationId!=0)
+            prefs.workLocationId
+        else
+            prefs.currLocationId
+
+
         viewModel.AddOnRouteInfo(
             AddOnRouteInfoRequest(
                 RtAddMode = "A",
@@ -173,7 +194,7 @@ class OnRoadHoursFragment : Fragment() {
                 RtTypeId = selectedRouteId,
                 RtDwId = dwID,
                 RtFinishMileage = totalMileage?.toInt() ?: 0,
-                RtLocationId = selectedLocId,
+                RtLocationId = locationID,
                 RtName = routeName!!,
                 RtNoOfParcelsDelivered = parcelsDelivered?.toInt() ?: 0,
                 RtNoParcelsbroughtback = binding.parcelsBroughtBack.text.toString().toInt(),
@@ -227,6 +248,12 @@ class OnRoadHoursFragment : Fragment() {
                 if (it != null) {
                     if (it.vmRegNo != null) {
                         prefs.vmRegNo = it.vmRegNo!!
+
+                        if (it.workingLocationId != null)
+                            prefs.workLocationId = it.workingLocationId
+                        if (it.currentLocationId != null)
+                            prefs.currLocationId = it.currentLocationId
+
                         try {
                             viewModel.GetVehicleInformation(prefs.userID.toInt(), it.vmRegNo)
                         } catch (e: Exception) {
@@ -247,6 +274,7 @@ class OnRoadHoursFragment : Fragment() {
     }
 
     private fun locationSection() {
+
         viewModel.liveDataRouteLocationResponse.observe(viewLifecycleOwner) { locationData ->
             if (locationData != null) {
                 loadingDialog.show()
@@ -261,11 +289,18 @@ class OnRoadHoursFragment : Fragment() {
                 )
             }
         }
-        viewModel.GetRouteLocationInfo(locID)
+        var locationID =0
+
+        locationID = if(prefs.workLocationId!=0)
+            prefs.workLocationId
+        else
+            prefs.currLocationId
+
+        viewModel.GetRouteLocationInfo(locationID)
     }
 
     private fun rideAlongApiCall() {
-        viewModel.liveDataRideAlongRouteTypeInfo.observe(viewLifecycleOwner) { routeData ->
+        viewModel.liveDataRouteTypeInfo.observe(viewLifecycleOwner) { routeData ->
             loadingDialog.cancel()
             if (routeData != null) {
                 val routeNames = routeData.map { it.RtName }
@@ -273,7 +308,7 @@ class OnRoadHoursFragment : Fragment() {
                 setSpinnerNew(binding.spinnerRouteType, routeNames, routeIDs, "Select Route Type")
             }
         }
-        viewModel.GetRideAlongRouteTypeInfo(prefs.userID.toInt())
+        viewModel.GetDriverRouteTypeInfo(prefs.userID.toInt())
     }
 
     private fun setSpinners(spinner: Spinner, items: List<String>, ids: List<Int>) {
@@ -327,7 +362,7 @@ class OnRoadHoursFragment : Fragment() {
         items: List<String>,
         ids: List<Int>, dummyItem: String,
     ) {
-        val itemsList = mutableListOf(items.first())
+        val itemsList = mutableListOf<String>()
         itemsList.addAll(items)
         val adapter =
             ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, itemsList)
@@ -337,21 +372,21 @@ class OnRoadHoursFragment : Fragment() {
         spinner.setOnItemClickListener { parent, view, position, id ->
             run {
                 parent?.let { nonNullParent ->
-                    if (position != 0) {
+
                         val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
                         selectedItem.let {
                             when (spinner) {
                                 binding.spinnerLocation -> {
-                                    selectedLocId = ids[position - 1]
+                                    selectedLocId = ids[position]
                                 }
 
                                 binding.spinnerRouteType -> {
                                     selectedRouteType = selectedItem
-                                    selectedRouteId = ids[position - 1]
+                                    selectedRouteId = ids[position]
                                 }
                             }
                         }
-                    }
+
                 }
             }
         }

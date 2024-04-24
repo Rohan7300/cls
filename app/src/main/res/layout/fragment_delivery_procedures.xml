@@ -84,6 +84,7 @@
                     android:background="@drawable/cancel_button"
                     android:backgroundTint="#FD7C40"
                     android:ems="5"
+                    android:textAllCaps="false"
                     android:fontFamily="@font/poppins"
                     android:text="Save"
                     android:textStyle="bold"

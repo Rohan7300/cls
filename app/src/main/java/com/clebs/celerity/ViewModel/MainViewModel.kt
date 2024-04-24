@@ -84,6 +84,7 @@ class MainViewModel(
     val livedataDailyWorkInfoByIdResponse = MutableLiveData<DailyWorkInfoByIdResponse?>()
     val liveDataRouteLocationResponse = MutableLiveData<GetRouteLocationInfoResponse>()
     val liveDataRideAlongRouteTypeInfo = MutableLiveData<GetRideAlongRouteTypeInfoResponse>()
+    val liveDataRouteTypeInfo = MutableLiveData<GetRideAlongRouteTypeInfoResponse>()
     val liveDataGetDriverSignatureInformation =
         MutableLiveData<GetDriverSignatureInformationResponse?>()
     val livedataupdateDriverAgreementSignature = MutableLiveData<SimpleStatusMsgResponse?>()
@@ -335,6 +336,11 @@ class MainViewModel(
     fun GetRideAlongRouteTypeInfo(userID: Int) {
         viewModelScope.launch {
             liveDataRideAlongRouteTypeInfo.postValue(repo.GetRideAlongRouteTypeInfo(userID))
+        }
+    }
+    fun GetDriverRouteTypeInfo(userID: Int) {
+        viewModelScope.launch {
+            liveDataRouteTypeInfo.postValue(repo.GetDriverRouteTypeInfo(userID))
         }
     }
 

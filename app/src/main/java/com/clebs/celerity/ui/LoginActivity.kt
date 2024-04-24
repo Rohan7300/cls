@@ -152,32 +152,22 @@ class LoginActivity : AppCompatActivity() {
 
         mainViewModel.getDriverSignatureInfo(userid).observe(this@LoginActivity, Observer {
             if (it != null) {
-                //     Prefs.getInstance(applicationContext).saveSignatureInfo(it.toString())
-                pref.saveBoolean("isSignatureReq", it.isSignatureReq)
-                pref.saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
-                pref.saveBoolean("isother", it.isOtherCompanySignatureReq)
-                pref.handbookId = it.handbookId
-
                 loadingDialog.dismiss()
-                if (it.isSignatureReq) {
+                pref.handbookId = it.handbookId
+                if (it!!.isSignatureReq.equals(true) && (it.isAmazonSignatureReq || it.isOtherCompanySignatureReq)) {
+                    Prefs.getInstance(applicationContext)
+                        .saveBoolean("isSignatureReq", it.isSignatureReq)
+                    Prefs.getInstance(applicationContext)
+                        .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
+                    Prefs.getInstance(applicationContext)
+                        .saveBoolean("isother", it.isOtherCompanySignatureReq)
 
-                    if (it.isAmazonSignatureReq.equals(true) || it.isOtherCompanySignatureReq.equals(
-                            true
-                        )
-                    ) {
-                        val intent = Intent(this, PolicyDocsActivity::class.java)
-                        // val intent = Intent(this, HomeActivity::class.java)
 
-                        intent.putExtra("signature_required", "0")
-                        startActivity(intent)
-                    } else {
-                        //   val options = ActivityOptions.makeSceneTransitionAnimation(this)
-                        val intent = Intent(this, HomeActivity::class.java)
-                        intent.putExtra("no_signature_required", "0")
-                        intent.putExtra("destinationFragment", "HomeFragment")
-                        startActivity(intent)
-                        finish()
-                    }
+                    val intent = Intent(this, PolicyDocsActivity::class.java)
+
+                    intent.putExtra("signature_required", "0")
+                    startActivity(intent)
+                    finish()
                 } else {
                     val intent = Intent(this, HomeActivity::class.java)
                     intent.putExtra("destinationFragment", "HomeFragment")

@@ -106,6 +106,8 @@ class UpdateOnRoadHoursFragment : Fragment() {
             rtID = routeInfo.RtId
         }
 
+        rideAlongApiCall()
+
         binding.pbbPlus.setOnClickListener {
             parcelBack += 1
             binding.parcelsBroughtBack.text = parcelBack.toString()
@@ -140,11 +142,12 @@ class UpdateOnRoadHoursFragment : Fragment() {
             binding.headerTop.dxLoc.text =
                 Prefs.getInstance(requireContext()).workLocationName ?: ""
         }
-        if(binding.headerTop.dxReg.text.isEmpty()||binding.headerTop.dxReg.text=="")
+        binding.headerTop.dxReg.text = prefs.vmRegNo
+        if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
             binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
             binding.headerTop.strikedxRegNo.visibility = View.GONE
-        if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text==""||binding.headerTop.dxLoc.text=="Not Allocated")
+        if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
             binding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
             binding.headerTop.strikedxLoc.visibility = View.GONE
@@ -165,6 +168,14 @@ class UpdateOnRoadHoursFragment : Fragment() {
             }
             if (it != null) {
                 binding.headerTop.dxReg.text = it.vmRegNo ?: ""
+                if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
+                    binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+                else
+                    binding.headerTop.strikedxRegNo.visibility = View.GONE
+                if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
+                    binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+                else
+                    binding.headerTop.strikedxLoc.visibility = View.GONE
             }
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
                 binding.headerTop.anaCarolin.text = name
@@ -200,6 +211,15 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 findNavController().navigate(R.id.completeTaskFragment)
             }
         }
+
+        var locationID = 0
+
+        locationID = if (prefs.workLocationId != 0)
+            prefs.workLocationId
+        else
+            prefs.currLocationId
+
+
         viewModel.UpdateOnRouteInfo(
             GetDriverRouteInfoByDateResponseItem(
                 RtAddMode = "U",
@@ -207,7 +227,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 RtTypeId = selectedRouteId,
                 RtDwId = dwID,
                 RtFinishMileage = totalMileage?.toInt() ?: 0,
-                RtLocationId = selectedLocId,
+                RtLocationId = locationID,
                 RtName = routeName!!,
                 RtNoOfParcelsDelivered = parcelsDelivered?.toInt() ?: 0,
                 RtNoParcelsbroughtback = binding.parcelsBroughtBack.text.toString().toInt(),
@@ -261,8 +281,9 @@ class UpdateOnRoadHoursFragment : Fragment() {
             ).observe(viewLifecycleOwner) {
                 if (it != null) {
                     it.vmRegNo?.let { it1 ->
-                        binding.headerTop.dxReg.text = it1?:"Not Assigned"
-                        viewModel.GetVehicleInformation(Prefs.getInstance(requireContext()).userID.toInt(),
+                        binding.headerTop.dxReg.text = it1 ?: "Not Assigned"
+                        viewModel.GetVehicleInformation(
+                            Prefs.getInstance(requireContext()).userID.toInt(),
                             it1
                         )
                     }
@@ -274,13 +295,18 @@ class UpdateOnRoadHoursFragment : Fragment() {
                         binding.headerTop.dxLoc.text =
                             prefs.workLocationName ?: ""
                     }
+
+                    if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
+                        binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+                    else
+                        binding.headerTop.strikedxRegNo.visibility = View.GONE
+                    if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
+                        binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+                    else
+                        binding.headerTop.strikedxLoc.visibility = View.GONE
                 }
             }
-            /*
-            viewModel.GetVehicleInformation(
-                prefs.userID.toInt(),
-                "YE23MUU"
-            )*/
+
         } else {
             locID = prefs.getLocationID()
             locationSection()
@@ -302,11 +328,17 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 )
             }
         }
-        viewModel.GetRouteLocationInfo(locID)
+        var locationID = 0
+        locationID = if (prefs.workLocationId != 0)
+            prefs.workLocationId
+        else
+            prefs.currLocationId
+
+        viewModel.GetRouteLocationInfo(locationID)
     }
 
     private fun rideAlongApiCall() {
-        viewModel.liveDataRideAlongRouteTypeInfo.observe(viewLifecycleOwner) { routeData ->
+        viewModel.liveDataRouteTypeInfo.observe(viewLifecycleOwner) { routeData ->
             loadingDialog.cancel()
             if (routeData != null) {
                 val routeNames = routeData.map { it.RtName }
@@ -325,7 +357,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 )
             }
         }
-        viewModel.GetRideAlongRouteTypeInfo(prefs.userID.toInt())
+        viewModel.GetDriverRouteTypeInfo(prefs.userID.toInt())
     }
 
 
