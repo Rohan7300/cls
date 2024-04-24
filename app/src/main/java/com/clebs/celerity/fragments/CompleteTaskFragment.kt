@@ -152,7 +152,8 @@ class CompleteTaskFragment : Fragment() {
         cqSDKInitializer.triggerOfflineSync()
         setProgress()
 
-        inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
+        //inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
+        inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
         viewModel = (activity as HomeActivity).viewModel
         showDialog()
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.completeTaskFragment)
@@ -369,7 +370,8 @@ class CompleteTaskFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
+        //inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
+        inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
         Log.d("hdhsdshdsdjshhsds", "Ins $inspectionstarted")
         checkInspection()
         if (inspectionstarted?.equals(true) == true) {

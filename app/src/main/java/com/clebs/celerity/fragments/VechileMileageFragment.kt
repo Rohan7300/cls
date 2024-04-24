@@ -18,6 +18,7 @@ import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.navigateTo
+import com.clebs.celerity.utils.showToast
 
 
 class VechileMileageFragment : Fragment() {
@@ -100,16 +101,21 @@ class VechileMileageFragment : Fragment() {
 
         mbinding.edtMilvm.doAfterTextChanged { edtMilText ->
             edtMilText.let {
-                if(edtMilText?.isNotEmpty() == true){
-                    Prefs.getInstance(App.instance).vehicleLastMileage = edtMilText.toString().toInt()
-                    mbinding.tvNext.isEnabled = true
-                }
-                mbinding.tvNext.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        if (mbinding.tvNext.isEnabled) R.color.white else R.color.orange
+                try {
+                    if(edtMilText?.isNotEmpty() == true){
+                        Prefs.getInstance(App.instance).vehicleLastMileage = edtMilText.toString().toInt()
+                        mbinding.tvNext.isEnabled = true
+                    }
+                    mbinding.tvNext.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            if (mbinding.tvNext.isEnabled) R.color.white else R.color.orange
+                        )
                     )
-                )
+                }catch (_:Exception){
+                    showToast("Value too Long!!",requireContext())
+                }
+
             }
         }
 

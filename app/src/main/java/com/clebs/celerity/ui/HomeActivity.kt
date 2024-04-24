@@ -112,6 +112,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (tempCode == 200) {
                 Log.d("hdhsdshdsdjshhsds", "200 $message")
                 prefs.saveBoolean("Inspection", true)
+                prefs.updateInspectionStatus(true)
                 //inspectionstarted = true
                 navController.navigate(R.id.completeTaskFragment)
                 showToast("Vehicle Inspection is successfully completed ", this)
@@ -120,6 +121,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 navController.navigate(R.id.completeTaskFragment)
                 showToast("inspection Failed", this)
                 prefs.saveBoolean("Inspection", false)
+                prefs.updateInspectionStatus(false)
                 //inspectionstarted = false
 
             }
