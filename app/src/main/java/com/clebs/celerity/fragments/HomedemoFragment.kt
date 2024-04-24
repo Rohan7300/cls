@@ -125,6 +125,10 @@ class HomedemoFragment : Fragment() {
         mbinding.btPrev.setOnClickListener {
             mbinding.btPrev.visibility = View.GONE
             mbinding.btThisWeek.visibility = View.VISIBLE
+            val weekprev = week - 3
+            mbinding.txtLastWeek.text = "Week " + weekprev
+            val weekschedule=week-1
+            mbinding.viewfullschedule.text = "Week " + weekschedule + "\nSchedule"
             showDialog()
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).userID.toInt(), 0, year, week - 1
@@ -144,6 +148,9 @@ class HomedemoFragment : Fragment() {
             mbinding.btThisWeek.visibility = View.GONE
             mbinding.btPrev.visibility = View.VISIBLE
             showDialog()
+            val weekprev = week - 2
+            mbinding.txtLastWeek.text = "Week " + weekprev
+            mbinding.viewfullschedule.text = "Week " + week + "\nSchedule"
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).userID.toInt(), 0, year, week
             )
@@ -171,10 +178,12 @@ class HomedemoFragment : Fragment() {
                 showDialog()
                 //subtract weekNo by 2
                 val weeknew = it.weekNO - 2
-                mbinding.viewfullschedule.text = "Week "+it.weekNO.toString()+"\nSchedule"
+
+                val weekprev = week - 2
+                mbinding.txtLastWeek.text = "Week " + weekprev
+                mbinding.viewfullschedule.text = "Week " + week + "\nSchedule"
 
 
-                mbinding.txtLastWeek.text = "Week " + weeknew
                 viewModel.GetcashFlowWeek(
                     Prefs.getInstance(requireContext()).userID.toInt(), 0, year, 12
                 )
