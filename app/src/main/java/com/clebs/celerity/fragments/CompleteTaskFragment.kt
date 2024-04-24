@@ -88,8 +88,8 @@ class CompleteTaskFragment : Fragment() {
     var breakStartTime: String = ""
     var breakEndTime: String = ""
     private lateinit var loadingDialog: LoadingDialog
-    var b1 = false
-    var b2 = false
+    private var b1 = false
+    private var b2 = false
     var breakTimeSent = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
@@ -1218,6 +1218,7 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.onRoadView.visibility = View.VISIBLE
                 mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+                mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
                 mbinding.complete.setBackground(
                     ContextCompat.getDrawable(
                         requireContext(),
