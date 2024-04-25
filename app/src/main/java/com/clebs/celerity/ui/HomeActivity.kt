@@ -56,7 +56,7 @@ import java.util.Locale
 
 class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener,
     SaveChangesCallback {
-    var saveChangesCallback: SaveChangesCallback? = null
+    private var saveChangesCallback: SaveChangesCallback? = null
     private lateinit var bottomNavigationView: BottomNavigationView
     lateinit var imageViewModel: ImageViewModel
     private var screenid: Int = 0

@@ -235,7 +235,6 @@ class CompleteTaskFragment : Fragment() {
             //navigateTo(R.id.rideAlongFragment, requireContext(), findNavController())
             findNavController().popBackStack()
             findNavController().navigate(R.id.rideAlongFragment)
-
         }
 
         mbinding.headerTop.icpnUser.setOnClickListener {
