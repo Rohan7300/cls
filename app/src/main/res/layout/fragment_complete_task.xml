@@ -592,6 +592,7 @@
                         android:layout_centerVertical="true"
                         android:fontFamily="@font/poppins_bold"
                         android:text="Clock Out"
+                        android:id="@+id/clockOutTV"
                         android:textColor="@color/text_color"
                         android:textSize="15sp"
                         android:textStyle="bold" />

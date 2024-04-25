@@ -471,6 +471,7 @@ class CompleteTaskFragment : Fragment() {
                 if (it.ClockedOutTime != null) {
                     mbinding.clockOutMark.setImageResource(R.drawable.check_new)
                     mbinding.rlcomtwoClockOut.isEnabled = false
+                    mbinding.clockOutTV.text = "Clocked Out"
                     mbinding.rlcomtwoClockOut.isClickable = false
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
                 }
@@ -522,6 +523,7 @@ class CompleteTaskFragment : Fragment() {
             if (it != null) {
                 mbinding.clockOutMark.setImageResource(R.drawable.check_new)
                 mbinding.rlcomtwoClockOut.isEnabled = false
+                mbinding.clockOutTV.text = "Clocked Out"
                 mbinding.rlcomtwoClockOut.isClickable = false
 
 
@@ -751,7 +753,6 @@ class CompleteTaskFragment : Fragment() {
                     rideAlongAdapter.notifyDataSetChanged()
                 }
             }
-
         }
 
     }

@@ -46,8 +46,6 @@ class RideAlongAdapter(
                             itemX.isFeedBackFilled = it.RaIsSubmitted
                            // notifyDataSetChanged()
                         }
-
-
                     }
 
                     if (it.DriverId == item.DriverId) {
