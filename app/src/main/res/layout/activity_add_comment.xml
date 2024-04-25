@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="5dp"
                     android:layout_marginVertical="5dp"
-                    android:text="Comment"
+                    android:text="Comment*"
                     android:fontFamily="@font/poppins_semibold"
                     android:textColor="@color/text_color"
                     android:textSize="15sp" />

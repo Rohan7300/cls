@@ -81,7 +81,7 @@ class DeliveryProcedures : Fragment() {
                     val selectedOptions = questions.map { it.selectedOption }
                     saveDeliveryProcedureApi(selectedOptions, comment)
                 } else {
-                    showToast("Not all selected", requireContext())
+                    showToast("Please select answer to all questions.", requireContext())
                 }
             }
         }

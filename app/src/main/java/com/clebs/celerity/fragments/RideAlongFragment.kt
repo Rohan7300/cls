@@ -13,6 +13,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import android.widget.RadioButton
 import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
@@ -262,22 +263,25 @@ class RideAlongFragment : Fragment() {
                 if (chkNull()) showToast("Please fill all fields!!", requireContext())
                 else rideAlongApi()
             }
-            binding.rbReTraining.setOnClickListener {
-                isReTrainingSelected = !isReTrainingSelected
-                binding.rbReTraining.isChecked = isReTrainingSelected
-                retraining = true
-                training = false
-                binding.rbTraining.isChecked = false
-            }
 
-            binding.rbTraining.setOnClickListener {
-                isTrainingSelected = !isTrainingSelected
-                isReTrainingSelected = false
-                retraining = false
-                training = true
-                binding.rbReTraining.isChecked = false
-                binding.rbTraining.isChecked = isTrainingSelected
-            }
+        binding.rbReTraining.setOnClickListener(::onRadioButtonClicked)
+        binding.rbTraining.setOnClickListener(::onRadioButtonClicked)
+//            binding.rbReTraining.setOnClickListener {
+//
+//                retraining = true
+//                training = false
+//                radio1.setOnClickListener(::onRadioButtonClicked)
+//                radio2.setOnClickListener(::onRadioButtonClicked)
+//            }
+//
+//            binding.rbTraining.setOnClickListener {
+//                isTrainingSelected = !isTrainingSelected
+//                isReTrainingSelected = false
+//                retraining = false
+//                training = true
+//                binding.rbReTraining.isChecked = false
+//                binding.rbTraining.isChecked = isTrainingSelected
+//            }
     }
 
 
@@ -455,6 +459,27 @@ class RideAlongFragment : Fragment() {
                             }
                         }
 
+                }
+            }
+        }
+    }
+    fun onRadioButtonClicked(view: View) {
+        val checked = (view as RadioButton).isChecked
+
+        when (view.id) {
+            R.id.rbReTraining -> {
+                if (checked) {
+                    binding.rbTraining.isChecked = false
+                    retraining = true
+                    training = false
+
+                }
+            }
+            R.id.rbTraining -> {
+                if (checked) {
+                    retraining = false
+                    training = true
+                    binding.rbReTraining.isChecked = false
                 }
             }
         }

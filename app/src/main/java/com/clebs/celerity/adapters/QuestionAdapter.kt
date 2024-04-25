@@ -96,7 +96,7 @@ class QuestionAdapter(var list: ArrayList<QuestionWithOption>,var context:Contex
     private fun viewGoneAnimator(view: View) {
         view.animate()
             .alpha(0f)
-            .setDuration(600)
+            .setDuration(100)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     view.visibility = View.GONE
@@ -106,7 +106,7 @@ class QuestionAdapter(var list: ArrayList<QuestionWithOption>,var context:Contex
     private fun viewVisibleAnimator(view: View) {
         view.animate()
             .alpha(1f)
-            .setDuration(500)
+            .setDuration(100)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     view.visibility = View.VISIBLE

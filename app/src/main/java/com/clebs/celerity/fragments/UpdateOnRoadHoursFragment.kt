@@ -192,7 +192,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
             if (totalMileage.isEmpty())
                 totalMileage = "0"
             if (chkNotNullInputs()) {
-                showToast("Please fill above information first.", requireContext())
+                showToast("Please fill Route name.", requireContext())
             } else {
                 sendData()
             }

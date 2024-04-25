@@ -50,7 +50,7 @@ class CustDialog2 : DialogFragment() {
         save.setOnClickListener {
             if (pathList.isEmpty()) {
                 // Show a toast indicating that the user has not signed
-                showToast("Please sign before saving",requireContext())
+                showToast("Please add your signature.",requireContext())
             } else {
                 val signatureBitmap: Bitmap = drawView.getBitmap()
                 testIV.setImageBitmap(signatureBitmap)

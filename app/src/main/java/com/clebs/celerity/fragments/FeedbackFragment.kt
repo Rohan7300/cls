@@ -84,7 +84,8 @@ class FeedbackFragment : Fragment() {
                 saveFeedbackQuestions(selectedOptions, bse64)
             }
         })
-        dialog.isCancelable = false
+        dialog.isCancelable = true
+
 
 
         binding.feedbackAddSignature.setOnClickListener {

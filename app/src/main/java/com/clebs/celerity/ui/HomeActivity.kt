@@ -13,8 +13,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import androidx.activity.OnBackPressedCallback
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -34,12 +34,12 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.ImageDatabase
 import com.clebs.celerity.database.ImagesRepo
 import com.clebs.celerity.databinding.ActivityHomeBinding
-
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.SaveChangesCallback
 import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.showToast
@@ -50,8 +50,9 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
-class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
-
+class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener,
+    SaveChangesCallback {
+    var saveChangesCallback: SaveChangesCallback? = null
     private lateinit var bottomNavigationView: BottomNavigationView
     lateinit var imageViewModel: ImageViewModel
     private var screenid: Int = 0
@@ -71,6 +72,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     lateinit var prefs: Prefs
     var date = ""
     lateinit var loadingDialog: LoadingDialog
+
+    var isApiResponseTrue = false
+    var trueCount = 0
+    private var isChangesSaved = false
 
     companion object {
         fun showLog(tag: String, message: String) {
@@ -97,7 +102,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             Log.d("hdhsdshdsdjshhsds", "main $message")
 
             val destinationFragment = intent.getStringExtra("destinationFragment")
-            if(destinationFragment!=null){
+            if (destinationFragment != null) {
 
                 Log.d("HomeActivityX", destinationFragment!!)
                 if (destinationFragment == "NotificationsFragment") {
@@ -189,7 +194,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     completeTaskScreen = it.IsSubmited
                     if (!completeTaskScreen) {
                         screenid = viewModel.getLastVisitedScreenId(this)
-                        if (screenid == 0||screenid == R.id.completeTaskFragment) {
+                        if (screenid == 0 || screenid == R.id.completeTaskFragment) {
                             navController.navigate(R.id.homeFragment)
                             navController.currentDestination!!.id = R.id.homeFragment
                         } else {
@@ -204,7 +209,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     } else {
                         navController.navigate(R.id.completeTaskFragment)
                     }
-                }else{
+                } else {
                     navController.navigate(R.id.homeFragment)
                     navController.currentDestination!!.id = R.id.homeFragment
                 }
@@ -302,7 +307,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             RetrofitService.handleNetworkError(e, fragmentManager)
         }
         val destinationFragment = intent.getStringExtra("destinationFragment")
-        if(destinationFragment!=null){
+        if (destinationFragment != null) {
 
             Log.d("HomeActivityX", destinationFragment!!)
             if (destinationFragment == "NotificationsFragment") {
@@ -527,6 +532,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 prefs.userName = "$firstName $lastName"
                 isLeadDriver = it.IsLeadDriver
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
+                isApiResponseTrue = it.IsUsrProfileUpdateReqin90days
+                if (isApiResponseTrue) {
+                    trueCount++
+                } else {
+                    trueCount = 0
+                }
                 if (it.IsUsrProfileUpdateReqin90days.equals(true)) {
                     Prefs.getInstance(applicationContext).days = "1"
                     showAlertChangePasword90dys()
@@ -542,10 +553,16 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val view: View = factory.inflate(R.layout.change_passwordninetydays, null)
         val deleteDialog: android.app.AlertDialog = android.app.AlertDialog.Builder(this).create()
         deleteDialog.setView(view)
-
+        val textView = view.findViewById<TextView>(R.id.keeping_you)
         val button: TextView = view.findViewById(R.id.save)
+        if (isApiResponseTrue && trueCount >= 2 && isChangesSaved) {
+            textView.setText("You have not updated your profile for 90 days, please update it.")
+        } else {
+            textView.setText(" Please update your information in case if you find it incorrect.")
+        }
         button.setOnClickListener {
             navController.navigate(R.id.profileFragment)
+
 
 //            Prefs.getInstance(App.instance).save("90days", "1")
             deleteDialog.dismiss()
@@ -562,6 +579,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         deleteDialog.setCancelable(false)
         deleteDialog.setCanceledOnTouchOutside(false);
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        (deleteDialog as? android.app.AlertDialog)?.apply {
+            saveChangesCallback = this@HomeActivity
+        }
         deleteDialog.show();
 
     }
@@ -578,5 +598,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
 //        bottomNavigationView.isEnabled = true
 //        bottomNavigationView.isClickable=true
+    }
+
+    override fun onChangesSaved() {
+        isChangesSaved = true
     }
 }

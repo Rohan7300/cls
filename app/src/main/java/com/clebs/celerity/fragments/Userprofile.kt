@@ -32,6 +32,7 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.SaveChangesCallback
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showToast
 import com.tapadoo.alerter.Alerter
@@ -40,10 +41,12 @@ import com.tapadoo.alerter.Alerter
 class Userprofile : Fragment() {
     lateinit var mbinding: FragmentUserprofileBinding
     private var isedit: Boolean = false
+    var saveChangesCallback: SaveChangesCallback? = null
     lateinit var mainViewModel: MainViewModel
     var ninetydaysBoolean: Boolean? = null
     var edtold: String? = null
     var thirdpartyaccessrequested: Boolean? = null
+
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
     }
@@ -103,23 +106,21 @@ class Userprofile : Fragment() {
             mbinding.emailtext.isFocusableInTouchMode = true
             mbinding.emailtext.requestFocus()
 
-            /*            val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
-                        imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)*/
-//                mbinding.usertext.isEnabled = true
-//                mbinding.usertext.isFocusable = true
-//                mbinding.usertext.isFocusableInTouchMode = true
+            val colorRes = R.color.white
+            val color = ContextCompat.getColor(requireContext(), colorRes)
 
-//                mbinding.passtext.isEnabled = true
-//                mbinding.passtext.isFocusable = true
-//                mbinding.passtext.isFocusableInTouchMode = true
+
+            // Set background tint using a specific color
+            mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(color)
+            mbinding.phonetext.backgroundTintList = ColorStateList.valueOf(color)
 
             mbinding.phonetext.isEnabled = true
             mbinding.phonetext.isFocusable = true
             mbinding.phonetext.isFocusableInTouchMode = true
 
-            mbinding.addresstext.isEnabled = true
-            mbinding.addresstext.isFocusable = true
-            mbinding.addresstext.isFocusableInTouchMode = true
+            mbinding.editImg.isClickable = false
+            mbinding.editImg.isEnabled = false
+
 
             mbinding.editImg.alpha = 0.5f
 
@@ -525,8 +526,9 @@ class Userprofile : Fragment() {
                 mbinding.save.visibility = View.GONE
                 if (it?.Status!!.equals(200)) {
                     Log.e("90daysdisdjskjds", "updateProfile90dys: ")
-                    showToast("ProfileUpdated", requireContext())
+                    showToast("Profile Updated", requireContext())
                     Prefs.getInstance(App.instance).days = "0"
+                    saveChangesCallback?.onChangesSaved()
 //                    Prefs.getInstance(App.instance).save("90days", "0")
                     (activity as HomeActivity).enableBottomNavigationView()
                     findNavController().navigate(R.id.homedemoFragment)

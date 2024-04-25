@@ -28,6 +28,7 @@ class QuestinareFragment : Fragment() {
             binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_questinare, container, false)
         }
+        binding.tablay.getTabAt(0)?.select()
         return binding.root
     }
 
@@ -90,6 +91,7 @@ class QuestinareFragment : Fragment() {
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
                 tab.text = tab.contentDescription?.substring(0, 3)
+
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {}
@@ -98,6 +100,7 @@ class QuestinareFragment : Fragment() {
         viewModel.currentViewPage.observe(viewLifecycleOwner) {
             it.let { currentPage ->
                 binding.viewPager.currentItem = currentPage!!
+
             }
         }
 
