@@ -159,7 +159,9 @@ class RideAlongFragment : Fragment() {
                     setSpinnerNew(
                         binding.spinnerSelectDriver,driverName,driverId,"Select Driver"
                     )
-                }/*
+                }
+
+                /*
                     setSpinners(
                     binding.spinnerSelectDriver, driverName, driverId
                 )*/
@@ -176,12 +178,7 @@ class RideAlongFragment : Fragment() {
 
                 if (typeName.isNotEmpty() && typeId.isNotEmpty()){
                     setSpinnerNew(binding.SpinnerRouteType,typeName,typeId,"Select Route Type")
-                }/*
-                    setSpinners(
-                        binding.SpinnerRouteType, typeName, typeId
-                    )*/
-            } else {
-                Log.d("Exec", "NULL#1 ")
+                }
             }
         }
 
@@ -220,14 +217,11 @@ class RideAlongFragment : Fragment() {
                 if (locationNames.isNotEmpty() && locationId.isNotEmpty()) {
                     setSpinnerNew(binding.spinnerRouteLocation,locationNames,locationId,"Select Route Location")
                 }
-/*                    setSpinners(
-                    binding.spinnerRouteLocation,
-                    locationNames,
-                    locationId
-                )*/
+
 
             } else {
                 Log.d("Exec", "NULL#4")
+                setSpinnerNew(binding.spinnerRouteLocation, listOf(), listOf(),"Select Route Location")
             }
         }
 
@@ -417,16 +411,25 @@ class RideAlongFragment : Fragment() {
         ids: List<Int>, dummyItem: String,
     ) {
         val itemsList = mutableListOf<String>()
-        itemsList.addAll(items)
-        val adapter =
-            ArrayAdapter(requireContext(), R.layout.dropdown_menu_popup_item, itemsList)
+        if (items.isEmpty() && ids.isEmpty()) {
+            itemsList.add(dummyItem) // Add the dummy item to the list
+        } else {
+            itemsList.addAll(items) // Add items to the list
+        }
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            R.layout.dropdown_menu_popup_item,
+            itemsList
+        )
+        spinner.setAdapter(adapter)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
 
         spinner.setAdapter(adapter)
         spinner.setOnItemClickListener { parent, view, position, id ->
             run {
                 parent?.let { nonNullParent ->
-
                         val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
                         selectedItem.let { nonNullSelectedItem ->
                             when (spinner) {

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.clebs.celerity.R
+import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentQuestinareBinding
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.ViewAdaptor
@@ -20,6 +21,9 @@ class QuestinareFragment : Fragment() {
     private val TAG = "QuestinareFrag"
     private var rideAlongID = 0
     private var leadDriverID = 0
+    lateinit var adapter: ViewAdaptor
+    lateinit var viewModel: MainViewModel
+    var firsttime: Boolean = true
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,7 +41,7 @@ class QuestinareFragment : Fragment() {
 
         rideAlongID = arguments?.getInt("rideAlongID", 0) ?: 0
         leadDriverID = arguments?.getInt("leadDriverID", 0) ?: 0
-        val viewModel = (activity as HomeActivity).viewModel
+        viewModel = (activity as HomeActivity).viewModel
 
         if (rideAlongID != null && leadDriverID != null) {
             Log.d(TAG, "RIDEALONGID $rideAlongID \n LEADDRIVERID $leadDriverID")
@@ -45,7 +49,14 @@ class QuestinareFragment : Fragment() {
             Log.d(TAG, "RIDEALONGID null \n LEADDRIVERID null")
         }
 
-        val headingList = arrayOf("Preparedness", "Start Up", "Going On","Delivery Procedures","Return","Final Assesment")
+        val headingList = arrayOf(
+            "Preparedness",
+            "Start Up",
+            "Going On",
+            "Delivery Procedures",
+            "Return",
+            "Final Assesment"
+        )
         val str = "Observations and explanations must be conducted on a" +
                 " Nursery Level 1 route. The new driver should make at least 50 unassisted deliveries," +
                 " before being considered as fully trained. Where an individual is identified as not ready" +
@@ -68,9 +79,9 @@ class QuestinareFragment : Fragment() {
 
         binding.tablay.setupWithViewPager(binding.viewPager)
 
-        val adapter = ViewAdaptor(
+        adapter = ViewAdaptor(
             requireContext(),
-         childFragmentManager,
+            childFragmentManager,
             headingList.size,
         )
         binding.viewPager.adapter = adapter
@@ -78,7 +89,7 @@ class QuestinareFragment : Fragment() {
 
         binding.tablay.getTabAt(0)?.select()
 
-        for (i in headingList.indices){
+        for (i in headingList.indices) {
             binding.tablay.getTabAt(i)?.text = headingList[i]
         }
 
@@ -97,13 +108,33 @@ class QuestinareFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-        viewModel.currentViewPage.observe(viewLifecycleOwner) {
-            it.let { currentPage ->
-                binding.viewPager.currentItem = currentPage!!
-
-            }
+        if (this::adapter.isInitialized && this::viewModel.isInitialized) {
+            binding.viewPager.currentItem = 0
+            binding.viewPager.setCurrentItem(0, true)
+            viewModel.currentViewPage.postValue(0)
         }
 
+        viewModel.currentViewPage.observe(viewLifecycleOwner) {
+            if (firsttime) {
+                firsttime = false
+            } else {
+                it.let { currentPage ->
+                    binding.viewPager.currentItem = currentPage!!
+
+                }
+            }
+
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (this::adapter.isInitialized && this::viewModel.isInitialized) {
+            binding.viewPager.currentItem = 0
+            firsttime = true
+            viewModel.currentViewPage.postValue(0)
+        }
     }
 
 }
