@@ -13,6 +13,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import android.widget.RadioButton
 import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
@@ -93,11 +94,11 @@ class RideAlongFragment : Fragment() {
                 Prefs.getInstance(requireContext()).workLocationName ?: ""
         }
         binding.headerTop.dxReg.text = Prefs.getInstance(requireContext()).vmRegNo
-        if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
+        if(binding.headerTop.dxReg.text.isEmpty()||binding.headerTop.dxReg.text=="")
             binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
             binding.headerTop.strikedxRegNo.visibility = View.GONE
-        if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
+        if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text==""||binding.headerTop.dxLoc.text=="Not Allocated")
             binding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
             binding.headerTop.strikedxLoc.visibility = View.GONE
@@ -124,11 +125,11 @@ class RideAlongFragment : Fragment() {
             }
             binding.headerTop.dxm5.text = (activity as HomeActivity).date
 
-            if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
+        if(binding.headerTop.dxReg.text.isEmpty()||binding.headerTop.dxReg.text=="")
                 binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
             else
                 binding.headerTop.strikedxRegNo.visibility = View.GONE
-            if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
+            if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text==""||binding.headerTop.dxLoc.text=="Not Allocated")
                 binding.headerTop.strikedxLoc.visibility = View.VISIBLE
             else
                 binding.headerTop.strikedxLoc.visibility = View.GONE
@@ -143,7 +144,7 @@ class RideAlongFragment : Fragment() {
 
                 if (vehNames.isNotEmpty() && vehIds.isNotEmpty()) {
                     //setSpinners(binding.spinnerSelectVehicle, vehNames, vehIds)
-                    setSpinnerNew(binding.spinnerSelectVehicle, vehNames, vehIds, "Select Vehicle")
+                    setSpinnerNew(binding.spinnerSelectVehicle,vehNames,vehIds,"Select Vehicle")
                 }
             }
         }
@@ -154,9 +155,9 @@ class RideAlongFragment : Fragment() {
                 val driverId = it.map { drivers -> drivers.Id }
                 val driverName = it.map { drivers -> drivers.Name }
 
-                if (driverId.isNotEmpty() && driverName.isNotEmpty()) {
+                if (driverId.isNotEmpty() && driverName.isNotEmpty()){
                     setSpinnerNew(
-                        binding.spinnerSelectDriver, driverName, driverId, "Select Driver"
+                        binding.spinnerSelectDriver,driverName,driverId,"Select Driver"
                     )
                 }/*
                     setSpinners(
@@ -173,8 +174,8 @@ class RideAlongFragment : Fragment() {
                 val typeName = it.map { type -> type.RtName }
                 val typeId = it.map { type -> type.RtId }
 
-                if (typeName.isNotEmpty() && typeId.isNotEmpty()) {
-                    setSpinnerNew(binding.SpinnerRouteType, typeName, typeId, "Select Route Type")
+                if (typeName.isNotEmpty() && typeId.isNotEmpty()){
+                    setSpinnerNew(binding.SpinnerRouteType,typeName,typeId,"Select Route Type")
                 }/*
                     setSpinners(
                         binding.SpinnerRouteType, typeName, typeId
@@ -217,18 +218,13 @@ class RideAlongFragment : Fragment() {
                 val locationId = it.map { loc -> loc.LocId }
 
                 if (locationNames.isNotEmpty() && locationId.isNotEmpty()) {
-                    setSpinnerNew(
-                        binding.spinnerRouteLocation,
-                        locationNames,
-                        locationId,
-                        "Select Route Location"
-                    )
+                    setSpinnerNew(binding.spinnerRouteLocation,locationNames,locationId,"Select Route Location")
                 }
-                /*                    setSpinners(
-                                    binding.spinnerRouteLocation,
-                                    locationNames,
-                                    locationId
-                                )*/
+/*                    setSpinners(
+                    binding.spinnerRouteLocation,
+                    locationNames,
+                    locationId
+                )*/
 
             } else {
                 Log.d("Exec", "NULL#4")
@@ -237,7 +233,7 @@ class RideAlongFragment : Fragment() {
 
         viewModel.livedataRideAlongSubmitApiRes.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            if (pref.submittedRideAlong) {
+            if(pref.submittedRideAlong){
                 if (it != null) {
                     findNavController().navigate(R.id.completeTaskFragment)
                 } else {
@@ -259,30 +255,33 @@ class RideAlongFragment : Fragment() {
             viewModel.GetRideAlongVehicleLists()
         }
 
-        binding.rideAlongCancel.setOnClickListener {
-            findNavController().navigate(R.id.completeTaskFragment)
-            findNavController().clearBackStack(R.id.completeTaskFragment)
-        }
-        binding.saveBT.setOnClickListener {
-            if (chkNull()) showToast("Please fill all fields!!", requireContext())
-            else rideAlongApi()
-        }
-        binding.rbReTraining.setOnClickListener {
-            isReTrainingSelected = !isReTrainingSelected
-            binding.rbReTraining.isChecked = isReTrainingSelected
-            retraining = true
-            training = false
-            binding.rbTraining.isChecked = false
-        }
+            binding.rideAlongCancel.setOnClickListener {
+                findNavController().navigate(R.id.completeTaskFragment)
+                findNavController().clearBackStack(R.id.completeTaskFragment)
+            }
+            binding.saveBT.setOnClickListener {
+                if (chkNull()) showToast("Please fill all fields!!", requireContext())
+                else rideAlongApi()
+            }
 
-        binding.rbTraining.setOnClickListener {
-            isTrainingSelected = !isTrainingSelected
-            isReTrainingSelected = false
-            retraining = false
-            training = true
-            binding.rbReTraining.isChecked = false
-            binding.rbTraining.isChecked = isTrainingSelected
-        }
+        binding.rbReTraining.setOnClickListener(::onRadioButtonClicked)
+        binding.rbTraining.setOnClickListener(::onRadioButtonClicked)
+//            binding.rbReTraining.setOnClickListener {
+//
+//                retraining = true
+//                training = false
+//                radio1.setOnClickListener(::onRadioButtonClicked)
+//                radio2.setOnClickListener(::onRadioButtonClicked)
+//            }
+//
+//            binding.rbTraining.setOnClickListener {
+//                isTrainingSelected = !isTrainingSelected
+//                isReTrainingSelected = false
+//                retraining = false
+//                training = true
+//                binding.rbReTraining.isChecked = false
+//                binding.rbTraining.isChecked = isTrainingSelected
+//            }
     }
 
 
@@ -342,7 +341,7 @@ class RideAlongFragment : Fragment() {
             false
         }
 
-        // spinner.setSelection(0)
+       // spinner.setSelection(0)
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -428,38 +427,59 @@ class RideAlongFragment : Fragment() {
             run {
                 parent?.let { nonNullParent ->
 
-                    val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
-                    selectedItem.let { nonNullSelectedItem ->
-                        when (spinner) {
-                            binding.spinnerSelectDriver -> {
-                                selectedDriverId =
-                                    ids[position]
-                                selectedDriverName = nonNullSelectedItem
-                                loadingDialog.show()
-                                Log.d("Exec", "SelectedDriverID $selectedDriverId")
-                                viewModel.GetRideAlongRouteTypeInfo(selectedDriverId!!)
-                            }
+                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
+                        selectedItem.let { nonNullSelectedItem ->
+                            when (spinner) {
+                                binding.spinnerSelectDriver -> {
+                                    selectedDriverId =
+                                        ids[position]
+                                    selectedDriverName = nonNullSelectedItem
+                                    loadingDialog.show()
+                                    Log.d("Exec", "SelectedDriverID $selectedDriverId")
+                                    viewModel.GetRideAlongRouteTypeInfo(selectedDriverId!!)
+                                }
 
-                            binding.spinnerSelectVehicle -> {
-                                selectedVehicleName = nonNullSelectedItem
-                                selectedVehicleId =
-                                    ids[position]
-                            }
+                                binding.spinnerSelectVehicle -> {
+                                    selectedVehicleName = nonNullSelectedItem
+                                    selectedVehicleId =
+                                        ids[position]
+                                }
 
-                            binding.SpinnerRouteType -> {
-                                selectedRouteId =
-                                    ids[position]
-                                loadingDialog.show()
-                                viewModel.GetRouteInfoById(selectedRouteId!!)
-                            }
+                                binding.SpinnerRouteType -> {
+                                    selectedRouteId =
+                                        ids[position]
+                                    loadingDialog.show()
+                                    viewModel.GetRouteInfoById(selectedRouteId!!)
+                                }
 
-                            binding.spinnerRouteLocation -> {
-                                selectedLocId =
-                                    ids[position]
+                                binding.spinnerRouteLocation -> {
+                                    selectedLocId =
+                                        ids[position]
+                                }
                             }
                         }
-                    }
 
+                }
+            }
+        }
+    }
+    fun onRadioButtonClicked(view: View) {
+        val checked = (view as RadioButton).isChecked
+
+        when (view.id) {
+            R.id.rbReTraining -> {
+                if (checked) {
+                    binding.rbTraining.isChecked = false
+                    retraining = true
+                    training = false
+
+                }
+            }
+            R.id.rbTraining -> {
+                if (checked) {
+                    retraining = false
+                    training = true
+                    binding.rbReTraining.isChecked = false
                 }
             }
         }

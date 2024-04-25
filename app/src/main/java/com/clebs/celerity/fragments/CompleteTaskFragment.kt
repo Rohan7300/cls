@@ -1102,7 +1102,9 @@ class CompleteTaskFragment : Fragment() {
                         userName = " ",
                         dealer = " ",
                         dealerIdentifier = " ",
-                        client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                        client_unique_id = inspectionID
+
+                    //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
                     ),
                     inputDetails = InputDetails(
                         vehicleDetails = VehicleDetails(

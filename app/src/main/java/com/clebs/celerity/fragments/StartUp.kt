@@ -70,7 +70,7 @@ class StartUp : Fragment() {
                         saveStartupApi(selectedOptions, comment)
                     }
                 } else {
-                    showToast("Not all selected", requireContext())
+                    showToast("Please select answer to all questions.", requireContext())
                 }
             }
         }

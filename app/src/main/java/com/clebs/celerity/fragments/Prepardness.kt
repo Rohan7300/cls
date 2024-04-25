@@ -66,10 +66,11 @@ class Prepardness : Fragment() {
                 if (binding.prepComment.text.isNullOrEmpty()) " " else binding.prepComment.text
             if (allQuestionsSelected) {
                 val selectedOptions = questions.map { it.selectedOption }
+
                 savePrepardnessApi(selectedOptions,comment)
 
             } else {
-                showToast("Not all selected", requireContext())
+                showToast("Please select answer to all questions.", requireContext())
             }
         }
 
