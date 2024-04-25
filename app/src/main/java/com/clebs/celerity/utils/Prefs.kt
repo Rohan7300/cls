@@ -55,6 +55,22 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putString("scannedVmRegNo", value).apply()
         }
 
+    var inspectionID: String
+        get() {
+            return sharedPreferences.getString("inspectionID", "") ?: ""
+        }
+        set(value) {
+            sharedPreferences.edit().putString("inspectionID", value).apply()
+        }
+
+    var VmID: String
+        get() {
+            return sharedPreferences.getString("vm_ID", "") ?: ""
+        }
+        set(value) {
+            sharedPreferences.edit().putString("vm_ID", value).apply()
+        }
+
     var saveNnext: Int
         get() {
             return sharedPreferences.getInt("saveNnext", 0)

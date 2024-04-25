@@ -23,6 +23,7 @@ import com.clebs.celerity.models.requests.SaveQuestionaireReturnToDeliveryStatio
 import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
 import com.clebs.celerity.models.requests.SaveTicketDataRequestBody
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
+import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
 import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
@@ -959,5 +960,16 @@ class MainRepo(private val ApiService: ApiService) {
         }
         return null
     }
-
+    suspend fun SaveVehicleInspectionInfo(body: SaveVehicleInspectionInfo
+    ):SimpleStatusMsgResponse?{
+        val response = ApiService.SaveVehicleInspectionInformation(body)
+        if(response.isSuccessful){
+            return response.body()
+        }
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("GetNotificationListByUserIId: Error Response Body: $errorBody")
+        }
+        return null
+    }
 }

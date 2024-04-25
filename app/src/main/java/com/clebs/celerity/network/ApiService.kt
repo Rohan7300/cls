@@ -26,6 +26,7 @@ import com.clebs.celerity.models.requests.SaveQuestionaireReturnToDeliveryStatio
 import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
 import com.clebs.celerity.models.requests.SaveTicketDataRequestBody
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
+import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
 import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
@@ -511,5 +512,12 @@ interface ApiService {
     suspend fun GetNotificationListByUserId(
         @Query("userId") userId: Int
     ):Response<NotificationResponse>
+
+    @POST("/api/Vehicle/SaveVehInspectionInfo")
+    suspend fun SaveVehicleInspectionInformation(
+        @Body body:SaveVehicleInspectionInfo
+    ):Response<SimpleStatusMsgResponse>
+
+
 }
 
