@@ -30,16 +30,48 @@ class RideAlongAdapter(
         fun bind(item: leadDriverIdItem) {
             binding.tainerName.text = prefs.userName
             binding.traineeName.text = item.DriverName
-            mainViewModel.GetRideAlongDriverFeedbackQuestion(item.DriverId,item.RtId,item.LeadDriverId,item.DawId)
-            mainViewModel.liveDataGetRideAlongDriverFeedbackQuestion.observe(viewLifecycleOwner){
-                if(it!=null){
-                    if(it.DriverId==item.DriverId){
-                        if(it.RaIsSubmitted==true){
+            mainViewModel.GetRideAlongDriverFeedbackQuestion(
+                item.DriverId,
+                item.RtId,
+                item.LeadDriverId,
+                item.DawId
+            )
+            mainViewModel.liveDataGetRideAlongDriverFeedbackQuestion.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    val itemX = data.find { driver ->
+                        driver.DriverId == it.DriverId
+                    }
+                    if (itemX != null) {
+                        if (itemX.isFeedBackFilled != it.RaIsSubmitted){
+                            itemX.isFeedBackFilled = it.RaIsSubmitted
+                           // notifyDataSetChanged()
+                        }
+
+
+                    }
+
+                    if (it.DriverId == item.DriverId) {
+                        if (it.RaIsSubmitted == true) {
                             binding.trainerFeedbackIV.isClickable = false
-                            binding.trainerFeedbackImage.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.done))
+                            binding.trainerFeedbackImage.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    context,
+                                    R.drawable.done
+                                )
+                            )
                         }
                     }
                 }
+            }
+
+            if (item.isFeedBackFilled == true) {
+                binding.trainerFeedbackIV.isClickable = false
+                binding.trainerFeedbackImage.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        context,
+                        R.drawable.done
+                    )
+                )
             }
 
             mainViewModel.GetRideAlongLeadDriverQuestion(
@@ -50,6 +82,15 @@ class RideAlongAdapter(
             )
             mainViewModel.liveDataGetRideAlongLeadDriverQuestion.observe(viewLifecycleOwner) {
                 if (it != null) {
+                    val itemX = data.find { driver ->
+                        driver.DriverId == it.RaDriverId
+                    }
+                    if (itemX != null) {
+                        if (itemX.isQuestionsFilled != it.RaIsSubmitted) {
+                            itemX.isQuestionsFilled = it.RaIsSubmitted
+                          //  notifyDataSetChanged()
+                        }
+                    }
                     if (it.RaDriverId == item.DriverId) {
                         if (it.RaIsSubmitted) {
                             binding.edtIc.setImageDrawable(
@@ -72,7 +113,15 @@ class RideAlongAdapter(
                 }
             }
 
-
+            if (item.isQuestionsFilled == true) {
+                binding.edtIc.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        context,
+                        R.drawable.done
+                    )
+                )
+                binding.edtIc.isClickable = false
+            }
             binding.edtIc.setOnClickListener {
                 val bundle = bundleOf(
                     "rideAlongID" to item.DriverId,
@@ -99,7 +148,8 @@ class RideAlongAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RideAlongViewHolder {
-        val binding = AdapterRideAlongBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding =
+            AdapterRideAlongBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return RideAlongViewHolder(binding)
     }
 
@@ -109,7 +159,7 @@ class RideAlongAdapter(
 
     override fun onBindViewHolder(holder: RideAlongViewHolder, position: Int) {
         val item = data[position]
-        if(position!=0){
+        if (position != 0) {
             holder.binding.trainerHeader.visibility = View.GONE
         }
         holder.bind(item)

@@ -26,7 +26,7 @@ data class GetRideAlongDriverFeedbackQuestionResponse(
     val RaDriverSpatialAwareness: Any,
     val RaDriverToolSpareWheel: Any,
     val RaDriverUseOfMirrors: Any,
-    val RaIsSubmitted: Any,
+    val RaIsSubmitted: Boolean?=null,
     val RaIsSubmittedOn: Any,
     val RaIssubmittedBy: Any
 )
