@@ -2,6 +2,7 @@ package com.clebs.celerity.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.clebs.celerity.models.response.Doc
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.Invoice
@@ -341,7 +342,7 @@ class Prefs(context: Context) {
     fun updateInspectionStatus(isInspectionDone: Boolean) {
         val editor = sharedPreferences.edit()
 
-        val lastInspectionDateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(
+        val lastInspectionDateTime = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
             Date()
         )
         if(isInspectionDone){
@@ -357,6 +358,7 @@ class Prefs(context: Context) {
 
 
         val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        Log.d("isInspectionDoneToday","$currentDate \n$lastInspectionDateTimeString")
 
         return lastInspectionDateTimeString == currentDate
     }

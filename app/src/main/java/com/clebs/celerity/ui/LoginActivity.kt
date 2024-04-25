@@ -1,11 +1,13 @@
 package com.clebs.celerity.ui
 
-import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -59,7 +61,21 @@ class LoginActivity : AppCompatActivity() {
                 login()
             }
         }
+        var isPasswordVisible = false
 
+
+        ActivityLoginBinding.passIcon.setOnClickListener {
+            val cursorPosition = ActivityLoginBinding.edtPass.selectionEnd
+            if (!isPasswordVisible) {
+                ActivityLoginBinding.edtPass.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                ActivityLoginBinding.passIcon.setImageDrawable(getDrawable(R.drawable.visible2))
+            } else {
+                ActivityLoginBinding.edtPass.transformationMethod = PasswordTransformationMethod.getInstance()
+                ActivityLoginBinding.passIcon.setImageDrawable(getDrawable(R.drawable.hidden2))
+            }
+            ActivityLoginBinding.edtPass.setSelection(cursorPosition)
+            isPasswordVisible = !isPasswordVisible
+        }
         mainViewModel.liveDataSaveDeviceInformation.observe(this) {
             if (it != null) {
                 Log.d("SaveDeviceInformation", "Submitted $it")

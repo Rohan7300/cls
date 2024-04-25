@@ -23,6 +23,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
@@ -370,19 +371,14 @@ class CompleteTaskFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        //inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
         inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
         Log.d("hdhsdshdsdjshhsds", "Ins $inspectionstarted")
         checkInspection()
         if (inspectionstarted?.equals(true) == true) {
-
             setVisibiltyLevel()
-
         } else {
             mbinding.startinspection.visibility = View.VISIBLE
         }
-
-
     }
 
     private fun observers() {
@@ -473,7 +469,8 @@ class CompleteTaskFragment : Fragment() {
                 }
 
                 if (it.ClockedOutTime != null) {
-                    mbinding.clockOutMark.setImageResource(R.drawable.checked)
+                    mbinding.clockOutMark.setImageResource(R.drawable.check_new)
+                    mbinding.rlcomtwoClockOut.isEnabled = false
                     mbinding.rlcomtwoClockOut.isClickable = false
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
                 }
@@ -523,7 +520,8 @@ class CompleteTaskFragment : Fragment() {
             viewModel.GetDailyWorkInfoById(userId)
             showDialog()
             if (it != null) {
-                mbinding.clockOutMark.setImageResource(R.drawable.checked)
+                mbinding.clockOutMark.setImageResource(R.drawable.check_new)
+                mbinding.rlcomtwoClockOut.isEnabled = false
                 mbinding.rlcomtwoClockOut.isClickable = false
 
 
@@ -588,7 +586,7 @@ class CompleteTaskFragment : Fragment() {
             println(it)
             if (it != null) {
                 if (it!!.Status == "404") {
-                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
                     showImageUploadLayout = true
                     imagesUploaded = false
                     setVisibiltyLevel()
@@ -702,7 +700,7 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.routeNameTV.visibility = View.VISIBLE
                 }
                 for (item in it) {
-                    if (item.RtFinishMileage > 0) {
+                    if (item.RtFinishMileage > 0&&item.RtNoOfParcelsDelivered>0) {
                         isOnRoadHours = true
                         setVisibiltyLevel()
                         break
@@ -776,6 +774,8 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun showAlert() {
+        b1=false
+        b2=false
         val dialogBinding = TimePickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
         val deleteDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
         deleteDialog.setView(dialogBinding.root)
@@ -788,43 +788,50 @@ class CompleteTaskFragment : Fragment() {
             deleteDialog.cancel()
         }
 
-        dialogBinding.edtBreakstart.setOnClickListener {
+        dialogBinding.edtBreakstart.doAfterTextChanged {
             b1 = true
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
-
             if (b1 && b2) {
                 dialogBinding.timeTvNext.isEnabled = true
                 dialogBinding.timeTvNext.setTextColor(Color.WHITE)
             }
+        }
+        dialogBinding.edtBreakend.doAfterTextChanged {
+            b2 = true
+            if (b1 && b2) {
+                dialogBinding.timeTvNext.isEnabled = true
+                dialogBinding.timeTvNext.setTextColor(Color.WHITE)
+            }
+        }
+
+        dialogBinding.edtBreakstart.setOnClickListener {
+            b1=false
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
         }
 
         dialogBinding.icBreakstart.setOnClickListener {
-            b1 = true
+            b1=false
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
-            if (b1 && b2) {
+           /* if (b1 && b2) {
                 dialogBinding.timeTvNext.isEnabled = true
                 dialogBinding.timeTvNext.setTextColor(Color.WHITE)
-            }
+            }*/
         }
 
         dialogBinding.edtBreakend.setOnClickListener {
-            b2 = true
+          //  b2 = true
+            b2 = false
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
-            if (b1 && b2) {
 
-                dialogBinding.timeTvNext.isEnabled = true
-                dialogBinding.timeTvNext.setTextColor(Color.WHITE)
-            }
         }
 
         dialogBinding.icBreakend.setOnClickListener {
-            b2 = true
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
+            b2 = false
+            /*b2 = true
             if (b1 && b2) {
-
                 dialogBinding.timeTvNext.isEnabled = true
                 dialogBinding.timeTvNext.setTextColor(Color.WHITE)
-            }
+            }*/
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
         }
 
         /*     val textWatcher = object : TextWatcher {

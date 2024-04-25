@@ -235,6 +235,7 @@
             <ImageView
                 android:layout_width="18dp"
                 android:layout_height="22dp"
+                android:visibility="visible"
                 android:layout_marginEnd="-8dp"
                 android:background="@drawable/ticket_round"
                 android:src="@drawable/circleright"

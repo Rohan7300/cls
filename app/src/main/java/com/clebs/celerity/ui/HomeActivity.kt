@@ -123,7 +123,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 prefs.saveBoolean("Inspection", false)
                 prefs.updateInspectionStatus(false)
                 //inspectionstarted = false
-
             }
             // Check if identifier is valid
             if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
@@ -470,7 +469,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
             )
         }
-
     }
 
 

@@ -87,12 +87,14 @@ class FeedbackFragment : Fragment() {
         dialog.isCancelable = false
 
 
+
         binding.feedbackAddSignature.setOnClickListener {
 
 
             val areAllQuestionsSelected = adapter.areAllQuestionsSelected()
             if (areAllQuestionsSelected) {
                 dialog.show((activity as HomeActivity).supportFragmentManager, "sign")
+
             } else {
                 showToast("Please complete Questionnaire first!!", requireContext())
             }

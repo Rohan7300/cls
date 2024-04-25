@@ -33,9 +33,11 @@ class RideAlongAdapter(
             mainViewModel.GetRideAlongDriverFeedbackQuestion(item.DriverId,item.RtId,item.LeadDriverId,item.DawId)
             mainViewModel.liveDataGetRideAlongDriverFeedbackQuestion.observe(viewLifecycleOwner){
                 if(it!=null){
-                    if(it.RaIsSubmitted==true){
-                        binding.trainerFeedbackIV.isClickable = false
-                        binding.trainerFeedbackImage.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.done))
+                    if(it.DriverId==item.DriverId){
+                        if(it.RaIsSubmitted==true){
+                            binding.trainerFeedbackIV.isClickable = false
+                            binding.trainerFeedbackImage.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.done))
+                        }
                     }
                 }
             }
@@ -48,31 +50,25 @@ class RideAlongAdapter(
             )
             mainViewModel.liveDataGetRideAlongLeadDriverQuestion.observe(viewLifecycleOwner) {
                 if (it != null) {
-                    if (it.RaIsSubmitted) {
-                        binding.edtIc.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.done
+                    if (it.RaDriverId == item.DriverId) {
+                        if (it.RaIsSubmitted) {
+                            binding.edtIc.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    context,
+                                    R.drawable.done
+                                )
                             )
-                        )
-                        binding.edtIc.isClickable = false
-                    } else {
-                        binding.edtIc.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.edit_orange
+                            binding.edtIc.isClickable = false
+                        } else {
+                            binding.edtIc.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    context,
+                                    R.drawable.edit_orange
+                                )
                             )
-                        )
-                        binding.edtIc.isClickable = true
+                            binding.edtIc.isClickable = true
+                        }
                     }
-                } else {
-                    binding.edtIc.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            context,
-                            R.drawable.edit_orange
-                        )
-                    )
-                    binding.edtIc.isClickable = true
                 }
             }
 
@@ -103,7 +99,7 @@ class RideAlongAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RideAlongViewHolder {
-        val binding = AdapterRideAlongBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = AdapterRideAlongBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return RideAlongViewHolder(binding)
     }
 
@@ -118,4 +114,5 @@ class RideAlongAdapter(
         }
         holder.bind(item)
     }
+
 }

@@ -382,10 +382,12 @@ class UpdateOnRoadHoursFragment : Fragment() {
                     selectedItem.let {
                         when (spinner) {
                             binding.spinnerLocation -> {
+                                binding.selectDepartmentTIL.hint = "Select route type"
                                 selectedLocId = ids[position]
                             }
 
                             binding.spinnerRouteType -> {
+                                binding.selectDepartmentTIL.hint = "Select route type"
                                 selectedRouteType = selectedItem
                                 selectedRouteId = ids[position]
                             }

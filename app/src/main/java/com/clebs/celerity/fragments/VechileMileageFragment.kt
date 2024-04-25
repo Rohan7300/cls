@@ -106,6 +106,9 @@ class VechileMileageFragment : Fragment() {
                         Prefs.getInstance(App.instance).vehicleLastMileage = edtMilText.toString().toInt()
                         mbinding.tvNext.isEnabled = true
                     }
+                    else{
+                        mbinding.tvNext.isEnabled = false
+                    }
                     mbinding.tvNext.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),

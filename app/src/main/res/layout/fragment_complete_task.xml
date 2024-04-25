@@ -127,7 +127,7 @@
                                 android:textColor="@color/black"
                                 android:textSize="14sp" />
 
-                            <ImageButton
+                            <ImageView
                                 android:id="@+id/vehiclePicturesIB"
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
