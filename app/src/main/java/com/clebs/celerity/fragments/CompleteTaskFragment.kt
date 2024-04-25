@@ -110,7 +110,7 @@ class CompleteTaskFragment : Fragment() {
             mutableListOf(
                 Manifest.permission.CAMERA,
 
-            ).apply {
+                ).apply {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
 //                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -1008,17 +1008,17 @@ class CompleteTaskFragment : Fragment() {
         }
     }
 
-    private fun clientUniqueID(): String {
+    fun clientUniqueID(): String {
         val x = Prefs.getInstance(App.instance).userID.toString()
-        val y = Prefs.getInstance(App.instance).get("vrn")
+        val y = Prefs.getInstance(App.instance).scannedVmRegNo
         // example string
         val currentDate = LocalDateTime.now()
         val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
 
-        regexPattern = Regex("${x.take(3)}${y?.take(3)}${formattedDate}")
+        regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
         inspectionID = regexPattern.toString()
         return regexPattern.toString()
-        Log.e("resistrationvrnpatterhn", "clientUniqueID: " + regexPattern + inspectionID)
+        Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
     }
 
     /*private fun startInspection() {
@@ -1086,7 +1086,7 @@ class CompleteTaskFragment : Fragment() {
 
         if (cqSDKInitializer.isCQSDKInitialized()) {
 
-            var vmReg = Prefs.getInstance(App.instance).vmRegNo ?: ""
+            var vmReg = Prefs.getInstance(App.instance).scannedVmRegNo ?: ""
             Log.e(
                 "totyototyotoytroitroi",
                 "startInspection: " + inspectionID + "VmReg ${Prefs.getInstance(App.instance).vmRegNo}"
@@ -1103,8 +1103,7 @@ class CompleteTaskFragment : Fragment() {
                         dealer = " ",
                         dealerIdentifier = " ",
                         client_unique_id = inspectionID
-
-                    //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                        //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
                     ),
                     inputDetails = InputDetails(
                         vehicleDetails = VehicleDetails(
@@ -1124,10 +1123,10 @@ class CompleteTaskFragment : Fragment() {
                         )
                     ),
                     result = { isStarted, msg, code ->
-
+                        Log.e("inspectionIDsssssssss", "startInspection: " + inspectionID)
                         Log.e("messsagesss", "startInspection: " + msg + code)
                         if (isStarted) {
-//
+                            Prefs.getInstance(App.instance).inspectionID = inspectionID
                         } else {
 //
                         }

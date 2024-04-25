@@ -27,6 +27,7 @@ import com.clebs.celerity.models.requests.SaveQuestionaireReturnToDeliveryStatio
 import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
 import com.clebs.celerity.models.requests.SaveTicketDataRequestBody
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
+import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
 import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
@@ -150,6 +151,7 @@ class MainViewModel(
     }
 
     val livedataGetNotificationListByUserId = MutableLiveData<NotificationResponse?>()
+    val livedataSavevehicleinspectioninfo=MutableLiveData<SimpleStatusMsgResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -1049,6 +1051,20 @@ class MainViewModel(
             }
             result.onSuccess { res ->
                 livedataGetNotificationListByUserId.postValue(res)
+            }
+            result.onFailure { ex ->
+                Log.d("NotificationList ", "${ex.message}")
+            }
+        }
+    }
+
+    fun SaveVehicleInspectionInfo(body: SaveVehicleInspectionInfo) {
+        viewModelScope.launch {
+            val result = runCatching {
+                repo.SaveVehicleInspectionInfo(body)
+            }
+            result.onSuccess { res ->
+                livedataSavevehicleinspectioninfo.postValue(res)
             }
             result.onFailure { ex ->
                 Log.d("NotificationList ", "${ex.message}")

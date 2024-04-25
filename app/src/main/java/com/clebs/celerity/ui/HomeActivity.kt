@@ -34,6 +34,7 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.ImageDatabase
 import com.clebs.celerity.database.ImagesRepo
 import com.clebs.celerity.databinding.ActivityHomeBinding
+import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
@@ -46,8 +47,11 @@ import com.clebs.celerity.utils.showToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 
 class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener,
@@ -119,6 +123,36 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 prefs.saveBoolean("Inspection", true)
                 prefs.updateInspectionStatus(true)
                 //inspectionstarted = true
+
+                val currentDate =
+                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
+                        Date()
+                    )
+
+                val currentloction = Prefs.getInstance(App.instance).currLocationId
+                val workinglocation = Prefs.getInstance(App.instance).workLocationId
+                val locationID: Int
+                if (!workinglocation.equals(0)) {
+                    locationID = workinglocation
+                } else {
+                    locationID = currentloction
+                }
+                viewModel.SaveVehicleInspectionInfo(
+                    SaveVehicleInspectionInfo(
+                        Prefs.getInstance(App.instance).userID.toInt(),
+                        currentDate,
+                        Prefs.getInstance(App.instance).inspectionID,
+                        locationID,
+                        Prefs.getInstance(App.instance).VmID.toString().toInt()
+                    )
+                )
+                viewModel.livedataSavevehicleinspectioninfo.observe(this, Observer {
+                    if (it != null) {
+                        if (it.Message.equals("200"))
+                            Log.e("verygood", "onNewIntent: " + it.Message)
+                        showToast("Vehicle Inspection info saved", this)
+                    }
+                })
                 navController.navigate(R.id.completeTaskFragment)
                 showToast("Vehicle Inspection is successfully completed ", this)
             } else {
@@ -504,7 +538,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         ).observe(this, Observer {
             hideDialog()
             if (it != null) {
-
+                Log.e(
+                    "GetDriversBasicInformationInspection",
+                    "GetDriversBasicInformation: " + it.IsVehicleInspectionDone
+                )
                 if (it.workingLocationId != null)
                     prefs.workLocationId = it.workingLocationId
                 if (it.currentLocationId != null)
