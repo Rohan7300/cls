@@ -1099,9 +1099,9 @@ class CompleteTaskFragment : Fragment() {
     }*/
 
     private fun startInspection() {
-        if (isAllImageUploaded) {
-            mbinding.tvNext.visibility = View.VISIBLE
-        }
+//        if (isAllImageUploaded) {
+//            mbinding.tvNext.visibility = View.VISIBLE
+//        }
 
 //      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
         loadingDialog.show()
@@ -1279,7 +1279,7 @@ class CompleteTaskFragment : Fragment() {
 
     private fun setVisibiltyLevel() {
         visibilityLevel = 0
-        if (!inspectionstarted && !imagesUploaded) {
+        if (!inspectionstarted ) {
             visibilityLevel = -1
             visibiltyControlls()
             return
