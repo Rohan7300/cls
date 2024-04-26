@@ -711,6 +711,7 @@
                                     android:fontFamily="@font/inter"
                                     android:letterSpacing="0.02"
                                     android:text="Front"
+
                                     android:textColor="#4A4A4A"
                                     android:textSize="13sp"
                                     app:layout_constraintEnd_toEndOf="parent"

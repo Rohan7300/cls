@@ -17,7 +17,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/poppins_semibold"
-        android:text="RideAlong Assesment*"
+        android:text="Ride Along assessment*"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -40,7 +40,7 @@
             android:background="@android:color/transparent"
             android:backgroundTint="@android:color/transparent"
             android:fontFamily="@font/poppins"
-            android:hint="RideAlong Assesment"
+            android:hint="Ride Along Assesment"
             android:gravity="center"
             android:importantForAutofill="no"
             android:textColor="#675D5D"

@@ -1,6 +1,7 @@
 package com.clebs.celerity.ui
 
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -207,6 +208,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         window.getDecorView()
             .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+        disableAutofill()
+
         getDeviceID()
         val deviceID =
             Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()
@@ -371,7 +374,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         }
     }
-
+    @TargetApi(Build.VERSION_CODES.O)
+    private fun disableAutofill() {
+        window.decorView.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
+    }
     @SuppressLint("MissingSuperCall")
 
     override fun onBackPressed() {

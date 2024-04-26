@@ -97,7 +97,7 @@ class FeedbackFragment : Fragment() {
                 dialog.show((activity as HomeActivity).supportFragmentManager, "sign")
 
             } else {
-                showToast("Please complete Questionnaire first!!", requireContext())
+                showToast("Please complete questionnaire first!!", requireContext())
             }
         }
 

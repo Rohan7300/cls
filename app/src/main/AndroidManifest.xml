@@ -16,9 +16,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_PROFILES"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-
+    <uses-permission android:name="android.permission.ACCESS_CLIPBOARD_SERVICE"/>
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
@@ -74,7 +76,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.PolicyDocsActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.CreateTicketsActivity"
@@ -83,11 +85,14 @@
         <activity
             android:name=".ui.HomeActivity"
             android:exported="true"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.LoginActivity"
-            android:exported="false"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity

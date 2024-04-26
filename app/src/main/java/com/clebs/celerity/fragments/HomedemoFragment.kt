@@ -1,11 +1,16 @@
 package com.clebs.celerity.ui
 
 
+import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
+import android.webkit.WebViewRenderProcessClient
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -18,6 +23,9 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.MPPointF
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.jetbrains.anko.doAsyncResult
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -58,6 +66,7 @@ class HomedemoFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -75,6 +84,69 @@ class HomedemoFragment : Fragment() {
 
 
         viewModel.GetWeekAndYear()
+//        mbinding.web.settings.allowContentAccess
+//        mbinding.web.settings.setRenderPriority(WebSettings.RenderPriority.HIGH)
+//        mbinding.web.settings.setCacheMode(WebSettings.LOAD_NO_CACHE)
+//        mbinding.web.settings.setDomStorageEnabled(true)
+//       mbinding.web.settings.loadsImagesAutomatically
+//        //my webview is lagging
+//        mbinding.web.settings.setJavaScriptEnabled(true)
+//        //my web is still lagging
+//        mbinding.web.setWebViewRenderProcessClient(mbinding.web.webViewRenderProcessClient)
+//        mbinding.web.settings.setSupportZoom(false)
+//        mbinding.web.setMixedContentAllowed(true)
+//        mbinding.web.loadHtml(
+//            "<html>\n" +
+//                    "  <head>\n" +
+//                    "    <!--Load the AJAX API-->\n" +
+//                    "    <script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>\n" +
+//                    "    <script type=\"text/javascript\">\n" +
+//                    "    \n" +
+//                    "      // Load the Visualization API and the piechart package.\n" +
+//                    "      google.load('visualization', '1.0', {'packages':['corechart']});\n" +
+//                    "      \n" +
+//                    "      // Set a callback to run when the Google Visualization API is loaded.\n" +
+//                    "      google.setOnLoadCallback(drawChart);\n" +
+//                    "\n" +
+//                    "\n" +
+//                    "      // Callback that creates and populates a data table, \n" +
+//                    "      // instantiates the pie chart, passes in the data and\n" +
+//                    "      // draws it.\n" +
+//                    "      function drawChart() {\n" +
+//                    "\n" +
+//                    "      // Create the data table.\n" +
+//                    "      var data = new google.visualization.DataTable();\n" +
+//                    "      data.addColumn('string', 'ITEM');\n" +
+//                    "      data.addColumn('number', 'VALUE');\n" +
+//                    "      data.addRows([\n" +
+//                    "        ['Item 1', 30],\n" +
+//                    "        ['Item 2', 11],\n" +
+//                    "        ['Item 3', 12], \n" +
+//                    "        ['Item 4', 50],\n" +
+//                    "        ['Item 5', 10]\n" +
+//                    "      ]);\n" +
+//                    "\n" +
+//                    "      // Set chart options\n" +
+//                    "      var options = {'title':'Android-er: Load Google Charts (pie chart) with WebView',\n" +
+//                    "                     'width':600,\n" +
+//                    "                     'height':600};\n" +
+//
+//                    "\n" +
+//                    "      // Instantiate and draw our chart, passing in some options.\n" +
+//                    "      var chart = new google.visualization.PieChart(document.getElementById('chart_div'));\n" +
+//                    "      chart.draw(data, options);\n" +
+//                    "    }\n" +
+//                    "    </script>\n" +
+//                    "  </head>\n" +
+//                    "\n" +
+//                    "  <body>\n" +
+//                    " <!--Div that will hold the pie chart-->\n" +
+//                    "    <div id=\"chart_div\" style=\"width:400; height:600,overflow:hidden\"></div>\n" +
+//                    "  </body>\n" +
+//                    "</html>"
+//        )
+
+        // Load the HTML file from the assets folder
 
 
 //        mbinding.pieChart.setUsePercentValues(true);
@@ -127,7 +199,7 @@ class HomedemoFragment : Fragment() {
             mbinding.btThisWeek.visibility = View.VISIBLE
             val weekprev = week - 3
             mbinding.txtLastWeek.text = "Week " + weekprev
-            val weekschedule=week-1
+            val weekschedule = week - 1
             mbinding.viewfullschedule.text = "Week " + weekschedule + "\nSchedule"
             showDialog()
             viewModel.GetViewFullScheduleInfo(

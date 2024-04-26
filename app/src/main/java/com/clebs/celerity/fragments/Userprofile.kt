@@ -5,6 +5,7 @@ import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -86,6 +87,7 @@ class Userprofile : Fragment() {
         mbinding.logout.setOnClickListener {
             (activity as HomeActivity).showAlertLogout()
         }
+
 
 
 //        if (isthirdpartyAccessRequested != null && isthirdpartyAccessRequested!!.equals(true)) {
@@ -469,7 +471,8 @@ class Userprofile : Fragment() {
                     //mbinding.checkbox.isChecked =
                 } else if (it.IsThirdPartyChargeAccessAllowed == true) {
                     mbinding.Tvthirdparty.text = "Third party Access is Granted."
-                    mbinding.checkbox.visibility = View.GONE
+                    mbinding.checkbox.visibility = View.VISIBLE
+                    mbinding.checkbox.isChecked=-true
                 } else if (it.IsThirdPartyChargeAccessAllowed == false && it.IsThirdPartyChargeAccessApplied == false) {
                     mbinding.Tvthirdparty.text = "Request for third party Access."
                     mbinding.checkbox.visibility = View.VISIBLE
@@ -585,7 +588,7 @@ class Userprofile : Fragment() {
                 mbinding.save.visibility = View.GONE
                 if (it.Status.equals("200")) {
 
-                    showToast("profile successfully updated", requireContext())
+                    showToast("Profile Successfully Updated", requireContext())
 
                 } else {
                     showErrorDialog(fragmentManager, "0", "Error in updating profile")
@@ -596,5 +599,6 @@ class Userprofile : Fragment() {
         }
 
     }
+
 
 }
