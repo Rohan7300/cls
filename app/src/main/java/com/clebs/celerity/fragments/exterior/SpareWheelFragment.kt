@@ -240,12 +240,12 @@ class SpareWheelFragment : BaseInteriorFragment() {
                     if (prefs.scannedVmRegNo.isNotEmpty() && !secondTry) {
                         showDialog()
                         secondTry = true
-                        viewModel.GetVehicleInformation(prefs.userID.toInt(), prefs.scannedVmRegNo)
+                        viewModel.GetVehicleInformation(prefs.userID.toInt(), prefs.vmRegNo)
                     }
                 }
             }
 
-            viewModel.GetVehicleInformation(prefs.userID.toInt(), prefs.vmRegNo)
+            viewModel.GetVehicleInformation(prefs.userID.toInt(), prefs.scannedVmRegNo)
             viewModel.SaveVehDefectSheetResponseLiveData.observe(viewLifecycleOwner) {
                 hideDialog()
                 if (it != null) {

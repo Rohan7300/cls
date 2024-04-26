@@ -70,6 +70,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var userId: Int = 0
     var firstName = ""
     var apiCount = 0
+    val currentDate =
+        SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(
+            Date()
+        )
     var ninetydaysBoolean: Boolean? = null
     var lastName = ""
     var isLeadDriver = false
@@ -217,6 +221,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
 
             GetDriversBasicInformation()
+            getscannednumbervehicleinfo()
             if (ninetydaysBoolean?.equals(true) == true) {
                 showAlertChangePasword90dys()
             }
@@ -640,5 +645,22 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onChangesSaved() {
         isChangesSaved = true
+    }
+
+    fun getscannednumbervehicleinfo() {
+        viewModel.GetVehicleInfobyDriverId(
+            Prefs.getInstance(App.instance).userID.toInt(),
+            currentDate
+        )
+        viewModel.livedataGetVehicleInfobyDriverId.observe(this) {
+
+            if (it != null) {
+
+                Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
+                if ( !Prefs.getInstance(App.instance).VmID.isNotEmpty()){
+                    Prefs.getInstance(App.instance).VmID=it.vmId.toString()
+                }
+            }
+        }
     }
 }

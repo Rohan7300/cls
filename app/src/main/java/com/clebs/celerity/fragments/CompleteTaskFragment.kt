@@ -174,6 +174,9 @@ class CompleteTaskFragment : Fragment() {
 
                 scannedvrn=it.vmRegNo
                 Prefs.getInstance(App.instance).scannedVmRegNo=it.vmRegNo
+                if ( !Prefs.getInstance(App.instance).VmID.isNotEmpty()){
+                    Prefs.getInstance(App.instance).VmID=it.vmId.toString()
+                }
             }
         }
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.completeTaskFragment)
