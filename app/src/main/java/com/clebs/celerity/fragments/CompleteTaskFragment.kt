@@ -75,6 +75,7 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var imageView: ImageView
     private var userId: Int = 0
+
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
     lateinit var ivX: ImageView
@@ -1181,6 +1182,7 @@ class CompleteTaskFragment : Fragment() {
                 rlcomtwoBreak,
                 rlcomtwoClock,
                 rlcomtwoClockOut,
+                startinspection,
                 BreakTimeTable,
                 taskDetails,
                 view2
@@ -1190,7 +1192,7 @@ class CompleteTaskFragment : Fragment() {
             -1 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.GONE
-
+                mbinding.startinspection.visibility = View.VISIBLE
                 /*mbinding.clFaceMask.visibility = View.GONE
                 mbinding.clOilLevel.visibility = View.GONE*/
                 /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
@@ -1352,10 +1354,10 @@ class CompleteTaskFragment : Fragment() {
                     }
                 }
             }, 0, 1000)
-            mbinding.startinspection.visibility = View.GONE
+//            mbinding.startinspection.visibility = View.GONE
 
         } else {
-            mbinding.startinspection.visibility = View.VISIBLE
+//            mbinding.startinspection.visibility = View.VISIBLE
         }
     }
 

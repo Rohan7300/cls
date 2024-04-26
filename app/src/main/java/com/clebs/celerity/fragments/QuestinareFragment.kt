@@ -55,7 +55,7 @@ class QuestinareFragment : Fragment() {
             "Going On",
             "Delivery Procedures",
             "Return",
-            "Final Assesment"
+            "Final assessment"
         )
         val str = "Observations and explanations must be conducted on a" +
                 " Nursery Level 1 route. The new driver should make at least 50 unassisted deliveries," +

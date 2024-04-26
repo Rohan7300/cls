@@ -164,18 +164,20 @@ android:layout_marginTop="10dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Email"
+                                android:importantForAutofill="noExcludeDescendants"
                                 app:boxBackgroundColor="@color/very_light_grey_two"
                                 android:padding="2dp"
                                 app:expandedHintEnabled="false"
                                 app:hintTextColor="@color/black">
 
-                                <EditText
+                                <com.edittextpicker.aliazaz.EditTextPicker
                                     android:id="@+id/emailtext"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
                                     android:layout_weight="1"
                                     android:enabled="false"
+
                                     android:fontFamily="@font/poppins"
                                     android:importantForAutofill="no"
                                     android:inputType="textEmailAddress"
@@ -183,7 +185,7 @@ android:layout_marginTop="10dp"
                                     android:padding="12dp"
                                     android:paddingStart="4dp"
                                     android:textColor="@color/text_color"
-                                    android:textCursorDrawable="@color/light_orange2"
+
                                     android:textSize="12sp" />
 
                             </com.google.android.material.textfield.TextInputLayout>
