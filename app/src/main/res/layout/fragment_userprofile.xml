@@ -101,7 +101,17 @@
                         app:layout_constraintEnd_toStartOf="@+id/editImg"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/dpLayout" />
-
+                    <ImageView
+                        android:id="@+id/editImg"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="4dp"
+                        android:elevation="12dp"
+                        android:padding="4dp"
+                        android:src="@drawable/edit_orange"
+                        app:layout_constraintBottom_toBottomOf="@+id/logout"
+                        app:layout_constraintEnd_toStartOf="@+id/logout"
+                        app:layout_constraintTop_toBottomOf="@+id/name" />
                     <ImageView
                         android:id="@+id/logout"
                         android:layout_width="30dp"
@@ -110,18 +120,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/name" />
 
-                    <ImageView
-                        android:id="@+id/editImg"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-
-                        android:layout_marginEnd="4dp"
-                        android:elevation="12dp"
-                        android:padding="4dp"
-                        android:src="@drawable/edit_orange"
-                        app:layout_constraintBottom_toBottomOf="@+id/logout"
-                        app:layout_constraintEnd_toStartOf="@+id/logout"
-                        app:layout_constraintTop_toBottomOf="@+id/name" />
                 </LinearLayout>
 
                 <LinearLayout

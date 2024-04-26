@@ -42,6 +42,7 @@ class Prepardness : Fragment() {
             QuestionWithOption("Device requirement (Android preferably)*")
         )
         pref = Prefs.getInstance(requireContext())
+        pref.submittedPrepardness = false
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
 
@@ -53,10 +54,13 @@ class Prepardness : Fragment() {
         viewModel.liveDataQuestionairePreparedness.observe(viewLifecycleOwner){
             loadingDialog.cancel()
             if(it!=null){
-                Log.d("Preparedness",it.toString())
-                viewModel.currentViewPage.postValue(1)
-                pref.quesID = it.QuestionId
-                pref.qStage = 1
+                if(pref.submittedPrepardness){
+                    Log.d("Preparedness",it.toString())
+                    viewModel.currentViewPage.postValue(1)
+                    pref.quesID = it.QuestionId
+                    pref.qStage = 1
+                }
+
             }
         }
         binding.prepCancel.setOnClickListener {
@@ -81,6 +85,7 @@ class Prepardness : Fragment() {
 
     private fun savePrepardnessApi(selectedOptions: List<String>, comment: CharSequence?) {
         loadingDialog.show()
+        pref.submittedPrepardness = true
         viewModel.SaveQuestionairePreparedness(SaveQuestionairePreparednessRequest(
             DaDailyWorkId = pref.daWID,
             LeadDriverId = pref.userID.toInt(),

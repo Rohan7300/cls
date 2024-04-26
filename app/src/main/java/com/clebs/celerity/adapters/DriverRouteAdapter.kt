@@ -5,12 +5,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.AdapterDriverRouteBinding
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
+import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
+import com.clebs.celerity.models.response.leadDriverIdItem
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.navigateTo
 
@@ -53,11 +57,32 @@ class DriverRouteAdapter(
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return asyncListDiffer.currentList.size
     }
 
     override fun onBindViewHolder(holder: DriverRouteAdapterViewHolder, position: Int) {
-        val item = list[position]
+        val item = asyncListDiffer.currentList[position]
         holder.bind(item)
+    }
+
+    private val diffUtil = object : DiffUtil.ItemCallback<GetDriverRouteInfoByDateResponseItem>() {
+        override fun areItemsTheSame(
+            oldItem: GetDriverRouteInfoByDateResponseItem,
+            newItem: GetDriverRouteInfoByDateResponseItem
+        ): Boolean {
+            return oldItem.RtUsrId == newItem.RtUsrId
+        }
+
+        override fun areContentsTheSame(
+            oldItem: GetDriverRouteInfoByDateResponseItem,
+            newItem: GetDriverRouteInfoByDateResponseItem
+        ): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+    val asyncListDiffer = AsyncListDiffer(this, diffUtil)
+    fun saveData(data: GetDriverRouteInfoByDateResponse){
+        asyncListDiffer.submitList(data)
     }
 }

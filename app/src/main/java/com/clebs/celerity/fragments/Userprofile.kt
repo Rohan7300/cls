@@ -472,7 +472,7 @@ class Userprofile : Fragment() {
                 } else if (it.IsThirdPartyChargeAccessAllowed == true) {
                     mbinding.Tvthirdparty.text = "Third party Access is Granted."
                     mbinding.checkbox.visibility = View.VISIBLE
-                    mbinding.checkbox.isChecked=-true
+                    mbinding.checkbox.isChecked=true
                 } else if (it.IsThirdPartyChargeAccessAllowed == false && it.IsThirdPartyChargeAccessApplied == false) {
                     mbinding.Tvthirdparty.text = "Request for third party Access."
                     mbinding.checkbox.visibility = View.VISIBLE

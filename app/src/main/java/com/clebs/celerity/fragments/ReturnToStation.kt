@@ -45,7 +45,7 @@ class ReturnToStation : Fragment() {
         pref = Prefs.getInstance(requireContext())
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
-
+        pref.submittedReturnToStation = false
         val adapter = QuestionAdapter(questions,requireContext())
         binding.ReturnRV.adapter = adapter
         binding.ReturnRV.layoutManager = LinearLayoutManager(requireContext())
@@ -53,9 +53,11 @@ class ReturnToStation : Fragment() {
         viewModel.liveDataQuestionareReturn.observe(viewLifecycleOwner){
             loadingDialog.cancel()
             if(it!=null){
-                viewModel.currentViewPage.postValue(5)
-                pref.quesID = it.QuestionId
-                pref.qStage = 5
+                if(pref.submittedReturnToStation){
+                    viewModel.currentViewPage.postValue(5)
+                    pref.quesID = it.QuestionId
+                    pref.qStage = 5
+                }
             }
         }
 
@@ -84,6 +86,7 @@ class ReturnToStation : Fragment() {
 
     private fun saveReturnQuesApi(selectedOptions: List<String>, comment: CharSequence?) {
         loadingDialog.show()
+        pref.submittedReturnToStation = true
         viewModel.SaveQuestionaireReturnToDeliveryStation(
             SaveQuestionaireReturnToDeliveryStationRequest(
                 QuestionId = pref.quesID,

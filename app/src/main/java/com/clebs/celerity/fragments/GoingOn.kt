@@ -49,7 +49,7 @@ class GoingOn : Fragment() {
         pref = Prefs.getInstance(requireContext())
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
-
+pref.submittedGoingOn = false
         val adapter = QuestionAdapter(questions,requireContext())
         binding.GoingOnRV.adapter = adapter
         binding.GoingOnRV.layoutManager = LinearLayoutManager(requireContext())
@@ -63,10 +63,12 @@ class GoingOn : Fragment() {
 
         viewModel.liveDataQuestionaireGoingOn.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            if (it != null) {
-                viewModel.currentViewPage.postValue(3)
-                pref.quesID = it.QuestionId
-                pref.qStage = 3
+            if(pref.submittedGoingOn){
+                if (it != null) {
+                    viewModel.currentViewPage.postValue(3)
+                    pref.quesID = it.QuestionId
+                    pref.qStage = 3
+                }
             }
         }
 
@@ -90,6 +92,7 @@ class GoingOn : Fragment() {
 
     private fun saveGoingonApi(selectedOptions: List<String>, comment: CharSequence?) {
         loadingDialog.show()
+        pref.submittedGoingOn = true
         viewModel.SaveQuestionaireGoingOn(
             SaveQuestionaireOnGoingActivitiesRequest(
                 QuestionId = pref.quesID,

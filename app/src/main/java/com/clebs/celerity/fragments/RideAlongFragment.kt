@@ -24,6 +24,7 @@ import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.RideAlongViewReadyCallback
 import com.clebs.celerity.utils.showToast
 
 
@@ -498,4 +499,6 @@ class RideAlongFragment : Fragment() {
             }
         }
     }
+
+
 }

@@ -8,13 +8,18 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.AdapterRideAlongBinding
+import com.clebs.celerity.models.response.NotificationResponseItem
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.leadDriverIdItem
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.RideAlongViewReadyCallback
 
 class RideAlongAdapter(
     var data: RideAlongDriverInfoByDateResponse,
@@ -39,7 +44,7 @@ class RideAlongAdapter(
             )
             mainViewModel.liveDataGetRideAlongDriverFeedbackQuestion.observe(viewLifecycleOwner) {
                 if (it != null) {
-                    val itemX = data.find { driver ->
+                    val itemX = asyncListDiffer.currentList.find { driver ->
                         driver.DriverId == it.DriverId
                     }
                     if (itemX != null) {
@@ -82,7 +87,7 @@ class RideAlongAdapter(
             )
             mainViewModel.liveDataGetRideAlongLeadDriverQuestion.observe(viewLifecycleOwner) {
                 if (it != null) {
-                    val itemX = data.find { driver ->
+                    val itemX = asyncListDiffer.currentList.find { driver ->
                         driver.DriverId == it.RaDriverId
                     }
                     if (itemX != null) {
@@ -132,6 +137,8 @@ class RideAlongAdapter(
                 prefs.currRideAlongID = item.DriverId
                 prefs.daWID = item.DawId
                 prefs.currRtId = item.RtId
+                //mainViewModel.currentViewPage.postValue(0)
+
                 navController.navigate(R.id.questinareFragment, bundle)
             }
             binding.trainerFeedbackIV.setOnClickListener {
@@ -144,8 +151,9 @@ class RideAlongAdapter(
                 loadingDialog()
                 mainViewModel.DeleteOnRideAlongRouteInfo(item.RtId)
             }
-            if(adapterPosition == data.size-1&&isChanged){
-                notifyDataSetChanged()
+            if(adapterPosition == asyncListDiffer.currentList.size-1&&isChanged){
+                asyncListDiffer.submitList(asyncListDiffer.currentList)
+
             }
         }
     }
@@ -158,15 +166,35 @@ class RideAlongAdapter(
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return asyncListDiffer.currentList.size
     }
 
     override fun onBindViewHolder(holder: RideAlongViewHolder, position: Int) {
-        val item = data[position]
+        val item = asyncListDiffer.currentList[position]
         if (position != 0) {
             holder.binding.trainerHeader.visibility = View.GONE
         }
         holder.bind(item)
     }
 
+    private val diffUtil = object : DiffUtil.ItemCallback<leadDriverIdItem>() {
+        override fun areItemsTheSame(
+            oldItem: leadDriverIdItem,
+            newItem: leadDriverIdItem
+        ): Boolean {
+            return oldItem.DriverId == newItem.DriverId
+        }
+
+        override fun areContentsTheSame(
+            oldItem: leadDriverIdItem,
+            newItem: leadDriverIdItem
+        ): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+    private val asyncListDiffer = AsyncListDiffer(this, diffUtil)
+    fun saveData(data:RideAlongDriverInfoByDateResponse){
+        asyncListDiffer.submitList(data)
+    }
 }

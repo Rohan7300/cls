@@ -27,7 +27,7 @@ class FinalAssesmentFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentFinalAssesmentBinding.inflate(inflater,container,false)
+        binding = FragmentFinalAssesmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -37,12 +37,14 @@ class FinalAssesmentFragment : Fragment() {
         pref = Prefs.getInstance(requireContext())
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
-
-        viewModel.liveDataFinalAssesment.observe(viewLifecycleOwner){
+        pref.submittedFinalAssesmentFragment = false
+        viewModel.liveDataFinalAssesment.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            if(it!=null){
-                findNavController().navigate(R.id.completeTaskFragment)
-                pref.qStage=0
+            if (it != null) {
+                if (pref.submittedFinalAssesmentFragment) {
+                    findNavController().navigate(R.id.completeTaskFragment)
+                    pref.qStage = 0
+                }
             }
         }
 
@@ -53,28 +55,31 @@ class FinalAssesmentFragment : Fragment() {
         }
 
         binding.finalAssesmentSubmit.setOnClickListener {
-            if(binding.etFinalAssesmentComment.text.isNotEmpty()){
-                if(pref.qStage<5||pref.quesID==0){
+            if (binding.etFinalAssesmentComment.text.isNotEmpty()) {
+                if (pref.qStage < 5 || pref.quesID == 0) {
                     showToast("Please complete previous assessment first", requireContext())
-                }else{
+                } else {
                     val assesment =
                         if (binding.etFinalAssesmentComment.text.isNullOrEmpty()) " " else binding.etFinalAssesmentComment.text
 
-                    if(assesment.isNotEmpty()){
+                    if (assesment.isNotEmpty()) {
                         loadingDialog.show()
-                        viewModel.SaveQuestionaireFinalAssesment(SubmitFinalQuestionairebyLeadDriverRequest(
-                            QuestionId = pref.quesID,
-                            DaDailyWorkId = pref.daWID,
-                            LeadDriverId = pref.userID.toInt(),
-                            RoutetId = pref.currRtId,
-                            Assessment = assesment.toString()
-                        ))
-                    }else{
-                        showToast("Please enter the assessment",requireContext())
+                        pref.submittedFinalAssesmentFragment = true
+                        viewModel.SaveQuestionaireFinalAssesment(
+                            SubmitFinalQuestionairebyLeadDriverRequest(
+                                QuestionId = pref.quesID,
+                                DaDailyWorkId = pref.daWID,
+                                LeadDriverId = pref.userID.toInt(),
+                                RoutetId = pref.currRtId,
+                                Assessment = assesment.toString()
+                            )
+                        )
+                    } else {
+                        showToast("Please enter the assessment", requireContext())
                     }
                 }
-            }else{
-                showToast("Please fill the assessment",requireContext())
+            } else {
+                showToast("Please fill the assessment", requireContext())
             }
         }
 

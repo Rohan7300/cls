@@ -45,6 +45,7 @@ class StartUp : Fragment() {
         pref = Prefs.getInstance(requireContext())
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
+        pref.submittedStartUp = false
 
         val adapter = QuestionAdapter(questions,requireContext())
         binding.startUpRv.adapter = adapter
@@ -52,10 +53,12 @@ class StartUp : Fragment() {
 
         viewModel.liveDataQuestionaireStartup.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            if (it != null) {
-                viewModel.currentViewPage.postValue(2)
-                pref.quesID = it.QuestionId
-                pref.qStage = 2
+            if(pref.submittedStartUp){
+                if (it != null) {
+                    viewModel.currentViewPage.postValue(2)
+                    pref.quesID = it.QuestionId
+                    pref.qStage = 2
+                }
             }
         }
         binding.cancel.setOnClickListener {
@@ -84,6 +87,7 @@ class StartUp : Fragment() {
 
     private fun saveStartupApi(selectedOptions: List<String>, comment: CharSequence) {
         loadingDialog.show()
+        pref.submittedStartUp = true
         viewModel.SaveQuestionaireStartup(
             SaveQuestionaireStartupRequest(
                 QuestionId = pref.quesID,

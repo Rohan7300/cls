@@ -169,6 +169,34 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getBoolean("rideAlong", false)
         set(value) = sharedPreferences.edit().putBoolean("rideAlong", value).apply()
 
+    var submittedPrepardness: Boolean
+        get() = sharedPreferences.getBoolean("submittedPrepardness", false)
+        set(value) = sharedPreferences.edit().putBoolean("submittedPrepardness", value).apply()
+
+    var submittedStartUp: Boolean
+        get() = sharedPreferences.getBoolean("submittedStartUp", false)
+        set(value) = sharedPreferences.edit().putBoolean("submittedStartUp", value).apply()
+
+    var submittedGoingOn: Boolean
+        get() = sharedPreferences.getBoolean("submittedGoingOn", false)
+        set(value) = sharedPreferences.edit().putBoolean("submittedGoingOn", value).apply()
+
+    var submittedDeliveryProcedures: Boolean
+        get() = sharedPreferences.getBoolean("submittedDeliveryProcedures", false)
+        set(value) = sharedPreferences.edit().putBoolean("submittedDeliveryProcedures", value).apply()
+
+    var submittedReturnToStation: Boolean
+        get() = sharedPreferences.getBoolean("submittedReturnToStation", false)
+        set(value) = sharedPreferences.edit().putBoolean("submittedReturnToStation", value).apply()
+
+    var submittedFinalAssesmentFragment: Boolean
+        get() = sharedPreferences.getBoolean("submittedFinalAssesmentFragment", false)
+        set(value) = sharedPreferences.edit().putBoolean("submittedFinalAssesmentFragment", value).apply()
+
+
+
+
+
     var accessTokenclearquote: String
         get() {
             return sharedPreferences.getString(USER_ACCESS_TOKEN, " ") ?: " "

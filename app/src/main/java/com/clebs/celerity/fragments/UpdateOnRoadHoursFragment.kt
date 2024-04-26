@@ -111,6 +111,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
         rideAlongApiCall()
 
         binding.pbbPlus.setOnClickListener {
+            parcelBack =  binding.parcelsBroughtBack.text.toString().toInt()
             parcelBack += 1
             binding.parcelsBroughtBack.text = parcelBack.toString()
         }

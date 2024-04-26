@@ -70,6 +70,7 @@ class FeedbackFragment : Fragment() {
             loadingDialog.cancel()
             if (pref.submittedFeedback) {
                 if (it != null) {
+                    findNavController().popBackStack()
                     findNavController().navigate(R.id.completeTaskFragment)
                 }
             }

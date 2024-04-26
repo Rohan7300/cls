@@ -108,7 +108,7 @@
                 android:backgroundTint="#FD7C40"
                 android:ems="4"
                 android:textAllCaps="false"
-                android:text="Sign in agreeement"
+                android:text="Sign in agreement"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
         </LinearLayout>

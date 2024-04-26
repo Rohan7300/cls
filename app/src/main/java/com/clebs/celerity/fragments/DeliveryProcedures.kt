@@ -37,6 +37,7 @@ class DeliveryProcedures : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         pref = Prefs.getInstance(requireContext())
+        pref.submittedDeliveryProcedures = false
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
 
@@ -69,9 +70,11 @@ class DeliveryProcedures : Fragment() {
         viewModel.liveDataQuestionareDeliveryProcedures.observe(viewLifecycleOwner){
             loadingDialog.cancel()
             if(it!=null){
-                viewModel.currentViewPage.postValue(4)
-                pref.quesID = it.QuestionId
-                pref.qStage = 4
+                if(pref.submittedDeliveryProcedures){
+                    viewModel.currentViewPage.postValue(4)
+                    pref.quesID = it.QuestionId
+                    pref.qStage = 4
+                }
             }else{
                 showToast("Failed to submit!!",requireContext())
             }
@@ -96,6 +99,7 @@ class DeliveryProcedures : Fragment() {
 
     private fun saveDeliveryProcedureApi(selectedOptions: List<String>, comment: CharSequence?) {
         loadingDialog.show()
+        pref.submittedDeliveryProcedures = true
         viewModel.SaveQuestionaireDelivery(
             SaveQuestionaireDeliverProceduresRequest(
                 QuestionId = pref.quesID,
