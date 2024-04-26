@@ -582,6 +582,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 } else {
                     Prefs.getInstance(applicationContext).days = "0"
                 }
+
+                prefs.updateInspectionStatus(it.IsVehicleInspectionDone)
             }
         })
     }

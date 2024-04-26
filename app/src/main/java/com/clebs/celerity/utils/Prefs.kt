@@ -361,22 +361,26 @@ class Prefs(context: Context) {
         val lastInspectionDateTime = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
             Date()
         )
+        editor.putBoolean("is_inspection_done", isInspectionDone)
         if(isInspectionDone){
             editor.putString("last_inspection_datetime", lastInspectionDateTime)
-            editor.putBoolean("is_inspection_done", isInspectionDone)
-
         }
         editor.apply()
     }
     fun isInspectionDoneToday(): Boolean {
 
-        val lastInspectionDateTimeString = sharedPreferences.getString("last_inspection_datetime", "")
+        val isInspectionDone = sharedPreferences.getBoolean("is_inspection_done", false)
+        if(isInspectionDone){
+            val lastInspectionDateTimeString = sharedPreferences.getString("last_inspection_datetime", "")
+            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            Log.d("isInspectionDoneToday","$currentDate \n$lastInspectionDateTimeString")
 
+            return lastInspectionDateTimeString == currentDate
+        }else
+        {
+            return false
+        }
 
-        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-        Log.d("isInspectionDoneToday","$currentDate \n$lastInspectionDateTimeString")
-
-        return lastInspectionDateTimeString == currentDate
     }
 
 

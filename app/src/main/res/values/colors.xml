@@ -9,12 +9,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="orange">#F36C2E</color>
     <color name="light_orange">#E15F24</color>
+    <color name="very_light_orange">#FEF0EA</color>
     <color name="medium_orange">#FA9162</color>
     <color name="light_orange2">#FFD2BF</color>
     <color name="light_grey">#D3DBE7</color>
     <color name="black0">#343131</color>
     <color name="text_color">#4A4A4A</color>
-    <color name="very_light_orange">#FEF0EA</color>
     <color name="pink">#03A9F4</color>
     <color name="red_light">#f76f6f</color>
     <color name="red">#ff0000</color>
