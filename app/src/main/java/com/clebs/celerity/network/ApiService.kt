@@ -61,6 +61,7 @@ import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
+import com.clebs.celerity.models.response.GetvehicleInfoByDriverId
 import com.clebs.celerity.models.response.NotificationResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.SaveCommentResponse
@@ -518,6 +519,8 @@ interface ApiService {
         @Body body:SaveVehicleInspectionInfo
     ):Response<SimpleStatusMsgResponse>
 
-
+@GET("/api/Drivers/GetVehicleInfobyDriverId")
+suspend fun GetVehicleInfobyDriverId( @Query("userId") userId: Int, @Query("date") date:String)
+:Response<GetvehicleInfoByDriverId>
 }
 
