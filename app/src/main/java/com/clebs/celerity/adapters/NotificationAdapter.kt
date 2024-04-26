@@ -39,7 +39,7 @@ class NotificationAdapter() :
         RecyclerView.ViewHolder(binding.root){
             fun bind(item:NotificationResponseItem){
                 binding.title.text = item.NotificationTitle
-                binding.descripotion.text  = item.NotificationBody
+                binding.descripotionX.text  = item.NotificationBody
 
                 var formattedDate = item.NotificationSentOn
                 var formattedTime = "00:00"

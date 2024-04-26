@@ -91,6 +91,7 @@
                 android:id="@+id/ticketSubjectTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="Update missing classroom training proof"
                 android:textSize="11sp" />
@@ -234,6 +235,7 @@
             <ImageView
                 android:layout_width="18dp"
                 android:layout_height="22dp"
+                android:visibility="visible"
                 android:layout_marginEnd="-8dp"
                 android:background="@drawable/ticket_round"
                 android:src="@drawable/circleright"

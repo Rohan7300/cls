@@ -56,7 +56,7 @@ import java.util.Locale
 
 class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener,
     SaveChangesCallback {
-    var saveChangesCallback: SaveChangesCallback? = null
+    private var saveChangesCallback: SaveChangesCallback? = null
     private lateinit var bottomNavigationView: BottomNavigationView
     lateinit var imageViewModel: ImageViewModel
     private var screenid: Int = 0
@@ -121,6 +121,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (tempCode == 200) {
                 Log.d("hdhsdshdsdjshhsds", "200 $message")
                 prefs.saveBoolean("Inspection", true)
+                prefs.updateInspectionStatus(true)
                 //inspectionstarted = true
 
                 val currentDate =
@@ -159,8 +160,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 navController.navigate(R.id.completeTaskFragment)
                 showToast("inspection Failed", this)
                 prefs.saveBoolean("Inspection", false)
+                prefs.updateInspectionStatus(false)
                 //inspectionstarted = false
-
             }
             // Check if identifier is valid
             if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
@@ -507,7 +508,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
             )
         }
-
     }
 
 
@@ -560,6 +560,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         prefs.workLocationName = it.workinglocation
                     prefs.lmid = it.lmID
                     lmId = it.lmID
+                    prefs.vmId = it.vmID
                 } catch (e: Exception) {
                     Log.d("sds", e.toString())
                 }

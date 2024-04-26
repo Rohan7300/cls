@@ -117,24 +117,27 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/text_error" />
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_pass"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="14dp"
+                    android:id="@+id/edtpasslayoutFL"
+                    >
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:id="@+id/edtpasslayout"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     app:hintAnimationEnabled="false"
                     app:hintEnabled="false"
                     app:expandedHintEnabled="false"
-
-                    android:layout_marginTop="14dp"
                     app:boxStrokeColor="#FFF"
                     app:boxBackgroundColor="#FFF"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_pass"
-                    app:passwordToggleEnabled="true"
-                    app:passwordToggleTint="@color/orange">
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edt_pass"
@@ -154,7 +157,24 @@
                         android:textSize="13sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:paddingTop="10dp"
+                        android:gravity="right"
+                        >
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:id="@+id/passIcon"
+                            android:layout_height="25dp"
+                            android:src="@drawable/hidden2"
+                            app:tint="@color/orange" />
+                    </LinearLayout>
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/text_error_two"
@@ -166,7 +186,7 @@
                     android:visibility="gone"
                     android:layout_marginEnd="16dp"
                  app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edtpasslayout" />
+                    app:layout_constraintTop_toBottomOf="@+id/edtpasslayoutFL" />
 
                 <ProgressBar
                     android:id="@+id/progressbar"

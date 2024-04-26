@@ -95,7 +95,7 @@
                 app:tabMinWidth="100dp"
                 app:tabGravity="fill"
 
-                app:tabMaxWidth="200dp"
+                app:tabMaxWidth="300dp"
                 >
 
                 <com.google.android.material.tabs.TabItem

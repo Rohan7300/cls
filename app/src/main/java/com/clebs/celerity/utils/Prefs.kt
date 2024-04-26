@@ -2,12 +2,16 @@ package com.clebs.celerity.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.clebs.celerity.models.response.Doc
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.Invoice
 import com.clebs.celerity.models.response.InvoiceX
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.Stack
 
 
@@ -46,6 +50,10 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putString("vmRegNo", value).apply()
         }
+
+    var vmId: Int
+        get() = sharedPreferences.getInt("vmIdx", 0)
+        set(value) = sharedPreferences.edit().putInt("vmIdx", value).apply()
 
     var scannedVmRegNo: String
         get() {
@@ -199,6 +207,8 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getBoolean("canClockOut", false) ?: false
         set(value) = sharedPreferences.edit().putBoolean("canClockOut", value).apply()
 
+
+
     fun save(key: String?, value: String?) {
         sharedPreferences.edit().putString(key, value).apply()
         sharedPreferences.edit().apply()
@@ -344,6 +354,31 @@ class Prefs(context: Context) {
         val data = sharedPreferences.getString("CurrInvoiceX", null)
         return gson.fromJson(data, InvoiceX::class.java) ?: null
     }
+
+    fun updateInspectionStatus(isInspectionDone: Boolean) {
+        val editor = sharedPreferences.edit()
+
+        val lastInspectionDateTime = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
+            Date()
+        )
+        if(isInspectionDone){
+            editor.putString("last_inspection_datetime", lastInspectionDateTime)
+            editor.putBoolean("is_inspection_done", isInspectionDone)
+
+        }
+        editor.apply()
+    }
+    fun isInspectionDoneToday(): Boolean {
+
+        val lastInspectionDateTimeString = sharedPreferences.getString("last_inspection_datetime", "")
+
+
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        Log.d("isInspectionDoneToday","$currentDate \n$lastInspectionDateTimeString")
+
+        return lastInspectionDateTimeString == currentDate
+    }
+
 
 
 }

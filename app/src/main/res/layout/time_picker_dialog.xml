@@ -28,6 +28,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:backgroundTint="@color/white"
+                android:padding="2dp"
                 android:src="@drawable/orange_cross"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

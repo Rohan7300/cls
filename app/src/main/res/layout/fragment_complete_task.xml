@@ -127,7 +127,7 @@
                                 android:textColor="@color/black"
                                 android:textSize="14sp" />
 
-                            <ImageButton
+                            <ImageView
                                 android:id="@+id/vehiclePicturesIB"
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
@@ -592,6 +592,7 @@
                         android:layout_centerVertical="true"
                         android:fontFamily="@font/poppins_bold"
                         android:text="Clock Out"
+                        android:id="@+id/clockOutTV"
                         android:textColor="@color/text_color"
                         android:textSize="15sp"
                         android:textStyle="bold" />

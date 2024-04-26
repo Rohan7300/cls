@@ -10,138 +10,198 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:fillViewport="true"
         tools:context=".ui.CreateTicketsActivity">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:background="@color/very_light_orange"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cdsss"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/very_light_orange"
+                android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cdsss"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:id="@+id/imageViewBack"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/baseline_arrow_back_24"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/imageViewBack"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_margin="20dp"
-                        android:src="@drawable/baseline_arrow_back_24"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/tv_create"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:letterSpacing="0.02"
+                    android:text="View Ticket"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageViewBack"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/imageViewBack" />
 
-                    <TextView
-                        android:id="@+id/tv_create"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:letterSpacing="0.02"
-                        android:text="View Ticket"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/imageViewBack"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/imageViewBack" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/linearLayout15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cdsss">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:letterSpacing="0.02"
+                    android:text="id : "
+                    android:textColor="@color/text_color"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/ticketID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:letterSpacing="0.02"
+                    android:text="CLS"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
+
+                <ImageView
+                    android:id="@+id/commentIV"
+                    android:layout_width="25dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/baseline_message_24" />
+
+            </LinearLayout>
+
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="14dp"
+                android:clipToPadding="false"
+                android:fillViewport="true"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout15"
+                tools:layout_editor_absoluteX="20dp">
+
 
                 <LinearLayout
-                    android:id="@+id/linearLayout15"
+                    android:id="@+id/rlmain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cdsss">
+                    android:orientation="vertical">
+
 
                     <TextView
+                        android:id="@+id/tvdepart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:letterSpacing="0.02"
-                        android:text="id : "
+                        android:fontFamily="@font/poppins"
+                        android:letterSpacing="0.01"
+                        android:text="Department"
                         android:textColor="@color/text_color"
-                        android:textSize="17sp" />
+                        android:textSize="14sp" />
 
-                    <TextView
-                        android:id="@+id/ticketID"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:letterSpacing="0.02"
-                        android:text="CLS"
-                        android:textColor="@color/black"
-                        android:textSize="17sp" />
-
-                    <ImageView
-                        android:id="@+id/commentIV"
-                        android:layout_width="25dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/baseline_message_24" />
-
-                </LinearLayout>
-
-
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:clipToPadding="false"
-                    android:fillViewport="true"
-                    android:overScrollMode="never"
-                    android:scrollbars="none"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout15"
-                    tools:layout_editor_absoluteX="20dp">
-
-
-                    <LinearLayout
-                        android:id="@+id/rlmain"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/const1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
+                        android:layout_below="@id/tvdepart"
+                        android:layout_marginTop="8dp">
 
                         <TextView
-                            android:id="@+id/tvdepart"
+                            android:id="@+id/tv_depart"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shape_edittext_onroad"
+                            android:fontFamily="@font/poppins"
+                            android:letterSpacing="0.01"
+                            android:padding="10dp"
+                            android:text="Department Name"
+                            android:textColor="@color/text_color"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/arrow_left"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@id/tv_depart"
+                            app:layout_constraintTop_toTopOf="@+id/tv_depart" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_depart" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:id="@+id/view2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.05dp"
+                        android:layout_below="@+id/const1"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/black" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/view2"
+                        android:layout_marginTop="16dp">
+
+                        <TextView
+                            android:id="@+id/tv_request"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins"
                             android:letterSpacing="0.01"
-                            android:text="Department"
+                            android:text="Request Type"
                             android:textColor="@color/text_color"
                             android:textSize="14sp" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/const1"
+                            android:id="@+id/const2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/tvdepart"
+                            android:layout_below="@id/tv_request"
                             android:layout_marginTop="8dp">
 
                             <TextView
-                                android:id="@+id/tv_depart"
+                                android:id="@+id/tv_requests"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/shape_edittext_onroad"
                                 android:fontFamily="@font/poppins"
                                 android:letterSpacing="0.01"
                                 android:padding="10dp"
-                                android:text="Department Name"
+                                android:text="Request Type"
                                 android:textColor="@color/text_color"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -153,329 +213,266 @@
                                 android:src="@drawable/arrow_left"
                                 android:visibility="gone"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="@id/tv_depart"
-                                app:layout_constraintTop_toTopOf="@+id/tv_depart" />
+                                app:layout_constraintEnd_toEndOf="@id/tv_requests"
+                                app:layout_constraintTop_toTopOf="@+id/tv_requests" />
 
                             <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/rv_list"
+                                android:id="@+id/rv_list2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:visibility="gone"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_depart" />
+                                app:layout_constraintTop_toBottomOf="@+id/tv_requests" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <View
-                            android:id="@+id/view2"
+                            android:id="@+id/view3"
                             android:layout_width="match_parent"
                             android:layout_height="0.05dp"
-                            android:layout_below="@+id/const1"
+                            android:layout_below="@+id/const2"
                             android:layout_marginTop="16dp"
                             android:background="@color/black" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/view2"
+                            android:layout_below="@id/view3"
                             android:layout_marginTop="16dp">
 
                             <TextView
-                                android:id="@+id/tv_request"
+                                android:id="@+id/tv_reg"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
                                 android:letterSpacing="0.01"
-                                android:text="Request Type"
+                                android:text="Reg No. ( if applicable)"
                                 android:textColor="@color/text_color"
                                 android:textSize="14sp" />
 
                             <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/const2"
+                                android:id="@+id/const3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@id/tv_request"
+                                android:layout_below="@id/tv_reg"
                                 android:layout_marginTop="8dp">
 
                                 <TextView
-                                    android:id="@+id/tv_requests"
+                                    android:id="@+id/tv_registration"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/shape_edittext_onroad"
                                     android:fontFamily="@font/poppins"
+                                    android:hint="Vehicle registration number"
+                                    android:importantForAutofill="no"
                                     android:letterSpacing="0.01"
                                     android:padding="10dp"
-                                    android:text="Request Type"
                                     android:textColor="@color/text_color"
+                                    android:textSize="14sp"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 
-                                <ImageView
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:layout_marginEnd="8dp"
-                                    android:src="@drawable/arrow_left"
-                                    android:visibility="gone"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="@id/tv_requests"
-                                    app:layout_constraintTop_toTopOf="@+id/tv_requests" />
 
                                 <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/rv_list2"
+                                    android:id="@+id/rv_list3"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:visibility="gone"
-                                    app:layout_constraintTop_toBottomOf="@+id/tv_requests" />
+                                    app:layout_constraintTop_toBottomOf="@+id/tv_registration" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                             <View
-                                android:id="@+id/view3"
+                                android:id="@+id/view4"
                                 android:layout_width="match_parent"
                                 android:layout_height="0.05dp"
-                                android:layout_below="@+id/const2"
+                                android:layout_below="@+id/const3"
                                 android:layout_marginTop="16dp"
                                 android:background="@color/black" />
 
                             <RelativeLayout
+                                android:id="@+id/viewx"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@id/view3"
+                                android:layout_below="@id/view4"
                                 android:layout_marginTop="16dp">
 
                                 <TextView
-                                    android:id="@+id/tv_reg"
+                                    android:id="@+id/tv_title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/poppins"
                                     android:letterSpacing="0.01"
-                                    android:text="Reg No. ( if applicable)"
+                                    android:text="Title*"
                                     android:textColor="@color/text_color"
                                     android:textSize="14sp" />
 
-                                <androidx.constraintlayout.widget.ConstraintLayout
-                                    android:id="@+id/const3"
+                                <TextView
+                                    android:id="@+id/edt_title"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_below="@id/tv_reg"
-                                    android:layout_marginTop="8dp">
-
-                                    <TextView
-                                        android:id="@+id/tv_registration"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:background="@drawable/shape_edittext_onroad"
-                                        android:fontFamily="@font/poppins"
-                                        android:hint="Vehicle registration number"
-                                        android:importantForAutofill="no"
-                                        android:letterSpacing="0.01"
-                                        android:padding="10dp"
-                                        android:textColor="@color/text_color"
-                                        android:textSize="14sp"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                                    <androidx.recyclerview.widget.RecyclerView
-                                        android:id="@+id/rv_list3"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:visibility="gone"
-                                        app:layout_constraintTop_toBottomOf="@+id/tv_registration" />
-                                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                                <View
-                                    android:id="@+id/view4"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0.05dp"
-                                    android:layout_below="@+id/const3"
-                                    android:layout_marginTop="16dp"
-                                    android:background="@color/black" />
-
-                                <RelativeLayout
-                                    android:id="@+id/viewx"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@id/view4"
-                                    android:layout_marginTop="16dp">
-
-                                    <TextView
-                                        android:id="@+id/tv_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/poppins"
-                                        android:letterSpacing="0.01"
-                                        android:text="Title*"
-                                        android:textColor="@color/text_color"
-                                        android:textSize="14sp" />
-
-                                    <TextView
-                                        android:id="@+id/edt_title"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@+id/tv_title"
-                                        android:layout_marginTop="8dp"
-                                        android:background="@drawable/shape_edittext_onroad"
-                                        android:fontFamily="@font/poppins"
-                                        android:gravity="top"
-                                        android:hint="Title"
-                                        android:importantForAutofill="no"
-                                        android:letterSpacing="0.01"
-                                        android:padding="10dp"
-                                        android:textColor="@color/text_color"
-                                        android:textSize="14sp" />
-                                </RelativeLayout>
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@id/viewx"
-                                    android:layout_marginTop="16dp">
-
-                                    <TextView
-                                        android:id="@+id/tv_des"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/poppins"
-                                        android:letterSpacing="0.01"
-                                        android:text="Description"
-                                        android:textColor="@color/text_color"
-                                        android:textSize="14sp" />
-
-                                    <TextView
-                                        android:id="@+id/edt_des"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="180dp"
-                                        android:layout_below="@+id/tv_des"
-                                        android:layout_marginTop="10dp"
-                                        android:background="@drawable/shape_edittext_onroad"
-                                        android:fontFamily="@font/poppins"
-                                        android:gravity="top"
-                                        android:hint="Description"
-                                        android:importantForAutofill="no"
-                                        android:letterSpacing="0.01"
-                                        android:padding="13dp"
-                                        android:textColor="@color/text_color"
-                                        android:textSize="14sp" />
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:layout_marginTop="15dp"
-                                        android:id="@+id/llAttachment"
-                                        android:layout_below="@id/edt_des"
-                                        android:orientation="horizontal">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginHorizontal="2dp"
-                                            android:fontFamily="@font/poppins_semibold"
-                                            android:text="Attachments" />
-
-                                        <ImageView
-                                            android:layout_width="20dp"
-                                            android:layout_height="20dp"
-                                            android:layout_marginRight="20dp"
-                                            android:src="@drawable/link" />
-
-                                        <androidx.recyclerview.widget.RecyclerView
-                                            android:id="@+id/attachmentRV"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginVertical="10dp" />
-                                    </LinearLayout>
-
-                                    <TextView
-                                        android:id="@+id/tv_upload"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/edt_des"
-                                        android:layout_marginTop="25dp"
-                                        android:fontFamily="@font/poppins"
-                                        android:text="Upload Image (Optional)"
-                                        android:visibility="gone" />
-
-                                    <ImageView
-                                        android:id="@+id/ic_upload"
-                                        android:layout_width="55dp"
-                                        android:layout_height="35dp"
-                                        android:layout_below="@id/edt_des"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_marginTop="20dp"
-                                        android:background="@drawable/shape_edittext_onroad"
-                                        android:padding="10dp"
-                                        android:src="@drawable/upload_icc"
-                                        android:visibility="gone" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/tv_upload"
-                                        android:layout_marginTop="20dp"
-                                        android:background="@color/orange"
-                                        android:fontFamily="@font/poppins_semibold"
-                                        android:gravity="center"
-                                        android:paddingHorizontal="20dp"
-                                        android:paddingVertical="10dp"
-                                        android:text="cancel"
-                                        android:textColor="@color/white"
-                                        android:visibility="gone" />
-
-                                    <androidx.cardview.widget.CardView
-                                        android:id="@+id/cancel"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/tv_upload"
-                                        android:layout_marginHorizontal="10dp"
-                                        android:layout_marginTop="20dp"
-                                        android:backgroundTint="@color/gray"
-                                        android:padding="10dp"
-                                        android:visibility="gone"
-                                        app:cardCornerRadius="20dp">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:fontFamily="@font/poppins_semibold"
-                                            android:paddingHorizontal="15dp"
-                                            android:paddingVertical="8dp"
-                                            android:text="Cancel"
-                                            android:textColor="@color/white"
-
-                                            android:textSize="14sp" />
-                                    </androidx.cardview.widget.CardView>
-
-
-                                    <TextView
-                                        android:id="@+id/saveTickets"
-                                        style="@style/ctaStyle1"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@id/ic_upload"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_marginTop="20dp"
-                                        android:fontFamily="@font/poppins_semibold"
-                                        android:gravity="center"
-                                        android:paddingHorizontal="20dp"
-                                        android:paddingVertical="10dp"
-                                        android:text="Save"
-                                        android:textColor="@color/white"
-                                        android:visibility="gone" />
-                                </RelativeLayout>
+                                    android:layout_below="@+id/tv_title"
+                                    android:layout_marginTop="8dp"
+                                    android:background="@drawable/shape_edittext_onroad"
+                                    android:fontFamily="@font/poppins"
+                                    android:gravity="top"
+                                    android:hint="Title"
+                                    android:importantForAutofill="no"
+                                    android:letterSpacing="0.01"
+                                    android:padding="10dp"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp" />
                             </RelativeLayout>
 
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/viewx"
+                                android:layout_marginTop="16dp">
+
+                                <TextView
+                                    android:id="@+id/tv_des"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins"
+                                    android:letterSpacing="0.01"
+                                    android:text="Description"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/edt_des"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="180dp"
+                                    android:layout_below="@+id/tv_des"
+                                    android:layout_marginTop="10dp"
+                                    android:background="@drawable/shape_edittext_onroad"
+                                    android:fontFamily="@font/poppins"
+                                    android:gravity="top"
+                                    android:hint="Description"
+                                    android:importantForAutofill="no"
+                                    android:letterSpacing="0.01"
+                                    android:padding="13dp"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp" />
+
+                                <LinearLayout
+                                    android:id="@+id/llAttachment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/edt_des"
+                                    android:layout_marginTop="15dp"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginHorizontal="2dp"
+                                        android:fontFamily="@font/poppins_semibold"
+                                        android:text="Attachments" />
+
+                                    <ImageView
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginRight="20dp"
+                                        android:src="@drawable/link" />
+
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/attachmentRV"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginVertical="10dp" />
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/tv_upload"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/edt_des"
+                                    android:layout_marginTop="25dp"
+                                    android:fontFamily="@font/poppins"
+                                    android:text="Upload Image (Optional)"
+                                    android:visibility="gone" />
+
+                                <ImageView
+                                    android:id="@+id/ic_upload"
+                                    android:layout_width="55dp"
+                                    android:layout_height="35dp"
+                                    android:layout_below="@id/edt_des"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_marginTop="20dp"
+                                    android:background="@drawable/shape_edittext_onroad"
+                                    android:padding="10dp"
+                                    android:src="@drawable/upload_icc"
+                                    android:visibility="gone" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/tv_upload"
+                                    android:layout_marginTop="20dp"
+                                    android:background="@color/orange"
+                                    android:fontFamily="@font/poppins_semibold"
+                                    android:gravity="center"
+                                    android:paddingHorizontal="20dp"
+                                    android:paddingVertical="10dp"
+                                    android:text="cancel"
+                                    android:textColor="@color/white"
+                                    android:visibility="gone" />
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/cancel"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/tv_upload"
+                                    android:layout_marginHorizontal="10dp"
+                                    android:layout_marginTop="20dp"
+                                    android:backgroundTint="@color/gray"
+                                    android:padding="10dp"
+                                    android:visibility="gone"
+                                    app:cardCornerRadius="20dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:fontFamily="@font/poppins_semibold"
+                                        android:paddingHorizontal="15dp"
+                                        android:paddingVertical="8dp"
+                                        android:text="Cancel"
+                                        android:textColor="@color/white"
+
+                                        android:textSize="14sp" />
+                                </androidx.cardview.widget.CardView>
+
+
+                                <TextView
+                                    android:id="@+id/saveTickets"
+                                    style="@style/ctaStyle1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/ic_upload"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_marginTop="20dp"
+                                    android:fontFamily="@font/poppins_semibold"
+                                    android:gravity="center"
+                                    android:paddingHorizontal="20dp"
+                                    android:paddingVertical="10dp"
+                                    android:text="Save"
+                                    android:textColor="@color/white"
+                                    android:visibility="gone" />
+                            </RelativeLayout>
                         </RelativeLayout>
 
+                    </RelativeLayout>
 
-                    </LinearLayout>
+
+                </LinearLayout>
 
 
-                </ScrollView>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </ScrollView>
 
 </layout>

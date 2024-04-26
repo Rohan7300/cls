@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.TicketAdapter
 import com.clebs.celerity.databinding.DialogSortFiltersBinding
@@ -29,7 +31,11 @@ class UserTicketsFragment : Fragment() {
     lateinit var prefs: Prefs
     lateinit var homeActivity: HomeActivity
     private lateinit var loadingDialog: LoadingDialog
-
+    var d1: Boolean = false
+    var d2: Boolean = false
+    lateinit var deleteDialog: AlertDialog
+    lateinit var deleteDailogBinding:DialogSortFiltersBinding
+    var includeCompleted = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,6 +49,10 @@ class UserTicketsFragment : Fragment() {
         homeActivity.showDialog()
         viewModel.GetUserTickets(prefs.userID.toInt())
 
+        deleteDialog = AlertDialog.Builder(requireContext()).create()
+
+        deleteDailogBinding =
+            DialogSortFiltersBinding.inflate(LayoutInflater.from(requireContext()))
 
         observers()
         mbinding.rlreltive.setOnClickListener {
@@ -84,15 +94,24 @@ class UserTicketsFragment : Fragment() {
     }
 
     fun showAlert() {
-        val factory = LayoutInflater.from(requireActivity())
+/*        val factory = LayoutInflater.from(requireActivity())
         //val view: View = factory.inflate(R.layout.dialog_sort_filters, null)
         val deleteDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
 
         val deleteDailogBinding =
-            DialogSortFiltersBinding.inflate(LayoutInflater.from(requireContext()))
+            DialogSortFiltersBinding.inflate(LayoutInflater.from(requireContext()))*/
+
         deleteDailogBinding.tvNext.isClickable = false
         deleteDailogBinding.icCrossOrange.setOnClickListener {
             deleteDialog.cancel()
+        }
+        deleteDailogBinding.checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            includeCompleted = isChecked
+            if (isChecked) {
+                enableDates(true, deleteDailogBinding)
+            } else {
+                enableDates(false, deleteDailogBinding)
+            }
         }
 
         deleteDailogBinding.edtBreakstart.setOnClickListener {
@@ -113,6 +132,16 @@ class UserTicketsFragment : Fragment() {
                 1
             )
         }
+        deleteDailogBinding.edtBreakstart.doAfterTextChanged {
+            d1 = deleteDailogBinding.edtBreakstart.text != "DD-MM-YYYY"
+            if (d1 && d2)
+                deleteDailogBinding.tvNext.isEnabled = true
+        }
+        deleteDailogBinding.edtBreakend.doAfterTextChanged {
+            d2 = deleteDailogBinding.edtBreakend.text != "DD-MM-YYYY"
+            if (d1 && d2)
+                deleteDailogBinding.tvNext.isEnabled = true
+        }
 
         deleteDailogBinding.tvNext.setOnClickListener {
             homeActivity.showDialog()
@@ -125,7 +154,9 @@ class UserTicketsFragment : Fragment() {
             val t2 = convertDateFormat(tDate2, inputFormat, outputFormat)
             viewModel.GetUserTickets(
                 userID = prefs.userID.toInt(),
-                startDate = t1, endDate = t2
+                startDate = t1,
+                endDate = t2,
+                includeCompleted = includeCompleted
             )
             deleteDialog.cancel()
         }
@@ -134,6 +165,24 @@ class UserTicketsFragment : Fragment() {
         deleteDialog.setCanceledOnTouchOutside(true);
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         deleteDialog.show();
+    }
+
+    private fun enableDates(b: Boolean, dialogBinding: DialogSortFiltersBinding) {
+        if (b) {
+            dialogBinding.edtBreakstart.isClickable = true
+            dialogBinding.edtBreakstart.isEnabled = true
+            dialogBinding.edtBreakend.isClickable = true
+            dialogBinding.edtBreakend.isEnabled = true
+            dialogBinding.edtBreakstart.setBackgroundResource(R.drawable.shape_edittext_onroad)
+            dialogBinding.edtBreakend.setBackgroundResource(R.drawable.shape_edittext_onroad)
+        } else {
+            dialogBinding.edtBreakstart.isClickable = false
+            dialogBinding.edtBreakstart.isEnabled = false
+            dialogBinding.edtBreakend.isClickable = false
+            dialogBinding.edtBreakend.isEnabled = false
+            dialogBinding.edtBreakstart.setBackgroundResource(R.drawable.shape_edittext_onroad_gray)
+            dialogBinding.edtBreakend.setBackgroundResource(R.drawable.shape_edittext_onroad_gray)
+        }
     }
 
     override fun onResume() {

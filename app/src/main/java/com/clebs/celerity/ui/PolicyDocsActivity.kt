@@ -4,6 +4,10 @@ import android.Manifest
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -18,6 +22,8 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
@@ -492,6 +498,13 @@ mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
                     }
                 }
                 showToast("PDF Downloaded!", this)
+                val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    FileProvider.getUriForFile(this, "${this.packageName}.fileprovider", file)
+                } else {
+                    Uri.fromFile(file)
+                }
+                showNotification("PDF Downloaded", "Your PDF has been downloaded successfully.",uri)
+
                 openPDF(file, mode)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -499,6 +512,45 @@ mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
             }
         } else {
             showToast("Storage Permission Required", this)
+        }
+    }
+
+    private fun showNotification(title: String, content: String,uri: Uri) {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel("Download Complete", "PDF Download Channel", NotificationManager.IMPORTANCE_DEFAULT)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        //intent.setType("*/*");
+
+        intent.setDataAndType(uri, "*/*")
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+
+
+        val notificationBuilder = NotificationCompat.Builder(this, "Download Complete")
+            .setSmallIcon(R.drawable.logo_new)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+
+        with(NotificationManagerCompat.from(this)) {
+            if (ActivityCompat.checkSelfPermission(
+                    this@PolicyDocsActivity,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+            notify(1, notificationBuilder.build())
         }
     }
 

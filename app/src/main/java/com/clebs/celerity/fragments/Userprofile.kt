@@ -504,7 +504,7 @@ class Userprofile : Fragment() {
         ).observe(requireActivity(), Observer {
             Log.e("dkfjdkfjdfkj", "UseEmailAsUSername: ")
             if (it?.Status!!.equals(200)) {
-//                mbinding.usertext.setText(mbinding.emailtext.text.toString())
+                   mbinding.usertext.setText(mbinding.emailtext.text.toString())
 
                 showToast("Email has been used as username", requireContext())
 
