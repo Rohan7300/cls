@@ -1077,9 +1077,9 @@ class CompleteTaskFragment : Fragment() {
     }*/
 
     private fun startInspection() {
-        if (isAllImageUploaded) {
+/*        if (isAllImageUploaded) {
             mbinding.tvNext.visibility = View.VISIBLE
-        }
+        }*/
 
 //      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
         loadingDialog.show()
@@ -1169,13 +1169,6 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.GONE
 
-                /*mbinding.clFaceMask.visibility = View.GONE
-                mbinding.clOilLevel.visibility = View.GONE*/
-                /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
-                         mbinding.uploadLayouts.visibility = View.VISIBLE
-                         mbinding.taskDetails.visibility = View.VISIBLE
-                         mbinding.imageUploadView.visibility = View.VISIBLE*/
-                // mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
             }
 
             0 -> {
@@ -1257,7 +1250,7 @@ class CompleteTaskFragment : Fragment() {
 
     private fun setVisibiltyLevel() {
         visibilityLevel = 0
-        if (!inspectionstarted && !imagesUploaded) {
+        if (!inspectionstarted) {
             visibilityLevel = -1
             visibiltyControlls()
             return

@@ -367,6 +367,7 @@ class Prefs(context: Context) {
         }
         editor.apply()
     }
+
     fun isInspectionDoneToday(): Boolean {
 
         val isInspectionDone = sharedPreferences.getBoolean("is_inspection_done", false)
