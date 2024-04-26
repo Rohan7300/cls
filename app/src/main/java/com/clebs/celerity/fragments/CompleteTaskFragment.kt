@@ -62,6 +62,7 @@ import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
@@ -89,6 +90,7 @@ class CompleteTaskFragment : Fragment() {
     private var visibilityLevel = -1
     var breakStartTime: String = ""
     var breakEndTime: String = ""
+    var scannedvrn:String=""
     private lateinit var loadingDialog: LoadingDialog
     private var b1 = false
     private var b2 = false
@@ -130,6 +132,14 @@ class CompleteTaskFragment : Fragment() {
         val clickListener = View.OnClickListener {
             showAlert()
         }
+        val currentDate =
+            SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(
+                Date()
+            )
+
+
+
+
         loadingDialog = (activity as HomeActivity).loadingDialog
         userId = Prefs.getInstance(requireContext()).userID.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
@@ -157,6 +167,18 @@ class CompleteTaskFragment : Fragment() {
         inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
         viewModel = (activity as HomeActivity).viewModel
         showDialog()
+        viewModel.GetVehicleInfobyDriverId(Prefs.getInstance(App.instance).userID.toInt(),currentDate)
+        viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner){
+
+            if (it!=null){
+
+                scannedvrn=it.vmRegNo
+                Prefs.getInstance(App.instance).scannedVmRegNo=it.vmRegNo
+                if ( !Prefs.getInstance(App.instance).VmID.isNotEmpty()){
+                    Prefs.getInstance(App.instance).VmID=it.vmId.toString()
+                }
+            }
+        }
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.completeTaskFragment)
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
 
@@ -1169,6 +1191,13 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.GONE
 
+                /*mbinding.clFaceMask.visibility = View.GONE
+                mbinding.clOilLevel.visibility = View.GONE*/
+                /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                         mbinding.uploadLayouts.visibility = View.VISIBLE
+                         mbinding.taskDetails.visibility = View.VISIBLE
+                         mbinding.imageUploadView.visibility = View.VISIBLE*/
+                // mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
             }
 
             0 -> {

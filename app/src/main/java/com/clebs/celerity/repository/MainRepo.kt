@@ -56,6 +56,7 @@ import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
+import com.clebs.celerity.models.response.GetvehicleInfoByDriverId
 import com.clebs.celerity.models.response.NotificationResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.SaveCommentResponse
@@ -964,6 +965,19 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun SaveVehicleInspectionInfo(body: SaveVehicleInspectionInfo
     ):SimpleStatusMsgResponse?{
         val response = ApiService.SaveVehicleInspectionInformation(body)
+        if(response.isSuccessful){
+            return response.body()
+        }
+        else{
+            val errorBody = response.errorBody()?.string()
+            println("GetNotificationListByUserIId: Error Response Body: $errorBody")
+        }
+        return null
+    }
+
+    suspend fun GetVehicleInfobyDriverId(userID: Int,date:String
+    ):GetvehicleInfoByDriverId?{
+        val response = ApiService.GetVehicleInfobyDriverId(userID,date)
         if(response.isSuccessful){
             return response.body()
         }
