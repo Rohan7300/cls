@@ -116,6 +116,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 if (destinationFragment == "NotificationsFragment") {
                     ActivityHomeBinding.title.text = "Notifications"
                     navController.navigate(R.id.notifficationsFragment)
+                    return
                 }
             }
 
@@ -150,6 +151,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         Prefs.getInstance(App.instance).VmID.toString().toInt()
                     )
                 )
+
                 viewModel.livedataSavevehicleinspectioninfo.observe(this, Observer {
                     if (it != null) {
                         if (it.Message.equals("200"))

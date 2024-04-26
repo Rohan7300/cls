@@ -59,6 +59,10 @@ class NotificationAdapter() :
                     binding.time.text = item.NotificationSentOn
                 }
 
+                binding.overallNotification.setOnClickListener {
+
+                }
+
             }
         }
 

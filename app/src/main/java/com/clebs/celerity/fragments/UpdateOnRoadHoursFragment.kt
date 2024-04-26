@@ -88,7 +88,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
         if (routeInfo != null) {
             binding.parcelsBroughtBack.text = routeInfo.RtNoParcelsbroughtback.toString()
             binding.edtMileage.setText(routeInfo.RtFinishMileage.toString())
-            binding.edtRouteComment.setText(routeInfo.RtComment)
+            //binding.edtRouteComment.setText(routeInfo.RtComment)
             binding.edtRoutesORH.setText(routeInfo.RtName)
             binding.edtParcels.setText(routeInfo.RtNoOfParcelsDelivered.toString())
             dwID = routeInfo.RtDwId
@@ -96,11 +96,13 @@ class UpdateOnRoadHoursFragment : Fragment() {
 
             selectedRouteId = routeInfo.RtTypeId
             routeName = routeInfo.RtName
-            if (routeInfo.RtComment.equals("null")) {
+            if (routeInfo.RtComment == "null") {
                 binding.edtRouteComment.setText(" ")
+
             }
             else{
                 binding.edtRouteComment.setText(routeInfo.RtComment)
+                routeComment =routeInfo.RtComment
             }
 
             rtID = routeInfo.RtId
@@ -119,6 +121,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
         }
 
         binding.pbbMinus.setOnClickListener {
+            parcelBack =  binding.parcelsBroughtBack.text.toString().toInt()
             if (parcelBack > 0) {
                 parcelBack -= 1
                 binding.parcelsBroughtBack.text = parcelBack.toString()
@@ -248,7 +251,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
                     R.id.edt_routesORH -> routeName = value
                     R.id.edt_parcels -> parcelsDelivered = value.toString()
                     R.id.edt_mileage -> totalMileage = value.toString()
-                    R.id.edt_route_comment -> routeComment = value
+                    R.id.edt_route_comment -> routeComment = value.toString()
                 }
             }
 
@@ -345,7 +348,11 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 val routeNames = routeData.map { it.RtName }
                 val routeIDs = routeData.map { it.RtId }
                 try {
-                    binding.selectDepartmentTIL.hint = routeNames[routeIDs.indexOf(selectedRouteId)]
+                    //binding.selectDepartmentTIL.hint = routeNames[routeIDs.indexOf(selectedRouteId)]
+
+                    binding.spinnerRouteType.setText(routeNames[routeIDs.indexOf(selectedRouteId)])
+                    binding.spinnerRouteType.setSelection(routeIDs.indexOf(selectedRouteId))
+
                 } catch (_: Exception) {
 
                 }

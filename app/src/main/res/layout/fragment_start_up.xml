@@ -73,6 +73,7 @@
                 android:ems="5"
                 android:fontFamily="@font/poppins_semibold"
                 android:padding="10dp"
+                android:id="@+id/cancel"
                 android:text="Cancel"
                 android:textAlignment="center"
                 android:textColor="@color/black"

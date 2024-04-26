@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentQuestinareBinding
@@ -55,7 +56,7 @@ class QuestinareFragment : Fragment() {
             "Going On",
             "Delivery Procedures",
             "Return",
-            "Final Assesment"
+            "Final Assessment"
         )
         val str = "Observations and explanations must be conducted on a" +
                 " Nursery Level 1 route. The new driver should make at least 50 unassisted deliveries," +
@@ -76,6 +77,7 @@ class QuestinareFragment : Fragment() {
                     orignalParams
             }
         }
+
 
         binding.tablay.setupWithViewPager(binding.viewPager)
 

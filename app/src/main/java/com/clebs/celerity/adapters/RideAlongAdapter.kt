@@ -25,6 +25,7 @@ class RideAlongAdapter(
     var viewLifecycleOwner: LifecycleOwner,
     var context: Context
 ) : RecyclerView.Adapter<RideAlongAdapter.RideAlongViewHolder>() {
+    var isChanged = false
     inner class RideAlongViewHolder(val binding: AdapterRideAlongBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: leadDriverIdItem) {
@@ -44,6 +45,7 @@ class RideAlongAdapter(
                     if (itemX != null) {
                         if (itemX.isFeedBackFilled != it.RaIsSubmitted){
                             itemX.isFeedBackFilled = it.RaIsSubmitted
+                            isChanged = true
                            // notifyDataSetChanged()
                         }
                     }
@@ -86,6 +88,7 @@ class RideAlongAdapter(
                     if (itemX != null) {
                         if (itemX.isQuestionsFilled != it.RaIsSubmitted) {
                             itemX.isQuestionsFilled = it.RaIsSubmitted
+                            isChanged = true
                           //  notifyDataSetChanged()
                         }
                     }
@@ -140,6 +143,9 @@ class RideAlongAdapter(
             binding.deleteRideAlong.setOnClickListener {
                 loadingDialog()
                 mainViewModel.DeleteOnRideAlongRouteInfo(item.RtId)
+            }
+            if(adapterPosition == data.size-1&&isChanged){
+                notifyDataSetChanged()
             }
         }
     }

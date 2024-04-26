@@ -83,6 +83,7 @@ class OnRoadHoursFragment : Fragment() {
         }
 
         binding.pbbMinus.setOnClickListener {
+
             if (parcelBack > 0) {
                 parcelBack -= 1
                 binding.parcelsBroughtBack.text = parcelBack.toString()
@@ -179,9 +180,9 @@ class OnRoadHoursFragment : Fragment() {
                 findNavController().navigate(R.id.completeTaskFragment)
             }
         }
-        var locationID =0
+        var locationID = 0
 
-        locationID = if(prefs.workLocationId!=0)
+        locationID = if (prefs.workLocationId != 0)
             prefs.workLocationId
         else
             prefs.currLocationId
@@ -290,9 +291,9 @@ class OnRoadHoursFragment : Fragment() {
                 )
             }
         }
-        var locationID =0
+        var locationID = 0
 
-        locationID = if(prefs.workLocationId!=0)
+        locationID = if (prefs.workLocationId != 0)
             prefs.workLocationId
         else
             prefs.currLocationId
@@ -374,19 +375,19 @@ class OnRoadHoursFragment : Fragment() {
             run {
                 parent?.let { nonNullParent ->
 
-                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
-                        selectedItem.let {
-                            when (spinner) {
-                                binding.spinnerLocation -> {
-                                    selectedLocId = ids[position]
-                                }
+                    val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
+                    selectedItem.let {
+                        when (spinner) {
+                            binding.spinnerLocation -> {
+                                selectedLocId = ids[position]
+                            }
 
-                                binding.spinnerRouteType -> {
-                                    selectedRouteType = selectedItem
-                                    selectedRouteId = ids[position]
-                                }
+                            binding.spinnerRouteType -> {
+                                selectedRouteType = selectedItem
+                                selectedRouteId = ids[position]
                             }
                         }
+                    }
 
                 }
             }

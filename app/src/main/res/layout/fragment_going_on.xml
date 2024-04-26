@@ -73,6 +73,7 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:padding="10dp"
                 android:text="Cancel"
+                android:id="@+id/cancel"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="16sp" />

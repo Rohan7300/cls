@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.QuestionAdapter
 import com.clebs.celerity.databinding.FragmentGoingOnBinding
@@ -51,6 +53,13 @@ class GoingOn : Fragment() {
         val adapter = QuestionAdapter(questions,requireContext())
         binding.GoingOnRV.adapter = adapter
         binding.GoingOnRV.layoutManager = LinearLayoutManager(requireContext())
+
+
+        binding.cancel.setOnClickListener {
+            findNavController().navigate(R.id.completeTaskFragment)
+            findNavController().clearBackStack(R.id.completeTaskFragment)
+        }
+
 
         viewModel.liveDataQuestionaireGoingOn.observe(viewLifecycleOwner) {
             loadingDialog.cancel()

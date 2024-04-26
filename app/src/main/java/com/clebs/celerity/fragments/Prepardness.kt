@@ -59,7 +59,10 @@ class Prepardness : Fragment() {
                 pref.qStage = 1
             }
         }
-
+        binding.prepCancel.setOnClickListener {
+            findNavController().navigate(R.id.completeTaskFragment)
+            findNavController().clearBackStack(R.id.completeTaskFragment)
+        }
         binding.prepardnessSave.setOnClickListener {
             val allQuestionsSelected = adapter.areAllQuestionsSelected()
             val comment =

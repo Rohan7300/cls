@@ -490,7 +490,7 @@ class CompleteTaskFragment : Fragment() {
                 }
 
                 if (it.ClockedOutTime != null) {
-                    mbinding.clockOutMark.setImageResource(R.drawable.check_new)
+                    mbinding.clockOutMark.setImageResource(R.drawable.finalclockout)
                     mbinding.rlcomtwoClockOut.isEnabled = false
                     mbinding.clockOutTV.text = "Clocked Out"
                     mbinding.rlcomtwoClockOut.isClickable = false
@@ -542,7 +542,7 @@ class CompleteTaskFragment : Fragment() {
             viewModel.GetDailyWorkInfoById(userId)
             showDialog()
             if (it != null) {
-                mbinding.clockOutMark.setImageResource(R.drawable.check_new)
+                mbinding.clockOutMark.setImageResource(R.drawable.finalclockout)
                 mbinding.rlcomtwoClockOut.isEnabled = false
                 mbinding.clockOutTV.text = "Clocked Out"
                 mbinding.rlcomtwoClockOut.isClickable = false
@@ -759,8 +759,11 @@ class CompleteTaskFragment : Fragment() {
             requireContext()
         )
 
+
         mbinding.questionareRv.adapter = rideAlongAdapter
         mbinding.questionareRv.layoutManager = LinearLayoutManager(requireContext())
+
+        mbinding.questionareRv.viewTreeObserver
 
         viewModel.liveDataRideAlongDriverInfoByDateResponse.observe(viewLifecycleOwner) { rideAlongs ->
             hideDialog()
@@ -769,6 +772,7 @@ class CompleteTaskFragment : Fragment() {
                     rideAlongAdapter.data.clear()
                     rideAlongAdapter.data.addAll(it)
                     rideAlongAdapter.notifyDataSetChanged()
+
                 } else {
                     rideAlongAdapter.data.clear()
                     rideAlongAdapter.notifyDataSetChanged()
@@ -1182,6 +1186,7 @@ class CompleteTaskFragment : Fragment() {
                 rlcomtwoClock,
                 rlcomtwoClockOut,
                 BreakTimeTable,
+                startinspection,
                 taskDetails,
                 view2
             ).forEach { thisView -> thisView.visibility = View.GONE }
@@ -1190,6 +1195,7 @@ class CompleteTaskFragment : Fragment() {
             -1 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.GONE
+                mbinding.startinspection.visibility = View.VISIBLE
 
                 /*mbinding.clFaceMask.visibility = View.GONE
                 mbinding.clOilLevel.visibility = View.GONE*/
@@ -1352,10 +1358,10 @@ class CompleteTaskFragment : Fragment() {
                     }
                 }
             }, 0, 1000)
-            mbinding.startinspection.visibility = View.GONE
+           // mbinding.startinspection.visibility = View.GONE
 
         } else {
-            mbinding.startinspection.visibility = View.VISIBLE
+            //mbinding.startinspection.visibility = View.VISIBLE
         }
     }
 

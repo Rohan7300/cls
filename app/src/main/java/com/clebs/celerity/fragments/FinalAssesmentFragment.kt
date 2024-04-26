@@ -46,32 +46,36 @@ class FinalAssesmentFragment : Fragment() {
             }
         }
 
+
         binding.cancelBtn.setOnClickListener {
             findNavController().navigate(R.id.completeTaskFragment)
             findNavController().clearBackStack(R.id.completeTaskFragment)
         }
 
         binding.finalAssesmentSubmit.setOnClickListener {
-            if(pref.qStage<5||pref.quesID==0){
-                showToast("Please complete previous assessment first", requireContext())
-            }else{
-                val assesment =
-                    if (binding.etFinalAssesmentComment.text.isNullOrEmpty()) " " else binding.etFinalAssesmentComment.text
-
-                if(assesment.isNotEmpty()){
-                    loadingDialog.show()
-                    viewModel.SaveQuestionaireFinalAssesment(SubmitFinalQuestionairebyLeadDriverRequest(
-                        QuestionId = pref.quesID,
-                        DaDailyWorkId = pref.daWID,
-                        LeadDriverId = pref.userID.toInt(),
-                        RoutetId = pref.currRtId,
-                        Assessment = assesment.toString()
-                    ))
+            if(binding.etFinalAssesmentComment.text.isNotEmpty()){
+                if(pref.qStage<5||pref.quesID==0){
+                    showToast("Please complete previous assessment first", requireContext())
                 }else{
-                    showToast("Please enter the assessment",requireContext())
-                }
-            }
+                    val assesment =
+                        if (binding.etFinalAssesmentComment.text.isNullOrEmpty()) " " else binding.etFinalAssesmentComment.text
 
+                    if(assesment.isNotEmpty()){
+                        loadingDialog.show()
+                        viewModel.SaveQuestionaireFinalAssesment(SubmitFinalQuestionairebyLeadDriverRequest(
+                            QuestionId = pref.quesID,
+                            DaDailyWorkId = pref.daWID,
+                            LeadDriverId = pref.userID.toInt(),
+                            RoutetId = pref.currRtId,
+                            Assessment = assesment.toString()
+                        ))
+                    }else{
+                        showToast("Please enter the assessment",requireContext())
+                    }
+                }
+            }else{
+                showToast("Please fill the assessment",requireContext())
+            }
         }
 
 

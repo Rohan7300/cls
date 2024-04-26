@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.QuestionAdapter
 import com.clebs.celerity.databinding.FragmentStartUpBinding
@@ -55,6 +57,10 @@ class StartUp : Fragment() {
                 pref.quesID = it.QuestionId
                 pref.qStage = 2
             }
+        }
+        binding.cancel.setOnClickListener {
+            findNavController().navigate(R.id.completeTaskFragment)
+            findNavController().clearBackStack(R.id.completeTaskFragment)
         }
 
         binding.saveBTNStartup.setOnClickListener {

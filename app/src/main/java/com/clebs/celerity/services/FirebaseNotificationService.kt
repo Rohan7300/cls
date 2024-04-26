@@ -31,7 +31,6 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         super.onCreate()
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         mainRepo = MainRepo(apiService)
-
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -44,6 +43,7 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         Log.d(TAG, "FCMMessage Data6 ${message.sentTime} ")
         val title = message.notification?.title ?: "Notification Title"
         val messageBody = message.notification?.body ?: "Notification Message"
+        Log.d(TAG, "FCMMessage MessageBody ${message.notification?.body} ")
         showCustomNotification(title, messageBody)
     }
 
@@ -105,10 +105,9 @@ class FirebaseNotificationService : FirebaseMessagingService() {
     }
 
     private fun getCustomDesign(title: String, message: String): RemoteViews {
-
         val remoteViews = RemoteViews(packageName, R.layout.notification_layout)
         remoteViews.setTextViewText(R.id.title, title)
-        remoteViews.setTextViewText(R.id.descripotionX, message)
+        remoteViews.setTextViewText(R.id.descriptionXX, message)
         remoteViews.setImageViewResource(R.id.icons, R.drawable.logo_new)
         return remoteViews
     }

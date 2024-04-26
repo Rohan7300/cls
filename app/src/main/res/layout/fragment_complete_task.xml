@@ -225,7 +225,7 @@
                         android:layout_height="25dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
-                        android:src="@drawable/clock_in" />
+                        android:src="@drawable/finalclockout" />
 
                     <ImageButton
                         android:id="@+id/down_ivs"
