@@ -13,12 +13,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.liveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
-import com.clebs.celerity.adapters.CommentAdapter
 import com.clebs.celerity.adapters.DetailCommentAdapter
 import com.clebs.celerity.databinding.ActivityAddCommentBinding
 import com.clebs.celerity.network.ApiService
@@ -68,12 +66,12 @@ class AddCommentActivity : AppCompatActivity() {
         }
 
         loadingDialog.show()
-        viewModel.GetTicketCommentList(prefs.userID.toInt(), ticketID!!)
+        viewModel.GetTicketCommentList(prefs.clebUserId.toInt(), ticketID!!)
         binding.submitAddComment.setOnClickListener {
             if (!binding.commentET.text.isNullOrEmpty()) {
                 loadingDialog.show()
                 viewModel.SaveTicketComment(
-                    prefs.userID.toInt(),
+                    prefs.clebUserId.toInt(),
                     ticketID!!,
                     binding.commentET.text.toString()
                 )
@@ -94,13 +92,13 @@ class AddCommentActivity : AppCompatActivity() {
                     commentID = it.CommentId.toInt()
                     uploadAttachment()
                 }else{
-                    viewModel.GetTicketCommentList(prefs.userID.toInt(), ticketID!!)
+                    viewModel.GetTicketCommentList(prefs.clebUserId.toInt(), ticketID!!)
                 }
             }
         }
 
         viewModel.liveDataUploadTicketCommentAttachmentDoc.observe(this){
-            viewModel.GetTicketCommentList(prefs.userID.toInt(), ticketID!!)
+            viewModel.GetTicketCommentList(prefs.clebUserId.toInt(), ticketID!!)
             if(it!=null){
                 binding.addImage.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.gallery))
                 ticketID = null
@@ -135,7 +133,7 @@ class AddCommentActivity : AppCompatActivity() {
     private fun uploadAttachment() {
         if (filePart != null && commentID != null) {
             viewModel.UploadTicketCommentAttachmentDoc(
-                prefs.userID.toInt(),
+                prefs.clebUserId.toInt(),
                 commentID!!,
                 filePart!!
             )

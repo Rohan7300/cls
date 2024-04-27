@@ -24,7 +24,8 @@ import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.RideAlongViewReadyCallback
+import com.clebs.celerity.utils.getLoc
+import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.showToast
 
 
@@ -68,11 +69,12 @@ class RideAlongFragment : Fragment() {
 
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
-        leadDriverID = (activity as HomeActivity).userId
+        leadDriverID = (activity as HomeActivity).clebuserID
         pref = Prefs.getInstance(requireContext())
         pref.submittedRideAlong = false
 
         clickListeners()
+
         observers()
 
         setInputListener(binding.edtParcels)
@@ -87,14 +89,9 @@ class RideAlongFragment : Fragment() {
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
             binding.headerTop.anaCarolin.text = name
         }
-        if (Prefs.getInstance(requireContext()).currLocationName != null) {
-            binding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).currLocationName ?: ""
-        } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
-            binding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).workLocationName ?: ""
-        }
-        binding.headerTop.dxReg.text = Prefs.getInstance(requireContext()).vmRegNo
+        binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
+
         if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
             binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
@@ -107,10 +104,10 @@ class RideAlongFragment : Fragment() {
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            if (Prefs.getInstance(requireContext()).currLocationName != null) {
+            if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
                 binding.headerTop.dxLoc.text =
                     Prefs.getInstance(requireContext()).currLocationName ?: ""
-            } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+            } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
                 binding.headerTop.dxLoc.text =
                     Prefs.getInstance(requireContext()).workLocationName ?: ""
             } else {
@@ -118,13 +115,18 @@ class RideAlongFragment : Fragment() {
                     binding.headerTop.dxLoc.text = it.locationName ?: ""
                 }
             }
+
             if (it != null) {
-                binding.headerTop.dxReg.text = it.vmRegNo ?: ""
+                pref.vmRegNo = it.vmRegNo ?: ""
+                if(it.vmId!=0)
+                    Prefs.getInstance(requireContext()).vmId = it.vmId
             }
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
                 binding.headerTop.anaCarolin.text = name
             }
             binding.headerTop.dxm5.text = (activity as HomeActivity).date
+            binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+            binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
             if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
                 binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
@@ -308,7 +310,7 @@ class RideAlongFragment : Fragment() {
                 RtType = rtType!!,
                 RtUsrId = selectedDriverId!!,
                 TrainingDays = 0,
-                VehicleId = selectedVehicleId!!
+                VehicleId = pref.vmId
             )
         )
     }
@@ -316,7 +318,6 @@ class RideAlongFragment : Fragment() {
     private fun chkNull(): Boolean {
         return listOf(
             selectedDriverId,
-            selectedVehicleId,
             selectedRouteId,
             routeName,
             retraining,

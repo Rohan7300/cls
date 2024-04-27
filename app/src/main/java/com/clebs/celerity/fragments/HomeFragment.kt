@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentHomeBinding
-import com.clebs.celerity.databinding.FragmentInvoicesBinding
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
@@ -46,7 +45,7 @@ class HomeFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         showDialog()
         viewModel.GetDriversBasicInformation(
-            Prefs.getInstance(App.instance).userID.toInt().toDouble()
+            Prefs.getInstance(App.instance).clebUserId.toInt().toDouble()
         ).observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {

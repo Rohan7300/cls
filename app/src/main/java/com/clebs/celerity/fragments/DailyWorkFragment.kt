@@ -3,13 +3,11 @@ package com.clebs.celerity.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -18,14 +16,12 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.CheckBox
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -35,15 +31,12 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.content.ContextCompat
-import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.ais.plate_req_api.model.NumberPlateResponse
 import com.ais.plate_req_api.webService.RetrofitHelper
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
@@ -71,7 +64,6 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer
 import com.kotlinpermissions.KotlinPermissions
-import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 import com.tapadoo.alerter.Alerter
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.Dispatchers
@@ -613,7 +605,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
         Prefs.getInstance(App.instance).scannedVmRegNo = vrn
         (activity as HomeActivity).GetDriversBasicInformation()
         mainViewModel.getVichelinformationResponse(
-            Prefs.getInstance(App.instance).userID.toString().toDouble(), 0.toDouble(), vrn
+            Prefs.getInstance(App.instance).clebUserId.toString().toDouble(), 0.toDouble(), vrn
         ).observe(requireActivity(), Observer {
             if (it != null) {
                 Prefs.getInstance(App.instance)

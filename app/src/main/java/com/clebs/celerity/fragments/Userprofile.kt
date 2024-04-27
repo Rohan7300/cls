@@ -5,7 +5,6 @@ import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,7 +15,6 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
@@ -142,9 +140,9 @@ class Userprofile : Fragment() {
 
         mbinding.checkbox.setOnClickListener {
             if (mbinding.checkbox.isChecked) {
-                mainViewModel.GetThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
+                mainViewModel.GetThirdPartyAccess(Prefs.getInstance(requireContext()).clebUserId.toInt())
             } else {
-                mainViewModel.RemoveThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
+                mainViewModel.RemoveThirdPartyAccess(Prefs.getInstance(requireContext()).clebUserId.toInt())
             }
         }
         mainViewModel.livedatathirdpartyaccess.observe(viewLifecycleOwner) {
@@ -401,7 +399,7 @@ class Userprofile : Fragment() {
         showDialog()
         mbinding.FormLayout.alpha = 0.5f
         mainViewModel.GetDriversBasicInformation(
-            Prefs.getInstance(App.instance).userID.toDouble()
+            Prefs.getInstance(App.instance).clebUserId.toDouble()
         ).observe(requireActivity(), Observer {
             if (it != null) {
                 Log.e("responseprofile", "GetDriversBasicInformation: ")
@@ -503,7 +501,7 @@ class Userprofile : Fragment() {
 
 
         mainViewModel.UseEmailasUsername(
-            Prefs.getInstance(App.instance).userID.toDouble(), mbinding.emailtext.text.toString()
+            Prefs.getInstance(App.instance).clebUserId.toDouble(), mbinding.emailtext.text.toString()
         ).observe(requireActivity(), Observer {
             Log.e("dkfjdkfjdfkj", "UseEmailAsUSername: ")
             if (it?.Status!!.equals(200)) {
@@ -520,7 +518,7 @@ class Userprofile : Fragment() {
 
     fun updateProfile90dys() {
         mainViewModel.UpdateDAprofileninetydays(
-            Prefs.getInstance(App.instance).userID.toDouble(),
+            Prefs.getInstance(App.instance).clebUserId.toDouble(),
             mbinding.emailtext.text.toString(),
             mbinding.phonetext.text.toString()
         ).observe(viewLifecycleOwner, Observer {
@@ -546,7 +544,7 @@ class Userprofile : Fragment() {
     fun updateProfilePassword() {
 
         mainViewModel.updateProfilepassword(
-            Prefs.getInstance(App.instance).userID.toDouble(),
+            Prefs.getInstance(App.instance).clebUserId.toDouble(),
             edtold!!, edtnew!!
         )
         mainViewModel.updateprofilelivedata.observe(viewLifecycleOwner) {
@@ -575,7 +573,7 @@ class Userprofile : Fragment() {
 
         mainViewModel.updateprofileRegular(
             UpdateProfileRequestBody(
-                Prefs.getInstance(App.instance).userID.toInt(),
+                Prefs.getInstance(App.instance).clebUserId.toInt(),
                 mbinding.emailtext.text.toString(),
                 mbinding.phonetext.text.toString(),
                 mbinding.addresstext.text.toString()

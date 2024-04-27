@@ -17,7 +17,6 @@ import com.clebs.celerity.models.requests.SaveQuestionairePreparednessRequest
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.ViewAdaptor
 import com.clebs.celerity.utils.showToast
 
 class Prepardness : Fragment() {
@@ -88,7 +87,7 @@ class Prepardness : Fragment() {
         pref.submittedPrepardness = true
         viewModel.SaveQuestionairePreparedness(SaveQuestionairePreparednessRequest(
             DaDailyWorkId = pref.daWID,
-            LeadDriverId = pref.userID.toInt(),
+            LeadDriverId = pref.clebUserId.toInt(),
             QuestionId = 0,
             RideAlongDriverId = pref.currRideAlongID,
             RoutetId = pref.currRtId,

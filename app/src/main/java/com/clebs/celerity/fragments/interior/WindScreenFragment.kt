@@ -32,6 +32,8 @@ import com.clebs.celerity.utils.DBImages
 import com.clebs.celerity.utils.DBNames
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertBitmapToBase64
+import com.clebs.celerity.utils.getLoc
+import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.visible
 import com.elconfidencial.bubbleshowcase.BubbleShowCase
@@ -126,17 +128,23 @@ class WindScreenFragment : Fragment() {
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
             .also { name -> mbinding.headerTop.anaCarolin.text = name }
         mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
-        if (Prefs.getInstance(requireContext()).currLocationName != null) {
+/*
+        if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
             mbinding.headerTop.dxLoc.text =
                 Prefs.getInstance(requireContext()).currLocationName ?: ""
-        } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+        } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
             mbinding.headerTop.dxLoc.text =
                 Prefs.getInstance(requireContext()).workLocationName ?: ""
-        }
+        }*/
+
+        mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
+
         if(mbinding.headerTop.dxReg.text.isEmpty())
             mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
             mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+
         if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text==""||mbinding.headerTop.dxLoc.text=="Not Allocated")
             mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
@@ -144,20 +152,26 @@ class WindScreenFragment : Fragment() {
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
 
-            if (Prefs.getInstance(requireContext()).currLocationName != null) {
+            if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
                 mbinding.headerTop.dxLoc.text =
                     Prefs.getInstance(requireContext()).currLocationName ?: ""
-            } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+            } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
                 mbinding.headerTop.dxLoc.text =
                     Prefs.getInstance(requireContext()).workLocationName ?: ""
             } else {
                 if (it != null) {
                     mbinding.headerTop.dxLoc.text = it.locationName ?: ""
+                    if(it.vmId!=0)
+                        Prefs.getInstance(requireContext()).vmId = it.vmId
                 }
             }
             if (it != null) {
-                mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
+                Prefs.getInstance(requireContext()).vmRegNo = it.vmRegNo ?: ""
+                if(it.vmId!=0)
+                    Prefs.getInstance(requireContext()).vmId = it.vmId
             }
+            mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
+
             if(mbinding.headerTop.dxReg.text.isEmpty())
                 mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
             else
@@ -166,7 +180,6 @@ class WindScreenFragment : Fragment() {
                 mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
             else
                 mbinding.headerTop.strikedxLoc.visibility = View.GONE
-
 
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
                 .also { name -> mbinding.headerTop.anaCarolin.text = name }

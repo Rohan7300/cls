@@ -12,10 +12,6 @@ data class ImageEntity(
     @PrimaryKey(autoGenerate = true)
     var localId: Int = 0,
 
-    @ColumnInfo(defaultValue = "user")
-    var userName:String?="user",
-
-
     @ColumnInfo(defaultValue = "empty")
     var vehicleDashboard: String? = "empty",
     @ColumnInfo(defaultValue = "empty")

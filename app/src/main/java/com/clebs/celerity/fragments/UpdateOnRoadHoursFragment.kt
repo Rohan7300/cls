@@ -3,16 +3,13 @@ package com.clebs.celerity.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
-import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
@@ -23,6 +20,8 @@ import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.getLoc
+import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.showToast
 
 class UpdateOnRoadHoursFragment : Fragment() {
@@ -139,14 +138,10 @@ class UpdateOnRoadHoursFragment : Fragment() {
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
             binding.headerTop.anaCarolin.text = name
         }
-        if (Prefs.getInstance(requireContext()).currLocationName != null) {
-            binding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).currLocationName ?: ""
-        } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
-            binding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).workLocationName ?: ""
-        }
-        binding.headerTop.dxReg.text = prefs.vmRegNo
+        binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
+
+
         if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
             binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
@@ -159,10 +154,10 @@ class UpdateOnRoadHoursFragment : Fragment() {
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            if (Prefs.getInstance(requireContext()).currLocationName != null) {
+            if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
                 binding.headerTop.dxLoc.text =
                     Prefs.getInstance(requireContext()).currLocationName ?: ""
-            } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+            } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
                 binding.headerTop.dxLoc.text =
                     Prefs.getInstance(requireContext()).workLocationName ?: ""
             } else {
@@ -170,8 +165,11 @@ class UpdateOnRoadHoursFragment : Fragment() {
                     binding.headerTop.dxLoc.text = it.locationName ?: ""
                 }
             }
+
             if (it != null) {
-                binding.headerTop.dxReg.text = it.vmRegNo ?: ""
+                prefs.vmRegNo= it.vmRegNo ?: ""
+                if(it.vmId!=0)
+                    Prefs.getInstance(requireContext()).vmId = it.vmId
                 if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
                     binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
                 else
@@ -187,7 +185,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
             binding.headerTop.dxm5.text = (activity as HomeActivity).date
         }
         inputListeners()
-        viewModel.GetDailyWorkInfoById(prefs.userID.toInt())
+        viewModel.GetDailyWorkInfoById(prefs.clebUserId.toInt())
         binding.onRoadHoursSave.setOnClickListener {
             parcelsDelivered = binding.edtParcels.text.toString()
             totalMileage = binding.edtMileage.text.toString()
@@ -235,7 +233,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 RtName = routeName!!,
                 RtNoOfParcelsDelivered = parcelsDelivered?.toInt() ?: 0,
                 RtNoParcelsbroughtback = binding.parcelsBroughtBack.text.toString().toInt(),
-                RtUsrId = prefs.userID.toInt(),
+                RtUsrId = prefs.clebUserId.toInt(),
                 VehicleId = prefs.vmId,
                 RtId = rtID
             )
@@ -274,6 +272,8 @@ class UpdateOnRoadHoursFragment : Fragment() {
         if (prefs.getLocationID() == 0) {
             viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
                 if (it != null) {
+                    if(it.vmId!=0)
+                        Prefs.getInstance(requireContext()).vmId = it.vmId
                     prefs.saveLocationID(it.vmLocId)
                     locID = it.vmLocId
                     vehID = it.vmId
@@ -281,25 +281,23 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 }
             }
             viewModel.GetDriversBasicInformation(
-                Prefs.getInstance(App.instance).userID.toDouble()
+                Prefs.getInstance(App.instance).clebUserId.toDouble()
             ).observe(viewLifecycleOwner) {
                 if (it != null) {
-                    prefs.vmId = it.vmID
+                    if(it.vmID!=null && prefs.vmId==0)
+                        prefs.vmId = it.vmID
                     it.vmRegNo?.let { it1 ->
-                        binding.headerTop.dxReg.text = it1 ?: "Not Assigned"
+                        prefs.vmRegNo = it1
                         viewModel.GetVehicleInformation(
-                            Prefs.getInstance(requireContext()).userID.toInt(),
-                            it1
+                            Prefs.getInstance(requireContext()).clebUserId.toInt(),
+                            getVRegNo(prefs)
                         )
                     }
                     prefs.workLocationName = it.workinglocation
                     prefs.currLocationName = it.currentlocation
-                    if (prefs.currLocationName.isNotEmpty()) {
-                        binding.headerTop.dxLoc.text = prefs.currLocationName ?: ""
-                    } else if (prefs.workLocationName.isNotEmpty()) {
-                        binding.headerTop.dxLoc.text =
-                            prefs.workLocationName ?: ""
-                    }
+
+                    binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+                    binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
                     if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
                         binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
@@ -366,7 +364,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 )
             }
         }
-        viewModel.GetDriverRouteTypeInfo(prefs.userID.toInt())
+        viewModel.GetDriverRouteTypeInfo(prefs.clebUserId.toInt())
     }
 
 

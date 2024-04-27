@@ -47,7 +47,7 @@ class UserTicketsFragment : Fragment() {
         loadingDialog = homeActivity.loadingDialog
 
         homeActivity.showDialog()
-        viewModel.GetUserTickets(prefs.userID.toInt())
+        viewModel.GetUserTickets(prefs.clebUserId.toInt())
 
         deleteDialog = AlertDialog.Builder(requireContext()).create()
 
@@ -153,7 +153,7 @@ class UserTicketsFragment : Fragment() {
             val t1 = convertDateFormat(tDate1, inputFormat, outputFormat)
             val t2 = convertDateFormat(tDate2, inputFormat, outputFormat)
             viewModel.GetUserTickets(
-                userID = prefs.userID.toInt(),
+                userID = prefs.clebUserId.toInt(),
                 startDate = t1,
                 endDate = t2,
                 includeCompleted = includeCompleted
@@ -188,6 +188,6 @@ class UserTicketsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         loadingDialog.show()
-        viewModel.GetUserTickets(prefs.userID.toInt())
+        viewModel.GetUserTickets(prefs.clebUserId.toInt())
     }
 }

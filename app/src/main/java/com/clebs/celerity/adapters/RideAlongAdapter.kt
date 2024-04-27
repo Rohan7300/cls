@@ -36,40 +36,7 @@ class RideAlongAdapter(
         fun bind(item: leadDriverIdItem) {
             binding.tainerName.text = prefs.userName
             binding.traineeName.text = item.DriverName
-            mainViewModel.GetRideAlongDriverFeedbackQuestion(
-                item.DriverId,
-                item.RtId,
-                item.LeadDriverId,
-                item.DawId
-            )
-            mainViewModel.liveDataGetRideAlongDriverFeedbackQuestion.observe(viewLifecycleOwner) {
-                if (it != null) {
-                    val itemX = asyncListDiffer.currentList.find { driver ->
-                        driver.DriverId == it.DriverId
-                    }
-                    if (itemX != null) {
-                        if (itemX.isFeedBackFilled != it.RaIsSubmitted){
-                            itemX.isFeedBackFilled = it.RaIsSubmitted
-                            isChanged = true
-                           // notifyDataSetChanged()
-                        }
-                    }
-
-                    if (it.DriverId == item.DriverId) {
-                        if (it.RaIsSubmitted == true) {
-                            binding.trainerFeedbackIV.isClickable = false
-                            binding.trainerFeedbackImage.setImageDrawable(
-                                ContextCompat.getDrawable(
-                                    context,
-                                    R.drawable.done
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-
-            if (item.isFeedBackFilled == true) {
+            if(item.IsCompleted){
                 binding.trainerFeedbackIV.isClickable = false
                 binding.trainerFeedbackImage.setImageDrawable(
                     ContextCompat.getDrawable(
@@ -77,57 +44,125 @@ class RideAlongAdapter(
                         R.drawable.done
                     )
                 )
-            }
-
-            mainViewModel.GetRideAlongLeadDriverQuestion(
-                item.DriverId,
-                item.RtId,
-                item.LeadDriverId,
-                item.DawId
-            )
-            mainViewModel.liveDataGetRideAlongLeadDriverQuestion.observe(viewLifecycleOwner) {
-                if (it != null) {
-                    val itemX = asyncListDiffer.currentList.find { driver ->
-                        driver.DriverId == it.RaDriverId
-                    }
-                    if (itemX != null) {
-                        if (itemX.isQuestionsFilled != it.RaIsSubmitted) {
-                            itemX.isQuestionsFilled = it.RaIsSubmitted
-                            isChanged = true
-                          //  notifyDataSetChanged()
+                    binding.edtIc.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.done
+                        )
+                    )
+                    binding.edtIc.isClickable = false
+            }else{
+                mainViewModel.GetRideAlongDriverFeedbackQuestion(
+                    item.DriverId,
+                    item.RtId,
+                    item.LeadDriverId,
+                    item.DawId
+                )
+                mainViewModel.GetRideAlongLeadDriverQuestion(
+                    item.DriverId,
+                    item.RtId,
+                    item.LeadDriverId,
+                    item.DawId
+                )
+                if (item.isFeedBackFilled == true) {
+                    binding.trainerFeedbackIV.isClickable = false
+                    binding.trainerFeedbackImage.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.done
+                        )
+                    )
+                }
+                if (item.isQuestionsFilled == true) {
+                    binding.edtIc.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.done
+                        )
+                    )
+                    binding.edtIc.isClickable = false
+                }
+                mainViewModel.liveDataGetRideAlongLeadDriverQuestion.observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        val itemX = asyncListDiffer.currentList.find { driver ->
+                            driver.DriverId == it.RaDriverId
+                        }
+                        if (itemX != null) {
+                            if (itemX.isQuestionsFilled != it.RaIsSubmitted) {
+                                itemX.isQuestionsFilled = it.RaIsSubmitted
+                                if(it.RaIsSubmitted==true){
+                                    binding.edtIc.setImageDrawable(
+                                        ContextCompat.getDrawable(
+                                            context,
+                                            R.drawable.done
+                                        )
+                                    )
+                                }
+                                isChanged = true
+                                //  notifyDataSetChanged()
+                            }
+                        }
+                        if (it.RaDriverId == item.DriverId) {
+                            if (it.RaIsSubmitted) {
+                                binding.edtIc.setImageDrawable(
+                                    ContextCompat.getDrawable(
+                                        context,
+                                        R.drawable.done
+                                    )
+                                )
+                                binding.edtIc.isClickable = false
+                            } else {
+                                binding.edtIc.setImageDrawable(
+                                    ContextCompat.getDrawable(
+                                        context,
+                                        R.drawable.edit_orange
+                                    )
+                                )
+                                binding.edtIc.isClickable = true
+                            }
                         }
                     }
-                    if (it.RaDriverId == item.DriverId) {
-                        if (it.RaIsSubmitted) {
-                            binding.edtIc.setImageDrawable(
-                                ContextCompat.getDrawable(
-                                    context,
-                                    R.drawable.done
+                }
+                mainViewModel.liveDataGetRideAlongDriverFeedbackQuestion.observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        val itemX = asyncListDiffer.currentList.find { driver ->
+                            driver.DriverId == it.DriverId
+                        }
+                        if (itemX != null) {
+                            if (itemX.isFeedBackFilled != it.RaIsSubmitted){
+                                itemX.isFeedBackFilled = it.RaIsSubmitted
+                                isChanged = true
+                                if(it.RaIsSubmitted==true){
+                                    binding.edtIc.setImageDrawable(
+                                        ContextCompat.getDrawable(
+                                            context,
+                                            R.drawable.done
+                                        )
+                                    )
+                                }
+                                // notifyDataSetChanged()
+                            }
+                        }
+
+                        if (it.DriverId == item.DriverId) {
+                            if (it.RaIsSubmitted == true) {
+                                binding.trainerFeedbackIV.isClickable = false
+                                binding.trainerFeedbackImage.setImageDrawable(
+                                    ContextCompat.getDrawable(
+                                        context,
+                                        R.drawable.done
+                                    )
                                 )
-                            )
-                            binding.edtIc.isClickable = false
-                        } else {
-                            binding.edtIc.setImageDrawable(
-                                ContextCompat.getDrawable(
-                                    context,
-                                    R.drawable.edit_orange
-                                )
-                            )
-                            binding.edtIc.isClickable = true
+                            }
                         }
                     }
                 }
             }
 
-            if (item.isQuestionsFilled == true) {
-                binding.edtIc.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        context,
-                        R.drawable.done
-                    )
-                )
-                binding.edtIc.isClickable = false
-            }
+
+
+
+
             binding.edtIc.setOnClickListener {
                 val bundle = bundleOf(
                     "rideAlongID" to item.DriverId,

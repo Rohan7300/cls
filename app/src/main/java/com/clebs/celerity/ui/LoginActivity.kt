@@ -7,7 +7,6 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -113,7 +112,7 @@ class LoginActivity : AppCompatActivity() {
                                 mainViewModel.SaveDeviceInformation(
                                     SaveDeviceInformationRequest(
                                         FcmToken = token,
-                                        UsrId = Prefs.getInstance(this).userID.toInt(),
+                                        UsrId = Prefs.getInstance(this).clebUserId.toInt(),
                                         UsrDeviceId = getDeviceID(),
                                         UsrDeviceType = "Android"
                                     )
@@ -122,7 +121,7 @@ class LoginActivity : AppCompatActivity() {
                             })
 
                         Prefs.getInstance(applicationContext).accessToken = it.token
-                        Prefs.getInstance(applicationContext).userID = it.userID.toString()
+                        Prefs.getInstance(applicationContext).clebUserId = it.userID.toString()
                         ActivityLoginBinding.progressbar.visibility = View.GONE
                         Log.e("response", "onCreate: " + it.token)
                         GetDriverSignatureInformation()
@@ -162,8 +161,8 @@ class LoginActivity : AppCompatActivity() {
         loadingDialog.show()
         var userid: Double = 0.0
         var pref = Prefs.getInstance(applicationContext)
-        if (!pref.userID.equals(0.0)) {
-            userid = pref.userID.toDouble()
+        if (!pref.clebUserId.equals(0.0)) {
+            userid = pref.clebUserId.toDouble()
         }
 
         mainViewModel.getDriverSignatureInfo(userid).observe(this@LoginActivity, Observer {

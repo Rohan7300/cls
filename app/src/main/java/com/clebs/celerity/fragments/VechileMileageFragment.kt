@@ -17,6 +17,8 @@ import com.clebs.celerity.databinding.FragmentVechileMileageBinding
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.getLoc
+import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.showToast
 
@@ -47,20 +49,18 @@ class VechileMileageFragment : Fragment() {
             append("${Prefs.getInstance(App.instance).vehicleLastMileage} ")
             append("Miles")
         }
-        if (Prefs.getInstance(requireContext()).currLocationName != null) {
-            mbinding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).currLocationName ?: ""
-        } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
-            mbinding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).workLocationName ?: ""
-        }
+        mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
+
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
             .also { name -> mbinding.headerTop.anaCarolin.text = name }
         mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
+
         if(mbinding.headerTop.dxReg.text.isEmpty()||mbinding.headerTop.dxReg.text=="")
             mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
             mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+
         if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text==""||mbinding.headerTop.dxLoc.text=="Not Allocated")
             mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
@@ -70,16 +70,18 @@ class VechileMileageFragment : Fragment() {
             it?.let {
                 Prefs.getInstance(App.instance).vehicleLastMileage = it.vehicleLastMillage
                 mbinding.miles.text = buildString {
-
+                    if(it.vmId!=0)
+                        Prefs.getInstance(requireContext()).vmId = it.vmId
                     append("${it.vehicleLastMillage} ")
                     append("Miles")
                 }
-                mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
+                mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
             }
-            if (Prefs.getInstance(requireContext()).currLocationName != null) {
+
+            if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
                 mbinding.headerTop.dxLoc.text =
                     Prefs.getInstance(requireContext()).currLocationName ?: ""
-            } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+            } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
                 mbinding.headerTop.dxLoc.text =
                     Prefs.getInstance(requireContext()).workLocationName ?: ""
             } else {
@@ -87,6 +89,7 @@ class VechileMileageFragment : Fragment() {
                     mbinding.headerTop.dxLoc.text = it.locationName ?: ""
                 }
             }
+
             if(mbinding.headerTop.dxReg.text.isEmpty()||mbinding.headerTop.dxReg.text=="")
                 mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
             else
@@ -95,7 +98,6 @@ class VechileMileageFragment : Fragment() {
                 mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
             else
                 mbinding.headerTop.strikedxLoc.visibility = View.GONE
-
 
         }
 

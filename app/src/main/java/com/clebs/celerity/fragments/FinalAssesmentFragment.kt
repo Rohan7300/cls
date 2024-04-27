@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
-import com.clebs.celerity.databinding.FragmentDeliveryProceduresBinding
 import com.clebs.celerity.databinding.FragmentFinalAssesmentBinding
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
 import com.clebs.celerity.ui.HomeActivity
@@ -69,7 +68,7 @@ class FinalAssesmentFragment : Fragment() {
                             SubmitFinalQuestionairebyLeadDriverRequest(
                                 QuestionId = pref.quesID,
                                 DaDailyWorkId = pref.daWID,
-                                LeadDriverId = pref.userID.toInt(),
+                                LeadDriverId = pref.clebUserId.toInt(),
                                 RoutetId = pref.currRtId,
                                 Assessment = assesment.toString()
                             )

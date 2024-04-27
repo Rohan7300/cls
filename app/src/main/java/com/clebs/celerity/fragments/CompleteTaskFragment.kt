@@ -18,7 +18,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -47,8 +46,8 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.RideAlongViewReadyCallback
-import com.clebs.celerity.utils.hideKeyboardInputInTimePicker
+import com.clebs.celerity.utils.getLoc
+import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog
@@ -86,7 +85,7 @@ class CompleteTaskFragment : Fragment() {
     private var isAllImageUploaded: Boolean = false
     private var isInspectionDone: Boolean = false
     private var imagesUploaded: Boolean = false
-    lateinit var rideAlongAdapter:RideAlongAdapter
+    lateinit var rideAlongAdapter: RideAlongAdapter
     private var isClockedIn: Boolean = false
     private var isOnRoadHours: Boolean = false
     private var isBreakTimeAdded: Boolean = false
@@ -144,7 +143,7 @@ class CompleteTaskFragment : Fragment() {
 
 
         loadingDialog = (activity as HomeActivity).loadingDialog
-        userId = Prefs.getInstance(requireContext()).userID.toInt()
+        userId = Prefs.getInstance(requireContext()).clebUserId.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.addBreakIV.setOnClickListener(clickListener)
 
@@ -171,7 +170,7 @@ class CompleteTaskFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         showDialog()
         viewModel.GetVehicleInfobyDriverId(
-            Prefs.getInstance(App.instance).userID.toInt(),
+            Prefs.getInstance(App.instance).clebUserId.toInt(),
             currentDate
         )
         viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner) {
@@ -186,7 +185,7 @@ class CompleteTaskFragment : Fragment() {
             }
         }
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.completeTaskFragment)
-        viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
+        viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).clebUserId.toInt())
 
         observers()
         showDialog()
@@ -412,41 +411,44 @@ class CompleteTaskFragment : Fragment() {
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
             mbinding.headerTop.anaCarolin.text = name
         }
-        if (Prefs.getInstance(requireContext()).currLocationName != null) {
-            mbinding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).currLocationName ?: ""
-        } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
-            mbinding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).workLocationName ?: ""
-        }
+        mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
         mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
         val isLeadDriver = (activity as HomeActivity).isLeadDriver
         if (!isLeadDriver) {
             mbinding.rideAlong.visibility = View.GONE
         }
+
         if (mbinding.headerTop.dxReg.text.isEmpty() || mbinding.headerTop.dxReg.text == "")
             mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
             mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+
         if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "" || mbinding.headerTop.dxLoc.text == "Not Allocated")
             mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
             mbinding.headerTop.strikedxLoc.visibility = View.GONE
+
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
 
             hideDialog()
             if (it != null) {
-                if (Prefs.getInstance(requireContext()).currLocationName != null) {
+                if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
                     mbinding.headerTop.dxLoc.text =
                         Prefs.getInstance(requireContext()).currLocationName ?: ""
-                } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+                } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
                     mbinding.headerTop.dxLoc.text =
                         Prefs.getInstance(requireContext()).workLocationName ?: ""
                 } else {
                     mbinding.headerTop.dxLoc.text = it.locationName ?: ""
                 }
-                mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
+
+                if (it.vmId != 0)
+                    Prefs.getInstance(requireContext()).vmId = it.vmId
+
+                mbinding.headerTop.dxReg.text =
+                    getVRegNo(prefs = Prefs.getInstance(requireContext()))
                 if (mbinding.headerTop.dxReg.text.isEmpty())
                     mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
                 else
@@ -736,9 +738,9 @@ class CompleteTaskFragment : Fragment() {
                         break
                     }
                 }
- /*               adapter.list.clear()
-                adapter.list.addAll(it)
-                adapter.notifyDataSetChanged()*/
+                /*               adapter.list.clear()
+                               adapter.list.addAll(it)
+                               adapter.notifyDataSetChanged()*/
                 adapter.saveData(it)
             } else {
                 mbinding.routeNameTV.visibility = View.GONE
@@ -770,15 +772,15 @@ class CompleteTaskFragment : Fragment() {
 
         mbinding.questionareRv.adapter = rideAlongAdapter
         mbinding.questionareRv.layoutManager = LinearLayoutManager(requireContext())
-/*        rideAlongAdapter.recyclerViewReadyCallback = this@CompleteTaskFragment
+        /*        rideAlongAdapter.recyclerViewReadyCallback = this@CompleteTaskFragment
 
-        mbinding.questionareRv.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                rideAlongAdapter.recyclerViewReadyCallback?.onLayoutReady()
-                mbinding.questionareRv.viewTreeObserver.removeOnGlobalLayoutListener(this)
-            }
-        })*/
+                mbinding.questionareRv.viewTreeObserver.addOnGlobalLayoutListener(object :
+                    ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        rideAlongAdapter.recyclerViewReadyCallback?.onLayoutReady()
+                        mbinding.questionareRv.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    }
+                })*/
 
         viewModel.liveDataRideAlongDriverInfoByDateResponse.observe(viewLifecycleOwner) { rideAlongs ->
             hideDialog()
@@ -1051,7 +1053,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     fun clientUniqueID(): String {
-        val x = Prefs.getInstance(App.instance).userID.toString()
+        val x = Prefs.getInstance(App.instance).clebUserId.toString()
         val y = Prefs.getInstance(App.instance).scannedVmRegNo
         // example string
         val currentDate = LocalDateTime.now()

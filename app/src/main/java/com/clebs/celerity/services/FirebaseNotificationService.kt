@@ -51,11 +51,11 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         super.onNewToken(token)
         Log.d(TAG, "FCM Refreshed token: $token")
         var userID = 0
-        if (Prefs.getInstance(applicationContext).userID.isEmpty() || Prefs.getInstance(
+        if (Prefs.getInstance(applicationContext).clebUserId.isEmpty() || Prefs.getInstance(
                 applicationContext
-            ).userID == " "
+            ).clebUserId == " "
         ) userID = 0
-        else userID = Prefs.getInstance(applicationContext).userID.toInt()
+        else userID = Prefs.getInstance(applicationContext).clebUserId.toInt()
         CoroutineScope(Dispatchers.IO).launch {
             mainRepo.SaveDeviceInformation(
                 SaveDeviceInformationRequest(

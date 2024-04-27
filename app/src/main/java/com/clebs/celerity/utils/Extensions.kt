@@ -344,11 +344,11 @@ fun convertBitmapToBase64(bitmap: Bitmap): String {
 
 fun dbLog(it: ImageEntity) {
 
-    /* val TAG = "DB_TEST"
+val TAG = "DB_TEST"
      Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
      Log.d(TAG, it.toString())
      Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
- */
+
 }
 
 fun setImageView(im: ImageView, value: String) {
@@ -638,6 +638,20 @@ fun convertDateFormat(inputDate: String, inputFormat: String, outputFormat: Stri
         e.printStackTrace()
         ""
     }
+}
+
+fun getVRegNo(prefs: Prefs):String{
+    return if(prefs.scannedVmRegNo.isEmpty()){
+        prefs.vmRegNo
+    }else
+        prefs.scannedVmRegNo
+}
+
+fun getLoc(prefs: Prefs):String{
+    return if (prefs.currLocationName.isNotEmpty())
+        prefs.currLocationName ?: ""
+    else
+        prefs.workLocationName ?: ""
 }
 
 

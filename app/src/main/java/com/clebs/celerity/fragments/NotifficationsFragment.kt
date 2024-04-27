@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.NotificationAdapter
 import com.clebs.celerity.databinding.FragmentNotifficationsBinding
-import com.clebs.celerity.models.response.NotificationResponse
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
 
@@ -43,7 +41,7 @@ class NotifficationsFragment : Fragment() {
 
         observers()
         showDialog()
-        viewModel.GetNotificationListByUserId(prefs.userID.toInt())
+        viewModel.GetNotificationListByUserId(prefs.clebUserId.toInt())
         return binding.root
     }
 

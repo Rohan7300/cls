@@ -41,6 +41,7 @@ import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.utils.DownloadingDialog
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.OpenMode
 import com.clebs.celerity.utils.Prefs
@@ -70,6 +71,7 @@ class PolicyDocsActivity : AppCompatActivity() {
     var openModeSignedDAEngagement: OpenMode = OpenMode.VIEW
     var isImage2 = true
     lateinit var loadingDialog: LoadingDialog
+    lateinit var downloadingDialog: DownloadingDialog
     var REQUEST_STORAGE_PERMISSION_CODE = 101
     lateinit var currentfileName: String
     lateinit var currentFileContent: InputStream
@@ -89,6 +91,7 @@ class PolicyDocsActivity : AppCompatActivity() {
             mbinding.llAmazon.visibility = View.VISIBLE
         }
         loadingDialog = LoadingDialog(this)
+        downloadingDialog = DownloadingDialog(this)
         if (!Prefs.getInstance(App.instance).getBoolean("isother", false)) {
             mbinding.llTrucks.visibility = View.GONE
         } else {
@@ -99,7 +102,7 @@ class PolicyDocsActivity : AppCompatActivity() {
         val mainRepo = MainRepo(apiService)
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
 
-        userId = Prefs.getInstance(this).userID.toInt()
+        userId = Prefs.getInstance(this).clebUserId.toInt()
         handbookID = Prefs.getInstance(this).handbookId
         viewModel.liveDataGetDriverSignatureInformation.observe(this) {
             if (it != null) {
@@ -148,9 +151,9 @@ class PolicyDocsActivity : AppCompatActivity() {
             if (checkBox.isChecked) {
 
                 mbinding.amazonHeader.isClickable = false
-           viewGoneAnimator(mbinding.amazonLayout)
-               viewGoneAnimator(mbinding.views1)
-mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
+                viewGoneAnimator(mbinding.amazonLayout)
+                viewGoneAnimator(mbinding.views1)
+                mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
 
                 if (mbinding.llTrucks.visibility == View.GONE) {
                     showAlert()
@@ -193,7 +196,7 @@ mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
 
     private fun observers() {
         viewModel.liveDataDownloadSignedServiceLevelAgreement.observe(this) {
-            loadingDialog.dismiss()
+            downloadingDialog.dismiss()
             if (it != null) {
                 downloadPDF(
                     "SignedServiceLevelAgreement",
@@ -203,30 +206,29 @@ mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
             }
         }
 
-
         viewModel.liveDataDownloadSignedDAHandbook.observe(this) {
-            loadingDialog.dismiss()
+            downloadingDialog.dismiss()
             if (it != null) {
                 downloadPDF("DAHandbook", it.byteStream(), openModeDAHandBook)
             }
         }
 
         viewModel.liveDataDownloadSignedGDPRPOLICY.observe(this) {
-            loadingDialog.dismiss()
+            downloadingDialog.dismiss()
             if (it != null) {
                 downloadPDF("GDPRPOLICY", it.byteStream(), openModeSignedGDPRPOLICY)
             }
         }
 
         viewModel.liveDataDownloadSignedPrivacyPolicy.observe(this) {
-            loadingDialog.dismiss()
+            downloadingDialog.dismiss()
             if (it != null) {
                 downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
             }
         }
 
         viewModel.liveDataDownloadSignedDAEngagement.observe(this) {
-            loadingDialog.dismiss()
+            downloadingDialog.dismiss()
             if (it != null) {
                 downloadPDF("DAEngagement", it.byteStream(), openModeSignedDAEngagement)
             }
@@ -236,110 +238,110 @@ mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
     private fun clickListeners() {
 
         mbinding.downloadHandBookPolicy1.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeDAHandBook = OpenMode.DOWNLOAD
             viewModel.DownloadSignedDAHandbook(handbookID)
         }
         mbinding.imgHandBookPolicy1.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeDAHandBook = OpenMode.VIEW
             viewModel.DownloadSignedDAHandbook(handbookID)
         }
         mbinding.downloadHandBookPolicy2.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeDAHandBook = OpenMode.DOWNLOAD
             viewModel.DownloadSignedDAHandbook(handbookID)
         }
         mbinding.imgHandBookPolicy2.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeDAHandBook = OpenMode.VIEW
             viewModel.DownloadSignedDAHandbook(handbookID)
         }
 
 
         mbinding.downloadSLA1.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedServiceLevelAgreement = OpenMode.DOWNLOAD
             viewModel.DownloadSignedServiceLevelAgreement(handbookID)
         }
         mbinding.imgSLA1.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedServiceLevelAgreement = OpenMode.VIEW
             viewModel.DownloadSignedServiceLevelAgreement(handbookID)
         }
         mbinding.downloadSLA2.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedServiceLevelAgreement = OpenMode.DOWNLOAD
             viewModel.DownloadSignedServiceLevelAgreement(handbookID)
         }
         mbinding.imgSLA2.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedServiceLevelAgreement = OpenMode.VIEW
             viewModel.DownloadSignedServiceLevelAgreement(handbookID)
         }
 
 
         mbinding.downloadPrivacyPolicy1.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
             viewModel.DownloadSignedPrivacyPolicy(handbookID)
         }
         mbinding.imgPrivacyPolicy1.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.VIEW
             viewModel.DownloadSignedPrivacyPolicy(handbookID)
         }
         mbinding.downloadPrivacyPolicy2.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
             viewModel.DownloadSignedPrivacyPolicy(handbookID)
         }
         mbinding.imgPrivacyPolicy2.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.VIEW
             viewModel.DownloadSignedPrivacyPolicy(handbookID)
         }
 
 
         mbinding.downloadDAEngagement1.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
             viewModel.DownloadSignedDAEngagement(handbookID)
         }
         mbinding.imgDAEngagement1.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
             viewModel.DownloadSignedDAEngagement(handbookID)
         }
         mbinding.downloadDAEngagement2.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
             viewModel.DownloadSignedDAEngagement(handbookID)
         }
         mbinding.imgDAEngagement2.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
             viewModel.DownloadSignedDAEngagement(handbookID)
         }
 
 
         mbinding.downloadGDPR1.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
             viewModel.DownloadSignedGDPRPOLICY(handbookID)
         }
         mbinding.downloadGDPR2.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
             viewModel.DownloadSignedGDPRPOLICY(handbookID)
         }
         mbinding.imgGDPR1.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.VIEW
             viewModel.DownloadSignedGDPRPOLICY(handbookID)
         }
         mbinding.imgGDPR2.setOnClickListener {
-            loadingDialog.show()
+            downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.VIEW
             viewModel.DownloadSignedGDPRPOLICY(handbookID)
         }
@@ -497,13 +499,23 @@ mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
                         input.copyTo(outputStream)
                     }
                 }
-                showToast("PDF Downloaded!", this)
-                val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    FileProvider.getUriForFile(this, "${this.packageName}.fileprovider", file)
-                } else {
-                    Uri.fromFile(file)
+
+                val uri = getFileUri(file)
+                if(mode==OpenMode.DOWNLOAD){
+                    showNotification(
+                        "PDF Downloaded",
+                        "Your PDF has been downloaded successfully.",
+                        uri
+                    )
+                    showToast("PDF Downloaded!", this)
+                }else{
+                    showNotification(
+                        "PDF Loaded",
+                        "Your PDF is ready to view.",
+                        uri
+                    )
+                    showToast("Your PDF is ready to view.", this)
                 }
-                showNotification("PDF Downloaded", "Your PDF has been downloaded successfully.",uri)
 
                 openPDF(file, mode)
             } catch (e: Exception) {
@@ -515,12 +527,25 @@ mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
         }
     }
 
-    private fun showNotification(title: String, content: String,uri: Uri) {
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private fun getFileUri(file: File): Uri {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            FileProvider.getUriForFile(this, "${this.packageName}.fileprovider", file)
+        } else {
+            Uri.fromFile(file)
+        }
+    }
+
+    private fun showNotification(title: String, content: String, uri: Uri) {
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel("Download Complete", "PDF Download Channel", NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(
+                "Download Complete",
+                "PDF Download Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             notificationManager.createNotificationChannel(channel)
         }
 
@@ -543,7 +568,6 @@ mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
                 PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
             )
         }
-
 
 
         val notificationBuilder = NotificationCompat.Builder(this, "Download Complete")
@@ -636,6 +660,7 @@ mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
                 }
             })
     }
+
     private fun viewVisibleAnimator(view: View) {
         view.animate()
             .alpha(1f)

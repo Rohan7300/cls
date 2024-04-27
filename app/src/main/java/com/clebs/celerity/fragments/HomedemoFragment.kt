@@ -1,15 +1,12 @@
 package com.clebs.celerity.ui
 
 
-import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebSettings
-import android.webkit.WebViewRenderProcessClient
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.clebs.celerity.R
@@ -23,9 +20,6 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.MPPointF
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.jetbrains.anko.doAsyncResult
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -187,7 +181,7 @@ class HomedemoFragment : Fragment() {
         }
 
         viewModel.GetAVGscore(
-            Prefs.getInstance(requireContext()).userID.toInt(),
+            Prefs.getInstance(requireContext()).clebUserId.toInt(),
             Prefs.getInstance(requireContext()).lmid
         )
 
@@ -203,14 +197,14 @@ class HomedemoFragment : Fragment() {
             mbinding.viewfullschedule.text = "Week " + weekschedule + "\nSchedule"
             showDialog()
             viewModel.GetViewFullScheduleInfo(
-                Prefs.getInstance(requireContext()).userID.toInt(), 0, year, week - 1
+                Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 1
             )
             showDialog()
             viewModel.GetcashFlowWeek(
-                Prefs.getInstance(requireContext()).userID.toInt(), 0, year, week - 3
+                Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 3
             )
             viewModel.GetLastWeekSCore(
-                Prefs.getInstance(requireContext()).userID.toInt(), week - 3, year
+                Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 3, year
             )
         }
 
@@ -224,14 +218,14 @@ class HomedemoFragment : Fragment() {
             mbinding.txtLastWeek.text = "Week " + weekprev
             mbinding.viewfullschedule.text = "Week " + week + "\nSchedule"
             viewModel.GetViewFullScheduleInfo(
-                Prefs.getInstance(requireContext()).userID.toInt(), 0, year, week
+                Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week
             )
             showDialog()
             viewModel.GetcashFlowWeek(
-                Prefs.getInstance(requireContext()).userID.toInt(), 0, year, week - 2
+                Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 2
             )
             viewModel.GetLastWeekSCore(
-                Prefs.getInstance(requireContext()).userID.toInt(), week - 2, year
+                Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 2, year
             )
 
         }
@@ -257,15 +251,15 @@ class HomedemoFragment : Fragment() {
 
 
                 viewModel.GetcashFlowWeek(
-                    Prefs.getInstance(requireContext()).userID.toInt(), 0, year, 12
+                    Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, 12
                 )
                 showDialog()
                 viewModel.GetViewFullScheduleInfo(
-                    Prefs.getInstance(requireContext()).userID.toInt(), 0, year, week
+                    Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week
                 )
 
                 viewModel.GetLastWeekSCore(
-                    Prefs.getInstance(requireContext()).userID.toInt(), week - 2, year
+                    Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 2, year
                 )
 
 

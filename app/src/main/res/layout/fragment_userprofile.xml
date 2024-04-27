@@ -76,63 +76,85 @@
                     android:id="@+id/linearLayout16"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:id="@+id/name"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="2dp"
-                        android:backgroundTint="@color/very_light_orange"
-                        android:elevation="8dp"
-                        android:fontFamily="@font/poppins_bold"
-                        android:letterSpacing="0.05"
-                        android:padding="8dp"
-                        android:text=""
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        app:layout_constraintEnd_toStartOf="@+id/editImg"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/dpLayout" />
-                    <ImageView
-                        android:id="@+id/editImg"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginEnd="4dp"
-                        android:elevation="12dp"
-                        android:padding="4dp"
-                        android:src="@drawable/edit_orange"
-                        app:layout_constraintBottom_toBottomOf="@+id/logout"
-                        app:layout_constraintEnd_toStartOf="@+id/logout"
-                        app:layout_constraintTop_toBottomOf="@+id/name" />
-                    <ImageView
-                        android:id="@+id/logout"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/baseline_logout_24"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/name" />
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/very_light_orange"
+                            android:elevation="8dp"
+                            android:fontFamily="@font/poppins_bold"
+                            android:letterSpacing="0.05"
+                            android:padding="2dp"
+                            android:text="Guneet Kaur"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            app:layout_constraintEnd_toStartOf="@+id/editImg"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/dpLayout" />
+
+                        <ImageView
+                            android:id="@+id/logout"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/logoutnew"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/name"
+                            app:tint="@color/orange" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/FormLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="5dp"
                     android:orientation="vertical"
                     android:padding="10dp"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout16">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:layout_marginStart="5dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:letterSpacing="0.05"
+                            android:text="Edit Details"
+                            android:textColor="@color/text_color"
+                            android:textSize="12sp" />
+                        <ImageView
+                            android:id="@+id/editImg"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="2dp"
+                            android:elevation="12dp"
+                            android:padding="4dp"
+                            android:src="@drawable/edit_orange" />
 
+                    </LinearLayout>
                     <!--email-->
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/firstconst"
@@ -657,13 +679,12 @@
                     android:id="@+id/pb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
                     android:indeterminateTint="@color/orange"
                     android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/linearLayout16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/name" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
 
                 <!--phone no-->

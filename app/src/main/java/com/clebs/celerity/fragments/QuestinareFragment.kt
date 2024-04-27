@@ -124,7 +124,6 @@ class QuestinareFragment : Fragment() {
                     binding.viewPager.currentItem = currentPage!!
                 }
             }
-
         }
 
     }
