@@ -29,39 +29,72 @@
 
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/clsinvoices"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="60dp"
-                android:elevation="8dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/shape_expand_main"
+                android:layout_height="wrap_content">
 
-                android:drawableEnd="@drawable/third_party_invoices"
-                android:fontFamily="@font/poppins_semibold"
-                android:padding="30dp"
-                android:text="CLS - Invoices"
-                android:textColor="@color/text_color"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/clsinvoices"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="@drawable/shape_expand_two"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="30dp"
+                    android:backgroundTint="@color/medium_orange"
+                    android:text="CLS - Invoices"
+                    android:textColor="@color/text_color"
+                    android:textSize="20sp"
 
-            <TextView
-                android:id="@+id/otherinvoices"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
-                android:elevation="8dp"
-android:drawableEnd="@drawable/third_party_invoices"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/shape_expand_main"
+                    app:drawableEndCompat="@drawable/third_party_invoices" />
 
-                android:fontFamily="@font/poppins_semibold"
-                android:padding="30dp"
-                android:text="3rd Party Invoices"
-                android:textColor="@color/text_color"
-                android:textSize="20sp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/iv1"
+                    android:src="@drawable/baseline_swap_horizontal_circle_24"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/clsinvoices"
+                    app:layout_constraintStart_toStartOf="@+id/clsinvoices"
+                    app:layout_constraintTop_toTopOf="@+id/clsinvoices"
+                 />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/iv2"
+                    android:src="@drawable/baseline_swap_horizontal_circle_24"
+                    android:layout_marginStart="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/otherinvoices"
+                    app:layout_constraintStart_toStartOf="@+id/otherinvoices"
+                    app:layout_constraintTop_toTopOf="@+id/otherinvoices"
+                    app:tint="@color/black" />
+                <TextView
+                    android:id="@+id/otherinvoices"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="30dp"
+                    android:elevation="8dp"
+                    android:backgroundTint="@color/medium_orange"
+                    app:layout_constraintTop_toBottomOf="@id/clsinvoices"
+                    android:drawableEnd="@drawable/third_party_invoices"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/shape_expand_two"
+android:gravity="center_horizontal"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="30dp"
+                    android:text="3rd Party Invoices"
+                    android:textColor="@color/text_color"
+                    android:textSize="20sp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

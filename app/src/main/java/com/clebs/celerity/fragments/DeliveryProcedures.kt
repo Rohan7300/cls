@@ -28,6 +28,7 @@ class DeliveryProcedures : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setRetainInstance(true);
         binding = FragmentDeliveryProceduresBinding.inflate(inflater, container, false)
         return binding.root
     }

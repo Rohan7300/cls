@@ -26,6 +26,7 @@ class FinalAssesmentFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setRetainInstance(true);
         binding = FragmentFinalAssesmentBinding.inflate(inflater, container, false)
         return binding.root
     }

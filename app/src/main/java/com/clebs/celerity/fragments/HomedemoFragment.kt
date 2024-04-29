@@ -416,9 +416,14 @@ class HomedemoFragment : Fragment() {
                 val tomorrowDate = currentDate.time
                 val dateFormat = SimpleDateFormat("EEE MMM dd yyyy", Locale.US)
 
-                val formattedDate: String = dateFormat.format(tomorrowDate)
-                mbinding.textView5.text = formattedDate
-                Log.e("tomotmoit", "onCreateView: " + formattedDate)
+
+
+                val formattedDatetwo: String = dateFormat.format(tomorrowDate)
+
+
+
+
+//                Log.e("tomotmoit", "onCreateView: " + formattedDate)
                 mbinding.viewfullschedule.isClickable = true
                 mbinding.viewfullschedule.isEnabled = true
                 mbinding.llnodata.visibility = View.GONE
@@ -448,6 +453,14 @@ class HomedemoFragment : Fragment() {
 
                     val formattedDate7 = convertDateFormat(it.saturdayDate)
                     mbinding.tvDateShow7.text = "SAT " + formattedDate7
+
+
+//                    if (newformatteddate.equals(formattedDate) && !it.sundayLocation.equals("OFF")) {
+//
+//                    }
+//
+//                        mbinding.textView5.text = formattedDate
+
                     mbinding.tvIsWorkingShowSunday.text = it.sundayLocation
                     mbinding.tvIsWorkingShowTuesday.text = it.tuesdayLocation
                     mbinding.tvIsWorkingShowWed.text = it.wednesdayLocation

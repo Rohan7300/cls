@@ -329,6 +329,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                     R.id.home -> {
                         ActivityHomeBinding.title.text = ""
+                        ActivityHomeBinding.logout.visibility=View.GONE
+                        ActivityHomeBinding.imgNotification.visibility=View.VISIBLE
                         navController.navigate(R.id.homedemoFragment)
                         true
                     }
@@ -337,7 +339,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         /*     navController.navigate(R.id.homeFragment)
                              navController.currentDestination!!.id = R.id.homeFragment
          */
+                        ActivityHomeBinding.logout.visibility=View.GONE
                         ActivityHomeBinding.title.text = ""
+                        ActivityHomeBinding.imgNotification.visibility=View.VISIBLE
                         viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
                         showDialog()
                         true
@@ -345,12 +349,16 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                     R.id.invoices -> {
                         ActivityHomeBinding.title.text = "Invoices"
+                        ActivityHomeBinding.logout.visibility=View.GONE
+                        ActivityHomeBinding.imgNotification.visibility=View.VISIBLE
                         navController.navigate(R.id.invoicesFragment)
                         true
                     }
 
                     R.id.tickets -> {
+                        ActivityHomeBinding.logout.visibility=View.GONE
                         ActivityHomeBinding.title.text = "User Tickets"
+                        ActivityHomeBinding.imgNotification.visibility=View.VISIBLE
                         navController.navigate(R.id.userTicketsFragment)
 
                         true
@@ -361,7 +369,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
             }
-            ActivityHomeBinding.imgLogoutMain.setOnClickListener {
+            ActivityHomeBinding.logout.setOnClickListener {
                 showAlertLogout()
             }
         } catch (e: Exception) {
@@ -658,14 +666,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     fun disableBottomNavigationView() {
         bottomNavigationView.visibility = View.GONE
-        ActivityHomeBinding.imgNotification.visibility = View.GONE
+//        ActivityHomeBinding.imgNotification.visibility = View.GONE
 //        bottomNavigationView. = false
 //        bottomNavigationView.isClickable=false
     }
 
     fun enableBottomNavigationView() {
         bottomNavigationView.visibility = View.VISIBLE
-        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+//        ActivityHomeBinding.imgNotification.visibility = View.GONE
 //        bottomNavigationView.isEnabled = true
 //        bottomNavigationView.isClickable=true
     }

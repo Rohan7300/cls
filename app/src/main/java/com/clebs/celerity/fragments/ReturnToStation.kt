@@ -29,7 +29,7 @@ class ReturnToStation : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        setRetainInstance(true);
         binding = FragmentReturnToStationBinding.inflate(inflater, container, false)
         return binding.root
     }

@@ -18,6 +18,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -139,8 +141,9 @@ class CompleteTaskFragment : Fragment() {
                 Date()
             )
 
-
-
+        val animFadein: Animation =
+            AnimationUtils.loadAnimation(context, R.anim.left2right)
+mbinding.mainCompleteTask.animation=animFadein
 
         loadingDialog = (activity as HomeActivity).loadingDialog
         userId = Prefs.getInstance(requireContext()).clebUserId.toInt()

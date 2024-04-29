@@ -27,7 +27,7 @@
             android:gravity="center"
             android:text="@string/use_email_as_user_name"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,10 +48,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center_horizontal"
                 android:fontFamily="@font/poppins"
                 android:text="@string/please_confirm"
                 android:textColor="@color/text_color"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/title"
                 app:layout_constraintTop_toBottomOf="@id/title" />
 
@@ -76,7 +77,7 @@
                 android:background="@drawable/shape_button_three"
                 android:textAllCaps="false"
                 android:fontFamily="@font/inter"
-
+android:textSize="14sp"
                 android:textColor="@color/text_color"
                 android:layout_marginBottom="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -93,7 +94,7 @@
                 android:textAllCaps="false"
                 android:fontFamily="@font/inter"
               android:background="@drawable/shape_button_three"
-
+                android:textSize="14sp"
                 android:textColor="@color/text_color"
                 android:layout_marginBottom="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
