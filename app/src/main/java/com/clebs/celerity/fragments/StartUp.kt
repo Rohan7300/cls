@@ -28,6 +28,7 @@ class StartUp : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setRetainInstance(true);
         binding = FragmentStartUpBinding.inflate(inflater, container, false)
         return binding.root
     }

@@ -4,11 +4,17 @@ import android.Manifest
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.app.DownloadManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.ProgressDialog
+import android.content.ActivityNotFoundException
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Path
@@ -24,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
@@ -53,6 +60,8 @@ import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.Timer
+import java.util.TimerTask
 import java.util.UUID
 
 
@@ -480,6 +489,14 @@ class PolicyDocsActivity : AppCompatActivity() {
     }
 
     private fun downloadPDF(fileName: String, fileContent: InputStream, mode: OpenMode) {
+//        val androidData =fileContent// Replace with your actual data
+//
+//// Calculate the processedData value (for demonstration purposes, let's use a fixed value)
+//        val processedData = androidData.read().
+
+
+
+
         currentfileName = fileName
         currentMode = mode
         currentFileContent = fileContent
@@ -499,8 +516,11 @@ class PolicyDocsActivity : AppCompatActivity() {
                         input.copyTo(outputStream)
                     }
                 }
-
                 val uri = getFileUri(file)
+
+
+
+
                 if(mode==OpenMode.DOWNLOAD){
                     showNotification(
                         "PDF Downloaded",

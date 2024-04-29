@@ -50,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:id="@+id/selectYearET"
+
                 android:inputType="none"
                 android:hint=""
                 android:paddingVertical="8dp"

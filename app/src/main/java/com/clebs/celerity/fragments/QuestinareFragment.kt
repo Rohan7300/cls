@@ -2,6 +2,7 @@ package com.clebs.celerity.fragments
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,21 +19,26 @@ import com.clebs.celerity.utils.ViewAdaptor
 import com.google.android.material.tabs.TabLayout
 
 class QuestinareFragment : Fragment() {
-    lateinit var binding: FragmentQuestinareBinding
+
     private val TAG = "QuestinareFrag"
     private var rideAlongID = 0
     private var leadDriverID = 0
     lateinit var adapter: ViewAdaptor
     lateinit var viewModel: MainViewModel
     private var firsttime: Boolean = true
+    companion object{
+        @SuppressLint("StaticFieldLeak")
+        lateinit var binding: FragmentQuestinareBinding
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (!this::binding.isInitialized) {
+
             binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_questinare, container, false)
-        }
+
         binding.tablay.getTabAt(0)?.select()
         return binding.root
     }
@@ -88,7 +94,7 @@ class QuestinareFragment : Fragment() {
         )
         binding.viewPager.adapter = adapter
         binding.viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.tablay))
-
+binding.viewPager.offscreenPageLimit = 6
         binding.tablay.getTabAt(0)?.select()
 
         for (i in headingList.indices) {

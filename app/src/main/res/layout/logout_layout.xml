@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="20dp"
+    android:layout_marginEnd="30dp"
     android:layout_marginTop="100dp"
     android:background="@drawable/break_dialog"
     android:layout_marginBottom="100dp"
-    android:layout_marginStart="20dp">
+    android:layout_marginStart="30dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,10 +18,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/ic_cross_orange"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:backgroundTint="@color/white"
             android:src="@drawable/orange_cross"
             app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +36,7 @@
             android:text="Logout"
             android:textColor="@color/text_color"
 
-            android:textSize="20sp"
+            android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="@+id/ic_cross_orange"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/ic_cross_orange" />
@@ -50,25 +50,27 @@
             android:id="@+id/des"
             android:text="Are you sure you want to logout?"
             android:textColor="@color/text_color"
-            android:textSize="16sp"
+            android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_txt" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:text="No"
+            android:textSize="12sp"
             android:id="@+id/bt_no"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/des" />
 
         <Button
             android:id="@+id/bt_yes"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:textSize="12sp"
             android:text="Yes"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/des" />

@@ -42,6 +42,7 @@ class InvoicesFragment : Fragment() {
             findNavController().navigate(R.id.CLSThirdPartyFragment)
         }
         binding.otherinvoices.visibility = View.GONE
+        binding.iv2.visibility=View.GONE
         GetDriversBasicInformation()
         return binding.root
     }
@@ -75,8 +76,10 @@ class InvoicesFragment : Fragment() {
 
                 if (it.IsThirdPartyChargeAccessAllowed) {
                     binding.otherinvoices.visibility = View.VISIBLE
+                    binding.iv2.visibility=View.VISIBLE
                 } else {
                     binding.otherinvoices.visibility = View.GONE
+                    binding.iv2.visibility=View.GONE
                 }
 
                 if(binding.headerTop.dxReg.text.isEmpty())

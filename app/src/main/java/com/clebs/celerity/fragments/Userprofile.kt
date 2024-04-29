@@ -82,9 +82,11 @@ class Userprofile : Fragment() {
         GetDriversBasicInformation()
         HomeActivity.ActivityHomeBinding.title.setText("")
 
-        mbinding.logout.setOnClickListener {
-            (activity as HomeActivity).showAlertLogout()
-        }
+//        mbinding.logout.setOnClickListener {
+//            (activity as HomeActivity).showAlertLogout()
+//        }
+        HomeActivity.ActivityHomeBinding.imgNotification.visibility=View.GONE
+HomeActivity.ActivityHomeBinding.logout.visibility=View.VISIBLE
 
 
 
@@ -220,7 +222,7 @@ class Userprofile : Fragment() {
 
                 // Set background tint using a specific color
                 mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(color)
-                mbinding.passtext.backgroundTintList = ColorStateList.valueOf(color)
+//                mbinding.passtext.backgroundTintList = ColorStateList.valueOf(color)
                 mbinding.phonetext.backgroundTintList = ColorStateList.valueOf(color)
                 mbinding.addresstext.backgroundTintList = ColorStateList.valueOf(color)
 

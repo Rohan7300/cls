@@ -29,6 +29,7 @@ class Prepardness : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setRetainInstance(true);
         binding = FragmentPrepardnessBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -95,6 +96,7 @@ class Prepardness : Fragment() {
             RaPreparednessVehicleReadiness = selectedOptions[1],
             RaPreparednessDeviceReq =  selectedOptions[2]
         ))
+
     }
 
 }

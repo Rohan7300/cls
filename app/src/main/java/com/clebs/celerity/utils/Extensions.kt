@@ -25,6 +25,7 @@ import android.util.Base64OutputStream
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -424,6 +425,7 @@ fun bitmapToBase64(bitmap: Bitmap): String {
 }*/
 
 fun showTimePickerDialog(context: Context, tv: TextView) {
+
     val calendar = Calendar.getInstance()
     val hour = calendar.get(Calendar.HOUR_OF_DAY)
     val minute = calendar.get(Calendar.MINUTE)
@@ -431,6 +433,8 @@ fun showTimePickerDialog(context: Context, tv: TextView) {
     val timePickerDialog = TimePickerDialog(
         context,
         { _, selectedHour, selectedMinute ->
+
+
             val formattedTime: String = when {
                 selectedHour == 0 -> {
                     if (minute < 10) {
@@ -465,19 +469,40 @@ fun showTimePickerDialog(context: Context, tv: TextView) {
                 }
             }
             tv.text = formattedTime
+
 //            val time = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute)
 //            tv.text = time
         },
         hour,
         minute,
         false
-    )
 
+    )
+//want to disable keyboard mode in above time picker dialog
+//    timePickerDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+    //there is a input keyboard icon show on timepicker dialog at bottom left i want to remove that icon
+//    hideKeyboardInputInTimePicker(context.resources.configuration.orientation, timePickerDialog)
     //timePickerDialog.getButton(TimePickerDialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.orange))
     //timePickerDialog.getButton(TimePickerDialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.orange))
     timePickerDialog.show()
 }
-
+//fun hideKeyboardInputInTimePicker(orientation: Int, timePickerDialog: TimePickerDialog) {
+//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//        try {
+//            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+//                // Hide the keyboard icon in portrait mode
+//                ((timePickerDialog as LinearLayout).getChildAt(4) as LinearLayout)
+//                    .getChildAt(0).visibility = View.GONE
+//            } else {
+//                // Hide the keyboard icon in landscape mode
+//                (((timePickerDialog as LinearLayout).getChildAt(2) as LinearLayout)
+//                    .getChildAt(2) as LinearLayout).getChildAt(0).visibility = View.GONE
+//            }
+//        } catch (e: Exception) {
+//            // Handle any exceptions here
+//        }
+//    }
+//}
 private val timePickerDialogListener: TimePickerDialog.OnTimeSetListener =
     object : TimePickerDialog.OnTimeSetListener {
         override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
@@ -565,23 +590,7 @@ fun showDatePickerDialog(context: Context, tv1: TextView, tv2: TextView, tvNext:
     datePickerDialog.show()
 }
 
-fun hideKeyboardInputInTimePicker(orientation: Int, timePicker: TimePicker) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        try {
-            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                ((timePicker.getChildAt(0) as LinearLayout).getChildAt(4) as LinearLayout).getChildAt(
-                    0
-                ).visibility = View.GONE
-            } else {
-                (((timePicker.getChildAt(0) as LinearLayout).getChildAt(2) as LinearLayout).getChildAt(
-                    2
-                ) as LinearLayout).getChildAt(0).visibility = View.GONE
-            }
-        } catch (ex: Exception) {
-        }
 
-    }
-}
 
 fun isEndDateGreaterThanStartDate(startDate: String, endDate: String): Boolean {
     val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())

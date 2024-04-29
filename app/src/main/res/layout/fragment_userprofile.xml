@@ -108,14 +108,14 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/dpLayout" />
 
-                        <ImageView
-                            android:id="@+id/logout"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/logoutnew"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/name"
-                            app:tint="@color/orange" />
+<!--                        <ImageView-->
+<!--                            android:id="@+id/logout"-->
+<!--                            android:layout_width="30dp"-->
+<!--                            android:layout_height="30dp"-->
+<!--                            android:src="@drawable/logoutnew"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintTop_toBottomOf="@+id/name"-->
+<!--                            app:tint="@color/orange" />-->
                     </LinearLayout>
                 </LinearLayout>
 
@@ -138,13 +138,14 @@
                         android:orientation="horizontal">
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:layout_marginTop="8dp"
                             android:fontFamily="@font/poppins_semibold"
                             android:letterSpacing="0.05"
                             android:text="Edit Details"
                             android:textColor="@color/text_color"
-                            android:textSize="12sp" />
+                            android:textSize="11sp" />
                         <ImageView
                             android:id="@+id/editImg"
                             android:layout_width="30dp"

@@ -70,24 +70,25 @@
                     android:fontFamily="@font/poppins_semibold"
                     android:letterSpacing="0.02"
                     android:text="id : "
-                    android:textColor="@color/text_color"
-                    android:textSize="17sp" />
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/ticketID"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+
                     android:fontFamily="@font/poppins_semibold"
                     android:letterSpacing="0.02"
                     android:text="CLS"
-                    android:textColor="@color/black"
-                    android:textSize="17sp" />
+                    android:textColor="@color/text_color"
+                    android:textSize="15sp" />
 
                 <ImageView
                     android:id="@+id/commentIV"
-                    android:layout_width="25dp"
-                    android:layout_height="30dp"
+                    android:layout_width="24dp"
+                    android:layout_height="28dp"
                     android:src="@drawable/baseline_message_24" />
 
             </LinearLayout>
@@ -117,7 +118,7 @@
                         android:id="@+id/tvdepart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
+                        android:fontFamily="@font/poppins_semibold"
                         android:letterSpacing="0.01"
                         android:text="Department"
                         android:textColor="@color/text_color"
@@ -138,6 +139,7 @@
                             android:fontFamily="@font/poppins"
                             android:letterSpacing="0.01"
                             android:padding="10dp"
+                            android:textSize="12sp"
                             android:text="Department Name"
                             android:textColor="@color/text_color"
                             app:layout_constraintStart_toStartOf="parent"
@@ -180,7 +182,7 @@
                             android:id="@+id/tv_request"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins"
+                            android:fontFamily="@font/poppins_semibold"
                             android:letterSpacing="0.01"
                             android:text="Request Type"
                             android:textColor="@color/text_color"
@@ -201,6 +203,7 @@
                                 android:fontFamily="@font/poppins"
                                 android:letterSpacing="0.01"
                                 android:padding="10dp"
+                                android:textSize="12sp"
                                 android:text="Request Type"
                                 android:textColor="@color/text_color"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -242,8 +245,9 @@
                                 android:id="@+id/tv_reg"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/poppins"
+                                android:fontFamily="@font/poppins_semibold"
                                 android:letterSpacing="0.01"
+
                                 android:text="Reg No. ( if applicable)"
                                 android:textColor="@color/text_color"
                                 android:textSize="14sp" />
@@ -264,9 +268,10 @@
                                     android:hint="Vehicle registration number"
                                     android:importantForAutofill="no"
                                     android:letterSpacing="0.01"
+
                                     android:padding="10dp"
                                     android:textColor="@color/text_color"
-                                    android:textSize="14sp"
+                                    android:textSize="12sp"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -298,7 +303,7 @@
                                     android:id="@+id/tv_title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins"
+                                    android:fontFamily="@font/poppins_semibold"
                                     android:letterSpacing="0.01"
                                     android:text="Title*"
                                     android:textColor="@color/text_color"
@@ -318,7 +323,7 @@
                                     android:letterSpacing="0.01"
                                     android:padding="10dp"
                                     android:textColor="@color/text_color"
-                                    android:textSize="14sp" />
+                                    android:textSize="12sp" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -331,7 +336,7 @@
                                     android:id="@+id/tv_des"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins"
+                                    android:fontFamily="@font/poppins_semibold"
                                     android:letterSpacing="0.01"
                                     android:text="Description"
                                     android:textColor="@color/text_color"
@@ -351,7 +356,7 @@
                                     android:letterSpacing="0.01"
                                     android:padding="13dp"
                                     android:textColor="@color/text_color"
-                                    android:textSize="14sp" />
+                                    android:textSize="12sp" />
 
                                 <LinearLayout
                                     android:id="@+id/llAttachment"

@@ -29,6 +29,7 @@ class GoingOn : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setRetainInstance(true);
         binding = FragmentGoingOnBinding.inflate(inflater, container, false)
         return binding.root
     }

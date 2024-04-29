@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -19,6 +20,7 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.PermissionCallback
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
+import kotlinx.coroutines.launch
 import java.time.Year
 import java.util.Calendar
 
@@ -57,7 +59,12 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
         showYearPickerNew()
         showDialog()
         observers()
-        viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
+        viewLifecycleOwner.lifecycleScope.launch{
+
+
+            viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
+        }
+//        viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
         return binding.root
     }
 

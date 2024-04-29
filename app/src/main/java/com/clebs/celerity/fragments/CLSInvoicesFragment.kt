@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -19,6 +20,7 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.PermissionCallback
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
+import kotlinx.coroutines.launch
 import java.time.Year
 import java.util.Calendar
 
@@ -55,7 +57,16 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
               }*/
         observers()
         showYearPickerNew()
-        viewModel.DownloadInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
+       //getting response faster from api
+
+
+            //getting response faster from api
+
+        viewLifecycleOwner.lifecycleScope.launch{
+            viewModel.DownloadInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
+        }
+
+
         return binding.root
     }
 
@@ -63,6 +74,7 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
 
         adapter = CLSInvoiceAdapter(ArrayList(), requireContext(), prefs, this)
         binding.clsInvoices.adapter = adapter
+        binding.clsInvoices.setHasFixedSize(true)
         binding.clsInvoices.layoutManager = LinearLayoutManager(requireContext())
         viewModel.liveDataDownloadInvoicePDF.observe(viewLifecycleOwner) {
             hideDialog()
