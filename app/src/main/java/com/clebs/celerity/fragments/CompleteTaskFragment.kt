@@ -46,7 +46,7 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.hideKeyboardInputInTimePicker
+
 import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog

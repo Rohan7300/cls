@@ -471,8 +471,7 @@ class Userprofile : Fragment() {
                     //mbinding.checkbox.isChecked =
                 } else if (it.IsThirdPartyChargeAccessAllowed == true) {
                     mbinding.Tvthirdparty.text = "Third party Access is Granted."
-                    mbinding.checkbox.visibility = View.VISIBLE
-                    mbinding.checkbox.isChecked=-true
+                    mbinding.checkbox.visibility = View.GONE
                 } else if (it.IsThirdPartyChargeAccessAllowed == false && it.IsThirdPartyChargeAccessApplied == false) {
                     mbinding.Tvthirdparty.text = "Request for third party Access."
                     mbinding.checkbox.visibility = View.VISIBLE
@@ -587,7 +586,44 @@ class Userprofile : Fragment() {
                 isedit = false
                 mbinding.save.visibility = View.GONE
                 if (it.Status.equals("200")) {
+mbinding.editImg.alpha=1f
+                    val newColor = resources.getColor(R.color.very_light_grey_two)
+                    mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(newColor)
+                    mbinding.passtext.backgroundTintList = ColorStateList.valueOf(newColor)
+                    mbinding.phonetext.backgroundTintList = ColorStateList.valueOf(newColor)
+                    mbinding.addresstext.backgroundTintList = ColorStateList.valueOf(newColor)
+                    mbinding.save.visibility = View.GONE
+                    mbinding.emailtext.isEnabled = false
+                    mbinding.emailtext.isFocusable = false
+                    mbinding.emailtext.isFocusableInTouchMode = false
+                    val colorRes = R.color.very_light_grey_two
+                    val color = ContextCompat.getColor(requireContext(), colorRes)
 
+                    mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(color)
+                    mbinding.passtext.backgroundTintList = ColorStateList.valueOf(color)
+                    mbinding.phonetext.backgroundTintList = ColorStateList.valueOf(color)
+                    mbinding.addresstext.backgroundTintList = ColorStateList.valueOf(color)
+                    mbinding.txtChangePassword.visibility = View.GONE
+
+                    mbinding.usertext.isEnabled = false
+                    mbinding.usertext.isFocusable = false
+                    mbinding.usertext.isFocusableInTouchMode = false
+
+                    mbinding.passtext.isEnabled = false
+                    mbinding.passtext.isFocusable = false
+                    mbinding.passtext.isFocusableInTouchMode = false
+
+                    mbinding.phonetext.isEnabled = false
+                    mbinding.phonetext.isFocusable = false
+                    mbinding.phonetext.isFocusableInTouchMode = false
+
+                    mbinding.addresstext.isEnabled = false
+                    mbinding.addresstext.isFocusable = false
+                    mbinding.addresstext.isFocusableInTouchMode = false
+
+                    mbinding.editImg.alpha = 1f
+//                mbinding.icInfos.visibility = View.GONE
+                    mbinding.useEmailas.visibility = View.GONE
                     showToast("Profile Successfully Updated", requireContext())
 
                 } else {
