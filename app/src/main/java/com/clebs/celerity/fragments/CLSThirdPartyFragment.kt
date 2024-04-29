@@ -19,7 +19,6 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.PermissionCallback
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
-import com.google.android.material.datepicker.MaterialDatePicker
 import java.time.Year
 import java.util.Calendar
 
@@ -58,7 +57,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
         showYearPickerNew()
         showDialog()
         observers()
-        viewModel.DownloadThirdPartyInvoicePDF(prefs.userID.toInt(), selectedYear)
+        viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
         return binding.root
     }
 
@@ -122,7 +121,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
                     selectedYear = year
                     binding.dateTV.text = year.toString()
                     showDialog()
-                    viewModel.DownloadThirdPartyInvoicePDF(prefs.userID.toInt(), selectedYear)
+                    viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
                     //  showToast("Selected Year: $selectedYear", requireContext())
                 }
             },
@@ -150,7 +149,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
                     if (position != 0) {
                         selectedYear = nonNullParent.getItemAtPosition(position) as Int
                         showDialog()
-                        viewModel.DownloadThirdPartyInvoicePDF(prefs.userID.toInt(), selectedYear)
+                        viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
                     }
                 }
             }

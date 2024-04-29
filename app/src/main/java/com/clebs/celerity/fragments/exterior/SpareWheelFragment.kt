@@ -1,7 +1,6 @@
 package com.clebs.celerity.fragments.exterior
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +14,10 @@ import com.clebs.celerity.fragments.BaseInteriorFragment
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
-import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.NoInternetDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentDateTime
+import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.isNetworkAvailable
 import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.showErrorDialog
@@ -132,7 +131,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
     }
 
     override fun saveNnext() {
-        var userId = Prefs.getInstance(requireContext()).userID.toInt()
+        var userId = Prefs.getInstance(requireContext()).clebUserId.toInt()
         if (isNetworkAvailable(requireActivity().baseContext)) {
             showDialog()
             if (defectView) {
@@ -159,6 +158,8 @@ class SpareWheelFragment : BaseInteriorFragment() {
                     if (!isApiCallInProgress) {
                         isApiCallInProgress = true
                         VdhVmId = it.vmId
+                        if(it.vmId!=0)
+                            Prefs.getInstance(requireContext()).vmId = it.vmId
 
                         Prefs.getInstance(App.instance).VmID = it.vmId.toString()
                         Prefs.getInstance(App.instance).save("lm",it.vmLocId.toString())
@@ -240,12 +241,12 @@ class SpareWheelFragment : BaseInteriorFragment() {
                     if (prefs.scannedVmRegNo.isNotEmpty() && !secondTry) {
                         showDialog()
                         secondTry = true
-                        viewModel.GetVehicleInformation(prefs.userID.toInt(), prefs.vmRegNo)
+                        viewModel.GetVehicleInformation(prefs.clebUserId.toInt(), getVRegNo(prefs))
                     }
                 }
             }
 
-            viewModel.GetVehicleInformation(prefs.userID.toInt(), prefs.scannedVmRegNo)
+            viewModel.GetVehicleInformation(prefs.clebUserId.toInt(), getVRegNo(prefs))
             viewModel.SaveVehDefectSheetResponseLiveData.observe(viewLifecycleOwner) {
                 hideDialog()
                 if (it != null) {

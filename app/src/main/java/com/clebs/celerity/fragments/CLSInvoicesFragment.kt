@@ -3,28 +3,22 @@ package com.clebs.celerity.fragments
 import android.Manifest
 import android.app.DatePickerDialog
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.DatePicker
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.CLSInvoiceAdapter
 import com.clebs.celerity.databinding.FragmentCLSInvoicesBinding
-import com.clebs.celerity.databinding.FragmentInvoicesBinding
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.PermissionCallback
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
-import com.google.android.material.datepicker.MaterialDatePicker
-import java.io.File
 import java.time.Year
 import java.util.Calendar
 
@@ -61,7 +55,7 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
               }*/
         observers()
         showYearPickerNew()
-        viewModel.DownloadInvoicePDF(prefs.userID.toInt(), selectedYear)
+        viewModel.DownloadInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
         return binding.root
     }
 
@@ -126,7 +120,7 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
                     selectedYear = year
                     binding.dateTV.text = year.toString()
                     showDialog()
-                    viewModel.DownloadInvoicePDF(prefs.userID.toInt(), selectedYear)
+                    viewModel.DownloadInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
                     //  showToast("Selected Year: $selectedYear", requireContext())
                 }
             },
@@ -156,7 +150,7 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
                     if (position != 0) {
                         selectedYear = nonNullParent.getItemAtPosition(position) as Int
                         showDialog()
-                        viewModel.DownloadInvoicePDF(prefs.userID.toInt(), selectedYear)
+                        viewModel.DownloadInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
                     }
                 }
             }

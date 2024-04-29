@@ -29,6 +29,8 @@ import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertBitmapToBase64
+import com.clebs.celerity.utils.getLoc
+import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.showToast
 import com.elconfidencial.bubbleshowcase.BubbleShowCase
@@ -85,18 +87,15 @@ abstract class BaseInteriorFragment : Fragment() {
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
             .also { name -> ana_carolin.text = name }
         dxm5.text = (activity as HomeActivity).date
-        if (Prefs.getInstance(requireContext()).currLocationName != null) {
-            dxLoc.text =
-                Prefs.getInstance(requireContext()).currLocationName ?: ""
-        } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
-            dxLoc.text =
-                Prefs.getInstance(requireContext()).workLocationName ?: ""
-        }
+
+        dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
         if(dxReg.text.isEmpty()||dxReg.text=="")
             strikedxRegNo.visibility = View.VISIBLE
         else
             strikedxRegNo.visibility = View.GONE
+
         if(dxLoc.text.isEmpty()||dxLoc.text==""||dxLoc.text=="Not Allocated")
             strikedxLoc.visibility = View.VISIBLE
         else
@@ -105,10 +104,10 @@ abstract class BaseInteriorFragment : Fragment() {
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             dxLoc.text = it?.locationName ?: ""
             dxReg.text = it?.vmRegNo ?: ""
-            if (Prefs.getInstance(requireContext()).currLocationName != null) {
+            if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
                 dxLoc.text =
                     Prefs.getInstance(requireContext()).currLocationName ?: ""
-            } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+            } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
                 dxLoc.text =
                     Prefs.getInstance(requireContext()).workLocationName ?: ""
             } else {
@@ -116,6 +115,11 @@ abstract class BaseInteriorFragment : Fragment() {
                     dxLoc.text = it.locationName ?: ""
                 }
             }
+            if(it!=null){
+                if(it.vmId!=0)
+                    Prefs.getInstance(requireContext()).vmId = it.vmId
+            }
+
             if(dxReg.text.isEmpty()||dxReg.text=="")
                 strikedxRegNo.visibility = View.VISIBLE
             else

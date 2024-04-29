@@ -10,6 +10,7 @@
         android:id="@+id/homeFragment"
         android:name="com.clebs.celerity.fragments.HomeFragment"
         android:label="fragment_home"
+
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/dailyWorkFragment"

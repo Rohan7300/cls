@@ -3,13 +3,9 @@ package com.clebs.celerity.ui
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -31,7 +27,6 @@ import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.showToast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.FirebaseMessagingService
 
 class SplashActivity : AppCompatActivity() {
     lateinit var ActivitySplashBinding: ActivitySplashBinding
@@ -127,7 +122,7 @@ class SplashActivity : AppCompatActivity() {
             mainViewModel.SaveDeviceInformation(
                 SaveDeviceInformationRequest(
                     FcmToken = token,
-                    UsrId = Prefs.getInstance(this).userID.toInt(),
+                    UsrId = Prefs.getInstance(this).clebUserId.toInt(),
                     UsrDeviceId = getDeviceID(),
                     UsrDeviceType = "Android"
                 )
@@ -142,8 +137,7 @@ class SplashActivity : AppCompatActivity() {
             this@SplashActivity,
             LoginActivity::class.java
         )
-        // on below line we are
-        // starting a new activity.
+
         startActivity(i)
 
     }
@@ -170,8 +164,8 @@ class SplashActivity : AppCompatActivity() {
 
     fun GetDriverSignatureInformation() {
         var userid: Double = 0.0
-        if (!Prefs.getInstance(applicationContext).userID.equals(0.0)) {
-            userid = Prefs.getInstance(applicationContext).userID.toDouble()
+        if (!Prefs.getInstance(applicationContext).clebUserId.equals(0.0)) {
+            userid = Prefs.getInstance(applicationContext).clebUserId.toDouble()
         }
 
         mainViewModel.getDriverSignatureInfo(userid).observe(this@SplashActivity, Observer {

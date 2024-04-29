@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.clebs.celerity.DrawViewClass
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.FeedbackQuestionareAdapter
@@ -17,7 +16,6 @@ import com.clebs.celerity.databinding.FragmentFeedbackBinding
 import com.clebs.celerity.models.QuestionWithOption
 import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
 import com.clebs.celerity.ui.HomeActivity
-import com.clebs.celerity.utils.CustDialog
 import com.clebs.celerity.utils.CustDialog2
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
@@ -70,6 +68,7 @@ class FeedbackFragment : Fragment() {
             loadingDialog.cancel()
             if (pref.submittedFeedback) {
                 if (it != null) {
+                    findNavController().popBackStack()
                     findNavController().navigate(R.id.completeTaskFragment)
                 }
             }
@@ -109,7 +108,7 @@ class FeedbackFragment : Fragment() {
         pref.submittedFeedback = true
         var request = SubmitRideAlongDriverFeedbackRequest(
             DaDailyWorkId = pref.daWID,
-            LeadDriverId = pref.userID.toInt(),
+            LeadDriverId = pref.clebUserId.toInt(),
             QuestionId = 0,
             RoutetId = pref.currRtId,
             Signature = bse64,

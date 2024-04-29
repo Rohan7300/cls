@@ -56,6 +56,6 @@ class CommentDetailActivity : AppCompatActivity() {
         }
 
         loadingDialog.show()
-        viewModel.GetTicketCommentList(prefs.userID.toInt(), ticketID!!)
+        viewModel.GetTicketCommentList(prefs.clebUserId.toInt(), ticketID!!)
     }
 }

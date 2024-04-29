@@ -5,7 +5,6 @@ import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,7 +15,6 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
@@ -142,9 +140,9 @@ class Userprofile : Fragment() {
 
         mbinding.checkbox.setOnClickListener {
             if (mbinding.checkbox.isChecked) {
-                mainViewModel.GetThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
+                mainViewModel.GetThirdPartyAccess(Prefs.getInstance(requireContext()).clebUserId.toInt())
             } else {
-                mainViewModel.RemoveThirdPartyAccess(Prefs.getInstance(requireContext()).userID.toInt())
+                mainViewModel.RemoveThirdPartyAccess(Prefs.getInstance(requireContext()).clebUserId.toInt())
             }
         }
         mainViewModel.livedatathirdpartyaccess.observe(viewLifecycleOwner) {
@@ -401,7 +399,7 @@ class Userprofile : Fragment() {
         showDialog()
         mbinding.FormLayout.alpha = 0.5f
         mainViewModel.GetDriversBasicInformation(
-            Prefs.getInstance(App.instance).userID.toDouble()
+            Prefs.getInstance(App.instance).clebUserId.toDouble()
         ).observe(requireActivity(), Observer {
             if (it != null) {
                 Log.e("responseprofile", "GetDriversBasicInformation: ")
@@ -471,7 +469,8 @@ class Userprofile : Fragment() {
                     //mbinding.checkbox.isChecked =
                 } else if (it.IsThirdPartyChargeAccessAllowed == true) {
                     mbinding.Tvthirdparty.text = "Third party Access is Granted."
-                    mbinding.checkbox.visibility = View.GONE
+                    mbinding.checkbox.visibility = View.VISIBLE
+                    mbinding.checkbox.isChecked=true
                 } else if (it.IsThirdPartyChargeAccessAllowed == false && it.IsThirdPartyChargeAccessApplied == false) {
                     mbinding.Tvthirdparty.text = "Request for third party Access."
                     mbinding.checkbox.visibility = View.VISIBLE
@@ -502,7 +501,7 @@ class Userprofile : Fragment() {
 
 
         mainViewModel.UseEmailasUsername(
-            Prefs.getInstance(App.instance).userID.toDouble(), mbinding.emailtext.text.toString()
+            Prefs.getInstance(App.instance).clebUserId.toDouble(), mbinding.emailtext.text.toString()
         ).observe(requireActivity(), Observer {
             Log.e("dkfjdkfjdfkj", "UseEmailAsUSername: ")
             if (it?.Status!!.equals(200)) {
@@ -519,7 +518,7 @@ class Userprofile : Fragment() {
 
     fun updateProfile90dys() {
         mainViewModel.UpdateDAprofileninetydays(
-            Prefs.getInstance(App.instance).userID.toDouble(),
+            Prefs.getInstance(App.instance).clebUserId.toDouble(),
             mbinding.emailtext.text.toString(),
             mbinding.phonetext.text.toString()
         ).observe(viewLifecycleOwner, Observer {
@@ -545,7 +544,7 @@ class Userprofile : Fragment() {
     fun updateProfilePassword() {
 
         mainViewModel.updateProfilepassword(
-            Prefs.getInstance(App.instance).userID.toDouble(),
+            Prefs.getInstance(App.instance).clebUserId.toDouble(),
             edtold!!, edtnew!!
         )
         mainViewModel.updateprofilelivedata.observe(viewLifecycleOwner) {
@@ -574,7 +573,7 @@ class Userprofile : Fragment() {
 
         mainViewModel.updateprofileRegular(
             UpdateProfileRequestBody(
-                Prefs.getInstance(App.instance).userID.toInt(),
+                Prefs.getInstance(App.instance).clebUserId.toInt(),
                 mbinding.emailtext.text.toString(),
                 mbinding.phonetext.text.toString(),
                 mbinding.addresstext.text.toString()
@@ -586,44 +585,7 @@ class Userprofile : Fragment() {
                 isedit = false
                 mbinding.save.visibility = View.GONE
                 if (it.Status.equals("200")) {
-mbinding.editImg.alpha=1f
-                    val newColor = resources.getColor(R.color.very_light_grey_two)
-                    mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(newColor)
-                    mbinding.passtext.backgroundTintList = ColorStateList.valueOf(newColor)
-                    mbinding.phonetext.backgroundTintList = ColorStateList.valueOf(newColor)
-                    mbinding.addresstext.backgroundTintList = ColorStateList.valueOf(newColor)
-                    mbinding.save.visibility = View.GONE
-                    mbinding.emailtext.isEnabled = false
-                    mbinding.emailtext.isFocusable = false
-                    mbinding.emailtext.isFocusableInTouchMode = false
-                    val colorRes = R.color.very_light_grey_two
-                    val color = ContextCompat.getColor(requireContext(), colorRes)
 
-                    mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(color)
-                    mbinding.passtext.backgroundTintList = ColorStateList.valueOf(color)
-                    mbinding.phonetext.backgroundTintList = ColorStateList.valueOf(color)
-                    mbinding.addresstext.backgroundTintList = ColorStateList.valueOf(color)
-                    mbinding.txtChangePassword.visibility = View.GONE
-
-                    mbinding.usertext.isEnabled = false
-                    mbinding.usertext.isFocusable = false
-                    mbinding.usertext.isFocusableInTouchMode = false
-
-                    mbinding.passtext.isEnabled = false
-                    mbinding.passtext.isFocusable = false
-                    mbinding.passtext.isFocusableInTouchMode = false
-
-                    mbinding.phonetext.isEnabled = false
-                    mbinding.phonetext.isFocusable = false
-                    mbinding.phonetext.isFocusableInTouchMode = false
-
-                    mbinding.addresstext.isEnabled = false
-                    mbinding.addresstext.isFocusable = false
-                    mbinding.addresstext.isFocusableInTouchMode = false
-
-                    mbinding.editImg.alpha = 1f
-//                mbinding.icInfos.visibility = View.GONE
-                    mbinding.useEmailas.visibility = View.GONE
                     showToast("Profile Successfully Updated", requireContext())
 
                 } else {

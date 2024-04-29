@@ -67,7 +67,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/poppins"
             android:letterSpacing="0.02"
-            android:text="Trainer\nQuestionare"
+            android:text="Trainer\nQuestionnaire"
             android:textColor="#4A4A4A"
             android:textSize="13sp" />
 

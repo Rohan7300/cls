@@ -1,7 +1,6 @@
 package com.clebs.celerity.ui
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -12,11 +11,11 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.AUTOFILL_TYPE_NONE
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -44,6 +43,7 @@ import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
 import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.getDeviceID
+import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.showToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
@@ -68,7 +68,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private lateinit var cqSDKInitializer: CQSDKInitializer
     lateinit var fragmentManager: FragmentManager
     private var sdkkey = ""
-    var userId: Int = 0
+    var clebuserID: Int = 0
     var firstName = ""
     var apiCount = 0
     val currentDate =
@@ -97,6 +97,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         var lmId: Int = 0
     }
 
+    fun getAutofillType(): Int {
+        return AUTOFILL_TYPE_NONE
+    }
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
@@ -117,6 +120,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 if (destinationFragment == "NotificationsFragment") {
                     ActivityHomeBinding.title.text = "Notifications"
                     navController.navigate(R.id.notifficationsFragment)
+                    return
                 }
             }
 
@@ -144,13 +148,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
                 viewModel.SaveVehicleInspectionInfo(
                     SaveVehicleInspectionInfo(
-                        Prefs.getInstance(App.instance).userID.toInt(),
+                        Prefs.getInstance(App.instance).clebUserId.toInt(),
                         currentDate,
                         Prefs.getInstance(App.instance).inspectionID,
                         locationID,
                         Prefs.getInstance(App.instance).VmID.toString().toInt()
                     )
                 )
+
                 viewModel.livedataSavevehicleinspectioninfo.observe(this, Observer {
                     if (it != null) {
                         if (it.Message.equals("200"))
@@ -184,7 +189,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     @SuppressLint("HardwareIds")
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ActivityHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
@@ -193,8 +197,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         prefs = Prefs.getInstance(this)
         loadingDialog = LoadingDialog(this)
         sdkkey = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            window.decorView.importantForAutofill =
+                View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS;
+        }
+
         cqSDKInitializer()
-        userId = prefs.userID.toInt()
+        clebuserID = prefs.clebUserId.toInt()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -203,10 +212,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         fragmentManager = this.supportFragmentManager
         bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
-
-        window.getDecorView()
-            .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
-        disableAutofill()
 
         getDeviceID()
         val deviceID =
@@ -303,9 +308,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
 
-
-
-
             bottomNavigationView.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
 
@@ -320,7 +322,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                              navController.currentDestination!!.id = R.id.homeFragment
          */
                         ActivityHomeBinding.title.text = ""
-                        viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).userID.toInt())
+                        viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
                         showDialog()
                         true
                     }
@@ -372,12 +374,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         }
     }
-    @TargetApi(Build.VERSION_CODES.O)
-    private fun disableAutofill() {
-        window.decorView.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
-    }
-    @SuppressLint("MissingSuperCall")
 
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         //super.onBackPressed()
         screenid = viewModel.getLastVisitedScreenId(this)
@@ -450,9 +448,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
             }
         } catch (_: Exception) {
-
         }
-
     }
 
     fun showAlertLogout() {
@@ -483,7 +479,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         deleteDialog.setCanceledOnTouchOutside(false)
         deleteDialog.setCancelable(false)
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        deleteDialog.show()
+        try{
+            deleteDialog.show()
+        }catch (_:Exception){
+
+        }
+
     }
 
 
@@ -545,7 +546,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         date = today.format(formatter)
         showDialog()
         viewModel.GetDriversBasicInformation(
-            Prefs.getInstance(App.instance).userID.toDouble()
+            Prefs.getInstance(App.instance).clebUserId.toDouble()
         ).observe(this, Observer {
             hideDialog()
             if (it != null) {
@@ -560,18 +561,19 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 try {
                     it.vmRegNo?.let { it1 ->
                         prefs.vmRegNo = it1
-                        viewModel.GetVehicleInformation(
-                            prefs.userID.toInt(),
-                            it1
-                        )
                     }
+                    viewModel.GetVehicleInformation(
+                        prefs.clebUserId.toInt(),
+                        getVRegNo(prefs)
+                    )
                     if (it.currentlocation != null)
                         prefs.currLocationName = it.currentlocation
                     if (it.workinglocation != null)
                         prefs.workLocationName = it.workinglocation
                     prefs.lmid = it.lmID
                     lmId = it.lmID
-                    prefs.vmId = it.vmID
+                    if(it.vmID!=null && prefs.vmId==0)
+                        prefs.vmId = it.vmID
                 } catch (e: Exception) {
                     Log.d("sds", e.toString())
                 }
@@ -657,7 +659,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     fun getscannednumbervehicleinfo() {
         viewModel.GetVehicleInfobyDriverId(
-            Prefs.getInstance(App.instance).userID.toInt(),
+            Prefs.getInstance(App.instance).clebUserId.toInt(),
             currentDate
         )
         viewModel.livedataGetVehicleInfobyDriverId.observe(this) {

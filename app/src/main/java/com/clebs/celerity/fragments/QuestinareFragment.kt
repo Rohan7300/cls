@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentQuestinareBinding
@@ -23,7 +24,7 @@ class QuestinareFragment : Fragment() {
     private var leadDriverID = 0
     lateinit var adapter: ViewAdaptor
     lateinit var viewModel: MainViewModel
-    var firsttime: Boolean = true
+    private var firsttime: Boolean = true
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,7 +44,7 @@ class QuestinareFragment : Fragment() {
         leadDriverID = arguments?.getInt("leadDriverID", 0) ?: 0
         viewModel = (activity as HomeActivity).viewModel
 
-        if (rideAlongID != null && leadDriverID != null) {
+        if (leadDriverID != null) {
             Log.d(TAG, "RIDEALONGID $rideAlongID \n LEADDRIVERID $leadDriverID")
         } else {
             Log.d(TAG, "RIDEALONGID null \n LEADDRIVERID null")
@@ -55,7 +56,7 @@ class QuestinareFragment : Fragment() {
             "Going On",
             "Delivery Procedures",
             "Return",
-            "Final assessment"
+            "Final Assessment"
         )
         val str = "Observations and explanations must be conducted on a" +
                 " Nursery Level 1 route. The new driver should make at least 50 unassisted deliveries," +
@@ -76,6 +77,7 @@ class QuestinareFragment : Fragment() {
                     orignalParams
             }
         }
+
 
         binding.tablay.setupWithViewPager(binding.viewPager)
 
@@ -108,11 +110,11 @@ class QuestinareFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-        if (this::adapter.isInitialized && this::viewModel.isInitialized) {
+/*        if (this::adapter.isInitialized && this::viewModel.isInitialized) {
             binding.viewPager.currentItem = 0
             binding.viewPager.setCurrentItem(0, true)
             viewModel.currentViewPage.postValue(0)
-        }
+        }*/
 
         viewModel.currentViewPage.observe(viewLifecycleOwner) {
             if (firsttime) {
@@ -120,21 +122,19 @@ class QuestinareFragment : Fragment() {
             } else {
                 it.let { currentPage ->
                     binding.viewPager.currentItem = currentPage!!
-
                 }
             }
-
         }
 
     }
 
     override fun onResume() {
         super.onResume()
-        if (this::adapter.isInitialized && this::viewModel.isInitialized) {
+/*        if (this::adapter.isInitialized && this::viewModel.isInitialized) {
             binding.viewPager.currentItem = 0
             firsttime = true
             viewModel.currentViewPage.postValue(0)
-        }
+        }*/
     }
 
 }

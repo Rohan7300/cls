@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.QuestionAdapter
 import com.clebs.celerity.databinding.FragmentStartUpBinding
@@ -43,6 +45,7 @@ class StartUp : Fragment() {
         pref = Prefs.getInstance(requireContext())
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
+        pref.submittedStartUp = false
 
         val adapter = QuestionAdapter(questions,requireContext())
         binding.startUpRv.adapter = adapter
@@ -50,11 +53,17 @@ class StartUp : Fragment() {
 
         viewModel.liveDataQuestionaireStartup.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            if (it != null) {
-                viewModel.currentViewPage.postValue(2)
-                pref.quesID = it.QuestionId
-                pref.qStage = 2
+            if(pref.submittedStartUp){
+                if (it != null) {
+                    viewModel.currentViewPage.postValue(2)
+                    pref.quesID = it.QuestionId
+                    pref.qStage = 2
+                }
             }
+        }
+        binding.cancel.setOnClickListener {
+            findNavController().navigate(R.id.completeTaskFragment)
+            findNavController().clearBackStack(R.id.completeTaskFragment)
         }
 
         binding.saveBTNStartup.setOnClickListener {
@@ -78,6 +87,7 @@ class StartUp : Fragment() {
 
     private fun saveStartupApi(selectedOptions: List<String>, comment: CharSequence) {
         loadingDialog.show()
+        pref.submittedStartUp = true
         viewModel.SaveQuestionaireStartup(
             SaveQuestionaireStartupRequest(
                 QuestionId = pref.quesID,

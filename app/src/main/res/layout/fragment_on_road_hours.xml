@@ -188,6 +188,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+
                             android:hint="Select route type">
 
                             <AutoCompleteTextView
@@ -198,6 +199,7 @@
                                 android:importantForAutofill="no"
                                 android:inputType="none"
                                 android:padding="12dp"
+                                android:hint="Select route type"
                                 android:textColorHint="@color/hintColor"
                                 android:textSize="14sp" />
 
@@ -281,7 +283,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="Number of parcels delivered Number">
+                            android:hint="Number of parcels delivered">
 
                             <EditText
                                 android:id="@+id/edt_parcels"
@@ -410,7 +412,7 @@
                                 android:hint="0"
                                 android:importantForAutofill="no"
                                 android:inputType="number"
-                                android:maxLength="3"
+                                android:maxLength="6"
                                 android:padding="12dp"
                                 android:textCursorDrawable="@color/orange"
                                 android:textSize="14sp"

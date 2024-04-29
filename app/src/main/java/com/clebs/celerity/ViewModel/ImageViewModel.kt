@@ -24,7 +24,6 @@ class ImageViewModel(val imageRepo: ImagesRepo) : ViewModel() {
                     images.postValue(it)
                 }
             } catch (e: Exception) {
-                // Handle error
                 Log.e("ViewModel", "Error fetching image data: ${e.message}")
             }
         }

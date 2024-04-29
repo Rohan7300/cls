@@ -53,7 +53,6 @@ class ViewAdaptor(
                 FinalAssesmentFragment()
             }
 
-
             else -> getItem(position)
         }
     }

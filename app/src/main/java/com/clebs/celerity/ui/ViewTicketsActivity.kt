@@ -1,6 +1,5 @@
 package com.clebs.celerity.ui
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -61,7 +60,7 @@ class ViewTicketsActivity : AppCompatActivity() {
             binding.tvRequests.text = ticketData!!.ReqTypeName
 
             viewModel.GetUserTicketDocuments(
-                userID = prefs.userID.toInt(),
+                userID = prefs.clebUserId.toInt(),
                 ticketId = ticketData!!.UserTicketID.toInt()
             )
         }

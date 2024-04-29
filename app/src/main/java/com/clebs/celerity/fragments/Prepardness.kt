@@ -17,7 +17,6 @@ import com.clebs.celerity.models.requests.SaveQuestionairePreparednessRequest
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.ViewAdaptor
 import com.clebs.celerity.utils.showToast
 
 class Prepardness : Fragment() {
@@ -42,6 +41,7 @@ class Prepardness : Fragment() {
             QuestionWithOption("Device requirement (Android preferably)*")
         )
         pref = Prefs.getInstance(requireContext())
+        pref.submittedPrepardness = false
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
 
@@ -53,13 +53,19 @@ class Prepardness : Fragment() {
         viewModel.liveDataQuestionairePreparedness.observe(viewLifecycleOwner){
             loadingDialog.cancel()
             if(it!=null){
-                Log.d("Preparedness",it.toString())
-                viewModel.currentViewPage.postValue(1)
-                pref.quesID = it.QuestionId
-                pref.qStage = 1
+                if(pref.submittedPrepardness){
+                    Log.d("Preparedness",it.toString())
+                    viewModel.currentViewPage.postValue(1)
+                    pref.quesID = it.QuestionId
+                    pref.qStage = 1
+                }
+
             }
         }
-
+        binding.prepCancel.setOnClickListener {
+            findNavController().navigate(R.id.completeTaskFragment)
+            findNavController().clearBackStack(R.id.completeTaskFragment)
+        }
         binding.prepardnessSave.setOnClickListener {
             val allQuestionsSelected = adapter.areAllQuestionsSelected()
             val comment =
@@ -78,9 +84,10 @@ class Prepardness : Fragment() {
 
     private fun savePrepardnessApi(selectedOptions: List<String>, comment: CharSequence?) {
         loadingDialog.show()
+        pref.submittedPrepardness = true
         viewModel.SaveQuestionairePreparedness(SaveQuestionairePreparednessRequest(
             DaDailyWorkId = pref.daWID,
-            LeadDriverId = pref.userID.toInt(),
+            LeadDriverId = pref.clebUserId.toInt(),
             QuestionId = 0,
             RideAlongDriverId = pref.currRideAlongID,
             RoutetId = pref.currRtId,

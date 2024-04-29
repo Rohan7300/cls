@@ -10,13 +10,10 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.webkit.MimeTypeMap
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
-import android.widget.Spinner
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -118,7 +115,7 @@ class CreateTicketsActivity : AppCompatActivity() {
             DaTestDate = currDt,
             DaTestTime = currDt,
             Description = desc!!,
-            DriverId = pref.userID.toInt(),
+            DriverId = pref.clebUserId.toInt(),
             EstCompletionDate = currDt,
             KeepDeptInLoop = true,
             NoofPeople = 0,
@@ -136,7 +133,7 @@ class CreateTicketsActivity : AppCompatActivity() {
         )
         showDialog()
         viewmodel.SaveTicketData(
-            pref.userID.toInt(),
+            pref.clebUserId.toInt(),
             request
         )
     }
@@ -164,7 +161,7 @@ class CreateTicketsActivity : AppCompatActivity() {
                 ticketID = it.TicketId
                 if(uploadWithAttachement){
                     viewmodel.UploadTicketAttachmentDoc(
-                        pref.userID.toInt(),
+                        pref.clebUserId.toInt(),
                         ticketId = ticketID!!.toInt(),
                         file = filePart
                     )

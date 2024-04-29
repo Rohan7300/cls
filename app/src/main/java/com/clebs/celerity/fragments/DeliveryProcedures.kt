@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.QuestionAdapter
 import com.clebs.celerity.databinding.FragmentDeliveryProceduresBinding
@@ -35,6 +37,7 @@ class DeliveryProcedures : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         pref = Prefs.getInstance(requireContext())
+        pref.submittedDeliveryProcedures = false
         viewModel = (activity as HomeActivity).viewModel
         loadingDialog = (activity as HomeActivity).loadingDialog
 
@@ -59,12 +62,19 @@ class DeliveryProcedures : Fragment() {
         binding.DeliveryRV.adapter = adapter
         binding.DeliveryRV.layoutManager = LinearLayoutManager(requireContext())
 
+        binding.cancel.setOnClickListener {
+            findNavController().navigate(R.id.completeTaskFragment)
+            findNavController().clearBackStack(R.id.completeTaskFragment)
+        }
+
         viewModel.liveDataQuestionareDeliveryProcedures.observe(viewLifecycleOwner){
             loadingDialog.cancel()
             if(it!=null){
-                viewModel.currentViewPage.postValue(4)
-                pref.quesID = it.QuestionId
-                pref.qStage = 4
+                if(pref.submittedDeliveryProcedures){
+                    viewModel.currentViewPage.postValue(4)
+                    pref.quesID = it.QuestionId
+                    pref.qStage = 4
+                }
             }else{
                 showToast("Failed to submit!!",requireContext())
             }
@@ -89,6 +99,7 @@ class DeliveryProcedures : Fragment() {
 
     private fun saveDeliveryProcedureApi(selectedOptions: List<String>, comment: CharSequence?) {
         loadingDialog.show()
+        pref.submittedDeliveryProcedures = true
         viewModel.SaveQuestionaireDelivery(
             SaveQuestionaireDeliverProceduresRequest(
                 QuestionId = pref.quesID,

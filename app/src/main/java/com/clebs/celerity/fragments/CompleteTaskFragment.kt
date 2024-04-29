@@ -46,7 +46,8 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
-
+import com.clebs.celerity.utils.getLoc
+import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog
@@ -75,7 +76,6 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var imageView: ImageView
     private var userId: Int = 0
-
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
     lateinit var ivX: ImageView
@@ -85,13 +85,14 @@ class CompleteTaskFragment : Fragment() {
     private var isAllImageUploaded: Boolean = false
     private var isInspectionDone: Boolean = false
     private var imagesUploaded: Boolean = false
+    lateinit var rideAlongAdapter: RideAlongAdapter
     private var isClockedIn: Boolean = false
     private var isOnRoadHours: Boolean = false
     private var isBreakTimeAdded: Boolean = false
     private var visibilityLevel = -1
     var breakStartTime: String = ""
     var breakEndTime: String = ""
-    var scannedvrn:String=""
+    var scannedvrn: String = ""
     private lateinit var loadingDialog: LoadingDialog
     private var b1 = false
     private var b2 = false
@@ -142,7 +143,7 @@ class CompleteTaskFragment : Fragment() {
 
 
         loadingDialog = (activity as HomeActivity).loadingDialog
-        userId = Prefs.getInstance(requireContext()).userID.toInt()
+        userId = Prefs.getInstance(requireContext()).clebUserId.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.addBreakIV.setOnClickListener(clickListener)
 
@@ -168,20 +169,23 @@ class CompleteTaskFragment : Fragment() {
         inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
         viewModel = (activity as HomeActivity).viewModel
         showDialog()
-        viewModel.GetVehicleInfobyDriverId(Prefs.getInstance(App.instance).userID.toInt(),currentDate)
-        viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner){
+        viewModel.GetVehicleInfobyDriverId(
+            Prefs.getInstance(App.instance).clebUserId.toInt(),
+            currentDate
+        )
+        viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner) {
 
-            if (it!=null){
+            if (it != null) {
 
-                scannedvrn=it.vmRegNo
-                Prefs.getInstance(App.instance).scannedVmRegNo=it.vmRegNo
-                if ( !Prefs.getInstance(App.instance).VmID.isNotEmpty()){
-                    Prefs.getInstance(App.instance).VmID=it.vmId.toString()
+                scannedvrn = it.vmRegNo
+                Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
+                if (!Prefs.getInstance(App.instance).VmID.isNotEmpty()) {
+                    Prefs.getInstance(App.instance).VmID = it.vmId.toString()
                 }
             }
         }
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.completeTaskFragment)
-        viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).userID.toInt())
+        viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).clebUserId.toInt())
 
         observers()
         showDialog()
@@ -407,41 +411,44 @@ class CompleteTaskFragment : Fragment() {
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
             mbinding.headerTop.anaCarolin.text = name
         }
-        if (Prefs.getInstance(requireContext()).currLocationName != null) {
-            mbinding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).currLocationName ?: ""
-        } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
-            mbinding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).workLocationName ?: ""
-        }
+        mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
         mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
         val isLeadDriver = (activity as HomeActivity).isLeadDriver
         if (!isLeadDriver) {
             mbinding.rideAlong.visibility = View.GONE
         }
+
         if (mbinding.headerTop.dxReg.text.isEmpty() || mbinding.headerTop.dxReg.text == "")
             mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
             mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+
         if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "" || mbinding.headerTop.dxLoc.text == "Not Allocated")
             mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
             mbinding.headerTop.strikedxLoc.visibility = View.GONE
+
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
 
             hideDialog()
             if (it != null) {
-                if (Prefs.getInstance(requireContext()).currLocationName != null) {
+                if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
                     mbinding.headerTop.dxLoc.text =
                         Prefs.getInstance(requireContext()).currLocationName ?: ""
-                } else if (Prefs.getInstance(requireContext()).workLocationName != null) {
+                } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
                     mbinding.headerTop.dxLoc.text =
                         Prefs.getInstance(requireContext()).workLocationName ?: ""
                 } else {
                     mbinding.headerTop.dxLoc.text = it.locationName ?: ""
                 }
-                mbinding.headerTop.dxReg.text = it.vmRegNo ?: ""
+
+                if (it.vmId != 0)
+                    Prefs.getInstance(requireContext()).vmId = it.vmId
+
+                mbinding.headerTop.dxReg.text =
+                    getVRegNo(prefs = Prefs.getInstance(requireContext()))
                 if (mbinding.headerTop.dxReg.text.isEmpty())
                     mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
                 else
@@ -491,7 +498,7 @@ class CompleteTaskFragment : Fragment() {
                 }
 
                 if (it.ClockedOutTime != null) {
-                    mbinding.clockOutMark.setImageResource(R.drawable.check_new)
+                    mbinding.clockOutMark.setImageResource(R.drawable.finalclockout)
                     mbinding.rlcomtwoClockOut.isEnabled = false
                     mbinding.clockOutTV.text = "Clocked Out"
                     mbinding.rlcomtwoClockOut.isClickable = false
@@ -543,7 +550,7 @@ class CompleteTaskFragment : Fragment() {
             viewModel.GetDailyWorkInfoById(userId)
             showDialog()
             if (it != null) {
-                mbinding.clockOutMark.setImageResource(R.drawable.check_new)
+                mbinding.clockOutMark.setImageResource(R.drawable.finalclockout)
                 mbinding.rlcomtwoClockOut.isEnabled = false
                 mbinding.clockOutTV.text = "Clocked Out"
                 mbinding.rlcomtwoClockOut.isClickable = false
@@ -700,6 +707,7 @@ class CompleteTaskFragment : Fragment() {
             hideDialog()
             if (it != null) {
                 showDialog()
+
                 viewModel.GetRideAlongDriverInfoByDate(userId)
             }
         }
@@ -724,19 +732,21 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.routeNameTV.visibility = View.VISIBLE
                 }
                 for (item in it) {
-                    if (item.RtFinishMileage > 0&&item.RtNoOfParcelsDelivered>0) {
+                    if (item.RtFinishMileage > 0 && item.RtNoOfParcelsDelivered > 0) {
                         isOnRoadHours = true
                         setVisibiltyLevel()
                         break
                     }
                 }
-                adapter.list.clear()
-                adapter.list.addAll(it)
-                adapter.notifyDataSetChanged()
+                /*               adapter.list.clear()
+                               adapter.list.addAll(it)
+                               adapter.notifyDataSetChanged()*/
+                adapter.saveData(it)
             } else {
                 mbinding.routeNameTV.visibility = View.GONE
-                adapter.list.clear()
-                adapter.notifyDataSetChanged()
+                //adapter.list.clear()
+                adapter.saveData(GetDriverRouteInfoByDateResponse())
+                //adapter.notifyDataSetChanged()
                 isOnRoadHours = false
                 setVisibiltyLevel()
             }
@@ -750,7 +760,7 @@ class CompleteTaskFragment : Fragment() {
                 viewModel.GetDriverRouteInfoByDate(userId)
             }
         }
-        val rideAlongAdapter = RideAlongAdapter(
+        rideAlongAdapter = RideAlongAdapter(
             RideAlongDriverInfoByDateResponse(),
             findNavController(),
             Prefs.getInstance(requireContext()),
@@ -762,17 +772,28 @@ class CompleteTaskFragment : Fragment() {
 
         mbinding.questionareRv.adapter = rideAlongAdapter
         mbinding.questionareRv.layoutManager = LinearLayoutManager(requireContext())
+        /*        rideAlongAdapter.recyclerViewReadyCallback = this@CompleteTaskFragment
+
+                mbinding.questionareRv.viewTreeObserver.addOnGlobalLayoutListener(object :
+                    ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        rideAlongAdapter.recyclerViewReadyCallback?.onLayoutReady()
+                        mbinding.questionareRv.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    }
+                })*/
 
         viewModel.liveDataRideAlongDriverInfoByDateResponse.observe(viewLifecycleOwner) { rideAlongs ->
             hideDialog()
             rideAlongs.let {
                 if (it != null) {
-                    rideAlongAdapter.data.clear()
-                    rideAlongAdapter.data.addAll(it)
-                    rideAlongAdapter.notifyDataSetChanged()
+                    /*rideAlongAdapter.data.clear()
+                    rideAlongAdapter.data.addAll(it)*/
+                    rideAlongAdapter.saveData(it)
+                    //rideAlongAdapter.notifyDataSetChanged()
                 } else {
                     rideAlongAdapter.data.clear()
-                    rideAlongAdapter.notifyDataSetChanged()
+                    rideAlongAdapter.saveData(RideAlongDriverInfoByDateResponse())
+                    //rideAlongAdapter.notifyDataSetChanged()
                 }
             }
         }
@@ -797,8 +818,8 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun showAlert() {
-        b1=false
-        b2=false
+        b1 = false
+        b2 = false
         val dialogBinding = TimePickerDialogBinding.inflate(LayoutInflater.from(requireContext()))
         val deleteDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
         deleteDialog.setView(dialogBinding.root)
@@ -827,21 +848,21 @@ class CompleteTaskFragment : Fragment() {
         }
 
         dialogBinding.edtBreakstart.setOnClickListener {
-            b1=false
+            b1 = false
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
         }
 
         dialogBinding.icBreakstart.setOnClickListener {
-            b1=false
+            b1 = false
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
-           /* if (b1 && b2) {
-                dialogBinding.timeTvNext.isEnabled = true
-                dialogBinding.timeTvNext.setTextColor(Color.WHITE)
-            }*/
+            /* if (b1 && b2) {
+                 dialogBinding.timeTvNext.isEnabled = true
+                 dialogBinding.timeTvNext.setTextColor(Color.WHITE)
+             }*/
         }
 
         dialogBinding.edtBreakend.setOnClickListener {
-          //  b2 = true
+            //  b2 = true
             b2 = false
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
 
@@ -1032,7 +1053,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     fun clientUniqueID(): String {
-        val x = Prefs.getInstance(App.instance).userID.toString()
+        val x = Prefs.getInstance(App.instance).clebUserId.toString()
         val y = Prefs.getInstance(App.instance).scannedVmRegNo
         // example string
         val currentDate = LocalDateTime.now()
@@ -1115,7 +1136,7 @@ class CompleteTaskFragment : Fragment() {
                 "startInspection: " + inspectionID + "VmReg ${Prefs.getInstance(App.instance).vmRegNo}"
             )
             if (vmReg.isEmpty()) {
-                vmReg = Prefs.getInstance(App.instance).scannedVmRegNo
+                vmReg = Prefs.getInstance(App.instance).vmRegNo
             }
             Log.e("sdkskdkdkskdkskd", "onCreateView: ")
 
@@ -1182,7 +1203,6 @@ class CompleteTaskFragment : Fragment() {
                 rlcomtwoBreak,
                 rlcomtwoClock,
                 rlcomtwoClockOut,
-                startinspection,
                 BreakTimeTable,
                 taskDetails,
                 view2
@@ -1192,7 +1212,7 @@ class CompleteTaskFragment : Fragment() {
             -1 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.GONE
-                mbinding.startinspection.visibility = View.VISIBLE
+
                 /*mbinding.clFaceMask.visibility = View.GONE
                 mbinding.clOilLevel.visibility = View.GONE*/
                 /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
@@ -1281,7 +1301,7 @@ class CompleteTaskFragment : Fragment() {
 
     private fun setVisibiltyLevel() {
         visibilityLevel = 0
-        if (!inspectionstarted ) {
+        if (!inspectionstarted) {
             visibilityLevel = -1
             visibiltyControlls()
             return
@@ -1354,10 +1374,10 @@ class CompleteTaskFragment : Fragment() {
                     }
                 }
             }, 0, 1000)
-//            mbinding.startinspection.visibility = View.GONE
+            mbinding.startinspection.visibility = View.GONE
 
         } else {
-//            mbinding.startinspection.visibility = View.VISIBLE
+            mbinding.startinspection.visibility = View.VISIBLE
         }
     }
 
