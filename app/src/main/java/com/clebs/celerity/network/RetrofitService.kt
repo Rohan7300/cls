@@ -25,9 +25,9 @@ import javax.net.ssl.X509TrustManager
 object RetrofitService {
     //    private const val BASE_URL = "http://182.64.1.105:8119/"
     //    private const val BASE_URL = "http://122.176.42.96:8119/"
-    //   private const val BASE_URL = "http://122.186.85.26:8119/"
-  // private const val BASE_URL = "http://192.168.0.150:8119/"
-        private const val BASE_URL = "https://api.clsdasystem.com/" //Do not use this url in testing
+      private const val BASE_URL = "http://122.186.85.26:8119/"
+ // private const val BASE_URL = "http://192.168.0.150:8119/"
+   //     private const val BASE_URL = "https://api.clsdasystem.com/" //Do not use this url in testing
 
 
     //     private const val BASE_URL = "https://api.clsdasystem.com/"
@@ -111,7 +111,7 @@ object RetrofitService {
             .build()
     }
 
-    fun provideHeaderInterceptor(): Interceptor {
+    private fun provideHeaderInterceptor(): Interceptor {
         val applicationContext = App.instance
         try {
             return Interceptor { chain ->
@@ -136,7 +136,7 @@ object RetrofitService {
     }
 
 
-    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+    private fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         val httpLoggingInterceptor =
             HttpLoggingInterceptor { message ->
 //                Log.d("API Logging", "response => $message")

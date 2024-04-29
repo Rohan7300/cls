@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.Factory.MyViewModelFactory
@@ -20,6 +21,7 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.utils.NoInternetDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getDeviceID
@@ -33,16 +35,31 @@ class LoginActivity : AppCompatActivity() {
     lateinit var ActivityLoginBinding: ActivityLoginBinding
     lateinit var mainViewModel: MainViewModel
     lateinit var loadingDialog: LoadingDialog
+    lateinit var fragmentManager: FragmentManager
+    lateinit var dialog: NoInternetDialog
+    var isNetworkActive:Boolean = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+        fragmentManager = this.supportFragmentManager
+        dialog = NoInternetDialog()
+        val networkManager = NetworkManager(this)
+        networkManager.observe(this){
+            if(it){
+                isNetworkActive = true
+                dialog.hideDialog()
+            }else{
+                isNetworkActive = false
+                dialog.showDialog(fragmentManager)
+            }
+        }
         val mainRepo = MainRepo(apiService)
         loadingDialog = LoadingDialog(this)
 
-        //getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
 
@@ -85,8 +102,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun login() {
-        val fragmentManager = this.supportFragmentManager // Adjust this according to your needs
-        if (isNetworkAvailable(this)) {
+        if (isNetworkActive) {
             mainViewModel.loginUser(
                 LoginRequest(
                     ActivityLoginBinding.edtUser.text.toString(),
@@ -147,8 +163,7 @@ class LoginActivity : AppCompatActivity() {
             })
         } else {
             loadingDialog.dismiss()
-            val dialog = NoInternetDialog()
-            dialog.show(fragmentManager, NoInternetDialog.TAG)
+            dialog.showDialog(fragmentManager)
         }
 
     }

@@ -8,10 +8,10 @@
     tools:context=".fragments.DailyWorkFragment">
 
 
-    <include
+<!--    <include
         android:id="@+id/nodatafound"
         layout="@layout/no_data_layout"
-        android:visibility="gone" />
+        android:visibility="gone" />-->
 
     <include
         android:id="@+id/headerTop"

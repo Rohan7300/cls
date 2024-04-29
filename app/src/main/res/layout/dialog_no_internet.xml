@@ -50,6 +50,7 @@
         android:fontFamily="@font/poppins_bold"
         android:paddingVertical="8dp"
         android:paddingHorizontal="15dp"
+        android:visibility="gone"
         android:text="Try Again"
         android:textColor="@color/white"
         android:textSize="14sp" />

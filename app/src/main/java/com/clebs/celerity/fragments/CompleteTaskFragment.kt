@@ -1238,6 +1238,7 @@ class CompleteTaskFragment : Fragment() {
             1 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.rlcomtwoClock.visibility = View.VISIBLE
+                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
                 mbinding.complete.setBackground(
                     ContextCompat.getDrawable(
                         requireContext(),
@@ -1249,6 +1250,7 @@ class CompleteTaskFragment : Fragment() {
             2 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
                 mbinding.rlcomtwoBreak.visibility = View.VISIBLE
                 mbinding.complete.setBackground(
                     ContextCompat.getDrawable(
@@ -1261,6 +1263,7 @@ class CompleteTaskFragment : Fragment() {
             3 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
                 mbinding.BreakTimeTable.visibility = View.VISIBLE
                 mbinding.complete.setBackground(
                     ContextCompat.getDrawable(
@@ -1273,6 +1276,7 @@ class CompleteTaskFragment : Fragment() {
             4 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
                 mbinding.rlcomtwoBreak.visibility = View.VISIBLE
                 mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
                 mbinding.complete.setBackground(
@@ -1287,6 +1291,7 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
                 mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
                 mbinding.BreakTimeTable.visibility = View.VISIBLE
                 mbinding.complete.setBackground(
                     ContextCompat.getDrawable(
