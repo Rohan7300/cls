@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.Factory.MyViewModelFactory
@@ -22,6 +23,8 @@ import com.clebs.celerity.models.response.SaveDeviceInformationRequest
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.utils.NetworkManager
+import com.clebs.celerity.utils.NoInternetDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.showToast
@@ -29,8 +32,11 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 
 class SplashActivity : AppCompatActivity() {
-    lateinit var ActivitySplashBinding: ActivitySplashBinding
+    private lateinit var ActivitySplashBinding: ActivitySplashBinding
     val TAG = "SPLASHACTIVIITY"
+    var isNetworkActive: Boolean = true
+    lateinit var dialog: NoInternetDialog
+    lateinit var fragmentManager: FragmentManager
     private lateinit var mainViewModel: MainViewModel
 
 
@@ -72,9 +78,22 @@ class SplashActivity : AppCompatActivity() {
 
         val rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.anam)
 
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU){
+        fragmentManager = this.supportFragmentManager
+        dialog = NoInternetDialog()
+        val networkManager = NetworkManager(this)
+        networkManager.observe(this) {
+            if (it) {
+                isNetworkActive = true
+                dialog.hideDialog()
+            } else {
+                isNetworkActive = false
+                dialog.showDialog(fragmentManager)
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             askNotificationPermission()
-        }else{
+        } else {
             next()
         }
 
@@ -96,7 +115,7 @@ class SplashActivity : AppCompatActivity() {
 
     }
 
-    fun next(){
+    fun next() {
         android.os.Handler().postDelayed({
             if (isLoggedIn()) {
                 retrieveAndSaveFCMToken()
@@ -107,6 +126,7 @@ class SplashActivity : AppCompatActivity() {
             finish()
         }, 2000)
     }
+
     private fun isLoggedIn(): Boolean {
         return Prefs.getInstance(applicationContext).getBoolean("isLoggedIn", false)
     }
@@ -119,14 +139,16 @@ class SplashActivity : AppCompatActivity() {
             }
 
             val token = task.result
-            mainViewModel.SaveDeviceInformation(
-                SaveDeviceInformationRequest(
-                    FcmToken = token,
-                    UsrId = Prefs.getInstance(this).clebUserId.toInt(),
-                    UsrDeviceId = getDeviceID(),
-                    UsrDeviceType = "Android"
+            if (isNetworkActive) {
+                mainViewModel.SaveDeviceInformation(
+                    SaveDeviceInformationRequest(
+                        FcmToken = token,
+                        UsrId = Prefs.getInstance(this).clebUserId.toInt(),
+                        UsrDeviceId = getDeviceID(),
+                        UsrDeviceType = "Android"
+                    )
                 )
-            )
+            }
             Log.d(TAG, "FCM Token $token")
         })
     }
@@ -167,32 +189,34 @@ class SplashActivity : AppCompatActivity() {
         if (!Prefs.getInstance(applicationContext).clebUserId.equals(0.0)) {
             userid = Prefs.getInstance(applicationContext).clebUserId.toDouble()
         }
+        if (isNetworkActive) {
+            mainViewModel.getDriverSignatureInfo(userid).observe(this@SplashActivity, Observer {
+                if (it != null) {
+                    if (it!!.isSignatureReq.equals(true) && (it.isAmazonSignatureReq || it.isOtherCompanySignatureReq)) {
+                        Prefs.getInstance(applicationContext)
+                            .saveBoolean("isSignatureReq", it.isSignatureReq)
+                        Prefs.getInstance(applicationContext)
+                            .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
+                        Prefs.getInstance(applicationContext)
+                            .saveBoolean("isother", it.isOtherCompanySignatureReq)
 
-        mainViewModel.getDriverSignatureInfo(userid).observe(this@SplashActivity, Observer {
-            if (it != null) {
-                if (it!!.isSignatureReq.equals(true) && (it.isAmazonSignatureReq || it.isOtherCompanySignatureReq)) {
-                    Prefs.getInstance(applicationContext)
-                        .saveBoolean("isSignatureReq", it.isSignatureReq)
-                    Prefs.getInstance(applicationContext)
-                        .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
-                    Prefs.getInstance(applicationContext)
-                        .saveBoolean("isother", it.isOtherCompanySignatureReq)
 
+                        val intent = Intent(this, PolicyDocsActivity::class.java)
 
-                    val intent = Intent(this, PolicyDocsActivity::class.java)
-
-                    intent.putExtra("signature_required", "0")
-                    startActivity(intent)
-                    finish()
-                } else {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    intent.putExtra("destinationFragment", "HomeFragment")
-                    intent.putExtra("no_signature_required", "0")
-                    startActivity(intent)
-                    finish()
+                        intent.putExtra("signature_required", "0")
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        val intent = Intent(this, HomeActivity::class.java)
+                        intent.putExtra("destinationFragment", "HomeFragment")
+                        intent.putExtra("no_signature_required", "0")
+                        startActivity(intent)
+                        finish()
+                    }
                 }
-            }
-        })
+            })
+        }
+
     }
 
 }

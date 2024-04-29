@@ -39,6 +39,8 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.utils.NetworkManager
+import com.clebs.celerity.utils.NoInternetDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
 import com.clebs.celerity.utils.dbLog
@@ -67,6 +69,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private var completeTaskScreen: Boolean = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
     lateinit var fragmentManager: FragmentManager
+    lateinit var internetDialog: NoInternetDialog
+    var isNetworkActive:Boolean = true
     private var sdkkey = ""
     var clebuserID: Int = 0
     var firstName = ""
@@ -193,6 +197,18 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         super.onCreate(savedInstanceState)
         ActivityHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
+        fragmentManager = this.supportFragmentManager
+        internetDialog = NoInternetDialog()
+        val networkManager = NetworkManager(this)
+        networkManager.observe(this){
+            if(it){
+                isNetworkActive = true
+                internetDialog.hideDialog()
+            }else{
+                isNetworkActive = false
+                internetDialog.showDialog(fragmentManager)
+            }
+        }
 
         prefs = Prefs.getInstance(this)
         loadingDialog = LoadingDialog(this)
@@ -541,6 +557,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     fun GetDriversBasicInformation() {
+
         val today = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("dd/MM")
         date = today.format(formatter)

@@ -87,8 +87,7 @@ class MainViewModel(
     val liveDataRouteLocationResponse = MutableLiveData<GetRouteLocationInfoResponse>()
     val liveDataRideAlongRouteTypeInfo = MutableLiveData<GetRideAlongRouteTypeInfoResponse>()
     val liveDataRouteTypeInfo = MutableLiveData<GetRideAlongRouteTypeInfoResponse>()
-    val liveDataGetDriverSignatureInformation =
-        MutableLiveData<GetDriverSignatureInformationResponse?>()
+    val liveDataGetDriverSignatureInformation = MutableLiveData<GetDriverSignatureInformationResponse?>()
     val livedataupdateDriverAgreementSignature = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataAddOnRouteInfo = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataSaveBreakTime = MutableLiveData<SimpleStatusMsgResponse?>()

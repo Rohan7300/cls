@@ -257,7 +257,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
             }
         } else {
             val dialog = NoInternetDialog()
-            dialog.show(fragmentManager, NoInternetDialog.TAG)
+            dialog.showDialog(fragmentManager)
         }
     }
 
