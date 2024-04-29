@@ -4,11 +4,17 @@ import android.Manifest
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.app.DownloadManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.ProgressDialog
+import android.content.ActivityNotFoundException
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Path
@@ -24,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
@@ -53,6 +60,8 @@ import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.Timer
+import java.util.TimerTask
 import java.util.UUID
 
 
@@ -480,6 +489,14 @@ class PolicyDocsActivity : AppCompatActivity() {
     }
 
     private fun downloadPDF(fileName: String, fileContent: InputStream, mode: OpenMode) {
+//        val androidData =fileContent// Replace with your actual data
+//
+//// Calculate the processedData value (for demonstration purposes, let's use a fixed value)
+//        val processedData = androidData.read().
+
+
+
+
         currentfileName = fileName
         currentMode = mode
         currentFileContent = fileContent
@@ -499,8 +516,129 @@ class PolicyDocsActivity : AppCompatActivity() {
                         input.copyTo(outputStream)
                     }
                 }
-
                 val uri = getFileUri(file)
+                val downloadManager =
+                    this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+
+                val request = DownloadManager.Request(uri)
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                request.setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS,
+                    uniqueFileName
+                )
+
+                // Show toast indicating download started
+
+
+                // Enqueue the download request
+                val downloadId = downloadManager.enqueue(request)
+
+                // Create and show a progress dialog
+                val progressDialog = ProgressDialog(this)
+                progressDialog.setMessage("Downloading...")
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+                progressDialog.setCancelable(false)
+                progressDialog.max = 100
+                progressDialog.setButton(
+                    DialogInterface.BUTTON_NEGATIVE, "Cancel"
+                ) { dialog, _ ->
+                    // Cancel download
+                    downloadManager.remove(downloadId)
+                    progressDialog.dismiss()
+                    dialog.dismiss()
+
+                }
+
+                progressDialog.show()
+
+                // Create a TimerTask to update progress periodically
+                val timerTask = object : TimerTask() {
+                    override fun run() {
+                        val query = DownloadManager.Query().setFilterById(downloadId)
+                        val cursor = downloadManager.query(query)
+                        if (cursor != null && cursor.moveToFirst()) {
+                            val statusIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+                            if (statusIndex != -1) {
+                                val status = cursor.getInt(statusIndex)
+                                if (status == DownloadManager.STATUS_SUCCESSFUL || status == DownloadManager.STATUS_FAILED) {
+                                    // Download completed or failed
+                                    cursor.close()
+                                    progressDialog.dismiss()
+                                    cancel()
+                                } else {
+                                    val totalBytesIndex =
+                                        cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
+                                    val downloadedBytesIndex =
+                                        cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
+
+                                    if (totalBytesIndex != -1 && downloadedBytesIndex != -1) {
+                                        val totalBytes = cursor.getLong(totalBytesIndex)
+                                        val downloadedBytes = cursor.getLong(downloadedBytesIndex)
+
+                                        // Now you can safely use totalBytes and downloadedBytes
+                                        val progress =
+                                            if (totalBytes > 0) ((downloadedBytes * 100) / totalBytes).toInt() else 0
+                                        progressDialog.progress = progress
+                                    }
+
+                                }
+                            } else {
+                                // Handle the case where COLUMN_STATUS is not available
+                            }
+
+                        }
+                        cursor?.close()
+                    }
+                }
+
+                // Schedule the timer task to update progress every second
+                val timer = Timer()
+                timer.schedule(timerTask, 0, 1000)
+
+                // Register a BroadcastReceiver to listen for download completion
+                val onComplete = object : BroadcastReceiver() {
+                    override fun onReceive(context: Context?, intent: Intent?) {
+                        if (intent?.action == DownloadManager.ACTION_DOWNLOAD_COMPLETE) {
+                            // Hide the progress dialog
+
+                            progressDialog.dismiss()
+                            // Show toast indicating download completed
+                            if (file.exists()) {
+
+                                if (Build.VERSION.SDK_INT < 30) {
+//                                    openPdfFile2(uri)
+                                } else
+
+
+                                    try {
+
+                                        context!!.startActivity(intent)
+                                    } catch (e: ActivityNotFoundException) {
+                                        // Handle the case where no PDF viewer app is installed
+
+                                    }
+                                return
+                            } else {
+                            }
+
+                            // Unregister the receiver to avoid memory leaks
+                            context!!.unregisterReceiver(this)
+                            // Cancel the timer task
+                            timer.cancel()
+
+
+                        }
+                    }
+                }
+
+                // Register the BroadcastReceiver to listen for download completion
+               this.registerReceiver(
+                    onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+                )
+
+
+
+
                 if(mode==OpenMode.DOWNLOAD){
                     showNotification(
                         "PDF Downloaded",
