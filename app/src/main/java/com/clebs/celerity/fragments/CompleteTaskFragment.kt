@@ -287,9 +287,9 @@ mbinding.mainCompleteTask.animation=animFadein
             pictureDialogBase64(mbinding.ivFaceMask, requestCode)
         }
         mbinding.startinspection.setOnClickListener {
-            //startInspection()
-            var intent = Intent(requireContext(),AddInspection::class.java)
-            startActivity(intent)
+            startInspection()
+            /*var intent = Intent(requireContext(),AddInspection::class.java)
+            startActivity(intent)*/
         }
         mbinding.ivOilLevel.setOnClickListener {
             requestCode = 5
