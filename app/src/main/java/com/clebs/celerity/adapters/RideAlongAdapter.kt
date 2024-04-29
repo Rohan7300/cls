@@ -52,7 +52,26 @@ class RideAlongAdapter(
                     )
                     binding.edtIc.isClickable = false
             }else{
-                mainViewModel.GetRideAlongDriverFeedbackQuestion(
+                if (item.IsDriverFeedbackCompleted == true) {
+                    binding.trainerFeedbackIV.isClickable = false
+                    binding.trainerFeedbackImage.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.done
+                        )
+                    )
+                }
+                if (item.IsTrainerQuestionnaireCompleted == true) {
+                    binding.edtIc.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.done
+                        )
+                    )
+                    binding.edtIc.isClickable = false
+                }
+
+/*                mainViewModel.GetRideAlongDriverFeedbackQuestion(
                     item.DriverId,
                     item.RtId,
                     item.LeadDriverId,
@@ -63,26 +82,9 @@ class RideAlongAdapter(
                     item.RtId,
                     item.LeadDriverId,
                     item.DawId
-                )
-                if (item.isFeedBackFilled == true) {
-                    binding.trainerFeedbackIV.isClickable = false
-                    binding.trainerFeedbackImage.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            context,
-                            R.drawable.done
-                        )
-                    )
-                }
-                if (item.isQuestionsFilled == true) {
-                    binding.edtIc.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            context,
-                            R.drawable.done
-                        )
-                    )
-                    binding.edtIc.isClickable = false
-                }
-                mainViewModel.liveDataGetRideAlongLeadDriverQuestion.observe(viewLifecycleOwner) {
+                )*/
+
+/*                mainViewModel.liveDataGetRideAlongLeadDriverQuestion.observe(viewLifecycleOwner) {
                     if (it != null) {
                         val itemX = asyncListDiffer.currentList.find { driver ->
                             driver.DriverId == it.RaDriverId
@@ -156,12 +158,8 @@ class RideAlongAdapter(
                             }
                         }
                     }
-                }
+                }*/
             }
-
-
-
-
 
             binding.edtIc.setOnClickListener {
                 val bundle = bundleOf(

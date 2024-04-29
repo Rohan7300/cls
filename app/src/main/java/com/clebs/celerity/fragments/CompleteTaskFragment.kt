@@ -41,6 +41,7 @@ import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
+import com.clebs.celerity.ui.AddInspection
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
@@ -283,7 +284,9 @@ class CompleteTaskFragment : Fragment() {
             pictureDialogBase64(mbinding.ivFaceMask, requestCode)
         }
         mbinding.startinspection.setOnClickListener {
-            startInspection()
+            //startInspection()
+            var intent = Intent(requireContext(),AddInspection::class.java)
+            startActivity(intent)
         }
         mbinding.ivOilLevel.setOnClickListener {
             requestCode = 5
