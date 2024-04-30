@@ -5,10 +5,8 @@
     <uses-feature android:name="android.hardware.camera.any" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
-<!--    <permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" android:protectionLevel="signature"-->
-<!--        tools:ignore="ReservedSystemPermission" />-->
-
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" /> <!-- <permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" android:protectionLevel="signature" -->
+    <!-- tools:ignore="ReservedSystemPermission" /> -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -20,12 +18,21 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-<!--    <uses-permission android:name="android.permission.INTERACT_ACROSS_PROFILES"
-        tools:ignore="ProtectedPermissions" />-->
+    <!--
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_PROFILES"
+        tools:ignore="ProtectedPermissions" />
+    -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-    <uses-permission android:name="android.permission.ACCESS_CLIPBOARD_SERVICE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_CLIPBOARD_SERVICE" />
+
     <uses-feature android:name="android.hardware.location.gps" />
+
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
 
     <application
         android:name=".ui.App"
@@ -47,10 +54,20 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup"
         tools:targetApi="tiramisu">
+        <activity
+            android:name=".ui.AddInspection"
+            android:exported="true" >
+<!--            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -71,7 +88,6 @@
             </intent-filter>
         </service>
 
-
         <activity
             android:name=".ui.ViewTicketsActivity"
             android:exported="false" />
@@ -91,17 +107,17 @@
             android:theme="@style/Theme.Celerity" />
         <activity
             android:name=".ui.HomeActivity"
-            android:exported="true"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ui.LoginActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize|stateHidden"
             android:noHistory="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ui.SplashActivity"
             android:exported="true"
@@ -134,9 +150,5 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
     </application>
-    <queries>
-        <intent>
-            <action android:name="android.media.action.IMAGE_CAPTURE" />
-        </intent>
-    </queries>
+
 </manifest>

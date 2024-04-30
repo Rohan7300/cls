@@ -237,7 +237,7 @@ interface ApiService {
     @GET("/api/RouteUpdate/GetDriverRouteTypeInfo/{driverId}")
     suspend fun GetDriverRouteTypeInfo(
         @Path("driverId") userId: Int
-    ):Response<GetRideAlongRouteTypeInfoResponse>
+    ): Response<GetRideAlongRouteTypeInfoResponse>
 
     @GET("/api/Drivers/GetDriverSignatureInformation/{userId}")
     suspend fun GetDriverSignatureInformation(@Path("userId") userId: Int): Response<GetDriverSignatureInformationResponse>
@@ -362,7 +362,7 @@ interface ApiService {
         @Query("departmentId") departmentId: Int?,
         @Query("startDate") startDate: String?,
         @Query("endDate") endDate: String?,
-        @Query("includeCompleted") includeCompleted:Boolean?
+        @Query("includeCompleted") includeCompleted: Boolean?
     ): Response<GetUserTicketsResponse>
 
     @GET("/api/Ticket/GetUserDepartmentList")
@@ -480,47 +480,55 @@ interface ApiService {
     @GET("/api/HtmlToPDF/DownloadSignedDAEngagement/{handBookId}")
     suspend fun DownloadSignedDAEngagement(
         @Path("handBookId") handbookId: Int
-    ):Response<ResponseBody>
+    ): Response<ResponseBody>
 
     @GET("/api/HtmlToPDF/DownloadSignedGDPRPOLICY/{handBookId}")
     suspend fun DownloadSignedGDPRPOLICY(
         @Path("handBookId") handbookId: Int
-    ):Response<ResponseBody>
+    ): Response<ResponseBody>
 
     @GET("/api/HtmlToPDF/DownloadSignedServiceLevelAgreement/{handBookId}")
     suspend fun DownloadSignedServiceLevelAgreement(
         @Path("handBookId") handbookId: Int
-    ):Response<ResponseBody>
+    ): Response<ResponseBody>
+
     @GET("/api/HtmlToPDF/DownloadSignedPrivacyPolicy/{handBookId}")
     suspend fun DownloadSignedPrivacyPolicy(
         @Path("handBookId") handbookId: Int
-    ):Response<ResponseBody>
+    ): Response<ResponseBody>
 
     @GET("/api/DriverQuestionnaire/GetRideAlongDriverFeedbackQuestion")
     suspend fun GetRideAlongDriverFeedbackQuestion(
-        @Query("driverId") driverId:Int,
-        @Query("routetId") routeId:Int,
+        @Query("driverId") driverId: Int,
+        @Query("routetId") routeId: Int,
         @Query("leadDriverId") leadDriverId: Int,
-        @Query("daDailyWorkId") daDailyWorkId:Int
-    ):Response<GetRideAlongDriverFeedbackQuestionResponse>
+        @Query("daDailyWorkId") daDailyWorkId: Int
+    ): Response<GetRideAlongDriverFeedbackQuestionResponse>
 
     @POST("/api/Authentication/SaveDeviceInformation")
     suspend fun SaveDeviceInformation(
-        @Body body:SaveDeviceInformationRequest
-    ):Response<SimpleStatusMsgResponse>
+        @Body body: SaveDeviceInformationRequest
+    ): Response<SimpleStatusMsgResponse>
 
     @GET("/api/Notification/GetNotificationsListByUserId/{userId}")
     suspend fun GetNotificationListByUserId(
         @Path("userId") userId: Int
-    ):Response<NotificationResponse>
+    ): Response<NotificationResponse>
 
     @POST("/api/Vehicle/SaveVehInspectionInfo")
     suspend fun SaveVehicleInspectionInformation(
-        @Body body:SaveVehicleInspectionInfo
-    ):Response<SimpleStatusMsgResponse>
+        @Body body: SaveVehicleInspectionInfo
+    ): Response<SimpleStatusMsgResponse>
 
-@GET("/api/Drivers/GetVehicleInfobyDriverId")
-suspend fun GetVehicleInfobyDriverId( @Query("userId") userId: Int, @Query("date") date:String)
-:Response<GetvehicleInfoByDriverId>
+    @GET("/api/Drivers/GetVehicleInfobyDriverId")
+    suspend fun GetVehicleInfobyDriverId(@Query("userId") userId: Int, @Query("date") date: String)
+            : Response<GetvehicleInfoByDriverId>
+
+    @Multipart
+    @POST("/api/Vehicle/UploadVehicleImages")
+    suspend fun uploadVehicleImages(
+        @Query("userId") userId: Int,
+        @Part image: List<MultipartBody.Part>
+    ):Response<SimpleStatusMsgResponse>
 }
 

@@ -18,6 +18,6 @@ data class leadDriverIdItem(
     val SecondLeadDriverId: Any,
     val TrainingStartDate: String,
     val TrainingTotalDays: Int,
-    var isFeedBackFilled:Boolean?=false,
-    var isQuestionsFilled:Boolean?=false
+    var IsTrainerQuestionnaireCompleted:Boolean? = false,
+    var IsDriverFeedbackCompleted:Boolean? = false
 )

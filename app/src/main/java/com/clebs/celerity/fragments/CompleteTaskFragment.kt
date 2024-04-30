@@ -43,6 +43,7 @@ import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
+import com.clebs.celerity.ui.AddInspection
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
@@ -87,7 +88,7 @@ class CompleteTaskFragment : Fragment() {
     private var isAllImageUploaded: Boolean = false
     private var isInspectionDone: Boolean = false
     private var imagesUploaded: Boolean = false
-    lateinit var rideAlongAdapter: RideAlongAdapter
+    private lateinit var rideAlongAdapter: RideAlongAdapter
     private var isClockedIn: Boolean = false
     private var isOnRoadHours: Boolean = false
     private var isBreakTimeAdded: Boolean = false
@@ -143,7 +144,7 @@ class CompleteTaskFragment : Fragment() {
 
         val animFadein: Animation =
             AnimationUtils.loadAnimation(context, R.anim.left2right)
-mbinding.mainCompleteTask.animation=animFadein
+        mbinding.mainCompleteTask.animation = animFadein
 
         loadingDialog = (activity as HomeActivity).loadingDialog
         userId = Prefs.getInstance(requireContext()).clebUserId.toInt()
@@ -286,7 +287,9 @@ mbinding.mainCompleteTask.animation=animFadein
             pictureDialogBase64(mbinding.ivFaceMask, requestCode)
         }
         mbinding.startinspection.setOnClickListener {
-            startInspection()
+           // startInspection()
+            val intent = Intent(requireContext(),AddInspection::class.java)
+            startActivity(intent)
         }
         mbinding.ivOilLevel.setOnClickListener {
             requestCode = 5
@@ -1178,15 +1181,11 @@ mbinding.mainCompleteTask.animation=animFadein
 //
                         }
                         if (msg == "Success") {
-
                             loadingDialog.cancel()
                         }
                         if (!isStarted) {
-
                             loadingDialog.cancel()
                             Log.e("startedinspection", "onCreateView: " + msg + isStarted)
-
-
                         }
                     })
             } catch (_: Exception) {

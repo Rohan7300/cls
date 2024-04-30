@@ -630,6 +630,8 @@ fun showScanErrorDialog(
     scanDialog.show(fragmentManager, ScanErrorDialog.TAG)
 }
 
+
+
 fun getCurrentDateTime(): String {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     dateFormat.timeZone = TimeZone.getTimeZone("UTC")

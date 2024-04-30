@@ -68,7 +68,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private lateinit var navGraph: NavGraph
     private var completeTaskScreen: Boolean = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
-    lateinit var fragmentManager: FragmentManager
+        lateinit var fragmentManager: FragmentManager
     lateinit var internetDialog: NoInternetDialog
     var isNetworkActive:Boolean = true
     private var sdkkey = ""
@@ -104,6 +104,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     fun getAutofillType(): Int {
         return AUTOFILL_TYPE_NONE
     }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
@@ -125,6 +126,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     ActivityHomeBinding.title.text = "Notifications"
                     navController.navigate(R.id.notifficationsFragment)
                     return
+                }else if(destinationFragment =="CompleteTask"){
+                    navController.navigate(R.id.completeTaskFragment)
                 }
             }
 
@@ -383,7 +386,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 ActivityHomeBinding.title.text = "Notifications"
                 navController.navigate(R.id.notifficationsFragment)
             }
-        }
+        }else if(destinationFragment =="CompleteTask"){
+        navController.navigate(R.id.completeTaskFragment)
+    }
 
     }
 
