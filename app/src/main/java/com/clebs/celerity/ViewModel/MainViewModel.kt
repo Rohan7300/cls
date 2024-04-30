@@ -87,7 +87,8 @@ class MainViewModel(
     val liveDataRouteLocationResponse = MutableLiveData<GetRouteLocationInfoResponse?>()
     val liveDataRideAlongRouteTypeInfo = MutableLiveData<GetRideAlongRouteTypeInfoResponse?>()
     val liveDataRouteTypeInfo = MutableLiveData<GetRideAlongRouteTypeInfoResponse?>()
-    val liveDataGetDriverSignatureInformation = MutableLiveData<GetDriverSignatureInformationResponse?>()
+    val liveDataGetDriverSignatureInformation =
+        MutableLiveData<GetDriverSignatureInformationResponse?>()
     val livedataupdateDriverAgreementSignature = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataAddOnRouteInfo = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataSaveBreakTime = MutableLiveData<SimpleStatusMsgResponse?>()
@@ -151,8 +152,9 @@ class MainViewModel(
     }
 
     val livedataGetNotificationListByUserId = MutableLiveData<NotificationResponse?>()
-    val livedataSavevehicleinspectioninfo=MutableLiveData<SimpleStatusMsgResponse?>()
-        val livedataGetVehicleInfobyDriverId=MutableLiveData<GetvehicleInfoByDriverId?>()
+    val livedataSavevehicleinspectioninfo = MutableLiveData<SimpleStatusMsgResponse?>()
+    val livedataGetVehicleInfobyDriverId = MutableLiveData<GetvehicleInfoByDriverId?>()
+    val liveDatauploadVehicleImages = MutableLiveData<SimpleStatusMsgResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -165,12 +167,12 @@ class MainViewModel(
 
         viewModelScope.launch {
             val response = repo.loginUser(requestModel)
-            if(response.failed){
+            if (response.failed) {
                 responseLiveData.postValue(null)
             }
-            if(!response.isSuccessful){
+            if (!response.isSuccessful) {
                 responseLiveData.postValue(null)
-            }else{
+            } else {
                 responseLiveData.postValue(response.body)
             }
         }
@@ -181,9 +183,9 @@ class MainViewModel(
     fun updateProfilepassword(userID: Double, oldpass: String, newpass: String) {
         viewModelScope.launch {
             val response = repo.updateprofilePassword(userID, oldpass, newpass)
-            if(response.failed)
+            if (response.failed)
                 updateprofilelivedata.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 updateprofilelivedata.postValue(null)
             else
                 updateprofilelivedata.postValue(response.body)
@@ -193,9 +195,9 @@ class MainViewModel(
     fun updateprofileRegular(request: UpdateProfileRequestBody) {
         viewModelScope.launch {
             val response = repo.updteprofileregular(request)
-            if(response.failed)
+            if (response.failed)
                 updateprofileregular.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 updateprofileregular.postValue(null)
             else
                 updateprofileregular.postValue(response.body)
@@ -212,9 +214,9 @@ class MainViewModel(
 
         viewModelScope.launch {
             val response = repo.getVechileinformation(userID, LmID, VechileRegistrationno)
-            if(response.failed)
+            if (response.failed)
                 responseLiveData.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 responseLiveData.postValue(null)
             else
                 responseLiveData.postValue(response.body)
@@ -227,9 +229,9 @@ class MainViewModel(
 
         viewModelScope.launch {
             val response = repo.getDriverSignatureInfo(userID)
-            if(response.failed)
+            if (response.failed)
                 responseLiveData.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 responseLiveData.postValue(null)
             else
                 responseLiveData.postValue(response.body)
@@ -256,9 +258,9 @@ class MainViewModel(
 
         viewModelScope.launch {
             val response = repo.GetDriversBasicInfo(userID)
-            if(response.failed)
+            if (response.failed)
                 responseLiveData.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 responseLiveData.postValue(null)
             else
                 responseLiveData.postValue(response.body)
@@ -273,9 +275,9 @@ class MainViewModel(
 
         viewModelScope.launch {
             val response = repo.CheckIFTodayCheckIsDone()
-            if(response.failed)
+            if (response.failed)
                 responseLiveData.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 responseLiveData.postValue(null)
             else
                 responseLiveData.postValue(response.body)
@@ -291,9 +293,9 @@ class MainViewModel(
 
         viewModelScope.launch {
             val response = repo.UseEmailAsUsername(userID, Email)
-            if(response.failed)
+            if (response.failed)
                 responseLiveData.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 responseLiveData.postValue(null)
             else
                 responseLiveData.postValue(response.body)
@@ -312,9 +314,9 @@ class MainViewModel(
 
         viewModelScope.launch {
             val response = repo.UpdateDAprofileninetydays(userID, Email, phone)
-            if(response.failed)
+            if (response.failed)
                 responseLiveData.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 responseLiveData.postValue(null)
             else
                 responseLiveData.postValue(response.body)
@@ -335,9 +337,9 @@ class MainViewModel(
     fun GetVehicleDefectSheetInfo(userID: Int) {
         viewModelScope.launch {
             val response = repo.GetVehicleDefectSheetInfo(userID)
-            if(response.failed)
+            if (response.failed)
                 getVehicleDefectSheetInfoLiveData.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 getVehicleDefectSheetInfoLiveData.postValue(null)
             else
                 getVehicleDefectSheetInfoLiveData.postValue(response.body)
@@ -347,11 +349,11 @@ class MainViewModel(
     fun SaveVehDefectSheet(vehicleDefectSheetInfoResponse: SaveVechileDefectSheetRequest) {
         viewModelScope.launch {
             var response = repo.SaveVehDefectSheet(
-                    vehicleDefectSheetInfoResponse
+                vehicleDefectSheetInfoResponse
             )
-            if(response.failed)
+            if (response.failed)
                 SaveVehDefectSheetResponseLiveData.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 SaveVehDefectSheetResponseLiveData.postValue(null)
             else
                 SaveVehDefectSheetResponseLiveData.postValue(response.body)
@@ -361,9 +363,9 @@ class MainViewModel(
     fun GetVehicleInformation(userID: Int, vehRegNo: String) {
         viewModelScope.launch {
             var response = repo.GetVehicleInformation(userID, vehRegNo)
-            if(response.failed)
+            if (response.failed)
                 vechileInformationLiveData.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 vechileInformationLiveData.postValue(null)
             else
                 vechileInformationLiveData.postValue(response.body)
@@ -373,9 +375,9 @@ class MainViewModel(
     fun GetVehicleImageUploadInfo(userID: Int) {
         viewModelScope.launch {
             var response = repo.GetVehicleImageUploadInfo(userID)
-            if(response.failed)
+            if (response.failed)
                 vehicleImageUploadInfoLiveData.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 vehicleImageUploadInfoLiveData.postValue(null)
             else
                 vehicleImageUploadInfoLiveData.postValue(response.body)
@@ -384,10 +386,10 @@ class MainViewModel(
 
     fun uploadVehicleImage(userID: Int, image: MultipartBody.Part, type: Int) {
         viewModelScope.launch {
-            var response = repo.uploadVehicleImage(userID,image,type)
-            if(response.failed)
+            var response = repo.uploadVehicleImage(userID, image, type)
+            if (response.failed)
                 uploadVehicleImageLiveData.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 uploadVehicleImageLiveData.postValue(null)
             else
                 uploadVehicleImageLiveData.postValue(response.body)
@@ -397,9 +399,9 @@ class MainViewModel(
     fun GetDailyWorkInfoById(userID: Int) {
         viewModelScope.launch {
             var response = repo.GetDailyWorkInfobyId(userID)
-            if(response.failed)
+            if (response.failed)
                 livedataDailyWorkInfoByIdResponse.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataDailyWorkInfoByIdResponse.postValue(null)
             else
                 livedataDailyWorkInfoByIdResponse.postValue(response.body)
@@ -409,9 +411,9 @@ class MainViewModel(
     fun GetRouteLocationInfo(locID: Int) {
         viewModelScope.launch {
             var response = repo.GetRouteLocationInfo(locID)
-            if(response.failed)
+            if (response.failed)
                 liveDataRouteLocationResponse.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataRouteLocationResponse.postValue(null)
             else
                 liveDataRouteLocationResponse.postValue(response.body)
@@ -421,20 +423,21 @@ class MainViewModel(
     fun GetRideAlongRouteTypeInfo(userID: Int) {
         viewModelScope.launch {
             var response = repo.GetRideAlongRouteTypeInfo(userID)
-            if(response.failed)
+            if (response.failed)
                 liveDataRideAlongRouteTypeInfo.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataRideAlongRouteTypeInfo.postValue(null)
             else
                 liveDataRideAlongRouteTypeInfo.postValue(response.body)
         }
     }
+
     fun GetDriverRouteTypeInfo(userID: Int) {
         viewModelScope.launch {
             var response = repo.GetDriverRouteTypeInfo(userID)
-            if(response.failed)
+            if (response.failed)
                 liveDataRouteTypeInfo.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataRouteTypeInfo.postValue(null)
             else
                 liveDataRouteTypeInfo.postValue(response.body)
@@ -446,9 +449,9 @@ class MainViewModel(
     fun GetDriverSignatureInformation(userID: Int) {
         viewModelScope.launch {
             val response = repo.GetDriverSignatureInformation(userID)
-            if(response.failed)
+            if (response.failed)
                 liveDataGetDriverSignatureInformation.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataGetDriverSignatureInformation.postValue(null)
             else
                 liveDataGetDriverSignatureInformation.postValue(response.body)
@@ -459,9 +462,9 @@ class MainViewModel(
     fun UpdateDriverAgreementSignature(updateDriverAgreementSignature: UpdateDriverAgreementSignatureRequest) {
         viewModelScope.launch {
             val response = repo.UpdateDriverAgreementSignature(updateDriverAgreementSignature)
-            if(response.failed)
+            if (response.failed)
                 livedataupdateDriverAgreementSignature.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataupdateDriverAgreementSignature.postValue(null)
             else
                 livedataupdateDriverAgreementSignature.postValue(response.body)
@@ -472,9 +475,9 @@ class MainViewModel(
     fun AddOnRouteInfo(addOnRouteInfoRequest: AddOnRouteInfoRequest) {
         viewModelScope.launch {
             val response = repo.AddOnRouteInfo(addOnRouteInfoRequest)
-            if(response.failed)
+            if (response.failed)
                 livedataAddOnRouteInfo.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataAddOnRouteInfo.postValue(null)
             else
                 livedataAddOnRouteInfo.postValue(response.body)
@@ -485,9 +488,9 @@ class MainViewModel(
     fun SaveBreakTime(saveBreakTimeRequest: SaveBreakTimeRequest) {
         viewModelScope.launch {
             val response = repo.SaveBreakTime(saveBreakTimeRequest)
-            if(response.failed)
+            if (response.failed)
                 livedataSaveBreakTime.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataSaveBreakTime.postValue(null)
             else
                 livedataSaveBreakTime.postValue(response.body)
@@ -498,9 +501,9 @@ class MainViewModel(
     fun GetDriverBreakTimeInfo(driverId: Int) {
         viewModelScope.launch {
             val response = repo.GetDriverBreakInfo(driverId)
-            if(response.failed)
+            if (response.failed)
                 livedataDriverBreakInfo.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataDriverBreakInfo.postValue(null)
             else
                 livedataDriverBreakInfo.postValue(response.body)
@@ -511,351 +514,351 @@ class MainViewModel(
     fun UpdateClockInTime(driverId: Int) {
         viewModelScope.launch {
             val response = repo.UpdateClockInTime(driverId)
-            if(response.failed)
+            if (response.failed)
                 livedataClockInTime.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataClockInTime.postValue(null)
             else
                 livedataClockInTime.postValue(response.body)
-          //  livedataClockInTime.postValue(response)
+            //  livedataClockInTime.postValue(response)
         }
     }
 
     fun UpdateClockOutTime(driverId: Int) {
         viewModelScope.launch {
             val response = repo.UpdateClockOutTime(driverId)
-            if(response.failed)
+            if (response.failed)
                 livedataUpdateClockOutTime.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataUpdateClockOutTime.postValue(null)
             else
                 livedataUpdateClockOutTime.postValue(response.body)
-          //  livedataUpdateClockOutTime.postValue(response)
+            //  livedataUpdateClockOutTime.postValue(response)
         }
     }
 
     fun GetRideAlongDriversList() {
         viewModelScope.launch {
             val response = repo.GetRideAlongDriversList()
-            if(response.failed)
+            if (response.failed)
                 livedataGetRideAlongDriversList.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataGetRideAlongDriversList.postValue(null)
             else
                 livedataGetRideAlongDriversList.postValue(response.body)
-           // livedataGetRideAlongDriversList.postValue(response)
+            // livedataGetRideAlongDriversList.postValue(response)
         }
     }
 
     fun GetRideAlongVehicleLists() {
         viewModelScope.launch {
             val response = repo.GetRideAlongVehicleLists()
-            if(response.failed)
+            if (response.failed)
                 livedataGetRideAlongVehicleLists.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataGetRideAlongVehicleLists.postValue(null)
             else
                 livedataGetRideAlongVehicleLists.postValue(response.body)
-           // livedataGetRideAlongVehicleLists.postValue(response)
+            // livedataGetRideAlongVehicleLists.postValue(response)
         }
     }
 
     fun GetRouteInfoById(routeID: Int) {
         viewModelScope.launch {
             val response = repo.GetRouteInfoById(routeID)
-            if(response.failed)
+            if (response.failed)
                 livedataGetRouteInfoById.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataGetRouteInfoById.postValue(null)
             else
                 livedataGetRouteInfoById.postValue(response.body)
-           // livedataGetRouteInfoById.postValue(response)
+            // livedataGetRouteInfoById.postValue(response)
         }
     }
 
     fun AddOnRideAlongRouteInfo(addOnRideAlongRouteInfoRequest: AddOnRideAlongRouteInfoRequest) {
         viewModelScope.launch {
             var response = repo.AddOnRideAlongRouteInfo(addOnRideAlongRouteInfoRequest)
-            if(response.failed)
+            if (response.failed)
                 livedataRideAlongSubmitApiRes.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataRideAlongSubmitApiRes.postValue(null)
             else
                 livedataRideAlongSubmitApiRes.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.AddOnRideAlongRouteInfo(addOnRideAlongRouteInfoRequest)
-            }
-            result.onSuccess { response ->
-                livedataRideAlongSubmitApiRes.postValue(response)
-            }
-            result.onFailure { exception ->
-                Log.e("AddOnRideAlongRouteInfo", "Error: ${exception.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.AddOnRideAlongRouteInfo(addOnRideAlongRouteInfoRequest)
+                        }
+                        result.onSuccess { response ->
+                            livedataRideAlongSubmitApiRes.postValue(response)
+                        }
+                        result.onFailure { exception ->
+                            Log.e("AddOnRideAlongRouteInfo", "Error: ${exception.message}")
+                        }*/
         }
     }
 
     fun GetRideAlongRouteInfoById(routeID: Int, leadDriverId: Int) {
         viewModelScope.launch {
-            var response =  repo.GetRideAlongRouteInfoById(routeID, leadDriverId)
-            if(response.failed)
+            var response = repo.GetRideAlongRouteInfoById(routeID, leadDriverId)
+            if (response.failed)
                 livedataRideAlongRouteInfoById.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataRideAlongRouteInfoById.postValue(null)
             else
                 livedataRideAlongRouteInfoById.postValue(response.body)
 
-         /*   val result = runCatching {
-                repo.GetRideAlongRouteInfoById(routeID, leadDriverId)
-            }
-            result.onSuccess { response ->
-                livedataRideAlongRouteInfoById.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("GetRideAlongRouteInfoById Exception", "Error: ${ex.message}")
-            }*/
+            /*   val result = runCatching {
+                   repo.GetRideAlongRouteInfoById(routeID, leadDriverId)
+               }
+               result.onSuccess { response ->
+                   livedataRideAlongRouteInfoById.postValue(response)
+               }
+               result.onFailure { ex ->
+                   Log.e("GetRideAlongRouteInfoById Exception", "Error: ${ex.message}")
+               }*/
         }
     }
 
     fun GetDriverRouteInfoByDate(driverId: Int) {
         viewModelScope.launch {
             var response = repo.GetDriverRouteInfoByDate(driverId)
-            if(response.failed)
+            if (response.failed)
                 liveDatadriverInfobyRouteDate.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDatadriverInfobyRouteDate.postValue(null)
             else
                 liveDatadriverInfobyRouteDate.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.GetDriverRouteInfoByDate(driverId)
-            }
-            result.onSuccess { response ->
-                liveDatadriverInfobyRouteDate.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("GetDriverRouteInfoByDate Exception", "Error: ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.GetDriverRouteInfoByDate(driverId)
+                        }
+                        result.onSuccess { response ->
+                            liveDatadriverInfobyRouteDate.postValue(response)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("GetDriverRouteInfoByDate Exception", "Error: ${ex.message}")
+                        }*/
         }
     }
 
     fun GetRideAlongDriverInfoByDate(driverId: Int) {
         viewModelScope.launch {
             var response = repo.GetRideAlongDriverInfoByDate(driverId)
-            if(response.failed)
+            if (response.failed)
                 liveDataRideAlongDriverInfoByDateResponse.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataRideAlongDriverInfoByDateResponse.postValue(null)
             else
                 liveDataRideAlongDriverInfoByDateResponse.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.GetRideAlongDriverInfoByDate(driverId)
-            }
-            result.onSuccess { response ->
-                liveDataRideAlongDriverInfoByDateResponse.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.GetRideAlongDriverInfoByDate(driverId)
+                        }
+                        result.onSuccess { response ->
+                            liveDataRideAlongDriverInfoByDateResponse.postValue(response)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun SaveQuestionairePreparedness(request: SaveQuestionairePreparednessRequest) {
         viewModelScope.launch {
             var response = repo.SaveQuestionairePreparedness(request)
-            if(response.failed)
+            if (response.failed)
                 liveDataQuestionairePreparedness.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataQuestionairePreparedness.postValue(null)
             else
                 liveDataQuestionairePreparedness.postValue(response.body)
-   /*
-            val result = runCatching {
-                repo.SaveQuestionairePreparedness(request)
-            }
-            result.onSuccess { response ->
-                liveDataQuestionairePreparedness.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
-            }*/
+            /*
+                     val result = runCatching {
+                         repo.SaveQuestionairePreparedness(request)
+                     }
+                     result.onSuccess { response ->
+                         liveDataQuestionairePreparedness.postValue(response)
+                     }
+                     result.onFailure { ex ->
+                         Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+                     }*/
         }
     }
 
     fun SaveQuestionaireStartup(request: SaveQuestionaireStartupRequest) {
         viewModelScope.launch {
             var response = repo.SaveQuestionaireStartup(request)
-            if(response.failed)
+            if (response.failed)
                 liveDataQuestionaireStartup.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataQuestionaireStartup.postValue(null)
             else
                 liveDataQuestionaireStartup.postValue(response.body)
-/*
-            val result = runCatching {
-                repo.SaveQuestionaireStartup(request)
-            }
-            result.onSuccess { response ->
-                liveDataQuestionaireStartup.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
-            }*/
+            /*
+                        val result = runCatching {
+                            repo.SaveQuestionaireStartup(request)
+                        }
+                        result.onSuccess { response ->
+                            liveDataQuestionaireStartup.postValue(response)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun SaveQuestionaireGoingOn(request: SaveQuestionaireOnGoingActivitiesRequest) {
         viewModelScope.launch {
             var response = repo.SaveQuestionaireOnGoingActivities(request)
-            if(response.failed)
+            if (response.failed)
                 liveDataQuestionaireGoingOn.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataQuestionaireGoingOn.postValue(null)
             else
                 liveDataQuestionaireGoingOn.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.SaveQuestionaireOnGoingActivities(request)
-            }
-            result.onSuccess { response ->
-                liveDataQuestionaireGoingOn.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.SaveQuestionaireOnGoingActivities(request)
+                        }
+                        result.onSuccess { response ->
+                            liveDataQuestionaireGoingOn.postValue(response)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun SaveQuestionaireDelivery(request: SaveQuestionaireDeliverProceduresRequest) {
         viewModelScope.launch {
-            var response =  repo.SaveQuestionaireDeliverProcedures(request)
-            if(response.failed)
+            var response = repo.SaveQuestionaireDeliverProcedures(request)
+            if (response.failed)
                 liveDataQuestionareDeliveryProcedures.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataQuestionareDeliveryProcedures.postValue(null)
             else
                 liveDataQuestionareDeliveryProcedures.postValue(response.body)
 
-  /*          val result = runCatching {
-                repo.SaveQuestionaireDeliverProcedures(request)
-            }
-            result.onSuccess { response ->
-                liveDataQuestionareDeliveryProcedures.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
-            }*/
+            /*          val result = runCatching {
+                          repo.SaveQuestionaireDeliverProcedures(request)
+                      }
+                      result.onSuccess { response ->
+                          liveDataQuestionareDeliveryProcedures.postValue(response)
+                      }
+                      result.onFailure { ex ->
+                          Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+                      }*/
         }
     }
 
     fun SaveQuestionaireReturnToDeliveryStation(request: SaveQuestionaireReturnToDeliveryStationRequest) {
         viewModelScope.launch {
-            var response =    repo.SaveQuestionaireReturnToDeliveryStation(request)
-            if(response.failed)
+            var response = repo.SaveQuestionaireReturnToDeliveryStation(request)
+            if (response.failed)
                 liveDataQuestionareReturn.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataQuestionareReturn.postValue(null)
             else
                 liveDataQuestionareReturn.postValue(response.body)
 
-           /* val result = runCatching {
-                repo.SaveQuestionaireReturnToDeliveryStation(request)
-            }
-            result.onSuccess { response ->
-                liveDataQuestionareReturn.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
-            }*/
+            /* val result = runCatching {
+                 repo.SaveQuestionaireReturnToDeliveryStation(request)
+             }
+             result.onSuccess { response ->
+                 liveDataQuestionareReturn.postValue(response)
+             }
+             result.onFailure { ex ->
+                 Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+             }*/
         }
     }
 
     fun SaveQuestionaireFinalAssesment(request: SubmitFinalQuestionairebyLeadDriverRequest) {
         viewModelScope.launch {
             var response = repo.SubmitFinalQuestionairebyLeadDriver(request)
-            if(response.failed)
+            if (response.failed)
                 liveDataFinalAssesment.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataFinalAssesment.postValue(null)
             else
                 liveDataFinalAssesment.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.SubmitFinalQuestionairebyLeadDriver(request)
-            }
-            result.onSuccess { response ->
-                liveDataFinalAssesment.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.SubmitFinalQuestionairebyLeadDriver(request)
+                        }
+                        result.onSuccess { response ->
+                            liveDataFinalAssesment.postValue(response)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun DeleteOnRideAlongRouteInfo(routeID: Int) {
         viewModelScope.launch {
             var response = repo.DeleteOnRideAlongRouteInfo(routeID)
-            if(response.failed)
+            if (response.failed)
                 liveDataDeleteOnRideAlongRouteInfo.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataDeleteOnRideAlongRouteInfo.postValue(null)
             else
                 liveDataDeleteOnRideAlongRouteInfo.postValue(response.body)
-/*
-            val result = runCatching {
-                repo.DeleteOnRideAlongRouteInfo(routeID)
-            }
-            result.onSuccess { response ->
-                liveDataDeleteOnRideAlongRouteInfo.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
-            }*/
+            /*
+                        val result = runCatching {
+                            repo.DeleteOnRideAlongRouteInfo(routeID)
+                        }
+                        result.onSuccess { response ->
+                            liveDataDeleteOnRideAlongRouteInfo.postValue(response)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun DeleteOnRouteDetails(routeID: Int) {
         viewModelScope.launch {
-            var response =  repo.DeleteOnRouteDetails(routeID)
-            if(response.failed)
+            var response = repo.DeleteOnRouteDetails(routeID)
+            if (response.failed)
                 liveDataDeleteOnRouteDetails.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataDeleteOnRouteDetails.postValue(null)
             else
                 liveDataDeleteOnRouteDetails.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.DeleteOnRouteDetails(routeID)
-            }
-            result.onSuccess { response ->
-                liveDataDeleteOnRouteDetails.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.DeleteOnRouteDetails(routeID)
+                        }
+                        result.onSuccess { response ->
+                            liveDataDeleteOnRouteDetails.postValue(response)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun SubmitRideAlongDriverFeedback(request: SubmitRideAlongDriverFeedbackRequest) {
         viewModelScope.launch {
             var response = repo.SubmitRideAlongDriverFeedback(request)
-            if(response.failed)
+            if (response.failed)
                 liveDataSubmitRideAlongDriverFeedbackRequest.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataSubmitRideAlongDriverFeedbackRequest.postValue(null)
             else
                 liveDataSubmitRideAlongDriverFeedbackRequest.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.SubmitRideAlongDriverFeedback(request)
-            }
-            result.onSuccess { response ->
-                liveDataSubmitRideAlongDriverFeedbackRequest.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.SubmitRideAlongDriverFeedback(request)
+                        }
+                        result.onSuccess { response ->
+                            liveDataSubmitRideAlongDriverFeedbackRequest.postValue(response)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -866,23 +869,24 @@ class MainViewModel(
         daDailyWorkId: Int
     ) {
         viewModelScope.launch {
-            var response = repo.GetRideAlongLeadDriverQuestion(driverId, routeID, leadDriverId, daDailyWorkId)
-            if(response.failed)
+            var response =
+                repo.GetRideAlongLeadDriverQuestion(driverId, routeID, leadDriverId, daDailyWorkId)
+            if (response.failed)
                 liveDataGetRideAlongLeadDriverQuestion.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataGetRideAlongLeadDriverQuestion.postValue(null)
             else
                 liveDataGetRideAlongLeadDriverQuestion.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.GetRideAlongLeadDriverQuestion(driverId, routeID, leadDriverId, daDailyWorkId)
-            }
-            result.onSuccess { response ->
-                liveDataGetRideAlongLeadDriverQuestion.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.GetRideAlongLeadDriverQuestion(driverId, routeID, leadDriverId, daDailyWorkId)
+                        }
+                        result.onSuccess { response ->
+                            liveDataGetRideAlongLeadDriverQuestion.postValue(response)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("RideAlongDriverInfo Exception", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -890,24 +894,24 @@ class MainViewModel(
         dawDriverBreakId: Int
     ) {
         viewModelScope.launch {
-            var response =   repo.DeleteBreakTime(dawDriverBreakId)
-            if(response.failed)
+            var response = repo.DeleteBreakTime(dawDriverBreakId)
+            if (response.failed)
                 liveDataDeleteBreakTime.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataDeleteBreakTime.postValue(null)
             else
                 liveDataDeleteBreakTime.postValue(response.body)
 
-/*
-            val result = runCatching {
-                repo.DeleteBreakTime(dawDriverBreakId)
-            }
-            result.onSuccess { response ->
-                liveDataDeleteBreakTime.postValue(response)
-            }
-            result.onFailure { ex ->
-                Log.e("DeleteBreakTime Exception", "Error ${ex.message}")
-            }*/
+            /*
+                        val result = runCatching {
+                            repo.DeleteBreakTime(dawDriverBreakId)
+                        }
+                        result.onSuccess { response ->
+                            liveDataDeleteBreakTime.postValue(response)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("DeleteBreakTime Exception", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -916,23 +920,23 @@ class MainViewModel(
     ) {
         viewModelScope.launch {
 
-            var response =   repo.UpdateOnRouteInfo(request)
-            if(response.failed)
+            var response = repo.UpdateOnRouteInfo(request)
+            if (response.failed)
                 liveDataUpdateOnRouteInfo.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataUpdateOnRouteInfo.postValue(null)
             else
                 liveDataUpdateOnRouteInfo.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.UpdateOnRouteInfo(request)
-            }
-            result.onSuccess { res ->
-                liveDataUpdateOnRouteInfo.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("DeleteBreakTime Exception", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.UpdateOnRouteInfo(request)
+                        }
+                        result.onSuccess { res ->
+                            liveDataUpdateOnRouteInfo.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("DeleteBreakTime Exception", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -941,114 +945,115 @@ class MainViewModel(
         department: Int? = null,
         startDate: String? = null,
         endDate: String? = null,
-        includeCompleted:Boolean?=null
+        includeCompleted: Boolean? = null
     ) {
         viewModelScope.launch {
-            var response = repo.GetUserTickets(userID, department, startDate, endDate,includeCompleted)
-            if(response.failed)
+            var response =
+                repo.GetUserTickets(userID, department, startDate, endDate, includeCompleted)
+            if (response.failed)
                 liveDataGetUserTickets.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataGetUserTickets.postValue(null)
             else
                 liveDataGetUserTickets.postValue(response.body)
 
-  /*          val result = runCatching {
-                repo.GetUserTickets(userID, department, startDate, endDate,includeCompleted)
-            }
-            result.onSuccess { res ->
-                liveDataGetUserTickets.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("GetUserTickets", "Error ${ex.message}")
-            }*/
+            /*          val result = runCatching {
+                          repo.GetUserTickets(userID, department, startDate, endDate,includeCompleted)
+                      }
+                      result.onSuccess { res ->
+                          liveDataGetUserTickets.postValue(res)
+                      }
+                      result.onFailure { ex ->
+                          Log.e("GetUserTickets", "Error ${ex.message}")
+                      }*/
         }
     }
 
     fun GetUserDepartmentList() {
         viewModelScope.launch {
             var response = repo.GetUserDepartmentList()
-            if(response.failed)
+            if (response.failed)
                 liveDataTicketDepartmentsResponse.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataTicketDepartmentsResponse.postValue(null)
             else
                 liveDataTicketDepartmentsResponse.postValue(response.body)
-/*
-            val result = runCatching {
-                repo.GetUserDepartmentList()
-            }
-            result.onSuccess { res ->
-                liveDataTicketDepartmentsResponse.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("GetUserTickets", "Error ${ex.message}")
-            }*/
+            /*
+                        val result = runCatching {
+                            repo.GetUserDepartmentList()
+                        }
+                        result.onSuccess { res ->
+                            liveDataTicketDepartmentsResponse.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("GetUserTickets", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun GetTicketRequestType(deptID: Int) {
         viewModelScope.launch {
-            var response =  repo.GetTicketRequestType(deptID)
-            if(response.failed)
+            var response = repo.GetTicketRequestType(deptID)
+            if (response.failed)
                 liveDataGetTicketRequestType.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataGetTicketRequestType.postValue(null)
             else
                 liveDataGetTicketRequestType.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.GetTicketRequestType(deptID)
-            }
-            result.onSuccess {
-                liveDataGetTicketRequestType.postValue(it)
-            }
-            result.onFailure { ex ->
-                Log.e("GetTicketUserType", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.GetTicketRequestType(deptID)
+                        }
+                        result.onSuccess {
+                            liveDataGetTicketRequestType.postValue(it)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("GetTicketUserType", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun SaveTicketData(userID: Int, request: SaveTicketDataRequestBody) {
         viewModelScope.launch {
             var response = repo.SaveTicketData(userID, request)
-            if(response.failed)
+            if (response.failed)
                 liveDataSaveTicketResponse.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataSaveTicketResponse.postValue(null)
             else
                 liveDataSaveTicketResponse.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.SaveTicketData(userID, request)
-            }
-            result.onSuccess { res ->
-                liveDataSaveTicketResponse.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("GetTicketUserType Ex", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.SaveTicketData(userID, request)
+                        }
+                        result.onSuccess { res ->
+                            liveDataSaveTicketResponse.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("GetTicketUserType Ex", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun GetTicketCommentList(userID: Int, ticketId: Int) {
         viewModelScope.launch {
             var response = repo.GetTicketCommentList(userID, ticketId)
-            if(response.failed)
+            if (response.failed)
                 liveDataGetTicketCommentList.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataGetTicketCommentList.postValue(null)
             else
                 liveDataGetTicketCommentList.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.GetTicketCommentList(userID, ticketId)
-            }
-            result.onSuccess { res ->
-                liveDataGetTicketCommentList.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("GetTicketCommentList Ex", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.GetTicketCommentList(userID, ticketId)
+                        }
+                        result.onSuccess { res ->
+                            liveDataGetTicketCommentList.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("GetTicketCommentList Ex", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -1056,23 +1061,23 @@ class MainViewModel(
         userID: Int, ticketId: Int, file: MultipartBody.Part
     ) {
         viewModelScope.launch {
-            var response =   repo.UploadTicketAttachmentDoc(userID, ticketId, file)
-            if(response.failed)
+            var response = repo.UploadTicketAttachmentDoc(userID, ticketId, file)
+            if (response.failed)
                 liveDataUploadTicketAttachmentDoc.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataUploadTicketAttachmentDoc.postValue(null)
             else
                 liveDataUploadTicketAttachmentDoc.postValue(response.body)
-/*
-            val result = runCatching {
-                repo.UploadTicketAttachmentDoc(userID, ticketId, file)
-            }
-            result.onSuccess { res ->
-                liveDataUploadTicketAttachmentDoc.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("UploadTicketAttachmentDoc Ex", "Error ${ex.message}")
-            }*/
+            /*
+                        val result = runCatching {
+                            repo.UploadTicketAttachmentDoc(userID, ticketId, file)
+                        }
+                        result.onSuccess { res ->
+                            liveDataUploadTicketAttachmentDoc.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("UploadTicketAttachmentDoc Ex", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -1083,132 +1088,132 @@ class MainViewModel(
     ) {
         viewModelScope.launch {
             var response = repo.SaveTicketComment(userID, ticketId, comment)
-            if(response.failed)
+            if (response.failed)
                 liveDataSaveTicketComment.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataSaveTicketComment.postValue(null)
             else
                 liveDataSaveTicketComment.postValue(response.body)
-/*
-            val result = runCatching {
-                repo.SaveTicketComment(userID, ticketId, comment)
-            }
-            result.onSuccess { res ->
-                liveDataSaveTicketComment.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("SaveTicketComment Ex", "Error ${ex.message}")
-            }*/
+            /*
+                        val result = runCatching {
+                            repo.SaveTicketComment(userID, ticketId, comment)
+                        }
+                        result.onSuccess { res ->
+                            liveDataSaveTicketComment.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("SaveTicketComment Ex", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun GetAVGscore(userID: Int, lmid: Int) {
         viewModelScope.launch {
-            var response =repo.GetAvgWeekScore(userID, lmid)
-            if(response.failed)
+            var response = repo.GetAvgWeekScore(userID, lmid)
+            if (response.failed)
                 livedataAvgScoreResponse.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataAvgScoreResponse.postValue(null)
             else
                 livedataAvgScoreResponse.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.GetAvgWeekScore(userID, lmid)
-            }
-            result.onSuccess { res ->
-                livedataAvgScoreResponse.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("GetTicketUserType", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.GetAvgWeekScore(userID, lmid)
+                        }
+                        result.onSuccess { res ->
+                            livedataAvgScoreResponse.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("GetTicketUserType", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun GetLastWeekSCore(userID: Int, lmid: Int, year: Int) {
         viewModelScope.launch {
-            var response =   repo.GetLastWeekScrore(userID, lmid, year)
-            if(response.failed)
+            var response = repo.GetLastWeekScrore(userID, lmid, year)
+            if (response.failed)
                 livedatalastweekresponse.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedatalastweekresponse.postValue(null)
             else
                 livedatalastweekresponse.postValue(response.body)
-/*
-            val result = runCatching {
-                repo.GetLastWeekScrore(userID, lmid, year)
-            }
-            result.onSuccess { res ->
-                livedatalastweekresponse.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("GetTicketUserType", "Error ${ex.message}")
-            }*/
+            /*
+                        val result = runCatching {
+                            repo.GetLastWeekScrore(userID, lmid, year)
+                        }
+                        result.onSuccess { res ->
+                            livedatalastweekresponse.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("GetTicketUserType", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun GetcashFlowWeek(userID: Int, companyFilter: Int, selYear: Int, selWeek: Int) {
         viewModelScope.launch {
-            var response =  repo.GetCashFlowWeek(userID, companyFilter, selYear, selWeek)
-            if(response.failed)
+            var response = repo.GetCashFlowWeek(userID, companyFilter, selYear, selWeek)
+            if (response.failed)
                 livedataCashFlowWeek.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataCashFlowWeek.postValue(null)
             else
                 livedataCashFlowWeek.postValue(response.body)
 
- /*           val result = runCatching {
-                repo.GetCashFlowWeek(userID, companyFilter, selYear, selWeek)
-            }
-            result.onSuccess { res ->
-                livedataCashFlowWeek.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("GetTicketUserType", "Error ${ex.message}")
-            }*/
+            /*           val result = runCatching {
+                           repo.GetCashFlowWeek(userID, companyFilter, selYear, selWeek)
+                       }
+                       result.onSuccess { res ->
+                           livedataCashFlowWeek.postValue(res)
+                       }
+                       result.onFailure { ex ->
+                           Log.e("GetTicketUserType", "Error ${ex.message}")
+                       }*/
         }
     }
 
     fun GetWeekAndYear() {
         viewModelScope.launch {
             var response = repo.GetWeekYear()
-            if(response.failed)
+            if (response.failed)
                 livedatagetweekyear.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedatagetweekyear.postValue(null)
             else
                 livedatagetweekyear.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.GetWeekYear()
-            }
-            result.onSuccess { res ->
-                livedatagetweekyear.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("GetTicketUserType", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.GetWeekYear()
+                        }
+                        result.onSuccess { res ->
+                            livedatagetweekyear.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("GetTicketUserType", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun GetViewFullScheduleInfo(userID: Int, lmid: Int, Year: Int, Week: Int) {
         viewModelScope.launch {
-            var response =   repo.GetVechileSchedule(userID, lmid, Year, Week)
-            if(response.failed)
+            var response = repo.GetVechileSchedule(userID, lmid, Year, Week)
+            if (response.failed)
                 livedatagetvechilescheduleinfo.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedatagetvechilescheduleinfo.postValue(null)
             else
                 livedatagetvechilescheduleinfo.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.GetVechileSchedule(userID, lmid, Year, Week)
-            }
-            result.onSuccess { res ->
-                livedatagetvechilescheduleinfo.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("GetTicketUserType", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.GetVechileSchedule(userID, lmid, Year, Week)
+                        }
+                        result.onSuccess { res ->
+                            livedatagetvechilescheduleinfo.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("GetTicketUserType", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -1218,23 +1223,23 @@ class MainViewModel(
         file: MultipartBody.Part
     ) {
         viewModelScope.launch {
-            var response =  repo.UploadTicketCommentAttachmentDoc(userID, ticketCommentID, file)
-            if(response.failed)
+            var response = repo.UploadTicketCommentAttachmentDoc(userID, ticketCommentID, file)
+            if (response.failed)
                 liveDataUploadTicketCommentAttachmentDoc.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataUploadTicketCommentAttachmentDoc.postValue(null)
             else
                 liveDataUploadTicketCommentAttachmentDoc.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.UploadTicketCommentAttachmentDoc(userID, ticketCommentID, file)
-            }
-            result.onSuccess { res ->
-                liveDataUploadTicketCommentAttachmentDoc.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("UploadTicketCommentAttachmentDoc", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.UploadTicketCommentAttachmentDoc(userID, ticketCommentID, file)
+                        }
+                        result.onSuccess { res ->
+                            liveDataUploadTicketCommentAttachmentDoc.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("UploadTicketCommentAttachmentDoc", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -1243,68 +1248,68 @@ class MainViewModel(
         ticketId: Int
     ) {
         viewModelScope.launch {
-            var response =  repo.GetUserTicketDocuments(userID, ticketId)
-            if(response.failed)
+            var response = repo.GetUserTicketDocuments(userID, ticketId)
+            if (response.failed)
                 liveDataGetUserTicketDocuments.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataGetUserTicketDocuments.postValue(null)
             else
                 liveDataGetUserTicketDocuments.postValue(response.body)
 
-        /*    val result = runCatching {
-                repo.GetUserTicketDocuments(userID, ticketId)
-            }
-            result.onSuccess { res ->
-                liveDataGetUserTicketDocuments.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("GetUserTicketDocument", "Error ${ex.message}")
-            }*/
+            /*    val result = runCatching {
+                    repo.GetUserTicketDocuments(userID, ticketId)
+                }
+                result.onSuccess { res ->
+                    liveDataGetUserTicketDocuments.postValue(res)
+                }
+                result.onFailure { ex ->
+                    Log.e("GetUserTicketDocument", "Error ${ex.message}")
+                }*/
         }
     }
 
     fun GetThirdPartyAccess(userID: Int) {
         viewModelScope.launch {
             var response = repo.GetThirdPartyAccess(userID)
-            if(response.failed)
+            if (response.failed)
                 livedatathirdpartyaccess.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedatathirdpartyaccess.postValue(null)
             else
                 livedatathirdpartyaccess.postValue(response.body)
 
-/*            val result = runCatching {
+            /*            val result = runCatching {
 
-                repo.GetThirdPartyAccess(userID)
-            }
-            result.onSuccess { res ->
-                livedatathirdpartyaccess.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("GetTicketUserType", "Error ${ex.message}")
-            }*/
+                            repo.GetThirdPartyAccess(userID)
+                        }
+                        result.onSuccess { res ->
+                            livedatathirdpartyaccess.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("GetTicketUserType", "Error ${ex.message}")
+                        }*/
         }
     }
 
     fun RemoveThirdPartyAccess(userID: Int) {
         viewModelScope.launch {
             var response = repo.RemoveThirdPartyAccess(userID)
-            if(response.failed)
+            if (response.failed)
                 livedataremovethirdpartyaccess.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataremovethirdpartyaccess.postValue(null)
             else
                 livedataremovethirdpartyaccess.postValue(response.body)
-/*
-            val result = runCatching {
-                repo.RemoveThirdPartyAccess(userID)
-            }
-            result.onSuccess { res ->
-                livedataremovethirdpartyaccess.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("GetTicketUserType", "Error ${ex.message}")
-            }*/
+            /*
+                        val result = runCatching {
+                            repo.RemoveThirdPartyAccess(userID)
+                        }
+                        result.onSuccess { res ->
+                            livedataremovethirdpartyaccess.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("GetTicketUserType", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -1312,23 +1317,23 @@ class MainViewModel(
         userID: Int, selYear: Int
     ) {
         viewModelScope.launch {
-            var response =   repo.DownloadInvoicePDF(userID, selYear)
-            if(response.failed)
+            var response = repo.DownloadInvoicePDF(userID, selYear)
+            if (response.failed)
                 liveDataDownloadInvoicePDF.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataDownloadInvoicePDF.postValue(null)
             else
                 liveDataDownloadInvoicePDF.postValue(response.body)
 
- /*           val result = runCatching {
-                repo.DownloadInvoicePDF(userID, selYear)
-            }
-            result.onSuccess { res ->
-                liveDataDownloadInvoicePDF.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("DownloadInvoicePDF ", "Error ${ex.message}")
-            }*/
+            /*           val result = runCatching {
+                           repo.DownloadInvoicePDF(userID, selYear)
+                       }
+                       result.onSuccess { res ->
+                           liveDataDownloadInvoicePDF.postValue(res)
+                       }
+                       result.onFailure { ex ->
+                           Log.e("DownloadInvoicePDF ", "Error ${ex.message}")
+                       }*/
         }
     }
 
@@ -1336,23 +1341,23 @@ class MainViewModel(
         userID: Int, selYear: Int
     ) {
         viewModelScope.launch {
-            var response =  repo.DownloadThirdPartyInvoicePDF(userID, selYear)
-            if(response.failed)
+            var response = repo.DownloadThirdPartyInvoicePDF(userID, selYear)
+            if (response.failed)
                 liveDataDownloadThirdPartyInvoicePDF.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataDownloadThirdPartyInvoicePDF.postValue(null)
             else
                 liveDataDownloadThirdPartyInvoicePDF.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.DownloadThirdPartyInvoicePDF(userID, selYear)
-            }
-            result.onSuccess { res ->
-                liveDataDownloadThirdPartyInvoicePDF.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("DownloadInvoicePDF ", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.DownloadThirdPartyInvoicePDF(userID, selYear)
+                        }
+                        result.onSuccess { res ->
+                            liveDataDownloadThirdPartyInvoicePDF.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("DownloadInvoicePDF ", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -1361,22 +1366,22 @@ class MainViewModel(
     ) {
         viewModelScope.launch {
             var response = repo.DownloadSignedDAHandbook(handbookId)
-            if(response.failed)
+            if (response.failed)
                 liveDataDownloadSignedDAHandbook.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataDownloadSignedDAHandbook.postValue(null)
             else
                 liveDataDownloadSignedDAHandbook.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.DownloadSignedDAHandbook(handbookId)
-            }
-            result.onSuccess { res ->
-                liveDataDownloadSignedDAHandbook.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("Download Signed Da Handbook", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.DownloadSignedDAHandbook(handbookId)
+                        }
+                        result.onSuccess { res ->
+                            liveDataDownloadSignedDAHandbook.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("Download Signed Da Handbook", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -1385,22 +1390,22 @@ class MainViewModel(
     ) {
         viewModelScope.launch {
             var response = repo.DownloadSignedGDPRPOLICY(handbookId)
-            if(response.failed)
+            if (response.failed)
                 liveDataDownloadSignedGDPRPOLICY.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataDownloadSignedGDPRPOLICY.postValue(null)
             else
                 liveDataDownloadSignedGDPRPOLICY.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.DownloadSignedGDPRPOLICY(handbookId)
-            }
-            result.onSuccess { res ->
-                liveDataDownloadSignedGDPRPOLICY.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("Download Signed Da Handbook", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.DownloadSignedGDPRPOLICY(handbookId)
+                        }
+                        result.onSuccess { res ->
+                            liveDataDownloadSignedGDPRPOLICY.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("Download Signed Da Handbook", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -1409,22 +1414,22 @@ class MainViewModel(
     ) {
         viewModelScope.launch {
             var response = repo.DownloadSignedServiceLevelAgreement(handbookId)
-            if(response.failed)
+            if (response.failed)
                 liveDataDownloadSignedServiceLevelAgreement.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataDownloadSignedServiceLevelAgreement.postValue(null)
             else
                 liveDataDownloadSignedServiceLevelAgreement.postValue(response.body)
 
- /*           val result = runCatching {
-                repo.DownloadSignedServiceLevelAgreement(handbookId)
-            }
-            result.onSuccess { res ->
-                liveDataDownloadSignedServiceLevelAgreement.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("Download Signed Da Handbook", "Error ${ex.message}")
-            }*/
+            /*           val result = runCatching {
+                           repo.DownloadSignedServiceLevelAgreement(handbookId)
+                       }
+                       result.onSuccess { res ->
+                           liveDataDownloadSignedServiceLevelAgreement.postValue(res)
+                       }
+                       result.onFailure { ex ->
+                           Log.e("Download Signed Da Handbook", "Error ${ex.message}")
+                       }*/
         }
     }
 
@@ -1432,23 +1437,23 @@ class MainViewModel(
         handbookId: Int
     ) {
         viewModelScope.launch {
-            var response =    repo.DownloadSignedPrivacyPolicy(handbookId)
-            if(response.failed)
+            var response = repo.DownloadSignedPrivacyPolicy(handbookId)
+            if (response.failed)
                 liveDataDownloadSignedPrivacyPolicy.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataDownloadSignedPrivacyPolicy.postValue(null)
             else
                 liveDataDownloadSignedPrivacyPolicy.postValue(response.body)
-/*
-            val result = runCatching {
-                repo.DownloadSignedPrivacyPolicy(handbookId)
-            }
-            result.onSuccess { res ->
-                liveDataDownloadSignedPrivacyPolicy.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("Download Signed Da Handbook", "Error ${ex.message}")
-            }*/
+            /*
+                        val result = runCatching {
+                            repo.DownloadSignedPrivacyPolicy(handbookId)
+                        }
+                        result.onSuccess { res ->
+                            liveDataDownloadSignedPrivacyPolicy.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("Download Signed Da Handbook", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -1456,23 +1461,23 @@ class MainViewModel(
         handbookId: Int
     ) {
         viewModelScope.launch {
-            var response =   repo.DownloadSignedDAEngagement(handbookId)
-            if(response.failed)
+            var response = repo.DownloadSignedDAEngagement(handbookId)
+            if (response.failed)
                 liveDataDownloadSignedDAEngagement.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataDownloadSignedDAEngagement.postValue(null)
             else
                 liveDataDownloadSignedDAEngagement.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.DownloadSignedDAEngagement(handbookId)
-            }
-            result.onSuccess { res ->
-                liveDataDownloadSignedDAEngagement.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("Download Signed Da Handbook", "Error ${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.DownloadSignedDAEngagement(handbookId)
+                        }
+                        result.onSuccess { res ->
+                            liveDataDownloadSignedDAEngagement.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("Download Signed Da Handbook", "Error ${ex.message}")
+                        }*/
         }
     }
 
@@ -1483,33 +1488,33 @@ class MainViewModel(
         daDailyWorkId: Int
     ) {
         viewModelScope.launch {
-            var response =  repo.GetRideAlongDriverFeedbackQuestion(
+            var response = repo.GetRideAlongDriverFeedbackQuestion(
                 driverId,
                 routeID,
                 leadDriverId,
                 daDailyWorkId
             )
-            if(response.failed)
+            if (response.failed)
                 liveDataGetRideAlongDriverFeedbackQuestion.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataGetRideAlongDriverFeedbackQuestion.postValue(null)
             else
                 liveDataGetRideAlongDriverFeedbackQuestion.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.GetRideAlongDriverFeedbackQuestion(
-                    driverId,
-                    routeID,
-                    leadDriverId,
-                    daDailyWorkId
-                )
-            }
-            result.onSuccess { res ->
-                liveDataGetRideAlongDriverFeedbackQuestion.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("GetRideAlongDriverFeedBackQuestionRes ", "${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.GetRideAlongDriverFeedbackQuestion(
+                                driverId,
+                                routeID,
+                                leadDriverId,
+                                daDailyWorkId
+                            )
+                        }
+                        result.onSuccess { res ->
+                            liveDataGetRideAlongDriverFeedbackQuestion.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("GetRideAlongDriverFeedBackQuestionRes ", "${ex.message}")
+                        }*/
 
         }
     }
@@ -1517,89 +1522,100 @@ class MainViewModel(
     fun SaveDeviceInformation(body: SaveDeviceInformationRequest) {
         viewModelScope.launch {
             var response = repo.SaveDeviceInformation(body)
-            if(response.failed)
+            if (response.failed)
                 liveDataSaveDeviceInformation.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 liveDataSaveDeviceInformation.postValue(null)
             else
                 liveDataSaveDeviceInformation.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.SaveDeviceInformation(body)
-            }
-            result.onSuccess { res ->
-                liveDataSaveDeviceInformation.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.e("SaveDeviceInformation ", "${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.SaveDeviceInformation(body)
+                        }
+                        result.onSuccess { res ->
+                            liveDataSaveDeviceInformation.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.e("SaveDeviceInformation ", "${ex.message}")
+                        }*/
         }
     }
 
     fun GetNotificationListByUserId(userId: Int) {
         viewModelScope.launch {
             var response = repo.GetNotificationListByUserId(userId)
-            if(response.failed)
+            if (response.failed)
                 livedataGetNotificationListByUserId.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataGetNotificationListByUserId.postValue(null)
             else
                 livedataGetNotificationListByUserId.postValue(response.body)
 
 
-/*            val result = runCatching {
-                repo.GetNotificationListByUserId(userId)
-            }
-            result.onSuccess { res ->
-                livedataGetNotificationListByUserId.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.d("NotificationList ", "${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.GetNotificationListByUserId(userId)
+                        }
+                        result.onSuccess { res ->
+                            livedataGetNotificationListByUserId.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.d("NotificationList ", "${ex.message}")
+                        }*/
         }
     }
 
     fun SaveVehicleInspectionInfo(body: SaveVehicleInspectionInfo) {
         viewModelScope.launch {
             var response = repo.SaveVehicleInspectionInfo(body)
-            if(response.failed)
+            if (response.failed)
                 livedataSavevehicleinspectioninfo.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataSavevehicleinspectioninfo.postValue(null)
             else
                 livedataSavevehicleinspectioninfo.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.SaveVehicleInspectionInfo(body)
-            }
-            result.onSuccess { res ->
-                livedataSavevehicleinspectioninfo.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.d("NotificationList ", "${ex.message}")
-            }*/
+            /*            val result = runCatching {
+                            repo.SaveVehicleInspectionInfo(body)
+                        }
+                        result.onSuccess { res ->
+                            livedataSavevehicleinspectioninfo.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.d("NotificationList ", "${ex.message}")
+                        }*/
         }
     }
 
-    fun GetVehicleInfobyDriverId(userID: Int,date:String) {
+    fun GetVehicleInfobyDriverId(userID: Int, date: String) {
         viewModelScope.launch {
-            var response = repo.GetVehicleInfobyDriverId(userID,date)
-            if(response.failed)
+            var response = repo.GetVehicleInfobyDriverId(userID, date)
+            if (response.failed)
                 livedataGetVehicleInfobyDriverId.postValue(null)
-            if(!response.isSuccessful)
+            if (!response.isSuccessful)
                 livedataGetVehicleInfobyDriverId.postValue(null)
             else
                 livedataGetVehicleInfobyDriverId.postValue(response.body)
 
-/*            val result = runCatching {
-                repo.GetVehicleInfobyDriverId(userID,date)
+            /*            val result = runCatching {
+                            repo.GetVehicleInfobyDriverId(userID,date)
+                        }
+                        result.onSuccess { res ->
+                            livedataGetVehicleInfobyDriverId.postValue(res)
+                        }
+                        result.onFailure { ex ->
+                            Log.d("NotificationList ", "${ex.message}")
+                        }*/
+        }
+    }
+
+    fun uploadVehicleImages(userID: Int, imageList: List<MultipartBody.Part>) {
+        viewModelScope.launch {
+            val response = repo.uploadVehicleImages(userID,imageList)
+            if(response.failed||!response.isSuccessful){
+                liveDatauploadVehicleImages.postValue(null)
+            }else{
+                liveDatauploadVehicleImages.postValue(response.body)
             }
-            result.onSuccess { res ->
-                livedataGetVehicleInfobyDriverId.postValue(res)
-            }
-            result.onFailure { ex ->
-                Log.d("NotificationList ", "${ex.message}")
-            }*/
         }
     }
 }

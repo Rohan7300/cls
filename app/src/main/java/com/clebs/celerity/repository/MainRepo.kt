@@ -81,6 +81,7 @@ class MainRepo(private val ApiService: ApiService) {
         return try {
             SimpleNetworkResponse.success(apiCall.invoke())
         } catch (e: Exception) {
+            Log.d("SafeException","$e")
             SimpleNetworkResponse.failure(e)
         }
     }
@@ -217,9 +218,9 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun GetVehicleDefectSheetInfo(userID: Int): SimpleNetworkResponse<GetVehicleDefectSheetInfoResponse> {
-/*        val response = ApiService.GetVehicleDefectSheetInfo(userID)
-        if (response.isSuccessful)
-            return response.body()*/
+        /*        val response = ApiService.GetVehicleDefectSheetInfo(userID)
+                if (response.isSuccessful)
+                    return response.body()*/
         return safeApiCall {
             ApiService.GetVehicleDefectSheetInfo(userID)
         }
@@ -242,23 +243,23 @@ class MainRepo(private val ApiService: ApiService) {
         userID: Int,
         vehRegNo: String
     ): SimpleNetworkResponse<GetVechileInformationResponse> {
-  /*      val response = ApiService.GetVehicleInformation(userID, vehRegNo)
-        if (response.isSuccessful)
-            return response.body()*/
+        /*      val response = ApiService.GetVehicleInformation(userID, vehRegNo)
+              if (response.isSuccessful)
+                  return response.body()*/
         return safeApiCall {
             ApiService.GetVehicleInformation(userID, vehRegNo)
         }
     }
 
     suspend fun GetVehicleImageUploadInfo(userID: Int): SimpleNetworkResponse<GetVehicleImageUploadInfoResponse> {
-/*        val response = ApiService.GetVehicleImageUploadInfo(userID)
-        Log.d("GetVehicleImageUploadInfoRes : ", "$response")
-        if (response.isSuccessful)
-            return response.body()
-        else if (response.code() == 404) {
-            val res = response.errorBody()?.string()
-            return Gson().fromJson(res, GetVehicleImageUploadInfoResponse::class.java)
-        }*/
+        /*        val response = ApiService.GetVehicleImageUploadInfo(userID)
+                Log.d("GetVehicleImageUploadInfoRes : ", "$response")
+                if (response.isSuccessful)
+                    return response.body()
+                else if (response.code() == 404) {
+                    val res = response.errorBody()?.string()
+                    return Gson().fromJson(res, GetVehicleImageUploadInfoResponse::class.java)
+                }*/
         return safeApiCall {
             ApiService.GetVehicleImageUploadInfo(userID)
         }
@@ -294,65 +295,65 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun GetDailyWorkInfobyId(userID: Int): SimpleNetworkResponse<DailyWorkInfoByIdResponse> {
-/*        val response = ApiService.GetDailyWorkInfobyId(userID)
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error response body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetDailyWorkInfobyId(userID)
+                if (response.isSuccessful) {
+                    return response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetDailyWorkInfobyId(userID)
         }
     }
 
     suspend fun GetRouteLocationInfo(locID: Int): SimpleNetworkResponse<GetRouteLocationInfoResponse> {
-    /*    val response = ApiService.GetRouteLocationInfo(locID)
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error response body: $errorBody")
-        }*/
+        /*    val response = ApiService.GetRouteLocationInfo(locID)
+            if (response.isSuccessful) {
+                return response.body()
+            } else {
+                val errorBody = response.errorBody()?.string()
+                println("Error response body: $errorBody")
+            }*/
         return safeApiCall {
             ApiService.GetRouteLocationInfo(locID)
         }
     }
 
     suspend fun GetRideAlongRouteTypeInfo(userID: Int): SimpleNetworkResponse<GetRideAlongRouteTypeInfoResponse> {
-/*        val response = ApiService.GetRideAlongRouteTypeInfo(userID)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error response body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetRideAlongRouteTypeInfo(userID)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetRideAlongRouteTypeInfo(userID)
         }
     }
 
     suspend fun GetDriverRouteTypeInfo(userID: Int): SimpleNetworkResponse<GetRideAlongRouteTypeInfoResponse> {
-/*        val response = ApiService.GetDriverRouteTypeInfo(userID)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error response body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetDriverRouteTypeInfo(userID)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetDriverRouteTypeInfo(userID)
         }
     }
 
     suspend fun GetDriverSignatureInformation(userID: Int): SimpleNetworkResponse<GetDriverSignatureInformationResponse> {
-/*        val response = ApiService.GetDriverSignatureInformation(userID)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error response body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetDriverSignatureInformation(userID)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetDriverSignatureInformation(userID)
         }
@@ -449,40 +450,40 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun GetRideAlongDriversList(): SimpleNetworkResponse<GetRideAlongDriversListResponse> {
-/*        val response = ApiService.GetRideAlongDriversList()
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetRideAlongDriversList()
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetRideAlongDriversList()
         }
     }
 
     suspend fun GetRideAlongVehicleLists(): SimpleNetworkResponse<GetRideAlongVehicleLists> {
-/*        val response = ApiService.GetRideAlongVehicleLists()
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response body: $errorBody")
-        }
-        return null*/
+        /*        val response = ApiService.GetRideAlongVehicleLists()
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response body: $errorBody")
+                }
+                return null*/
         return safeApiCall {
             ApiService.GetRideAlongVehicleLists()
         }
     }
 
     suspend fun GetRouteInfoById(routeID: Int): SimpleNetworkResponse<GetRouteInfoByIdRes> {
-/*        val response = ApiService.GetRouteInfoById(routeID)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetRouteInfoById(routeID)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetRouteInfoById(routeID)
         }
@@ -505,15 +506,15 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun GetRideAlongRouteInfoById(
         routeID: Int,
-        leadDriverId:Int
+        leadDriverId: Int
     ): SimpleNetworkResponse<GetRideAlongRouteInfoByIdRes> {
-/*        val response = ApiService.GetRideAlongRouteInfoById(routeID, leadDriverId)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetRideAlongRouteInfoById(routeID, leadDriverId)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetRideAlongRouteInfoById(routeID, leadDriverId)
         }
@@ -522,13 +523,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun GetDriverRouteInfoByDate(
         driverId: Int
     ): SimpleNetworkResponse<GetDriverRouteInfoByDateResponse> {
-/*        val response = ApiService.GetDriverRouteInfoByDate(driverId)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetDriverRouteInfoByDate(driverId)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetDriverRouteInfoByDate(driverId)
         }
@@ -537,13 +538,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun SaveQuestionairePreparedness(
         request: SaveQuestionairePreparednessRequest
     ): SimpleNetworkResponse<SimpleQuestionResponse> {
-/*        val response = ApiService.SaveQuestionairePreparedness(request)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response body: $errorBody")
-        }*/
+        /*        val response = ApiService.SaveQuestionairePreparedness(request)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.SaveQuestionairePreparedness(request)
         }
@@ -552,13 +553,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun SaveQuestionaireStartup(
         request: SaveQuestionaireStartupRequest
     ): SimpleNetworkResponse<SimpleQuestionResponse> {
-       /* val response = ApiService.SaveQuestionaireStartup(request)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response body: $errorBody")
-        }*/
+        /* val response = ApiService.SaveQuestionaireStartup(request)
+         if (response.isSuccessful)
+             return response.body()
+         else {
+             val errorBody = response.errorBody()?.string()
+             println("Error Response body: $errorBody")
+         }*/
         return safeApiCall {
             ApiService.SaveQuestionaireStartup(request)
         }
@@ -567,13 +568,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun SaveQuestionaireOnGoingActivities(
         request: SaveQuestionaireOnGoingActivitiesRequest
     ): SimpleNetworkResponse<SimpleQuestionResponse> {
-/*        val response = ApiService.SaveQuestionaireOnGoingActivities(request)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response body: $errorBody")
-        }*/
+        /*        val response = ApiService.SaveQuestionaireOnGoingActivities(request)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.SaveQuestionaireOnGoingActivities(request)
         }
@@ -582,13 +583,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun SaveQuestionaireDeliverProcedures(
         request: SaveQuestionaireDeliverProceduresRequest
     ): SimpleNetworkResponse<SimpleQuestionResponse> {
-/*        val response = ApiService.SaveQuestionaireDeliverProcedures(request)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response body: $errorBody")
-        }*/
+        /*        val response = ApiService.SaveQuestionaireDeliverProcedures(request)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.SaveQuestionaireDeliverProcedures(request)
         }
@@ -597,13 +598,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun SaveQuestionaireReturnToDeliveryStation(
         request: SaveQuestionaireReturnToDeliveryStationRequest
     ): SimpleNetworkResponse<SimpleQuestionResponse> {
-/*        val response = ApiService.SaveQuestionaireReturnToDeliveryStation(request)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response body: $errorBody")
-        }*/
+        /*        val response = ApiService.SaveQuestionaireReturnToDeliveryStation(request)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.SaveQuestionaireReturnToDeliveryStation(request)
         }
@@ -612,13 +613,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun SubmitFinalQuestionairebyLeadDriver(
         request: SubmitFinalQuestionairebyLeadDriverRequest
     ): SimpleNetworkResponse<SimpleQuestionResponse> {
-/*        val response = ApiService.SubmitFinalQuestionairebyLeadDriver(request)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response body: $errorBody")
-        }*/
+        /*        val response = ApiService.SubmitFinalQuestionairebyLeadDriver(request)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.SubmitFinalQuestionairebyLeadDriver(request)
         }
@@ -627,13 +628,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun GetRideAlongDriverInfoByDate(
         driverId: Int
     ): SimpleNetworkResponse<RideAlongDriverInfoByDateResponse> {
-/*        val response = ApiService.GetRideAlongDriverInfoByDate((driverId))
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetRideAlongDriverInfoByDate((driverId))
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetRideAlongDriverInfoByDate((driverId))
         }
@@ -693,18 +694,18 @@ class MainRepo(private val ApiService: ApiService) {
         leadDriverId: Int,
         daDailyWorkId: Int
     ): SimpleNetworkResponse<GetRideAlongLeadDriverQuestionResponse> {
-/*        val response = ApiService.GetRideAlongLeadDriverQuestion(
-            driverId,
-            routeID,
-            leadDriverId,
-            daDailyWorkId
-        )
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response SubmitRideAlongDriverFeedback : $errorBody")
-        }*/
+        /*        val response = ApiService.GetRideAlongLeadDriverQuestion(
+                    driverId,
+                    routeID,
+                    leadDriverId,
+                    daDailyWorkId
+                )
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response SubmitRideAlongDriverFeedback : $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetRideAlongLeadDriverQuestion(
                 driverId,
@@ -754,40 +755,40 @@ class MainRepo(private val ApiService: ApiService) {
         endDate: String?,
         includeCompleted: Boolean?
     ): SimpleNetworkResponse<GetUserTicketsResponse> {
-/*        val response =
-            ApiService.GetUserTickets(userID, departmentId, startDate, endDate, includeCompleted)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body : $errorBody")
-        }*/
+        /*        val response =
+                    ApiService.GetUserTickets(userID, departmentId, startDate, endDate, includeCompleted)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body : $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetUserTickets(userID, departmentId, startDate, endDate, includeCompleted)
         }
     }
 
     suspend fun GetUserDepartmentList(): SimpleNetworkResponse<TicketDepartmentsResponse> {
-/*        val response = ApiService.GetUserDepartmentList()
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error response Body : $errorBody")
-        }*/
+        /*        val response = ApiService.GetUserDepartmentList()
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error response Body : $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetUserDepartmentList()
         }
     }
 
     suspend fun GetTicketRequestType(depID: Int): SimpleNetworkResponse<DepartmentRequestResponse> {
-/*        val response = ApiService.GetTicketRequestType(depID)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body : $errorBody")
-        }*/
+        /*        val response = ApiService.GetTicketRequestType(depID)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body : $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetTicketRequestType(depID)
         }
@@ -797,13 +798,13 @@ class MainRepo(private val ApiService: ApiService) {
         userID: Int,
         request: SaveTicketDataRequestBody
     ): SimpleNetworkResponse<SaveTicketResponse> {
-/*        val response = ApiService.SaveTicketData(userID, request)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.SaveTicketData(userID, request)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.SaveTicketData(userID, request)
         }
@@ -813,13 +814,13 @@ class MainRepo(private val ApiService: ApiService) {
         userID: Int,
         ticketID: Int
     ): SimpleNetworkResponse<GetTicketCommentListNewResponse> {
-/*        val response = ApiService.GetTicketCommentList(userID, ticketID)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body $errorBody")
-        }*/
+        /*        val response = ApiService.GetTicketCommentList(userID, ticketID)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetTicketCommentList(userID, ticketID)
         }
@@ -850,13 +851,13 @@ class MainRepo(private val ApiService: ApiService) {
         ticketID: Int,
         comment: String
     ): SimpleNetworkResponse<SaveCommentResponse> {
-/*        val response = ApiService.SaveTicketComment(userID, ticketID, comment)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body $errorBody")
-        }*/
+        /*        val response = ApiService.SaveTicketComment(userID, ticketID, comment)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body $errorBody")
+                }*/
         return safeApiCall {
             ApiService.SaveTicketComment(userID, ticketID, comment)
         }
@@ -866,13 +867,13 @@ class MainRepo(private val ApiService: ApiService) {
         userID: Int,
         lmid: Int
     ): SimpleNetworkResponse<GetAvgScoreResponse> {
-/*        val response = ApiService.GetAvgScore(userID, lmid)
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetAvgScore(userID, lmid)
+                if (response.isSuccessful) {
+                    return response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetAvgScore(userID, lmid)
         }
@@ -883,13 +884,13 @@ class MainRepo(private val ApiService: ApiService) {
         Weekno: Int,
         Year: Int
     ): SimpleNetworkResponse<GetLastWeekScore> {
-/*        val response = ApiService.GetLastWeekScore(userID, Weekno, Year)
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetLastWeekScore(userID, Weekno, Year)
+                if (response.isSuccessful) {
+                    return response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetLastWeekScore(userID, Weekno, Year)
         }
@@ -901,18 +902,18 @@ class MainRepo(private val ApiService: ApiService) {
         selyear: Int,
         selweek: Int
     ): SimpleNetworkResponse<CashFlowPieChartResponse> {
-/*        val response = ApiService.CashFLowData(
-            userID,
-            //companyFilter,
-            selyear,
-            selweek
-        )
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.CashFLowData(
+                    userID,
+                    //companyFilter,
+                    selyear,
+                    selweek
+                )
+                if (response.isSuccessful) {
+                    return response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.CashFLowData(
                 userID,
@@ -924,13 +925,13 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun GetWeekYear(): SimpleNetworkResponse<GetWeekYear> {
-/*        val response = ApiService.GetWeekAndYear()
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetWeekAndYear()
+                if (response.isSuccessful) {
+                    return response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetWeekAndYear()
         }
@@ -942,13 +943,13 @@ class MainRepo(private val ApiService: ApiService) {
         year: Int,
         week: Int
     ): SimpleNetworkResponse<ViewFullScheduleResponse> {
-/*        val response = ApiService.GetVechileScheduleInfo(userID, lmid, year, week)
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetVechileScheduleInfo(userID, lmid, year, week)
+                if (response.isSuccessful) {
+                    return response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetVechileScheduleInfo(userID, lmid, year, week)
         }
@@ -976,13 +977,13 @@ class MainRepo(private val ApiService: ApiService) {
         userID: Int,
         ticketID: Int
     ): SimpleNetworkResponse<GetUserTicketDocumentsResponse> {
-/*        val response = ApiService.GetUserTicketDocuments(userID, ticketID)
-        if (response.isSuccessful)
-            return response.body()
-        else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.GetUserTicketDocuments(userID, ticketID)
+                if (response.isSuccessful)
+                    return response.body()
+                else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.GetUserTicketDocuments(userID, ticketID)
         }
@@ -1020,13 +1021,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun DownloadInvoicePDF(
         userID: Int, selyear: Int
     ): SimpleNetworkResponse<DownloadInvoicePDFResponse> {
-/*        val response = ApiService.DownloadInvoicePDF(userID, selyear)
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.DownloadInvoicePDF(userID, selyear)
+                if (response.isSuccessful) {
+                    return response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.DownloadInvoicePDF(userID, selyear)
         }
@@ -1035,13 +1036,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun DownloadThirdPartyInvoicePDF(
         userID: Int, selyear: Int
     ): SimpleNetworkResponse<DownloadThirdPartyInvoicePDFResponse> {
-/*        val response = ApiService.DownloadThirdPartyInvoicePDF(userID, selyear)
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.DownloadThirdPartyInvoicePDF(userID, selyear)
+                if (response.isSuccessful) {
+                    return response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.DownloadThirdPartyInvoicePDF(userID, selyear)
         }
@@ -1050,13 +1051,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun DownloadSignedDAHandbook(
         handbookId: Int
     ): SimpleNetworkResponse<ResponseBody> {
-/*        val response = ApiService.DownloadSignedDAHandbook(handbookId)
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.DownloadSignedDAHandbook(handbookId)
+                if (response.isSuccessful) {
+                    return response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.DownloadSignedDAHandbook(handbookId)
         }
@@ -1065,13 +1066,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun DownloadSignedGDPRPOLICY(
         handbookId: Int
     ): SimpleNetworkResponse<ResponseBody> {
-/*        val response = ApiService.DownloadSignedGDPRPOLICY(handbookId)
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.DownloadSignedGDPRPOLICY(handbookId)
+                if (response.isSuccessful) {
+                    return response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.DownloadSignedGDPRPOLICY(handbookId)
         }
@@ -1080,13 +1081,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun DownloadSignedServiceLevelAgreement(
         handbookId: Int
     ): SimpleNetworkResponse<ResponseBody> {
-/*        val response = ApiService.DownloadSignedServiceLevelAgreement(handbookId)
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.DownloadSignedServiceLevelAgreement(handbookId)
+                if (response.isSuccessful) {
+                    return response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.DownloadSignedServiceLevelAgreement(handbookId)
         }
@@ -1095,13 +1096,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun DownloadSignedPrivacyPolicy(
         handbookId: Int
     ): SimpleNetworkResponse<ResponseBody> {
-/*        val response = ApiService.DownloadSignedPrivacyPolicy(handbookId)
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.DownloadSignedPrivacyPolicy(handbookId)
+                if (response.isSuccessful) {
+                    return response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.DownloadSignedPrivacyPolicy(handbookId)
         }
@@ -1110,13 +1111,13 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun DownloadSignedDAEngagement(
         handbookId: Int
     ): SimpleNetworkResponse<ResponseBody> {
-/*        val response = ApiService.DownloadSignedDAEngagement(handbookId)
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            println("Error Response Body: $errorBody")
-        }*/
+        /*        val response = ApiService.DownloadSignedDAEngagement(handbookId)
+                if (response.isSuccessful) {
+                    return response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    println("Error Response Body: $errorBody")
+                }*/
         return safeApiCall {
             ApiService.DownloadSignedDAEngagement(handbookId)
         }
@@ -1210,6 +1211,15 @@ class MainRepo(private val ApiService: ApiService) {
                 return null*/
         return safeApiCall {
             ApiService.GetVehicleInfobyDriverId(userID, date)
+        }
+    }
+
+    suspend fun uploadVehicleImages(
+        userID: Int,
+        imageList: List<MultipartBody.Part>
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.uploadVehicleImages(userID, imageList)
         }
     }
 
