@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.Data
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -25,6 +26,7 @@ import com.clebs.celerity.utils.BackgroundUploadDialogListener
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.ScanErrorDialog
+import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toRequestBody
 import okhttp3.MultipartBody
@@ -40,6 +42,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     lateinit var prefs: Prefs
     private lateinit var backgroundUploadDialog: BackgroundUploadDialog
     lateinit var loadingDialog: LoadingDialog
+    var b64ImageList = mutableListOf<String>()
     var i = 0
     lateinit var fragmentManager: FragmentManager
     private val imagePartsList = mutableListOf<MultipartBody.Part>()
@@ -313,6 +316,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
             4->"uploadVehicleOffSideImage"
             else -> "Invalid"
         }
+        b64ImageList.add(bitmapToBase64(imageBitmap))
         val imagePart =
             MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
 
@@ -333,6 +337,25 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[3], 4)
         viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[4], 6)
     }
+   /* private fun startUploadWithWorkManager() {
+        val userId = prefs.clebUserId.toInt()
+
+        val inputData = Data.Builder()
+            .putStringArray("imagePartsList", b64ImageList)
+            .putInt("userId", userId)
+            .build()
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val uploadWorkRequest = OneTimeWorkRequestBuilder<ImageUploadWorker>()
+            .setInputData(inputData)
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(this).enqueue(uploadWorkRequest)
+    }*/
 
     private fun clientUniqueID(): String {
         val x = Prefs.getInstance(App.instance).clebUserId.toString()
