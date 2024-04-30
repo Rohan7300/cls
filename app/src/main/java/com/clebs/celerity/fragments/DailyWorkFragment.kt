@@ -18,6 +18,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -532,6 +533,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 .setTitle("Analysing")
                 .setIcon(R.drawable.logo_new)
                 .setText("Photo is been analysed")
+                .setContentGravity(Gravity.CENTER_HORIZONTAL)
                 .setBackgroundColorInt(resources.getColor(R.color.medium_orange))
                 .show()
             val apiService: ApiPlateRecognizer =

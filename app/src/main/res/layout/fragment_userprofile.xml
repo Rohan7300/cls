@@ -101,9 +101,10 @@
                             android:fontFamily="@font/poppins_bold"
                             android:letterSpacing="0.05"
                             android:padding="2dp"
+                            android:maxLines="2"
                             android:text="Guneet Kaur"
                             android:textColor="@color/black"
-                            android:textSize="20sp"
+                            android:textSize="22sp"
                             app:layout_constraintEnd_toStartOf="@+id/editImg"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/dpLayout" />

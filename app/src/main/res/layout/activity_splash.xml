@@ -5,7 +5,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:fitsSystemWindows="true"
     android:background="@drawable/background"
     tools:context=".ui.SplashActivity">
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,11 +14,11 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/img_circle_logo"
         android:alpha="0.5"
         android:src="@drawable/splash_screen_ic"
@@ -27,6 +27,7 @@
     <ImageView
         android:layout_width="100dp"
         android:layout_height="80dp"
+        android:id="@+id/ls"
         android:src="@drawable/cls_final_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

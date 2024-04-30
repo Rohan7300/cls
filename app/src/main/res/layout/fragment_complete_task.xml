@@ -62,12 +62,13 @@
                             android:textColor="@color/text_color"
                             android:textSize="16sp" />
 
-                        <ImageButton
+                        <ImageView
                             android:id="@+id/down_iv"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
-                            android:layout_centerHorizontal="true"
+
                             android:backgroundTint="@color/white"
                             android:src="@drawable/grey_right_arrow" />
 
@@ -225,7 +226,7 @@
                         android:layout_height="25dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
-                        android:src="@drawable/finalclockout" />
+                        android:src="@drawable/baseline_access_time_filled_24" />
 
                     <ImageButton
                         android:id="@+id/down_ivs"
@@ -274,7 +275,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_alignParentRight="true"
-                            android:layout_centerHorizontal="true"
+                       android:layout_centerVertical="true"
                             android:backgroundTint="@color/white"
                             android:src="@drawable/grey_right_arrow" />
 

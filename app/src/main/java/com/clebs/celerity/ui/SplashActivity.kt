@@ -6,10 +6,14 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
@@ -30,6 +34,7 @@ import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.showToast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var ActivitySplashBinding: ActivitySplashBinding
@@ -71,13 +76,27 @@ class SplashActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
+        val window = window
+        val winParams = window.attributes
+        winParams.flags =
+            winParams.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
+        window.attributes = winParams
+        window?.decorView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                )
+        window.statusBarColor = resources.getColor(io.clearquote.assessment.cq_sdk.R.color.transparent, null)
+        window.requestFeature(Window.FEATURE_NO_TITLE);
+
         super.onCreate(savedInstanceState)
+
 
         ActivitySplashBinding =
             DataBindingUtil.setContentView(this@SplashActivity, R.layout.activity_splash)
 
-        val rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.anam)
-
+        val rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.anam_two)
+        val rotateAnimationtwo = AnimationUtils.loadAnimation(this, R.anim.slide_slide)
         fragmentManager = this.supportFragmentManager
         dialog = NoInternetDialog()
         val networkManager = NetworkManager(this)
@@ -98,7 +117,8 @@ class SplashActivity : AppCompatActivity() {
         }
 
 
-        ActivitySplashBinding.imgCircleLogo.startAnimation(rotateAnimation)
+        ActivitySplashBinding.ls.startAnimation(rotateAnimationtwo)
+//        ActivitySplashBinding.imgCircleLogo.startAnimation(rotateAnimation)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
 

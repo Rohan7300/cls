@@ -149,7 +149,7 @@ class HomedemoFragment : Fragment() {
 
         mbinding.pieChart.dragDecelerationFrictionCoef = 0.95f;
 
-        mbinding.pieChart.setDrawCenterText(false);
+        mbinding.pieChart.setDrawCenterText(true);
 
         mbinding.pieChart.isRotationEnabled = true;
         mbinding.pieChart.isHighlightPerTapEnabled = false;
@@ -173,9 +173,11 @@ class HomedemoFragment : Fragment() {
 
         mbinding.viewfullschedule.setOnClickListener {
             if (isclicked) {
+                mbinding.vieww.visibility=View.VISIBLE
                 mbinding.viewfulldatalayout.visibility = View.VISIBLE
             } else {
                 mbinding.viewfulldatalayout.visibility = View.GONE
+                mbinding.vieww.visibility=View.GONE
             }
             isclicked = !isclicked
         }
@@ -394,9 +396,9 @@ class HomedemoFragment : Fragment() {
             } else {
                 hideDialog()
                 mbinding.demo.visibility = View.VISIBLE
-                mbinding.pieChart.setNoDataText("No cash flow data found!")
+                mbinding.pieChart.setNoDataText("No cash flow data found.")
                 mbinding.pieChart.setNoDataTextColor(resources.getColor(R.color.red))
-                mbinding.pieChart.setCenterTextSize(1.0f)
+                mbinding.pieChart.setCenterTextSize(5f)
                 mbinding.pieChart.visibility = View.VISIBLE
 
             }

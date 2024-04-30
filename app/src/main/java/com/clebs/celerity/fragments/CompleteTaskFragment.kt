@@ -501,7 +501,7 @@ mbinding.mainCompleteTask.animation=animFadein
                 }
 
                 if (it.ClockedOutTime != null) {
-                    mbinding.clockOutMark.setImageResource(R.drawable.finalclockout)
+                    mbinding.clockOutMark.setImageResource(R.drawable.baseline_access_time_filled_24)
                     mbinding.rlcomtwoClockOut.isEnabled = false
                     mbinding.clockOutTV.text = "Clocked Out"
                     mbinding.rlcomtwoClockOut.isClickable = false
@@ -553,7 +553,7 @@ mbinding.mainCompleteTask.animation=animFadein
             viewModel.GetDailyWorkInfoById(userId)
             showDialog()
             if (it != null) {
-                mbinding.clockOutMark.setImageResource(R.drawable.finalclockout)
+                mbinding.clockOutMark.setImageResource(R.drawable.baseline_access_time_filled_24)
                 mbinding.rlcomtwoClockOut.isEnabled = false
                 mbinding.clockOutTV.text = "Clocked Out"
                 mbinding.rlcomtwoClockOut.isClickable = false

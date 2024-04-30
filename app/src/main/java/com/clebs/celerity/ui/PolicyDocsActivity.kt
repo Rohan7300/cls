@@ -162,7 +162,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                 mbinding.amazonHeader.isClickable = false
                 viewGoneAnimator(mbinding.amazonLayout)
                 viewGoneAnimator(mbinding.views1)
-                mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
+                mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.frame__2_))
 
                 if (mbinding.llTrucks.visibility == View.GONE) {
                     showAlert()
@@ -184,7 +184,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                 viewGoneAnimator(mbinding.truckLayout)
                 viewGoneAnimator(mbinding.viewss2)
                 mbinding.truckHeaderLL.isClickable = false
-                mbinding.truckArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
+                mbinding.truckArrow.setImageDrawable(resources.getDrawable(R.drawable.frame__2_))
                 mbinding.viewss2.visibility = View.GONE
                 if (mbinding.llAmazon.visibility == View.GONE) {
                     showAlert()

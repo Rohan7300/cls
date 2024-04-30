@@ -68,7 +68,7 @@
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="25dp"
-                android:layoutAnimation="@anim/layoutanim"
+                android:layoutAnimation="@anim/animation"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
