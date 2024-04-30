@@ -80,7 +80,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
             backgroundUploadDialog.show(this.supportFragmentManager, BackgroundUploadDialog.TAG)
 
-        //    viewModel.uploadVehicleImages(prefs.clebUserId.toInt(), imagePartsList)
+            //    viewModel.uploadVehicleImages(prefs.clebUserId.toInt(), imagePartsList)
         }
     }
 
@@ -105,7 +105,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                     i += 1
                 if (it.DaVehImgOffSideFileName != null)
                     i += 1
-                if (it.DaVehImgDashBoardFileName != null && it.DaVehImgFrontFileName != null && it.DaVehImgRearFileName != null && it.DaVehImgNearSideFileName != null && it.DaVehImgOffSideFileName != null&&i>=5) {
+                if (it.DaVehImgDashBoardFileName != null && it.DaVehImgFrontFileName != null && it.DaVehImgRearFileName != null && it.DaVehImgNearSideFileName != null && it.DaVehImgOffSideFileName != null && i >= 5) {
                     generateInspectionID()
                     allImagesUploaded = true
                 }
@@ -305,9 +305,16 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     private fun sendImage(imageBitmap: Bitmap, requestCode: Int) {
         val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
         val requestBody = imageBitmap.toRequestBody()
-
+        val partName = when (imagePartsList.size) {
+            0 -> "uploadVehicleDashBoardImage"
+            1-> "uploadVehicleFrontImage"
+            2->"uploadVehicleNearSideImage"
+            3->"uploadVehicleRearImage"
+            4->"uploadVehicleOffSideImage"
+            else -> "Invalid"
+        }
         val imagePart =
-            MultipartBody.Part.createFormData("uploadVehicleImage", uniqueFileName, requestBody)
+            MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
 
         imagePartsList.add(imagePart)
         val x = imagePartsList.size
@@ -319,12 +326,12 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     }
 
     private fun startUpload() {
-        showToast("Image Upload Started",this)
+        showToast("Image Upload Started", this)
         viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[0], 1)
-        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[0], 2)
-        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[0], 3)
-        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[0], 4)
-        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[0], 6)
+        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[1], 2)
+        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[2], 3)
+        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[3], 4)
+        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[4], 6)
     }
 
     private fun clientUniqueID(): String {
