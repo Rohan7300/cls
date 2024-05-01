@@ -1,9 +1,7 @@
 package com.clebs.celerity.repository
 
 import android.util.Log
-import androidx.fragment.app.FragmentManager
 import com.clebs.celerity.models.CashFlowPieChartResponse
-import com.clebs.celerity.models.CashFlowPieChartResponseItem
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
 import com.clebs.celerity.models.SimpleNetworkResponse
@@ -11,7 +9,6 @@ import com.clebs.celerity.models.TicketDepartmentsResponse
 import com.clebs.celerity.models.ViewFullScheduleResponse
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
-import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
 import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
@@ -48,11 +45,9 @@ import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
-import com.clebs.celerity.models.response.GetRideAlongVehicleListsItem
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
-import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
@@ -67,12 +62,9 @@ import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.network.ApiService
-import com.clebs.celerity.utils.NoInternetDialog
-import com.google.gson.Gson
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response
-import retrofit2.http.Body
 import java.lang.IllegalArgumentException
 
 class MainRepo(private val ApiService: ApiService) {
@@ -81,7 +73,7 @@ class MainRepo(private val ApiService: ApiService) {
         return try {
             SimpleNetworkResponse.success(apiCall.invoke())
         } catch (e: Exception) {
-            Log.d("SafeException","$e")
+            Log.d("SafeException", "$e")
             SimpleNetworkResponse.failure(e)
         }
     }
@@ -268,17 +260,18 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun uploadVehicleImage(
         userID: Int,
         image: MultipartBody.Part,
-        type: Int
+        type: Int,
+        dateTime: String
     ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
         val response = when (type) {
-            0 -> ApiService.UploadFaceMaskFile(userID, image)
-            1 -> ApiService.uploadVehicleDashboardImage(userID, image)
-            2 -> ApiService.uploadVehFrontImage(userID, image)
-            3 -> ApiService.uploadVehNearSideImage(userID, image)
-            4 -> ApiService.uploadVehRearImage(userID, image)
-            5 -> ApiService.UploadVehicleOilLevelFile(userID, image)
-            6 -> ApiService.uploadVehOffSideImage(userID, image)
-            7 -> ApiService.UploadVehicleAddBlueFile(userID, image)
+            0 -> ApiService.UploadFaceMaskFile(userID, image, dateTime)
+            1 -> ApiService.uploadVehicleDashboardImage(userID, image, dateTime)
+            2 -> ApiService.uploadVehFrontImage(userID, image, dateTime)
+            3 -> ApiService.uploadVehNearSideImage(userID, image, dateTime)
+            4 -> ApiService.uploadVehRearImage(userID, image, dateTime)
+            5 -> ApiService.UploadVehicleOilLevelFile(userID, image, dateTime)
+            6 -> ApiService.uploadVehOffSideImage(userID, image, dateTime)
+            7 -> ApiService.UploadVehicleAddBlueFile(userID, image, dateTime)
             else ->
                 throw IllegalArgumentException()
         }

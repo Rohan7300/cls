@@ -49,6 +49,7 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.navigateTo
@@ -177,6 +178,7 @@ class CompleteTaskFragment : Fragment() {
             Prefs.getInstance(App.instance).clebUserId.toInt(),
             currentDate
         )
+        (activity as HomeActivity).GetDriversBasicInformation()
         viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner) {
 
             if (it != null) {
@@ -197,6 +199,7 @@ class CompleteTaskFragment : Fragment() {
         showDialog()
         viewModel.GetDailyWorkInfoById(userId)
         viewModel.GetDriverRouteInfoByDate(userId)
+
         viewModel.GetRideAlongDriverInfoByDate(userId)
         if (mbinding.startinspection.isVisible) {
             val anim = ValueAnimator.ofFloat(1f, 1.2f)
@@ -287,8 +290,8 @@ class CompleteTaskFragment : Fragment() {
             pictureDialogBase64(mbinding.ivFaceMask, requestCode)
         }
         mbinding.startinspection.setOnClickListener {
-           // startInspection()
-            val intent = Intent(requireContext(),AddInspection::class.java)
+            // startInspection()
+            val intent = Intent(requireContext(), AddInspection::class.java)
             startActivity(intent)
         }
         mbinding.ivOilLevel.setOnClickListener {
@@ -640,15 +643,14 @@ class CompleteTaskFragment : Fragment() {
                         if (showImageUploadLayout) {
                             imagesUploaded = false
                             setVisibiltyLevel()
-                            //   mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
-//                            mbinding.taskDetails.visibility = View.VISIBLE
                         } else {
                             imagesUploaded = true
                             setVisibiltyLevel()
                             isAllImageUploaded = true
                         }
-
-                        if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
+                        if (it.DaVehicleAddBlueImage == null && it.DaVehImgOilLevelFileName == null && it.DaVehImgFaceMaskFileName == null) {
+                            imageUploadLevel = 0
+                        } else if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
                             // All images uploaded
                             imageUploadLevel = 3
                             mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
@@ -671,21 +673,6 @@ class CompleteTaskFragment : Fragment() {
                         }
 
                         setProgress()
-
-                        /*else if (it.DaVehImgFaceMaskFileName != null) {
-                            imageUploadLevel = 1
-                            setProgress()
-                            mbinding.ivFaceMask.setImageResource(
-                                R.drawable.ic_yes
-                            )
-                        } else if (it.DaVehicleAddBlueImage != null) {
-                            imageUploadLevel = 2
-                            setProgress()
-
-                            mbinding.ivAddBlueImg.setImageResource(
-                                R.drawable.ic_yes
-                            )
-                        }*/
 
                         mbinding.run {
                             mbinding.tvNext.isEnabled =
@@ -1038,7 +1025,7 @@ class CompleteTaskFragment : Fragment() {
         }
 
         showDialog()
-        viewModel.uploadVehicleImage(userId, imagePart, requestCode)
+        viewModel.uploadVehicleImage(userId, imagePart, requestCode, getCurrentDateTime())
 
     }
 
@@ -1214,7 +1201,7 @@ class CompleteTaskFragment : Fragment() {
             -1 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.GONE
-
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
                 /*mbinding.clFaceMask.visibility = View.GONE
                 mbinding.clOilLevel.visibility = View.GONE*/
                 /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)

@@ -1,7 +1,6 @@
 package com.clebs.celerity.network
 
 import com.clebs.celerity.models.CashFlowPieChartResponse
-import com.clebs.celerity.models.CashFlowPieChartResponseItem
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
 import com.clebs.celerity.models.TicketDepartmentsResponse
@@ -50,13 +49,11 @@ import com.clebs.celerity.models.response.GetRideAlongDriverFeedbackQuestionResp
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
-import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfo
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
-import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
@@ -71,9 +68,7 @@ import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
-import org.w3c.dom.Comment
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -167,56 +162,64 @@ interface ApiService {
     @POST("/api/Vehicle/UploadFaceMaskFile")
     suspend fun UploadFaceMaskFile(
         @Query("userId") userId: Int,
-        @Part image: MultipartBody.Part
+        @Part image: MultipartBody.Part,
+        @Query("date") dateTime: String
     ): Response<SimpleStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleDashBoardPictureFile")
     suspend fun uploadVehicleDashboardImage(
         @Query("userId") userId: Int,
-        @Part image: MultipartBody.Part
+        @Part image: MultipartBody.Part,
+        @Query("date") dateTime: String
     ): Response<SimpleStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleFrontPictureFile")
     suspend fun uploadVehFrontImage(
         @Query("userId") userId: Int,
-        @Part image: MultipartBody.Part
+        @Part image: MultipartBody.Part,
+        @Query("date") dateTime: String
     ): Response<SimpleStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleNearSidePictureFile")
     suspend fun uploadVehNearSideImage(
         @Query("userId") userId: Int,
-        @Part image: MultipartBody.Part
+        @Part image: MultipartBody.Part,
+        @Query("date") dateTime: String
     ): Response<SimpleStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleRearPictureFile")
     suspend fun uploadVehRearImage(
         @Query("userId") userId: Int,
-        @Part image: MultipartBody.Part
+        @Part image: MultipartBody.Part,
+        @Query("date") dateTime: String
     ): Response<SimpleStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleOilLevelFile")
     suspend fun UploadVehicleOilLevelFile(
         @Query("userId") userId: Int,
-        @Part image: MultipartBody.Part
+        @Part image: MultipartBody.Part,
+        @Query("date") dateTime: String
     ): Response<SimpleStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleOffSidePictureFile")
     suspend fun uploadVehOffSideImage(
         @Query("userId") userId: Int,
-        @Part image: MultipartBody.Part
+        @Part image: MultipartBody.Part,
+        @Query("date") dateTime: String
     ): Response<SimpleStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleAddBlueFile")
     suspend fun UploadVehicleAddBlueFile(
         @Query("userId") userId: Int,
-        @Part image: MultipartBody.Part
+        @Part image: MultipartBody.Part,
+        @Query("date") dateTime: String
     ): Response<SimpleStatusMsgResponse>
 
     @GET("/api/DailyWorks/GetDailyWorkInfobyId/{userId}")

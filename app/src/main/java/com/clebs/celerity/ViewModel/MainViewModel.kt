@@ -374,7 +374,7 @@ class MainViewModel(
 
     fun GetVehicleImageUploadInfo(userID: Int) {
         viewModelScope.launch {
-            var response = repo.GetVehicleImageUploadInfo(userID)
+            val response = repo.GetVehicleImageUploadInfo(userID)
             if (response.failed)
                 vehicleImageUploadInfoLiveData.postValue(null)
             if (!response.isSuccessful)
@@ -384,9 +384,9 @@ class MainViewModel(
         }
     }
 
-    fun uploadVehicleImage(userID: Int, image: MultipartBody.Part, type: Int) {
+    fun uploadVehicleImage(userID: Int, image: MultipartBody.Part, type: Int,dateTime:String) {
         viewModelScope.launch {
-            var response = repo.uploadVehicleImage(userID, image, type)
+            var response = repo.uploadVehicleImage(userID, image, type,dateTime)
             if (response.failed)
                 uploadVehicleImageLiveData.postValue(null)
             if (!response.isSuccessful)

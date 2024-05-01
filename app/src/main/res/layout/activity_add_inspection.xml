@@ -84,14 +84,7 @@
                         android:text="Upload"
                         android:textColor="@color/orange"
                         android:textSize="15sp" />
-<ProgressBar
-    android:layout_width="30dp"
-    android:layout_marginStart="10dp"
-    android:layout_height="30dp"
-    android:visibility="gone"
-    android:id="@+id/uploadProgress"
-    />
-                    <ImageView
+        <ImageView
                         android:id="@+id/ivUploadImage"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -151,7 +144,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="(1/5)"
+                    android:text="(0/5)"
                     android:textColor="@color/orange" />
             </LinearLayout>
         </LinearLayout>
@@ -205,7 +198,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/check_new" />
+                    android:src="@drawable/fileins" />
             </LinearLayout>
 
             <LinearLayout
@@ -241,7 +234,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/check_new" />
+                    android:src="@drawable/fileins" />
             </LinearLayout>
 
             <LinearLayout
@@ -277,7 +270,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/check_new" />
+                    android:src="@drawable/fileins" />
             </LinearLayout>
 
             <LinearLayout
@@ -313,7 +306,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/check_new" />
+                    android:src="@drawable/fileins" />
             </LinearLayout>
 
             <LinearLayout
@@ -349,7 +342,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/check_new" />
+                    android:src="@drawable/fileins" />
             </LinearLayout>
         </LinearLayout>
 

@@ -34,6 +34,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import com.clebs.celerity.R
 import com.clebs.celerity.database.ImageEntity
+import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.fragments.DailyWorkFragment
 import com.google.android.material.timepicker.MaterialTimePicker
 import java.io.*
@@ -345,10 +346,10 @@ fun convertBitmapToBase64(bitmap: Bitmap): String {
 
 fun dbLog(it: ImageEntity) {
 
-val TAG = "DB_TEST"
-     Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
-     Log.d(TAG, it.toString())
-     Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
+    /*val TAG = "DB_TEST"
+         Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
+         Log.d(TAG, it.toString())
+         Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")*/
 
 }
 
@@ -486,6 +487,7 @@ fun showTimePickerDialog(context: Context, tv: TextView) {
     //timePickerDialog.getButton(TimePickerDialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.orange))
     timePickerDialog.show()
 }
+
 //fun hideKeyboardInputInTimePicker(orientation: Int, timePickerDialog: TimePickerDialog) {
 //    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //        try {
@@ -591,7 +593,6 @@ fun showDatePickerDialog(context: Context, tv1: TextView, tv2: TextView, tvNext:
 }
 
 
-
 fun isEndDateGreaterThanStartDate(startDate: String, endDate: String): Boolean {
     val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     try {
@@ -631,7 +632,6 @@ fun showScanErrorDialog(
 }
 
 
-
 fun getCurrentDateTime(): String {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     dateFormat.timeZone = TimeZone.getTimeZone("UTC")
@@ -651,18 +651,22 @@ fun convertDateFormat(inputDate: String, inputFormat: String, outputFormat: Stri
     }
 }
 
-fun getVRegNo(prefs: Prefs):String{
-    return if(prefs.scannedVmRegNo.isEmpty()){
+fun getVRegNo(prefs: Prefs): String {
+    return if (prefs.scannedVmRegNo.isEmpty()) {
         prefs.vmRegNo
-    }else
+    } else
         prefs.scannedVmRegNo
 }
 
-fun getLoc(prefs: Prefs):String{
+fun getLoc(prefs: Prefs): String {
     return if (prefs.currLocationName.isNotEmpty())
         prefs.currLocationName ?: ""
     else
         prefs.workLocationName ?: ""
+}
+
+fun checkIfInspectionFailed(osData: OfflineSyncEntity): Boolean {
+    return osData.isdashboardUploadedFailed || osData.isfrontImageFailed || osData.isnearSideFailed || osData.isoffSideFailed || osData.isrearSideFailed
 }
 
 

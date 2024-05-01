@@ -31,18 +31,26 @@ import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.ImageViewModel
 import com.clebs.celerity.ViewModel.ImageViewModelProviderFactory
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.ViewModel.OSyncVMProvider
+import com.clebs.celerity.ViewModel.OSyncViewModel
 import com.clebs.celerity.database.ImageDatabase
 import com.clebs.celerity.database.ImagesRepo
+import com.clebs.celerity.database.OSyncRepo
+import com.clebs.celerity.database.OfflineSyncDB
 import com.clebs.celerity.databinding.ActivityHomeBinding
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.utils.BackgroundUploadDialog
+import com.clebs.celerity.utils.InspectionIncompleteDialog
+import com.clebs.celerity.utils.InspectionIncompleteListener
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.utils.NoInternetDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
+import com.clebs.celerity.utils.checkIfInspectionFailed
 import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.getVRegNo
@@ -55,10 +63,11 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 
 class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener,
-    SaveChangesCallback {
+    SaveChangesCallback, InspectionIncompleteListener {
     private var saveChangesCallback: SaveChangesCallback? = null
     private lateinit var bottomNavigationView: BottomNavigationView
     lateinit var imageViewModel: ImageViewModel
@@ -68,9 +77,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private lateinit var navGraph: NavGraph
     private var completeTaskScreen: Boolean = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
-        lateinit var fragmentManager: FragmentManager
+    lateinit var fragmentManager: FragmentManager
     lateinit var internetDialog: NoInternetDialog
-    var isNetworkActive:Boolean = true
+    var isNetworkActive: Boolean = true
     private var sdkkey = ""
     var clebuserID: Int = 0
     var firstName = ""
@@ -126,7 +135,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     ActivityHomeBinding.title.text = "Notifications"
                     navController.navigate(R.id.notifficationsFragment)
                     return
-                }else if(destinationFragment =="CompleteTask"){
+                } else if (destinationFragment == "CompleteTask") {
                     navController.navigate(R.id.completeTaskFragment)
                 }
             }
@@ -175,9 +184,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             } else {
                 Log.d("hdhsdshdsdjshhsds", "else $message")
                 navController.navigate(R.id.completeTaskFragment)
-                showToast("inspection Failed", this)
-                prefs.saveBoolean("Inspection", false)
-                prefs.updateInspectionStatus(false)
+                // showToast("inspection Failed", this)
+                /*            prefs.saveBoolean("Inspection", false)
+                            prefs.updateInspectionStatus(false)*/
                 //inspectionstarted = false
             }
             // Check if identifier is valid
@@ -203,13 +212,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         fragmentManager = this.supportFragmentManager
         internetDialog = NoInternetDialog()
         val networkManager = NetworkManager(this)
-        networkManager.observe(this){
-            if(it){
+        networkManager.observe(this) {
+            if (it) {
                 isNetworkActive = true
-                internetDialog.hideDialog()
-            }else{
+              //  internetDialog.hideDialog()
+            } else {
                 isNetworkActive = false
-                internetDialog.showDialog(fragmentManager)
+            //    internetDialog.showDialog(fragmentManager)
             }
         }
 
@@ -219,6 +228,24 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             window.decorView.importantForAutofill =
                 View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS;
+        }
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val todayDate = dateFormat.format(Date())
+
+        val osRepo = OSyncRepo(OfflineSyncDB.invoke(this))
+        var oSyncViewModel = ViewModelProvider(
+            this,
+            OSyncVMProvider(osRepo, prefs.clebUserId.toInt(), todayDate)
+        )[OSyncViewModel::class.java]
+
+        val osData = oSyncViewModel.osData.value!!
+        val inspectionFailedDialog = InspectionIncompleteDialog()
+        inspectionFailedDialog.setListener(this)
+        if (osData.isIni) {
+            if (checkIfInspectionFailed(osData)) {
+                inspectionFailedDialog.showDialog(this.supportFragmentManager)
+            }
         }
 
         cqSDKInitializer()
@@ -332,8 +359,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                     R.id.home -> {
                         ActivityHomeBinding.title.text = ""
-                        ActivityHomeBinding.logout.visibility=View.GONE
-                        ActivityHomeBinding.imgNotification.visibility=View.VISIBLE
+                        ActivityHomeBinding.logout.visibility = View.GONE
+                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
                         navController.navigate(R.id.homedemoFragment)
                         true
                     }
@@ -342,9 +369,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         /*     navController.navigate(R.id.homeFragment)
                              navController.currentDestination!!.id = R.id.homeFragment
          */
-                        ActivityHomeBinding.logout.visibility=View.GONE
+                        ActivityHomeBinding.logout.visibility = View.GONE
                         ActivityHomeBinding.title.text = ""
-                        ActivityHomeBinding.imgNotification.visibility=View.VISIBLE
+                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
                         viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
                         showDialog()
                         true
@@ -352,16 +379,16 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                     R.id.invoices -> {
                         ActivityHomeBinding.title.text = "Invoices"
-                        ActivityHomeBinding.logout.visibility=View.GONE
-                        ActivityHomeBinding.imgNotification.visibility=View.VISIBLE
+                        ActivityHomeBinding.logout.visibility = View.GONE
+                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
                         navController.navigate(R.id.invoicesFragment)
                         true
                     }
 
                     R.id.tickets -> {
-                        ActivityHomeBinding.logout.visibility=View.GONE
+                        ActivityHomeBinding.logout.visibility = View.GONE
                         ActivityHomeBinding.title.text = "User Tickets"
-                        ActivityHomeBinding.imgNotification.visibility=View.VISIBLE
+                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
                         navController.navigate(R.id.userTicketsFragment)
 
                         true
@@ -386,9 +413,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 ActivityHomeBinding.title.text = "Notifications"
                 navController.navigate(R.id.notifficationsFragment)
             }
-        }else if(destinationFragment =="CompleteTask"){
-        navController.navigate(R.id.completeTaskFragment)
-    }
+        } else if (destinationFragment == "CompleteTask") {
+            navController.navigate(R.id.completeTaskFragment)
+        }
 
     }
 
@@ -508,9 +535,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         deleteDialog.setCanceledOnTouchOutside(false)
         deleteDialog.setCancelable(false)
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        try{
+        try {
             deleteDialog.show()
-        }catch (_:Exception){
+        } catch (_: Exception) {
 
         }
 
@@ -602,7 +629,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         prefs.workLocationName = it.workinglocation
                     prefs.lmid = it.lmID
                     lmId = it.lmID
-                    if(it.vmID!=null && prefs.vmId==0)
+                    if (it.vmID != null && prefs.vmId == 0)
                         prefs.vmId = it.vmID
                 } catch (e: Exception) {
                     Log.d("sds", e.toString())
@@ -697,10 +724,15 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (it != null) {
 
                 Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
-                if ( !Prefs.getInstance(App.instance).VmID.isNotEmpty()){
-                    Prefs.getInstance(App.instance).VmID=it.vmId.toString()
+                if (!Prefs.getInstance(App.instance).VmID.isNotEmpty()) {
+                    Prefs.getInstance(App.instance).VmID = it.vmId.toString()
                 }
             }
         }
+    }
+
+    override fun onButtonClick() {
+        val intent = Intent(this, AddInspection::class.java)
+        startActivity(intent)
     }
 }
