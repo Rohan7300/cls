@@ -84,8 +84,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
 //    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("id.zelory:compressor:3.0.1")
-implementation("com.github.AliAzaz:Edittext-Library:1.0.2")
-implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
+    implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
@@ -93,7 +92,7 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.github.delight-im:Android-AdvancedWebView:v3.2.1")
     implementation("androidx.multidex:multidex:2.0.1")
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.firebase:firebase-messaging:23.4.1")
     implementation("com.google.firebase:firebase-crashlytics:18.6.4")
     //implementation("com.google.firebase:firebase-messaging:23.4.1")
@@ -109,7 +108,7 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
 
     val camerax_version = "1.0.0-rc01"
     implementation("androidx.camera:camera-camera2:$camerax_version")
-    implementation( "androidx.camera:camera-lifecycle:$camerax_version")
+    implementation("androidx.camera:camera-lifecycle:$camerax_version")
     implementation("androidx.camera:camera-view:1.0.0-alpha20")
     testImplementation("junit:junit:4.13.2")
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
@@ -126,10 +125,9 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("com.google.code.gson:gson:2.10.1")
 
 
-
     // CQ SDK
     /*implementation ("com.github.clearquotetech:cq-android-sdk:2.0.9-test")*/
-    implementation ("com.github.clearquotetech:cq-android-sdk:2.1.3-test")
+    implementation("com.github.clearquotetech:cq-android-sdk:2.1.3-test")
 
 
     //viewModel
@@ -137,7 +135,7 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     //implementation("com.github.quickpermissions:quickpermissions-kotlin:0.4.0")
-    implementation ("com.github.quickpermissions:quickpermissions-kotlin:0.4.0")
+    implementation("com.github.quickpermissions:quickpermissions-kotlin:0.4.0")
     implementation("ru.superjob:kotlin-permissions:1.0.3")
     implementation("org.jetbrains.anko:anko-commons:0.10.4")
 
@@ -149,12 +147,11 @@ implementation("com.elconfidencial.bubbleshowcase:bubbleshowcase:1.3.1")
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
 //    implementation("org.mozilla.geckoview:geckoview-nightly:100.0.20220308100756")
-    implementation ("com.github.clearquotetech:cq-android-sdk:2.0.4-test")
+    implementation("com.github.clearquotetech:cq-android-sdk:2.0.4-test")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.andkulikov:transitionseverywhere:1.8.1")
 
     kapt("androidx.room:room-compiler:2.6.1")
-
 
 
 }

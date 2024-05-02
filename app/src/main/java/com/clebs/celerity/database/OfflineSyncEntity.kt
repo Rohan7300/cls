@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey
     tableName = "OfflineSync"
 )
 data class OfflineSyncEntity(
+
     @PrimaryKey(autoGenerate = true)
     var offId: Int = 0,
 

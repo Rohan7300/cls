@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.NotificationAdapter
@@ -13,7 +14,7 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
 
 
-class NotifficationsFragment : Fragment() {
+class NotificationsFragment : Fragment() {
 
     lateinit var binding: FragmentNotifficationsBinding
     lateinit var viewModel: MainViewModel
@@ -34,7 +35,7 @@ class NotifficationsFragment : Fragment() {
         homeActivity = (activity as HomeActivity)
         viewModel = homeActivity.viewModel
 
-        notificationAdapter = NotificationAdapter()
+        notificationAdapter = NotificationAdapter(findNavController())
         binding.rvNotifications.adapter = notificationAdapter
         binding.rvNotifications.layoutManager = LinearLayoutManager(requireContext())
         prefs = Prefs.getInstance(requireContext())

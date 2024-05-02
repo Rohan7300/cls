@@ -231,4 +231,8 @@
         android:id="@+id/CLSThirdPartyFragment"
         android:name="com.clebs.celerity.fragments.CLSThirdPartyFragment"
         android:label="CLSThirdPartyFragment" />
+    <fragment
+        android:id="@+id/deductionFragment"
+        android:name="com.clebs.celerity.fragments.DeductionFragment"
+        android:label="DeductionFragment" />
 </navigation>

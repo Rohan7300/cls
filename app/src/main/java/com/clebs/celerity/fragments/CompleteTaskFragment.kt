@@ -168,7 +168,7 @@ class CompleteTaskFragment : Fragment() {
         fragmentManager = (activity as HomeActivity).fragmentManager
         cqSDKInitializer = CQSDKInitializer(requireContext())
         cqSDKInitializer.triggerOfflineSync()
-        setProgress()
+        //setProgress()
 
         //inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
         inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
@@ -648,9 +648,12 @@ class CompleteTaskFragment : Fragment() {
                             setVisibiltyLevel()
                             isAllImageUploaded = true
                         }
-                        if (it.DaVehicleAddBlueImage == null && it.DaVehImgOilLevelFileName == null && it.DaVehImgFaceMaskFileName == null) {
+                        if (/*it.DaVehicleAddBlueImage == null && it.DaVehImgOilLevelFileName == null &&*/ it.DaVehImgFaceMaskFileName == null) {
                             imageUploadLevel = 0
-                        } else if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
+                        }else{
+
+                        }
+                        /*else if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
                             // All images uploaded
                             imageUploadLevel = 3
                             mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
@@ -670,9 +673,9 @@ class CompleteTaskFragment : Fragment() {
                             mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
                         } else {
                             imageUploadLevel = 0
-                        }
+                        }*/
 
-                        setProgress()
+                        //setProgress()
 
                         mbinding.run {
                             mbinding.tvNext.isEnabled =
@@ -1334,8 +1337,6 @@ class CompleteTaskFragment : Fragment() {
         when (imageUploadLevel) {
             0 -> {
                 progressBar.setProgress(13, true)
-                mbinding.clFaceMask.visibility = View.VISIBLE
-
             }
 
             1 -> {

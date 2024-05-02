@@ -1,4 +1,5 @@
 package com.clebs.celerity.ViewModel
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,9 +14,14 @@ class OSyncViewModel(val oSyncRepo: OSyncRepo,var clebID:Int,var dawDate:String)
     init {
         viewModelScope.launch (Dispatchers.IO){
             val osEntity = oSyncRepo.getData(clebID,dawDate)
-            osEntity.let {
-                osData.postValue(it)
+            if(osEntity!=null){
+                osData.postValue(osEntity)
+            }else{
+                Log.d("OSynceViewModel","Init Fetch Issue")
             }
+       /*     osEntity.let {
+                osData.postValue(it)
+            }*/
         }
     }
 
@@ -23,9 +29,9 @@ class OSyncViewModel(val oSyncRepo: OSyncRepo,var clebID:Int,var dawDate:String)
         viewModelScope.launch (Dispatchers.IO){
             oSyncRepo.insertData(data)
             val osEntity = oSyncRepo.getData(clebID,dawDate)
-            osEntity.let {
+/*            osEntity.let {
                 osData.postValue(it)
-            }
+            }*/
         }
     }
 }

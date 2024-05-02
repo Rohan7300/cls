@@ -2,16 +2,18 @@ package com.clebs.celerity.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.clebs.celerity.R
 import com.clebs.celerity.databinding.NotificationAdapterDialogBinding
 import com.clebs.celerity.models.response.NotificationResponseItem
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class NotificationAdapter() :
+class NotificationAdapter(var navController: NavController) :
     RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
 
     private val diffUtil = object : DiffUtil.ItemCallback<NotificationResponseItem>() {
@@ -36,35 +38,40 @@ class NotificationAdapter() :
     }
 
     inner class NotificationViewHolder(val binding: NotificationAdapterDialogBinding) :
-        RecyclerView.ViewHolder(binding.root){
-            fun bind(item:NotificationResponseItem){
-                binding.title.text = item.NotificationTitle
-                binding.descripotionX.text  = item.NotificationBody
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: NotificationResponseItem) {
+            binding.title.text = item.NotificationTitle
+            binding.descripotionX.text = item.NotificationBody
 
-                var formattedDate = item.NotificationSentOn
-                var formattedTime = "00:00"
-                try {
-                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-                    val truncatedString =
-                        item.NotificationSentOn.substring(0, 19) // Truncate to remove milliseconds
-                    val dateTime = LocalDateTime.parse(truncatedString, formatter)
+            var formattedDate = item.NotificationSentOn
+            var formattedTime = "00:00"
+            try {
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+                val truncatedString =
+                    item.NotificationSentOn.substring(0, 19)
+                val dateTime = LocalDateTime.parse(truncatedString, formatter)
 
-                    val outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH)
-                    formattedDate = dateTime.format(outputFormatter).toUpperCase()
+                val outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH)
+                formattedDate = dateTime.format(outputFormatter).toUpperCase()
 
-                    val outputTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-                    formattedTime = dateTime.format(outputTimeFormatter)
-                    binding.time.text = "$formattedTime  $formattedDate"
-                }catch (_:Exception){
-                    binding.time.text = item.NotificationSentOn
-                }
-
-                binding.overallNotification.setOnClickListener {
+                val outputTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+                formattedTime = dateTime.format(outputTimeFormatter)
+                binding.time.text = "$formattedTime  $formattedDate"
+                binding.notficationArrow.setOnClickListener {
 
                 }
-
+            } catch (_: Exception) {
+                binding.time.text = item.NotificationSentOn
             }
+
+            binding.notficationArrow.setOnClickListener {
+                if (item.ActionToPerform.equals("Deductions")) {
+                    navController.navigate(R.id.deductionFragment)
+                }
+            }
+
         }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationViewHolder {
         val binding = NotificationAdapterDialogBinding.inflate(

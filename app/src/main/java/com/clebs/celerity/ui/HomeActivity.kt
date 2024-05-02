@@ -215,10 +215,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         networkManager.observe(this) {
             if (it) {
                 isNetworkActive = true
-              //  internetDialog.hideDialog()
+                //  internetDialog.hideDialog()
             } else {
                 isNetworkActive = false
-            //    internetDialog.showDialog(fragmentManager)
+                //    internetDialog.showDialog(fragmentManager)
             }
         }
 
@@ -239,14 +239,17 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             OSyncVMProvider(osRepo, prefs.clebUserId.toInt(), todayDate)
         )[OSyncViewModel::class.java]
 
-        val osData = oSyncViewModel.osData.value!!
         val inspectionFailedDialog = InspectionIncompleteDialog()
         inspectionFailedDialog.setListener(this)
-        if (osData.isIni) {
-            if (checkIfInspectionFailed(osData)) {
-                inspectionFailedDialog.showDialog(this.supportFragmentManager)
+
+        oSyncViewModel.osData.observe(this) {
+            if (it.isIni) {
+                if (checkIfInspectionFailed(it)) {
+                    inspectionFailedDialog.showDialog(this.supportFragmentManager)
+                }
             }
         }
+
 
         cqSDKInitializer()
         clebuserID = prefs.clebUserId.toInt()
