@@ -32,6 +32,11 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.clebs.celerity.R
 import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.database.OfflineSyncEntity
@@ -666,7 +671,69 @@ fun getLoc(prefs: Prefs): String {
 }
 
 fun checkIfInspectionFailed(osData: OfflineSyncEntity): Boolean {
-    return osData.isdashboardUploadedFailed || osData.isfrontImageFailed || osData.isnearSideFailed || osData.isoffSideFailed || osData.isrearSideFailed
+    return osData.isdashboardUploadedFailed || osData.isfrontImageFailed || osData.isnearSideFailed || osData.isoffSideFailed || osData.isrearSideFailed || osData.isoillevelImageFailed || osData.isaddblueImageFailed
+}
+
+fun logOSEntity(base: String, osData: OfflineSyncEntity) {
+    Log.d("$base", "OS DATA LOG + --------------------")
+    Log.d("OSData DashFailureStat", osData.isdashboardUploadedFailed.toString())
+    Log.d("OSData FrontImageFailed", osData.isfrontImageFailed.toString())
+    Log.d("OSData NearSideFailed", osData.isnearSideFailed.toString())
+    Log.d("OSData RearSideFailed", osData.isrearSideFailed.toString())
+    Log.d("OSData OffSideFailed", osData.isoffSideFailed.toString())
+    Log.d("OSData AddblueFailed", osData.isaddblueImageFailed.toString())
+    Log.d("OSData OilFailed", osData.isoillevelImageFailed.toString())
+
+    osData.dashboardImage?.take(10)
+        ?.let { it1 -> Log.d("OSData DashboardImageFirst10", it1) }
+        ?: Log.d("OSData DashboardImage", "null")
+
+    osData.frontImage?.take(10)
+        ?.let { it1 -> Log.d("OSData frontImageFirst10", it1) }
+        ?: Log.d("OSData frontImage", "null")
+
+    osData.rearSideImage?.take(10)
+        ?.let { it1 -> Log.d("OSData rearSideImageFirst10", it1) }
+        ?: Log.d("OSData rearSideImage", "null")
+
+    osData.nearSideImage?.take(10)
+        ?.let { it1 -> Log.d("OSData nearSideImageFirst10", it1) }
+        ?: Log.d("OSData nearSideImage", "null")
+
+    osData.offSideImage?.take(10)
+        ?.let { it1 -> Log.d("OSData offSideImageFirst10", it1) }
+        ?: Log.d("OSData offSideImage", "null")
+
+    osData.addblueImage?.take(10)
+        ?.let { it1 -> Log.d("OSData addblueImageFirst10", it1) }
+        ?: Log.d("OSData addblueImage", "null")
+
+    osData.oillevelImage?.take(10)
+        ?.let { it1 -> Log.d("OSData oillevelImageFirst10", it1 + "\n") }
+        ?: Log.d("OSData oillevelImage", "null")
+
+    Log.d("$base", "OS DATA LOG + --------------------")
+}
+fun startUploadWithWorkManager(uploadType:Int,prefs: Prefs,context: Context) {
+
+
+    val userId = prefs.clebUserId.toInt()
+
+    val inputData = Data.Builder()
+        .putInt("clebUserId", userId)
+        .putInt("uploadtype", uploadType)
+        .build()
+
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .build()
+
+    val uploadWorkRequest = OneTimeWorkRequestBuilder<ImageUploadWorker>()
+        .setInputData(inputData)
+        .setConstraints(constraints)
+        .build()
+
+    WorkManager.getInstance(context).enqueue(uploadWorkRequest)
 }
 
 

@@ -144,7 +144,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="(0/5)"
+                    android:text="(0/7)"
                     android:textColor="@color/orange" />
             </LinearLayout>
         </LinearLayout>
@@ -339,6 +339,79 @@
 
                 <ImageView
                     android:id="@+id/offsideStatusIV"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:src="@drawable/fileins" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:gravity="center"
+                android:id="@+id/addbluell"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="6. "
+                    android:textColor="@color/text_color" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:src="@drawable/adbluelevel" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins"
+                    android:text="Add Blue Level"
+                    android:textColor="@color/text_color" />
+
+                <ImageView
+                    android:id="@+id/addBlueIV"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:src="@drawable/fileins" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:id="@+id/oilLevelll"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="7. "
+                    android:textColor="@color/text_color" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:src="@drawable/coolantleaks" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins"
+                    android:text="Oil Level"
+                    android:textColor="@color/text_color" />
+
+                <ImageView
+                    android:id="@+id/oilLevelIV"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginHorizontal="10dp"

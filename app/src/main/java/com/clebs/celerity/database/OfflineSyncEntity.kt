@@ -54,4 +54,23 @@ data class OfflineSyncEntity(
 
     @ColumnInfo("isnearSideFailed")
     var isnearSideFailed: Boolean = false,
+
+    @ColumnInfo("addblueImage")
+    var addblueImage: String? = null,
+
+    @ColumnInfo("isaddblueImageFailed")
+    var isaddblueImageFailed: Boolean = false,
+
+    @ColumnInfo("oillevelImage")
+    var oillevelImage: String? = null,
+
+    @ColumnInfo("isoillevelImageFailed")
+    var isoillevelImageFailed: Boolean = false,
+
+    @ColumnInfo("facemaskImage")
+    var faceMaskImage: String? = null,
+
+    @ColumnInfo("isfaceMaskFailed")
+    var isfaceMaskImageFailed: Boolean = false,
+
 )

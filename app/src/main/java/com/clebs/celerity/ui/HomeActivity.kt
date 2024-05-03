@@ -37,6 +37,7 @@ import com.clebs.celerity.database.ImageDatabase
 import com.clebs.celerity.database.ImagesRepo
 import com.clebs.celerity.database.OSyncRepo
 import com.clebs.celerity.database.OfflineSyncDB
+import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.ActivityHomeBinding
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.network.ApiService
@@ -54,6 +55,7 @@ import com.clebs.celerity.utils.checkIfInspectionFailed
 import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.getVRegNo
+import com.clebs.celerity.utils.logOSEntity
 import com.clebs.celerity.utils.showToast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
@@ -91,12 +93,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var ninetydaysBoolean: Boolean? = null
     var lastName = ""
     var isLeadDriver = false
+    lateinit var oSyncViewModel:OSyncViewModel
+    lateinit var osData:OfflineSyncEntity
     lateinit var prefs: Prefs
     var date = ""
     lateinit var loadingDialog: LoadingDialog
 
-    var isApiResponseTrue = false
-    var trueCount = 0
+    private var isApiResponseTrue = false
+    private var trueCount = 0
     private var isChangesSaved = false
 
     companion object {
@@ -234,7 +238,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val todayDate = dateFormat.format(Date())
 
         val osRepo = OSyncRepo(OfflineSyncDB.invoke(this))
-        var oSyncViewModel = ViewModelProvider(
+        oSyncViewModel = ViewModelProvider(
             this,
             OSyncVMProvider(osRepo, prefs.clebUserId.toInt(), todayDate)
         )[OSyncViewModel::class.java]
@@ -243,6 +247,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         inspectionFailedDialog.setListener(this)
 
         oSyncViewModel.osData.observe(this) {
+            logOSEntity("HomeActivity",it)
+            osData = it
             if (it.isIni) {
                 if (checkIfInspectionFailed(it)) {
                     inspectionFailedDialog.showDialog(this.supportFragmentManager)

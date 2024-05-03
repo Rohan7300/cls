@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [OfflineSyncEntity::class],
-    version = 4
+    version = 6
 )
 abstract class OfflineSyncDB : RoomDatabase() {
     abstract fun osDao(): OfflineSyncDao

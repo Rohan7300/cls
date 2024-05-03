@@ -18,17 +18,32 @@ class BreakTimeAdapter(
 ):RecyclerView.Adapter<BreakTimeAdapter.BreakTimeViewHolder>() {
     inner class BreakTimeViewHolder(val binding:AdapterBreaktimeBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(item: GetDriverBreakTimeInfoResponseItem){
-            val startTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).parse(item.BreakTimeStart)
-            val endTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).parse(item.BreakTimeEnd)
+/*            if(item.BreakTimeStart!=null&&item.BreakTimeStart!=null){
+                val startTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).parse(item.BreakTimeStart)
+                val endTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).parse(item.BreakTimeEnd)
 
-            // Format the parsed times to display only hours and minutes
-            val startTimeFormatted = SimpleDateFormat("HH:mm", Locale.getDefault()).format(startTime)
-            val endTimeFormatted = SimpleDateFormat("HH:mm", Locale.getDefault()).format(endTime)
+                val startTimeFormatted = SimpleDateFormat("HH:mm", Locale.getDefault()).format(startTime)
+                val endTimeFormatted = SimpleDateFormat("HH:mm", Locale.getDefault()).format(endTime)
 
-            binding.breakStartTime.text = startTimeFormatted
-            binding.breakEndTime.text = endTimeFormatted
-
-            binding.breakDelete.setOnClickListener {
+                binding.breakStartTime.text = startTimeFormatted
+                binding.breakEndTime.text = endTimeFormatted
+            }else{*/
+                if(item.BreakTimeStart!=null && item.BreakTimeStart!="null"){
+                    val startTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).parse(item.BreakTimeStart)
+                    val startTimeFormatted = SimpleDateFormat("HH:mm", Locale.getDefault()).format(startTime)
+                    binding.breakStartTime.text = startTimeFormatted
+                }else{
+                    binding.breakStartTime.text = " "
+                }
+                if(item.BreakTimeEnd!=null && item.BreakTimeEnd!="null"){
+                    val endTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).parse(item.BreakTimeEnd)
+                    val endTimeFormatted = SimpleDateFormat("HH:mm", Locale.getDefault()).format(endTime)
+                    binding.breakEndTime.text = endTimeFormatted
+                }else{
+                    binding.breakEndTime.text = " "
+                }
+            //}
+             binding.breakDelete.setOnClickListener {
                 loadingDialog()
                 viewModel.DeleteBreakTime(item.DawDriverBreakId)
 

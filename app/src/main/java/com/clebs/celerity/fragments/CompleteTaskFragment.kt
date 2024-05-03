@@ -33,9 +33,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.ViewModel.OSyncViewModel
 import com.clebs.celerity.adapters.BreakTimeAdapter
 import com.clebs.celerity.adapters.DriverRouteAdapter
 import com.clebs.celerity.adapters.RideAlongAdapter
+import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
 import com.clebs.celerity.databinding.TimePickerDialogBinding
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
@@ -49,6 +51,7 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
 import com.clebs.celerity.utils.LoadingDialog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
@@ -56,6 +59,7 @@ import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
+import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.toRequestBody
 import com.tapadoo.alerter.Alerter
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
@@ -84,6 +88,7 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var inspectionID: String
     lateinit var ivX: ImageView
     var codeX = 0
+    lateinit var osData: OfflineSyncEntity
     private var requestCode: Int = 0
     private var showImageUploadLayout: Boolean = false
     private var isAllImageUploaded: Boolean = false
@@ -103,6 +108,7 @@ class CompleteTaskFragment : Fragment() {
     var breakTimeSent = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
+    private lateinit var oSyncViewModel: OSyncViewModel
     private var imageUploadLevel = 0
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
@@ -148,12 +154,16 @@ class CompleteTaskFragment : Fragment() {
         mbinding.mainCompleteTask.animation = animFadein
 
         loadingDialog = (activity as HomeActivity).loadingDialog
+        oSyncViewModel = (activity as HomeActivity).oSyncViewModel
+        osData = (activity as HomeActivity).osData
+
         userId = Prefs.getInstance(requireContext()).clebUserId.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.addBreakIV.setOnClickListener(clickListener)
 
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
+
         mbinding.h1.setOnClickListener {
             if (mbinding.breakH2.isVisible) {
                 mbinding.breakH2.visibility = View.GONE
@@ -163,6 +173,7 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.badgeArrow.setImageResource(R.drawable.down_arrow)
             }
         }
+
         mbinding.ivFaceMask.setImageResource(io.clearquote.assessment.cq_sdk.R.drawable.camera_icon)
         Prefs.getInstance(requireContext()).clearNavigationHistory()
         fragmentManager = (activity as HomeActivity).fragmentManager
@@ -178,29 +189,20 @@ class CompleteTaskFragment : Fragment() {
             Prefs.getInstance(App.instance).clebUserId.toInt(),
             currentDate
         )
-        (activity as HomeActivity).GetDriversBasicInformation()
-        viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner) {
-
-            if (it != null) {
-
-                scannedvrn = it.vmRegNo
-                Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
-                if (!Prefs.getInstance(App.instance).VmID.isNotEmpty()) {
-                    Prefs.getInstance(App.instance).VmID = it.vmId.toString()
-                }
-            }
-        }
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.completeTaskFragment)
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).clebUserId.toInt())
-
-        observers()
         showDialog()
         viewModel.GetDriverBreakTimeInfo(userId)
         showDialog()
         viewModel.GetDailyWorkInfoById(userId)
+        showDialog()
         viewModel.GetDriverRouteInfoByDate(userId)
-
+        showDialog()
         viewModel.GetRideAlongDriverInfoByDate(userId)
+        (activity as HomeActivity).GetDriversBasicInformation()
+
+        observers()
+
         if (mbinding.startinspection.isVisible) {
             val anim = ValueAnimator.ofFloat(1f, 1.2f)
             anim.setDuration(1000)
@@ -439,8 +441,17 @@ class CompleteTaskFragment : Fragment() {
         else
             mbinding.headerTop.strikedxLoc.visibility = View.GONE
 
-        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+        viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner) {
+            if (it != null) {
+                scannedvrn = it.vmRegNo
+                Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
+                if (!Prefs.getInstance(App.instance).VmID.isNotEmpty()) {
+                    Prefs.getInstance(App.instance).VmID = it.vmId.toString()
+                }
+            }
+        }
 
+        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
                 if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
@@ -583,22 +594,28 @@ class CompleteTaskFragment : Fragment() {
                 latestBreakInfo?.let { breakInfo ->
                     val breakTimeEnd = breakInfo.BreakTimeEnd
                     val breakTimeStart = breakInfo.BreakTimeStart
-                    if (breakTimeStart.isNotEmpty() && breakTimeEnd.isNotEmpty()) {
-                        val reversedList = it.reversed()
-                        breakTimeadapter.data.clear()
-                        breakTimeadapter.data.addAll(reversedList)
-                        breakTimeadapter.notifyDataSetChanged()
-                        isBreakTimeAdded = true
-                        setVisibiltyLevel()
-                    } else {
+                    try {
+                        if (breakTimeStart.isNotEmpty() && breakTimeEnd.isNotEmpty()) {
+                            val reversedList = it.reversed()
+                            breakTimeadapter.data.clear()
+                            breakTimeadapter.data.addAll(reversedList)
+                            breakTimeadapter.notifyDataSetChanged()
+                            isBreakTimeAdded = true
+                            setVisibiltyLevel()
+                        } else {
+                            showToast("No Break time information added!!", requireContext())
+                        }
+                    } catch (_: Exception) {
                         showToast("No Break time information added!!", requireContext())
                     }
+
                 } ?: showToast("No Break time information added!!", requireContext())
             } else {
                 isBreakTimeAdded = false
                 setVisibiltyLevel()
             }
         }
+
         viewModel.liveDataDeleteBreakTime.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
@@ -625,19 +642,18 @@ class CompleteTaskFragment : Fragment() {
             hideDialog()
             println(it)
             if (it != null) {
-                if (it!!.Status == "404") {
+                if (it!!.Status == "404"||osData.faceMaskImage==null) {
                     mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
                     showImageUploadLayout = true
                     imagesUploaded = false
                     setVisibiltyLevel()
                 } else {
-                    if (it.IsVehicleImageUploaded == false) {
+                    if (it.IsVehicleImageUploaded == false && checkNull(it)) {
                         showImageUploadLayout = true
                         imagesUploaded = false
                         setVisibiltyLevel()
                         //  mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                     } else {
-
                         showImageUploadLayout = checkNull(it)
 
                         if (showImageUploadLayout) {
@@ -648,11 +664,10 @@ class CompleteTaskFragment : Fragment() {
                             setVisibiltyLevel()
                             isAllImageUploaded = true
                         }
-                        if (/*it.DaVehicleAddBlueImage == null && it.DaVehImgOilLevelFileName == null &&*/ it.DaVehImgFaceMaskFileName == null) {
+                        /*
+                                                if (*//*it.DaVehicleAddBlueImage == null && it.DaVehImgOilLevelFileName == null &&*//* it.DaVehImgFaceMaskFileName == null) {
                             imageUploadLevel = 0
-                        }else{
-
-                        }
+                        }*/
                         /*else if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
                             // All images uploaded
                             imageUploadLevel = 3
@@ -677,23 +692,23 @@ class CompleteTaskFragment : Fragment() {
 
                         //setProgress()
 
-                        mbinding.run {
-                            mbinding.tvNext.isEnabled =
-                                it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
-                            if (tvNext.isEnabled) {
-                                tvNext.setTextColor(
-                                    ContextCompat.getColor(
-                                        requireContext(), R.color.white
-                                    )
-                                )
-                            } else {
-                                tvNext.setTextColor(
-                                    ContextCompat.getColor(
-                                        requireContext(), R.color.orange
-                                    )
-                                )
-                            }
-                        }
+                        /*                        mbinding.run {
+                                                    mbinding.tvNext.isEnabled =
+                                                        it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
+                                                    if (tvNext.isEnabled) {
+                                                        tvNext.setTextColor(
+                                                            ContextCompat.getColor(
+                                                                requireContext(), R.color.white
+                                                            )
+                                                        )
+                                                    } else {
+                                                        tvNext.setTextColor(
+                                                            ContextCompat.getColor(
+                                                                requireContext(), R.color.orange
+                                                            )
+                                                        )
+                                                    }
+                                                }*/
                     }
                 }
             }
@@ -797,7 +812,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun checkNull(res: GetVehicleImageUploadInfoResponse): Boolean {
-        return res.DaVehImgFaceMaskFileName == null || res.DaVehicleAddBlueImage == null || res.DaVehImgOilLevelFileName == null
+        return res.DaVehImgFaceMaskFileName == null && osData.faceMaskImage==null /*|| res.DaVehicleAddBlueImage == null || res.DaVehImgOilLevelFileName == null*/
     }
 
     private fun chkTime(edtBreakstart: TextView, edtBreakend: TextView): Boolean {
@@ -1027,8 +1042,12 @@ class CompleteTaskFragment : Fragment() {
             else -> throw IllegalArgumentException()
         }
 
-        showDialog()
-        viewModel.uploadVehicleImage(userId, imagePart, requestCode, getCurrentDateTime())
+        //viewModel.uploadVehicleImage(userId, imagePart, requestCode, getCurrentDateTime())
+        osData.faceMaskImage = bitmapToBase64(imageBitmap)
+        oSyncViewModel.insertData(osData)
+        imagesUploaded = true
+        setVisibiltyLevel()
+        startUploadWithWorkManager(1, Prefs.getInstance(requireContext()), requireContext())
 
     }
 
@@ -1313,7 +1332,6 @@ class CompleteTaskFragment : Fragment() {
         if (isClockedIn) {
             visibilityLevel = 2
         }
-
         if (isBreakTimeAdded && isOnRoadHours) {
             visibilityLevel = 5
             visibiltyControlls()
@@ -1329,33 +1347,33 @@ class CompleteTaskFragment : Fragment() {
         visibiltyControlls()
     }
 
-    private fun setProgress() {
-        val progressBar = mbinding.progressContainer.progressBarStep1
-        mbinding.clAddBlueImg.visibility = View.GONE
-        mbinding.clFaceMask.visibility = View.GONE
-        mbinding.clOilLevel.visibility = View.GONE
-        when (imageUploadLevel) {
-            0 -> {
-                progressBar.setProgress(13, true)
-            }
+    /*    private fun setProgress() {
+            val progressBar = mbinding.progressContainer.progressBarStep1
+            mbinding.clAddBlueImg.visibility = View.GONE
+            mbinding.clFaceMask.visibility = View.GONE
+            mbinding.clOilLevel.visibility = View.GONE
+            when (imageUploadLevel) {
+                0 -> {
+                    progressBar.setProgress(13, true)
+                }
 
-            1 -> {
-                progressBar.setProgress(45, true)
-                mbinding.clAddBlueImg.visibility = View.VISIBLE
+                1 -> {
+                    progressBar.setProgress(45, true)
+                    mbinding.clAddBlueImg.visibility = View.VISIBLE
 
-            }
+                }
 
-            2 -> {
-                progressBar.setProgress(70, true)
-                mbinding.clOilLevel.visibility = View.VISIBLE
-            }
+                2 -> {
+                    progressBar.setProgress(70, true)
+                    mbinding.clOilLevel.visibility = View.VISIBLE
+                }
 
-            else -> {
-                progressBar.setProgress(100, true)
-                progressBar.setBackgroundColor(Color.GREEN)
+                else -> {
+                    progressBar.setProgress(100, true)
+                    progressBar.setBackgroundColor(Color.GREEN)
+                }
             }
-        }
-    }
+        }*/
 
     private fun checkInspection() {
         if (inspectionstarted?.equals(true) == true) {

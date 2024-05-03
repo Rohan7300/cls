@@ -23,12 +23,12 @@ import java.util.TimeZone
 import java.util.UUID
 
 class ImageUploadWorker(
-    appContext: Context,
-    workerParams: WorkerParameters
+    appContext: Context, workerParams: WorkerParameters
 ) : Worker(appContext, workerParams) {
 
     override fun doWork(): Result {
-        val userId = inputData.getInt("clebUserId", 0)
+        val clebUserId = inputData.getInt("clebUserId", 0)
+        val uploadtype = inputData.getInt("uploadtype", 0)
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         var todayDate = dateFormat.format(Date())
@@ -38,108 +38,106 @@ class ImageUploadWorker(
         var currentDateTime = getCurrentDateTime()
         GlobalScope.launch {
 
+            val data = osRepo.getData(clebUserId, todayDate)
+            logOSEntity("ImageWorker",data)
 
-            val data = osRepo.getData(userId, todayDate)
-            val changedPartsList = mutableListOf<MultipartBody.Part>()
-            val indexes = mutableListOf<Int>()
+            try {
+                when(uploadtype){
+                    0->{
+                        if (data.dashboardImage != null) {
+                            val partBody = createMultipartPart(
+                                data.dashboardImage!!, "uploadVehicleDashBoardImage"
+                            )
+                            val dashresponse =
+                                mainRepo.uploadVehicleImage(clebUserId, partBody, 1, currentDateTime)
+                            if (!dashresponse.isSuccessful) {
+                                data.isdashboardUploadedFailed = true
+                            }
+                        }
 
-            if (data.dashboardImage != null) {
-                changedPartsList.add(
-                    createMultipartPart(
-                        data.dashboardImage!!,
-                        "uploadVehicleDashBoardImage"
-                    )
-                )
-                indexes.add(1)
-            }
+                        if (data.frontImage != null) {
+                            val partBody = createMultipartPart(
+                                data.frontImage!!, "uploadVehicleFrontImage"
+                            )
+                            val frontresponse =
+                                mainRepo.uploadVehicleImage(clebUserId, partBody, 2, currentDateTime)
+                            if (!frontresponse.isSuccessful) {
+                                data.isfrontImageFailed = true
+                            }
+                        }
 
-            if (data.frontImage != null) {
-                changedPartsList.add(
-                    createMultipartPart(
-                        data.frontImage!!,
-                        "uploadVehicleFrontImage"
-                    )
-                )
-                indexes.add(2)
-            }
+                        if (data.nearSideImage != null) {
+                            val partBody = createMultipartPart(
+                                data.nearSideImage!!, "uploadVehicleNearSideImage"
+                            )
 
-            if (data.nearSideImage != null) {
-                changedPartsList.add(
-                    createMultipartPart(
-                        data.nearSideImage!!,
-                        "uploadVehicleNearSideImage"
-                    )
-                )
-                indexes.add(3)
-            }
+                            val nearResponse =
+                                mainRepo.uploadVehicleImage(clebUserId, partBody, 3, currentDateTime)
+                            if (!nearResponse.isSuccessful) {
+                                data.isnearSideFailed = true
+                            }
+                        }
 
-            if (data.rearSideImage != null) {
-                changedPartsList.add(
-                    createMultipartPart(
-                        data.rearSideImage!!,
-                        "uploadVehicleRearImage"
-                    )
-                )
-                indexes.add(4)
-            }
+                        if (data.rearSideImage != null) {
+                            val partBody = createMultipartPart(
+                                data.rearSideImage!!, "uploadVehicleRearImage"
+                            )
+                            val rearResponse =
+                                mainRepo.uploadVehicleImage(clebUserId, partBody, 4, currentDateTime)
+                            if (!rearResponse.isSuccessful) {
+                                data.isrearSideFailed = true
+                            }
+                        }
 
-            if (data.offSideImage != null) {
-                changedPartsList.add(
-                    createMultipartPart(
-                        data.offSideImage!!,
-                        "uploadVehicleOffSideImage"
-                    )
-                )
-                indexes.add(6)
-            }
+                        if (data.offSideImage != null) {
+                            val partBody = createMultipartPart(
+                                data.offSideImage!!, "uploadVehicleOffSideImage"
+                            )
 
-            if (changedPartsList.isNotEmpty()) {
-                /*changedPartsList.forEachIndexed { index, part ->
-                    mainRepo.uploadVehicleImage(userId, part, indexes[index])
-                }*/
+                            val offsideResponse =
+                                mainRepo.uploadVehicleImage(clebUserId, partBody, 6, currentDateTime)
+                            if (!offsideResponse.isSuccessful) {
+                                data.isoffSideFailed = true
+                            }
+                        }
 
-                try {
+                        if (data.addblueImage != null) {
+                            val partBody = createMultipartPart(
+                                data.addblueImage!!, "uploadVehicleAddBlueImage"
+                            )
+                            val addBlueResponse = mainRepo.uploadVehicleImage(
+                                clebUserId, partBody, 7, currentDateTime
+                            )
+                            if (!addBlueResponse.isSuccessful)
+                                data.isaddblueImageFailed = true
+                        }
 
-                    val dashresponse =
-                        mainRepo.uploadVehicleImage(userId, changedPartsList[0], 1, currentDateTime)
-                    if (!dashresponse.isSuccessful) {
-                        data.isdashboardUploadedFailed = true
-//                        return@launch
+                        if (data.oillevelImage != null) {
+                            val partBody = createMultipartPart(
+                                data.oillevelImage!!, "uploadVehicleOilLevelImage"
+                            )
+                            val oilLevelResponse = mainRepo.uploadVehicleImage(
+                                clebUserId, partBody, 5, currentDateTime
+                            )
+                            if (!oilLevelResponse.isSuccessful)
+                                data.isoillevelImageFailed = true
+                        }
                     }
-
-                    val frontresponse =
-                        mainRepo.uploadVehicleImage(userId, changedPartsList[1], 2, currentDateTime)
-                    if (!frontresponse.isSuccessful) {
-                        data.isfrontImageFailed = true
-                        // return@launch
+                    1->{
+                        if(data.faceMaskImage!=null){
+                            val partBody = createMultipartPart(
+                                data.faceMaskImage!!,"uploadFaceMaskImage"
+                            )
+                            val selfieeRes = mainRepo.uploadVehicleImage(clebUserId,partBody,0,currentDateTime)
+                            if(!selfieeRes.isSuccessful)
+                                data.isfaceMaskImageFailed = true
+                        }
                     }
-
-                    val nearResponse =
-                        mainRepo.uploadVehicleImage(userId, changedPartsList[2], 3, currentDateTime)
-                    if (!nearResponse.isSuccessful) {
-                        data.isnearSideFailed = true
-                        //return@launch
-                    }
-
-                    val rearResponse =
-                        mainRepo.uploadVehicleImage(userId, changedPartsList[3], 4, currentDateTime)
-                    if (!rearResponse.isSuccessful) {
-                        data.isrearSideFailed = true
-                        //return@launch
-                    }
-
-                    val offsideResponse =
-                        mainRepo.uploadVehicleImage(userId, changedPartsList[4], 6, currentDateTime)
-                    if (!offsideResponse.isSuccessful) {
-                        data.isoffSideFailed = true
-                        //return@launch
-                    }
-
-                } catch (e: Exception) {
-                    Log.e("ImageWorker", "ImageUploadException e.printStackTrace()")
                 }
-            }
 
+            } catch (e: Exception) {
+                Log.e("ImageWorker", "ImageUploadException e.printStackTrace()")
+            }
         }
 
         return Result.success()

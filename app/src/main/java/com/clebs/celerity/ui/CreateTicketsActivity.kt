@@ -1,10 +1,13 @@
 package com.clebs.celerity.ui
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,6 +20,7 @@ import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.Factory.MyViewModelFactory
@@ -44,15 +48,30 @@ class CreateTicketsActivity : AppCompatActivity() {
     lateinit var repo: MainRepo
     var selectedDeptID: Int = -1
     var selectedRequestTypeID: Int = -1
-    var ticketID: String? = null
+    var ticketID: String? = "0"
     var apiCount = 0
     var title: String? = null
     lateinit var pref: Prefs
     var desc: String? = null
-    var uploadWithAttachement:Boolean = false
+    var uploadWithAttachement: Boolean = false
     lateinit var loadingDialog: LoadingDialog
     private var selectedFileUri: Uri? = null
     lateinit var filePart: MultipartBody.Part
+
+    companion object {
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf(
+                Manifest.permission.CAMERA
+            ).apply {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    add(Manifest.permission.READ_MEDIA_IMAGES)
+                }
+            }.toTypedArray()
+
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -159,13 +178,13 @@ class CreateTicketsActivity : AppCompatActivity() {
             hideDialog()
             if (it != null) {
                 ticketID = it.TicketId
-                if(uploadWithAttachement){
+                if (uploadWithAttachement) {
                     viewmodel.UploadTicketAttachmentDoc(
                         pref.clebUserId.toInt(),
                         ticketId = ticketID!!.toInt(),
                         file = filePart
                     )
-                }else{
+                } else {
                     onBackPressed()
                 }
             }
@@ -245,13 +264,12 @@ class CreateTicketsActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
-                Log.d("XX", "$result")
+                Log.d("XX", "$result $ticketID")
                 data?.data?.let {
                     selectedFileUri = it
                     if (ticketID == null || selectedFileUri == null) {
                         showToast("Something went wrong!!", this)
                     } else {
-
                         val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
                         val tmpFile = createTempFile("temp", null, cacheDir).apply {
                             deleteOnExit()
@@ -285,7 +303,7 @@ class CreateTicketsActivity : AppCompatActivity() {
                 }
             } else {
                 //saveTicket()
-                showToast("Attachment not selected!!",this)
+                showToast("Attachment not selected!!", this)
                 //onBackPressed()
             }
         }
@@ -301,9 +319,11 @@ class CreateTicketsActivity : AppCompatActivity() {
         uploadDialogBinding.upload.setOnClickListener {
             uploadDialog.dismiss()
             uploadDialog.cancel()
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "*/*"
-            resultLauncher.launch(intent)
+            if (allPermissionsGranted()) {
+                upload()
+            } else {
+                requestPermissions()
+            }
         }
 
 
@@ -314,6 +334,41 @@ class CreateTicketsActivity : AppCompatActivity() {
             saveTicket()
         }
     }
+
+    fun upload() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "*/*"
+        resultLauncher.launch(intent)
+    }
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            this, it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestPermissions() {
+
+        activityResultLauncher.launch(REQUIRED_PERMISSIONS)
+
+    }
+
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        )
+        { permissions ->
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                showToast("Permission denied", this)
+            } else {
+                upload()
+            }
+        }
 
     fun Int.dpToPx(): Int {
         val scale = resources.displayMetrics.density
@@ -335,20 +390,20 @@ class CreateTicketsActivity : AppCompatActivity() {
         spinner.setOnItemClickListener { parent, view, position, id ->
             run {
                 parent?.let { nonNullParent ->
-                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
-                        selectedItem.let {
-                            when (spinner) {
-                                mbinding.selectDepartmentET -> {
-                                    selectedDeptID = ids[position]
-                                    showDialog()
-                                    viewmodel.GetTicketRequestType(selectedDeptID)
-                                }
+                    val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
+                    selectedItem.let {
+                        when (spinner) {
+                            mbinding.selectDepartmentET -> {
+                                selectedDeptID = ids[position]
+                                showDialog()
+                                viewmodel.GetTicketRequestType(selectedDeptID)
+                            }
 
-                                mbinding.spinnerRequestAT -> {
-                                    selectedRequestTypeID = ids[position]
-                                }
+                            mbinding.spinnerRequestAT -> {
+                                selectedRequestTypeID = ids[position]
                             }
                         }
+                    }
                 }
             }
         }

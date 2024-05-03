@@ -203,7 +203,7 @@
         android:label="UserTicketsFragment" />
     <fragment
         android:id="@+id/notifficationsFragment"
-        android:name="com.clebs.celerity.fragments.NotifficationsFragment"
+        android:name="com.clebs.celerity.fragments.NotificationsFragment"
         android:label="fragment_notiffications"
         tools:layout="@layout/fragment_notiffications" />
     <fragment
@@ -235,4 +235,9 @@
         android:id="@+id/deductionFragment"
         android:name="com.clebs.celerity.fragments.DeductionFragment"
         android:label="DeductionFragment" />
+    <fragment
+        android:id="@+id/advancePaymentAgreementFragment"
+        android:name="com.clebs.celerity.fragments.AdvancePaymentAgreementFragment"
+        android:label="fragment_advance_payment_agreement"
+        tools:layout="@layout/fragment_advance_payment_agreement" />
 </navigation>

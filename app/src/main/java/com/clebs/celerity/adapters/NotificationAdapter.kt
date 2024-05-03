@@ -68,6 +68,25 @@ class NotificationAdapter(var navController: NavController) :
                 if (item.ActionToPerform.equals("Deductions")) {
                     navController.navigate(R.id.deductionFragment)
                 }
+                if (item.ActionToPerform.equals("Daily Location Rota")) {
+
+                }
+                if (item.ActionToPerform.equals("Invoice Ready To Review")) {
+                    navController.navigate(R.id.CLSInvoicesFragment)
+                }
+                if (item.ActionToPerform.equals("Weekly Location Rota")) {
+
+                }
+                if (item.ActionToPerform.equals("Expired Document")) {
+
+                }
+                if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement")) {
+                    navController.navigate(R.id.advancePaymentAgreementFragment)
+                }
+                if (item.ActionToPerform.equals("Expiring Document")) {
+
+                }
+
             }
 
         }

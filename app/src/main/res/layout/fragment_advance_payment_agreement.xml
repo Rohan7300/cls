@@ -2,7 +2,7 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -176,6 +176,7 @@
             android:layout_marginTop="25dp"
             android:gravity="center_vertical"
             android:layout_weight="1"
+            android:padding="10dp"
             android:fontFamily="@font/poppins"
             android:text="Important Information -I hereby authorise CLS to make the above deduction from my pay in accordance with the above terms. I understand and agree I am responsible for the satisfying the above amounts. I understand and agree that any amount that is due and outstanding at the time of SLA termination, regardless of whether the SLA termination was voluntary or not, will be deducted from my last invoice or any other amounts that may be owed to me. This authorizes CLS to retain the entire amount of my last invoice in compliance with the law."
             android:textSize="15sp" />
