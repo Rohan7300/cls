@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.content.res.Configuration
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -25,7 +24,6 @@ import android.util.Base64OutputStream
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
-import android.view.WindowManager
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -40,8 +38,9 @@ import androidx.work.WorkManager
 import com.clebs.celerity.R
 import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.database.OfflineSyncEntity
+import com.clebs.celerity.dialogs.ErrorDialog
+import com.clebs.celerity.dialogs.ScanErrorDialog
 import com.clebs.celerity.fragments.DailyWorkFragment
-import com.google.android.material.timepicker.MaterialTimePicker
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*

@@ -19,7 +19,7 @@ import com.clebs.celerity.databinding.FragmentUserTicketsBinding
 import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.ui.CreateTicketsActivity
 import com.clebs.celerity.ui.HomeActivity
-import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertDateFormat
 import com.clebs.celerity.utils.showDatePickerDialog

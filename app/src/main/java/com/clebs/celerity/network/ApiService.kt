@@ -28,6 +28,7 @@ import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
 import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
+import com.clebs.celerity.models.requests.UpdateDeductioRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.requests.logoutModel
@@ -35,10 +36,12 @@ import com.clebs.celerity.models.response.BaseResponseTwo
 
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.DeductionAgreementResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
 import com.clebs.celerity.models.response.DownloadInvoicePDFResponse
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
+import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
@@ -56,6 +59,7 @@ import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
 import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
+import com.clebs.celerity.models.response.GetVehicleAdvancePaymentAgreementResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.GetvehicleInfoByDriverId
@@ -532,6 +536,26 @@ interface ApiService {
     suspend fun uploadVehicleImages(
         @Query("userId") userId: Int,
         @Part image: List<MultipartBody.Part>
-    ):Response<SimpleStatusMsgResponse>
+    ): Response<SimpleStatusMsgResponse>
+
+    @GET("/api/Drivers/GetVehicleAdvancePaymentAgreement/{userId}")
+    suspend fun GetVehicleAdvancePaymentAgreement(
+        @Path("userId") userId: Int
+    ): Response<GetVehicleAdvancePaymentAgreementResponse>
+
+    @GET("/api/Drivers/GetDadeductionSignAgreement/{userId}")
+    suspend fun GetDeductionAgreement(
+        @Path("userId") userId: Int
+    ): Response<DeductionAgreementResponse>
+
+    @POST("/api/Drivers/UpdateDadeductionSignAgreement")
+    suspend fun UpdateDaDeductionSignAgreement(
+        @Body requestBody: UpdateDeductioRequest
+    ): Response<SimpleStatusMsgResponse>
+
+    @GET("GetDAVehicleExpiredDocumentsRequests")
+    suspend fun GetDaVehicleExpiredDocuments(
+        @Path("userId") userId: Int
+    ):Response<GetDAVehicleExpiredDocumentsResponse>
 }
 

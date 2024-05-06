@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.clebs.celerity.models.response.Doc
+import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.Invoice
 import com.clebs.celerity.models.response.InvoiceX
@@ -183,7 +184,8 @@ class Prefs(context: Context) {
 
     var submittedDeliveryProcedures: Boolean
         get() = sharedPreferences.getBoolean("submittedDeliveryProcedures", false)
-        set(value) = sharedPreferences.edit().putBoolean("submittedDeliveryProcedures", value).apply()
+        set(value) = sharedPreferences.edit().putBoolean("submittedDeliveryProcedures", value)
+            .apply()
 
     var submittedReturnToStation: Boolean
         get() = sharedPreferences.getBoolean("submittedReturnToStation", false)
@@ -191,10 +193,8 @@ class Prefs(context: Context) {
 
     var submittedFinalAssesmentFragment: Boolean
         get() = sharedPreferences.getBoolean("submittedFinalAssesmentFragment", false)
-        set(value) = sharedPreferences.edit().putBoolean("submittedFinalAssesmentFragment", value).apply()
-
-
-
+        set(value) = sharedPreferences.edit().putBoolean("submittedFinalAssesmentFragment", value)
+            .apply()
 
 
     var accessTokenclearquote: String
@@ -234,7 +234,6 @@ class Prefs(context: Context) {
     var canClockOut: Boolean
         get() = sharedPreferences.getBoolean("canClockOut", false) ?: false
         set(value) = sharedPreferences.edit().putBoolean("canClockOut", value).apply()
-
 
 
     fun save(key: String?, value: String?) {
@@ -341,6 +340,20 @@ class Prefs(context: Context) {
         return gson.fromJson(data, GetDriverRouteInfoByDateResponseItem::class.java) ?: null
     }
 
+    fun saveExpiredDocuments(data: GetDAVehicleExpiredDocumentsResponse) {
+        val editor = sharedPreferences.edit()
+        val gson = Gson()
+        val json = gson.toJson(data)
+        editor.putString("ExpiredDocuments", json)
+        editor.apply()
+    }
+
+    fun getExpiredDocuments(): GetDAVehicleExpiredDocumentsResponse? {
+        val gson = Gson()
+        val data = sharedPreferences.getString("ExpiredDocuments", null)
+        return gson.fromJson(data, GetDAVehicleExpiredDocumentsResponse::class.java) ?: null
+    }
+
     fun saveCurrentTicket(data: Doc) {
         val editor = sharedPreferences.edit()
         val gson = Gson()
@@ -390,7 +403,7 @@ class Prefs(context: Context) {
             Date()
         )
         editor.putBoolean("is_inspection_done", isInspectionDone)
-        if(isInspectionDone){
+        if (isInspectionDone) {
             editor.putString("last_inspection_datetime", lastInspectionDateTime)
         }
         editor.apply()
@@ -399,19 +412,18 @@ class Prefs(context: Context) {
     fun isInspectionDoneToday(): Boolean {
 
         val isInspectionDone = sharedPreferences.getBoolean("is_inspection_done", false)
-        if(isInspectionDone){
-            val lastInspectionDateTimeString = sharedPreferences.getString("last_inspection_datetime", "")
+        if (isInspectionDone) {
+            val lastInspectionDateTimeString =
+                sharedPreferences.getString("last_inspection_datetime", "")
             val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-            Log.d("isInspectionDoneToday","$currentDate \n$lastInspectionDateTimeString")
+            Log.d("isInspectionDoneToday", "$currentDate \n$lastInspectionDateTimeString")
 
             return lastInspectionDateTimeString == currentDate
-        }else
-        {
+        } else {
             return false
         }
 
     }
-
 
 
 }

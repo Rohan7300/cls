@@ -14,7 +14,7 @@ import com.clebs.celerity.fragments.BaseInteriorFragment
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
-import com.clebs.celerity.utils.NoInternetDialog
+import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.getVRegNo

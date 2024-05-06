@@ -26,7 +26,7 @@ class NotificationsFragment : Fragment() {
         (activity as HomeActivity).hideDialog()
     }
     lateinit var notificationAdapter: NotificationAdapter
-    lateinit var prefs:Prefs
+    lateinit var prefs: Prefs
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,11 +34,19 @@ class NotificationsFragment : Fragment() {
         binding = FragmentNotifficationsBinding.inflate(inflater, container, false)
         homeActivity = (activity as HomeActivity)
         viewModel = homeActivity.viewModel
-
-        notificationAdapter = NotificationAdapter(findNavController())
+        prefs = Prefs.getInstance(requireContext())
+        notificationAdapter = NotificationAdapter(
+            findNavController(),
+            homeActivity.supportFragmentManager,
+            homeActivity,
+            homeActivity.loadingDialog,
+            viewModel,
+            prefs,
+            viewLifecycleOwner
+        )
         binding.rvNotifications.adapter = notificationAdapter
         binding.rvNotifications.layoutManager = LinearLayoutManager(requireContext())
-        prefs = Prefs.getInstance(requireContext())
+
 
         observers()
         showDialog()
@@ -50,7 +58,7 @@ class NotificationsFragment : Fragment() {
         viewModel.livedataGetNotificationListByUserId.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
-                if(it.size>0){
+                if (it.size > 0) {
                     notificationAdapter.saveData(it)
                 }
             }

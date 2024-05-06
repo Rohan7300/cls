@@ -24,7 +24,7 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.NetworkManager
-import com.clebs.celerity.utils.NoInternetDialog
+import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.showToast

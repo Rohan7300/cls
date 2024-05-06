@@ -1,4 +1,4 @@
-package com.clebs.celerity.utils
+package com.clebs.celerity.dialogs
 
 import android.app.Dialog
 import android.os.Bundle

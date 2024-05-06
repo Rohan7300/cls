@@ -49,10 +49,9 @@ import com.clebs.celerity.ui.AddInspection
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
-import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
-import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.navigateTo
@@ -648,67 +647,73 @@ class CompleteTaskFragment : Fragment() {
                     imagesUploaded = false
                     setVisibiltyLevel()
                 } else {
-                    if (it.IsVehicleImageUploaded == false && checkNull(it)) {
-                        showImageUploadLayout = true
-                        imagesUploaded = false
+                    if(osData.faceMaskImage!=null&&it.DaVehImgFaceMaskFileName==null){
+                        imagesUploaded = true
                         setVisibiltyLevel()
-                        //  mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
-                    } else {
-                        showImageUploadLayout = checkNull(it)
-
-                        if (showImageUploadLayout) {
+                        startUploadWithWorkManager(1, Prefs.getInstance(requireContext()), requireContext())
+                    }else{
+                        if (it.IsVehicleImageUploaded == false && checkNull(it)) {
+                            showImageUploadLayout = true
                             imagesUploaded = false
                             setVisibiltyLevel()
+                            //  mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                         } else {
-                            imagesUploaded = true
-                            setVisibiltyLevel()
-                            isAllImageUploaded = true
+                            showImageUploadLayout = checkNull(it)
+
+                            if (showImageUploadLayout) {
+                                imagesUploaded = false
+                                setVisibiltyLevel()
+                            } else {
+                                imagesUploaded = true
+                                setVisibiltyLevel()
+                                isAllImageUploaded = true
+                            }
+                            /*
+                                                    if (*//*it.DaVehicleAddBlueImage == null && it.DaVehImgOilLevelFileName == null &&*//* it.DaVehImgFaceMaskFileName == null) {
+                            imageUploadLevel = 0
+                        }*/
+                            /*else if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
+                                // All images uploaded
+                                imageUploadLevel = 3
+                                mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
+                                mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
+                                mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
+                            } else if (it.DaVehicleAddBlueImage == null && it.DaVehImgFaceMaskFileName == null) {
+                                imageUploadLevel = 0
+                            } else if (it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage == null) {
+                                imageUploadLevel = 1
+                                mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
+                            } else if (it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName == null) {
+                                imageUploadLevel = 0
+                                mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
+                            } else if (it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage != null) {
+                                imageUploadLevel = 2
+                                mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
+                                mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
+                            } else {
+                                imageUploadLevel = 0
+                            }*/
+
+                            //setProgress()
+
+                            /*                        mbinding.run {
+                                                        mbinding.tvNext.isEnabled =
+                                                            it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
+                                                        if (tvNext.isEnabled) {
+                                                            tvNext.setTextColor(
+                                                                ContextCompat.getColor(
+                                                                    requireContext(), R.color.white
+                                                                )
+                                                            )
+                                                        } else {
+                                                            tvNext.setTextColor(
+                                                                ContextCompat.getColor(
+                                                                    requireContext(), R.color.orange
+                                                                )
+                                                            )
+                                                        }
+                                                    }*/
                         }
-                        /*
-                                                if (*//*it.DaVehicleAddBlueImage == null && it.DaVehImgOilLevelFileName == null &&*//* it.DaVehImgFaceMaskFileName == null) {
-                            imageUploadLevel = 0
-                        }*/
-                        /*else if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
-                            // All images uploaded
-                            imageUploadLevel = 3
-                            mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
-                            mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
-                            mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
-                        } else if (it.DaVehicleAddBlueImage == null && it.DaVehImgFaceMaskFileName == null) {
-                            imageUploadLevel = 0
-                        } else if (it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage == null) {
-                            imageUploadLevel = 1
-                            mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
-                        } else if (it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName == null) {
-                            imageUploadLevel = 0
-                            mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
-                        } else if (it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage != null) {
-                            imageUploadLevel = 2
-                            mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
-                            mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
-                        } else {
-                            imageUploadLevel = 0
-                        }*/
-
-                        //setProgress()
-
-                        /*                        mbinding.run {
-                                                    mbinding.tvNext.isEnabled =
-                                                        it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
-                                                    if (tvNext.isEnabled) {
-                                                        tvNext.setTextColor(
-                                                            ContextCompat.getColor(
-                                                                requireContext(), R.color.white
-                                                            )
-                                                        )
-                                                    } else {
-                                                        tvNext.setTextColor(
-                                                            ContextCompat.getColor(
-                                                                requireContext(), R.color.orange
-                                                            )
-                                                        )
-                                                    }
-                                                }*/
                     }
                 }
             }

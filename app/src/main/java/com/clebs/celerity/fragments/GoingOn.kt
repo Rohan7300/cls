@@ -14,7 +14,7 @@ import com.clebs.celerity.databinding.FragmentGoingOnBinding
 import com.clebs.celerity.models.QuestionWithOption
 import com.clebs.celerity.models.requests.SaveQuestionaireOnGoingActivitiesRequest
 import com.clebs.celerity.ui.HomeActivity
-import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 

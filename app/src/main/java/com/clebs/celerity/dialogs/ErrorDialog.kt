@@ -1,9 +1,8 @@
-package com.clebs.celerity.utils
+package com.clebs.celerity.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
@@ -16,7 +15,7 @@ class ErrorDialog:DialogFragment() {
         private const val ARG_MSG = "msg"
         private const val ARG_CODE = "code"
 
-        fun newInstance(msg:String,code:String):ErrorDialog{
+        fun newInstance(msg:String,code:String): ErrorDialog {
             val dialog = ErrorDialog()
             val args = Bundle()
             args.putString(ARG_MSG,msg)

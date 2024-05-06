@@ -1,6 +1,7 @@
 package com.clebs.celerity.repository
 
 import android.util.Log
+import com.clebs.celerity.dialogs.VehicleAdvancePaymentDialog
 import com.clebs.celerity.models.CashFlowPieChartResponse
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
@@ -24,6 +25,7 @@ import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
 import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
+import com.clebs.celerity.models.requests.UpdateDeductioRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.response.LoginResponse
@@ -31,10 +33,12 @@ import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.DeductionAgreementResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
 import com.clebs.celerity.models.response.DownloadInvoicePDFResponse
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
+import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
@@ -50,6 +54,7 @@ import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
 import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
+import com.clebs.celerity.models.response.GetVehicleAdvancePaymentAgreementResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.GetvehicleInfoByDriverId
@@ -1213,6 +1218,38 @@ class MainRepo(private val ApiService: ApiService) {
     ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
         return safeApiCall {
             ApiService.uploadVehicleImages(userID, imageList)
+        }
+    }
+
+    suspend fun GetVehicleAdvancePaymentAgreement(
+        userID: Int
+    ): SimpleNetworkResponse<GetVehicleAdvancePaymentAgreementResponse> {
+        return safeApiCall {
+            ApiService.GetVehicleAdvancePaymentAgreement(userID)
+        }
+    }
+
+    suspend fun GetDeductionAgreement(
+        userID: Int
+    ): SimpleNetworkResponse<DeductionAgreementResponse> {
+        return safeApiCall {
+            ApiService.GetDeductionAgreement(userID)
+        }
+    }
+
+    suspend fun UpdateDaDeductionSignAgreement(
+        body: UpdateDeductioRequest
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.UpdateDaDeductionSignAgreement(body)
+        }
+    }
+
+    suspend fun GetDaVehicleExpiredDocuments(
+        userID: Int
+    ): SimpleNetworkResponse<GetDAVehicleExpiredDocumentsResponse> {
+        return safeApiCall {
+            ApiService.GetDaVehicleExpiredDocuments(userID)
         }
     }
 

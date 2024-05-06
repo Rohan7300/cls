@@ -43,12 +43,11 @@ import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
-import com.clebs.celerity.utils.BackgroundUploadDialog
 import com.clebs.celerity.utils.InspectionIncompleteDialog
 import com.clebs.celerity.utils.InspectionIncompleteListener
-import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.NetworkManager
-import com.clebs.celerity.utils.NoInternetDialog
+import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
 import com.clebs.celerity.utils.checkIfInspectionFailed

@@ -20,12 +20,11 @@ import com.clebs.celerity.models.response.SaveDeviceInformationRequest
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
-import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.NetworkManager
-import com.clebs.celerity.utils.NoInternetDialog
+import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getDeviceID
-import com.clebs.celerity.utils.isNetworkAvailable
 import com.clebs.celerity.utils.showErrorDialog
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging

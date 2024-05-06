@@ -32,7 +32,7 @@ import com.clebs.celerity.models.requests.SaveTicketDataRequestBody
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
-import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.showToast
@@ -348,7 +348,6 @@ class CreateTicketsActivity : AppCompatActivity() {
     }
 
     private fun requestPermissions() {
-
         activityResultLauncher.launch(REQUIRED_PERMISSIONS)
 
     }
