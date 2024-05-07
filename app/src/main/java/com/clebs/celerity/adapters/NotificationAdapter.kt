@@ -3,6 +3,7 @@ package com.clebs.celerity.adapters
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
@@ -10,12 +11,12 @@ import androidx.navigation.NavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.clebs.celerity.DeductionAgreement
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.NotificationAdapterDialogBinding
 import com.clebs.celerity.dialogs.DailyRotaApprovalDialog
 import com.clebs.celerity.dialogs.ExpiredDocDialog
+import com.clebs.celerity.dialogs.InvoiceReadytoViewDialog
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.dialogs.VehicleAdvancePaymentDialog
 import com.clebs.celerity.models.response.NotificationResponseItem
@@ -23,6 +24,8 @@ import com.clebs.celerity.ui.DeductionAgreementActivity
 import com.clebs.celerity.ui.ExpiringDocumentsActivity
 import com.clebs.celerity.ui.WeeklyRotaApprovalActivity
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.getCurrentWeek
+import com.clebs.celerity.utils.getCurrentYear
 import com.clebs.celerity.utils.showToast
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -87,44 +90,53 @@ class NotificationAdapter(
                 binding.time.text = item.NotificationSentOn
             }
 
-            binding.notficationArrow.setOnClickListener {
+            if (item.ActionToPerform == "Deductions" ||
+                item.ActionToPerform == "Daily Location Rota" ||
+                item.ActionToPerform == "Invoice Ready To Review" ||
+                item.ActionToPerform == "Weekly Location Rota" ||
+                item.ActionToPerform == "Expired Document" ||
+                item.ActionToPerform == "Vehicle Advance Payment Aggrement" ||
+                item.ActionToPerform == "Expiring Document" ||
+                item.ActionToPerform == "Weekly Rota Approval"
+            ) {
+                binding.notficationArrow.visibility = View.VISIBLE
+            }
 
+            binding.notficationArrow.setOnClickListener {
                 if (item.ActionToPerform.equals("Deductions")) {
                     //navController.navigate(R.id.deductionFragment)
                     val intent = Intent(context, DeductionAgreementActivity::class.java)
                     context.startActivity(intent)
-                }
+                } else if (item.ActionToPerform.equals("Daily Location Rota")) {
 
-                if (item.ActionToPerform.equals("Daily Location Rota")) {
                     val dialog = DailyRotaApprovalDialog()
                     dialog.showDialog(fragmentManager)
-                }
 
-                if (item.ActionToPerform.equals("Invoice Ready To Review")) {
-                    navController.navigate(R.id.CLSInvoicesFragment)
-                }
-
-                if (item.ActionToPerform.equals("Weekly Location Rota")) {
+                } else if (item.ActionToPerform.equals("Invoice Ready To Review")) {
+                    val dialog = InvoiceReadytoViewDialog.newInstance(
+                        getCurrentWeek().toString(),
+                        getCurrentYear().toString()
+                    )
+                    dialog.showDialog(fragmentManager)
+                    //navController.navigate(R.id.CLSInvoicesFragment)
+                } else if (item.ActionToPerform.equals("Weekly Location Rota") || item.ActionToPerform == "Weekly Rota Approval") {
                     val intent = Intent(context, WeeklyRotaApprovalActivity::class.java)
                     context.startActivity(intent)
-                }
-
-                if (item.ActionToPerform.equals("Expired Document")) {
-                    val dialog = ExpiredDocDialog()
+                } else if (item.ActionToPerform.equals("Expired Document")) {
                     loadingDialog.show()
                     viewModel.GetDAVehicleExpiredDocuments(pref.clebUserId.toInt())
-                    viewModel.liveDataGetDAVehicleExpiredDocuments.observe(viewLifecycleOwner){
-                        loadingDialog.show()
-                        if(it!=null){
+                    viewModel.liveDataGetDAVehicleExpiredDocuments.observe(viewLifecycleOwner) {
+                        loadingDialog.dismiss()
+                        val dialog = ExpiredDocDialog(pref, context)
+                        if (it != null) {
                             pref.saveExpiredDocuments(it)
-                            dialog.init(pref)
+                            dialog.showDialog(fragmentManager)
+
+                        } else {
                             dialog.showDialog(fragmentManager)
                         }
                     }
-
-                }
-
-                if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement")) {
+                } else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement")) {
                     loadingDialog.show()
 
                     viewModel.GetVehicleAdvancePaymentAgreement(pref.clebUserId.toInt())
@@ -142,11 +154,11 @@ class NotificationAdapter(
                             showToast("Failed to fetch data", context)
                         }
                     }
-                }
-
-                if (item.ActionToPerform.equals("Expiring Document")) {
+                } else if (item.ActionToPerform.equals("Expiring Document")) {
                     val intent = Intent(context, ExpiringDocumentsActivity::class.java)
                     context.startActivity(intent)
+                } else {
+                    binding.notficationArrow.visibility = View.GONE
                 }
 
             }

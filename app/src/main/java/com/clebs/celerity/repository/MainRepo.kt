@@ -37,6 +37,7 @@ import com.clebs.celerity.models.response.DeductionAgreementResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
 import com.clebs.celerity.models.response.DownloadInvoicePDFResponse
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
+import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
@@ -1250,6 +1251,33 @@ class MainRepo(private val ApiService: ApiService) {
     ): SimpleNetworkResponse<GetDAVehicleExpiredDocumentsResponse> {
         return safeApiCall {
             ApiService.GetDaVehicleExpiredDocuments(userID)
+        }
+    }
+
+    suspend fun GetDAExpiringDocuments(
+        userID: Int
+    ):SimpleNetworkResponse<ExpiringDocumentsResponse>{
+        return safeApiCall {
+            ApiService.GetDAExpiringDocuments(userID)
+        }
+    }
+
+    suspend fun ApproveWeeklyRotabyDA(
+        userID: Int,
+        lrnId:Int
+    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.ApproveWeeklyRotabyDA(userID,lrnId)
+        }
+    }
+
+    suspend fun UploadExpiringDocs(
+        userID: Int,
+        docTypeID:Int,
+        multipartBody: MultipartBody.Part
+    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.UploadExpiringDocs(userID,docTypeID,multipartBody)
         }
     }
 

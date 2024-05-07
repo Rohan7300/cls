@@ -13,6 +13,7 @@ import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentHomedemoBinding
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.convertDateFormat
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
@@ -268,8 +269,6 @@ class HomedemoFragment : Fragment() {
 
 
             }
-
-
         }
 
         viewModel.livedataAvgScoreResponse.observe(viewLifecycleOwner) {
@@ -481,11 +480,6 @@ class HomedemoFragment : Fragment() {
         }
     }
 
-    fun convertDateFormat(inputDate: String): String {
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        val date = inputFormat.parse(inputDate)
-        return outputFormat.format(date!!)
-    }
+
 
 }

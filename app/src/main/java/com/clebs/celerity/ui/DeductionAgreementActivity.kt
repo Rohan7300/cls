@@ -31,6 +31,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
     private var DaDedAggrDaId = 0
     private var DaUserName = " "
     var isEnabled = false
+    var type = 0
     private var FromLocation = " "
     private var PaymentKey = " "
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +58,10 @@ class DeductionAgreementActivity : AppCompatActivity() {
                 DaUserName = it.DaUserName
                 FromLocation = it.FromLocation
                 PaymentKey = it.PaymentKey
-            }else{
+            } else {
                 isEnabled = false
+                showToast("Failed to fetch data!! Pls try again", this)
+                onBackPressed()
             }
         }
         viewmodel.GetDeductionAgreement(pref.clebUserId.toInt())
@@ -66,36 +69,41 @@ class DeductionAgreementActivity : AppCompatActivity() {
         binding.signSection.visibility = View.GONE
         binding.rbAcceptClose.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                if(isEnabled){
+                type=0
+                if (isEnabled) {
                     binding.rbAcceptDispute.isChecked = false
                     binding.deductionTXT.visibility = View.GONE
                     binding.dedctionContent.visibility = View.GONE
                     binding.disputeSection.visibility = View.GONE
                     binding.signSection.visibility = View.VISIBLE
-                }else{
-                    showToast("Failed to fetch data!! Pls try again",this)
+                } else {
+                    showToast("Failed to fetch data!! Pls try again", this)
                 }
             }
 
         }
         binding.rbAcceptDispute.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                if(isEnabled){
+                if (isEnabled) {
+                    type=1
                     binding.rbAcceptClose.isChecked = false
-                    binding.dedctionContent.visibility = View.VISIBLE
-                    binding.deductionTXT.visibility = View.VISIBLE
+                    binding.dedctionContent.visibility = View.GONE
+                    binding.deductionTXT.visibility = View.GONE
                     binding.disputeSection.visibility = View.VISIBLE
-                    binding.signSection.visibility = View.GONE
-                }else{
-                    showToast("Failed to fetch data!! Pls try again",this)
+                    binding.signSection.visibility = View.VISIBLE
+                } else {
+                    showToast("Failed to fetch data!! Pls try again", this)
                 }
             }
         }
 
-        binding.saveNdispute.setOnClickListener {
-            disputeCondition()
-        }
+        /*        binding.saveNdispute.setOnClickListener {
+                    disputeCondition()
+                }*/
 
+        binding.backIcon.setOnClickListener {
+            onBackPressed()
+        }
 
         val retry = binding.signSV.RetryLay
         val save = binding.signSV.sv
@@ -110,7 +118,10 @@ class DeductionAgreementActivity : AppCompatActivity() {
                 testIV.setImageBitmap(signatureBitmap)
 
                 loadingDialog.show()
-                submitCondition(signatureBitmap)
+                if (type == 0)
+                    submitCondition(signatureBitmap)
+                if (type == 1)
+                    disputeCondition(signatureBitmap)
             }
         }
         retry.setOnClickListener {
@@ -124,7 +135,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
         val bse64 = "data:image/png;base64," + bitmapToBase64(signatureBitmap)
         viewmodel.UpdateDaDeduction(
             UpdateDeductioRequest(
-                DaDedAggrDaId = DaDedAggrDaId,
+                DaDedAggrDaId = 197251,
                 DaUserName = DaUserName,
                 FromLocation = FromLocation,
                 IsDaDedAggAccepted = true,
@@ -142,8 +153,8 @@ class DeductionAgreementActivity : AppCompatActivity() {
         }
     }
 
-    private fun disputeCondition() {
-
+    private fun disputeCondition(signatureBitmap: Bitmap) {
+        val bse64 = "data:image/png;base64," + bitmapToBase64(signatureBitmap)
         if (binding.etDisputeDis.text.isNullOrEmpty()) {
             showToast("Please add dispute reason", this)
         } else {
@@ -151,13 +162,13 @@ class DeductionAgreementActivity : AppCompatActivity() {
             loadingDialog.show()
             viewmodel.UpdateDaDeduction(
                 UpdateDeductioRequest(
-                    DaDedAggrDaId = DaDedAggrDaId,
+                    DaDedAggrDaId = pref.clebUserId.toInt(),
                     DaUserName = DaUserName,
                     FromLocation = FromLocation,
                     IsDaDedAggAccepted = false,
                     PaymentKey = PaymentKey,
                     RejectionComment = disputeComment,
-                    Signature = "null"
+                    Signature = bse64
                 )
             )
 
@@ -166,7 +177,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
             viewmodel.liveDataUpdateDeducton.observe(this) {
                 loadingDialog.dismiss()
                 if (it != null) {
-                    startActivity(Intent(this, HomeActivity::class.java))
+                    onBackPressed()
                 }
             }
         }
@@ -174,7 +185,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
 
     private fun generateTicketInBackground(RejectionComment: Any?) {
         var currDt = getCurrentDateTime()
-      /*  val request = SaveTicketDataRequestBody(
+        val request = SaveTicketDataRequestBody(
             AssignedToUserIDs = listOf(),
             BadgeComment = "undefined",
             BadgeReturnedStatusId = 0,
@@ -187,8 +198,8 @@ class DeductionAgreementActivity : AppCompatActivity() {
             NoofPeople = 0,
             ParentCompanyID = 0,
             PriorityId = 0,
-            RequestTypeId = selectedRequestTypeID,
-            TicketDepartmentId = selectedDeptID,
+            RequestTypeId = 17,
+            TicketDepartmentId = 1,
             TicketId = 0,
             TicketUTRNo = "undefined",
             Title = RejectionComment.toString(),
@@ -197,10 +208,10 @@ class DeductionAgreementActivity : AppCompatActivity() {
             VmId = 0,
             WorkingOrder = 0
         )
-        showDialog()
         viewmodel.SaveTicketData(
             pref.clebUserId.toInt(),
             request
-        )*/
+        )
     }
+
 }

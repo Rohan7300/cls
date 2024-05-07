@@ -42,6 +42,7 @@ import com.clebs.celerity.models.response.DeductionAgreementResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
 import com.clebs.celerity.models.response.DownloadInvoicePDFResponse
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
+import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
@@ -165,8 +166,12 @@ class MainViewModel(
     val liveDataUpdateDeducton = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataGetDAVehicleExpiredDocuments =
         MutableLiveData<GetDAVehicleExpiredDocumentsResponse?>()
+    val liveDataGetDAExpiringDocuments = MutableLiveData<ExpiringDocumentsResponse?>()
+    val liveDataApproveWeeklyRota = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataUploadExpiringDocs = MutableLiveData<SimpleStatusMsgResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
+
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
     }
@@ -1670,6 +1675,43 @@ class MainViewModel(
                 liveDataGetDAVehicleExpiredDocuments.postValue(null)
             else
                 liveDataGetDAVehicleExpiredDocuments.postValue(response.body)
+        }
+    }
+
+    fun GetDAExpiringDocuments(userID: Int) {
+        viewModelScope.launch {
+            val response = repo.GetDAExpiringDocuments(userID)
+            if (!response.isSuccessful || response.failed)
+                liveDataGetDAExpiringDocuments.postValue(null)
+            else
+                liveDataGetDAExpiringDocuments.postValue(response.body)
+        }
+    }
+
+    fun ApproveWeeklyRotabyDA(
+        userID: Int,
+        lrnID: Int
+    ) {
+        viewModelScope.launch {
+            val response = repo.ApproveWeeklyRotabyDA(userID, lrnID)
+            if (!response.isSuccessful || response.failed)
+                liveDataApproveWeeklyRota.postValue(null)
+            else
+                liveDataApproveWeeklyRota.postValue(response.body)
+        }
+    }
+
+    fun UploadExpiringDocs(
+        userID: Int,
+        docTypeID:Int,
+        multipartBody: MultipartBody.Part
+    ){
+        viewModelScope.launch {
+            val response = repo.UploadExpiringDocs(userID,docTypeID,multipartBody)
+            if(!response.isSuccessful || response.failed)
+                liveDataUploadExpiringDocs.postValue(null)
+            else
+                liveDataUploadExpiringDocs.postValue(response.body)
         }
     }
 }

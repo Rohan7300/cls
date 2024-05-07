@@ -40,6 +40,7 @@ import com.clebs.celerity.models.response.DeductionAgreementResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
 import com.clebs.celerity.models.response.DownloadInvoicePDFResponse
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
+import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
@@ -553,9 +554,29 @@ interface ApiService {
         @Body requestBody: UpdateDeductioRequest
     ): Response<SimpleStatusMsgResponse>
 
-    @GET("GetDAVehicleExpiredDocumentsRequests")
+    @GET("/api/Drivers/GetDAVehicleExpiredDocuments/{userId}")
     suspend fun GetDaVehicleExpiredDocuments(
         @Path("userId") userId: Int
-    ):Response<GetDAVehicleExpiredDocumentsResponse>
+    ): Response<GetDAVehicleExpiredDocumentsResponse>
+
+    @GET("/api/Drivers/GetDAExpiringDocuments/{userId}")
+    suspend fun GetDAExpiringDocuments(
+        @Path("userId") userId: Int
+    ): Response<ExpiringDocumentsResponse>
+
+    @PUT("/api/Drivers/ApproveWeeklyRotabyDA")
+    suspend fun ApproveWeeklyRotabyDA(
+        @Query("userId") userId: Int,
+        @Query("lrnId") lrnID: Int
+    ): Response<SimpleStatusMsgResponse>
+
+
+    @Multipart
+    @POST("/api/Vehicle/UploadUserDocumentFileByDriver")
+    suspend fun UploadExpiringDocs(
+        @Query("userId") userId: Int,
+        @Query("docTypeId") docTypeID: Int,
+        @Part multipartBody: MultipartBody.Part
+    ): Response<SimpleStatusMsgResponse>
 }
 

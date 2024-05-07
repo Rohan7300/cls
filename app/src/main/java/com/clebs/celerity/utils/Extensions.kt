@@ -24,6 +24,7 @@ import android.util.Base64OutputStream
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -713,7 +714,8 @@ fun logOSEntity(base: String, osData: OfflineSyncEntity) {
 
     Log.d("$base", "OS DATA LOG + --------------------")
 }
-fun startUploadWithWorkManager(uploadType:Int,prefs: Prefs,context: Context) {
+
+fun startUploadWithWorkManager(uploadType: Int, prefs: Prefs, context: Context) {
 
 
     val userId = prefs.clebUserId.toInt()
@@ -733,6 +735,32 @@ fun startUploadWithWorkManager(uploadType:Int,prefs: Prefs,context: Context) {
         .build()
 
     WorkManager.getInstance(context).enqueue(uploadWorkRequest)
+}
+
+
+fun getCurrentWeek(): Int {
+    val calendar = Calendar.getInstance()
+    return calendar.get(Calendar.WEEK_OF_YEAR)
+}
+
+fun getCurrentYear(): Int {
+    val calendar = Calendar.getInstance()
+    return calendar.get(Calendar.YEAR)
+}
+fun convertDateFormat(inputDate: String): String {
+    try {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val date = inputFormat.parse(inputDate)
+        return outputFormat.format(date!!)
+    }catch (_:Exception){
+        return  " "
+    }
+}
+
+fun getMimeType(uri: Uri): String? {
+    val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+    return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
 }
 
 
