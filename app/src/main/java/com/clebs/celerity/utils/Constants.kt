@@ -4,6 +4,8 @@ class Constants {
     companion object {
         //video call
         const val PORTAL_KEY = "portal_key"
+        const val MODEL_PATH = "model.tflite"
+        const val LABELS_PATH = "labels.txt"
         const val CONFERENCE_LINK = "ConferenceLink"
         const val CALL_ID = "callId"
         const val VIDEO_TOKEN = "Videotoken"

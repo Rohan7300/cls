@@ -60,10 +60,7 @@ import com.clebs.celerity.utils.showToast
 import com.elconfidencial.bubbleshowcase.BubbleShowCase
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.text.FirebaseVisionText
-import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer
+
 import com.kotlinpermissions.KotlinPermissions
 import com.tapadoo.alerter.Alerter
 import id.zelory.compressor.Compressor
@@ -116,7 +113,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 }
             }.toTypedArray()
 
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -399,47 +396,47 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
     }
 
 
-    open fun detectTxt() {
-
-        val image = FirebaseVisionImage.fromBitmap(imageBitmap!!)
-        val detector: FirebaseVisionTextRecognizer =
-            FirebaseVision.getInstance().onDeviceTextRecognizer
-        detector.processImage(image)
-            .addOnSuccessListener { firebaseVisionText ->
-                processTxt(firebaseVisionText)
-            }
-            .addOnFailureListener { exception ->
-                // Handle any errors that occur during the text recognition process
-            }
-    }
-
-    open fun processTxt(text: FirebaseVisionText) {
-
-        val blocks: List<FirebaseVisionText.TextBlock> = text.textBlocks
-
-
-        if (blocks.size == 0) {
-            mbinding.pb.visibility = View.GONE
-            //showToast("No Text ", requireContext())
-            showScanErrorDialog(
-                this,
-                fragmentManager,
-                "DWF-03",
-                "Vehicle doesn't exists. Please scan again or contact your supervisor."
-            )
-            return
-        }
-
-        for (block in text.textBlocks) {
-            val lineText = block.lines.get(0).text
-            txt = lineText.replace(" ", "")
-            Log.e(TAG, "processTxtscanning: $txt")
-            if (txt.isNotEmpty()) {
-                getVichleinformation()
-            }
-
-        }
-    }
+//    open fun detectTxt() {
+//
+//        val image = FirebaseVisionImage.fromBitmap(imageBitmap!!)
+//        val detector: FirebaseVisionTextRecognizer =
+//            FirebaseVision.getInstance().onDeviceTextRecognizer
+//        detector.processImage(image)
+//            .addOnSuccessListener { firebaseVisionText ->
+//                processTxt(firebaseVisionText)
+//            }
+//            .addOnFailureListener { exception ->
+//                // Handle any errors that occur during the text recognition process
+//            }
+//    }
+//
+//    open fun processTxt(text: FirebaseVisionText) {
+//
+//        val blocks: List<FirebaseVisionText.TextBlock> = text.textBlocks
+//
+//
+//        if (blocks.size == 0) {
+//            mbinding.pb.visibility = View.GONE
+//            //showToast("No Text ", requireContext())
+//            showScanErrorDialog(
+//                this,
+//                fragmentManager,
+//                "DWF-03",
+//                "Vehicle doesn't exists. Please scan again or contact your supervisor."
+//            )
+//            return
+//        }
+//
+//        for (block in text.textBlocks) {
+//            val lineText = block.lines.get(0).text
+//            txt = lineText.replace(" ", "")
+//            Log.e(TAG, "processTxtscanning: $txt")
+//            if (txt.isNotEmpty()) {
+//                getVichleinformation()
+//            }
+//
+//        }
+//    }
 
     @SuppressLint("NewApi")
     private fun takePhoto() = try {

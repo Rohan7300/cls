@@ -21,7 +21,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.multidex.BuildConfig
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.clebs.celerity.utils.PermissionCallback
 import com.clebs.celerity.utils.Prefs
 import java.io.FileOutputStream

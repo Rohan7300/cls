@@ -18,8 +18,8 @@
         android:padding="25dp">
 
         <ImageView
-            android:layout_width="159dp"
-            android:layout_height="100dp"
+            android:layout_width="130dp"
+            android:layout_height="90dp"
             android:layout_gravity="center"
             android:layout_marginBottom="16dp"
             android:src="@drawable/upload" />
@@ -39,6 +39,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingVertical="3dp"
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
@@ -46,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/cancel"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="20dp"
+             app:cardElevation="0dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/light_grey"
                 android:padding="10dp"
@@ -69,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="20dp"
+        app:cardElevation="0dp"
                 android:layout_weight="1"
                 android:backgroundTint="#FBA27A"
                 android:padding="10dp"

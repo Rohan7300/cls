@@ -57,11 +57,11 @@ import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toRequestBody
 import com.tapadoo.alerter.Alerter
-import io.clearquote.assessment.cq_sdk.CQSDKInitializer
-import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
-import io.clearquote.assessment.cq_sdk.models.CustomerDetails
-import io.clearquote.assessment.cq_sdk.models.InputDetails
-import io.clearquote.assessment.cq_sdk.models.VehicleDetails
+//import io.clearquote.assessment.cq_sdk.CQSDKInitializer
+//import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
+//import io.clearquote.assessment.cq_sdk.models.CustomerDetails
+//import io.clearquote.assessment.cq_sdk.models.InputDetails
+//import io.clearquote.assessment.cq_sdk.models.VehicleDetails
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -100,7 +100,7 @@ class CompleteTaskFragment : Fragment() {
     private var b1 = false
     private var b2 = false
     var breakTimeSent = false
-    private lateinit var cqSDKInitializer: CQSDKInitializer
+//    private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
     private var imageUploadLevel = 0
     val showDialog: () -> Unit = {
@@ -162,11 +162,11 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.badgeArrow.setImageResource(R.drawable.down_arrow)
             }
         }
-        mbinding.ivFaceMask.setImageResource(io.clearquote.assessment.cq_sdk.R.drawable.camera_icon)
+//        mbinding.ivFaceMask.setImageResource(io.clearquote.assessment.cq_sdk.R.drawable.camera_icon)
         Prefs.getInstance(requireContext()).clearNavigationHistory()
         fragmentManager = (activity as HomeActivity).fragmentManager
-        cqSDKInitializer = CQSDKInitializer(requireContext())
-        cqSDKInitializer.triggerOfflineSync()
+//        cqSDKInitializer = CQSDKInitializer(requireContext())
+//        cqSDKInitializer.triggerOfflineSync()
         setProgress()
 
         //inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
@@ -405,7 +405,7 @@ class CompleteTaskFragment : Fragment() {
 
         inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
         Log.d("hdhsdshdsdjshhsds", "Ins $inspectionstarted")
-        checkInspection()
+//        checkInspection()
         if (inspectionstarted?.equals(true) == true) {
             setVisibiltyLevel()
         } else {
@@ -1126,75 +1126,75 @@ class CompleteTaskFragment : Fragment() {
 
     }*/
 
-    private fun startInspection() {
-//        if (isAllImageUploaded) {
-//            mbinding.tvNext.visibility = View.VISIBLE
-//        }
-
-//      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
-        loadingDialog.show()
-
-        if (cqSDKInitializer.isCQSDKInitialized()) {
-
-            var vmReg = Prefs.getInstance(App.instance).scannedVmRegNo ?: ""
-            Log.e(
-                "totyototyotoytroitroi",
-                "startInspection: " + inspectionID + "VmReg ${Prefs.getInstance(App.instance).vmRegNo}"
-            )
-            if (vmReg.isEmpty()) {
-                vmReg = Prefs.getInstance(App.instance).vmRegNo
-            }
-            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
-
-            try {
-                cqSDKInitializer.startInspection(activityContext = requireActivity(),
-                    clientAttrs = ClientAttrs(
-                        userName = " ",
-                        dealer = " ",
-                        dealerIdentifier = " ",
-                        client_unique_id = inspectionID
-                        //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
-                    ),
-                    inputDetails = InputDetails(
-                        vehicleDetails = VehicleDetails(
-                            regNumber = vmReg.replace(
-                                " ",
-                                ""
-                            ), //if sent, user can't edit
-                            make = "Van", //if sent, user can't edit
-                            model = "Any Model", //if sent, user can't edit
-                            bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
-                        ),
-                        customerDetails = CustomerDetails(
-                            name = "", //if sent, user can't edit
-                            email = "", //if sent, user can't edit
-                            dialCode = "", //if sent, user can't edit
-                            phoneNumber = "", //if sent, user can't edit
-                        )
-                    ),
-                    result = { isStarted, msg, code ->
-                        Log.e("inspectionIDsssssssss", "startInspection: " + inspectionID)
-                        Log.e("messsagesss", "startInspection: " + msg + code)
-                        if (isStarted) {
-                            Prefs.getInstance(App.instance).inspectionID = inspectionID
-                        } else {
+//    private fun startInspection() {
+////        if (isAllImageUploaded) {
+////            mbinding.tvNext.visibility = View.VISIBLE
+////        }
 //
-                        }
-                        if (msg == "Success") {
-                            loadingDialog.cancel()
-                        }
-                        if (!isStarted) {
-                            loadingDialog.cancel()
-                            Log.e("startedinspection", "onCreateView: " + msg + isStarted)
-                        }
-                    })
-            } catch (_: Exception) {
-
-                showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
-            }
-        }
-
-    }
+////      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
+//        loadingDialog.show()
+//
+//        if (cqSDKInitializer.isCQSDKInitialized()) {
+//
+//            var vmReg = Prefs.getInstance(App.instance).scannedVmRegNo ?: ""
+//            Log.e(
+//                "totyototyotoytroitroi",
+//                "startInspection: " + inspectionID + "VmReg ${Prefs.getInstance(App.instance).vmRegNo}"
+//            )
+//            if (vmReg.isEmpty()) {
+//                vmReg = Prefs.getInstance(App.instance).vmRegNo
+//            }
+//            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
+//
+//            try {
+//                cqSDKInitializer.startInspection(activityContext = requireActivity(),
+//                    clientAttrs = ClientAttrs(
+//                        userName = " ",
+//                        dealer = " ",
+//                        dealerIdentifier = " ",
+//                        client_unique_id = inspectionID
+//                        //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+//                    ),
+//                    inputDetails = InputDetails(
+//                        vehicleDetails = VehicleDetails(
+//                            regNumber = vmReg.replace(
+//                                " ",
+//                                ""
+//                            ), //if sent, user can't edit
+//                            make = "Van", //if sent, user can't edit
+//                            model = "Any Model", //if sent, user can't edit
+//                            bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
+//                        ),
+//                        customerDetails = CustomerDetails(
+//                            name = "", //if sent, user can't edit
+//                            email = "", //if sent, user can't edit
+//                            dialCode = "", //if sent, user can't edit
+//                            phoneNumber = "", //if sent, user can't edit
+//                        )
+//                    ),
+//                    result = { isStarted, msg, code ->
+//                        Log.e("inspectionIDsssssssss", "startInspection: " + inspectionID)
+//                        Log.e("messsagesss", "startInspection: " + msg + code)
+//                        if (isStarted) {
+//                            Prefs.getInstance(App.instance).inspectionID = inspectionID
+//                        } else {
+////
+//                        }
+//                        if (msg == "Success") {
+//                            loadingDialog.cancel()
+//                        }
+//                        if (!isStarted) {
+//                            loadingDialog.cancel()
+//                            Log.e("startedinspection", "onCreateView: " + msg + isStarted)
+//                        }
+//                    })
+//            } catch (_: Exception) {
+//
+//                showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
+//            }
+//        }
+//
+//    }
 
     private fun visibiltyControlls() {
         with(mbinding) {
@@ -1369,24 +1369,24 @@ class CompleteTaskFragment : Fragment() {
         }
     }
 
-    private fun checkInspection() {
-        if (inspectionstarted?.equals(true) == true) {
-            Timer().scheduleAtFixedRate(object : TimerTask() {
-                override fun run() {
-                    cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
-                        //Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
-                        inspectionOfflineImagesCHeck = isSyncCompletedForAllQuotes
-                        /*    if (isSyncCompletedForAllQuotes)
-                                //setProgress()*/
-                    }
-                }
-            }, 0, 1000)
-            mbinding.startinspection.visibility = View.GONE
-
-        } else {
-            mbinding.startinspection.visibility = View.VISIBLE
-        }
-    }
+//    private fun checkInspection() {
+//        if (inspectionstarted?.equals(true) == true) {
+//            Timer().scheduleAtFixedRate(object : TimerTask() {
+//                override fun run() {
+//                    cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
+//                        //Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
+//                        inspectionOfflineImagesCHeck = isSyncCompletedForAllQuotes
+//                        /*    if (isSyncCompletedForAllQuotes)
+//                                //setProgress()*/
+//                    }
+//                }
+//            }, 0, 1000)
+//            mbinding.startinspection.visibility = View.GONE
+//
+//        } else {
+//            mbinding.startinspection.visibility = View.VISIBLE
+//        }
+//    }
 
     private fun viewGoneAnimator(view: View) {
         view.animate()
