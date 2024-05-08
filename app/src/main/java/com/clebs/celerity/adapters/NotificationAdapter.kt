@@ -2,18 +2,22 @@ package com.clebs.celerity.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.databinding.DialogvehicleadvancepaymentBinding
 import com.clebs.celerity.databinding.NotificationAdapterDialogBinding
+import com.clebs.celerity.databinding.UploadexpiringdocdialogBinding
 import com.clebs.celerity.dialogs.DailyRotaApprovalDialog
 import com.clebs.celerity.dialogs.ExpiredDocDialog
 import com.clebs.celerity.dialogs.InvoiceReadytoViewDialog
@@ -69,6 +73,18 @@ class NotificationAdapter(
             binding.title.text = item.NotificationTitle
             binding.descripotionX.text = item.NotificationBody
 
+            if (item.ActionToPerform == "Deductions" ||
+                item.ActionToPerform == "Daily Location Rota" ||
+                item.ActionToPerform == "Invoice Ready To Review" ||
+                item.ActionToPerform == "Weekly Location Rota" ||
+                item.ActionToPerform == "Expired Document" ||
+                item.ActionToPerform == "Vehicle Advance Payment Aggrement" ||
+                item.ActionToPerform == "Expiring Document" ||
+                item.ActionToPerform == "Weekly Rota Approval"
+            ) {
+                binding.notficationArrow.visibility = View.VISIBLE
+            }
+
             var formattedDate = item.NotificationSentOn
             var formattedTime = "00:00"
             try {
@@ -90,20 +106,10 @@ class NotificationAdapter(
                 binding.time.text = item.NotificationSentOn
             }
 
-            if (item.ActionToPerform == "Deductions" ||
-                item.ActionToPerform == "Daily Location Rota" ||
-                item.ActionToPerform == "Invoice Ready To Review" ||
-                item.ActionToPerform == "Weekly Location Rota" ||
-                item.ActionToPerform == "Expired Document" ||
-                item.ActionToPerform == "Vehicle Advance Payment Aggrement" ||
-                item.ActionToPerform == "Expiring Document" ||
-                item.ActionToPerform == "Weekly Rota Approval"
-            ) {
-                binding.notficationArrow.visibility = View.VISIBLE
-            }
+
 
             binding.notficationArrow.setOnClickListener {
-                if (item.ActionToPerform.equals("Deductions")) {
+                if (item.ActionToPerform == "Deductions") {
                     //navController.navigate(R.id.deductionFragment)
                     val intent = Intent(context, DeductionAgreementActivity::class.java)
                     context.startActivity(intent)
@@ -131,25 +137,25 @@ class NotificationAdapter(
                         if (it != null) {
                             pref.saveExpiredDocuments(it)
                             dialog.showDialog(fragmentManager)
-
                         } else {
                             dialog.showDialog(fragmentManager)
                         }
                     }
                 } else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement")) {
                     loadingDialog.show()
-
                     viewModel.GetVehicleAdvancePaymentAgreement(pref.clebUserId.toInt())
                     viewModel.liveDataGetAdvancePaymentAgreement.observe(viewLifecycleOwner) {
                         loadingDialog.dismiss()
                         if (it != null) {
-                            val amount = it.VehAdvancePaymentAgreementAmount ?: "amount"
-                            val date = it.AgreementDate ?: "date"
-                            val dialog = VehicleAdvancePaymentDialog.newInstance(
+                            val amount = it.VehAdvancePaymentAgreementAmount ?: "null"
+                            val date = it.AgreementDate ?: "null"
+                            val comment = it.VehicleAdvancePaymentContent?:"null"
+     /*                       val dialog = VehicleAdvancePaymentDialog.newInstance(
                                 amount.toString(),
                                 date.toString()
-                            )
-                            dialog.showDialog(fragmentManager)
+                            )*/
+                            showAdvancePaymentDialog(amount.toString(), date.toString(),comment.toString())
+                           // dialog.showDialog(fragmentManager)
                         } else {
                             showToast("Failed to fetch data", context)
                         }
@@ -160,9 +166,7 @@ class NotificationAdapter(
                 } else {
                     binding.notficationArrow.visibility = View.GONE
                 }
-
             }
-
         }
     }
 
@@ -183,5 +187,39 @@ class NotificationAdapter(
     override fun onBindViewHolder(holder: NotificationViewHolder, position: Int) {
         val item = asyncListDiffer.currentList[position]
         holder.bind(item)
+    }
+
+    fun showAdvancePaymentDialog(amount: String, date: String,comment:String) {
+        val advancePaymentDialog = AlertDialog.Builder(context).create()
+        val advancePaymentBinding =
+            DialogvehicleadvancepaymentBinding.inflate(LayoutInflater.from(context))
+        advancePaymentDialog.setView(advancePaymentBinding.root)
+        advancePaymentDialog.setCanceledOnTouchOutside(false)
+        advancePaymentDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        advancePaymentBinding.agreementAmount.text = amount
+        advancePaymentBinding.agreementDate.text =  date
+        advancePaymentBinding.tvText.text =comment
+
+        advancePaymentDialog.show()
+
+        advancePaymentBinding.approve.setOnClickListener {
+            advancePaymentDialog.dismiss()
+            advancePaymentDialog.cancel()
+            loadingDialog.show()
+            viewModel.ApproveVehicleAdvancePaymentAgreement(pref.clebUserId.toInt(), true)
+            viewModel.liveDataApproveVehicleAdvancePaymentAgreement.observe(viewLifecycleOwner) {
+                loadingDialog.dismiss()
+                if (it != null) {
+                    showToast("Approved✔✔",context)
+                } else {
+                    showToast("Failed to approve!!", context)
+                }
+            }
+        }
+/*        uploadDialogBinding.cancel.setOnClickListener {
+            uploadDialog.dismiss()
+            uploadDialog.cancel()
+        }*/
+
     }
 }

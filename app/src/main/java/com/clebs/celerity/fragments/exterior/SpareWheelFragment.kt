@@ -15,6 +15,7 @@ import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.dialogs.NoInternetDialog
+import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.getVRegNo
@@ -28,8 +29,10 @@ class SpareWheelFragment : BaseInteriorFragment() {
     private var VdhDaId = 0
     private var VdhVmId = 0
     private var VdhLmId = 0
+    var isNetworkActive: Boolean = true
     private var secondTry = false
     private var VdhOdoMeterReading = 0
+    lateinit var internetDialog: NoInternetDialog
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
     }
@@ -53,7 +56,17 @@ class SpareWheelFragment : BaseInteriorFragment() {
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.spareWheelFragment)
         mBinding.tvNext.visibility = View.GONE
         clickListeners()
-
+        internetDialog = (activity as HomeActivity).internetDialog
+        val networkManager = (activity as HomeActivity).networkManager
+        networkManager.observe(viewLifecycleOwner) {
+            if(it) {
+                isNetworkActive = true
+                internetDialog.hideDialog()
+            } else {
+                isNetworkActive = false
+                internetDialog.showDialog(fragmentManager)
+            }
+        }
         setDefault(mBinding.imageUploadIV, mBinding.edtDefect)
     }
 
@@ -132,7 +145,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
 
     override fun saveNnext() {
         var userId = Prefs.getInstance(requireContext()).clebUserId.toInt()
-        if (isNetworkAvailable(requireActivity().baseContext)) {
+        if (isNetworkActive) {
             showDialog()
             if (defectView) {
                 if (base64 != null) {

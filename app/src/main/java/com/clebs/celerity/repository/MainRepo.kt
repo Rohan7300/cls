@@ -1256,7 +1256,7 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun GetDAExpiringDocuments(
         userID: Int
-    ):SimpleNetworkResponse<ExpiringDocumentsResponse>{
+    ): SimpleNetworkResponse<ExpiringDocumentsResponse> {
         return safeApiCall {
             ApiService.GetDAExpiringDocuments(userID)
         }
@@ -1264,22 +1264,30 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun ApproveWeeklyRotabyDA(
         userID: Int,
-        lrnId:Int
-    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+        lrnId: Int
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
         return safeApiCall {
-            ApiService.ApproveWeeklyRotabyDA(userID,lrnId)
+            ApiService.ApproveWeeklyRotabyDA(userID, lrnId)
         }
     }
 
     suspend fun UploadExpiringDocs(
         userID: Int,
-        docTypeID:Int,
+        docTypeID: Int,
         multipartBody: MultipartBody.Part
-    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
         return safeApiCall {
-            ApiService.UploadExpiringDocs(userID,docTypeID,multipartBody)
+            ApiService.UploadExpiringDocs(userID, docTypeID, multipartBody)
         }
     }
 
+    suspend fun ApproveVehicleAdvancePaymentAgreement(
+        userID: Int,
+        isApproved: Boolean
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.ApproveVehicleAdvancePaymentAgreement(userID, isApproved)
+        }
+    }
 
 }

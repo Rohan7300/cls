@@ -282,6 +282,7 @@ class CompleteTaskFragment : Fragment() {
             //findNavController().navigate(R.id.vechileMileageFragment)
             navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
         }
+
         mbinding.ivFaceMask.setOnClickListener {
             requestCode = 0
             pictureDialogBase64(mbinding.ivFaceMask, requestCode)
@@ -377,11 +378,11 @@ class CompleteTaskFragment : Fragment() {
 
     private fun requestpermissions() {
 
-        activityResultLauncher.launch(CompleteTaskFragment.REQUIRED_PERMISSIONS)
+        activityResultLauncher.launch(REQUIRED_PERMISSIONS)
 
     }
 
-    private fun allPermissionsGranted() = CompleteTaskFragment.REQUIRED_PERMISSIONS.all {
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             requireContext(), it
         ) == PackageManager.PERMISSION_GRANTED
@@ -394,7 +395,7 @@ class CompleteTaskFragment : Fragment() {
         { permissions ->
             var permissionGranted = true
             permissions.entries.forEach {
-                if (it.key in CompleteTaskFragment.REQUIRED_PERMISSIONS && it.value == false)
+                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
                     permissionGranted = false
             }
             if (!permissionGranted) {
@@ -560,7 +561,8 @@ class CompleteTaskFragment : Fragment() {
 //                }
                 setVisibiltyLevel()
             } else {
-                showToast("Please add face mask image first", requireContext())
+                showToast("Face mask image not submitted or upload in progress!!", requireContext())
+                setVisibiltyLevel()
             }
         }
 
@@ -641,22 +643,51 @@ class CompleteTaskFragment : Fragment() {
             hideDialog()
             println(it)
             if (it != null) {
-                if (it!!.Status == "404"||osData.faceMaskImage==null) {
+                if (it!!.Status == "404" || osData.faceMaskImage == null) {
                     mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
                     showImageUploadLayout = true
                     imagesUploaded = false
                     setVisibiltyLevel()
-                } else {
-                    if(osData.faceMaskImage!=null&&it.DaVehImgFaceMaskFileName==null){
+                }
+                if (it!!.Status == "404"
+                    && (osData.faceMaskImage != null ||
+                            osData.oillevelImage != null ||
+                            osData.dashboardImage != null ||
+                            osData.frontImage != null ||
+                            osData.nearSideImage != null ||
+                            osData.rearSideImage != null ||
+                            osData.addblueImage != null ||
+                            osData.offSideImage != null)
+                ) {
+                    startUploadWithWorkManager(
+                        0,
+                        Prefs.getInstance(requireContext()),
+                        requireContext()
+                    )
+                    if (osData.faceMaskImage != null) {
                         imagesUploaded = true
                         setVisibiltyLevel()
-                        startUploadWithWorkManager(1, Prefs.getInstance(requireContext()), requireContext())
-                    }else{
+                        startUploadWithWorkManager(
+                            1,
+                            Prefs.getInstance(requireContext()),
+                            requireContext()
+                        )
+                    }
+                } else {
+                    if (osData.faceMaskImage != null && it.DaVehImgFaceMaskFileName == null) {
+                        imagesUploaded = true
+                        setVisibiltyLevel()
+                        startUploadWithWorkManager(
+                            1,
+                            Prefs.getInstance(requireContext()),
+                            requireContext()
+                        )
+                    } else {
                         if (it.IsVehicleImageUploaded == false && checkNull(it)) {
                             showImageUploadLayout = true
                             imagesUploaded = false
                             setVisibiltyLevel()
-                            //  mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                            //mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                         } else {
                             showImageUploadLayout = checkNull(it)
 
@@ -716,8 +747,34 @@ class CompleteTaskFragment : Fragment() {
                         }
                     }
                 }
+            } else {
+                if (osData.faceMaskImage != null ||
+                    osData.oillevelImage != null ||
+                    osData.dashboardImage != null ||
+                    osData.frontImage != null ||
+                    osData.nearSideImage != null ||
+                    osData.rearSideImage != null ||
+                    osData.addblueImage != null ||
+                    osData.offSideImage != null
+                ) {
+                    startUploadWithWorkManager(
+                        0,
+                        Prefs.getInstance(requireContext()),
+                        requireContext()
+                    )
+                    if (osData.faceMaskImage != null) {
+                        imagesUploaded = true
+                        setVisibiltyLevel()
+                        startUploadWithWorkManager(
+                            1,
+                            Prefs.getInstance(requireContext()),
+                            requireContext()
+                        )
+                    }
+                }
             }
-        })
+        }
+        )
 
         viewModel.liveDataDeleteOnRideAlongRouteInfo.observe(viewLifecycleOwner) {
             hideDialog()
@@ -817,7 +874,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun checkNull(res: GetVehicleImageUploadInfoResponse): Boolean {
-        return res.DaVehImgFaceMaskFileName == null && osData.faceMaskImage==null /*|| res.DaVehicleAddBlueImage == null || res.DaVehImgOilLevelFileName == null*/
+        return res.DaVehImgFaceMaskFileName == null && osData.faceMaskImage == null /*|| res.DaVehicleAddBlueImage == null || res.DaVehImgOilLevelFileName == null*/
     }
 
     private fun chkTime(edtBreakstart: TextView, edtBreakend: TextView): Boolean {
@@ -1052,6 +1109,7 @@ class CompleteTaskFragment : Fragment() {
         oSyncViewModel.insertData(osData)
         imagesUploaded = true
         setVisibiltyLevel()
+        visibilityLevel = 0
         startUploadWithWorkManager(1, Prefs.getInstance(requireContext()), requireContext())
 
     }
@@ -1261,6 +1319,7 @@ class CompleteTaskFragment : Fragment() {
                         R.drawable.background_complete_task_done
                     )
                 );
+                //mbinding.rlcomtwoBreak.visibility = View.VISIBLE
             }
 
             2 -> {

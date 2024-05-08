@@ -578,5 +578,11 @@ interface ApiService {
         @Query("docTypeId") docTypeID: Int,
         @Part multipartBody: MultipartBody.Part
     ): Response<SimpleStatusMsgResponse>
+
+    @PUT("/api/Drivers/ApproveVehicleAdvancePaymentAgreement")
+    suspend fun ApproveVehicleAdvancePaymentAgreement(
+        @Query("userId") userId: Int,
+        @Query("isApproved") isApproved:Boolean
+    ):Response<SimpleStatusMsgResponse>
 }
 

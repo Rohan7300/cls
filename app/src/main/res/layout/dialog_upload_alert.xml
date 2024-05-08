@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/very_light_orange"
+        android:background="@color/white"
 
         android:gravity="center"
         android:orientation="vertical"
@@ -45,12 +45,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/cancel"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="5dp"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/light_grey"
                 android:padding="10dp"
-                app:cardCornerRadius="20dp">
+                app:cardCornerRadius="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
                     android:paddingHorizontal="15dp"
                     android:paddingVertical="8dp"
                     android:text="Save Anyways"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_color"
                     android:textSize="12sp" />
             </androidx.cardview.widget.CardView>
 
@@ -68,12 +68,12 @@
                 android:id="@+id/upload"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="5dp"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:backgroundTint="#FBA27A"
                 android:padding="10dp"
-                app:cardCornerRadius="20dp">
+                app:cardCornerRadius="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"

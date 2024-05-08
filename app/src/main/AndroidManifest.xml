@@ -52,15 +52,18 @@
         tools:targetApi="tiramisu">
         <activity
             android:name=".ui.DeductionAgreementActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.ExpiringDocumentsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.TestActivity"
             android:exported="false" />
         <activity
             android:name=".ui.AddInspection"
+            android:screenOrientation="portrait"
             android:exported="true">
 
             <!--
@@ -98,12 +101,15 @@
 
         <activity
             android:name=".ui.ViewTicketsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.CommentDetailActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.AddCommentActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.PolicyDocsActivity"
@@ -115,6 +121,7 @@
             android:theme="@style/Theme.Celerity" />
         <activity
             android:name=".ui.WeeklyRotaApprovalActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Celerity" />
         <activity
             android:name=".ui.HomeActivity"

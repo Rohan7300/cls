@@ -97,6 +97,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     lateinit var prefs: Prefs
     var date = ""
     lateinit var loadingDialog: LoadingDialog
+    lateinit var networkManager:NetworkManager
 
     private var isApiResponseTrue = false
     private var trueCount = 0
@@ -146,6 +147,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
             val tempCode =
                 intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
+
             if (tempCode == 200) {
                 Log.d("hdhsdshdsdjshhsds", "200 $message")
                 prefs.saveBoolean("Inspection", true)
@@ -165,6 +167,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 } else {
                     locationID = currentloction
                 }
+
                 viewModel.SaveVehicleInspectionInfo(
                     SaveVehicleInspectionInfo(
                         Prefs.getInstance(App.instance).clebUserId.toInt(),
@@ -214,7 +217,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
         fragmentManager = this.supportFragmentManager
         internetDialog = NoInternetDialog()
-        val networkManager = NetworkManager(this)
+        networkManager = NetworkManager(this)
+
         networkManager.observe(this) {
             if (it) {
                 isNetworkActive = true
@@ -252,6 +256,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 if (checkIfInspectionFailed(it)) {
                     inspectionFailedDialog.showDialog(this.supportFragmentManager)
                 }
+            }else{
+                osData.clebID = prefs.clebUserId.toInt()
+                osData.dawDate = todayDate
+                osData.vehicleID = prefs.scannedVmRegNo
+                osData.isIni = true
             }
         }
 
@@ -291,7 +300,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
                 Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
                 hideDialog()
-
                 if (it != null) {
                     completeTaskScreen = it.IsSubmited
                     if (!completeTaskScreen) {

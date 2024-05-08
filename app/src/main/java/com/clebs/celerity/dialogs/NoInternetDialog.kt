@@ -21,7 +21,7 @@ class NoInternetDialog() : DialogFragment() {
     /*        tryAgain.setOnClickListener {
                 dismiss()
             }*/
-            isCancelable = false
+            isCancelable = true
             builder.setView(view).create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }

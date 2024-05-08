@@ -169,6 +169,7 @@ class MainViewModel(
     val liveDataGetDAExpiringDocuments = MutableLiveData<ExpiringDocumentsResponse?>()
     val liveDataApproveWeeklyRota = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataUploadExpiringDocs = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataApproveVehicleAdvancePaymentAgreement = MutableLiveData<SimpleStatusMsgResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
 
@@ -1581,7 +1582,7 @@ class MainViewModel(
 
     fun SaveVehicleInspectionInfo(body: SaveVehicleInspectionInfo) {
         viewModelScope.launch {
-            var response = repo.SaveVehicleInspectionInfo(body)
+            val response = repo.SaveVehicleInspectionInfo(body)
             if (response.failed)
                 livedataSavevehicleinspectioninfo.postValue(null)
             if (!response.isSuccessful)
@@ -1712,6 +1713,19 @@ class MainViewModel(
                 liveDataUploadExpiringDocs.postValue(null)
             else
                 liveDataUploadExpiringDocs.postValue(response.body)
+        }
+    }
+
+    fun ApproveVehicleAdvancePaymentAgreement(
+        userID: Int,
+        isApproved:Boolean
+    ){
+        viewModelScope.launch {
+            val response = repo.ApproveVehicleAdvancePaymentAgreement(userID,isApproved)
+            if(!response.isSuccessful || response.failed)
+                liveDataApproveVehicleAdvancePaymentAgreement.postValue(null)
+            else
+                liveDataApproveVehicleAdvancePaymentAgreement.postValue(response.body)
         }
     }
 }
