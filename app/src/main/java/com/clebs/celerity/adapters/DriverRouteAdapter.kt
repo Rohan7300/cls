@@ -85,4 +85,12 @@ class DriverRouteAdapter(
     fun saveData(data: GetDriverRouteInfoByDateResponse){
         asyncListDiffer.submitList(data)
     }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

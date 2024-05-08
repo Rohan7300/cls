@@ -1290,4 +1290,12 @@ class MainRepo(private val ApiService: ApiService) {
         }
     }
 
+    suspend fun WeeklyRotaExistForDAApproval(
+        userID: Int
+    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.WeeklyRotaExistForDAApproval(userID)
+        }
+    }
+
 }

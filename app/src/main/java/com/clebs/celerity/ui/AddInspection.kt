@@ -643,7 +643,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         } else {
             currentLocation
         }
-        viewModel.SaveVehicleInspectionInfo(
+/*        viewModel.SaveVehicleInspectionInfo(
             SaveVehicleInspectionInfo(
                 prefs.clebUserId.toInt(),
                 currentDate,
@@ -651,7 +651,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                 locationID,
                 prefs.VmID.toString().toInt()
             )
-        )
+        )*/
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {

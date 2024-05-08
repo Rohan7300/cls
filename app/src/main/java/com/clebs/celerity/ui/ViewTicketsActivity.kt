@@ -38,7 +38,8 @@ class ViewTicketsActivity : AppCompatActivity() {
         prefs = Prefs.getInstance(this)
         ticketData = prefs.getCurrentTicket()
         binding.imageViewBack.setOnClickListener {
-            onBackPressed()
+            finish()
+            //onBackPressed()
         }
         binding.commentIV.setOnClickListener {
             if (ticketData != null) {

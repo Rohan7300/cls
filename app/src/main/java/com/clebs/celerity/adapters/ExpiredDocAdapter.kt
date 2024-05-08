@@ -57,4 +57,12 @@ class ExpiredDocAdapter : RecyclerView.Adapter<ExpiredDocAdapter.ExpiredDocViewH
         val item = asyncListDiffer.currentList[position]
         holder.bind(item, position)
     }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

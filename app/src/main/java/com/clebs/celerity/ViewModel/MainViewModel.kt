@@ -170,6 +170,7 @@ class MainViewModel(
     val liveDataApproveWeeklyRota = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataUploadExpiringDocs = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataApproveVehicleAdvancePaymentAgreement = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataWeeklyRotaExistForDAApproval = MutableLiveData<SimpleStatusMsgResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
 
@@ -1726,6 +1727,18 @@ class MainViewModel(
                 liveDataApproveVehicleAdvancePaymentAgreement.postValue(null)
             else
                 liveDataApproveVehicleAdvancePaymentAgreement.postValue(response.body)
+        }
+    }
+
+    fun WeeklyRotaExistForDAApproval(
+        userID: Int
+    ){
+        viewModelScope.launch {
+            val response = repo.WeeklyRotaExistForDAApproval(userID)
+            if(!response.isSuccessful || response.failed)
+                liveDataWeeklyRotaExistForDAApproval.postValue(null)
+            else
+                liveDataWeeklyRotaExistForDAApproval.postValue(response.body)
         }
     }
 }

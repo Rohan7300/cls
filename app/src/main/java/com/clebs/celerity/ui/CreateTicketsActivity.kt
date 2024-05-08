@@ -97,11 +97,13 @@ class CreateTicketsActivity : AppCompatActivity() {
         }
 
         mbinding.imageViewBack.setOnClickListener {
-            onBackPressed()
+            finish()
+            //onBackPressed()
         }
 
         mbinding.cancel.setOnClickListener {
-            onBackPressed()
+            finish()
+            //onBackPressed()
         }
 
         val spinnerNamesWithPlaceholder = listOf<String>()
@@ -185,7 +187,8 @@ class CreateTicketsActivity : AppCompatActivity() {
                         file = filePart
                     )
                 } else {
-                    onBackPressed()
+                    finish()
+                    //onBackPressed()
                 }
             }
         }
@@ -193,10 +196,12 @@ class CreateTicketsActivity : AppCompatActivity() {
         viewmodel.liveDataUploadTicketAttachmentDoc.observe(this) {
             hideDialog()
             if (it != null) {
-                onBackPressed()
+                finish()
+                //onBackPressed()
             } else {
                 showToast("Failed to Upload Attachment!!", this)
-                onBackPressed()
+                finish()
+                //onBackPressed()
             }
         }
 
@@ -303,6 +308,7 @@ class CreateTicketsActivity : AppCompatActivity() {
                 }
             } else {
                 //saveTicket()
+                finish()
                 showToast("Attachment not selected!!", this)
                 //onBackPressed()
             }

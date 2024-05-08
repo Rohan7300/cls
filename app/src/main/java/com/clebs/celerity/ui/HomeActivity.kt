@@ -168,7 +168,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     locationID = currentloction
                 }
 
-                viewModel.SaveVehicleInspectionInfo(
+/*                viewModel.SaveVehicleInspectionInfo(
                     SaveVehicleInspectionInfo(
                         Prefs.getInstance(App.instance).clebUserId.toInt(),
                         currentDate,
@@ -176,7 +176,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         locationID,
                         Prefs.getInstance(App.instance).VmID.toString().toInt()
                     )
-                )
+                )*/
 
                 viewModel.livedataSavevehicleinspectioninfo.observe(this, Observer {
                     if (it != null) {

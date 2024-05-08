@@ -103,4 +103,12 @@ class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context
 
         holder.bind(item)
     }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

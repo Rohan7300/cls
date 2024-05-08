@@ -23,10 +23,12 @@ import android.util.Base64
 import android.util.Base64OutputStream
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.view.KeyEventDispatcher.dispatchKeyEvent
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager

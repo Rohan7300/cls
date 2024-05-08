@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.webkit.MimeTypeMap
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -44,9 +45,9 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
     lateinit var loadingDialog: LoadingDialog
     private var selectedFileUri: Uri? = null
     lateinit var filePart: MultipartBody.Part
-    var documentID:Int = -1
+    var documentID: Int = -1
 
-    companion object{
+    companion object {
         private val REQUIRED_PERMISSIONS =
             mutableListOf(
                 Manifest.permission.CAMERA
@@ -58,6 +59,7 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
                 }
             }.toTypedArray()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -73,11 +75,16 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
         binding.expringDocRV.adapter = adapter
         binding.expringDocRV.layoutManager = LinearLayoutManager(this)
         loadingDialog.show()
+
         viewmodel.GetDAExpiringDocuments(pref.clebUserId.toInt())
         viewmodel.liveDataGetDAExpiringDocuments.observe(this) {
             loadingDialog.dismiss()
             if (it != null) {
                 adapter.saveData(it)
+            } else {
+                showToast("No Documents found!!", this)
+                finish()
+
             }
         }
         binding.expringDocSave.isEnabled = false
@@ -85,10 +92,11 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
 
         }
         binding.expringDocCancel.setOnClickListener {
-            onBackPressed()
+            finish()
         }
 
     }
+
     override fun uploadIntent(documentTypeID: Int) {
         documentID = documentTypeID
         if (allPermissionsGranted()) {
@@ -167,10 +175,10 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
                         )
 
                         //loadingDialog.show()
-                        if(documentID!=-1)
-                        showUploadDialog()
+                        if (documentID != -1)
+                            showUploadDialog()
                         else
-                            showToast("Failed to fetch Document ID",this)
+                            showToast("Failed to fetch Document ID", this)
                     }
 
                 }
@@ -200,17 +208,19 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
         }
     }
 
-    fun uploadDoc(){
+    fun uploadDoc() {
         loadingDialog.show()
-        viewmodel.UploadExpiringDocs(pref.clebUserId.toInt(),documentID,filePart)
-        viewmodel.liveDataUploadExpiringDocs.observe(this){
-            if(it!=null){
+        viewmodel.UploadExpiringDocs(pref.clebUserId.toInt(), documentID, filePart)
+        viewmodel.liveDataUploadExpiringDocs.observe(this) {
+            if (it != null) {
                 loadingDialog.show()
                 viewmodel.GetDAExpiringDocuments(pref.clebUserId.toInt())
-                showToast("Document Uploaded succesfully!!",this)
-            }else{
-                showToast("Something went wron!!",this)
+                showToast("Document Uploaded succesfully!!", this)
+            } else {
+                showToast("Something went wrong!!", this)
             }
         }
     }
+
+
 }

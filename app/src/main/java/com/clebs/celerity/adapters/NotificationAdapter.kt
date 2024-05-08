@@ -17,12 +17,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.DialogvehicleadvancepaymentBinding
 import com.clebs.celerity.databinding.NotificationAdapterDialogBinding
-import com.clebs.celerity.databinding.UploadexpiringdocdialogBinding
 import com.clebs.celerity.dialogs.DailyRotaApprovalDialog
 import com.clebs.celerity.dialogs.ExpiredDocDialog
 import com.clebs.celerity.dialogs.InvoiceReadytoViewDialog
 import com.clebs.celerity.dialogs.LoadingDialog
-import com.clebs.celerity.dialogs.VehicleAdvancePaymentDialog
 import com.clebs.celerity.models.response.NotificationResponseItem
 import com.clebs.celerity.ui.DeductionAgreementActivity
 import com.clebs.celerity.ui.ExpiringDocumentsActivity
@@ -99,9 +97,7 @@ class NotificationAdapter(
                 val outputTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
                 formattedTime = dateTime.format(outputTimeFormatter)
                 binding.time.text = "$formattedTime  $formattedDate"
-                binding.notficationArrow.setOnClickListener {
 
-                }
             } catch (_: Exception) {
                 binding.time.text = item.NotificationSentOn
             }
@@ -124,7 +120,6 @@ class NotificationAdapter(
                         getCurrentYear().toString()
                     )
                     dialog.showDialog(fragmentManager)
-                    //navController.navigate(R.id.CLSInvoicesFragment)
                 } else if (item.ActionToPerform.equals("Weekly Location Rota") || item.ActionToPerform == "Weekly Rota Approval") {
                     val intent = Intent(context, WeeklyRotaApprovalActivity::class.java)
                     context.startActivity(intent)
@@ -138,7 +133,8 @@ class NotificationAdapter(
                             pref.saveExpiredDocuments(it)
                             dialog.showDialog(fragmentManager)
                         } else {
-                            dialog.showDialog(fragmentManager)
+                            showToast("No expired document founds",context)
+                            //dialog.showDialog(fragmentManager)
                         }
                     }
                 } else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement")) {
@@ -221,5 +217,13 @@ class NotificationAdapter(
             uploadDialog.cancel()
         }*/
 
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
 }

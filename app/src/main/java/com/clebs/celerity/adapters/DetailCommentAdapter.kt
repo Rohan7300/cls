@@ -99,4 +99,12 @@ class DetailCommentAdapter(
         else
             holder.bind(arrayList[position], false)
     }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

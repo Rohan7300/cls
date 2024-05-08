@@ -2,6 +2,7 @@ package com.clebs.celerity.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -56,10 +57,20 @@ class WeeklyRotaApprovalActivity : AppCompatActivity() {
             viewmodel.ApproveWeeklyRotabyDA(pref.clebUserId.toInt(), lrnID)
         }
 
+
+        viewmodel.WeeklyRotaExistForDAApproval(pref.clebUserId.toInt())
+        viewmodel.liveDataWeeklyRotaExistForDAApproval.observe(this){
+            if(it==null){
+                finish()
+                showToast("Weekly Rota not exist for approval.",this)
+            }
+
+        }
+
         viewmodel.liveDataApproveWeeklyRota.observe(this) {
             loadingDialog.dismiss()
             if (it != null)
-                onBackPressed()
+                finish()
             else
                 showToast("Failed to update weekly rota or already approved!!", this)
         }
@@ -133,4 +144,5 @@ class WeeklyRotaApprovalActivity : AppCompatActivity() {
 
         }
     }
+
 }

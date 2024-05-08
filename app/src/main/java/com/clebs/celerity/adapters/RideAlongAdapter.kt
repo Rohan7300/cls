@@ -230,4 +230,12 @@ class RideAlongAdapter(
     fun saveData(data:RideAlongDriverInfoByDateResponse){
         asyncListDiffer.submitList(data)
     }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

@@ -42,9 +42,7 @@ class OnRoadHoursFragment : Fragment() {
     private var totalMileage: String = "0"
     private var routeComment: String? = null
     private var dwID: Int = 0
-    private var vehID: Int = 0
     private var parcelBack = 0
-    lateinit var edtRoutes: EditText
     private lateinit var loadingDialog: LoadingDialog
 
     override fun onCreateView(

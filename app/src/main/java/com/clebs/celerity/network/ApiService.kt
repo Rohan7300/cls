@@ -584,5 +584,10 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("isApproved") isApproved:Boolean
     ):Response<SimpleStatusMsgResponse>
+
+    @GET("/api/Drivers/WeeklyRotaExistForDAApproval/{userId}")
+    suspend fun WeeklyRotaExistForDAApproval(
+        @Path("userId") userId: Int
+    ):Response<SimpleStatusMsgResponse>
 }
 

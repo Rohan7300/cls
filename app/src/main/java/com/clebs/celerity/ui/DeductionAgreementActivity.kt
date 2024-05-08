@@ -177,7 +177,8 @@ class DeductionAgreementActivity : AppCompatActivity() {
             viewmodel.liveDataUpdateDeducton.observe(this) {
                 loadingDialog.dismiss()
                 if (it != null) {
-                    onBackPressed()
+                    finish()
+                    //onBackPressed()
                 }
             }
         }

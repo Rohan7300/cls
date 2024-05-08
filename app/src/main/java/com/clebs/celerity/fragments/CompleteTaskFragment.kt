@@ -258,7 +258,6 @@ class CompleteTaskFragment : Fragment() {
         mbinding.rlcomtwoClock.setOnClickListener {
             showDialog()
             viewModel.UpdateClockInTime(userId)
-
         }
 
         mbinding.rlcomtwoClockOut.setOnClickListener {
@@ -511,10 +510,10 @@ class CompleteTaskFragment : Fragment() {
                 if (it.ClockedInTime != null) {
                     mbinding.tvClockedIN.text = it.ClockedInTime.toString()
                     isClockedIn = true
-                    setVisibiltyLevel()
+
                 } else {
                     isClockedIn = false
-                    setVisibiltyLevel()
+                    // setVisibiltyLevel()
                 }
 
                 if (it.ClockedOutTime != null) {
@@ -524,13 +523,14 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.rlcomtwoClockOut.isClickable = false
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
                 }
-            } else {
+            } /*else {
                 with(mbinding) {
                     listOf(
                         rlcomtwoClock, rlcomtwoBreak, onRoadView, rlcomtwoBreak, rlcomtwoClockOut
                     ).forEach { thisView -> thisView.visibility = View.GONE }
                 }
-            }
+            }*/
+            setVisibiltyLevel()
         }
 
         viewModel.ldcompleteTaskLayoutObserver.observe(viewLifecycleOwner) {
@@ -542,7 +542,6 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.searchLayout.visibility = View.VISIBLE
             }
         }
-
 
         viewModel.livedataClockInTime.observe(viewLifecycleOwner) {
             hideDialog()
@@ -643,62 +642,41 @@ class CompleteTaskFragment : Fragment() {
             hideDialog()
             println(it)
             if (it != null) {
+                showImageUploadLayout = false
+                imagesUploaded = true
                 if (it!!.Status == "404" || osData.faceMaskImage == null) {
                     mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
                     showImageUploadLayout = true
                     imagesUploaded = false
-                    setVisibiltyLevel()
+                } else if (checkNull(it)) {
+                    showImageUploadLayout = true
+                    imagesUploaded = false
                 }
-                if (it!!.Status == "404"
-                    && (osData.faceMaskImage != null ||
-                            osData.oillevelImage != null ||
-                            osData.dashboardImage != null ||
-                            osData.frontImage != null ||
-                            osData.nearSideImage != null ||
-                            osData.rearSideImage != null ||
-                            osData.addblueImage != null ||
-                            osData.offSideImage != null)
+                else if (it.DaVehicleAddBlueImage == null ||
+                    it.DaVehImgOilLevelFileName == null ||
+                    it.DaVehImgNearSideFileName == null ||
+                    it.DaVehImgRearFileName == null ||
+                    it.DaVehImgDashBoardFileName == null ||
+                    it.DaVehImgOffSideFileName == null
                 ) {
-                    startUploadWithWorkManager(
-                        0,
-                        Prefs.getInstance(requireContext()),
-                        requireContext()
-                    )
-                    if (osData.faceMaskImage != null) {
-                        imagesUploaded = true
-                        setVisibiltyLevel()
-                        startUploadWithWorkManager(
-                            1,
-                            Prefs.getInstance(requireContext()),
-                            requireContext()
-                        )
-                    }
+                        backgroundImageSync()
                 } else {
-                    if (osData.faceMaskImage != null && it.DaVehImgFaceMaskFileName == null) {
-                        imagesUploaded = true
-                        setVisibiltyLevel()
-                        startUploadWithWorkManager(
-                            1,
-                            Prefs.getInstance(requireContext()),
-                            requireContext()
-                        )
-                    } else {
-                        if (it.IsVehicleImageUploaded == false && checkNull(it)) {
+   /*                     if (it.IsVehicleImageUploaded == false && checkNull(it)) {
                             showImageUploadLayout = true
                             imagesUploaded = false
-                            setVisibiltyLevel()
+                            //   setVisibiltyLevel()
                             //mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                         } else {
                             showImageUploadLayout = checkNull(it)
 
                             if (showImageUploadLayout) {
                                 imagesUploaded = false
-                                setVisibiltyLevel()
+                                //  setVisibiltyLevel()
                             } else {
                                 imagesUploaded = true
-                                setVisibiltyLevel()
+                                //setVisibiltyLevel()
                                 isAllImageUploaded = true
-                            }
+                            }*/
                             /*
                                                     if (*//*it.DaVehicleAddBlueImage == null && it.DaVehImgOilLevelFileName == null &&*//* it.DaVehImgFaceMaskFileName == null) {
                             imageUploadLevel = 0
@@ -744,10 +722,10 @@ class CompleteTaskFragment : Fragment() {
                                                             )
                                                         }
                                                     }*/
-                        }
-                    }
+                        //}
                 }
-            } else {
+            }
+            else {
                 if (osData.faceMaskImage != null ||
                     osData.oillevelImage != null ||
                     osData.dashboardImage != null ||
@@ -757,22 +735,27 @@ class CompleteTaskFragment : Fragment() {
                     osData.addblueImage != null ||
                     osData.offSideImage != null
                 ) {
-                    startUploadWithWorkManager(
+                    backgroundImageSync()
+/*                    startUploadWithWorkManager(
                         0,
                         Prefs.getInstance(requireContext()),
                         requireContext()
                     )
                     if (osData.faceMaskImage != null) {
-                        imagesUploaded = true
-                        setVisibiltyLevel()
+              *//*          imagesUploaded = true
+                        showImageUploadLayout = false*//*
                         startUploadWithWorkManager(
                             1,
                             Prefs.getInstance(requireContext()),
                             requireContext()
                         )
-                    }
+                    }*/
+                }else{
+                    showImageUploadLayout = true
+                    imagesUploaded = false
                 }
             }
+            setVisibiltyLevel()
         }
         )
 
@@ -871,6 +854,25 @@ class CompleteTaskFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun backgroundImageSync() {
+        inspectionstarted = true
+        Prefs.getInstance(requireContext()).updateInspectionStatus(true)
+        startUploadWithWorkManager(
+            0,
+            Prefs.getInstance(requireContext()),
+            requireContext()
+        )
+        if (osData.faceMaskImage != null) {
+            imagesUploaded = true
+            startUploadWithWorkManager(
+                1,
+                Prefs.getInstance(requireContext()),
+                requireContext()
+            )
+        }
+        setVisibiltyLevel()
     }
 
     private fun checkNull(res: GetVehicleImageUploadInfoResponse): Boolean {
@@ -1109,7 +1111,7 @@ class CompleteTaskFragment : Fragment() {
         oSyncViewModel.insertData(osData)
         imagesUploaded = true
         setVisibiltyLevel()
-        visibilityLevel = 0
+        visibilityLevel = 1
         startUploadWithWorkManager(1, Prefs.getInstance(requireContext()), requireContext())
 
     }
@@ -1272,6 +1274,7 @@ class CompleteTaskFragment : Fragment() {
         with(mbinding) {
             listOf(
                 uploadLayouts,
+                startinspection,
                 rlcomtwoBreak,
                 onRoadView,
                 rlcomtwoBreak,
@@ -1285,6 +1288,7 @@ class CompleteTaskFragment : Fragment() {
         when (visibilityLevel) {
             -1 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
+                mbinding.startinspection.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.GONE
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
                 /*mbinding.clFaceMask.visibility = View.GONE
