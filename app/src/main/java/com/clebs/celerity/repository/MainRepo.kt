@@ -1,9 +1,8 @@
 package com.clebs.celerity.repository
 
 import android.util.Log
-import androidx.fragment.app.FragmentManager
+import com.clebs.celerity.dialogs.VehicleAdvancePaymentDialog
 import com.clebs.celerity.models.CashFlowPieChartResponse
-import com.clebs.celerity.models.CashFlowPieChartResponseItem
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
 import com.clebs.celerity.models.SimpleNetworkResponse
@@ -11,7 +10,6 @@ import com.clebs.celerity.models.TicketDepartmentsResponse
 import com.clebs.celerity.models.ViewFullScheduleResponse
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
-import com.clebs.celerity.models.requests.GetDriverBasicInfoRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
 import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
@@ -27,6 +25,7 @@ import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
 import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
+import com.clebs.celerity.models.requests.UpdateDeductioRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.response.LoginResponse
@@ -34,10 +33,13 @@ import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.DeductionAgreementResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
 import com.clebs.celerity.models.response.DownloadInvoicePDFResponse
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
+import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
+import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
@@ -48,13 +50,12 @@ import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRideAlongRouteTypeInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongVehicleLists
-import com.clebs.celerity.models.response.GetRideAlongVehicleListsItem
 import com.clebs.celerity.models.response.GetRouteInfoByIdRes
 import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
-import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
+import com.clebs.celerity.models.response.GetVehicleAdvancePaymentAgreementResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.GetvehicleInfoByDriverId
@@ -67,12 +68,9 @@ import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.network.ApiService
-import com.clebs.celerity.utils.NoInternetDialog
-import com.google.gson.Gson
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response
-import retrofit2.http.Body
 import java.lang.IllegalArgumentException
 
 class MainRepo(private val ApiService: ApiService) {
@@ -81,7 +79,7 @@ class MainRepo(private val ApiService: ApiService) {
         return try {
             SimpleNetworkResponse.success(apiCall.invoke())
         } catch (e: Exception) {
-            Log.d("SafeException","$e")
+            Log.d("SafeException", "$e")
             SimpleNetworkResponse.failure(e)
         }
     }
@@ -268,17 +266,18 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun uploadVehicleImage(
         userID: Int,
         image: MultipartBody.Part,
-        type: Int
+        type: Int,
+        dateTime: String
     ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
         val response = when (type) {
-            0 -> ApiService.UploadFaceMaskFile(userID, image)
-            1 -> ApiService.uploadVehicleDashboardImage(userID, image)
-            2 -> ApiService.uploadVehFrontImage(userID, image)
-            3 -> ApiService.uploadVehNearSideImage(userID, image)
-            4 -> ApiService.uploadVehRearImage(userID, image)
-            5 -> ApiService.UploadVehicleOilLevelFile(userID, image)
-            6 -> ApiService.uploadVehOffSideImage(userID, image)
-            7 -> ApiService.UploadVehicleAddBlueFile(userID, image)
+            0 -> ApiService.UploadFaceMaskFile(userID, image, dateTime)
+            1 -> ApiService.uploadVehicleDashboardImage(userID, image, dateTime)
+            2 -> ApiService.uploadVehFrontImage(userID, image, dateTime)
+            3 -> ApiService.uploadVehNearSideImage(userID, image, dateTime)
+            4 -> ApiService.uploadVehRearImage(userID, image, dateTime)
+            5 -> ApiService.UploadVehicleOilLevelFile(userID, image, dateTime)
+            6 -> ApiService.uploadVehOffSideImage(userID, image, dateTime)
+            7 -> ApiService.UploadVehicleAddBlueFile(userID, image, dateTime)
             else ->
                 throw IllegalArgumentException()
         }
@@ -1223,5 +1222,72 @@ class MainRepo(private val ApiService: ApiService) {
         }
     }
 
+    suspend fun GetVehicleAdvancePaymentAgreement(
+        userID: Int
+    ): SimpleNetworkResponse<GetVehicleAdvancePaymentAgreementResponse> {
+        return safeApiCall {
+            ApiService.GetVehicleAdvancePaymentAgreement(userID)
+        }
+    }
+
+    suspend fun GetDeductionAgreement(
+        userID: Int
+    ): SimpleNetworkResponse<DeductionAgreementResponse> {
+        return safeApiCall {
+            ApiService.GetDeductionAgreement(userID)
+        }
+    }
+
+    suspend fun UpdateDaDeductionSignAgreement(
+        body: UpdateDeductioRequest
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.UpdateDaDeductionSignAgreement(body)
+        }
+    }
+
+    suspend fun GetDaVehicleExpiredDocuments(
+        userID: Int
+    ): SimpleNetworkResponse<GetDAVehicleExpiredDocumentsResponse> {
+        return safeApiCall {
+            ApiService.GetDaVehicleExpiredDocuments(userID)
+        }
+    }
+
+    suspend fun GetDAExpiringDocuments(
+        userID: Int
+    ): SimpleNetworkResponse<ExpiringDocumentsResponse> {
+        return safeApiCall {
+            ApiService.GetDAExpiringDocuments(userID)
+        }
+    }
+
+    suspend fun ApproveWeeklyRotabyDA(
+        userID: Int,
+        lrnId: Int
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.ApproveWeeklyRotabyDA(userID, lrnId)
+        }
+    }
+
+    suspend fun UploadExpiringDocs(
+        userID: Int,
+        docTypeID: Int,
+        multipartBody: MultipartBody.Part
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.UploadExpiringDocs(userID, docTypeID, multipartBody)
+        }
+    }
+
+    suspend fun ApproveVehicleAdvancePaymentAgreement(
+        userID: Int,
+        isApproved: Boolean
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.ApproveVehicleAdvancePaymentAgreement(userID, isApproved)
+        }
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.clebs.celerity.utils
+package com.clebs.celerity.dialogs
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -14,6 +14,8 @@ import androidx.fragment.app.DialogFragment
 import com.clebs.celerity.DrawViewClass
 import com.clebs.celerity.DrawViewClass.Companion.pathList
 import com.clebs.celerity.R
+import com.clebs.celerity.utils.SignatureListener
+import com.clebs.celerity.utils.showToast
 
 class CustDialog2 : DialogFragment() {
 

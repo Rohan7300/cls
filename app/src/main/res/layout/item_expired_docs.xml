@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/headerh1"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/very_light_orange"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/poppins_semibold"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:text="Document Type"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Expiry Date"
+            android:textSize="14sp"
+            android:textColor="@color/text_color" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginVertical="2dp"
+        android:layout_marginHorizontal="1dp"
+        android:background="@color/text_color"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/birthCertTV"
+            android:fontFamily="@font/poppins"
+            android:gravity="center"
+            android:text="Birth Certificate"
+            android:textSize="12sp"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/expiryDateTV"
+            android:fontFamily="@font/poppins"
+            android:text="Expiry Date"
+            android:textColor="@color/text_color" />
+    </LinearLayout>
+    </LinearLayout>

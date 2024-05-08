@@ -50,9 +50,9 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.showLog
-import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.ScanErrorDialogListener
+import com.clebs.celerity.dialogs.ScanErrorDialogListener
 import com.clebs.celerity.utils.getFileFromUri
 import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.showScanErrorDialog

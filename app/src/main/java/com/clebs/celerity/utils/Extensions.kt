@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.content.res.Configuration
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -25,17 +24,24 @@ import android.util.Base64OutputStream
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
-import android.view.WindowManager
+import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.clebs.celerity.R
 import com.clebs.celerity.database.ImageEntity
+import com.clebs.celerity.database.OfflineSyncEntity
+import com.clebs.celerity.dialogs.ErrorDialog
+import com.clebs.celerity.dialogs.ScanErrorDialog
 import com.clebs.celerity.fragments.DailyWorkFragment
-import com.google.android.material.timepicker.MaterialTimePicker
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -345,10 +351,10 @@ fun convertBitmapToBase64(bitmap: Bitmap): String {
 
 fun dbLog(it: ImageEntity) {
 
-val TAG = "DB_TEST"
-     Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
-     Log.d(TAG, it.toString())
-     Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
+    /*val TAG = "DB_TEST"
+         Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")
+         Log.d(TAG, it.toString())
+         Log.d(TAG, "\n\n-+-----------------------------------------------------------------+-\n\n")*/
 
 }
 
@@ -486,6 +492,7 @@ fun showTimePickerDialog(context: Context, tv: TextView) {
     //timePickerDialog.getButton(TimePickerDialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.orange))
     timePickerDialog.show()
 }
+
 //fun hideKeyboardInputInTimePicker(orientation: Int, timePickerDialog: TimePickerDialog) {
 //    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //        try {
@@ -591,7 +598,6 @@ fun showDatePickerDialog(context: Context, tv1: TextView, tv2: TextView, tvNext:
 }
 
 
-
 fun isEndDateGreaterThanStartDate(startDate: String, endDate: String): Boolean {
     val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     try {
@@ -631,7 +637,6 @@ fun showScanErrorDialog(
 }
 
 
-
 fun getCurrentDateTime(): String {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     dateFormat.timeZone = TimeZone.getTimeZone("UTC")
@@ -651,18 +656,111 @@ fun convertDateFormat(inputDate: String, inputFormat: String, outputFormat: Stri
     }
 }
 
-fun getVRegNo(prefs: Prefs):String{
-    return if(prefs.scannedVmRegNo.isEmpty()){
+fun getVRegNo(prefs: Prefs): String {
+    return if (prefs.scannedVmRegNo.isEmpty()) {
         prefs.vmRegNo
-    }else
+    } else
         prefs.scannedVmRegNo
 }
 
-fun getLoc(prefs: Prefs):String{
+fun getLoc(prefs: Prefs): String {
     return if (prefs.currLocationName.isNotEmpty())
         prefs.currLocationName ?: ""
     else
         prefs.workLocationName ?: ""
+}
+
+fun checkIfInspectionFailed(osData: OfflineSyncEntity): Boolean {
+    return osData.isdashboardUploadedFailed || osData.isfrontImageFailed || osData.isnearSideFailed || osData.isoffSideFailed || osData.isrearSideFailed || osData.isoillevelImageFailed || osData.isaddblueImageFailed
+}
+
+fun logOSEntity(base: String, osData: OfflineSyncEntity) {
+    Log.d("$base", "OS DATA LOG + --------------------")
+    Log.d("OSData DashFailureStat", osData.isdashboardUploadedFailed.toString())
+    Log.d("OSData FrontImageFailed", osData.isfrontImageFailed.toString())
+    Log.d("OSData NearSideFailed", osData.isnearSideFailed.toString())
+    Log.d("OSData RearSideFailed", osData.isrearSideFailed.toString())
+    Log.d("OSData OffSideFailed", osData.isoffSideFailed.toString())
+    Log.d("OSData AddblueFailed", osData.isaddblueImageFailed.toString())
+    Log.d("OSData OilFailed", osData.isoillevelImageFailed.toString())
+
+    osData.dashboardImage?.take(10)
+        ?.let { it1 -> Log.d("OSData DashboardImageFirst10", it1) }
+        ?: Log.d("OSData DashboardImage", "null")
+
+    osData.frontImage?.take(10)
+        ?.let { it1 -> Log.d("OSData frontImageFirst10", it1) }
+        ?: Log.d("OSData frontImage", "null")
+
+    osData.rearSideImage?.take(10)
+        ?.let { it1 -> Log.d("OSData rearSideImageFirst10", it1) }
+        ?: Log.d("OSData rearSideImage", "null")
+
+    osData.nearSideImage?.take(10)
+        ?.let { it1 -> Log.d("OSData nearSideImageFirst10", it1) }
+        ?: Log.d("OSData nearSideImage", "null")
+
+    osData.offSideImage?.take(10)
+        ?.let { it1 -> Log.d("OSData offSideImageFirst10", it1) }
+        ?: Log.d("OSData offSideImage", "null")
+
+    osData.addblueImage?.take(10)
+        ?.let { it1 -> Log.d("OSData addblueImageFirst10", it1) }
+        ?: Log.d("OSData addblueImage", "null")
+
+    osData.oillevelImage?.take(10)
+        ?.let { it1 -> Log.d("OSData oillevelImageFirst10", it1 + "\n") }
+        ?: Log.d("OSData oillevelImage", "null")
+
+    Log.d("$base", "OS DATA LOG + --------------------")
+}
+
+fun startUploadWithWorkManager(uploadType: Int, prefs: Prefs, context: Context) {
+
+
+    val userId = prefs.clebUserId.toInt()
+
+    val inputData = Data.Builder()
+        .putInt("clebUserId", userId)
+        .putInt("uploadtype", uploadType)
+        .build()
+
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .build()
+
+    val uploadWorkRequest = OneTimeWorkRequestBuilder<ImageUploadWorker>()
+        .setInputData(inputData)
+        .setConstraints(constraints)
+        .build()
+
+    WorkManager.getInstance(context).enqueue(uploadWorkRequest)
+}
+
+
+fun getCurrentWeek(): Int {
+    val calendar = Calendar.getInstance()
+    return calendar.get(Calendar.WEEK_OF_YEAR)
+}
+
+fun getCurrentYear(): Int {
+    val calendar = Calendar.getInstance()
+    return calendar.get(Calendar.YEAR)
+}
+fun convertDateFormat(inputDate: String): String {
+    try {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val date = inputFormat.parse(inputDate)
+        return outputFormat.format(date!!)
+    }catch (_:Exception){
+        return  " "
+    }
+}
+
+fun getMimeType(uri: Uri): String? {
+    val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+    return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
 }
 
 

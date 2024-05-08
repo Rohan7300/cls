@@ -33,9 +33,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.ViewModel.OSyncViewModel
 import com.clebs.celerity.adapters.BreakTimeAdapter
 import com.clebs.celerity.adapters.DriverRouteAdapter
 import com.clebs.celerity.adapters.RideAlongAdapter
+import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
 import com.clebs.celerity.databinding.TimePickerDialogBinding
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
@@ -47,21 +49,23 @@ import com.clebs.celerity.ui.AddInspection
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
-import com.clebs.celerity.utils.LoadingDialog
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
+import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.toRequestBody
 import com.tapadoo.alerter.Alerter
-//import io.clearquote.assessment.cq_sdk.CQSDKInitializer
-//import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
-//import io.clearquote.assessment.cq_sdk.models.CustomerDetails
-//import io.clearquote.assessment.cq_sdk.models.InputDetails
-//import io.clearquote.assessment.cq_sdk.models.VehicleDetails
+import io.clearquote.assessment.cq_sdk.CQSDKInitializer
+import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
+import io.clearquote.assessment.cq_sdk.models.CustomerDetails
+import io.clearquote.assessment.cq_sdk.models.InputDetails
+import io.clearquote.assessment.cq_sdk.models.VehicleDetails
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -83,6 +87,7 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var inspectionID: String
     lateinit var ivX: ImageView
     var codeX = 0
+    lateinit var osData: OfflineSyncEntity
     private var requestCode: Int = 0
     private var showImageUploadLayout: Boolean = false
     private var isAllImageUploaded: Boolean = false
@@ -100,8 +105,9 @@ class CompleteTaskFragment : Fragment() {
     private var b1 = false
     private var b2 = false
     var breakTimeSent = false
-//    private lateinit var cqSDKInitializer: CQSDKInitializer
+    private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
+    private lateinit var oSyncViewModel: OSyncViewModel
     private var imageUploadLevel = 0
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
@@ -147,12 +153,16 @@ class CompleteTaskFragment : Fragment() {
         mbinding.mainCompleteTask.animation = animFadein
 
         loadingDialog = (activity as HomeActivity).loadingDialog
+        oSyncViewModel = (activity as HomeActivity).oSyncViewModel
+        osData = (activity as HomeActivity).osData
+
         userId = Prefs.getInstance(requireContext()).clebUserId.toInt()
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.addBreakIV.setOnClickListener(clickListener)
 
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
+
         mbinding.h1.setOnClickListener {
             if (mbinding.breakH2.isVisible) {
                 mbinding.breakH2.visibility = View.GONE
@@ -162,12 +172,13 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.badgeArrow.setImageResource(R.drawable.down_arrow)
             }
         }
-//        mbinding.ivFaceMask.setImageResource(io.clearquote.assessment.cq_sdk.R.drawable.camera_icon)
+
+        mbinding.ivFaceMask.setImageResource(io.clearquote.assessment.cq_sdk.R.drawable.camera_icon)
         Prefs.getInstance(requireContext()).clearNavigationHistory()
         fragmentManager = (activity as HomeActivity).fragmentManager
-//        cqSDKInitializer = CQSDKInitializer(requireContext())
-//        cqSDKInitializer.triggerOfflineSync()
-        setProgress()
+        cqSDKInitializer = CQSDKInitializer(requireContext())
+        cqSDKInitializer.triggerOfflineSync()
+        //setProgress()
 
         //inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
         inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
@@ -177,27 +188,20 @@ class CompleteTaskFragment : Fragment() {
             Prefs.getInstance(App.instance).clebUserId.toInt(),
             currentDate
         )
-        viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner) {
-
-            if (it != null) {
-
-                scannedvrn = it.vmRegNo
-                Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
-                if (!Prefs.getInstance(App.instance).VmID.isNotEmpty()) {
-                    Prefs.getInstance(App.instance).VmID = it.vmId.toString()
-                }
-            }
-        }
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.completeTaskFragment)
         viewModel.GetVehicleImageUploadInfo(Prefs.getInstance(requireContext()).clebUserId.toInt())
-
-        observers()
         showDialog()
         viewModel.GetDriverBreakTimeInfo(userId)
         showDialog()
         viewModel.GetDailyWorkInfoById(userId)
+        showDialog()
         viewModel.GetDriverRouteInfoByDate(userId)
+        showDialog()
         viewModel.GetRideAlongDriverInfoByDate(userId)
+        (activity as HomeActivity).GetDriversBasicInformation()
+
+        observers()
+
         if (mbinding.startinspection.isVisible) {
             val anim = ValueAnimator.ofFloat(1f, 1.2f)
             anim.setDuration(1000)
@@ -278,6 +282,7 @@ class CompleteTaskFragment : Fragment() {
             //findNavController().navigate(R.id.vechileMileageFragment)
             navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
         }
+
         mbinding.ivFaceMask.setOnClickListener {
             requestCode = 0
             pictureDialogBase64(mbinding.ivFaceMask, requestCode)
@@ -287,8 +292,8 @@ class CompleteTaskFragment : Fragment() {
             pictureDialogBase64(mbinding.ivFaceMask, requestCode)
         }
         mbinding.startinspection.setOnClickListener {
-           // startInspection()
-            val intent = Intent(requireContext(),AddInspection::class.java)
+            // startInspection()
+            val intent = Intent(requireContext(), AddInspection::class.java)
             startActivity(intent)
         }
         mbinding.ivOilLevel.setOnClickListener {
@@ -373,11 +378,11 @@ class CompleteTaskFragment : Fragment() {
 
     private fun requestpermissions() {
 
-        activityResultLauncher.launch(CompleteTaskFragment.REQUIRED_PERMISSIONS)
+        activityResultLauncher.launch(REQUIRED_PERMISSIONS)
 
     }
 
-    private fun allPermissionsGranted() = CompleteTaskFragment.REQUIRED_PERMISSIONS.all {
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             requireContext(), it
         ) == PackageManager.PERMISSION_GRANTED
@@ -390,7 +395,7 @@ class CompleteTaskFragment : Fragment() {
         { permissions ->
             var permissionGranted = true
             permissions.entries.forEach {
-                if (it.key in CompleteTaskFragment.REQUIRED_PERMISSIONS && it.value == false)
+                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
                     permissionGranted = false
             }
             if (!permissionGranted) {
@@ -405,7 +410,7 @@ class CompleteTaskFragment : Fragment() {
 
         inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
         Log.d("hdhsdshdsdjshhsds", "Ins $inspectionstarted")
-//        checkInspection()
+        checkInspection()
         if (inspectionstarted?.equals(true) == true) {
             setVisibiltyLevel()
         } else {
@@ -436,8 +441,17 @@ class CompleteTaskFragment : Fragment() {
         else
             mbinding.headerTop.strikedxLoc.visibility = View.GONE
 
-        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+        viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner) {
+            if (it != null) {
+                scannedvrn = it.vmRegNo
+                Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
+                if (!Prefs.getInstance(App.instance).VmID.isNotEmpty()) {
+                    Prefs.getInstance(App.instance).VmID = it.vmId.toString()
+                }
+            }
+        }
 
+        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
                 if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
@@ -504,7 +518,7 @@ class CompleteTaskFragment : Fragment() {
                 }
 
                 if (it.ClockedOutTime != null) {
-                    mbinding.clockOutMark.setImageResource(R.drawable.baseline_access_time_filled_24)
+                    mbinding.clockOutMark.setImageResource(R.drawable.finalclockout)
                     mbinding.rlcomtwoClockOut.isEnabled = false
                     mbinding.clockOutTV.text = "Clocked Out"
                     mbinding.rlcomtwoClockOut.isClickable = false
@@ -547,7 +561,8 @@ class CompleteTaskFragment : Fragment() {
 //                }
                 setVisibiltyLevel()
             } else {
-                showToast("Please add face mask image first", requireContext())
+                showToast("Face mask image not submitted or upload in progress!!", requireContext())
+                setVisibiltyLevel()
             }
         }
 
@@ -556,7 +571,7 @@ class CompleteTaskFragment : Fragment() {
             viewModel.GetDailyWorkInfoById(userId)
             showDialog()
             if (it != null) {
-                mbinding.clockOutMark.setImageResource(R.drawable.baseline_access_time_filled_24)
+                mbinding.clockOutMark.setImageResource(R.drawable.finalclockout)
                 mbinding.rlcomtwoClockOut.isEnabled = false
                 mbinding.clockOutTV.text = "Clocked Out"
                 mbinding.rlcomtwoClockOut.isClickable = false
@@ -580,22 +595,28 @@ class CompleteTaskFragment : Fragment() {
                 latestBreakInfo?.let { breakInfo ->
                     val breakTimeEnd = breakInfo.BreakTimeEnd
                     val breakTimeStart = breakInfo.BreakTimeStart
-                    if (breakTimeStart.isNotEmpty() && breakTimeEnd.isNotEmpty()) {
-                        val reversedList = it.reversed()
-                        breakTimeadapter.data.clear()
-                        breakTimeadapter.data.addAll(reversedList)
-                        breakTimeadapter.notifyDataSetChanged()
-                        isBreakTimeAdded = true
-                        setVisibiltyLevel()
-                    } else {
+                    try {
+                        if (breakTimeStart.isNotEmpty() && breakTimeEnd.isNotEmpty()) {
+                            val reversedList = it.reversed()
+                            breakTimeadapter.data.clear()
+                            breakTimeadapter.data.addAll(reversedList)
+                            breakTimeadapter.notifyDataSetChanged()
+                            isBreakTimeAdded = true
+                            setVisibiltyLevel()
+                        } else {
+                            showToast("No Break time information added!!", requireContext())
+                        }
+                    } catch (_: Exception) {
                         showToast("No Break time information added!!", requireContext())
                     }
+
                 } ?: showToast("No Break time information added!!", requireContext())
             } else {
                 isBreakTimeAdded = false
                 setVisibiltyLevel()
             }
         }
+
         viewModel.liveDataDeleteBreakTime.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
@@ -622,92 +643,138 @@ class CompleteTaskFragment : Fragment() {
             hideDialog()
             println(it)
             if (it != null) {
-                if (it!!.Status == "404") {
+                if (it!!.Status == "404" || osData.faceMaskImage == null) {
                     mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
                     showImageUploadLayout = true
                     imagesUploaded = false
                     setVisibiltyLevel()
-                } else {
-                    if (it.IsVehicleImageUploaded == false) {
-                        showImageUploadLayout = true
-                        imagesUploaded = false
+                }
+                if (it!!.Status == "404"
+                    && (osData.faceMaskImage != null ||
+                            osData.oillevelImage != null ||
+                            osData.dashboardImage != null ||
+                            osData.frontImage != null ||
+                            osData.nearSideImage != null ||
+                            osData.rearSideImage != null ||
+                            osData.addblueImage != null ||
+                            osData.offSideImage != null)
+                ) {
+                    startUploadWithWorkManager(
+                        0,
+                        Prefs.getInstance(requireContext()),
+                        requireContext()
+                    )
+                    if (osData.faceMaskImage != null) {
+                        imagesUploaded = true
                         setVisibiltyLevel()
-                        //  mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                        startUploadWithWorkManager(
+                            1,
+                            Prefs.getInstance(requireContext()),
+                            requireContext()
+                        )
+                    }
+                } else {
+                    if (osData.faceMaskImage != null && it.DaVehImgFaceMaskFileName == null) {
+                        imagesUploaded = true
+                        setVisibiltyLevel()
+                        startUploadWithWorkManager(
+                            1,
+                            Prefs.getInstance(requireContext()),
+                            requireContext()
+                        )
                     } else {
-
-                        showImageUploadLayout = checkNull(it)
-
-                        if (showImageUploadLayout) {
+                        if (it.IsVehicleImageUploaded == false && checkNull(it)) {
+                            showImageUploadLayout = true
                             imagesUploaded = false
                             setVisibiltyLevel()
-                            //   mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
-//                            mbinding.taskDetails.visibility = View.VISIBLE
+                            //mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
                         } else {
-                            imagesUploaded = true
-                            setVisibiltyLevel()
-                            isAllImageUploaded = true
-                        }
+                            showImageUploadLayout = checkNull(it)
 
-                        if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
-                            // All images uploaded
-                            imageUploadLevel = 3
-                            mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
-                            mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
-                            mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
-                        } else if (it.DaVehicleAddBlueImage == null && it.DaVehImgFaceMaskFileName == null) {
-                            imageUploadLevel = 0
-                        } else if (it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage == null) {
-                            imageUploadLevel = 1
-                            mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
-                        } else if (it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName == null) {
-                            imageUploadLevel = 0
-                            mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
-                        } else if (it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage != null) {
-                            imageUploadLevel = 2
-                            mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
-                            mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
-                        } else {
-                            imageUploadLevel = 0
-                        }
-
-                        setProgress()
-
-                        /*else if (it.DaVehImgFaceMaskFileName != null) {
-                            imageUploadLevel = 1
-                            setProgress()
-                            mbinding.ivFaceMask.setImageResource(
-                                R.drawable.ic_yes
-                            )
-                        } else if (it.DaVehicleAddBlueImage != null) {
-                            imageUploadLevel = 2
-                            setProgress()
-
-                            mbinding.ivAddBlueImg.setImageResource(
-                                R.drawable.ic_yes
-                            )
-                        }*/
-
-                        mbinding.run {
-                            mbinding.tvNext.isEnabled =
-                                it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
-                            if (tvNext.isEnabled) {
-                                tvNext.setTextColor(
-                                    ContextCompat.getColor(
-                                        requireContext(), R.color.white
-                                    )
-                                )
+                            if (showImageUploadLayout) {
+                                imagesUploaded = false
+                                setVisibiltyLevel()
                             } else {
-                                tvNext.setTextColor(
-                                    ContextCompat.getColor(
-                                        requireContext(), R.color.orange
-                                    )
-                                )
+                                imagesUploaded = true
+                                setVisibiltyLevel()
+                                isAllImageUploaded = true
                             }
+                            /*
+                                                    if (*//*it.DaVehicleAddBlueImage == null && it.DaVehImgOilLevelFileName == null &&*//* it.DaVehImgFaceMaskFileName == null) {
+                            imageUploadLevel = 0
+                        }*/
+                            /*else if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
+                                // All images uploaded
+                                imageUploadLevel = 3
+                                mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
+                                mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
+                                mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
+                            } else if (it.DaVehicleAddBlueImage == null && it.DaVehImgFaceMaskFileName == null) {
+                                imageUploadLevel = 0
+                            } else if (it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage == null) {
+                                imageUploadLevel = 1
+                                mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
+                            } else if (it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName == null) {
+                                imageUploadLevel = 0
+                                mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
+                            } else if (it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage != null) {
+                                imageUploadLevel = 2
+                                mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
+                                mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
+                            } else {
+                                imageUploadLevel = 0
+                            }*/
+
+                            //setProgress()
+
+                            /*                        mbinding.run {
+                                                        mbinding.tvNext.isEnabled =
+                                                            it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
+                                                        if (tvNext.isEnabled) {
+                                                            tvNext.setTextColor(
+                                                                ContextCompat.getColor(
+                                                                    requireContext(), R.color.white
+                                                                )
+                                                            )
+                                                        } else {
+                                                            tvNext.setTextColor(
+                                                                ContextCompat.getColor(
+                                                                    requireContext(), R.color.orange
+                                                                )
+                                                            )
+                                                        }
+                                                    }*/
                         }
                     }
                 }
+            } else {
+                if (osData.faceMaskImage != null ||
+                    osData.oillevelImage != null ||
+                    osData.dashboardImage != null ||
+                    osData.frontImage != null ||
+                    osData.nearSideImage != null ||
+                    osData.rearSideImage != null ||
+                    osData.addblueImage != null ||
+                    osData.offSideImage != null
+                ) {
+                    startUploadWithWorkManager(
+                        0,
+                        Prefs.getInstance(requireContext()),
+                        requireContext()
+                    )
+                    if (osData.faceMaskImage != null) {
+                        imagesUploaded = true
+                        setVisibiltyLevel()
+                        startUploadWithWorkManager(
+                            1,
+                            Prefs.getInstance(requireContext()),
+                            requireContext()
+                        )
+                    }
+                }
             }
-        })
+        }
+        )
 
         viewModel.liveDataDeleteOnRideAlongRouteInfo.observe(viewLifecycleOwner) {
             hideDialog()
@@ -807,7 +874,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun checkNull(res: GetVehicleImageUploadInfoResponse): Boolean {
-        return res.DaVehImgFaceMaskFileName == null || res.DaVehicleAddBlueImage == null || res.DaVehImgOilLevelFileName == null
+        return res.DaVehImgFaceMaskFileName == null && osData.faceMaskImage == null /*|| res.DaVehicleAddBlueImage == null || res.DaVehImgOilLevelFileName == null*/
     }
 
     private fun chkTime(edtBreakstart: TextView, edtBreakend: TextView): Boolean {
@@ -1037,8 +1104,13 @@ class CompleteTaskFragment : Fragment() {
             else -> throw IllegalArgumentException()
         }
 
-        showDialog()
-        viewModel.uploadVehicleImage(userId, imagePart, requestCode)
+        //viewModel.uploadVehicleImage(userId, imagePart, requestCode, getCurrentDateTime())
+        osData.faceMaskImage = bitmapToBase64(imageBitmap)
+        oSyncViewModel.insertData(osData)
+        imagesUploaded = true
+        setVisibiltyLevel()
+        visibilityLevel = 0
+        startUploadWithWorkManager(1, Prefs.getInstance(requireContext()), requireContext())
 
     }
 
@@ -1126,75 +1198,75 @@ class CompleteTaskFragment : Fragment() {
 
     }*/
 
-//    private fun startInspection() {
-////        if (isAllImageUploaded) {
-////            mbinding.tvNext.visibility = View.VISIBLE
-////        }
-//
-////      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
-//        loadingDialog.show()
-//
-//        if (cqSDKInitializer.isCQSDKInitialized()) {
-//
-//            var vmReg = Prefs.getInstance(App.instance).scannedVmRegNo ?: ""
-//            Log.e(
-//                "totyototyotoytroitroi",
-//                "startInspection: " + inspectionID + "VmReg ${Prefs.getInstance(App.instance).vmRegNo}"
-//            )
-//            if (vmReg.isEmpty()) {
-//                vmReg = Prefs.getInstance(App.instance).vmRegNo
-//            }
-//            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
-//
-//            try {
-//                cqSDKInitializer.startInspection(activityContext = requireActivity(),
-//                    clientAttrs = ClientAttrs(
-//                        userName = " ",
-//                        dealer = " ",
-//                        dealerIdentifier = " ",
-//                        client_unique_id = inspectionID
-//                        //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
-//                    ),
-//                    inputDetails = InputDetails(
-//                        vehicleDetails = VehicleDetails(
-//                            regNumber = vmReg.replace(
-//                                " ",
-//                                ""
-//                            ), //if sent, user can't edit
-//                            make = "Van", //if sent, user can't edit
-//                            model = "Any Model", //if sent, user can't edit
-//                            bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
-//                        ),
-//                        customerDetails = CustomerDetails(
-//                            name = "", //if sent, user can't edit
-//                            email = "", //if sent, user can't edit
-//                            dialCode = "", //if sent, user can't edit
-//                            phoneNumber = "", //if sent, user can't edit
-//                        )
-//                    ),
-//                    result = { isStarted, msg, code ->
-//                        Log.e("inspectionIDsssssssss", "startInspection: " + inspectionID)
-//                        Log.e("messsagesss", "startInspection: " + msg + code)
-//                        if (isStarted) {
-//                            Prefs.getInstance(App.instance).inspectionID = inspectionID
-//                        } else {
-////
-//                        }
-//                        if (msg == "Success") {
-//                            loadingDialog.cancel()
-//                        }
-//                        if (!isStarted) {
-//                            loadingDialog.cancel()
-//                            Log.e("startedinspection", "onCreateView: " + msg + isStarted)
-//                        }
-//                    })
-//            } catch (_: Exception) {
-//
-//                showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
-//            }
+    private fun startInspection() {
+//        if (isAllImageUploaded) {
+//            mbinding.tvNext.visibility = View.VISIBLE
 //        }
+
+//      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
+        loadingDialog.show()
+
+        if (cqSDKInitializer.isCQSDKInitialized()) {
+
+            var vmReg = Prefs.getInstance(App.instance).scannedVmRegNo ?: ""
+            Log.e(
+                "totyototyotoytroitroi",
+                "startInspection: " + inspectionID + "VmReg ${Prefs.getInstance(App.instance).vmRegNo}"
+            )
+            if (vmReg.isEmpty()) {
+                vmReg = Prefs.getInstance(App.instance).vmRegNo
+            }
+            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
+
+            try {
+                cqSDKInitializer.startInspection(activityContext = requireActivity(),
+                    clientAttrs = ClientAttrs(
+                        userName = " ",
+                        dealer = " ",
+                        dealerIdentifier = " ",
+                        client_unique_id = inspectionID
+                        //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                    ),
+                    inputDetails = InputDetails(
+                        vehicleDetails = VehicleDetails(
+                            regNumber = vmReg.replace(
+                                " ",
+                                ""
+                            ), //if sent, user can't edit
+                            make = "Van", //if sent, user can't edit
+                            model = "Any Model", //if sent, user can't edit
+                            bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
+                        ),
+                        customerDetails = CustomerDetails(
+                            name = "", //if sent, user can't edit
+                            email = "", //if sent, user can't edit
+                            dialCode = "", //if sent, user can't edit
+                            phoneNumber = "", //if sent, user can't edit
+                        )
+                    ),
+                    result = { isStarted, msg, code ->
+                        Log.e("inspectionIDsssssssss", "startInspection: " + inspectionID)
+                        Log.e("messsagesss", "startInspection: " + msg + code)
+                        if (isStarted) {
+                            Prefs.getInstance(App.instance).inspectionID = inspectionID
+                        } else {
 //
-//    }
+                        }
+                        if (msg == "Success") {
+                            loadingDialog.cancel()
+                        }
+                        if (!isStarted) {
+                            loadingDialog.cancel()
+                            Log.e("startedinspection", "onCreateView: " + msg + isStarted)
+                        }
+                    })
+            } catch (_: Exception) {
+
+                showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
+            }
+        }
+
+    }
 
     private fun visibiltyControlls() {
         with(mbinding) {
@@ -1214,7 +1286,7 @@ class CompleteTaskFragment : Fragment() {
             -1 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.GONE
-
+                mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
                 /*mbinding.clFaceMask.visibility = View.GONE
                 mbinding.clOilLevel.visibility = View.GONE*/
                 /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
@@ -1247,6 +1319,7 @@ class CompleteTaskFragment : Fragment() {
                         R.drawable.background_complete_task_done
                     )
                 );
+                //mbinding.rlcomtwoBreak.visibility = View.VISIBLE
             }
 
             2 -> {
@@ -1323,7 +1396,6 @@ class CompleteTaskFragment : Fragment() {
         if (isClockedIn) {
             visibilityLevel = 2
         }
-
         if (isBreakTimeAdded && isOnRoadHours) {
             visibilityLevel = 5
             visibiltyControlls()
@@ -1339,54 +1411,52 @@ class CompleteTaskFragment : Fragment() {
         visibiltyControlls()
     }
 
-    private fun setProgress() {
-        val progressBar = mbinding.progressContainer.progressBarStep1
-        mbinding.clAddBlueImg.visibility = View.GONE
-        mbinding.clFaceMask.visibility = View.GONE
-        mbinding.clOilLevel.visibility = View.GONE
-        when (imageUploadLevel) {
-            0 -> {
-                progressBar.setProgress(13, true)
-                mbinding.clFaceMask.visibility = View.VISIBLE
+    /*    private fun setProgress() {
+            val progressBar = mbinding.progressContainer.progressBarStep1
+            mbinding.clAddBlueImg.visibility = View.GONE
+            mbinding.clFaceMask.visibility = View.GONE
+            mbinding.clOilLevel.visibility = View.GONE
+            when (imageUploadLevel) {
+                0 -> {
+                    progressBar.setProgress(13, true)
+                }
 
+                1 -> {
+                    progressBar.setProgress(45, true)
+                    mbinding.clAddBlueImg.visibility = View.VISIBLE
+
+                }
+
+                2 -> {
+                    progressBar.setProgress(70, true)
+                    mbinding.clOilLevel.visibility = View.VISIBLE
+                }
+
+                else -> {
+                    progressBar.setProgress(100, true)
+                    progressBar.setBackgroundColor(Color.GREEN)
+                }
             }
+        }*/
 
-            1 -> {
-                progressBar.setProgress(45, true)
-                mbinding.clAddBlueImg.visibility = View.VISIBLE
+    private fun checkInspection() {
+        if (inspectionstarted?.equals(true) == true) {
+            Timer().scheduleAtFixedRate(object : TimerTask() {
+                override fun run() {
+                    cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
+                        //Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
+                        inspectionOfflineImagesCHeck = isSyncCompletedForAllQuotes
+                        /*    if (isSyncCompletedForAllQuotes)
+                                //setProgress()*/
+                    }
+                }
+            }, 0, 1000)
+            mbinding.startinspection.visibility = View.GONE
 
-            }
-
-            2 -> {
-                progressBar.setProgress(70, true)
-                mbinding.clOilLevel.visibility = View.VISIBLE
-            }
-
-            else -> {
-                progressBar.setProgress(100, true)
-                progressBar.setBackgroundColor(Color.GREEN)
-            }
+        } else {
+            mbinding.startinspection.visibility = View.VISIBLE
         }
     }
-
-//    private fun checkInspection() {
-//        if (inspectionstarted?.equals(true) == true) {
-//            Timer().scheduleAtFixedRate(object : TimerTask() {
-//                override fun run() {
-//                    cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
-//                        //Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
-//                        inspectionOfflineImagesCHeck = isSyncCompletedForAllQuotes
-//                        /*    if (isSyncCompletedForAllQuotes)
-//                                //setProgress()*/
-//                    }
-//                }
-//            }, 0, 1000)
-//            mbinding.startinspection.visibility = View.GONE
-//
-//        } else {
-//            mbinding.startinspection.visibility = View.VISIBLE
-//        }
-//    }
 
     private fun viewGoneAnimator(view: View) {
         view.animate()

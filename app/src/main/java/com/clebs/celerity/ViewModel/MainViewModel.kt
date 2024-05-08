@@ -30,6 +30,7 @@ import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
 import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
+import com.clebs.celerity.models.requests.UpdateDeductioRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.response.LoginResponse
@@ -37,10 +38,13 @@ import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
+import com.clebs.celerity.models.response.DeductionAgreementResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
 import com.clebs.celerity.models.response.DownloadInvoicePDFResponse
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
+import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
+import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
@@ -57,6 +61,7 @@ import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
 import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
+import com.clebs.celerity.models.response.GetVehicleAdvancePaymentAgreementResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.GetvehicleInfoByDriverId
@@ -155,8 +160,19 @@ class MainViewModel(
     val livedataSavevehicleinspectioninfo = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataGetVehicleInfobyDriverId = MutableLiveData<GetvehicleInfoByDriverId?>()
     val liveDatauploadVehicleImages = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataGetAdvancePaymentAgreement =
+        MutableLiveData<GetVehicleAdvancePaymentAgreementResponse?>()
+    val liveDataDeductionAgreement = MutableLiveData<DeductionAgreementResponse?>()
+    val liveDataUpdateDeducton = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataGetDAVehicleExpiredDocuments =
+        MutableLiveData<GetDAVehicleExpiredDocumentsResponse?>()
+    val liveDataGetDAExpiringDocuments = MutableLiveData<ExpiringDocumentsResponse?>()
+    val liveDataApproveWeeklyRota = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataUploadExpiringDocs = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataApproveVehicleAdvancePaymentAgreement = MutableLiveData<SimpleStatusMsgResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
+
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
     }
@@ -374,7 +390,7 @@ class MainViewModel(
 
     fun GetVehicleImageUploadInfo(userID: Int) {
         viewModelScope.launch {
-            var response = repo.GetVehicleImageUploadInfo(userID)
+            val response = repo.GetVehicleImageUploadInfo(userID)
             if (response.failed)
                 vehicleImageUploadInfoLiveData.postValue(null)
             if (!response.isSuccessful)
@@ -384,9 +400,9 @@ class MainViewModel(
         }
     }
 
-    fun uploadVehicleImage(userID: Int, image: MultipartBody.Part, type: Int) {
+    fun uploadVehicleImage(userID: Int, image: MultipartBody.Part, type: Int, dateTime: String) {
         viewModelScope.launch {
-            var response = repo.uploadVehicleImage(userID, image, type)
+            var response = repo.uploadVehicleImage(userID, image, type, dateTime)
             if (response.failed)
                 uploadVehicleImageLiveData.postValue(null)
             if (!response.isSuccessful)
@@ -1566,7 +1582,7 @@ class MainViewModel(
 
     fun SaveVehicleInspectionInfo(body: SaveVehicleInspectionInfo) {
         viewModelScope.launch {
-            var response = repo.SaveVehicleInspectionInfo(body)
+            val response = repo.SaveVehicleInspectionInfo(body)
             if (response.failed)
                 livedataSavevehicleinspectioninfo.postValue(null)
             if (!response.isSuccessful)
@@ -1610,12 +1626,106 @@ class MainViewModel(
 
     fun uploadVehicleImages(userID: Int, imageList: List<MultipartBody.Part>) {
         viewModelScope.launch {
-            val response = repo.uploadVehicleImages(userID,imageList)
-            if(response.failed||!response.isSuccessful){
+            val response = repo.uploadVehicleImages(userID, imageList)
+            if (response.failed || !response.isSuccessful) {
                 liveDatauploadVehicleImages.postValue(null)
-            }else{
+            } else {
                 liveDatauploadVehicleImages.postValue(response.body)
             }
+        }
+    }
+
+    fun GetVehicleAdvancePaymentAgreement(
+        userID: Int
+    ) {
+        viewModelScope.launch {
+            val response = repo.GetVehicleAdvancePaymentAgreement(userID)
+            if (response.failed || !response.isSuccessful)
+                liveDataGetAdvancePaymentAgreement.postValue(null)
+            else
+                liveDataGetAdvancePaymentAgreement.postValue(response.body)
+        }
+    }
+
+    fun GetDeductionAgreement(userID: Int) {
+        viewModelScope.launch {
+            val response = repo.GetDeductionAgreement(userID)
+            if (response.failed || !response.isSuccessful)
+                liveDataDeductionAgreement.postValue(null)
+            else
+                liveDataDeductionAgreement.postValue(response.body)
+        }
+    }
+
+    fun UpdateDaDeduction(
+        body: UpdateDeductioRequest
+    ) {
+        viewModelScope.launch {
+            val response = repo.UpdateDaDeductionSignAgreement(body)
+            if (response.failed || !response.isSuccessful)
+                liveDataUpdateDeducton.postValue(null)
+            else
+                liveDataUpdateDeducton.postValue(response.body)
+        }
+    }
+
+    fun GetDAVehicleExpiredDocuments(userID: Int) {
+        viewModelScope.launch {
+            val response = repo.GetDaVehicleExpiredDocuments(userID)
+            if (!response.isSuccessful || response.failed)
+                liveDataGetDAVehicleExpiredDocuments.postValue(null)
+            else
+                liveDataGetDAVehicleExpiredDocuments.postValue(response.body)
+        }
+    }
+
+    fun GetDAExpiringDocuments(userID: Int) {
+        viewModelScope.launch {
+            val response = repo.GetDAExpiringDocuments(userID)
+            if (!response.isSuccessful || response.failed)
+                liveDataGetDAExpiringDocuments.postValue(null)
+            else
+                liveDataGetDAExpiringDocuments.postValue(response.body)
+        }
+    }
+
+    fun ApproveWeeklyRotabyDA(
+        userID: Int,
+        lrnID: Int
+    ) {
+        viewModelScope.launch {
+            val response = repo.ApproveWeeklyRotabyDA(userID, lrnID)
+            if (!response.isSuccessful || response.failed)
+                liveDataApproveWeeklyRota.postValue(null)
+            else
+                liveDataApproveWeeklyRota.postValue(response.body)
+        }
+    }
+
+    fun UploadExpiringDocs(
+        userID: Int,
+        docTypeID:Int,
+        multipartBody: MultipartBody.Part
+    ){
+        viewModelScope.launch {
+            val response = repo.UploadExpiringDocs(userID,docTypeID,multipartBody)
+            if(!response.isSuccessful || response.failed)
+                liveDataUploadExpiringDocs.postValue(null)
+            else
+                liveDataUploadExpiringDocs.postValue(response.body)
+        }
+    }
+
+    fun ApproveVehicleAdvancePaymentAgreement(
+        userID: Int,
+        isApproved:Boolean
+    ){
+        viewModelScope.launch {
+            val response = repo.ApproveVehicleAdvancePaymentAgreement(userID,isApproved)
+            if(!response.isSuccessful || response.failed)
+                liveDataApproveVehicleAdvancePaymentAgreement.postValue(null)
+            else
+                liveDataApproveVehicleAdvancePaymentAgreement.postValue(response.body)
         }
     }
 }

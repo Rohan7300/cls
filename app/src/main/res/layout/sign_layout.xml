@@ -23,9 +23,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:text="Sign here"
-            android:fontFamily="@font/poppins"
+            android:fontFamily="@font/poppins_semibold"
             android:textColor="#675D5D"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
 
         <LinearLayout
@@ -110,7 +110,7 @@
                 android:textAllCaps="false"
                 android:text="Sign in agreement"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
 

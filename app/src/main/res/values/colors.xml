@@ -12,14 +12,12 @@
     <color name="very_light_orange">#FEF0EA</color>
     <color name="medium_orange">#FA9162</color>
     <color name="light_orange2">#FFD2BF</color>
-    <color name="very_light_orange_two">#FFE0DB</color>
     <color name="light_grey">#D3DBE7</color>
     <color name="black0">#343131</color>
     <color name="text_color">#4A4A4A</color>
     <color name="pink">#03A9F4</color>
     <color name="red_light">#f76f6f</color>
     <color name="red">#ff0000</color>
-    <color name="grey_main">#808080</color>
     <color name="peek_orange">#fdb64e</color>
     <color name="blue_hex">#77dfd8</color>
     <color name="commentbg">#E5ECF5</color>
@@ -27,9 +25,6 @@
     <color name="hintColor">#676C74</color>
     <color name="very_light_grey_two">#f3f3f3</color>
     <color name="new_light_orange">#FCD9C8</color>
-    <color name="transparent">#1C00ff00</color>
-    <color name="gray">#676C74</color>
-    <color name="green_700">#00ff00</color>
-    <color name="green_200">#00ff00</color>
+    <color name="home_blue">#EAFEFD</color>
 
 </resources>

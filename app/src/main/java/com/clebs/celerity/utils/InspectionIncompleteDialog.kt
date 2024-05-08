@@ -8,19 +8,29 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.clebs.celerity.R
 
-class NoInternetDialog() : DialogFragment() {
+interface InspectionIncompleteListener{
+    fun onButtonClick()
+}
+
+class InspectionIncompleteDialog() : DialogFragment() {
     companion object {
         const val TAG = "NoInternetDialog"
+    }
+
+    private var listener:InspectionIncompleteListener? = null
+    fun setListener(listener: InspectionIncompleteListener){
+        this.listener = listener
     }
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it,R.style.CustomDialog)
             val inflater = requireActivity().layoutInflater
-            val view = inflater.inflate(R.layout.dialog_no_internet, null)
-            val tryAgain = view.findViewById<CardView>(R.id.noIntTryAgain)
-    /*        tryAgain.setOnClickListener {
+            val view = inflater.inflate(R.layout.inspection_incomplete_dialog, null)
+            val continueInspectionCV = view.findViewById<CardView>(R.id.continueInspectionCV)
+            continueInspectionCV.setOnClickListener {
+                listener?.onButtonClick()
                 dismiss()
-            }*/
+            }
             isCancelable = false
             builder.setView(view).create()
         } ?: throw IllegalStateException("Activity cannot be null")
