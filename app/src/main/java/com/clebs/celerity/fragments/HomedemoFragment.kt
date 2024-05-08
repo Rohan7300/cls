@@ -364,7 +364,7 @@ class HomedemoFragment : Fragment() {
 
                 data.setValueFormatter(PercentFormatter())
                 data.setValueTextSize(11f)
-                data.setValueTextColor(resources.getColor(R.color.transparent))
+                data.setValueTextColor(resources.getColor(io.clearquote.assessment.cq_sdk.R.color.transparent))
 
                 mbinding.pieChart.setData(data)
 

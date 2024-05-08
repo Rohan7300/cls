@@ -81,6 +81,10 @@ dependencies {
 //    implementation(files("libs/android-support-v4.jar"))
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.12.0")
+    implementation("org.tensorflow:tensorflow-lite-task-vision:0.4.0")
+    // Import the GPU delegate plugin Library for GPU inference
+    implementation("org.tensorflow:tensorflow-lite-gpu-delegate-plugin:0.4.0")
+    implementation("org.tensorflow:tensorflow-lite-gpu:2.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
 //    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("id.zelory:compressor:3.0.1")

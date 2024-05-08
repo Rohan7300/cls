@@ -29,6 +29,7 @@ import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.ActivityAddInspectionBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
@@ -38,7 +39,7 @@ import com.clebs.celerity.utils.BackgroundUploadDialogListener
 import com.clebs.celerity.utils.ClsCapture
 import com.clebs.celerity.utils.Constants.Companion.LABELS_PATH
 import com.clebs.celerity.utils.Constants.Companion.MODEL_PATH
-import com.clebs.celerity.utils.LoadingDialog
+
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.toRequestBody
@@ -145,7 +146,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
 
         binding.tvNext.setOnClickListener {
-            startUpload()
+//            startUpload()
 
             backgroundUploadDialog.show(this.supportFragmentManager, BackgroundUploadDialog.TAG)
 
@@ -518,14 +519,14 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         }
     }
 
-    private fun startUpload() {
-        showToast("Image Upload Started", this)
-        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[0], 1)
-        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[1], 2)
-        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[2], 3)
-        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[3], 4)
-        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[4], 6)
-    }
+//    private fun startUpload() {
+//        showToast("Image Upload Started", this)
+//        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[0], 1)
+//        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[1], 2)
+//        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[2], 3)
+//        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[3], 4)
+//        viewModel.uploadVehicleImage(prefs.clebUserId.toInt(), imagePartsList[4], 6)
+//    }
 
     private fun clientUniqueID(): String {
         val x = Prefs.getInstance(App.instance).clebUserId.toString()
