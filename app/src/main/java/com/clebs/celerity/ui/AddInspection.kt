@@ -35,6 +35,7 @@ import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.checkIfInspectionFailed
+import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.toRequestBody
@@ -91,7 +92,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         val todayDate = dateFormat.format(Date())
-
+        var currentDateTime = getCurrentDateTime()
 
         val osRepo = OSyncRepo(OfflineSyncDB.invoke(this))
         oSyncViewModel = ViewModelProvider(
@@ -160,7 +161,8 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
             uploadStatus(i)
         }
         observers()
-        viewModel.GetVehicleImageUploadInfo(prefs.clebUserId.toInt())
+
+        viewModel.GetVehicleImageUploadInfo(prefs.clebUserId.toInt(), currentDateTime)
         loadingDialog.show()
         clientUniqueID()
 
@@ -247,8 +249,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         viewModel.liveDatauploadVehicleImages.observe(this) {
             loadingDialog.show()
             if (it != null) {
-
-                viewModel.GetVehicleImageUploadInfo(prefs.clebUserId.toInt())
+                viewModel.GetVehicleImageUploadInfo(prefs.clebUserId.toInt(), getCurrentDateTime())
             }
         }
     }
@@ -466,7 +467,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                     osData.isaddblueImageFailed = false
                     osData.isoillevelImageFailed = false
 
-                    startUploadWithWorkManager(0,prefs,this)
+                    startUploadWithWorkManager(0, prefs, this)
                 }
 
                 binding.dashboardStatusIV.setImageDrawable(
@@ -610,7 +611,6 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     }
 
 
-
     private fun clientUniqueID(): String {
         val x = Prefs.getInstance(App.instance).clebUserId.toString()
         val y = Prefs.getInstance(App.instance).scannedVmRegNo
@@ -643,15 +643,15 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         } else {
             currentLocation
         }
-/*        viewModel.SaveVehicleInspectionInfo(
-            SaveVehicleInspectionInfo(
-                prefs.clebUserId.toInt(),
-                currentDate,
-                prefs.inspectionID,
-                locationID,
-                prefs.VmID.toString().toInt()
-            )
-        )*/
+        /*        viewModel.SaveVehicleInspectionInfo(
+                    SaveVehicleInspectionInfo(
+                        prefs.clebUserId.toInt(),
+                        currentDate,
+                        prefs.inspectionID,
+                        locationID,
+                        prefs.VmID.toString().toInt()
+                    )
+                )*/
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {

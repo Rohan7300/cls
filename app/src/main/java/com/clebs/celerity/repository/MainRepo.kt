@@ -10,6 +10,7 @@ import com.clebs.celerity.models.TicketDepartmentsResponse
 import com.clebs.celerity.models.ViewFullScheduleResponse
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
+import com.clebs.celerity.models.requests.ApproveDaDailyRotaRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
 import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
@@ -32,6 +33,7 @@ import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
+import com.clebs.celerity.models.response.DaDailyLocationRotaResponse
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.DeductionAgreementResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
@@ -67,10 +69,12 @@ import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
+import com.clebs.celerity.models.response.WeeklyLocationRotabyIdResponse
 import com.clebs.celerity.network.ApiService
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response
+import retrofit2.http.Query
 import java.lang.IllegalArgumentException
 
 class MainRepo(private val ApiService: ApiService) {
@@ -249,7 +253,10 @@ class MainRepo(private val ApiService: ApiService) {
         }
     }
 
-    suspend fun GetVehicleImageUploadInfo(userID: Int): SimpleNetworkResponse<GetVehicleImageUploadInfoResponse> {
+    suspend fun GetVehicleImageUploadInfo(
+        userID: Int,
+        date: String
+    ): SimpleNetworkResponse<GetVehicleImageUploadInfoResponse> {
         /*        val response = ApiService.GetVehicleImageUploadInfo(userID)
                 Log.d("GetVehicleImageUploadInfoRes : ", "$response")
                 if (response.isSuccessful)
@@ -259,7 +266,7 @@ class MainRepo(private val ApiService: ApiService) {
                     return Gson().fromJson(res, GetVehicleImageUploadInfoResponse::class.java)
                 }*/
         return safeApiCall {
-            ApiService.GetVehicleImageUploadInfo(userID)
+            ApiService.GetVehicleImageUploadInfo(userID, date)
         }
     }
 
@@ -795,6 +802,7 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun SaveTicketData(
         userID: Int,
+        daDedAggrId: Int,
         request: SaveTicketDataRequestBody
     ): SimpleNetworkResponse<SaveTicketResponse> {
         /*        val response = ApiService.SaveTicketData(userID, request)
@@ -805,7 +813,7 @@ class MainRepo(private val ApiService: ApiService) {
                     println("Error Response Body: $errorBody")
                 }*/
         return safeApiCall {
-            ApiService.SaveTicketData(userID, request)
+            ApiService.SaveTicketData(userID, daDedAggrId, request)
         }
     }
 
@@ -1231,10 +1239,11 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun GetDeductionAgreement(
-        userID: Int
+        userID: Int,
+        aggrId: Int
     ): SimpleNetworkResponse<DeductionAgreementResponse> {
         return safeApiCall {
-            ApiService.GetDeductionAgreement(userID)
+            ApiService.GetDeductionAgreement(userID, aggrId)
         }
     }
 
@@ -1292,10 +1301,42 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun WeeklyRotaExistForDAApproval(
         userID: Int
-    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
         return safeApiCall {
             ApiService.WeeklyRotaExistForDAApproval(userID)
         }
     }
 
+    suspend fun GetWeeklyLocationRotabyId(
+        lrnId: Int
+    ): SimpleNetworkResponse<WeeklyLocationRotabyIdResponse> {
+        return safeApiCall {
+            ApiService.GetWeeklyLocationRotabyId(lrnId)
+        }
+    }
+
+    suspend fun MarkNotificationAsRead(
+        notificationId: Int
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.MarkNotificationAsRead(notificationId)
+        }
+    }
+
+    suspend fun GetDaDailyLocationRota(
+        userId: Int,
+        tokenxx:String
+    ):SimpleNetworkResponse<DaDailyLocationRotaResponse>{
+        return safeApiCall {
+            ApiService.GetDaDailyLocationRota(userId,tokenxx)
+        }
+    }
+
+    suspend fun ApproveDailyRotabyDA(
+        body: ApproveDaDailyRotaRequest
+    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.ApproveDailyRotabyDA(body)
+        }
+    }
 }

@@ -42,6 +42,7 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
     private lateinit var repo: MainRepo
     lateinit var pref: Prefs
     lateinit var binding: ActivityExpiringDocumentsBinding
+    private var notificationID= 0
     lateinit var loadingDialog: LoadingDialog
     private var selectedFileUri: Uri? = null
     lateinit var filePart: MultipartBody.Part
@@ -70,6 +71,7 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
         repo = MainRepo(apiService)
         pref = Prefs(this)
         loadingDialog = LoadingDialog(this)
+        notificationID = intent.getIntExtra("notificationID",0)
         viewmodel = ViewModelProvider(this, MyViewModelFactory(repo))[MainViewModel::class.java]
         val adapter = ExpiringDocAdapter(this@ExpiringDocumentsActivity)
         binding.expringDocRV.adapter = adapter

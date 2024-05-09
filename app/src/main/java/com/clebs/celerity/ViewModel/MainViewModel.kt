@@ -15,6 +15,7 @@ import com.clebs.celerity.models.TicketDepartmentsResponse
 import com.clebs.celerity.models.ViewFullScheduleResponse
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
+import com.clebs.celerity.models.requests.ApproveDaDailyRotaRequest
 import com.clebs.celerity.models.response.DriversBasicInformationModel
 import com.clebs.celerity.models.response.GetVechileInformationResponse
 import com.clebs.celerity.models.response.GetsignatureInformation
@@ -37,6 +38,7 @@ import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
+import com.clebs.celerity.models.response.DaDailyLocationRotaResponse
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.DeductionAgreementResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
@@ -73,6 +75,7 @@ import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
+import com.clebs.celerity.models.response.WeeklyLocationRotabyIdResponse
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.Prefs
@@ -171,6 +174,10 @@ class MainViewModel(
     val liveDataUploadExpiringDocs = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataApproveVehicleAdvancePaymentAgreement = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataWeeklyRotaExistForDAApproval = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataWeeklyLocationRotabyId = MutableLiveData<WeeklyLocationRotabyIdResponse?>()
+    val liveDataMarkNotificationAsRead = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataDaDailyLocationRota = MutableLiveData<DaDailyLocationRotaResponse?>()
+    val liveDataApproveDailyRotabyDA = MutableLiveData<SimpleStatusMsgResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
 
@@ -389,9 +396,9 @@ class MainViewModel(
         }
     }
 
-    fun GetVehicleImageUploadInfo(userID: Int) {
+    fun GetVehicleImageUploadInfo(userID: Int, date: String) {
         viewModelScope.launch {
-            val response = repo.GetVehicleImageUploadInfo(userID)
+            val response = repo.GetVehicleImageUploadInfo(userID, date)
             if (response.failed)
                 vehicleImageUploadInfoLiveData.postValue(null)
             if (!response.isSuccessful)
@@ -1030,9 +1037,9 @@ class MainViewModel(
         }
     }
 
-    fun SaveTicketData(userID: Int, request: SaveTicketDataRequestBody) {
+    fun SaveTicketData(userID: Int, daDedAggrId: Int, request: SaveTicketDataRequestBody) {
         viewModelScope.launch {
-            var response = repo.SaveTicketData(userID, request)
+            var response = repo.SaveTicketData(userID, daDedAggrId, request)
             if (response.failed)
                 liveDataSaveTicketResponse.postValue(null)
             if (!response.isSuccessful)
@@ -1648,9 +1655,9 @@ class MainViewModel(
         }
     }
 
-    fun GetDeductionAgreement(userID: Int) {
+    fun GetDeductionAgreement(userID: Int, aggrId: Int) {
         viewModelScope.launch {
-            val response = repo.GetDeductionAgreement(userID)
+            val response = repo.GetDeductionAgreement(userID, aggrId)
             if (response.failed || !response.isSuccessful)
                 liveDataDeductionAgreement.postValue(null)
             else
@@ -1705,12 +1712,12 @@ class MainViewModel(
 
     fun UploadExpiringDocs(
         userID: Int,
-        docTypeID:Int,
+        docTypeID: Int,
         multipartBody: MultipartBody.Part
-    ){
+    ) {
         viewModelScope.launch {
-            val response = repo.UploadExpiringDocs(userID,docTypeID,multipartBody)
-            if(!response.isSuccessful || response.failed)
+            val response = repo.UploadExpiringDocs(userID, docTypeID, multipartBody)
+            if (!response.isSuccessful || response.failed)
                 liveDataUploadExpiringDocs.postValue(null)
             else
                 liveDataUploadExpiringDocs.postValue(response.body)
@@ -1719,11 +1726,11 @@ class MainViewModel(
 
     fun ApproveVehicleAdvancePaymentAgreement(
         userID: Int,
-        isApproved:Boolean
-    ){
+        isApproved: Boolean
+    ) {
         viewModelScope.launch {
-            val response = repo.ApproveVehicleAdvancePaymentAgreement(userID,isApproved)
-            if(!response.isSuccessful || response.failed)
+            val response = repo.ApproveVehicleAdvancePaymentAgreement(userID, isApproved)
+            if (!response.isSuccessful || response.failed)
                 liveDataApproveVehicleAdvancePaymentAgreement.postValue(null)
             else
                 liveDataApproveVehicleAdvancePaymentAgreement.postValue(response.body)
@@ -1732,13 +1739,60 @@ class MainViewModel(
 
     fun WeeklyRotaExistForDAApproval(
         userID: Int
-    ){
+    ) {
         viewModelScope.launch {
             val response = repo.WeeklyRotaExistForDAApproval(userID)
-            if(!response.isSuccessful || response.failed)
+            if (!response.isSuccessful || response.failed)
                 liveDataWeeklyRotaExistForDAApproval.postValue(null)
             else
                 liveDataWeeklyRotaExistForDAApproval.postValue(response.body)
+        }
+    }
+
+    fun GetWeeklyLocationRotabyId(
+        lrnID: Int
+    ) {
+        viewModelScope.launch {
+            val response = repo.GetWeeklyLocationRotabyId(lrnID)
+            if (!response.isSuccessful || response.failed)
+                liveDataWeeklyLocationRotabyId.postValue(null)
+            else
+                liveDataWeeklyLocationRotabyId.postValue(response.body)
+        }
+    }
+
+    fun MarkNotificationAsRead(
+        notificationId: Int
+    ) {
+        viewModelScope.launch {
+            val response = repo.MarkNotificationAsRead(notificationId)
+            if (!response.isSuccessful || response.failed)
+                liveDataMarkNotificationAsRead.postValue(null)
+            else
+                liveDataMarkNotificationAsRead.postValue(response.body)
+        }
+    }
+
+    fun GetDaDailyLocationRota(
+        userID: Int,
+        tokenxx: String
+    ) {
+        viewModelScope.launch {
+            val response = repo.GetDaDailyLocationRota(userID, tokenxx)
+            if (!response.isSuccessful || response.failed)
+                liveDataDaDailyLocationRota.postValue(null)
+            else
+                liveDataDaDailyLocationRota.postValue(response.body)
+        }
+    }
+
+    fun ApproveDailyRotabyDA(body: ApproveDaDailyRotaRequest) {
+        viewModelScope.launch {
+            val response = repo.ApproveDailyRotabyDA(body)
+            if(!response.isSuccessful || response.failed)
+                liveDataApproveDailyRotabyDA.postValue(null)
+            else
+                liveDataApproveDailyRotabyDA.postValue(response.body)
         }
     }
 }

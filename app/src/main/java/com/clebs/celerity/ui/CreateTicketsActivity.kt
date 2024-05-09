@@ -155,6 +155,7 @@ class CreateTicketsActivity : AppCompatActivity() {
         showDialog()
         viewmodel.SaveTicketData(
             pref.clebUserId.toInt(),
+            0,
             request
         )
     }

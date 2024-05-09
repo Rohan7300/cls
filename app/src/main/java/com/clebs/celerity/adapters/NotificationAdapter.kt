@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,12 +16,13 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.databinding.DailyrotaapprovaldialogBinding
 import com.clebs.celerity.databinding.DialogvehicleadvancepaymentBinding
 import com.clebs.celerity.databinding.NotificationAdapterDialogBinding
-import com.clebs.celerity.dialogs.DailyRotaApprovalDialog
 import com.clebs.celerity.dialogs.ExpiredDocDialog
 import com.clebs.celerity.dialogs.InvoiceReadytoViewDialog
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.models.requests.ApproveDaDailyRotaRequest
 import com.clebs.celerity.models.response.NotificationResponseItem
 import com.clebs.celerity.ui.DeductionAgreementActivity
 import com.clebs.celerity.ui.ExpiringDocumentsActivity
@@ -68,17 +70,23 @@ class NotificationAdapter(
     inner class NotificationViewHolder(val binding: NotificationAdapterDialogBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: NotificationResponseItem) {
+            val dailyRotatoken = item.NotificationUrl.replace(" ", "")
+
             binding.title.text = item.NotificationTitle
             binding.descripotionX.text = item.NotificationBody
 
             if (item.ActionToPerform == "Deductions" ||
+                item.ActionToPerform == "Driver Deduction with Agreement" ||
                 item.ActionToPerform == "Daily Location Rota" ||
                 item.ActionToPerform == "Invoice Ready To Review" ||
+                item.ActionToPerform == "Invoice Ready to Review" ||
                 item.ActionToPerform == "Weekly Location Rota" ||
                 item.ActionToPerform == "Expired Document" ||
                 item.ActionToPerform == "Vehicle Advance Payment Aggrement" ||
+                item.ActionToPerform == "Vehicle Advance Payment Agreement" ||
                 item.ActionToPerform == "Expiring Document" ||
-                item.ActionToPerform == "Weekly Rota Approval"
+                item.ActionToPerform == "Weekly Rota Approval" ||
+                item.ActionToPerform == "Daily Rota Approval"
             ) {
                 binding.notficationArrow.visibility = View.VISIBLE
             }
@@ -105,23 +113,49 @@ class NotificationAdapter(
 
 
             binding.notficationArrow.setOnClickListener {
-                if (item.ActionToPerform == "Deductions") {
-                    //navController.navigate(R.id.deductionFragment)
+                if (item.ActionToPerform == "Deductions" || item.ActionToPerform == "Driver Deduction with Agreement") {
                     val intent = Intent(context, DeductionAgreementActivity::class.java)
+                    intent.putExtra("actionID", item.NotificationActionId)
+                    intent.putExtra("notificationID", item.NotificationId)
                     context.startActivity(intent)
-                } else if (item.ActionToPerform.equals("Daily Location Rota")) {
-
-                    val dialog = DailyRotaApprovalDialog()
-                    dialog.showDialog(fragmentManager)
-
-                } else if (item.ActionToPerform.equals("Invoice Ready To Review")) {
+                } else if (item.ActionToPerform == "Daily Location Rota" || item.ActionToPerform == "Daily Rota Approval"
+                ) {
+                    //val dialog = DailyRotaApprovalDialog()
+                    Log.d("tokenXX", "${item.NotificationUrl}")
+                    viewModel.GetDaDailyLocationRota(pref.clebUserId.toInt(), dailyRotatoken)
+                    loadingDialog.show()
+                    viewModel.liveDataDaDailyLocationRota.observe(viewLifecycleOwner) {
+                        loadingDialog.dismiss()
+                        if (it != null) {
+                            showDailyRotaDialog(
+                                item.NotificationId,
+                                it.DriverName,
+                                it.DayOfWeek,
+                                it.WeekNo,
+                                it.YearNo,
+                                it.LocationName,
+                                dailyRotatoken
+                            )
+                        } else {
+                            showToast("Failed to fetch Data!!", context)
+                        }
+                    }
+                    //dialog.showDialog(fragmentManager)
+                    //      showDailyRotaDialog(item.NotificationId)
+                } else if (item.ActionToPerform.equals("Invoice Ready To Review") || item.ActionToPerform.equals(
+                        "Invoice Ready to Review"
+                    )
+                ) {
                     val dialog = InvoiceReadytoViewDialog.newInstance(
                         getCurrentWeek().toString(),
                         getCurrentYear().toString()
                     )
                     dialog.showDialog(fragmentManager)
+                    //viewModel.MarkNotificationAsRead(item.NotificationId)
                 } else if (item.ActionToPerform.equals("Weekly Location Rota") || item.ActionToPerform == "Weekly Rota Approval") {
                     val intent = Intent(context, WeeklyRotaApprovalActivity::class.java)
+                    intent.putExtra("actionID", item.NotificationActionId)
+                    intent.putExtra("notificationID", item.NotificationId)
                     context.startActivity(intent)
                 } else if (item.ActionToPerform.equals("Expired Document")) {
                     loadingDialog.show()
@@ -129,15 +163,20 @@ class NotificationAdapter(
                     viewModel.liveDataGetDAVehicleExpiredDocuments.observe(viewLifecycleOwner) {
                         loadingDialog.dismiss()
                         val dialog = ExpiredDocDialog(pref, context)
+
                         if (it != null) {
                             pref.saveExpiredDocuments(it)
                             dialog.showDialog(fragmentManager)
+                            viewModel.MarkNotificationAsRead(item.NotificationId)
                         } else {
-                            showToast("No expired document founds",context)
+                            showToast("No expired document founds", context)
                             //dialog.showDialog(fragmentManager)
                         }
                     }
-                } else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement")) {
+                } else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement") || item.ActionToPerform.equals(
+                        "Vehicle Advance Payment Agreement"
+                    )
+                ) {
                     loadingDialog.show()
                     viewModel.GetVehicleAdvancePaymentAgreement(pref.clebUserId.toInt())
                     viewModel.liveDataGetAdvancePaymentAgreement.observe(viewLifecycleOwner) {
@@ -145,21 +184,129 @@ class NotificationAdapter(
                         if (it != null) {
                             val amount = it.VehAdvancePaymentAgreementAmount ?: "null"
                             val date = it.AgreementDate ?: "null"
-                            val comment = it.VehicleAdvancePaymentContent?:"null"
-     /*                       val dialog = VehicleAdvancePaymentDialog.newInstance(
+                            val comment = it.VehicleAdvancePaymentContent ?: "null"
+                            /*                       val dialog = VehicleAdvancePaymentDialog.newInstance(
+                                                       amount.toString(),
+                                                       date.toString()
+                                                   )*/
+                            showAdvancePaymentDialog(
                                 amount.toString(),
-                                date.toString()
-                            )*/
-                            showAdvancePaymentDialog(amount.toString(), date.toString(),comment.toString())
-                           // dialog.showDialog(fragmentManager)
+                                date.toString(),
+                                comment.toString(),
+                                item.NotificationId
+                            )
+
+                            // dialog.showDialog(fragmentManager)
                         } else {
                             showToast("Failed to fetch data", context)
                         }
                     }
                 } else if (item.ActionToPerform.equals("Expiring Document")) {
                     val intent = Intent(context, ExpiringDocumentsActivity::class.java)
+                    intent.putExtra("notificationID", item.NotificationId)
                     context.startActivity(intent)
                 } else {
+                    //viewModel.MarkNotificationAsRead(item.NotificationId)
+                    binding.notficationArrow.visibility = View.GONE
+                }
+            }
+
+            binding.overallNotification.setOnClickListener {
+                if (item.ActionToPerform == "Deductions" || item.ActionToPerform == "Driver Deduction with Agreement") {
+                    val intent = Intent(context, DeductionAgreementActivity::class.java)
+                    intent.putExtra("actionID", item.NotificationActionId)
+                    intent.putExtra("notificationID", item.NotificationId)
+                    context.startActivity(intent)
+                } else if (item.ActionToPerform.equals("Daily Location Rota") || item.ActionToPerform.equals(
+                        "Daily Rota Approval"
+                    )
+                ) {
+                    //val dialog = DailyRotaApprovalDialog()
+                    viewModel.GetDaDailyLocationRota(pref.clebUserId.toInt(), dailyRotatoken)
+                    loadingDialog.show()
+                    viewModel.liveDataDaDailyLocationRota.observe(viewLifecycleOwner) {
+                        loadingDialog.dismiss()
+                        if (it != null) {
+                            showDailyRotaDialog(
+                                item.NotificationId,
+                                it.DriverName,
+                                it.DayOfWeek,
+                                it.WeekNo,
+                                it.YearNo,
+                                it.LocationName,
+                                dailyRotatoken
+                            )
+                        } else {
+                            showToast("Failed to fetch Data!!", context)
+                        }
+                    }
+                    //dialog.showDialog(fragmentManager)
+                    //      showDailyRotaDialog(item.NotificationId)
+                } else if (item.ActionToPerform.equals("Invoice Ready To Review") || item.ActionToPerform.equals(
+                        "Invoice Ready to Review"
+                    )
+                ) {
+                    val dialog = InvoiceReadytoViewDialog.newInstance(
+                        getCurrentWeek().toString(),
+                        getCurrentYear().toString()
+                    )
+                    dialog.showDialog(fragmentManager)
+                    //viewModel.MarkNotificationAsRead(item.NotificationId)
+                } else if (item.ActionToPerform.equals("Weekly Location Rota") || item.ActionToPerform == "Weekly Rota Approval") {
+                    val intent = Intent(context, WeeklyRotaApprovalActivity::class.java)
+                    intent.putExtra("actionID", item.NotificationActionId)
+                    intent.putExtra("notificationID", item.NotificationId)
+                    context.startActivity(intent)
+                } else if (item.ActionToPerform.equals("Expired Document")) {
+                    loadingDialog.show()
+                    viewModel.GetDAVehicleExpiredDocuments(pref.clebUserId.toInt())
+                    viewModel.liveDataGetDAVehicleExpiredDocuments.observe(viewLifecycleOwner) {
+                        loadingDialog.dismiss()
+                        val dialog = ExpiredDocDialog(pref, context)
+
+                        if (it != null) {
+                            pref.saveExpiredDocuments(it)
+                            dialog.showDialog(fragmentManager)
+                            viewModel.MarkNotificationAsRead(item.NotificationId)
+                        } else {
+                            showToast("No expired document founds", context)
+                            //dialog.showDialog(fragmentManager)
+                        }
+                    }
+                } else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement") || item.ActionToPerform.equals(
+                        "Vehicle Advance Payment Agreement"
+                    )
+                ) {
+                    loadingDialog.show()
+                    viewModel.GetVehicleAdvancePaymentAgreement(pref.clebUserId.toInt())
+                    viewModel.liveDataGetAdvancePaymentAgreement.observe(viewLifecycleOwner) {
+                        loadingDialog.dismiss()
+                        if (it != null) {
+                            val amount = it.VehAdvancePaymentAgreementAmount ?: "null"
+                            val date = it.AgreementDate ?: "null"
+                            val comment = it.VehicleAdvancePaymentContent ?: "null"
+                            /*                       val dialog = VehicleAdvancePaymentDialog.newInstance(
+                                                       amount.toString(),
+                                                       date.toString()
+                                                   )*/
+                            showAdvancePaymentDialog(
+                                amount.toString(),
+                                date.toString(),
+                                comment.toString(),
+                                item.NotificationId
+                            )
+
+                            // dialog.showDialog(fragmentManager)
+                        } else {
+                            showToast("Failed to fetch data", context)
+                        }
+                    }
+                } else if (item.ActionToPerform.equals("Expiring Document")) {
+                    val intent = Intent(context, ExpiringDocumentsActivity::class.java)
+                    intent.putExtra("notificationID", item.NotificationId)
+                    context.startActivity(intent)
+                } else {
+                    //viewModel.MarkNotificationAsRead(item.NotificationId)
                     binding.notficationArrow.visibility = View.GONE
                 }
             }
@@ -185,7 +332,12 @@ class NotificationAdapter(
         holder.bind(item)
     }
 
-    fun showAdvancePaymentDialog(amount: String, date: String,comment:String) {
+    fun showAdvancePaymentDialog(
+        amount: String,
+        date: String,
+        comment: String,
+        notificationId: Int
+    ) {
         val advancePaymentDialog = AlertDialog.Builder(context).create()
         val advancePaymentBinding =
             DialogvehicleadvancepaymentBinding.inflate(LayoutInflater.from(context))
@@ -193,8 +345,8 @@ class NotificationAdapter(
         advancePaymentDialog.setCanceledOnTouchOutside(false)
         advancePaymentDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         advancePaymentBinding.agreementAmount.text = amount
-        advancePaymentBinding.agreementDate.text =  date
-        advancePaymentBinding.tvText.text =comment
+        advancePaymentBinding.agreementDate.text = date
+        advancePaymentBinding.tvText.text = comment
 
         advancePaymentDialog.show()
 
@@ -202,21 +354,113 @@ class NotificationAdapter(
             advancePaymentDialog.dismiss()
             advancePaymentDialog.cancel()
             loadingDialog.show()
+            viewModel.MarkNotificationAsRead(notificationId)
             viewModel.ApproveVehicleAdvancePaymentAgreement(pref.clebUserId.toInt(), true)
             viewModel.liveDataApproveVehicleAdvancePaymentAgreement.observe(viewLifecycleOwner) {
                 loadingDialog.dismiss()
                 if (it != null) {
-                    showToast("Approved✔✔",context)
+                    showToast("Approved✔✔", context)
                 } else {
                     showToast("Failed to approve!!", context)
                 }
             }
         }
-/*        uploadDialogBinding.cancel.setOnClickListener {
-            uploadDialog.dismiss()
-            uploadDialog.cancel()
-        }*/
+        /*        uploadDialogBinding.cancel.setOnClickListener {
+                    uploadDialog.dismiss()
+                    uploadDialog.cancel()
+                }*/
 
+    }
+
+    fun showDailyRotaDialog(
+        notificationId: Int,
+        rotaName: String,
+        rotaDay: String,
+        rotaWeek: Int,
+        rotaYear: Int,
+        rotaLocation: String,
+        dailyRotatoken: String
+    ) {
+        val dailyRotaDialog = AlertDialog.Builder(context).create()
+        val dailyRotaDialogBinding =
+            DailyrotaapprovaldialogBinding.inflate(LayoutInflater.from(context))
+        dailyRotaDialog.setView(dailyRotaDialogBinding.root)
+        dailyRotaDialog.setCanceledOnTouchOutside(true)
+        dailyRotaDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dailyRotaDialogBinding.rotaname.text = rotaName
+        dailyRotaDialogBinding.rotaday.text = rotaDay
+        dailyRotaDialogBinding.rotaweek.text = rotaWeek.toString()
+        dailyRotaDialogBinding.rotayear.text = rotaYear.toString()
+        dailyRotaDialogBinding.rotalocation.text = rotaLocation
+        var acceptRBChecked = false
+        var rejectRNcheck = false
+        var selectedItem = 0
+        dailyRotaDialogBinding.acceptRB.setOnClickListener {
+            if (!acceptRBChecked) {
+                dailyRotaDialogBinding.acceptRB.isChecked = true
+                dailyRotaDialogBinding.rejectRB.isChecked = false
+                acceptRBChecked = true
+                selectedItem = 1
+            } else {
+                selectedItem = 0
+                acceptRBChecked = false
+                dailyRotaDialogBinding.acceptRB.isChecked = false
+                dailyRotaDialogBinding.rejectRB.isChecked = false
+            }
+        }
+
+        dailyRotaDialogBinding.rejectRB.setOnClickListener {
+            if (!rejectRNcheck) {
+                dailyRotaDialogBinding.acceptRB.isChecked = false
+                dailyRotaDialogBinding.rejectRB.isChecked = true
+                rejectRNcheck = true
+                selectedItem = 2
+            } else {
+                dailyRotaDialogBinding.acceptRB.isChecked = false
+                dailyRotaDialogBinding.rejectRB.isChecked = false
+                rejectRNcheck = false
+                selectedItem = 0
+            }
+        }
+
+        dailyRotaDialogBinding.submit.setOnClickListener {
+            if (selectedItem == 0) {
+                showToast("Please select first!!", context)
+            } else {
+                var comment = ""
+                var isApproved = false
+                if (selectedItem == 1) {
+                    comment = ""
+                    isApproved = true
+                } else {
+                    comment = "Rejected "
+                    isApproved = false
+                }
+
+                loadingDialog.show()
+                viewModel.ApproveDailyRotabyDA(
+                    ApproveDaDailyRotaRequest(
+                        Comment = comment,
+                        IsApproved = isApproved,
+                        Token = dailyRotatoken,
+                        UserId = pref.clebUserId.toInt()
+                    )
+                )
+                viewModel.liveDataApproveDailyRotabyDA.observe(viewLifecycleOwner) {
+                    loadingDialog.dismiss()
+                    if (it != null) {
+                        dailyRotaDialog.dismiss()
+                        viewModel.MarkNotificationAsRead(notificationId)
+                    } else {
+                        showToast("Failed to submit!!", context)
+                    }
+                }
+            }
+        }
+
+        if (!dailyRotaDialog.isShowing)
+            dailyRotaDialog.show()
     }
 
     override fun getItemId(position: Int): Long {

@@ -7,6 +7,7 @@ import com.clebs.celerity.models.TicketDepartmentsResponse
 import com.clebs.celerity.models.ViewFullScheduleResponse
 import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.models.requests.AddOnRouteInfoRequest
+import com.clebs.celerity.models.requests.ApproveDaDailyRotaRequest
 import com.clebs.celerity.models.requests.CreateDaikyworkRequestBody
 import com.clebs.celerity.models.requests.GetDefectSheetBasicInfoRequestModel
 import com.clebs.celerity.models.response.DriversBasicInformationModel
@@ -35,6 +36,7 @@ import com.clebs.celerity.models.requests.logoutModel
 import com.clebs.celerity.models.response.BaseResponseTwo
 
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
+import com.clebs.celerity.models.response.DaDailyLocationRotaResponse
 import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.DeductionAgreementResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
@@ -72,6 +74,7 @@ import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
+import com.clebs.celerity.models.response.WeeklyLocationRotabyIdResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -160,7 +163,8 @@ interface ApiService {
 
     @GET("/api/DailyWorks/GetVehicleImageUploadedInfo/{userId}")
     suspend fun GetVehicleImageUploadInfo(
-        @Path("userId") userId: Int
+        @Path("userId") userId: Int,
+        @Query("date") date: String
     ): Response<GetVehicleImageUploadInfoResponse>
 
     @Multipart
@@ -384,6 +388,7 @@ interface ApiService {
     @POST("/api/Ticket/CreateUserTicket")
     suspend fun SaveTicketData(
         @Query("userId") userId: Int,
+        @Query("daDedAggrId") daDedAggrId: Int,
         @Body request: SaveTicketDataRequestBody
     ): Response<SaveTicketResponse>
 
@@ -544,9 +549,10 @@ interface ApiService {
         @Path("userId") userId: Int
     ): Response<GetVehicleAdvancePaymentAgreementResponse>
 
-    @GET("/api/Drivers/GetDadeductionSignAgreement/{userId}")
+    @GET("/api/Drivers/GetDadeductionSignAgreement")
     suspend fun GetDeductionAgreement(
-        @Path("userId") userId: Int
+        @Query("userId") userId: Int,
+        @Query("aggrId") aggrId: Int
     ): Response<DeductionAgreementResponse>
 
     @POST("/api/Drivers/UpdateDadeductionSignAgreement")
@@ -582,12 +588,34 @@ interface ApiService {
     @PUT("/api/Drivers/ApproveVehicleAdvancePaymentAgreement")
     suspend fun ApproveVehicleAdvancePaymentAgreement(
         @Query("userId") userId: Int,
-        @Query("isApproved") isApproved:Boolean
-    ):Response<SimpleStatusMsgResponse>
+        @Query("isApproved") isApproved: Boolean
+    ): Response<SimpleStatusMsgResponse>
 
     @GET("/api/Drivers/WeeklyRotaExistForDAApproval/{userId}")
     suspend fun WeeklyRotaExistForDAApproval(
         @Path("userId") userId: Int
-    ):Response<SimpleStatusMsgResponse>
+    ): Response<SimpleStatusMsgResponse>
+
+    @GET("/api/Drivers/GetWeeklyLocationRotabyId/{lrnId}")
+    suspend fun GetWeeklyLocationRotabyId(
+        @Path("lrnId") lrnID: Int
+    ): Response<WeeklyLocationRotabyIdResponse>
+
+    @POST("/api/Notification/MarkNotificationAsRead/{notificationId}")
+    suspend fun MarkNotificationAsRead(
+        @Path("notificationId") notificationId: Int
+    ): Response<SimpleStatusMsgResponse>
+
+    @GET("/api/Drivers/GetDaDailyLocationRota")
+    suspend fun GetDaDailyLocationRota(
+        @Query("userId") userId: Int,
+        @Query("token") token: String
+    ): Response<DaDailyLocationRotaResponse>
+
+    @POST("/api/Drivers/ApproveDailyRotabyDA")
+    suspend fun ApproveDailyRotabyDA(
+        @Body body: ApproveDaDailyRotaRequest
+    ): Response<SimpleStatusMsgResponse>
+
 }
 
