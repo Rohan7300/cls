@@ -14,6 +14,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.Prefs
 
 class InvoiceReadytoViewDialog() : DialogFragment() {
@@ -22,12 +24,14 @@ class InvoiceReadytoViewDialog() : DialogFragment() {
         const val TAG = "InvoiceReadyToView"
         const val WEEK = "week"
         const val YEAR = "year"
+        const val NOTID = "notificaionID"
 
-        fun newInstance(week: String, year: String): InvoiceReadytoViewDialog {
+        fun newInstance(week: String, year: String, notificationID: Int): InvoiceReadytoViewDialog {
             val dialog = InvoiceReadytoViewDialog()
             val args = Bundle()
             args.putString(WEEK, week)
             args.putString(YEAR, year)
+            args.putInt(NOTID, notificationID)
             dialog.arguments = args
             return dialog
         }
@@ -36,13 +40,17 @@ class InvoiceReadytoViewDialog() : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val week = arguments?.getString(WEEK) ?: "week"
         val year = arguments?.getString(YEAR) ?: "year"
+        val notificationID = arguments?.getInt(NOTID) ?: 0
 
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setContentView(R.layout.dialoginvoiceready)
         val viewInvoiceBtn = dialog.findViewById<Button>(R.id.viewinvoicebtn)
         val weekyearTV = dialog.findViewById<TextView>(R.id.weekYearText)
-        weekyearTV.text = "Your CLS Invoice for Week $week | Year $year is available for review. Click the button below."
+        weekyearTV.text =
+            "Your CLS Invoice for Week $week | Year $year is available for review. Click the button below."
         viewInvoiceBtn.setOnClickListener {
+            (activity as HomeActivity).viewModel
+                .MarkNotificationAsRead(notificationID)
             dialog.dismiss()
             findNavController().navigate(R.id.CLSInvoicesFragment)
         }

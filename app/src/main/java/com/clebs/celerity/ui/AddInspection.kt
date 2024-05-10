@@ -184,6 +184,10 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
             val intent = Intent(this, HomeActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             intent.putExtra("destinationFragment", "CompleteTask")
+            intent.putExtra("actionToperform", "undef")
+            intent.putExtra("actionID", "0")
+            intent.putExtra("tokenUrl", "undef")
+            intent.putExtra("notificationId", "0")
             startActivity(intent)
         }
         binding.tvNext.setOnClickListener {
@@ -626,6 +630,10 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.putExtra("destinationFragment", "CompleteTask")
+        intent.putExtra("actionToperform", "undef")
+        intent.putExtra("actionID", "0")
+        intent.putExtra("tokenUrl", "undef")
+        intent.putExtra("notificationId", "0")
         startActivity(intent)
     }
 

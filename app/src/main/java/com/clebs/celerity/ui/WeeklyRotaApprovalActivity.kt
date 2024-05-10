@@ -27,7 +27,7 @@ class WeeklyRotaApprovalActivity : AppCompatActivity() {
     lateinit var viewmodel: MainViewModel
     lateinit var repo: MainRepo
     lateinit var pref: Prefs
-    private var notificationID= 0
+    private var notificationID = 0
     lateinit var binding: ActivityWeeklyrotaBinding
     var lrnID: Int = 0
     lateinit var loadingDialog: LoadingDialog
@@ -37,7 +37,7 @@ class WeeklyRotaApprovalActivity : AppCompatActivity() {
         setContentView(binding.root)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val actionID = intent.getIntExtra("actionID", 0)
-        notificationID = intent.getIntExtra("notificationID",0)
+        notificationID = intent.getIntExtra("notificationID", 0)
 
         repo = MainRepo(apiService)
         pref = Prefs(this)
@@ -62,6 +62,9 @@ class WeeklyRotaApprovalActivity : AppCompatActivity() {
             loadingDialog.show()
             viewmodel.ApproveWeeklyRotabyDA(pref.clebUserId.toInt(), lrnID)
         }
+        binding.reviewLater.setOnClickListener {
+            finish()
+        }
 
 
         viewmodel.WeeklyRotaExistForDAApproval(pref.clebUserId.toInt())
@@ -69,6 +72,7 @@ class WeeklyRotaApprovalActivity : AppCompatActivity() {
             if (it == null) {
                 finish()
                 showToast("Weekly Rota not exist for approval.", this)
+                viewmodel.MarkNotificationAsRead(notificationID)
             }
 
         }
@@ -103,7 +107,6 @@ class WeeklyRotaApprovalActivity : AppCompatActivity() {
                 binding.viewfullschedule.isClickable = true
                 binding.viewfullschedule.isEnabled = true
                 binding.llnodata.visibility = View.GONE
-                binding.rlicons.visibility = View.VISIBLE
 
                 it.map {
                     binding.weekrotaheader.text =
@@ -141,15 +144,13 @@ class WeeklyRotaApprovalActivity : AppCompatActivity() {
                     binding.tvIsWorkingShowSat.text = it.SaturdayLocation
 
                 }
-            }
-            else {
+            } else {
                 binding.nodataLayout.visibility = View.VISIBLE
                 binding.mainLayout.visibility = View.GONE
                 binding.viewfullschedule.isClickable = false
                 binding.viewfullschedule.isEnabled = false
                 binding.viewfulldatalayout.visibility = View.GONE
                 binding.llnodata.visibility = View.VISIBLE
-                binding.rlicons.visibility = View.GONE
             }
 
         }

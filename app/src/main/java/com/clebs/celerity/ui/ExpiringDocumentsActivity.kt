@@ -85,6 +85,7 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
                 adapter.saveData(it)
             } else {
                 showToast("No Documents found!!", this)
+                viewmodel.MarkNotificationAsRead(notificationID)
                 finish()
 
             }
@@ -217,7 +218,7 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
             if (it != null) {
                 loadingDialog.show()
                 viewmodel.GetDAExpiringDocuments(pref.clebUserId.toInt())
-                showToast("Document Uploaded succesfully!!", this)
+                showToast("Document Uploaded successfully!!", this)
             } else {
                 showToast("Something went wrong!!", this)
             }

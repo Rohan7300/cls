@@ -26,8 +26,8 @@ object RetrofitService {
     //    private const val BASE_URL = "http://182.64.1.105:8119/"
     //private const val BASE_URL = "http://122.176.42.96:8119/"
     private const val BASE_URL = "http://122.186.85.26:8119/"
-    // private const val BASE_URL = "http://192.168.0.150:8119/"
-    //private const val BASE_URL = "https://api.clsdasystem.com/" //Do not use this url in testing
+   // private const val BASE_URL = "http://192.168.0.150:8119/"
+  //  private const val BASE_URL = "https://api.clsdasystem.com/" //Do not use this url in testing
 
 
     //     private const val BASE_URL = "https://api.clsdasystem.com/"

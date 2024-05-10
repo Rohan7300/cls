@@ -269,10 +269,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/inter_bold"
-                        android:text="Your next working day:"
-
+                        android:text="Next working day:"
                         android:textColor="@color/text_color"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -287,7 +286,7 @@
                         android:maxLines="2"
                         android:text="View full schedule"
                         android:textColor="@color/text_color"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         app:layout_constraintBottom_toBottomOf="@+id/textView5"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/your_next" />
@@ -299,8 +298,8 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/inter_semibold"
                         android:text=""
-                        android:textColor="@color/black"
-                        android:textSize="13sp"
+                        android:textColor="@color/text_color"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toStartOf="@+id/your_next"
                         app:layout_constraintTop_toBottomOf="@id/your_next" />
 

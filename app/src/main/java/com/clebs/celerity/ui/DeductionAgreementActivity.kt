@@ -67,6 +67,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
             } else {
                 isEnabled = false
                 showToast("Failed to fetch data!! Pls try again", this)
+                viewmodel.MarkNotificationAsRead(notificationID)
                 finish()
             }
         }
@@ -200,7 +201,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
                     DaDedAggrDaId = pref.clebUserId.toInt(),
                     DaUserName = DaUserName,
                     FromLocation = FromLocation,
-                    IsDaDedAggAccepted = false,
+                    IsDaDedAggAccepted = true,
                     PaymentKey = PaymentKey,
                     RejectionComment = disputeComment,
                     Signature = bse64
@@ -226,7 +227,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
         var currDt = getCurrentDateTime()
         val request = SaveTicketDataRequestBody(
             AssignedToUserIDs = listOf(),
-            BadgeComment = "undefined",
+            BadgeComment = "",
             BadgeReturnedStatusId = 0,
             DaTestDate = currDt,
             DaTestTime = currDt,
@@ -240,10 +241,10 @@ class DeductionAgreementActivity : AppCompatActivity() {
             RequestTypeId = 17,
             TicketDepartmentId = 1,
             TicketId = 0,
-            TicketUTRNo = "undefined",
-            Title = RejectionComment.toString(),
+            TicketUTRNo = " ",
+            Title = "Agreement Dispute [Aggr: $actionID]",
             UserStatusId = 0,
-            UserTicketRegNo = "undefined",
+            UserTicketRegNo = "",
             VmId = 0,
             WorkingOrder = 0
         )

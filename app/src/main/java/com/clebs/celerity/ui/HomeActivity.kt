@@ -39,6 +39,8 @@ import com.clebs.celerity.database.OSyncRepo
 import com.clebs.celerity.database.OfflineSyncDB
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.ActivityHomeBinding
+import com.clebs.celerity.dialogs.ExpiredDocDialog
+import com.clebs.celerity.dialogs.InvoiceReadytoViewDialog
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
@@ -48,14 +50,25 @@ import com.clebs.celerity.utils.InspectionIncompleteListener
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.dialogs.NoInternetDialog
+import com.clebs.celerity.utils.DependencyProvider.getMainVM
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
 import com.clebs.celerity.utils.checkIfInspectionFailed
+import com.clebs.celerity.utils.dailyRota
 import com.clebs.celerity.utils.dbLog
+import com.clebs.celerity.utils.deductions
+import com.clebs.celerity.utils.expiredDocuments
+import com.clebs.celerity.utils.expiringDocument
+import com.clebs.celerity.utils.getCurrentWeek
+import com.clebs.celerity.utils.getCurrentYear
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.getVRegNo
+import com.clebs.celerity.utils.invoiceReadyToView
 import com.clebs.celerity.utils.logOSEntity
+import com.clebs.celerity.utils.parseToInt
 import com.clebs.celerity.utils.showToast
+import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
+import com.clebs.celerity.utils.weeklyLocationRota
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
@@ -92,12 +105,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var ninetydaysBoolean: Boolean? = null
     var lastName = ""
     var isLeadDriver = false
-    lateinit var oSyncViewModel:OSyncViewModel
-    lateinit var osData:OfflineSyncEntity
+    lateinit var oSyncViewModel: OSyncViewModel
+    lateinit var osData: OfflineSyncEntity
     lateinit var prefs: Prefs
     var date = ""
     lateinit var loadingDialog: LoadingDialog
-    lateinit var networkManager:NetworkManager
+    lateinit var networkManager: NetworkManager
 
     private var isApiResponseTrue = false
     private var trueCount = 0
@@ -132,18 +145,88 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             Log.d("hdhsdshdsdjshhsds", "main $message")
 
             val destinationFragment = intent.getStringExtra("destinationFragment")
+            val actionToPerform = intent.getStringExtra("actionToperform") ?: "undef"
+            val tokenUrl = intent.getStringExtra("tokenUrl") ?: "undef"
+            val actionID = intent.getStringExtra("actionID") ?: "0"
+            val notificationID = intent.getStringExtra("notificationId") ?: "0"
+            Log.d("NotExtras"," $destinationFragment $actionToPerform $tokenUrl $actionID $notificationID")
             if (destinationFragment != null) {
-
-                Log.d("HomeActivityX", destinationFragment!!)
+            Log.d("HomeActivityX", destinationFragment!!)
                 if (destinationFragment == "NotificationsFragment") {
-                    ActivityHomeBinding.title.text = "Notifications"
-                    navController.navigate(R.id.notifficationsFragment)
+              //      try {
+                        if (actionToPerform == "Deductions" || actionToPerform == "Driver Deduction with Agreement") {
+                            deductions(this, parseToInt(actionID), parseToInt(notificationID))
+                        } else if (actionToPerform == "Daily Location Rota" || actionToPerform == "Daily Rota Approval"
+                        ) {
+                            if (getMainVM(this) != null)
+                                dailyRota(
+                                    getMainVM(this),
+                                    tokenUrl,
+                                    this,
+                                    this,
+                                    parseToInt(notificationID)
+                                )
+                            else {
+                                ActivityHomeBinding.title.text = "Notifications"
+                                navController.navigate(R.id.notifficationsFragment)
+                                return
+                            }
+                        } else if (actionToPerform.equals("Invoice Ready To Review")
+                            || actionToPerform.equals(
+                                "Invoice Ready to Review"
+                            )
+                        ) {
+                            invoiceReadyToView(parseToInt(notificationID), supportFragmentManager)
+                        } else if (actionToPerform == "Weekly Location Rota" || actionToPerform == "Weekly Rota Approval") {
+                            weeklyLocationRota(
+                                this,
+                                parseToInt( notificationID),
+                                parseToInt(actionID)
+                            )
+                        } else if (actionToPerform == "Expired Document") {
+                            expiredDocuments(
+                                getMainVM(this),
+                                this,
+                                this,
+                                supportFragmentManager,
+                                parseToInt(notificationID)
+                            )
+                        } else if (actionToPerform.equals("Vehicle Advance Payment Aggrement") || actionToPerform.equals(
+                                "Vehicle Advance Payment Agreement"
+                            )
+                        ) {
+                            vehicleAdvancePaymentAgreement(
+                                this,
+                                parseToInt(notificationID),
+                                getMainVM(this),
+                                this
+                            )
+                        } else if (actionToPerform.equals("Expiring Document")) {
+                            expiringDocument(
+                                this,
+                                parseToInt(notificationID)
+                            )
+                        } else {
+
+                            ActivityHomeBinding.title.text = "Notifications"
+                            navController.navigate(R.id.notifficationsFragment)
+                            return
+                        }
+      /*              }
+                    catch (_: Exception) {
+                        ActivityHomeBinding.title.text = "Notifications"
+                        navController.navigate(R.id.notifficationsFragment)
+                        return
+                    }*/
+
+                    /*                    ActivityHomeBinding.title.text = "Notifications"
+                                        navController.navigate(R.id.notifficationsFragment)
+                                        return*/
                     return
                 } else if (destinationFragment == "CompleteTask") {
                     navController.navigate(R.id.completeTaskFragment)
                 }
             }
-
 
             val tempCode =
                 intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
@@ -168,15 +251,15 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     locationID = currentloction
                 }
 
-/*                viewModel.SaveVehicleInspectionInfo(
-                    SaveVehicleInspectionInfo(
-                        Prefs.getInstance(App.instance).clebUserId.toInt(),
-                        currentDate,
-                        Prefs.getInstance(App.instance).inspectionID,
-                        locationID,
-                        Prefs.getInstance(App.instance).VmID.toString().toInt()
-                    )
-                )*/
+                /*                viewModel.SaveVehicleInspectionInfo(
+                                    SaveVehicleInspectionInfo(
+                                        Prefs.getInstance(App.instance).clebUserId.toInt(),
+                                        currentDate,
+                                        Prefs.getInstance(App.instance).inspectionID,
+                                        locationID,
+                                        Prefs.getInstance(App.instance).VmID.toString().toInt()
+                                    )
+                                )*/
 
                 viewModel.livedataSavevehicleinspectioninfo.observe(this, Observer {
                     if (it != null) {
@@ -250,13 +333,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         inspectionFailedDialog.setListener(this)
 
         oSyncViewModel.osData.observe(this) {
-            logOSEntity("HomeActivity",it)
+            logOSEntity("HomeActivity", it)
             osData = it
             if (it.isIni) {
                 if (checkIfInspectionFailed(it)) {
                     inspectionFailedDialog.showDialog(this.supportFragmentManager)
                 }
-            }else{
+            } else {
                 osData.clebID = prefs.clebUserId.toInt()
                 osData.dawDate = todayDate
                 osData.vehicleID = prefs.scannedVmRegNo
@@ -669,7 +752,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     Prefs.getInstance(applicationContext).days = "0"
                 }
 
-               // prefs.updateInspectionStatus(it.IsVehicleInspectionDone)
+                // prefs.updateInspectionStatus(it.IsVehicleInspectionDone)
             }
         })
     }

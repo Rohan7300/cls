@@ -416,10 +416,7 @@ class HomedemoFragment : Fragment() {
                 val dateFormat = SimpleDateFormat("EEE MMM dd yyyy", Locale.US)
 
 
-
                 val formattedDatetwo: String = dateFormat.format(tomorrowDate)
-
-
 
 
 //                Log.e("tomotmoit", "onCreateView: " + formattedDate)
@@ -458,7 +455,13 @@ class HomedemoFragment : Fragment() {
 //
 //                    }
 //
-//                        mbinding.textView5.text = formattedDate
+                    try{
+                        mbinding.textView5.text =
+                            "${convertDateFormat(it.NextWorkingDate)} - ${it.NextWorkingDay}\n${it.NextWorkingLoc}"
+
+                    }catch (_:Exception){
+                        mbinding.textView5.text = "Not allocated"
+                    }
 
                     mbinding.tvIsWorkingShowSunday.text = it.sundayLocation
                     mbinding.tvIsWorkingShowTuesday.text = it.tuesdayLocation
@@ -475,11 +478,12 @@ class HomedemoFragment : Fragment() {
                 mbinding.viewfulldatalayout.visibility = View.GONE
                 mbinding.llnodata.visibility = View.VISIBLE
                 mbinding.rlicons.visibility = View.GONE
+                mbinding.textView5.text = "Not allocated"
+
             }
 
         }
     }
-
 
 
 }

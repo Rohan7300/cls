@@ -23,6 +23,7 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.dialogs.NoInternetDialog
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.showErrorDialog
@@ -30,22 +31,23 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 
 
-class LoginActivity : AppCompatActivity() {
+class   LoginActivity : AppCompatActivity() {
     lateinit var ActivityLoginBinding: ActivityLoginBinding
     lateinit var mainViewModel: MainViewModel
     lateinit var loadingDialog: LoadingDialog
     lateinit var fragmentManager: FragmentManager
     lateinit var dialog: NoInternetDialog
-    var isNetworkActive:Boolean = true
+    private var isNetworkActive:Boolean = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
-        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+
         fragmentManager = this.supportFragmentManager
         dialog = NoInternetDialog()
         val networkManager = NetworkManager(this)
+
         networkManager.observe(this){
             if(it){
                 isNetworkActive = true
@@ -55,15 +57,11 @@ class LoginActivity : AppCompatActivity() {
                 dialog.showDialog(fragmentManager)
             }
         }
-        val mainRepo = MainRepo(apiService)
+
         loadingDialog = LoadingDialog(this)
-
-
-        mainViewModel =
-            ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
+        mainViewModel =DependencyProvider.getMainVM(this)
 
         ActivityLoginBinding.btLogin.setOnClickListener {
-
             if (ActivityLoginBinding.edtUser.text!!.isEmpty()) {
                 ActivityLoginBinding.textError.visibility = View.VISIBLE
             } else if (ActivityLoginBinding.edtPass.text!!.isEmpty()) {
@@ -76,8 +74,8 @@ class LoginActivity : AppCompatActivity() {
                 login()
             }
         }
-        var isPasswordVisible = false
 
+        var isPasswordVisible = false
 
         ActivityLoginBinding.passIcon.setOnClickListener {
             val cursorPosition = ActivityLoginBinding.edtPass.selectionEnd
@@ -200,7 +198,10 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     val intent = Intent(this, HomeActivity::class.java)
                     intent.putExtra("destinationFragment", "HomeFragment")
-                    intent.putExtra("no_signature_required", "0")
+                    intent.putExtra("actionToperform", "undef")
+                    intent.putExtra("actionID", "0")
+                    intent.putExtra("tokenUrl", "undef")
+                    intent.putExtra("notificationId", "0")
                     startActivity(intent)
                     finish()
                 }
