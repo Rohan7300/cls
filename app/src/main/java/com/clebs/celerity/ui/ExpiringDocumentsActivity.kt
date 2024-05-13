@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.webkit.MimeTypeMap
 import androidx.activity.OnBackPressedCallback
@@ -87,7 +88,6 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
                 showToast("No Documents found!!", this)
                 viewmodel.MarkNotificationAsRead(notificationID)
                 finish()
-
             }
         }
         binding.expringDocSave.isEnabled = false
@@ -110,8 +110,8 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
     }
 
     fun upload() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "*/*"
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
         resultLauncher.launch(intent)
     }
 

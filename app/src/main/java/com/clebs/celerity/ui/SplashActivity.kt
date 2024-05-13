@@ -27,6 +27,7 @@ import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.getCurrentAppVersion
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.showToast
 import com.google.android.gms.tasks.OnCompleteListener
@@ -81,6 +82,8 @@ class SplashActivity : AppCompatActivity() {
 
         fragmentManager = this.supportFragmentManager
         dialog = NoInternetDialog()
+
+        ActivitySplashBinding.appVersionTv.text =  getCurrentAppVersion(this)
         val networkManager = NetworkManager(this)
         networkManager.observe(this) {
             if (it) {

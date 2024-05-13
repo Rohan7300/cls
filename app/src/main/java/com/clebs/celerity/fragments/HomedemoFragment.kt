@@ -147,7 +147,6 @@ class HomedemoFragment : Fragment() {
 //        mbinding.pieChart.setUsePercentValues(true);
         mbinding.pieChart.description.isEnabled = false;
 
-
         mbinding.pieChart.dragDecelerationFrictionCoef = 0.95f;
 
         mbinding.pieChart.setDrawCenterText(false);
@@ -168,8 +167,6 @@ class HomedemoFragment : Fragment() {
         l.xEntrySpace = 7f
         l.yEntrySpace = 0f
         l.yOffset = 0f
-
-
 
 
         mbinding.viewfullschedule.setOnClickListener {
@@ -195,7 +192,7 @@ class HomedemoFragment : Fragment() {
             val weekprev = week - 3
             mbinding.txtLastWeek.text = "Week " + weekprev
             val weekschedule = week - 1
-            mbinding.viewfullschedule.text = "Week " + weekschedule + "\nSchedule"
+            mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
             showDialog()
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 1
@@ -217,7 +214,7 @@ class HomedemoFragment : Fragment() {
             showDialog()
             val weekprev = week - 2
             mbinding.txtLastWeek.text = "Week " + weekprev
-            mbinding.viewfullschedule.text = "Week " + week + "\nSchedule"
+            mbinding.viewfullschedule.text = "Full schedule for week " + week
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week
             )
@@ -243,16 +240,14 @@ class HomedemoFragment : Fragment() {
                 week = it.weekNO
                 year = it.year
                 showDialog()
-                //subtract weekNo by 2
-                val weeknew = it.weekNO - 2
 
                 val weekprev = week - 2
-                mbinding.txtLastWeek.text = "Week " + weekprev
-                mbinding.viewfullschedule.text = "Week " + week + "\nSchedule"
+                mbinding.txtLastWeek.text = "Week $weekprev"
+                mbinding.viewfullschedule.text = "Full schedule for week $week"
 
 
                 viewModel.GetcashFlowWeek(
-                    Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, 12
+                    Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week-2
                 )
                 showDialog()
                 viewModel.GetViewFullScheduleInfo(
@@ -262,9 +257,6 @@ class HomedemoFragment : Fragment() {
                 viewModel.GetLastWeekSCore(
                     Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 2, year
                 )
-
-
-                val bt_text = (week - 2).toString()
                 mbinding.btPrev.text = "Previous"
 
 
@@ -279,16 +271,16 @@ class HomedemoFragment : Fragment() {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBar.setProgress(it.avgTotalScore.toDouble().toInt())
                     mbinding.tvPbone.text =
-                        it.avgTotalScore.toDouble().toInt().toString() + "%" + " Score"
+                        "${it.avgTotalScore.toDouble().toInt()}% Score"
 
                     mbinding.ProgressBar.tooltipText = it.avgTotalScore.toDouble().toString() + "%"
                 } else {
                     mbinding.ProgressBar.setProgress(0)
-                    mbinding.tvPbone.setText("0%" + " Score")
+                    mbinding.tvPbone.setText("0% Score")
                 }
             } else {
                 mbinding.ProgressBar.setProgress(0)
-                mbinding.tvPbone.setText("0%" + " Score")
+                mbinding.tvPbone.setText("0% Score")
             }
         }
         viewModel.livedatalastweekresponse.observe(viewLifecycleOwner) {
@@ -298,7 +290,7 @@ class HomedemoFragment : Fragment() {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBartwo.setProgress(it.avgTotalScore.toDouble().toInt())
                     mbinding.tvPbTwo.text =
-                        it.avgTotalScore.toDouble().toInt().toString() + "%" + " Score"
+                        "${it.avgTotalScore.toDouble().toInt()}% Score"
                     mbinding.ProgressBartwo.tooltipText =
                         it.avgTotalScore.toDouble().toString() + "%"
                 } else {
@@ -315,7 +307,6 @@ class HomedemoFragment : Fragment() {
             if (depts != null) {
                 mbinding.demo.visibility = View.GONE
                 mbinding.pieChart.visibility = View.VISIBLE
-//                mbinding.nodata.visibility = View.GONE
                 depts.map {
 
 
@@ -335,15 +326,12 @@ class HomedemoFragment : Fragment() {
                 }
                 val entries = ArrayList<PieEntry>()
 
-                // NOTE: The order of the entries when being added to the entries array determines their position around the center of
-                // the chart.
-                entries.add(PieEntry(avprofit, "Profits" + "\n" + totalearning))
-
-                entries.add(PieEntry(avdeductions, "Deductions" + "\n" + totaldedecutions))
+                entries.add(PieEntry(avprofit, "Profits\n $totalearning"))
+                entries.add(PieEntry(avdeductions, "Deductions\n $totaldedecutions"))
                 entries.add(
                     PieEntry(
                         thirdpartydeductions,
-                        "3rd party Deductions" + "\n" + thirdparty
+                        "3rd party Deductions\n $thirdparty"
                     )
                 )
                 val dataSet = PieDataSet(entries, "")
@@ -390,7 +378,8 @@ class HomedemoFragment : Fragment() {
 //                pieChart.holeRatio = 0f
 //                pieChart.overlayRatio = 0f
 
-            } else {
+            }
+            else {
                 hideDialog()
                 mbinding.demo.visibility = View.VISIBLE
                 mbinding.pieChart.setNoDataText("No cash flow data found!")
@@ -455,13 +444,22 @@ class HomedemoFragment : Fragment() {
 //
 //                    }
 //
+                    mbinding.viewfullschedule.visibility = View.VISIBLE
+                    mbinding.yourNext.text = "Your next working day"
                     try{
+               /*         mbinding.textView5.text =
+                            "${convertDateFormat(it.NextWorkingDate)} - ${it.NextWorkingDay}\n${it.NextWorkingLoc}"*/
+                        var time = it.NextWorkingDayWaveTime?:" "
+                        var date = it.NextWorkingDate?:" "
+                        var nextLoc = it.NextWorkingLoc?:" "
                         mbinding.textView5.text =
-                            "${convertDateFormat(it.NextWorkingDate)} - ${it.NextWorkingDay}\n${it.NextWorkingLoc}"
+                            "${convertDateFormat(date)} ${time} - ${nextLoc}"
 
                     }catch (_:Exception){
                         mbinding.textView5.text = "Not allocated"
                     }
+
+
 
                     mbinding.tvIsWorkingShowSunday.text = it.sundayLocation
                     mbinding.tvIsWorkingShowTuesday.text = it.tuesdayLocation
@@ -472,10 +470,12 @@ class HomedemoFragment : Fragment() {
                     mbinding.tvIsWorkingShowSat.text = it.saturdayLocation
 
                 }
-            } else {
+            }
+            else {
                 mbinding.viewfullschedule.isClickable = false
                 mbinding.viewfullschedule.isEnabled = false
                 mbinding.viewfulldatalayout.visibility = View.GONE
+                mbinding.viewfullschedule.visibility = View.GONE
                 mbinding.llnodata.visibility = View.VISIBLE
                 mbinding.rlicons.visibility = View.GONE
                 mbinding.textView5.text = "Not allocated"

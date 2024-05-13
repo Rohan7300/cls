@@ -359,6 +359,7 @@ class PolicyDocsActivity : AppCompatActivity() {
         val drawView = mbinding.signLayout.paintView.drawView
 
         save.setOnClickListener {
+            Log.d("DrawViewSize",DrawViewClass.pathList.size.toString())
             if (DrawViewClass.pathList.isEmpty()) {
                 showToast("Please sign before saving", this)
             } else {

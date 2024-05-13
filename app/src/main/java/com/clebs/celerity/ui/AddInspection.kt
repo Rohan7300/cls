@@ -361,7 +361,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
             }
 
             5 -> {
-                binding.tvUploadType.text = "AddBlue Level Image"
+                binding.tvUploadType.text = "Add Blue Level Image"
                 binding.dashboardStatusIV.setImageDrawable(
                     ContextCompat.getDrawable(
                         this,

@@ -452,11 +452,11 @@ class NotificationAdapter(
                     loadingDialog.dismiss()
                     dailyRotaDialog.dismiss()
                     viewModel.MarkNotificationAsRead(notificationId)
-/*                    if (it != null) {
-
+                    if (it != null) {
+                        showToast("Submitted Successfully!!", context)
                     } else {
                         showToast("Failed to submit!!", context)
-                    }*/
+                    }
                 }
             }
         }

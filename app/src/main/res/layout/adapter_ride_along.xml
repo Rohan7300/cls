@@ -139,6 +139,7 @@
                     android:id="@+id/edt_ic"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    android:clickable="false"
                     android:src="@drawable/edit_orange" />
             </LinearLayout>
 
@@ -182,6 +183,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:id="@+id/trainerFeedbackImage"
+                    android:clickable="false"
                     android:src="@drawable/edit_orange" />
             </LinearLayout>
 

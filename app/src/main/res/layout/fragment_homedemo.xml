@@ -104,7 +104,6 @@
                                     android:layout_marginTop="8dp"
                                     android:elevation="30dp"
                                     android:indeterminate="false"
-
                                     android:progressDrawable="@drawable/pb_style"
                                     android:progressTint="@color/peek_orange"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -206,11 +205,10 @@
                         android:layout_height="300dp"
                         android:layout_marginTop="10dp"
                         android:visibility="visible"
+
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/txt_this_week"
-                        app:layout_constraintTop_toBottomOf="@+id/txt_this_week"
-
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/txt_this_week" />
                     <!--                    <im.delight.android.webview.AdvancedWebView-->
                     <!--                        android:layout_width="match_parent"-->
                     <!--                        android:layout_height="wrap_content"-->
@@ -254,7 +252,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:id="@+id/layoutfullschedule"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -262,52 +260,68 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/shape_expand_main"
+                    android:orientation="vertical"
                     android:padding="10dp">
 
-                    <TextView
-                        android:id="@+id/your_next"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_bold"
-                        android:text="Next working day:"
-                        android:textColor="@color/text_color"
-                        android:textSize="15sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:padding="5dp"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/viewfullschedule"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:drawableRight="@drawable/down_arrow"
-                        android:drawablePadding="10dp"
-                        android:fontFamily="@font/inter_bold"
-                        android:gravity="center"
-                        android:maxLines="2"
-                        android:text="View full schedule"
-                        android:textColor="@color/text_color"
-                        android:textSize="15sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView5"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/your_next" />
+                        <TextView
+                            android:id="@+id/your_next"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_bold"
+                            android:layout_marginVertical="5dp"
+                            android:text="Your next working day for week :"
+                            android:textColor="@color/text_color"
+                            android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:fontFamily="@font/inter_semibold"
-                        android:text=""
-                        android:textColor="@color/text_color"
-                        android:textSize="12sp"
-                        app:layout_constraintStart_toStartOf="@+id/your_next"
-                        app:layout_constraintTop_toBottomOf="@id/your_next" />
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="5dp"
+                            app:cardCornerRadius="8dp">
+
+                            <TextView
+                                android:id="@+id/textView5"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/medium_orange"
+                                android:fontFamily="@font/poppins_bold"
+                                android:gravity="center"
+                                android:padding="6dp"
+                                android:text=""
+                                android:textColor="@color/white"
+                                android:textSize="12sp" />
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:id="@+id/viewfullschedule"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:drawableRight="@drawable/down_arrow"
+                            android:drawablePadding="10dp"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:gravity="center"
+                            android:maxLines="2"
+                            android:text="View full schedule"
+                            android:textColor="@color/text_color"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView5"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/your_next" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/llnodata"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="5dp"
                         android:gravity="center"
                         android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@id/textView5"
@@ -396,7 +410,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-
                             android:background="@drawable/shape_expand_main"
                             android:padding="13dp">
 
@@ -590,7 +603,7 @@
                     </LinearLayout>
 
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
                 <RelativeLayout
                     android:id="@+id/linearLayout13"
@@ -600,42 +613,53 @@
                     android:orientation="horizontal"
                     app:layout_constraintStart_toStartOf="parent">
 
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        app:layout_constraintStart_toStartOf="parent" >
                     <TextView
                         android:id="@+id/bt_prev"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/home_button_shape"
-                        android:backgroundTint="@color/medium_orange"
-                        android:fontFamily="@font/poppins"
-                        android:padding="8dp"
+                        android:background="@color/medium_orange"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:padding="6dp"
+                        android:gravity="center"
                         android:text="Previous"
-                        android:textColor="@color/text_color"
-                        android:textSize="11sp"
-                        android:visibility="visible"
-                        app:layout_constraintStart_toStartOf="parent" />
-
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:visibility="visible"/>
+                    </androidx.cardview.widget.CardView>
                     <View
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
-
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                         >
                     <TextView
                         android:id="@+id/bt_this_week"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+
                         android:background="@drawable/home_button_shape"
                         android:backgroundTint="@color/medium_orange"
-                        android:fontFamily="@font/poppins"
-
-                        android:padding="8dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:padding="6dp"
                         android:text="This week"
-                        android:textColor="@color/text_color"
-                        android:textSize="11sp"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
                         android:visibility="gone" />
-
+                    </androidx.cardview.widget.CardView>
                 </RelativeLayout>
 
 

@@ -53,8 +53,8 @@ class ViewTicketsActivity : AppCompatActivity() {
 
         if (ticketData != null) {
             binding.ticketID.text = "CLS : " + ticketData!!.UserTicketID.toString()
-            if (ticketData!!.RegNo != null)
-                binding.tvRegistration.text = ticketData!!.RegNo.toString()
+            if (ticketData!!.OtherRegNo != null)
+                binding.tvRegistration.text = ticketData!!.OtherRegNo.toString()
             binding.edtTitle.text = ticketData!!.TicketTitle
             binding.edtDes.text = ticketData!!.TicketDescription
             binding.tvDepart.text = ticketData!!.DepartmentName

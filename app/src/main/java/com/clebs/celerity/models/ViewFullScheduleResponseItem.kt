@@ -147,5 +147,7 @@ data class ViewFullScheduleResponseItem(
     @SerializedName("NextWorkingDay")
     val NextWorkingDay:String,
     @SerializedName("NextWorkingLoc")
-    val NextWorkingLoc:String
+    val NextWorkingLoc:String,
+    @SerializedName("NextWorkingDayWaveTime")
+    val NextWorkingDayWaveTime:String?=null
 )

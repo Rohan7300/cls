@@ -97,6 +97,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private var sdkkey = ""
     var clebuserID: Int = 0
     var firstName = ""
+
     var apiCount = 0
     val currentDate =
         SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(
@@ -149,75 +150,78 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             val tokenUrl = intent.getStringExtra("tokenUrl") ?: "undef"
             val actionID = intent.getStringExtra("actionID") ?: "0"
             val notificationID = intent.getStringExtra("notificationId") ?: "0"
-            Log.d("NotExtras"," $destinationFragment $actionToPerform $tokenUrl $actionID $notificationID")
+            Log.d(
+                "NotExtras",
+                " $destinationFragment $actionToPerform $tokenUrl $actionID $notificationID"
+            )
             if (destinationFragment != null) {
-            Log.d("HomeActivityX", destinationFragment!!)
+                Log.d("HomeActivityX", destinationFragment!!)
                 if (destinationFragment == "NotificationsFragment") {
-              //      try {
-                        if (actionToPerform == "Deductions" || actionToPerform == "Driver Deduction with Agreement") {
-                            deductions(this, parseToInt(actionID), parseToInt(notificationID))
-                        } else if (actionToPerform == "Daily Location Rota" || actionToPerform == "Daily Rota Approval"
-                        ) {
-                            if (getMainVM(this) != null)
-                                dailyRota(
-                                    getMainVM(this),
-                                    tokenUrl,
-                                    this,
-                                    this,
-                                    parseToInt(notificationID)
-                                )
-                            else {
-                                ActivityHomeBinding.title.text = "Notifications"
-                                navController.navigate(R.id.notifficationsFragment)
-                                return
-                            }
-                        } else if (actionToPerform.equals("Invoice Ready To Review")
-                            || actionToPerform.equals(
-                                "Invoice Ready to Review"
-                            )
-                        ) {
-                            invoiceReadyToView(parseToInt(notificationID), supportFragmentManager)
-                        } else if (actionToPerform == "Weekly Location Rota" || actionToPerform == "Weekly Rota Approval") {
-                            weeklyLocationRota(
-                                this,
-                                parseToInt( notificationID),
-                                parseToInt(actionID)
-                            )
-                        } else if (actionToPerform == "Expired Document") {
-                            expiredDocuments(
+                    //      try {
+                    if (actionToPerform == "Deductions" || actionToPerform == "Driver Deduction with Agreement") {
+                        deductions(this, parseToInt(actionID), parseToInt(notificationID))
+                    } else if (actionToPerform == "Daily Location Rota" || actionToPerform == "Daily Rota Approval"
+                    ) {
+                        if (getMainVM(this) != null)
+                            dailyRota(
                                 getMainVM(this),
+                                tokenUrl,
                                 this,
-                                this,
-                                supportFragmentManager,
-                                parseToInt(notificationID)
-                            )
-                        } else if (actionToPerform.equals("Vehicle Advance Payment Aggrement") || actionToPerform.equals(
-                                "Vehicle Advance Payment Agreement"
-                            )
-                        ) {
-                            vehicleAdvancePaymentAgreement(
-                                this,
-                                parseToInt(notificationID),
-                                getMainVM(this),
-                                this
-                            )
-                        } else if (actionToPerform.equals("Expiring Document")) {
-                            expiringDocument(
                                 this,
                                 parseToInt(notificationID)
                             )
-                        } else {
-
+                        else {
                             ActivityHomeBinding.title.text = "Notifications"
                             navController.navigate(R.id.notifficationsFragment)
                             return
                         }
-      /*              }
-                    catch (_: Exception) {
+                    } else if (actionToPerform.equals("Invoice Ready To Review")
+                        || actionToPerform.equals(
+                            "Invoice Ready to Review"
+                        )
+                    ) {
+                        invoiceReadyToView(parseToInt(notificationID), supportFragmentManager)
+                    } else if (actionToPerform == "Weekly Location Rota" || actionToPerform == "Weekly Rota Approval") {
+                        weeklyLocationRota(
+                            this,
+                            parseToInt(notificationID),
+                            parseToInt(actionID)
+                        )
+                    } else if (actionToPerform == "Expired Document") {
+                        expiredDocuments(
+                            getMainVM(this),
+                            this,
+                            this,
+                            supportFragmentManager,
+                            parseToInt(notificationID)
+                        )
+                    } else if (actionToPerform.equals("Vehicle Advance Payment Aggrement") || actionToPerform.equals(
+                            "Vehicle Advance Payment Agreement"
+                        )
+                    ) {
+                        vehicleAdvancePaymentAgreement(
+                            this,
+                            parseToInt(notificationID),
+                            getMainVM(this),
+                            this
+                        )
+                    } else if (actionToPerform.equals("Expiring Document")) {
+                        expiringDocument(
+                            this,
+                            parseToInt(notificationID)
+                        )
+                    } else {
+
                         ActivityHomeBinding.title.text = "Notifications"
                         navController.navigate(R.id.notifficationsFragment)
                         return
-                    }*/
+                    }
+                    /*              }
+                                  catch (_: Exception) {
+                                      ActivityHomeBinding.title.text = "Notifications"
+                                      navController.navigate(R.id.notifficationsFragment)
+                                      return
+                                  }*/
 
                     /*                    ActivityHomeBinding.title.text = "Notifications"
                                         navController.navigate(R.id.notifficationsFragment)
@@ -245,10 +249,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 val currentloction = Prefs.getInstance(App.instance).currLocationId
                 val workinglocation = Prefs.getInstance(App.instance).workLocationId
                 val locationID: Int
-                if (!workinglocation.equals(0)) {
-                    locationID = workinglocation
+                locationID = if (workinglocation != 0) {
+                    workinglocation
                 } else {
-                    locationID = currentloction
+                    currentloction
                 }
 
                 /*                viewModel.SaveVehicleInspectionInfo(
@@ -303,11 +307,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         networkManager = NetworkManager(this)
 
         networkManager.observe(this) {
-            if (it) {
-                isNetworkActive = true
+            isNetworkActive = if (it) {
+                true
                 //  internetDialog.hideDialog()
             } else {
-                isNetworkActive = false
+                false
                 //    internetDialog.showDialog(fragmentManager)
             }
         }
@@ -468,11 +472,21 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         /*     navController.navigate(R.id.homeFragment)
                              navController.currentDestination!!.id = R.id.homeFragment
          */
-                        ActivityHomeBinding.logout.visibility = View.GONE
-                        ActivityHomeBinding.title.text = ""
-                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                        viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
-                        showDialog()
+                        if (isNetworkActive) {
+
+                            ActivityHomeBinding.logout.visibility = View.GONE
+                            ActivityHomeBinding.title.text = ""
+                            ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                            viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
+                            showDialog()
+                        } else {
+                            if (prefs.isInspectionDoneToday())
+                                navController.navigate(R.id.completeTaskFragment)
+                            else {
+                                navController.navigate(R.id.homeFragment)
+                                navController.currentDestination!!.id = R.id.homeFragment
+                            }
+                        }
                         true
                     }
 

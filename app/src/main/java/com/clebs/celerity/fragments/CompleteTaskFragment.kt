@@ -14,6 +14,8 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -51,6 +53,7 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.addLeadingZeroIfNeeded
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.getLoc
@@ -571,7 +574,7 @@ class CompleteTaskFragment : Fragment() {
                 if(uploadInProgress){
                     imagesUploaded = true
                     showImageUploadLayout = false
-                    showToast("Pls wait images are uploading!!", requireContext())
+                    showToast("Pls wait!!", requireContext())
                 }else{
                     showToast("Face mask image not submitted or upload in progress!!", requireContext())
                 }
@@ -618,13 +621,13 @@ class CompleteTaskFragment : Fragment() {
                             isBreakTimeAdded = true
                             setVisibiltyLevel()
                         } else {
-                            showToast("No Break time information added!!", requireContext())
+                           // showToast("No Break time information added!!", requireContext())
                         }
                     } catch (_: Exception) {
-                        showToast("No Break time information added!!", requireContext())
+                        //showToast("No Break time information added!!", requireContext())
                     }
 
-                } ?: showToast("No Break time information added!!", requireContext())
+                } /*?: showToast("No Break time information added!!", requireContext())*/
             } else {
                 isBreakTimeAdded = false
                 setVisibiltyLevel()
@@ -948,6 +951,49 @@ class CompleteTaskFragment : Fragment() {
             b1 = false
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
         }
+
+
+
+        val breakstartWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                s?.let {
+                    val formattedTime = addLeadingZeroIfNeeded(it)
+                    dialogBinding.tvBreakstart.removeTextChangedListener(this)
+                    dialogBinding.tvBreakstart.text = formattedTime
+                    dialogBinding.tvBreakstart.addTextChangedListener(this)
+                }
+            }
+        }
+
+        val breakendWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Not needed
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                s?.let {
+                    val formattedTime = addLeadingZeroIfNeeded(it)
+                    dialogBinding.tvBreakend.removeTextChangedListener(this)
+                    dialogBinding.tvBreakend.text = formattedTime
+                    dialogBinding.tvBreakend.addTextChangedListener(this)
+                }
+            }
+        }
+
+        dialogBinding.tvBreakstart.addTextChangedListener(breakstartWatcher)
+        dialogBinding.tvBreakend.addTextChangedListener(breakendWatcher)
 
         dialogBinding.icBreakstart.setOnClickListener {
             b1 = false

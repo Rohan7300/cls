@@ -168,7 +168,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
         val bse64 = "data:image/png;base64," + bitmapToBase64(signatureBitmap)
         viewmodel.UpdateDaDeduction(
             UpdateDeductioRequest(
-                DaDedAggrDaId = 197251,
+                DaDedAggrDaId = pref.clebUserId.toInt(),
                 DaUserName = DaUserName,
                 FromLocation = FromLocation,
                 IsDaDedAggAccepted = true,

@@ -112,11 +112,11 @@ fun showDailyRotaDialog(
                 loadingDialog.dismiss()
                 dailyRotaDialog.dismiss()
                 viewModel.MarkNotificationAsRead(notificationId)
-   /*             if (it != null) {
-                    dailyRotaDialog.dismiss()
+                if (it != null) {
+                    showToast("Submitted Successfully!!", context)
                 } else {
                     showToast("Failed to submit!!", context)
-                }*/
+                }
             }
         }
     }
