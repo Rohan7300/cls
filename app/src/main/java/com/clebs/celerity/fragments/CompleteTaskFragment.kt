@@ -571,12 +571,12 @@ class CompleteTaskFragment : Fragment() {
 //                }
                 setVisibiltyLevel()
             } else {
-                if(uploadInProgress){
+                if (uploadInProgress) {
                     imagesUploaded = true
                     showImageUploadLayout = false
-                    showToast("Pls wait!!", requireContext())
-                }else{
-                    showToast("Face mask image not submitted or upload in progress!!", requireContext())
+                    showToast("Syncing!! Pls wait", requireContext())
+                } else {
+                    showToast("Pls Retry!!", requireContext())
                 }
 
                 setVisibiltyLevel()
@@ -592,7 +592,6 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.rlcomtwoClockOut.isEnabled = false
                 mbinding.clockOutTV.text = "Clocked Out"
                 mbinding.rlcomtwoClockOut.isClickable = false
-
 
             }
         }
@@ -621,7 +620,7 @@ class CompleteTaskFragment : Fragment() {
                             isBreakTimeAdded = true
                             setVisibiltyLevel()
                         } else {
-                           // showToast("No Break time information added!!", requireContext())
+                            // showToast("No Break time information added!!", requireContext())
                         }
                     } catch (_: Exception) {
                         //showToast("No Break time information added!!", requireContext())
@@ -663,90 +662,58 @@ class CompleteTaskFragment : Fragment() {
                 showImageUploadLayout = false
                 imagesUploaded = true
 
-                if (it!!.Status == "404" || osData.faceMaskImage == null) {
-                    mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
-                    showImageUploadLayout = true
-                    imagesUploaded = false
-                } else if (checkNull(it)) {
-                    showImageUploadLayout = true
-                    imagesUploaded = false
-                } else if (it.DaVehicleAddBlueImage == null ||
-                    it.DaVehImgOilLevelFileName == null ||
-                    it.DaVehImgNearSideFileName == null ||
-                    it.DaVehImgRearFileName == null ||
-                    it.DaVehImgDashBoardFileName == null ||
-                    it.DaVehImgOffSideFileName == null
+                if (it.DaVehImgFaceMaskFileName != null &&
+                    it.DaVehicleAddBlueImage != null &&
+                    it.DaVehImgOilLevelFileName != null &&
+                    it.DaVehImgNearSideFileName != null &&
+                    it.DaVehImgRearFileName != null &&
+                    it.DaVehImgDashBoardFileName != null &&
+                    it.DaVehImgOffSideFileName != null
                 ) {
                     showImageUploadLayout = false
                     imagesUploaded = true
-                    backgroundImageSync()
                 } else {
-                    showImageUploadLayout = false
-                    imagesUploaded = true
-
-
-                    /*                     if (it.IsVehicleImageUploaded == false && checkNull(it)) {
-                                             showImageUploadLayout = true
-                                             imagesUploaded = false
-                                             //   setVisibiltyLevel()
-                                             //mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
-                                         } else {
-                                             showImageUploadLayout = checkNull(it)
-
-                                             if (showImageUploadLayout) {
-                                                 imagesUploaded = false
-                                                 //  setVisibiltyLevel()
-                                             } else {
-                                                 imagesUploaded = true
-                                                 //setVisibiltyLevel()
-                                                 isAllImageUploaded = true
-                                             }*/
-                    /*
-                                            if (*//*it.DaVehicleAddBlueImage == null && it.DaVehImgOilLevelFileName == null &&*//* it.DaVehImgFaceMaskFileName == null) {
-                            imageUploadLevel = 0
-                        }*/
-                    /*else if (it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null && it.DaVehImgFaceMaskFileName != null) {
-                        // All images uploaded
-                        imageUploadLevel = 3
-                        mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
-                        mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
-                        mbinding.ivOilLevel.setImageResource(R.drawable.ic_yes)
-                    } else if (it.DaVehicleAddBlueImage == null && it.DaVehImgFaceMaskFileName == null) {
-                        imageUploadLevel = 0
-                    } else if (it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage == null) {
-                        imageUploadLevel = 1
-                        mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
-                    } else if (it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName == null) {
-                        imageUploadLevel = 0
-                        mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
-                    } else if (it.DaVehImgFaceMaskFileName != null && it.DaVehicleAddBlueImage != null) {
-                        imageUploadLevel = 2
-                        mbinding.ivFaceMask.setImageResource(R.drawable.ic_yes)
-                        mbinding.ivAddBlueImg.setImageResource(R.drawable.ic_yes)
+                    if (it!!.Status == "404" ||
+                        osData.faceMaskImage == null ||
+                        osData.dashboardImage == null ||
+                        osData.nearSideImage == null ||
+                        osData.rearSideImage == null ||
+                        osData.offSideImage == null ||
+                        osData.frontImage == null ||
+                        osData.oillevelImage == null ||
+                        osData.addblueImage == null
+                    ) {
+                        mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
+                        showImageUploadLayout = true
+                        imagesUploaded = false
+                        if (osData.dashboardImage == null &&
+                            osData.nearSideImage == null &&
+                            osData.rearSideImage == null &&
+                            osData.offSideImage == null &&
+                            osData.frontImage == null &&
+                            osData.oillevelImage == null &&
+                            osData.addblueImage == null
+                        ) {
+                            inspectionstarted = false
+                        }
+                    } else if (checkNull(it)) {
+                        showImageUploadLayout = true
+                        imagesUploaded = false
+                    } else if (
+                        it.DaVehicleAddBlueImage == null ||
+                        it.DaVehImgOilLevelFileName == null ||
+                        it.DaVehImgNearSideFileName == null ||
+                        it.DaVehImgRearFileName == null ||
+                        it.DaVehImgDashBoardFileName == null ||
+                        it.DaVehImgOffSideFileName == null
+                    ) {
+                        showImageUploadLayout = false
+                        imagesUploaded = true
+                        backgroundImageSync()
                     } else {
-                        imageUploadLevel = 0
-                    }*/
-
-                    //setProgress()
-
-                    /*                        mbinding.run {
-                                                mbinding.tvNext.isEnabled =
-                                                    it.DaVehicleAddBlueImage != null && it.DaVehImgFaceMaskFileName != null && it.DaVehImgOilLevelFileName != null
-                                                if (tvNext.isEnabled) {
-                                                    tvNext.setTextColor(
-                                                        ContextCompat.getColor(
-                                                            requireContext(), R.color.white
-                                                        )
-                                                    )
-                                                } else {
-                                                    tvNext.setTextColor(
-                                                        ContextCompat.getColor(
-                                                            requireContext(), R.color.orange
-                                                        )
-                                                    )
-                                                }
-                                            }*/
-                    //}
+                        showImageUploadLayout = false
+                        imagesUploaded = true
+                    }
                 }
             } else {
                 if (osData.faceMaskImage != null ||
@@ -759,20 +726,6 @@ class CompleteTaskFragment : Fragment() {
                     osData.offSideImage != null
                 ) {
                     backgroundImageSync()
-                    /*                    startUploadWithWorkManager(
-                                            0,
-                                            Prefs.getInstance(requireContext()),
-                                            requireContext()
-                                        )
-                                        if (osData.faceMaskImage != null) {
-                                  *//*          imagesUploaded = true
-                        showImageUploadLayout = false*//*
-                        startUploadWithWorkManager(
-                            1,
-                            Prefs.getInstance(requireContext()),
-                            requireContext()
-                        )
-                    }*/
                 } else {
                     showImageUploadLayout = true
                     imagesUploaded = false
@@ -888,21 +841,22 @@ class CompleteTaskFragment : Fragment() {
             Prefs.getInstance(requireContext()),
             requireContext()
         )
-        if (osData.faceMaskImage != null) {
-            imagesUploaded = true
-            showImageUploadLayout = false
-            startUploadWithWorkManager(
-                1,
-                Prefs.getInstance(requireContext()),
-                requireContext()
-            )
-        }
+        /*        if (osData.faceMaskImage != null) {
+                    imagesUploaded = true
+                    showImageUploadLayout = false
+                    startUploadWithWorkManager(
+                        1,
+                        Prefs.getInstance(requireContext()),
+                        requireContext()
+                    )
+                }*/
         setVisibiltyLevel()
     }
 
     private fun checkNull(res: GetVehicleImageUploadInfoResponse): Boolean {
-        return res.DaVehImgFaceMaskFileName == null && osData.faceMaskImage == null /*|| res.DaVehicleAddBlueImage == null || res.DaVehImgOilLevelFileName == null*/
+        return res.DaVehImgFaceMaskFileName == null && osData.faceMaskImage == null  /*|| res.DaVehicleAddBlueImage == null || res.DaVehImgOilLevelFileName == null*/
     }
+
 
     private fun chkTime(edtBreakstart: TextView, edtBreakend: TextView): Boolean {
 
@@ -939,6 +893,7 @@ class CompleteTaskFragment : Fragment() {
                 dialogBinding.timeTvNext.setTextColor(Color.WHITE)
             }
         }
+
         dialogBinding.edtBreakend.doAfterTextChanged {
             b2 = true
             if (b1 && b2) {
@@ -952,97 +907,61 @@ class CompleteTaskFragment : Fragment() {
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
         }
 
-
-
-        val breakstartWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                s?.let {
-                    val formattedTime = addLeadingZeroIfNeeded(it)
-                    dialogBinding.tvBreakstart.removeTextChangedListener(this)
-                    dialogBinding.tvBreakstart.text = formattedTime
-                    dialogBinding.tvBreakstart.addTextChangedListener(this)
-                }
-            }
-        }
-
-        val breakendWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Not needed
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Not needed
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                s?.let {
-                    val formattedTime = addLeadingZeroIfNeeded(it)
-                    dialogBinding.tvBreakend.removeTextChangedListener(this)
-                    dialogBinding.tvBreakend.text = formattedTime
-                    dialogBinding.tvBreakend.addTextChangedListener(this)
-                }
-            }
-        }
-
-        dialogBinding.tvBreakstart.addTextChangedListener(breakstartWatcher)
-        dialogBinding.tvBreakend.addTextChangedListener(breakendWatcher)
-
         dialogBinding.icBreakstart.setOnClickListener {
             b1 = false
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
-            /* if (b1 && b2) {
-                 dialogBinding.timeTvNext.isEnabled = true
-                 dialogBinding.timeTvNext.setTextColor(Color.WHITE)
-             }*/
         }
 
         dialogBinding.edtBreakend.setOnClickListener {
-            //  b2 = true
             b2 = false
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
-
         }
 
         dialogBinding.icBreakend.setOnClickListener {
             b2 = false
-            /*b2 = true
-            if (b1 && b2) {
-                dialogBinding.timeTvNext.isEnabled = true
-                dialogBinding.timeTvNext.setTextColor(Color.WHITE)
-            }*/
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
         }
 
-        /*     val textWatcher = object : TextWatcher {
-                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                 }
+        /*        val breakstartWatcher = object : TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
-                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                 }
+                    }
 
-                 override fun afterTextChanged(s: Editable?) {
-                     val startText = dialogBinding.edtBreakstart.text.toString()
-                     val endText = dialogBinding.edtBreakend.text.toString()
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
-                     if (startText.isNotEmpty() && endText.isNotEmpty()) {
-                         breakStartTime = startText
-                         breakEndTime = endText
-                         dialogBinding.timeTvNext.isEnabled = true
-                         dialogBinding.timeTvNext.setTextColor(Color.WHITE)
-                     }
-                 }
-             }
+                    }
 
-             dialogBinding.edtBreakstart.addTextChangedListener(textWatcher)
-             dialogBinding.edtBreakend.addTextChangedListener(textWatcher)*/
+                    override fun afterTextChanged(s: Editable?) {
+                        s?.let {
+                            val formattedTime = addLeadingZeroIfNeeded(it)
+                            dialogBinding.tvBreakstart.removeTextChangedListener(this)
+                            dialogBinding.tvBreakstart.text = formattedTime
+                            dialogBinding.tvBreakstart.addTextChangedListener(this)
+                        }
+                    }
+                }
+
+                val breakendWatcher = object : TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                        // Not needed
+                    }
+
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                        // Not needed
+                    }
+
+                    override fun afterTextChanged(s: Editable?) {
+                        s?.let {
+                            val formattedTime = addLeadingZeroIfNeeded(it)
+                            dialogBinding.tvBreakend.removeTextChangedListener(this)
+                            dialogBinding.tvBreakend.text = formattedTime
+                            dialogBinding.tvBreakend.addTextChangedListener(this)
+                        }
+                    }
+                }
+
+                dialogBinding.tvBreakstart.addTextChangedListener(breakstartWatcher)
+                dialogBinding.tvBreakend.addTextChangedListener(breakendWatcher)*/
 
 
         dialogBinding.timeTvNext.setOnClickListener {

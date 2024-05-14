@@ -85,9 +85,8 @@ class Userprofile : Fragment() {
 //        mbinding.logout.setOnClickListener {
 //            (activity as HomeActivity).showAlertLogout()
 //        }
-        HomeActivity.ActivityHomeBinding.imgNotification.visibility=View.GONE
-HomeActivity.ActivityHomeBinding.logout.visibility=View.VISIBLE
-
+        HomeActivity.ActivityHomeBinding.imgNotification.visibility = View.GONE
+        HomeActivity.ActivityHomeBinding.logout.visibility = View.VISIBLE
 
 
 //        if (isthirdpartyAccessRequested != null && isthirdpartyAccessRequested!!.equals(true)) {
@@ -472,7 +471,7 @@ HomeActivity.ActivityHomeBinding.logout.visibility=View.VISIBLE
                 } else if (it.IsThirdPartyChargeAccessAllowed == true) {
                     mbinding.Tvthirdparty.text = "Third party Access is Granted."
                     mbinding.checkbox.visibility = View.VISIBLE
-                    mbinding.checkbox.isChecked=true
+                    mbinding.checkbox.isChecked = true
                 } else if (it.IsThirdPartyChargeAccessAllowed == false && it.IsThirdPartyChargeAccessApplied == false) {
                     mbinding.Tvthirdparty.text = "Request for third party Access."
                     mbinding.checkbox.visibility = View.VISIBLE
@@ -503,11 +502,12 @@ HomeActivity.ActivityHomeBinding.logout.visibility=View.VISIBLE
 
 
         mainViewModel.UseEmailasUsername(
-            Prefs.getInstance(App.instance).clebUserId.toDouble(), mbinding.emailtext.text.toString()
+            Prefs.getInstance(App.instance).clebUserId.toDouble(),
+            mbinding.emailtext.text.toString()
         ).observe(requireActivity(), Observer {
             Log.e("dkfjdkfjdfkj", "UseEmailAsUSername: ")
             if (it?.Status!!.equals(200)) {
-                   mbinding.usertext.setText(mbinding.emailtext.text.toString())
+                mbinding.usertext.setText(mbinding.emailtext.text.toString())
 
                 showToast("Email has been used as username", requireContext())
 

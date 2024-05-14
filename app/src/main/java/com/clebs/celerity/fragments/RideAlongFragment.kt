@@ -159,6 +159,12 @@ class RideAlongFragment : Fragment() {
                 val driverName = it.map { drivers -> drivers.Name }
 
                 if (driverId.isNotEmpty() && driverName.isNotEmpty()) {
+                    binding.SpinnerRouteType.setText("")
+                    selectedRouteId = null
+                    binding.SpinnerRouteType.setAdapter(null)
+                    binding.spinnerRouteLocation.setAdapter(null)
+                    binding.spinnerRouteLocation.setText("")
+                    selectedLocId = null
                     setSpinnerNew(
                         binding.spinnerSelectDriver, driverName, driverId, "Select Driver"
                     )
@@ -453,6 +459,8 @@ class RideAlongFragment : Fragment() {
                                 viewModel.GetRideAlongRouteTypeInfo(selectedDriverId!!)
                                 binding.SpinnerRouteType.setText("")
                                 selectedRouteId = null
+                                binding.SpinnerRouteType.setAdapter(null)
+                                binding.spinnerRouteLocation.setAdapter(null)
                                 binding.spinnerRouteLocation.setText("")
                                 selectedLocId = null
                             }

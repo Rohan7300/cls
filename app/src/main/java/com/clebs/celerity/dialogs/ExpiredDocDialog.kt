@@ -29,7 +29,7 @@ class ExpiredDocDialog(val prefs: Prefs,val rvContext: Context) : DialogFragment
         dialog.setContentView(R.layout.expired_doc_dialog)
         dialog.window?.apply {
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            setBackgroundDrawableResource(android.R.color.transparent)
+            setBackgroundDrawableResource(R.color.semi_transparent_color)
         }
         expiredRV = dialog.findViewById(R.id.expiredRV)
         init()

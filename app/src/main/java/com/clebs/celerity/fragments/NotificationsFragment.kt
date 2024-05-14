@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.ExpiringDocUploadListener
 import com.clebs.celerity.adapters.NotificationAdapter
+import com.clebs.celerity.adapters.NotificationAdapterCallback
 import com.clebs.celerity.databinding.FragmentNotifficationsBinding
 import com.clebs.celerity.ui.CreateTicketsActivity
 import com.clebs.celerity.ui.HomeActivity
@@ -31,7 +32,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 
 
-class NotificationsFragment : Fragment() {
+class NotificationsFragment : Fragment(),NotificationAdapterCallback {
 
     lateinit var binding: FragmentNotifficationsBinding
     lateinit var viewModel: MainViewModel
@@ -63,7 +64,8 @@ class NotificationsFragment : Fragment() {
             homeActivity.loadingDialog,
             viewModel,
             prefs,
-            viewLifecycleOwner
+            viewLifecycleOwner,
+            this
         )
         binding.rvNotifications.adapter = notificationAdapter
         binding.rvNotifications.layoutManager = LinearLayoutManager(requireContext())
@@ -88,6 +90,11 @@ class NotificationsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.GetNotificationListByUserId(prefs.clebUserId.toInt())
+    }
+
+    override fun refresh() {
+        showDialog()
         viewModel.GetNotificationListByUserId(prefs.clebUserId.toInt())
     }
 }

@@ -106,6 +106,7 @@
                         android:id="@+id/imgName1"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:gravity="center_vertical"
                         android:fontFamily="@font/poppins"
                         android:text="IMG_NAME.JPG"
                         android:textColor="@color/blue_default"
@@ -249,6 +250,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/poppins"
+                        android:gravity="center_vertical"
                         android:text="IMG_NAME.JPG"
                         android:textColor="@color/blue_default"
                         android:textSize="10sp" />

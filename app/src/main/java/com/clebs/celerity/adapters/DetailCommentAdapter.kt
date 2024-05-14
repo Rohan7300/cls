@@ -47,7 +47,20 @@ class DetailCommentAdapter(
             linkView.visibility = View.GONE
             if (item.HasAttachment) {
                 linkView.visibility = View.VISIBLE
-                imgName.text = item.ActivityFileName
+                var shortenedName = " "
+                try {
+
+                    val fileName = item.ActivityFileName
+                    val nameWithoutExtension = fileName.substringBeforeLast(".") // Remove extension
+                    shortenedName =
+                        nameWithoutExtension.split("_")[0]+
+                                nameWithoutExtension.split("_")[1] +
+                                "." + fileName.substringAfterLast(".")
+                } catch (_: Exception) {
+                    shortenedName = "UT Comment File"
+                }
+                imgName.text = shortenedName
+
                 linkView.setOnClickListener {
                     try {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.FilePath.Result))

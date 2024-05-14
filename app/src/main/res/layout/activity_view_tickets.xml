@@ -248,7 +248,7 @@
                                 android:fontFamily="@font/poppins_semibold"
                                 android:letterSpacing="0.01"
 
-                                android:text="Reg No. ( if applicable)"
+                                android:text="Registration No. ( if applicable)"
                                 android:textColor="@color/text_color"
                                 android:textSize="14sp" />
 
