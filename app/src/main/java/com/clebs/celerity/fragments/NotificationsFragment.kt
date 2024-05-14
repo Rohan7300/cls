@@ -85,4 +85,9 @@ class NotificationsFragment : Fragment() {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.GetNotificationListByUserId(prefs.clebUserId.toInt())
+    }
 }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.DrawViewClass
@@ -18,6 +19,7 @@ import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
+import com.clebs.celerity.utils.convertDateFormat
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.showToast
 
@@ -27,10 +29,11 @@ class DeductionAgreementActivity : AppCompatActivity() {
     lateinit var repo: MainRepo
     lateinit var pref: Prefs
     lateinit var loadingDialog: LoadingDialog
-
+    var actionID = 0
     private var DaDedAggrDaId = 0
     private var DaUserName = " "
     var isEnabled = false
+    private var notificationID = 0
     var type = 0
     private var FromLocation = " "
     private var PaymentKey = " "
@@ -38,21 +41,24 @@ class DeductionAgreementActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DeducationAgreementBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        actionID = intent.getIntExtra("actionID", 0)
+        Log.d("ActionID", "$actionID")
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         repo = MainRepo(apiService)
+        notificationID = intent.getIntExtra("notificationID", 0)
         pref = Prefs(this)
         viewmodel =
             ViewModelProvider(this, MyViewModelFactory(repo))[MainViewModel::class.java]
         loadingDialog = LoadingDialog(this)
-
+        loadingDialog.show()
         viewmodel.liveDataDeductionAgreement.observe(this) {
+            loadingDialog.dismiss()
             if (it != null) {
                 isEnabled = true
                 binding.daUserName.text = it.DaUserName
                 binding.tvTotalAmount.text = it.TotalAdvanceAmt.toString()
                 binding.tvWeeklyAmount.text = it.WeeklyDeductionAmt.toString()
-                binding.tvDateTime.text = it.AgreementDate
+                binding.tvDateTime.text = convertDateFormat(it.AgreementDate)
                 binding.tvText.text = it.DeductionComment
                 DaDedAggrDaId = it.DaDedAggrId
                 DaUserName = it.DaUserName
@@ -61,16 +67,23 @@ class DeductionAgreementActivity : AppCompatActivity() {
             } else {
                 isEnabled = false
                 showToast("Failed to fetch data!! Pls try again", this)
-                onBackPressed()
+                viewmodel.MarkNotificationAsRead(notificationID)
+                finish()
             }
         }
-        viewmodel.GetDeductionAgreement(pref.clebUserId.toInt())
+        viewmodel.GetDeductionAgreement(pref.clebUserId.toInt(), actionID!!.toInt())
         binding.disputeSection.visibility = View.GONE
         binding.signSection.visibility = View.GONE
-        binding.rbAcceptClose.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                type=0
+
+        var isAcceptChecked = false
+        var isCloseChecked = false
+
+        binding.rbAcceptClose.setOnClickListener {
+            if (!isAcceptChecked) {
+                type = 0
                 if (isEnabled) {
+                    isAcceptChecked = true
+                    isCloseChecked = false
                     binding.rbAcceptDispute.isChecked = false
                     binding.deductionTXT.visibility = View.GONE
                     binding.dedctionContent.visibility = View.GONE
@@ -79,13 +92,23 @@ class DeductionAgreementActivity : AppCompatActivity() {
                 } else {
                     showToast("Failed to fetch data!! Pls try again", this)
                 }
+            } else {
+                isAcceptChecked = false
+                binding.rbAcceptDispute.isChecked = false
+                binding.rbAcceptClose.isChecked = false
+                binding.deductionTXT.visibility = View.VISIBLE
+                binding.dedctionContent.visibility = View.VISIBLE
+                binding.disputeSection.visibility = View.GONE
+                binding.signSection.visibility = View.GONE
             }
-
         }
-        binding.rbAcceptDispute.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
+
+        binding.rbAcceptDispute.setOnClickListener {
+            if (!isCloseChecked) {
                 if (isEnabled) {
-                    type=1
+                    type = 1
+                    isCloseChecked = true
+                    isAcceptChecked = false
                     binding.rbAcceptClose.isChecked = false
                     binding.dedctionContent.visibility = View.GONE
                     binding.deductionTXT.visibility = View.GONE
@@ -94,6 +117,14 @@ class DeductionAgreementActivity : AppCompatActivity() {
                 } else {
                     showToast("Failed to fetch data!! Pls try again", this)
                 }
+            } else {
+                isCloseChecked = false
+                binding.rbAcceptDispute.isChecked = false
+                binding.rbAcceptClose.isChecked = false
+                binding.dedctionContent.visibility = View.VISIBLE
+                binding.deductionTXT.visibility = View.VISIBLE
+                binding.disputeSection.visibility = View.GONE
+                binding.signSection.visibility = View.GONE
             }
         }
 
@@ -102,13 +133,15 @@ class DeductionAgreementActivity : AppCompatActivity() {
                 }*/
 
         binding.backIcon.setOnClickListener {
-            onBackPressed()
+            finish()
         }
 
         val retry = binding.signSV.RetryLay
         val save = binding.signSV.sv
         val testIV = binding.signSV.textIV
         val drawView = binding.signSV.paintView.drawView
+        if (DrawViewClass.pathList.isNotEmpty())
+            drawView.clearSignature()
 
         save.setOnClickListener {
             if (DrawViewClass.pathList.isEmpty()) {
@@ -135,7 +168,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
         val bse64 = "data:image/png;base64," + bitmapToBase64(signatureBitmap)
         viewmodel.UpdateDaDeduction(
             UpdateDeductioRequest(
-                DaDedAggrDaId = 197251,
+                DaDedAggrDaId = pref.clebUserId.toInt(),
                 DaUserName = DaUserName,
                 FromLocation = FromLocation,
                 IsDaDedAggAccepted = true,
@@ -147,8 +180,11 @@ class DeductionAgreementActivity : AppCompatActivity() {
 
         viewmodel.liveDataUpdateDeducton.observe(this) {
             loadingDialog.dismiss()
+            viewmodel.MarkNotificationAsRead(notificationID)
             if (it != null) {
-                startActivity(Intent(this, HomeActivity::class.java))
+                finish()
+            }else{
+                showToast("Something went wrong!!",this)
             }
         }
     }
@@ -165,7 +201,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
                     DaDedAggrDaId = pref.clebUserId.toInt(),
                     DaUserName = DaUserName,
                     FromLocation = FromLocation,
-                    IsDaDedAggAccepted = false,
+                    IsDaDedAggAccepted = true,
                     PaymentKey = PaymentKey,
                     RejectionComment = disputeComment,
                     Signature = bse64
@@ -175,9 +211,13 @@ class DeductionAgreementActivity : AppCompatActivity() {
             generateTicketInBackground(disputeComment)
 
             viewmodel.liveDataUpdateDeducton.observe(this) {
+                viewmodel.MarkNotificationAsRead(notificationID)
                 loadingDialog.dismiss()
                 if (it != null) {
-                    onBackPressed()
+                    finish()
+                    //onBackPressed()
+                }else{
+                    showToast("Something went wrong!!",this)
                 }
             }
         }
@@ -187,7 +227,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
         var currDt = getCurrentDateTime()
         val request = SaveTicketDataRequestBody(
             AssignedToUserIDs = listOf(),
-            BadgeComment = "undefined",
+            BadgeComment = "",
             BadgeReturnedStatusId = 0,
             DaTestDate = currDt,
             DaTestTime = currDt,
@@ -201,15 +241,16 @@ class DeductionAgreementActivity : AppCompatActivity() {
             RequestTypeId = 17,
             TicketDepartmentId = 1,
             TicketId = 0,
-            TicketUTRNo = "undefined",
-            Title = RejectionComment.toString(),
+            TicketUTRNo = " ",
+            Title = "Agreement Dispute [Aggr: $actionID]",
             UserStatusId = 0,
-            UserTicketRegNo = "undefined",
+            UserTicketRegNo = "",
             VmId = 0,
             WorkingOrder = 0
         )
         viewmodel.SaveTicketData(
             pref.clebUserId.toInt(),
+            actionID,
             request
         )
     }

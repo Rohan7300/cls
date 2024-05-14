@@ -60,7 +60,10 @@ class RideAlongAdapter(
                             R.drawable.done
                         )
                     )
+                }else{
+                    binding.trainerFeedbackIV.isClickable = true
                 }
+
                 if (item.IsTrainerQuestionnaireCompleted == true) {
                     binding.edtIc.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -69,6 +72,8 @@ class RideAlongAdapter(
                         )
                     )
                     binding.edtIc.isClickable = false
+                }else{
+                    binding.edtIc.isClickable = true
                 }
 
 /*                mainViewModel.GetRideAlongDriverFeedbackQuestion(
@@ -162,23 +167,31 @@ class RideAlongAdapter(
             }
 
             binding.edtIc.setOnClickListener {
-                val bundle = bundleOf(
-                    "rideAlongID" to item.DriverId,
-                    "leadDriverID" to item.LeadDriverId
-                )
+                if(item.IsTrainerQuestionnaireCompleted!=null){
+                    if(!item.IsTrainerQuestionnaireCompleted!!){
+                        val bundle = bundleOf(
+                            "rideAlongID" to item.DriverId,
+                            "leadDriverID" to item.LeadDriverId
+                        )
 
-                prefs.currRideAlongID = item.DriverId
-                prefs.daWID = item.DawId
-                prefs.currRtId = item.RtId
-                //mainViewModel.currentViewPage.postValue(0)
+                        prefs.currRideAlongID = item.DriverId
+                        prefs.daWID = item.DawId
+                        prefs.currRtId = item.RtId
+                        //mainViewModel.currentViewPage.postValue(0)
 
-                navController.navigate(R.id.questinareFragment, bundle)
+                        navController.navigate(R.id.questinareFragment, bundle)
+                    }
+                }
             }
             binding.trainerFeedbackIV.setOnClickListener {
-                prefs.currRideAlongID = item.DriverId
-                prefs.daWID = item.DawId
-                prefs.currRtId = item.RtId
-                navController.navigate(R.id.feedbackFragment)
+                if(item.IsDriverFeedbackCompleted!=null){
+                    if(!item.IsDriverFeedbackCompleted!!){
+                        prefs.currRideAlongID = item.DriverId
+                        prefs.daWID = item.DawId
+                        prefs.currRtId = item.RtId
+                        navController.navigate(R.id.feedbackFragment)
+                    }
+                }
             }
             binding.deleteRideAlong.setOnClickListener {
                 loadingDialog()
@@ -229,5 +242,13 @@ class RideAlongAdapter(
     private val asyncListDiffer = AsyncListDiffer(this, diffUtil)
     fun saveData(data:RideAlongDriverInfoByDateResponse){
         asyncListDiffer.submitList(data)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
 }

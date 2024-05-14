@@ -199,7 +199,6 @@
                                 android:importantForAutofill="no"
                                 android:inputType="none"
                                 android:padding="12dp"
-                                android:hint="Select route type"
                                 android:textColorHint="@color/hintColor"
                                 android:textSize="14sp" />
 

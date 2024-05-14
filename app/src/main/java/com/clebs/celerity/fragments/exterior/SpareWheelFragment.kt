@@ -167,7 +167,6 @@ class SpareWheelFragment : BaseInteriorFragment() {
             viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
                 hideDialog()
                 if (it != null) {
-
                     if (!isApiCallInProgress) {
                         isApiCallInProgress = true
                         VdhVmId = it.vmId

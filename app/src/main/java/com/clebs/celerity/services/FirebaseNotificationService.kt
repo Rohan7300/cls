@@ -43,8 +43,23 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         Log.d(TAG, "FCMMessage Data6 ${message.sentTime} ")
         val title = message.notification?.title ?: "Notification Title"
         val messageBody = message.notification?.body ?: "Notification Message"
+        val actionToperform = message.data["alertType"] ?: "undefined"
+        var actionID = "0.0"
+        var tokenUrl = ""
+        var notificationId = "0"
+        if (message.data["actionId"] != null) {
+            actionID = message.data["actionId"].toString()
+        }
+        if (message.data["url"] != null) {
+            tokenUrl = message.data["url"].toString()
+        }
+        if (message.data["notificationId"] != null) {
+            notificationId = message.data["notificationId"].toString()
+        }
+
         Log.d(TAG, "FCMMessage MessageBody ${message.notification?.body} ")
-        showCustomNotification(title, messageBody)
+        Log.d(TAG, "FCMMessage AlertType ${message.data["alertType"]} ")
+        showCustomNotification(title, messageBody, actionToperform, actionID, tokenUrl,notificationId)
     }
 
     override fun onNewToken(token: String) {
@@ -68,20 +83,50 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         }
     }
 
-    private fun showCustomNotification(title: String, message: String) {
+    private fun showCustomNotification(
+        title: String,
+        message: String,
+        actionToPerform: String,
+        actionID: String,
+        tokenUrl: String,
+        notificationID:String
+    ) {
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.putExtra("destinationFragment", "NotificationsFragment")
+        intent.putExtra("actionToperform", actionToPerform)
+        intent.putExtra("actionID", actionID)
+        intent.putExtra("tokenUrl", tokenUrl)
+        intent.putExtra("notificationId", notificationID)
         val channel_id = "notification_channel"
         val notificationId = 0
 
-        val pendingIntent = PendingIntent.getActivity(
-            this, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        var pendingIntent: PendingIntent? = null
+        pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(
+                this,
+                notificationId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        } else {
+            PendingIntent.getActivity(
+                this,
+                notificationId,
+                intent,
+                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+        /*        val pendingIntent = PendingIntent.getActivity(
+                    this,
+                    notificationId,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )*/
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val notificationChannel = NotificationChannel(
                 channel_id, "web_app", NotificationManager.IMPORTANCE_HIGH
             )

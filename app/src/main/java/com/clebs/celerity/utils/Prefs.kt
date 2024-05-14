@@ -410,7 +410,6 @@ class Prefs(context: Context) {
     }
 
     fun isInspectionDoneToday(): Boolean {
-
         val isInspectionDone = sharedPreferences.getBoolean("is_inspection_done", false)
         if (isInspectionDone) {
             val lastInspectionDateTimeString =
@@ -422,7 +421,6 @@ class Prefs(context: Context) {
         } else {
             return false
         }
-
     }
 
 

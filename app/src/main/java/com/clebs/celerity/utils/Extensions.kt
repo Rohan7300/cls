@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -23,10 +24,12 @@ import android.util.Base64
 import android.util.Base64OutputStream
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.view.KeyEventDispatcher.dispatchKeyEvent
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
@@ -440,7 +443,6 @@ fun showTimePickerDialog(context: Context, tv: TextView) {
         context,
         { _, selectedHour, selectedMinute ->
 
-
             val formattedTime: String = when {
                 selectedHour == 0 -> {
                     if (minute < 10) {
@@ -476,8 +478,6 @@ fun showTimePickerDialog(context: Context, tv: TextView) {
             }
             tv.text = formattedTime
 
-//            val time = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute)
-//            tv.text = time
         },
         hour,
         minute,
@@ -762,5 +762,28 @@ fun getMimeType(uri: Uri): String? {
     val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
     return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
 }
+fun getCurrentAppVersion(context: Context): String {
+    try {
+        val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+        return packageInfo.versionName
+    } catch (e: PackageManager.NameNotFoundException) {
+        Log.e("VersionError", "Package name not found", e)
+    }
+    return "Unknown"
+}
+
+fun addLeadingZeroIfNeeded(text: Editable): String {
+    val time = text.toString().trim()
+    val parts = time.split(":")
+    if (parts.size == 2) {
+        val hour = parts[0].toIntOrNull()
+        val minute = parts[1].toIntOrNull()
+        if (hour != null && minute != null) {
+            return String.format("%02d:%02d", hour, minute)
+        }
+    }
+    return time
+}
+
 
 

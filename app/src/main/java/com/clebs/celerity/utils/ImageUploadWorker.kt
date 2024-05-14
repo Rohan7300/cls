@@ -35,7 +35,7 @@ class ImageUploadWorker(
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         val osRepo = OSyncRepo(OfflineSyncDB.invoke(applicationContext))
-        var currentDateTime = getCurrentDateTime()
+            var currentDateTime = getCurrentDateTime()
         GlobalScope.launch {
 
             val data = osRepo.getData(clebUserId, todayDate)

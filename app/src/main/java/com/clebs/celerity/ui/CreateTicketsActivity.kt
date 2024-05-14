@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -21,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.Factory.MyViewModelFactory
@@ -54,6 +56,7 @@ class CreateTicketsActivity : AppCompatActivity() {
     lateinit var pref: Prefs
     var desc: String? = null
     var uploadWithAttachement: Boolean = false
+    var ticketRegNo:String = "undefined"
     lateinit var loadingDialog: LoadingDialog
     private var selectedFileUri: Uri? = null
     lateinit var filePart: MultipartBody.Part
@@ -97,11 +100,19 @@ class CreateTicketsActivity : AppCompatActivity() {
         }
 
         mbinding.imageViewBack.setOnClickListener {
-            onBackPressed()
+            finish()
+            //onBackPressed()
+        }
+
+        mbinding.tvRegistration.doAfterTextChanged {
+            if(!it.isNullOrEmpty()){
+                ticketRegNo = it.toString()
+            }
         }
 
         mbinding.cancel.setOnClickListener {
-            onBackPressed()
+            finish()
+            //onBackPressed()
         }
 
         val spinnerNamesWithPlaceholder = listOf<String>()
@@ -122,11 +133,11 @@ class CreateTicketsActivity : AppCompatActivity() {
     }
 
     private fun chkNull(): Boolean {
-        return selectedDeptID == -1 || selectedRequestTypeID == -1 || title == null || desc == null
+        return selectedDeptID == -1 || selectedRequestTypeID == -1 || title == null || desc == null || mbinding.edtDes.text.isNullOrBlank()
     }
 
     private fun saveTicket() {
-        var currDt = getCurrentDateTime()
+        val currDt = getCurrentDateTime()
         val request = SaveTicketDataRequestBody(
             AssignedToUserIDs = listOf(),
             BadgeComment = "undefined",
@@ -146,13 +157,14 @@ class CreateTicketsActivity : AppCompatActivity() {
             TicketUTRNo = "undefined",
             Title = title!!,
             UserStatusId = 0,
-            UserTicketRegNo = "undefined",
+            UserTicketRegNo = ticketRegNo,
             VmId = 0,
             WorkingOrder = 0
         )
         showDialog()
         viewmodel.SaveTicketData(
             pref.clebUserId.toInt(),
+            0,
             request
         )
     }
@@ -185,7 +197,8 @@ class CreateTicketsActivity : AppCompatActivity() {
                         file = filePart
                     )
                 } else {
-                    onBackPressed()
+                    finish()
+                    //onBackPressed()
                 }
             }
         }
@@ -193,10 +206,12 @@ class CreateTicketsActivity : AppCompatActivity() {
         viewmodel.liveDataUploadTicketAttachmentDoc.observe(this) {
             hideDialog()
             if (it != null) {
-                onBackPressed()
+                finish()
+                //onBackPressed()
             } else {
                 showToast("Failed to Upload Attachment!!", this)
-                onBackPressed()
+                finish()
+                //onBackPressed()
             }
         }
 
@@ -218,6 +233,7 @@ class CreateTicketsActivity : AppCompatActivity() {
         }
         viewmodel.liveDataGetTicketRequestType.observe(this) { requests ->
             hideDialog()
+
             if (requests != null) {
                 val requestIDs = requests.map { it.RequestId }
                 val requestNames = requests.map { it.RequestName }
@@ -303,6 +319,7 @@ class CreateTicketsActivity : AppCompatActivity() {
                 }
             } else {
                 //saveTicket()
+                finish()
                 showToast("Attachment not selected!!", this)
                 //onBackPressed()
             }
@@ -336,8 +353,8 @@ class CreateTicketsActivity : AppCompatActivity() {
     }
 
     fun upload() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "*/*"
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
         resultLauncher.launch(intent)
     }
 
@@ -395,6 +412,8 @@ class CreateTicketsActivity : AppCompatActivity() {
                             mbinding.selectDepartmentET -> {
                                 selectedDeptID = ids[position]
                                 showDialog()
+                                selectedRequestTypeID = -1
+                                mbinding.spinnerRequestAT.setText("")
                                 viewmodel.GetTicketRequestType(selectedDeptID)
                             }
 

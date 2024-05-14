@@ -41,4 +41,12 @@ class AttachmentAdapter(var context: ViewTicketsActivity, var data: ArrayList<Do
         val item = data[position]
         holder.bind(item)
     }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

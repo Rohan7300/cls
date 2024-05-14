@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.webkit.MimeTypeMap
@@ -56,8 +57,8 @@ class AddCommentActivity : AppCompatActivity() {
 
         binding.addImage.setOnClickListener {
             uploadCommentAttachment = true
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "*/*"
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.type = "image/*"
             resultLauncher.launch(intent)
         }
 

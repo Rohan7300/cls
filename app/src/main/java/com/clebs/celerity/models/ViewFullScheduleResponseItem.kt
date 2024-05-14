@@ -141,5 +141,13 @@ data class ViewFullScheduleResponseItem(
     @SerializedName("WeekNo")
     val weekNo: Int,
     @SerializedName("YearNo")
-    val yearNo: Int
+    val yearNo: Int,
+    @SerializedName("NextWorkingDate")
+    val NextWorkingDate:String,
+    @SerializedName("NextWorkingDay")
+    val NextWorkingDay:String,
+    @SerializedName("NextWorkingLoc")
+    val NextWorkingLoc:String,
+    @SerializedName("NextWorkingDayWaveTime")
+    val NextWorkingDayWaveTime:String?=null
 )

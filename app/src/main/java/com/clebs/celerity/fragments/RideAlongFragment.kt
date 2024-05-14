@@ -451,6 +451,10 @@ class RideAlongFragment : Fragment() {
                                 loadingDialog.show()
                                 Log.d("Exec", "SelectedDriverID $selectedDriverId")
                                 viewModel.GetRideAlongRouteTypeInfo(selectedDriverId!!)
+                                binding.SpinnerRouteType.setText("")
+                                selectedRouteId = null
+                                binding.spinnerRouteLocation.setText("")
+                                selectedLocId = null
                             }
 
                             binding.spinnerSelectVehicle -> {

@@ -103,6 +103,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:id="@+id/spinnerRequestParent"
                         android:hint="Select Request Type">
 
                         <AutoCompleteTextView
@@ -286,7 +287,6 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
                             android:hint="Add Description*">
 
                             <EditText

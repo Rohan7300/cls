@@ -233,38 +233,14 @@
                 android:text="Important Information - I hereby authorise CLS to make the above deduction from my pay in accordance with the above terms. I understand and agree I am responsible for the satisfying the above amounts. I understand and agree that any amount that is due and outstanding at the time of SLA termination, regardless of whether the SLA termination was voluntary or not, will be deducted from my last invoice or any other amounts that may be owed to me. This authorizes CLS to retain the entire amount of my last invoice in compliance with the law."
                 android:textSize="12sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/shape_accept_close"
-                android:orientation="horizontal"
-                android:padding="16dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Accept &amp; Close"
-                    android:textColor="#231F20"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-
-                <RadioButton
-                    android:id="@+id/rb_accept_close"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:gravity="center"
-                    android:padding="5dp" />
-
-            </LinearLayout>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
                 android:background="@drawable/shape_accept_close"
                 android:orientation="horizontal"
                 android:padding="16dp">
@@ -275,19 +251,45 @@
                     android:layout_weight="1"
                     android:text="Accept &amp; Dispute"
                     android:textColor="#231F20"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
 
                 <RadioButton
                     android:id="@+id/rb_accept_dispute"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:gravity="center"
-                    android:padding="5dp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                     />
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:background="@drawable/shape_accept_close"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Accept &amp; Close"
+                    android:textColor="#231F20"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+
+                <RadioButton
+                    android:id="@+id/rb_accept_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    />
+
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/disputeSection"
                 android:layout_width="match_parent"
@@ -297,7 +299,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="20dp"
                     android:text="Dispute Discription"
                     android:textColor="@color/text_color"
                     android:textSize="13sp" />
@@ -324,7 +326,7 @@
         android:id="@+id/signSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginHorizontal="10dp"
         android:orientation="vertical">
 

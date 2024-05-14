@@ -81,4 +81,12 @@ class CommentAdapter(var arrayList: ArrayList<DocXX>, var addCommentActivity: Ad
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
         holder.bind(arrayList[position])
     }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

@@ -43,6 +43,7 @@ import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.dialogs.DownloadingDialog
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.OpenMode
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
@@ -98,10 +99,11 @@ class PolicyDocsActivity : AppCompatActivity() {
             mbinding.llAmazon.visibility = View.VISIBLE
         }
 
-        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+/*        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
-        viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]*/
 
+        viewModel = DependencyProvider.getMainVM(this)
         userId = Prefs.getInstance(this).clebUserId.toInt()
         handbookID = Prefs.getInstance(this).handbookId
         viewModel.liveDataGetDriverSignatureInformation.observe(this) {
@@ -357,6 +359,7 @@ class PolicyDocsActivity : AppCompatActivity() {
         val drawView = mbinding.signLayout.paintView.drawView
 
         save.setOnClickListener {
+            Log.d("DrawViewSize",DrawViewClass.pathList.size.toString())
             if (DrawViewClass.pathList.isEmpty()) {
                 showToast("Please sign before saving", this)
             } else {
@@ -397,6 +400,10 @@ class PolicyDocsActivity : AppCompatActivity() {
                 }
                 val intent = Intent(this, HomeActivity::class.java)
                 intent.putExtra("destinationFragment", "HomeFragment")
+                intent.putExtra("actionToperform", "undef")
+                intent.putExtra("actionID", "0")
+                intent.putExtra("tokenUrl", "undef")
+                intent.putExtra("notificationId", "0")
 
                 startActivity(intent)
 

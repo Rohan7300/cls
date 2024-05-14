@@ -46,7 +46,7 @@ class CustDialog : DialogFragment() {
         save.setOnClickListener {
             if (pathList.isEmpty()) {
                 // Show a toast indicating that the user has not signed
-                showToast("Please sign before saving",requireContext())
+                showToast("Please sign before saving", requireContext())
             } else {
                 val signatureBitmap: Bitmap = drawView.getBitmap()
                 testIV.setImageBitmap(signatureBitmap)
@@ -56,13 +56,19 @@ class CustDialog : DialogFragment() {
         }
 
         retry.setOnClickListener {
-            drawView.clearSignature()
+            clearSignature()
         }
 
         close.setOnClickListener { dismiss() }
         return rootView
     }
+
     fun setSignatureListener(listener: SignatureListener) {
         signatureListener = listener
+    }
+
+    fun clearSignature() {
+        if (pathList.isNotEmpty())
+            drawView.clearSignature()
     }
 }
