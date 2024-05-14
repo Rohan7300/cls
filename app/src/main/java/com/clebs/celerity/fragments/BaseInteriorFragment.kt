@@ -11,6 +11,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -26,6 +28,7 @@ import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.ImageViewModel
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.ImageEntity
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertBitmapToBase64
@@ -41,8 +44,10 @@ import java.util.Stack
 abstract class BaseInteriorFragment : Fragment() {
     lateinit var viewModel: MainViewModel
     lateinit var imageViewModel: ImageViewModel
+
     private val CAMERA_REQUEST_CODE = 101
     var base64: String? = null
+    private lateinit var loadingDialog: LoadingDialog
     private lateinit var imageView: ImageView
     private var nextEnabled: Boolean = false
     var functionalView: Boolean = false
@@ -57,7 +62,7 @@ abstract class BaseInteriorFragment : Fragment() {
     lateinit var ana_carolin: TextView
     lateinit var ivX: ImageView
 
-    companion object{
+    companion object {
         private val REQUIRED_PERMISSIONS =
             mutableListOf(
                 Manifest.permission.CAMERA,
@@ -72,6 +77,7 @@ abstract class BaseInteriorFragment : Fragment() {
                 }
             }.toTypedArray()
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as HomeActivity).viewModel
@@ -80,9 +86,9 @@ abstract class BaseInteriorFragment : Fragment() {
         dxReg = view.findViewById(R.id.dxReg)
         dxm5 = view.findViewById(R.id.dxm5)
         ana_carolin = view.findViewById(R.id.ana_carolin)
-
-        var strikedxRegNo =view.findViewById<LinearLayout>(R.id.strikedxRegNo)
-        var strikedxLoc =view.findViewById<LinearLayout>(R.id.strikedxLoc)
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        var strikedxRegNo = view.findViewById<LinearLayout>(R.id.strikedxRegNo)
+        var strikedxLoc = view.findViewById<LinearLayout>(R.id.strikedxLoc)
 
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
             .also { name -> ana_carolin.text = name }
@@ -91,12 +97,12 @@ abstract class BaseInteriorFragment : Fragment() {
         dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
         dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
-        if(dxReg.text.isEmpty()||dxReg.text=="")
+        if (dxReg.text.isEmpty() || dxReg.text == "")
             strikedxRegNo.visibility = View.VISIBLE
         else
             strikedxRegNo.visibility = View.GONE
 
-        if(dxLoc.text.isEmpty()||dxLoc.text==""||dxLoc.text=="Not Allocated")
+        if (dxLoc.text.isEmpty() || dxLoc.text == "" || dxLoc.text == "Not Allocated")
             strikedxLoc.visibility = View.VISIBLE
         else
             strikedxLoc.visibility = View.GONE
@@ -115,16 +121,16 @@ abstract class BaseInteriorFragment : Fragment() {
                     dxLoc.text = it.locationName ?: ""
                 }
             }
-            if(it!=null){
-                if(it.vmId!=0)
+            if (it != null) {
+                if (it.vmId != 0)
                     Prefs.getInstance(requireContext()).vmId = it.vmId
             }
 
-            if(dxReg.text.isEmpty()||dxReg.text=="")
+            if (dxReg.text.isEmpty() || dxReg.text == "")
                 strikedxRegNo.visibility = View.VISIBLE
             else
                 strikedxRegNo.visibility = View.GONE
-            if(dxLoc.text.isEmpty()||dxLoc.text==""||dxLoc.text=="Not Allocated")
+            if (dxLoc.text.isEmpty() || dxLoc.text == "" || dxLoc.text == "Not Allocated")
                 strikedxLoc.visibility = View.VISIBLE
             else
                 strikedxLoc.visibility = View.GONE
@@ -179,31 +185,31 @@ abstract class BaseInteriorFragment : Fragment() {
     }
 
     protected fun pictureDialogBase64(iv: ImageView) {
-/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            runWithPermissions(
-                android.Manifest.permission.CAMERA,
-                android.Manifest.permission.READ_MEDIA_IMAGES,
-                android.Manifest.permission.READ_MEDIA_VIDEO,
-                android.Manifest.permission.READ_MEDIA_AUDIO
+        /*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    runWithPermissions(
+                        android.Manifest.permission.CAMERA,
+                        android.Manifest.permission.READ_MEDIA_IMAGES,
+                        android.Manifest.permission.READ_MEDIA_VIDEO,
+                        android.Manifest.permission.READ_MEDIA_AUDIO
 
-            ) {
-                showPictureDialog(iv)
+                    ) {
+                        showPictureDialog(iv)
 
-            }
-        } else {
-            runWithPermissions(
-                android.Manifest.permission.CAMERA,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    }
+                } else {
+                    runWithPermissions(
+                        android.Manifest.permission.CAMERA,
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 
-            ) {
-                showPictureDialog(iv)
-            }
-        }*/
+                    ) {
+                        showPictureDialog(iv)
+                    }
+                }*/
         ivX = iv
-        if(allPermissionsGranted()){
+        if (allPermissionsGranted()) {
             showPictureDialog(iv)
-        }else{
+        } else {
 
             requestpermissions()
         }
@@ -396,14 +402,18 @@ abstract class BaseInteriorFragment : Fragment() {
     }
 
     fun navigateTo(fragmentId: Int) {
+
+
         fragmentStack.push(fragmentId)
+        val enterAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_left)
         val navOptions = NavOptions.Builder()
             .setEnterAnim(R.anim.slide_left) // Animation for entering the new fragment
-       // Animation for exiting the current fragment
+            // Animation for exiting the current fragment
 //            .setPopEnterAnim(R.anim.slide_in_right) // Animation for entering the previous fragment when navigating back
 //            .setPopExitAnim(R.anim.slide_left) // Animation for exiting the current fragment when navigating back
             .build()
-        findNavController().navigate(fragmentId,null,navOptions)
+        findNavController().navigate(fragmentId, null, navOptions)
+
         prefs.saveNavigationHistory(fragmentStack)
     }
 
@@ -412,7 +422,8 @@ abstract class BaseInteriorFragment : Fragment() {
             requireContext(), it
         ) == PackageManager.PERMISSION_GRANTED
     }
-    fun toolTip(tittle:String,description: String,id:String,view: LinearLayout?) {
+
+    fun toolTip(tittle: String, description: String, id: String, view: LinearLayout?) {
         view?.let {
             BubbleShowCaseBuilder(requireActivity()) //Activity instance
                 .title(tittle) //Any title for the bubble view

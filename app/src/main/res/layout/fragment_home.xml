@@ -302,7 +302,6 @@ Marian Ionut Malasincu"
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-
                 android:layout_height="wrap_content">
 
                 <com.ncorti.slidetoact.SlideToActView
@@ -318,7 +317,7 @@ Marian Ionut Malasincu"
                     app:inner_color="#FD844D"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:outer_color="@color/white"
+                    app:outer_color="@color/very_light_orange"
                     app:rotate_icon="false"
                     app:slider_height="80dp"
                     app:slider_icon="@drawable/scan_id"

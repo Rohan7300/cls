@@ -37,6 +37,7 @@ import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentCameraBinding
 import com.clebs.celerity.fragments.DailyWorkFragment
+import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.invisible
 import com.clebs.celerity.utils.showToast
 import kotlinx.coroutines.runBlocking
@@ -161,6 +162,7 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
                             getImageBitmapFromUri(requireContext(), output.savedUri!!)
                         if (bitmapBuffer2 != null) {
                             Log.e(TAG, "onImageSaved-==============: " + bitmapBuffer2)
+                            bitmapToBase64(bitmapBuffer2!!)
 
                             activity?.onBackPressed()
                         }
@@ -390,7 +392,7 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
                 String.format("%.2f", detection.categories[0].score) >= 0.60.toString()
             }
 
-            val containstruck=resultss.any{detection ->
+            val containstruck = resultss.any { detection ->
 
                 detection.categories[0].label.equals("truck")
             }

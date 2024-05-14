@@ -29,6 +29,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:scaleType="fillStart" />
 
+<!--    <ImageView-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="300dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/relativeLayout3"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:src="@drawable/carframe"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:tint="@color/white" />-->
     <com.clebs.celerity.utils.OverlayView
         android:id="@+id/overlay"
         android:layout_width="match_parent"
@@ -41,12 +50,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/shape_edittext_onroad"
         android:fontFamily="@font/poppins_semibold"
-        android:backgroundTint="@color/red"
+
         android:padding="5dp"
         android:text="No vehicle detected 😟"
-        android:textColor="@color/black"
+        android:textColor="@color/red"
         android:textSize="16sp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/relativeLayout3"
