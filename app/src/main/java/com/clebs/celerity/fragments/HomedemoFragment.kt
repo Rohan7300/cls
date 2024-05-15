@@ -261,8 +261,6 @@ class HomedemoFragment : Fragment() {
                     Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 2, year
                 )
                 mbinding.btPrev.text = "Previous"
-
-
             }
         }
 
