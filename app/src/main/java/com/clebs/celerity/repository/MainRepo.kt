@@ -1325,18 +1325,55 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun GetDaDailyLocationRota(
         userId: Int,
-        tokenxx:String
-    ):SimpleNetworkResponse<DaDailyLocationRotaResponse>{
+        tokenxx: String
+    ): SimpleNetworkResponse<DaDailyLocationRotaResponse> {
         return safeApiCall {
-            ApiService.GetDaDailyLocationRota(userId,tokenxx)
+            ApiService.GetDaDailyLocationRota(userId, tokenxx)
         }
     }
 
     suspend fun ApproveDailyRotabyDA(
         body: ApproveDaDailyRotaRequest
-    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
         return safeApiCall {
             ApiService.ApproveDailyRotabyDA(body)
         }
     }
+
+    suspend fun DownloadDAHandbookPolicy(): SimpleNetworkResponse<ResponseBody> {
+        return safeApiCall {
+            ApiService.DownloadDAHandbookPolicy()
+        }
+    }
+
+    suspend fun DownloadDAEngagementPolicy(): SimpleNetworkResponse<ResponseBody> {
+        return safeApiCall {
+            ApiService.DownloadDAEngagementPolicy()
+        }
+    }
+
+    suspend fun DownloadGDPRPolicy(): SimpleNetworkResponse<ResponseBody> {
+        return safeApiCall {
+            ApiService.DownloadGDPRPolicy()
+        }
+    }
+
+    suspend fun DownloadServiceLevelAgreementPolicy(): SimpleNetworkResponse<ResponseBody> {
+        return safeApiCall {
+            ApiService.DownloadServiceLevelAgreementPolicy()
+        }
+    }
+
+    suspend fun DownloadPrivacyPolicy(): SimpleNetworkResponse<ResponseBody> {
+        return safeApiCall {
+            ApiService.DownloadPrivacyPolicy()
+        }
+    }
+
+    suspend fun DownloadTrucksServiceLevelAgreementPolicy(): SimpleNetworkResponse<ResponseBody> {
+        return safeApiCall {
+            ApiService.DownloadTrucksServiceLevelAgreementPolicy()
+        }
+    }
+
 }

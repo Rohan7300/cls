@@ -179,6 +179,14 @@ class MainViewModel(
     val liveDataDaDailyLocationRota = MutableLiveData<DaDailyLocationRotaResponse?>()
     val liveDataApproveDailyRotabyDA = MutableLiveData<SimpleStatusMsgResponse?>()
 
+    val liveDataDownloadDAHandbookPolicy = MutableLiveData<ResponseBody?>()
+    val liveDataDownloadDAEngagementPolicy = MutableLiveData<ResponseBody?>()
+    val liveDataDownloadGDPRPolicy = MutableLiveData<ResponseBody?>()
+    val liveDataDownloadServiceLevelAgreementPolicy = MutableLiveData<ResponseBody?>()
+    val liveDataDownloadPrivacyPolicy = MutableLiveData<ResponseBody?>()
+    val liveDataDownloadTrucksServiceLevelAgreementPolicy = MutableLiveData<ResponseBody?>()
+
+
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
 
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -1789,10 +1797,70 @@ class MainViewModel(
     fun ApproveDailyRotabyDA(body: ApproveDaDailyRotaRequest) {
         viewModelScope.launch {
             val response = repo.ApproveDailyRotabyDA(body)
-            if(!response.isSuccessful || response.failed)
+            if (!response.isSuccessful || response.failed)
                 liveDataApproveDailyRotabyDA.postValue(null)
             else
                 liveDataApproveDailyRotabyDA.postValue(response.body)
+        }
+    }
+
+    fun DownloadDAHandbookPolicy() {
+        viewModelScope.launch {
+            val response = repo.DownloadDAHandbookPolicy()
+            if (!response.isSuccessful || response.failed)
+                liveDataDownloadDAHandbookPolicy.postValue(null)
+            else
+                liveDataDownloadDAHandbookPolicy.postValue(response.body)
+        }
+    }
+
+    fun DownloadDAEngagementPolicy() {
+        viewModelScope.launch {
+            val response = repo.DownloadDAEngagementPolicy()
+            if (!response.isSuccessful || response.failed)
+                liveDataDownloadDAEngagementPolicy.postValue(null)
+            else
+                liveDataDownloadDAEngagementPolicy.postValue(response.body)
+        }
+    }
+
+    fun DownloadGDPRPolicy() {
+        viewModelScope.launch {
+            val response = repo.DownloadGDPRPolicy()
+            if (!response.isSuccessful || response.failed)
+                liveDataDownloadGDPRPolicy.postValue(null)
+            else
+                liveDataDownloadGDPRPolicy.postValue(response.body)
+        }
+    }
+
+    fun DownloadServiceLevelAgreementPolicy() {
+        viewModelScope.launch {
+            val response = repo.DownloadServiceLevelAgreementPolicy()
+            if (!response.isSuccessful || response.failed)
+                liveDataDownloadServiceLevelAgreementPolicy.postValue(null)
+            else
+                liveDataDownloadServiceLevelAgreementPolicy.postValue(response.body)
+        }
+    }
+
+    fun DownloadPrivacyPolicy() {
+        viewModelScope.launch {
+            val response = repo.DownloadPrivacyPolicy()
+            if (!response.isSuccessful || response.failed)
+                liveDataDownloadPrivacyPolicy.postValue(null)
+            else
+                liveDataDownloadPrivacyPolicy.postValue(response.body)
+        }
+    }
+
+    fun DownloadTrucksServiceLevelAgreementPolicy() {
+        viewModelScope.launch {
+            val response = repo.DownloadTrucksServiceLevelAgreementPolicy()
+            if (!response.isSuccessful || response.failed)
+                liveDataDownloadTrucksServiceLevelAgreementPolicy.postValue(null)
+            else
+                liveDataDownloadTrucksServiceLevelAgreementPolicy.postValue(response.body)
         }
     }
 }

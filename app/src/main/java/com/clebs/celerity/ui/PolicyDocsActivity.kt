@@ -70,6 +70,7 @@ class PolicyDocsActivity : AppCompatActivity() {
     var openModeSignedServiceLevelAgreement: OpenMode = OpenMode.VIEW
     var openModeSignedPrivacyPolicy: OpenMode = OpenMode.VIEW
     var openModeSignedDAEngagement: OpenMode = OpenMode.VIEW
+    var openModeTrucksServiceLevelAgreementPolicy: OpenMode = OpenMode.VIEW
     var isImage2 = true
     lateinit var loadingDialog: LoadingDialog
     lateinit var downloadingDialog: DownloadingDialog
@@ -197,7 +198,18 @@ class PolicyDocsActivity : AppCompatActivity() {
     }
 
     private fun observers() {
-        viewModel.liveDataDownloadSignedServiceLevelAgreement.observe(this) {
+/*        viewModel.liveDataDownloadSignedServiceLevelAgreement.observe(this) {
+            downloadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF(
+                    "SignedServiceLevelAgreement",
+                    it.byteStream(),
+                    openModeSignedServiceLevelAgreement
+                )
+            }
+        }*/
+
+        viewModel.liveDataDownloadServiceLevelAgreementPolicy.observe(this){
             downloadingDialog.dismiss()
             if (it != null) {
                 downloadPDF(
@@ -208,31 +220,68 @@ class PolicyDocsActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.liveDataDownloadSignedDAHandbook.observe(this) {
+
+/*        viewModel.liveDataDownloadSignedDAHandbook.observe(this) {
+            downloadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF("DAHandbook", it.byteStream(), openModeDAHandBook)
+            }
+        }*/
+
+        viewModel.liveDataDownloadDAHandbookPolicy.observe(this){
             downloadingDialog.dismiss()
             if (it != null) {
                 downloadPDF("DAHandbook", it.byteStream(), openModeDAHandBook)
             }
         }
 
-        viewModel.liveDataDownloadSignedGDPRPOLICY.observe(this) {
+ /*       viewModel.liveDataDownloadSignedGDPRPOLICY.observe(this) {
+            downloadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF("GDPRPOLICY", it.byteStream(), openModeSignedGDPRPOLICY)
+            }
+        }*/
+
+        viewModel.liveDataDownloadGDPRPolicy.observe(this){
             downloadingDialog.dismiss()
             if (it != null) {
                 downloadPDF("GDPRPOLICY", it.byteStream(), openModeSignedGDPRPOLICY)
             }
         }
 
-        viewModel.liveDataDownloadSignedPrivacyPolicy.observe(this) {
+/*        viewModel.liveDataDownloadSignedPrivacyPolicy.observe(this) {
+            downloadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
+            }
+        }*/
+
+        viewModel.liveDataDownloadPrivacyPolicy.observe(this){
             downloadingDialog.dismiss()
             if (it != null) {
                 downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
             }
         }
 
-        viewModel.liveDataDownloadSignedDAEngagement.observe(this) {
+/*        viewModel.liveDataDownloadSignedDAEngagement.observe(this) {
             downloadingDialog.dismiss()
             if (it != null) {
                 downloadPDF("DAEngagement", it.byteStream(), openModeSignedDAEngagement)
+            }
+        }*/
+
+        viewModel.liveDataDownloadDAEngagementPolicy.observe(this){
+            downloadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
+            }
+        }
+
+
+        viewModel.liveDataDownloadTrucksServiceLevelAgreementPolicy.observe(this){
+            downloadingDialog.dismiss()
+            if(it!=null){
+                downloadPDF("TruckSLAPolicy", it.byteStream(), openModeTrucksServiceLevelAgreementPolicy)
             }
         }
     }
@@ -242,110 +291,131 @@ class PolicyDocsActivity : AppCompatActivity() {
         mbinding.downloadHandBookPolicy1.setOnClickListener {
             downloadingDialog.show()
             openModeDAHandBook = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedDAHandbook(handbookID)
+            //viewModel.DownloadSignedDAHandbook(handbookID)
+            viewModel.DownloadDAHandbookPolicy()
         }
         mbinding.imgHandBookPolicy1.setOnClickListener {
             downloadingDialog.show()
             openModeDAHandBook = OpenMode.VIEW
-            viewModel.DownloadSignedDAHandbook(handbookID)
+            //viewModel.DownloadSignedDAHandbook(handbookID)
+            viewModel.DownloadDAHandbookPolicy()
         }
         mbinding.downloadHandBookPolicy2.setOnClickListener {
             downloadingDialog.show()
             openModeDAHandBook = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedDAHandbook(handbookID)
+            //viewModel.DownloadSignedDAHandbook(handbookID)
+            viewModel.DownloadDAHandbookPolicy()
         }
         mbinding.imgHandBookPolicy2.setOnClickListener {
             downloadingDialog.show()
             openModeDAHandBook = OpenMode.VIEW
-            viewModel.DownloadSignedDAHandbook(handbookID)
+            //viewModel.DownloadSignedDAHandbook(handbookID)
+            viewModel.DownloadDAHandbookPolicy()
         }
 
 
         mbinding.downloadSLA1.setOnClickListener {
             downloadingDialog.show()
             openModeSignedServiceLevelAgreement = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+          //  viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+            viewModel.DownloadServiceLevelAgreementPolicy()
         }
         mbinding.imgSLA1.setOnClickListener {
             downloadingDialog.show()
             openModeSignedServiceLevelAgreement = OpenMode.VIEW
-            viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+            //viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+            viewModel.DownloadServiceLevelAgreementPolicy()
         }
         mbinding.downloadSLA2.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedServiceLevelAgreement = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+            openModeTrucksServiceLevelAgreementPolicy = OpenMode.DOWNLOAD
+           // viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+           // viewModel.DownloadServiceLevelAgreementPolicy()
+            viewModel.DownloadTrucksServiceLevelAgreementPolicy()
         }
         mbinding.imgSLA2.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedServiceLevelAgreement = OpenMode.VIEW
-            viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+            openModeTrucksServiceLevelAgreementPolicy = OpenMode.VIEW
+           // viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+            //viewModel.DownloadServiceLevelAgreementPolicy()
+            viewModel.DownloadTrucksServiceLevelAgreementPolicy()
         }
 
 
         mbinding.downloadPrivacyPolicy1.setOnClickListener {
             downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedPrivacyPolicy(handbookID)
+            //viewModel.DownloadSignedPrivacyPolicy(handbookID)
+            viewModel.DownloadPrivacyPolicy()
         }
         mbinding.imgPrivacyPolicy1.setOnClickListener {
             downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.VIEW
-            viewModel.DownloadSignedPrivacyPolicy(handbookID)
+           // viewModel.DownloadSignedPrivacyPolicy(handbookID)
+            viewModel.DownloadPrivacyPolicy()
         }
         mbinding.downloadPrivacyPolicy2.setOnClickListener {
             downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedPrivacyPolicy(handbookID)
+            //viewModel.DownloadSignedPrivacyPolicy(handbookID)
+            viewModel.DownloadPrivacyPolicy()
         }
         mbinding.imgPrivacyPolicy2.setOnClickListener {
             downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.VIEW
-            viewModel.DownloadSignedPrivacyPolicy(handbookID)
+            //viewModel.DownloadSignedPrivacyPolicy(handbookID)
+            viewModel.DownloadPrivacyPolicy()
         }
 
 
         mbinding.downloadDAEngagement1.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+            openModeSignedDAEngagement = OpenMode.DOWNLOAD
             viewModel.DownloadSignedDAEngagement(handbookID)
         }
         mbinding.imgDAEngagement1.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedDAEngagement(handbookID)
+            openModeSignedDAEngagement = OpenMode.VIEW
+            //viewModel.DownloadSignedDAEngagement(handbookID)
+            viewModel.DownloadDAEngagementPolicy()
         }
         mbinding.downloadDAEngagement2.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedDAEngagement(handbookID)
+            openModeSignedDAEngagement = OpenMode.DOWNLOAD
+            //viewModel.DownloadSignedDAEngagement(handbookID)
+            viewModel.DownloadDAEngagementPolicy()
         }
         mbinding.imgDAEngagement2.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedDAEngagement(handbookID)
+            openModeSignedDAEngagement = OpenMode.DOWNLOAD
+            //viewModel.DownloadSignedDAEngagement(handbookID)
+            viewModel.DownloadDAEngagementPolicy()
         }
 
 
         mbinding.downloadGDPR1.setOnClickListener {
             downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedGDPRPOLICY(handbookID)
+            //viewModel.DownloadSignedGDPRPOLICY(handbookID)
+            viewModel.DownloadGDPRPolicy()
         }
         mbinding.downloadGDPR2.setOnClickListener {
             downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedGDPRPOLICY(handbookID)
+            //viewModel.DownloadSignedGDPRPOLICY(handbookID)
+            viewModel.DownloadGDPRPolicy()
         }
         mbinding.imgGDPR1.setOnClickListener {
             downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.VIEW
-            viewModel.DownloadSignedGDPRPOLICY(handbookID)
+          //  viewModel.DownloadSignedGDPRPOLICY(handbookID)
+            viewModel.DownloadGDPRPolicy()
         }
         mbinding.imgGDPR2.setOnClickListener {
             downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.VIEW
-            viewModel.DownloadSignedGDPRPOLICY(handbookID)
+           // viewModel.DownloadSignedGDPRPOLICY(handbookID)
+            viewModel.DownloadGDPRPolicy()
         }
     }
 

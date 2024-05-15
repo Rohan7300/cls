@@ -694,6 +694,8 @@ fun logOSEntity(base: String, osData: OfflineSyncEntity) {
         ?.let { it1 -> Log.d("OSData oillevelImageFirst10", it1 + "\n") }
         ?: Log.d("OSData oillevelImage", "null")
 
+
+
     Log.d("$base", "OS DATA LOG + --------------------")
 }
 

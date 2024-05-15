@@ -58,6 +58,7 @@ import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
+import com.clebs.celerity.utils.logOSEntity
 import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showTimePickerDialog
@@ -70,6 +71,7 @@ import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.cre
 import io.clearquote.assessment.cq_sdk.models.CustomerDetails
 import io.clearquote.assessment.cq_sdk.models.InputDetails
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
+import io.ktor.util.reflect.instanceOf
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -159,14 +161,14 @@ class CompleteTaskFragment : Fragment() {
 
         loadingDialog = (activity as HomeActivity).loadingDialog
         oSyncViewModel = (activity as HomeActivity).oSyncViewModel
-        osData = (activity as HomeActivity).osData
-
         clebUserID = Prefs.getInstance(requireContext()).clebUserId.toInt()
+        osData = (activity as HomeActivity).osData
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.addBreakIV.setOnClickListener(clickListener)
 
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
+
 
         mbinding.h1.setOnClickListener {
             if (mbinding.breakH2.isVisible) {
@@ -183,32 +185,45 @@ class CompleteTaskFragment : Fragment() {
         fragmentManager = (activity as HomeActivity).fragmentManager
         cqSDKInitializer = CQSDKInitializer(requireContext())
         cqSDKInitializer.triggerOfflineSync()
-        //setProgress()
 
-        //inspectionstarted = Prefs.getInstance(requireContext()).getBoolean("Inspection", false)
         inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
         viewModel = (activity as HomeActivity).viewModel
-        showDialog()
-        viewModel.GetVehicleInfobyDriverId(
-            Prefs.getInstance(App.instance).clebUserId.toInt(),
-            currentDate
-        )
-        viewModel.setLastVisitedScreenId(requireActivity(), R.id.completeTaskFragment)
-        viewModel.GetVehicleImageUploadInfo(
-            Prefs.getInstance(requireContext()).clebUserId.toInt(),
-            getCurrentDateTime()
-        )
-        showDialog()
-        viewModel.GetDriverBreakTimeInfo(clebUserID)
-        showDialog()
-        viewModel.GetDailyWorkInfoById(clebUserID)
-        showDialog()
-        viewModel.GetDriverRouteInfoByDate(clebUserID)
-        showDialog()
-        viewModel.GetRideAlongDriverInfoByDate(clebUserID)
-        (activity as HomeActivity).GetDriversBasicInformation()
 
-        observers()
+        oSyncViewModel.osData.observe(viewLifecycleOwner) {
+            osData = it!!
+            showDialog()
+            if(it.isIni){
+                hideDialog()
+                osData.isDefectSheetFilled = true
+                logOSEntity("OSData CompleteTaskFragment", osData)
+                viewModel.GetVehicleImageUploadInfo(
+                    Prefs.getInstance(requireContext()).clebUserId.toInt(),
+                    getCurrentDateTime()
+                )
+                showDialog()
+                viewModel.GetDriverBreakTimeInfo(clebUserID)
+                showDialog()
+                viewModel.GetDailyWorkInfoById(clebUserID)
+                showDialog()
+                viewModel.GetDriverRouteInfoByDate(clebUserID)
+                showDialog()
+                viewModel.GetRideAlongDriverInfoByDate(clebUserID)
+                (activity as HomeActivity).GetDriversBasicInformation()
+                showDialog()
+
+                viewModel.GetVehicleInfobyDriverId(
+                    Prefs.getInstance(App.instance).clebUserId.toInt(),
+                    currentDate
+                )
+                observers()
+                setVisibiltyLevel()
+            }
+        }
+
+
+
+
+        viewModel.setLastVisitedScreenId(requireActivity(), R.id.completeTaskFragment)
 
         if (mbinding.startinspection.isVisible) {
             val anim = ValueAnimator.ofFloat(1f, 1.2f)
@@ -220,47 +235,8 @@ class CompleteTaskFragment : Fragment() {
             anim.repeatCount = 3
             anim.repeatMode = ValueAnimator.REVERSE
             anim.start()
-//            mbinding.startinspection.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_up));
         }
 
-        /*  BubbleShowCaseBuilder(requireActivity()) //Activity instance
-              .title("Start Inspection") //Any title for the bubble view
-              .description("Click here to capture Vehicle Images") //More detailed description
-              .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
-              //You can force the position of the arrow to change the location of the bubble.
-              .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
-              //Bubble background color
-              .textColor(requireContext().getColor(R.color.black)) //Bubble Text color
-              .titleTextSize(16) //Title text size in SP (default value 16sp)
-              .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
-              .image(requireContext().resources.getDrawable(R.drawable.baseline_image_search_24)!!) //Bubble main image
-              .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
-
-              .listener(
-                  (object : BubbleShowCaseListener { //Listener for user actions
-                      override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
-                          //Called when the user clicks the target
-                          bubbleShowCase.dismiss()
-                      }
-
-                      override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
-                          //Called when the user clicks the close button
-                          bubbleShowCase.dismiss()
-                      }
-
-                      override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
-                          //Called when the user clicks on the bubble
-                          bubbleShowCase.dismiss()
-                      }
-
-                      override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
-                          bubbleShowCase.dismiss()
-                          //Called when the user clicks on the background dim
-                      }
-                  })
-              )
-              .targetView(mbinding.startinspection).highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
-              .show()*/
         clientUniqueID()
 
         mbinding.rlcomtwoClock.setOnClickListener {
@@ -286,7 +262,6 @@ class CompleteTaskFragment : Fragment() {
 
 
         if (checked.equals("0")) {
-            //findNavController().navigate(R.id.vechileMileageFragment)
             navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
         }
 
@@ -330,17 +305,12 @@ class CompleteTaskFragment : Fragment() {
         mbinding.rlcom.setOnClickListener {
             if (isclicked) {
                 mbinding.taskDetails.visibility = View.VISIBLE
-//                viewVisibleAnimator( mbinding.taskDetails)
                 mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
                 mbinding.view2.visibility = View.VISIBLE
-//                viewVisibleAnimator(mbinding.view2)
             } else {
                 mbinding.taskDetails.visibility = View.GONE
-//                viewGoneAnimator(mbinding.taskDetails)
                 mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
                 mbinding.view2.visibility = View.GONE
-//                viewGoneAnimator(mbinding.view2)
-                //mbinding.uploadLayouts.visibility = View.VISIBLE
             }
             isclicked = !isclicked
         }
@@ -353,7 +323,6 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.taskDetails.visibility = View.GONE
                 mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
                 mbinding.view2.visibility = View.GONE
-                //mbinding.uploadLayouts.visibility = View.VISIBLE
             }
             isclicked = !isclicked
         }
@@ -384,9 +353,7 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun requestpermissions() {
-
         activityResultLauncher.launch(REQUIRED_PERMISSIONS)
-
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -521,7 +488,6 @@ class CompleteTaskFragment : Fragment() {
 
                 } else {
                     isClockedIn = false
-                    // setVisibiltyLevel()
                 }
 
                 if (it.ClockedOutTime != null) {
@@ -531,13 +497,7 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.rlcomtwoClockOut.isClickable = false
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
                 }
-            } /*else {
-                with(mbinding) {
-                    listOf(
-                        rlcomtwoClock, rlcomtwoBreak, onRoadView, rlcomtwoBreak, rlcomtwoClockOut
-                    ).forEach { thisView -> thisView.visibility = View.GONE }
-                }
-            }*/
+            }
             setVisibiltyLevel()
         }
 
@@ -556,20 +516,7 @@ class CompleteTaskFragment : Fragment() {
             viewModel.GetDailyWorkInfoById(clebUserID)
             showDialog()
             if (it != null) {
-
-                isClockedIn = true
-                imagesUploaded = true
-                showImageUploadLayout = false
-
-//                if (isClockedIn){
-//                    Alerter.create(requireActivity())
-//                        .setTitle("")
-//                        .setIcon(R.drawable.logo_new)
-//                        .setText("Clocked in successfully")
-//                        .setBackgroundColorInt(resources.getColor(R.color.medium_orange))
-//                        .show()
-//                }
-                setVisibiltyLevel()
+                osData.isClockedInToday = true
             } else {
                 if (uploadInProgress) {
                     imagesUploaded = true
@@ -578,9 +525,8 @@ class CompleteTaskFragment : Fragment() {
                 } else {
                     showToast("Pls Retry!!", requireContext())
                 }
-
-                setVisibiltyLevel()
             }
+            setVisibiltyLevel()
         }
 
         viewModel.livedataUpdateClockOutTime.observe(viewLifecycleOwner) {
@@ -620,13 +566,11 @@ class CompleteTaskFragment : Fragment() {
                             isBreakTimeAdded = true
                             setVisibiltyLevel()
                         } else {
-                            // showToast("No Break time information added!!", requireContext())
                         }
                     } catch (_: Exception) {
-                        //showToast("No Break time information added!!", requireContext())
                     }
 
-                } /*?: showToast("No Break time information added!!", requireContext())*/
+                }
             } else {
                 isBreakTimeAdded = false
                 setVisibiltyLevel()
@@ -670,11 +614,11 @@ class CompleteTaskFragment : Fragment() {
                     it.DaVehImgDashBoardFileName != null &&
                     it.DaVehImgOffSideFileName != null
                 ) {
-                    showImageUploadLayout = false
-                    imagesUploaded = true
+                    osData.isImagesUploadedToday = true
+                    osData.isInspectionDoneToday = true
+                    oSyncViewModel.insertData(osData)
                 } else {
-                    if (it!!.Status == "404" ||
-                        osData.faceMaskImage == null ||
+                    if (osData.faceMaskImage == null ||
                         osData.dashboardImage == null ||
                         osData.nearSideImage == null ||
                         osData.rearSideImage == null ||
@@ -686,60 +630,70 @@ class CompleteTaskFragment : Fragment() {
                         mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
                         showImageUploadLayout = true
                         imagesUploaded = false
-                        if (osData.dashboardImage == null &&
-                            osData.nearSideImage == null &&
-                            osData.rearSideImage == null &&
-                            osData.offSideImage == null &&
-                            osData.frontImage == null &&
-                            osData.oillevelImage == null &&
-                            osData.addblueImage == null
+                        if(it.DaVehicleAddBlueImage != null &&
+                            it.DaVehImgOilLevelFileName != null &&
+                            it.DaVehImgNearSideFileName != null &&
+                            it.DaVehImgRearFileName != null &&
+                            it.DaVehImgDashBoardFileName != null &&
+                            it.DaVehImgOffSideFileName != null){
+
+                            osData.isInspectionDoneToday = true
+                            osData.isImagesUploadedToday = false
+
+                        } else if (!osData.isInspectionDoneToday
                         ) {
+                            osData.isInspectionDoneToday = false
+                            osData.isImagesUploadedToday = false
                             inspectionstarted = false
                         }
-                    } else if (checkNull(it)) {
-                        showImageUploadLayout = true
-                        imagesUploaded = false
-                    } else if (
-                        it.DaVehicleAddBlueImage == null ||
-                        it.DaVehImgOilLevelFileName == null ||
-                        it.DaVehImgNearSideFileName == null ||
-                        it.DaVehImgRearFileName == null ||
-                        it.DaVehImgDashBoardFileName == null ||
-                        it.DaVehImgOffSideFileName == null
-                    ) {
-                        showImageUploadLayout = false
-                        imagesUploaded = true
-                        backgroundImageSync()
+                        else {
+                            osData.isInspectionDoneToday = true
+                            osData.isImagesUploadedToday = false
+                        }
+
+                        if (osData.faceMaskImage != null||it.DaVehImgFaceMaskFileName!=null) {
+                            osData.isImagesUploadedToday = true
+                        }
                     } else {
-                        showImageUploadLayout = false
-                        imagesUploaded = true
+                        backgroundImageSync()
                     }
                 }
-            } else {
-                if (osData.faceMaskImage != null ||
-                    osData.oillevelImage != null ||
-                    osData.dashboardImage != null ||
-                    osData.frontImage != null ||
-                    osData.nearSideImage != null ||
-                    osData.rearSideImage != null ||
-                    osData.addblueImage != null ||
-                    osData.offSideImage != null
+            }
+            else {
+                if (osData.faceMaskImage == null ||
+                    osData.dashboardImage == null ||
+                    osData.nearSideImage == null ||
+                    osData.rearSideImage == null ||
+                    osData.offSideImage == null ||
+                    osData.frontImage == null ||
+                    osData.oillevelImage == null ||
+                    osData.addblueImage == null
                 ) {
-                    backgroundImageSync()
+
+                    if (!osData.isInspectionDoneToday) {
+                        mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
+                        osData.isInspectionDoneToday = false
+                        osData.isImagesUploadedToday = false
+                        inspectionstarted = false
+                    } else {
+                        osData.isInspectionDoneToday = true
+                        osData.isImagesUploadedToday = false
+                    }
+
+                    if (osData.faceMaskImage != null) {
+                        osData.isImagesUploadedToday = true
+                    }
                 } else {
-                    showImageUploadLayout = true
-                    imagesUploaded = false
+                    backgroundImageSync()
                 }
             }
             setVisibiltyLevel()
-        }
-        )
+        })
 
         viewModel.liveDataDeleteOnRideAlongRouteInfo.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
                 showDialog()
-
                 viewModel.GetRideAlongDriverInfoByDate(clebUserID)
             }
         }
@@ -766,22 +720,16 @@ class CompleteTaskFragment : Fragment() {
                 for (item in it) {
                     if (item.RtFinishMileage > 0 && item.RtNoOfParcelsDelivered > 0) {
                         isOnRoadHours = true
-                        setVisibiltyLevel()
                         break
                     }
                 }
-                /*               adapter.list.clear()
-                               adapter.list.addAll(it)
-                               adapter.notifyDataSetChanged()*/
                 adapter.saveData(it)
             } else {
                 mbinding.routeNameTV.visibility = View.GONE
-                //adapter.list.clear()
                 adapter.saveData(GetDriverRouteInfoByDateResponse())
-                //adapter.notifyDataSetChanged()
                 isOnRoadHours = false
-                setVisibiltyLevel()
             }
+            setVisibiltyLevel()
         }
 
 
@@ -804,28 +752,15 @@ class CompleteTaskFragment : Fragment() {
 
         mbinding.questionareRv.adapter = rideAlongAdapter
         mbinding.questionareRv.layoutManager = LinearLayoutManager(requireContext())
-        /*        rideAlongAdapter.recyclerViewReadyCallback = this@CompleteTaskFragment
-
-                mbinding.questionareRv.viewTreeObserver.addOnGlobalLayoutListener(object :
-                    ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        rideAlongAdapter.recyclerViewReadyCallback?.onLayoutReady()
-                        mbinding.questionareRv.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    }
-                })*/
 
         viewModel.liveDataRideAlongDriverInfoByDateResponse.observe(viewLifecycleOwner) { rideAlongs ->
             hideDialog()
             rideAlongs.let {
                 if (it != null) {
-                    /*rideAlongAdapter.data.clear()
-                    rideAlongAdapter.data.addAll(it)*/
                     rideAlongAdapter.saveData(it)
-                    //rideAlongAdapter.notifyDataSetChanged()
                 } else {
                     rideAlongAdapter.data.clear()
                     rideAlongAdapter.saveData(RideAlongDriverInfoByDateResponse())
-                    //rideAlongAdapter.notifyDataSetChanged()
                 }
             }
         }
@@ -834,22 +769,18 @@ class CompleteTaskFragment : Fragment() {
 
     private fun backgroundImageSync() {
         uploadInProgress = true
-        inspectionstarted = true
+
         Prefs.getInstance(requireContext()).updateInspectionStatus(true)
         startUploadWithWorkManager(
             0,
             Prefs.getInstance(requireContext()),
             requireContext()
         )
-        /*        if (osData.faceMaskImage != null) {
-                    imagesUploaded = true
-                    showImageUploadLayout = false
-                    startUploadWithWorkManager(
-                        1,
-                        Prefs.getInstance(requireContext()),
-                        requireContext()
-                    )
-                }*/
+        osData.isInspectionDoneToday = true
+        if (osData.faceMaskImage != null)
+            osData.isImagesUploadedToday = true
+        oSyncViewModel.insertData(osData)
+
         setVisibiltyLevel()
     }
 
@@ -921,48 +852,6 @@ class CompleteTaskFragment : Fragment() {
             b2 = false
             showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
         }
-
-        /*        val breakstartWatcher = object : TextWatcher {
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-                    }
-
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-                    }
-
-                    override fun afterTextChanged(s: Editable?) {
-                        s?.let {
-                            val formattedTime = addLeadingZeroIfNeeded(it)
-                            dialogBinding.tvBreakstart.removeTextChangedListener(this)
-                            dialogBinding.tvBreakstart.text = formattedTime
-                            dialogBinding.tvBreakstart.addTextChangedListener(this)
-                        }
-                    }
-                }
-
-                val breakendWatcher = object : TextWatcher {
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                        // Not needed
-                    }
-
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                        // Not needed
-                    }
-
-                    override fun afterTextChanged(s: Editable?) {
-                        s?.let {
-                            val formattedTime = addLeadingZeroIfNeeded(it)
-                            dialogBinding.tvBreakend.removeTextChangedListener(this)
-                            dialogBinding.tvBreakend.text = formattedTime
-                            dialogBinding.tvBreakend.addTextChangedListener(this)
-                        }
-                    }
-                }
-
-                dialogBinding.tvBreakstart.addTextChangedListener(breakstartWatcher)
-                dialogBinding.tvBreakend.addTextChangedListener(breakendWatcher)*/
-
 
         dialogBinding.timeTvNext.setOnClickListener {
             if (chkTime(dialogBinding.edtBreakstart, dialogBinding.edtBreakend)) {
@@ -1093,13 +982,13 @@ class CompleteTaskFragment : Fragment() {
             else -> throw IllegalArgumentException()
         }
 
-        //viewModel.uploadVehicleImage(userId, imagePart, requestCode, getCurrentDateTime())
         osData.faceMaskImage = bitmapToBase64(imageBitmap)
-        oSyncViewModel.insertData(osData)
+        osData.isImagesUploadedToday = true
+
         imagesUploaded = true
-        setVisibiltyLevel()
         visibilityLevel = 1
         startUploadWithWorkManager(1, Prefs.getInstance(requireContext()), requireContext())
+        setVisibiltyLevel()
     }
 
     private fun setImageUploadViews(requestCode: Int, type: Int) {
@@ -1371,6 +1260,11 @@ class CompleteTaskFragment : Fragment() {
 
     private fun setVisibiltyLevel() {
         visibilityLevel = 0
+        inspectionstarted = osData.isInspectionDoneToday
+        imagesUploaded = osData.isImagesUploadedToday
+        isClockedIn = osData.isClockedInToday
+        oSyncViewModel.insertData(osData)
+
         if (!inspectionstarted) {
             visibilityLevel = -1
             visibiltyControlls()
