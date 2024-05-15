@@ -14,10 +14,10 @@ data class OfflineSyncEntity(
     var offId: Int = 0,
 
     @ColumnInfo("isIni")
-    var isIni:Boolean = false,
+    var isIni: Boolean = false,
 
     @ColumnInfo("clebID")
-    var clebID: Int =0,
+    var clebID: Int = 0,
 
     @ColumnInfo("vehicleID")
     var vehicleID: String? = null,
@@ -73,4 +73,18 @@ data class OfflineSyncEntity(
     @ColumnInfo("isfaceMaskFailed")
     var isfaceMaskImageFailed: Boolean = false,
 
+    @ColumnInfo("isInspectionDoneToday")
+    var isInspectionDoneToday:Boolean = false,
+
+    @ColumnInfo("isImageUploadedToday")
+    var isImagesUploadedToday: Boolean = false,
+
+    @ColumnInfo("isClockedInToday")
+    var isClockedInToday:Boolean = false,
+
+    @ColumnInfo("isClockedOutToday")
+    var isClockedOutToday:Boolean = false,
+
+    @ColumnInfo("isDefectSheetFilled")
+    var isDefectSheetFilled:Boolean = false
 )

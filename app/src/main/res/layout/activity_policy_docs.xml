@@ -669,7 +669,7 @@
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/poppins"
                                         android:letterSpacing="0.02"
-                                        android:text="DA Hand Book Policy"
+                                        android:text="DA Engagement Policy"
                                         android:textColor="@color/text_color" />
 
                                     <ImageView

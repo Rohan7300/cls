@@ -462,7 +462,7 @@ class HomedemoFragment : Fragment() {
                         var date = it.NextWorkingDate?:" "
                         var nextLoc = it.NextWorkingLoc?:" "
                         mbinding.textView5.text =
-                            "${convertDateFormat(date)} ${time} - ${nextLoc}"
+                            "${convertDateFormat(date)} ${time.split(":")[0]} : ${time.split(":")[1]} - ${nextLoc}"
 
                     }catch (_:Exception){
                         mbinding.textView5.text = "Not allocated"

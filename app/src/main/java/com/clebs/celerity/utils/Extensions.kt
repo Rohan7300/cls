@@ -446,37 +446,19 @@ fun showTimePickerDialog(context: Context, tv: TextView) {
 
             val formattedTime: String = when {
                 selectedHour == 0 -> {
-                    if (minute < 10) {
-                        "${selectedHour + 12}:0${selectedMinute} am"
-                    } else {
-                        "${selectedHour + 12}:${selectedMinute} am"
-                    }
+                    "${(selectedHour + 12).toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')} am"
                 }
-
                 selectedHour > 12 -> {
-                    if (minute < 10) {
-                        "${selectedHour - 12}:0${selectedMinute} pm"
-                    } else {
-                        "${selectedHour - 12}:${selectedMinute} pm"
-                    }
+                    "${(selectedHour - 12).toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')} pm"
                 }
-
                 selectedHour == 12 -> {
-                    if (minute < 10) {
-                        "${selectedHour}:0${selectedMinute} pm"
-                    } else {
-                        "${selectedHour}:${selectedMinute} pm"
-                    }
+                    "${selectedHour.toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')} pm"
                 }
-
                 else -> {
-                    if (minute < 10) {
-                        "${selectedHour}:${selectedMinute} am"
-                    } else {
-                        "${selectedHour}:${selectedMinute} am"
-                    }
+                    "${selectedHour.toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')} am"
                 }
             }
+
             tv.text = formattedTime
 
         },
@@ -712,6 +694,8 @@ fun logOSEntity(base: String, osData: OfflineSyncEntity) {
     osData.oillevelImage?.take(10)
         ?.let { it1 -> Log.d("OSData oillevelImageFirst10", it1 + "\n") }
         ?: Log.d("OSData oillevelImage", "null")
+
+
 
     Log.d("$base", "OS DATA LOG + --------------------")
 }

@@ -42,10 +42,8 @@ class CommentAdapter(var arrayList: ArrayList<DocXX>, var addCommentActivity: Ad
 
             var formattedDate = item.ActionOn
             try {
-
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-                val truncatedString =
-                    item.ActionOn.substring(0, 19) // Truncate to remove milliseconds
+                val truncatedString = item.ActionOn.substring(0, 19) //Truncate to remove milliseconds
                 val dateTime = LocalDateTime.parse(truncatedString, formatter)
 
                 val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
@@ -70,7 +68,7 @@ class CommentAdapter(var arrayList: ArrayList<DocXX>, var addCommentActivity: Ad
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
-        var binding = CommentsAdapterBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = CommentsAdapterBinding.inflate(LayoutInflater.from(parent.context))
         return CommentViewHolder(binding)
     }
 

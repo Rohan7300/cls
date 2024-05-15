@@ -63,7 +63,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
         internetDialog = (activity as HomeActivity).internetDialog
         val networkManager = (activity as HomeActivity).networkManager
         networkManager.observe(viewLifecycleOwner) {
-            if(it) {
+            if (it) {
                 isNetworkActive = true
                 internetDialog.hideDialog()
             } else {
@@ -174,11 +174,11 @@ class SpareWheelFragment : BaseInteriorFragment() {
                     if (!isApiCallInProgress) {
                         isApiCallInProgress = true
                         VdhVmId = it.vmId
-                        if(it.vmId!=0)
+                        if (it.vmId != 0)
                             Prefs.getInstance(requireContext()).vmId = it.vmId
 
                         Prefs.getInstance(App.instance).VmID = it.vmId.toString()
-                        Prefs.getInstance(App.instance).save("lm",it.vmLocId.toString())
+                        Prefs.getInstance(App.instance).save("lm", it.vmLocId.toString())
                         VdhLmId = it.vmLocId
                         VdhOdoMeterReading =
                             Prefs.getInstance(requireContext()).vehicleLastMileage
@@ -266,6 +266,9 @@ class SpareWheelFragment : BaseInteriorFragment() {
             viewModel.SaveVehDefectSheetResponseLiveData.observe(viewLifecycleOwner) {
                 hideDialog()
                 if (it != null) {
+                    var osData = (activity as HomeActivity).osData
+                    osData.isDefectSheetFilled = true
+                    (activity as HomeActivity).oSyncViewModel.insertData(osData)
                     navigateTo(R.id.completeTaskFragment)
                 } else {
                     showErrorDialog(fragmentManager, "SPW-01", "Failed to Save")

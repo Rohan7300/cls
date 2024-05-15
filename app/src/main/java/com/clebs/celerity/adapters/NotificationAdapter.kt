@@ -35,6 +35,10 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+interface NotificationAdapterCallback {
+    fun refresh()
+}
+
 class NotificationAdapter(
     var navController: NavController,
     var fragmentManager: FragmentManager,
@@ -42,9 +46,12 @@ class NotificationAdapter(
     var loadingDialog: LoadingDialog,
     var viewModel: MainViewModel,
     var pref: Prefs,
-    var viewLifecycleOwner: LifecycleOwner
+    var viewLifecycleOwner: LifecycleOwner,
+    var callback: NotificationAdapterCallback
 ) :
     RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
+    private var dailyRotaDialog: AlertDialog? = null
+    private var dailyRotaDialogBinding: DailyrotaapprovaldialogBinding? = null
 
     private val diffUtil = object : DiffUtil.ItemCallback<NotificationResponseItem>() {
         override fun areItemsTheSame(
@@ -111,114 +118,18 @@ class NotificationAdapter(
             }
 
 
-            /*  binding.notficationArrow.setOnClickListener {
-                  if (item.ActionToPerform == "Deductions" || item.ActionToPerform == "Driver Deduction with Agreement") {
-                      val intent = Intent(context, DeductionAgreementActivity::class.java)
-                      intent.putExtra("actionID", item.NotificationActionId)
-                      intent.putExtra("notificationID", item.NotificationId)
-                      context.startActivity(intent)
-                  } else if (item.ActionToPerform == "Daily Location Rota" || item.ActionToPerform == "Daily Rota Approval"
-                  ) {
-                      //val dialog = DailyRotaApprovalDialog()
-                      Log.d("tokenXX", "${item.NotificationUrl}")
-                      viewModel.GetDaDailyLocationRota(pref.clebUserId.toInt(), dailyRotatoken)
-                      loadingDialog.show()
-                      viewModel.liveDataDaDailyLocationRota.observe(viewLifecycleOwner) {
-                          loadingDialog.dismiss()
-                          if (it != null) {
-                              showDailyRotaDialog(
-                                  item.NotificationId,
-                                  it.DriverName,
-                                  it.DayOfWeek,
-                                  it.WeekNo,
-                                  it.YearNo,
-                                  it.LocationName,
-                                  dailyRotatoken
-                              )
-                          } else {
-                              showToast("Failed to fetch Data!!", context)
-                          }
-                      }
-                      //dialog.showDialog(fragmentManager)
-                      //      showDailyRotaDialog(item.NotificationId)
-                  } else if (item.ActionToPerform.equals("Invoice Ready To Review") || item.ActionToPerform.equals(
-                          "Invoice Ready to Review"
-                      )
-                  ) {
-                      val dialog = InvoiceReadytoViewDialog.newInstance(
-                          getCurrentWeek().toString(),
-                          getCurrentYear().toString()
-                      )
-                      dialog.showDialog(fragmentManager)
-                      //viewModel.MarkNotificationAsRead(item.NotificationId)
-                  } else if (item.ActionToPerform.equals("Weekly Location Rota") || item.ActionToPerform == "Weekly Rota Approval") {
-                      val intent = Intent(context, WeeklyRotaApprovalActivity::class.java)
-                      intent.putExtra("actionID", item.NotificationActionId)
-                      intent.putExtra("notificationID", item.NotificationId)
-                      context.startActivity(intent)
-                  } else if (item.ActionToPerform.equals("Expired Document")) {
-                      loadingDialog.show()
-                      viewModel.GetDAVehicleExpiredDocuments(pref.clebUserId.toInt())
-                      viewModel.liveDataGetDAVehicleExpiredDocuments.observe(viewLifecycleOwner) {
-                          loadingDialog.dismiss()
-                          val dialog = ExpiredDocDialog(pref, context)
-
-                          if (it != null) {
-                              pref.saveExpiredDocuments(it)
-                              dialog.showDialog(fragmentManager)
-                              viewModel.MarkNotificationAsRead(item.NotificationId)
-                          } else {
-                              showToast("No expired document founds", context)
-                              //dialog.showDialog(fragmentManager)
-                          }
-                      }
-                  } else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement") || item.ActionToPerform.equals(
-                          "Vehicle Advance Payment Agreement"
-                      )
-                  ) {
-                      loadingDialog.show()
-                      viewModel.GetVehicleAdvancePaymentAgreement(pref.clebUserId.toInt())
-                      viewModel.liveDataGetAdvancePaymentAgreement.observe(viewLifecycleOwner) {
-                          loadingDialog.dismiss()
-                          if (it != null) {
-                              val amount = it.VehAdvancePaymentAgreementAmount ?: "null"
-                              val date = it.AgreementDate ?: "null"
-                              val comment = it.VehicleAdvancePaymentContent ?: "null"
-                              *//*                       val dialog = VehicleAdvancePaymentDialog.newInstance(
-                                                       amount.toString(),
-                                                       date.toString()
-                                                   ) *//*
-                            showAdvancePaymentDialog(
-                                amount.toString(),
-                                date.toString(),
-                                comment.toString(),
-                                item.NotificationId
-                            )
-
-                            // dialog.showDialog(fragmentManager)
-                        } else {
-                            showToast("Failed to fetch data", context)
-                        }
-                    }
-                } else if (item.ActionToPerform.equals("Expiring Document")) {
-                    val intent = Intent(context, ExpiringDocumentsActivity::class.java)
-                    intent.putExtra("notificationID", item.NotificationId)
-                    context.startActivity(intent)
-                } else {
-                    //viewModel.MarkNotificationAsRead(item.NotificationId)
-                    binding.notficationArrow.visibility = View.GONE
-                }
-            }*/
-
             binding.overallNotification.setOnClickListener {
-                if (item.ActionToPerform == "Deductions" || item.ActionToPerform == "Driver Deduction with Agreement") {
+                if (item.ActionToPerform == "Deductions" ||
+                    item.ActionToPerform == "Driver Deduction with Agreement" ||
+                    item.ActionToPerform == "DriverDeductionWithAgreement"
+                ) {
                     val intent = Intent(context, DeductionAgreementActivity::class.java)
                     intent.putExtra("actionID", item.NotificationActionId)
                     intent.putExtra("notificationID", item.NotificationId)
                     context.startActivity(intent)
-                } else if (item.ActionToPerform.equals("Daily Location Rota") || item.ActionToPerform.equals(
-                        "Daily Rota Approval"
-                    )
+                } else if (item.ActionToPerform.equals("Daily Location Rota") ||
+                    item.ActionToPerform.equals("Daily Rota Approval") ||
+                    item.ActionToPerform.equals("DailyRotaApproval")
                 ) {
                     viewModel.GetDaDailyLocationRota(pref.clebUserId.toInt(), dailyRotatoken)
                     loadingDialog.show()
@@ -235,15 +146,14 @@ class NotificationAdapter(
                                 dailyRotatoken
                             )
                         } else {
-                            showToast("Failed to fetch Data!!", context)
+                            showToast("Daily Rota not found!!", context)
                         }
                     }
                     //dialog.showDialog(fragmentManager)
                     //      showDailyRotaDialog(item.NotificationId)
                 } else if (item.ActionToPerform.equals("Invoice Ready To Review")
-                    || item.ActionToPerform.equals(
-                        "Invoice Ready to Review"
-                    )
+                    || item.ActionToPerform.equals("Invoice Ready to Review") ||
+                    item.ActionToPerform.equals("InvoiceReadyToReview")
                 ) {
                     val dialog = InvoiceReadytoViewDialog.newInstance(
                         getCurrentWeek().toString(),
@@ -252,30 +162,34 @@ class NotificationAdapter(
                     )
                     dialog.showDialog(fragmentManager)
                     //viewModel.MarkNotificationAsRead(item.NotificationId)
-                } else if (item.ActionToPerform == "Weekly Location Rota" || item.ActionToPerform == "Weekly Rota Approval") {
+                } else if (item.ActionToPerform == "Weekly Location Rota" ||
+                    item.ActionToPerform == "Weekly Rota Approval" ||
+                    item.ActionToPerform.equals("WeeklyRotaApproval")
+                ) {
                     val intent = Intent(context, WeeklyRotaApprovalActivity::class.java)
                     intent.putExtra("actionID", item.NotificationActionId)
                     intent.putExtra("notificationID", item.NotificationId)
                     context.startActivity(intent)
-                } else if (item.ActionToPerform == "Expired Document") {
+                } else if (
+                    item.ActionToPerform == "Expired Document" ||
+                    item.ActionToPerform.equals("ExpiredDocuments")
+                ) {
                     loadingDialog.show()
                     viewModel.GetDAVehicleExpiredDocuments(pref.clebUserId.toInt())
                     viewModel.liveDataGetDAVehicleExpiredDocuments.observe(viewLifecycleOwner) {
                         loadingDialog.dismiss()
                         val dialog = ExpiredDocDialog(pref, context)
-
+                        viewModel.MarkNotificationAsRead(item.NotificationId)
                         if (it != null) {
                             pref.saveExpiredDocuments(it)
                             dialog.showDialog(fragmentManager)
-                            viewModel.MarkNotificationAsRead(item.NotificationId)
                         } else {
                             showToast("No expired document founds", context)
                             //dialog.showDialog(fragmentManager)
                         }
                     }
-                } else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement") || item.ActionToPerform.equals(
-                        "Vehicle Advance Payment Agreement"
-                    )
+                } else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement") ||
+                    item.ActionToPerform.equals("Vehicle Advance Payment Agreement")
                 ) {
                     loadingDialog.show()
                     viewModel.GetVehicleAdvancePaymentAgreement(pref.clebUserId.toInt())
@@ -301,7 +215,9 @@ class NotificationAdapter(
                             showToast("Failed to fetch data", context)
                         }
                     }
-                } else if (item.ActionToPerform.equals("Expiring Document")) {
+                } else if (item.ActionToPerform.equals("Expiring Document") ||
+                    item.ActionToPerform.equals("ExpiringDocuments")
+                ) {
                     val intent = Intent(context, ExpiringDocumentsActivity::class.java)
                     intent.putExtra("notificationID", item.NotificationId)
                     context.startActivity(intent)
@@ -357,6 +273,7 @@ class NotificationAdapter(
             viewModel.MarkNotificationAsRead(notificationId)
             viewModel.ApproveVehicleAdvancePaymentAgreement(pref.clebUserId.toInt(), true)
             viewModel.liveDataApproveVehicleAdvancePaymentAgreement.observe(viewLifecycleOwner) {
+                callback.refresh()
                 loadingDialog.dismiss()
                 if (it != null) {
                     showToast("Approved✔✔", context)
@@ -382,50 +299,55 @@ class NotificationAdapter(
         rotaLocation: String,
         dailyRotatoken: String
     ) {
-        val dailyRotaDialog = AlertDialog.Builder(context).create()
-        val dailyRotaDialogBinding =
-            DailyrotaapprovaldialogBinding.inflate(LayoutInflater.from(context))
-        dailyRotaDialog.setView(dailyRotaDialogBinding.root)
-        dailyRotaDialog.setCanceledOnTouchOutside(true)
-        dailyRotaDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        if (dailyRotaDialog == null && dailyRotaDialogBinding == null) {
+            dailyRotaDialog = AlertDialog.Builder(context).create()
+            dailyRotaDialogBinding =
+                DailyrotaapprovaldialogBinding.inflate(LayoutInflater.from(context))
+            dailyRotaDialog!!.setView(dailyRotaDialogBinding!!.root)
+            dailyRotaDialog!!.setCanceledOnTouchOutside(true)
+            dailyRotaDialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        } else {
+            dailyRotaDialogBinding!!.acceptRB.isChecked = false
+            dailyRotaDialogBinding!!.rejectRB.isChecked = false
+        }
 
-        dailyRotaDialogBinding.rotaname.text = rotaName
-        dailyRotaDialogBinding.rotaday.text = rotaDay
-        dailyRotaDialogBinding.rotaweek.text = rotaWeek.toString()
-        dailyRotaDialogBinding.rotayear.text = rotaYear.toString()
-        dailyRotaDialogBinding.rotalocation.text = rotaLocation
+        dailyRotaDialogBinding!!.rotaname.text = rotaName
+        dailyRotaDialogBinding!!.rotaday.text = rotaDay
+        dailyRotaDialogBinding!!.rotaweek.text = rotaWeek.toString()
+        dailyRotaDialogBinding!!.rotayear.text = rotaYear.toString()
+        dailyRotaDialogBinding!!.rotalocation.text = rotaLocation
         var acceptRBChecked = false
         var rejectRNcheck = false
         var selectedItem = 0
-        dailyRotaDialogBinding.acceptRB.setOnClickListener {
+        dailyRotaDialogBinding!!.acceptRB.setOnClickListener {
             if (!acceptRBChecked) {
-                dailyRotaDialogBinding.acceptRB.isChecked = true
-                dailyRotaDialogBinding.rejectRB.isChecked = false
+                dailyRotaDialogBinding!!.acceptRB.isChecked = true
+                dailyRotaDialogBinding!!.rejectRB.isChecked = false
                 acceptRBChecked = true
                 selectedItem = 1
             } else {
                 selectedItem = 0
                 acceptRBChecked = false
-                dailyRotaDialogBinding.acceptRB.isChecked = false
-                dailyRotaDialogBinding.rejectRB.isChecked = false
+                dailyRotaDialogBinding!!.acceptRB.isChecked = false
+                dailyRotaDialogBinding!!.rejectRB.isChecked = false
             }
         }
 
-        dailyRotaDialogBinding.rejectRB.setOnClickListener {
+        dailyRotaDialogBinding!!.rejectRB.setOnClickListener {
             if (!rejectRNcheck) {
-                dailyRotaDialogBinding.acceptRB.isChecked = false
-                dailyRotaDialogBinding.rejectRB.isChecked = true
+                dailyRotaDialogBinding!!.acceptRB.isChecked = false
+                dailyRotaDialogBinding!!.rejectRB.isChecked = true
                 rejectRNcheck = true
                 selectedItem = 2
             } else {
-                dailyRotaDialogBinding.acceptRB.isChecked = false
-                dailyRotaDialogBinding.rejectRB.isChecked = false
+                dailyRotaDialogBinding!!.acceptRB.isChecked = false
+                dailyRotaDialogBinding!!.rejectRB.isChecked = false
                 rejectRNcheck = false
                 selectedItem = 0
             }
         }
 
-        dailyRotaDialogBinding.submit.setOnClickListener {
+        dailyRotaDialogBinding!!.submit.setOnClickListener {
             if (selectedItem == 0) {
                 showToast("Please select first!!", context)
             } else {
@@ -448,10 +370,12 @@ class NotificationAdapter(
                         UserId = pref.clebUserId.toInt()
                     )
                 )
+
                 viewModel.liveDataApproveDailyRotabyDA.observe(viewLifecycleOwner) {
                     loadingDialog.dismiss()
-                    dailyRotaDialog.dismiss()
+                    dailyRotaDialog!!.dismiss()
                     viewModel.MarkNotificationAsRead(notificationId)
+                    callback.refresh()
                     if (it != null) {
                         showToast("Submitted Successfully!!", context)
                     } else {
@@ -461,8 +385,8 @@ class NotificationAdapter(
             }
         }
 
-        if (!dailyRotaDialog.isShowing)
-            dailyRotaDialog.show()
+        if (!dailyRotaDialog!!.isShowing)
+            dailyRotaDialog!!.show()
     }
 
     override fun getItemId(position: Int): Long {

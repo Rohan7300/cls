@@ -122,6 +122,14 @@ class ImageUploadWorker(
                             if (!oilLevelResponse.isSuccessful)
                                 data.isoillevelImageFailed = true
                         }
+                        if(data.faceMaskImage!=null){
+                            val partBody = createMultipartPart(
+                                data.faceMaskImage!!,"uploadFaceMaskImage"
+                            )
+                            val selfieeRes = mainRepo.uploadVehicleImage(clebUserId,partBody,0,currentDateTime)
+                            if(!selfieeRes.isSuccessful)
+                                data.isfaceMaskImageFailed = true
+                        }
                     }
                     1->{
                         if(data.faceMaskImage!=null){

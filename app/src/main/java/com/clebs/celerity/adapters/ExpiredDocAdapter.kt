@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.databinding.ItemExpiredDocsBinding
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsItem
+import com.clebs.celerity.utils.convertDateFormat
 
 class ExpiredDocAdapter : RecyclerView.Adapter<ExpiredDocAdapter.ExpiredDocViewHolder>() {
 
@@ -37,7 +38,8 @@ class ExpiredDocAdapter : RecyclerView.Adapter<ExpiredDocAdapter.ExpiredDocViewH
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: GetDAVehicleExpiredDocumentsItem, position: Int) {
             binding.birthCertTV.text = item.DocTypeName
-            binding.expiryDateTV.text = item.VehDocEndDate
+            binding.expiryDateTV.text = convertDateFormat(item.VehDocEndDate)
+            binding.regNoTV.text = item.RegNo
             if (position != 0)
                 binding.headerh1.visibility = View.GONE
         }

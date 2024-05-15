@@ -34,4 +34,15 @@ class OSyncViewModel(val oSyncRepo: OSyncRepo,var clebID:Int,var dawDate:String)
             }*/
         }
     }
+
+    fun getData(){
+        viewModelScope.launch (Dispatchers.IO){
+            val osEntity = oSyncRepo.getData(clebID,dawDate)
+            if(osEntity!=null){
+                osData.postValue(osEntity)
+            }else{
+                Log.d("OSynceViewModel","Init Fetch Issue")
+            }
+        }
+    }
 }

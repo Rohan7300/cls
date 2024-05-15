@@ -9,16 +9,25 @@
         android:id="@+id/headerh1"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:background="@color/very_light_orange"
         android:padding="5dp">
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/poppins_semibold"
             android:gravity="center"
-            android:textSize="14sp"
+            android:textSize="13sp"
+            android:text="Reg No."
+            android:textColor="@color/text_color" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/poppins_semibold"
+            android:gravity="center"
+            android:textSize="13sp"
             android:text="Document Type"
             android:textColor="@color/text_color" />
 
@@ -29,7 +38,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/poppins_semibold"
             android:text="Expiry Date"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:textColor="@color/text_color" />
     </LinearLayout>
     <View
@@ -44,6 +53,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingVertical="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/regNoTV"
+            android:fontFamily="@font/poppins"
+            android:gravity="center"
+            android:text=" --- "
+            android:textSize="12sp"
+            android:textColor="@color/text_color" />
 
         <TextView
             android:layout_width="match_parent"

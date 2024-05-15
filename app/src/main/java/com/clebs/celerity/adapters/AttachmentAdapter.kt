@@ -17,6 +17,19 @@ class AttachmentAdapter(var context: ViewTicketsActivity, var data: ArrayList<Do
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: DocXXX) {
             binding.imgName.text = item.FileName
+            var shortenedName = " "
+            try {
+
+                val fileName = item.FileName
+                val nameWithoutExtension = fileName.substringBeforeLast(".") // Remove extension
+                shortenedName =
+                    nameWithoutExtension.split("_")[0] +
+                            nameWithoutExtension.split("_")[1] +
+                            "." + fileName.substringAfterLast(".")
+            } catch (_: Exception) {
+                shortenedName = "UT Comment File"
+            }
+            binding.imgName.text = shortenedName
             binding.mainll.setOnClickListener {
                 try {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.Path))

@@ -226,7 +226,8 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                     it.DaVehImgRearFileName != null &&
                     it.DaVehImgNearSideFileName != null &&
                     it.DaVehImgOffSideFileName != null &&
-                    it.DaVehicleAddBlueImage != null && it.DaVehImgOilLevelFileName != null &&
+                    it.DaVehicleAddBlueImage != null &&
+                    it.DaVehImgOilLevelFileName != null &&
                     !checkIfInspectionFailed(osData)
                 ) {
                     generateInspectionID()
@@ -629,6 +630,8 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     override fun onSaveClick() {
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        osData.isInspectionDoneToday = true
+        oSyncViewModel.insertData(osData)
         intent.putExtra("destinationFragment", "CompleteTask")
         intent.putExtra("actionToperform", "undef")
         intent.putExtra("actionID", "0")
@@ -639,6 +642,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
     private fun generateInspectionID() {
         prefs.updateInspectionStatus(true)
+
         val currentDate =
             SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
                 Date()
@@ -690,4 +694,9 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                 uploadImage()
             }
         }
+
+    override fun onResume() {
+        super.onResume()
+
+    }
 }

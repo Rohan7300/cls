@@ -162,10 +162,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (destinationFragment != null) {
                 Log.d("HomeActivityX", destinationFragment!!)
                 if (destinationFragment == "NotificationsFragment") {
-                    //      try {
-                    if (actionToPerform == "Deductions" || actionToPerform == "Driver Deduction with Agreement") {
+                    if (actionToPerform == "Deductions" ||
+                        actionToPerform == "Driver Deduction with Agreement" ||
+                        actionToPerform == "DriverDeductionWithAgreement"
+                    ) {
                         deductions(this, parseToInt(actionID), parseToInt(notificationID))
-                    } else if (actionToPerform == "Daily Location Rota" || actionToPerform == "Daily Rota Approval"
+                    } else if (actionToPerform == "Daily Location Rota" ||
+                        actionToPerform == "Daily Rota Approval" ||
+                        actionToPerform == "DailyRotaApproval"
                     ) {
                         if (getMainVM(this) != null)
                             dailyRota(
@@ -180,19 +184,23 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             navController.navigate(R.id.notifficationsFragment)
                             return
                         }
-                    } else if (actionToPerform.equals("Invoice Ready To Review")
-                        || actionToPerform.equals(
-                            "Invoice Ready to Review"
-                        )
+                    } else if (actionToPerform == "Invoice Ready To Review" ||
+                        actionToPerform == "Invoice Ready to Review" ||
+                        actionToPerform == "InvoiceReadyToReview"
                     ) {
                         invoiceReadyToView(parseToInt(notificationID), supportFragmentManager)
-                    } else if (actionToPerform == "Weekly Location Rota" || actionToPerform == "Weekly Rota Approval") {
+                    } else if (actionToPerform == "Weekly Location Rota" ||
+                        actionToPerform == "Weekly Rota Approval" ||
+                        actionToPerform == "WeeklyRotaApproval"
+                    ) {
                         weeklyLocationRota(
                             this,
                             parseToInt(notificationID),
                             parseToInt(actionID)
                         )
-                    } else if (actionToPerform == "Expired Document") {
+                    } else if (actionToPerform == "Expired Document" ||
+                        actionToPerform == "ExpiredDocuments"
+                    ) {
                         expiredDocuments(
                             getMainVM(this),
                             this,
@@ -200,9 +208,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             supportFragmentManager,
                             parseToInt(notificationID)
                         )
-                    } else if (actionToPerform.equals("Vehicle Advance Payment Aggrement") || actionToPerform.equals(
-                            "Vehicle Advance Payment Agreement"
-                        )
+                    } else if (actionToPerform.equals("Vehicle Advance Payment Aggrement") ||
+                        actionToPerform.equals("Vehicle Advance Payment Agreement")
                     ) {
                         vehicleAdvancePaymentAgreement(
                             this,
@@ -210,7 +217,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             getMainVM(this),
                             this
                         )
-                    } else if (actionToPerform.equals("Expiring Document")) {
+                    } else if (
+                        actionToPerform.equals("Expiring Document") ||
+                        actionToPerform.equals("ExpiringDocuments")
+                    ) {
                         expiringDocument(
                             this,
                             parseToInt(notificationID)
@@ -424,6 +434,16 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
             }
 
+            viewModel.GetDAVehicleExpiredDocuments(prefs.clebUserId.toInt())
+            var expiredDocDialog = ExpiredDocDialog(prefs, this)
+            viewModel.liveDataGetDAVehicleExpiredDocuments.observe(this) {
+                if (it != null) {
+                    prefs.saveExpiredDocuments(it)
+                 //   expiredDocDialog.showDialog(supportFragmentManager)
+                    expiredDocDialog.isCancelable = false
+                }
+            }
+
             imageViewModel = ViewModelProvider(
                 this,
                 ImageViewModelProviderFactory(imagesRepo)
@@ -495,7 +515,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
                             showDialog()
                         } else {
-                            if (prefs.isInspectionDoneToday())
+                            if (osData.isDefectSheetFilled)
                                 navController.navigate(R.id.completeTaskFragment)
                             else {
                                 navController.navigate(R.id.homeFragment)
@@ -862,5 +882,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onButtonClick() {
         val intent = Intent(this, AddInspection::class.java)
         startActivity(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        oSyncViewModel.getData()
     }
 }

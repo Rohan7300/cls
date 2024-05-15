@@ -617,5 +617,24 @@ interface ApiService {
         @Body body: ApproveDaDailyRotaRequest
     ): Response<SimpleStatusMsgResponse>
 
+
+    @GET("/api/HtmlToPDF/DownloadDAHandbookPolicy")
+    suspend fun DownloadDAHandbookPolicy(): Response<ResponseBody>
+
+    @GET("/api/HtmlToPDF/DownloadDAEngagementPolicy")
+    suspend fun DownloadDAEngagementPolicy(): Response<ResponseBody>
+
+    @GET("/api/HtmlToPDF/DownloadGDPRPolicy")
+    suspend fun DownloadGDPRPolicy(): Response<ResponseBody>
+
+    @GET("/api/HtmlToPDF/DownloadServiceLevelAgreementPolicy")
+    suspend fun DownloadServiceLevelAgreementPolicy(): Response<ResponseBody>
+
+    @GET("/api/HtmlToPDF/DownloadPrivacyPolicy")
+    suspend fun DownloadPrivacyPolicy(): Response<ResponseBody>
+
+    @GET("/api/HtmlToPDF/DownloadTrucksServiceLevelAgreementPolicy")
+    suspend fun DownloadTrucksServiceLevelAgreementPolicy(): Response<ResponseBody>
+
 }
 
