@@ -1,6 +1,8 @@
 package com.clebs.celerity.fragments.interior
 
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,18 +10,25 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentWindowsGlassBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.fragments.BaseInteriorFragment
+import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.decodeBase64Image
 import com.clebs.celerity.utils.setImageView
 
 class WindowsGlassFragment : BaseInteriorFragment() {
     private lateinit var mBinding: FragmentWindowsGlassBinding
-
+    lateinit var loadingDialog: LoadingDialog
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.windowsGlassFragment)
+
         mBinding.tvNext.visibility = View.GONE
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        loadingDialog.dismiss()
         clickListeners()
         setDefault(mBinding.windowDefectUploadIv,mBinding.edtDefect)
     }
@@ -83,6 +92,9 @@ class WindowsGlassFragment : BaseInteriorFragment() {
 
             windowDefectUploadIv.setOnClickListener {
                 pictureDialogBase64(windowDefectUploadIv)
+
+
+
             }
             edtDefect.doAfterTextChanged {
                 doAfterTextChanged(mBinding.tvNext,mBinding.edtDefect)
@@ -130,6 +142,8 @@ class WindowsGlassFragment : BaseInteriorFragment() {
 //            .setPopEnterAnim(R.anim.slide_in_right) // Animation for entering the previous fragment when navigating back
 //            .setPopExitAnim(R.anim.slide_left) // Animation for exiting the current fragment when navigating back
             .build()
+        loadingDialog.show()
+//        Handler().postDelayed(Runnable {  navigateTo(R.id.wipersScreenFragment) }, 1000)
         navigateTo(R.id.wipersScreenFragment)
         //findNavController().navigate(R.id.cabSecurityFragment)
     }
@@ -143,6 +157,12 @@ class WindowsGlassFragment : BaseInteriorFragment() {
         return mBinding.root
     }
 
-
+    fun setImageViewTwo(im: ImageView, value: String) {
+        try {
+            val bitmap: Bitmap = decodeBase64Image(value)
+            im.setImageBitmap(bitmap)
+        } catch (_: Exception) {
+        }
+    }
 
 }

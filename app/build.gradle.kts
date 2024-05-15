@@ -111,6 +111,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
 
     val camerax_version = "1.0.0-rc01"
+    implementation("com.github.Akshay-Katariya:CurveBottomBar:1.0")
     implementation("androidx.camera:camera-camera2:$camerax_version")
     implementation("androidx.camera:camera-lifecycle:$camerax_version")
     implementation("androidx.camera:camera-view:1.0.0-alpha20")

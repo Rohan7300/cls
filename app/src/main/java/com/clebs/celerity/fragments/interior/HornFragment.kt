@@ -9,15 +9,20 @@ import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentHornBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.fragments.BaseInteriorFragment
+import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.setImageView
 
 class HornFragment : BaseInteriorFragment() {
     private lateinit var mBinding: FragmentHornBinding
+    lateinit var loadingDialog: LoadingDialog
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.hornFragment)
         mBinding.tvNext.visibility = View.GONE
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        loadingDialog.dismiss()
         clickListeners()
         setDefault(mBinding.imageUploadIV,mBinding.edtDefect)
     }
@@ -118,6 +123,7 @@ class HornFragment : BaseInteriorFragment() {
             imageEntity.dfNameHornReverseBeeper = "f"
             imageViewModel.insertDefectName(imageEntity)
         }
+        loadingDialog.show()
         navigateTo(R.id.steeringControlFragment)
         //findNavController().navigate(R.id.steeringControlFragment)
     }

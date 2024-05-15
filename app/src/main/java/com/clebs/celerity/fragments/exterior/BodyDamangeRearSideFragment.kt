@@ -9,7 +9,9 @@ import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentBodyDamangeRearSideBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.fragments.BaseInteriorFragment
+import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.setImageView
 
 // TODO: Rename parameter arguments, choose names that match
@@ -20,6 +22,7 @@ private const val ARG_PARAM2 = "param2"
 class BodyDamangeRearSideFragment : BaseInteriorFragment() {
 
     private lateinit var mBinding: FragmentBodyDamangeRearSideBinding
+    lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,6 +37,8 @@ class BodyDamangeRearSideFragment : BaseInteriorFragment() {
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.bodyDamageRearSideFragment)
         mBinding.tvNext.visibility = View.GONE
         clickListeners()
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        loadingDialog.dismiss()
         setDefault(mBinding.imageUploadIV, mBinding.edtDefect)
     }
 
@@ -133,6 +138,7 @@ class BodyDamangeRearSideFragment : BaseInteriorFragment() {
             imageEntity.dfNameBodyDamageRear = "f"
             imageViewModel.insertDefectName(imageEntity)
         }
+        loadingDialog.show()
         //findNavController().navigate(R.id.bodyOffsideFragment)
         navigateTo(R.id.bodyOffsideFragment)
     }

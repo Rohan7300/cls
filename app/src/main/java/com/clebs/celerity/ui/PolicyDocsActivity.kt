@@ -17,6 +17,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -99,9 +101,9 @@ class PolicyDocsActivity : AppCompatActivity() {
             mbinding.llAmazon.visibility = View.VISIBLE
         }
 
-/*        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
-        val mainRepo = MainRepo(apiService)
-        viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]*/
+        /*        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+                val mainRepo = MainRepo(apiService)
+                viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]*/
 
         viewModel = DependencyProvider.getMainVM(this)
         userId = Prefs.getInstance(this).clebUserId.toInt()
@@ -359,15 +361,19 @@ class PolicyDocsActivity : AppCompatActivity() {
         val drawView = mbinding.signLayout.paintView.drawView
 
         save.setOnClickListener {
-            Log.d("DrawViewSize",DrawViewClass.pathList.size.toString())
+            Log.d("DrawViewSize", DrawViewClass.pathList.size.toString())
             if (DrawViewClass.pathList.isEmpty()) {
                 showToast("Please sign before saving", this)
+            } else if (!DrawViewClass.isSignatureValid()) {
+                DrawViewClass.pathList.clear()
+                showToast("Please do valid signature", this)
             } else {
                 val signatureBitmap: Bitmap = drawView.getBitmap()
                 testIV.setImageBitmap(signatureBitmap)
 
                 loadingDialog.show()
                 updateSignatureInfoApi(signatureBitmap)
+
             }
         }
 
@@ -397,6 +403,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                 if (it.Status == "200") {
                     Prefs.getInstance(applicationContext)
                         .saveBoolean("isSignatureReq", false)
+                    DrawViewClass.pathList.clear()
                 }
                 val intent = Intent(this, HomeActivity::class.java)
                 intent.putExtra("destinationFragment", "HomeFragment")
@@ -493,8 +500,6 @@ class PolicyDocsActivity : AppCompatActivity() {
 //        val processedData = androidData.read().
 
 
-
-
         currentfileName = fileName
         currentMode = mode
         currentFileContent = fileContent
@@ -519,14 +524,14 @@ class PolicyDocsActivity : AppCompatActivity() {
 
 
 
-                if(mode==OpenMode.DOWNLOAD){
+                if (mode == OpenMode.DOWNLOAD) {
                     showNotification(
                         "PDF Downloaded",
                         "Your PDF has been downloaded successfully.",
                         uri
                     )
                     showToast("PDF Downloaded!", this)
-                }else{
+                } else {
                     showNotification(
                         "PDF Loaded",
                         "Your PDF is ready to view.",
@@ -689,4 +694,6 @@ class PolicyDocsActivity : AppCompatActivity() {
                 }
             })
     }
+
+
 }

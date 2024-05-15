@@ -47,56 +47,6 @@
                 android:src="@drawable/logo_new" />
 
         </LinearLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constcamera"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-<!--            <androidx.camera.view.PreviewView-->
-<!--                android:id="@+id/camera"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="570dp"-->
-<!--                android:layout_marginEnd="20dp"-->
-<!--                android:layout_marginStart="20dp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintDimensionRatio="3:4"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.5"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintVertical_bias="0.5"-->
-<!--               />-->
-
-<!--            <com.clebs.celerity.utils.OverlayView-->
-<!--                android:id="@+id/overlay"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="300dp"-->
-<!--                android:layout_marginStart="20dp"-->
-<!--                android:layout_marginEnd="20dp"-->
-<!--                android:translationZ="5dp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintDimensionRatio="3:4"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintHorizontal_bias="0.5"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintVertical_bias="0.5" />-->
-<!--            <ImageView-->
-<!--                android:layout_width="50dp"-->
-<!--                android:id="@+id/cameraicons"-->
-<!--                android:layout_height="50dp"-->
-<!--                android:layout_gravity="center_horizontal"-->
-<!--                android:src="@drawable/camera_icon"-->
-<!--                android:visibility="gone"-->
-<!--                app:layout_constraintEnd_toEndOf="@+id/camera"-->
-<!--                app:layout_constraintStart_toStartOf="@+id/camera"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/camera" />-->
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
         <!--    <include
                 android:id="@+id/headerTop"
                 layout="@layout/fragment_headers"/>-->
@@ -109,7 +59,6 @@
             app:cardCornerRadius="30dp">
 
             <LinearLayout
-                android:id="@+id/llupload"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/dotted_shape"
@@ -121,8 +70,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/very_light_orange"
                     android:orientation="horizontal"
+                    android:background="@color/very_light_orange"
                     android:padding="10dp">
 
                     <TextView
@@ -135,15 +84,7 @@
                         android:text="Upload"
                         android:textColor="@color/orange"
                         android:textSize="15sp" />
-
-                    <ProgressBar
-                        android:id="@+id/uploadProgress"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="10dp"
-                        android:visibility="gone" />
-
-                    <ImageView
+        <ImageView
                         android:id="@+id/ivUploadImage"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -157,10 +98,10 @@
                     android:id="@+id/tvUploadType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:letterSpacing="0.02"
+                    android:layout_marginTop="5dp"
                     android:text="Dashboard Image"
                     android:textColor="#4A4A4A"
                     android:textSize="13sp" />
@@ -203,7 +144,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="(1/5)"
+                    android:text="(0/7)"
                     android:textColor="@color/orange" />
             </LinearLayout>
         </LinearLayout>
@@ -257,7 +198,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/check_new" />
+                    android:src="@drawable/fileins" />
             </LinearLayout>
 
             <LinearLayout
@@ -293,7 +234,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/check_new" />
+                    android:src="@drawable/fileins" />
             </LinearLayout>
 
             <LinearLayout
@@ -329,7 +270,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/check_new" />
+                    android:src="@drawable/fileins" />
             </LinearLayout>
 
             <LinearLayout
@@ -365,7 +306,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/check_new" />
+                    android:src="@drawable/fileins" />
             </LinearLayout>
 
             <LinearLayout
@@ -401,7 +342,80 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/check_new" />
+                    android:src="@drawable/fileins" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:gravity="center"
+                android:id="@+id/addbluell"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="6. "
+                    android:textColor="@color/text_color" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:src="@drawable/adbluelevel" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins"
+                    android:text="Add Blue Level"
+                    android:textColor="@color/text_color" />
+
+                <ImageView
+                    android:id="@+id/addBlueIV"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:src="@drawable/fileins" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:id="@+id/oilLevelll"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="7. "
+                    android:textColor="@color/text_color" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:src="@drawable/coolantleaks" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins"
+                    android:text="Oil Level"
+                    android:textColor="@color/text_color" />
+
+                <ImageView
+                    android:id="@+id/oilLevelIV"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:src="@drawable/fileins" />
             </LinearLayout>
         </LinearLayout>
 
@@ -415,7 +429,7 @@
             android:enabled="false"
             android:fontFamily="@font/inter"
             android:gravity="center_horizontal|center_vertical"
-            android:text="Save &amp; Complete"
+            android:text="Next Steps"
             android:textAllCaps="false"
             android:textColor="#F36C2E" />
     </LinearLayout>

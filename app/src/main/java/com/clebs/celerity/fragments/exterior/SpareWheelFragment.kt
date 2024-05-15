@@ -10,6 +10,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentSpareWheelBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.fragments.BaseInteriorFragment
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.ui.App
@@ -32,6 +33,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
     var isNetworkActive: Boolean = true
     private var secondTry = false
     private var VdhOdoMeterReading = 0
+    lateinit var loadingDialog: LoadingDialog
     lateinit var internetDialog: NoInternetDialog
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
@@ -54,6 +56,8 @@ class SpareWheelFragment : BaseInteriorFragment() {
         super.onViewCreated(view, savedInstanceState)
         fragmentManager = (activity as HomeActivity).fragmentManager
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.spareWheelFragment)
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        loadingDialog.dismiss()
         mBinding.tvNext.visibility = View.GONE
         clickListeners()
         internetDialog = (activity as HomeActivity).internetDialog

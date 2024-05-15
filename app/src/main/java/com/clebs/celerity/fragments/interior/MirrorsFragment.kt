@@ -9,16 +9,21 @@ import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentMirrorsBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.fragments.BaseInteriorFragment
+import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.setImageView
 
 class MirrorsFragment : BaseInteriorFragment() {
     private lateinit var mBinding: FragmentMirrorsBinding
+    lateinit var loadingDialog: LoadingDialog
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.mirrorsScreenFragment)
         mBinding.tvNext.visibility = View.GONE
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        loadingDialog.dismiss()
         clickListeners()
         setDefault(mBinding.mirrorsScreenIV,mBinding.edtDefect)
     }
@@ -120,6 +125,7 @@ class MirrorsFragment : BaseInteriorFragment() {
             imageEntity.dfNameMirrors = "f"
             imageViewModel.insertDefectName(imageEntity)
         }
+        loadingDialog.show()
         navigateTo(R.id.cabSecurityFragment)
         //findNavController().navigate(R.id.cabSecurityFragment)
     }

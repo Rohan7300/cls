@@ -9,16 +9,21 @@ import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentCabSecurityBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.fragments.BaseInteriorFragment
+import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.setImageView
 
 
 class CabSecurityFragment : BaseInteriorFragment() {
     private lateinit var mBinding: FragmentCabSecurityBinding
+    lateinit var loadingDialog: LoadingDialog
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.cabSecurityFragment)
         mBinding.tvNext.visibility = View.GONE
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        loadingDialog.dismiss()
         clickListeners()
         setDefault(mBinding.imageUploadIV,mBinding.edtDefect)
     }
@@ -122,6 +127,7 @@ class CabSecurityFragment : BaseInteriorFragment() {
             imageViewModel.insertDefectName(imageEntity)
 
         }
+        loadingDialog.show()
         navigateTo(R.id.seatbeltFragment)
         //findNavController().navigate(R.id.seatbeltFragment)
     }

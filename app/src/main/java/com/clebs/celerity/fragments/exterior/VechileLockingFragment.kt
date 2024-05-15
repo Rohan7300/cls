@@ -9,12 +9,15 @@ import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentVechileLockingBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.fragments.BaseInteriorFragment
+import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.setImageView
 
 class VechileLockingFragment : BaseInteriorFragment() {
 
     private lateinit var mBinding: FragmentVechileLockingBinding
+    lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,6 +31,8 @@ class VechileLockingFragment : BaseInteriorFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.brakesFragment)
         mBinding.tvNext.visibility = View.GONE
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        loadingDialog.dismiss()
         clickListeners()
         setDefault(mBinding.imageUploadIV, mBinding.edtDefect)
     }
@@ -128,6 +133,7 @@ class VechileLockingFragment : BaseInteriorFragment() {
             imageEntity.dfNameVehicleLockingSystem = "f"
             imageViewModel.insertDefectName(imageEntity)
         }
+        loadingDialog.show()
         navigateTo(R.id.bodyDamagefrontFragment)
         //findNavController().navigate(R.id.bodyDamagefrontFragment)
     }

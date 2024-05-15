@@ -13,9 +13,9 @@
             layout="@layout/no_data_layout"
             android:visibility="gone" />-->
 
-        <include
-            android:id="@+id/headerTop"
-            layout="@layout/fragment_headers" />
+            <include
+                android:id="@+id/headerTop"
+                layout="@layout/fragment_headers" />
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -40,39 +40,39 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="60dp"
                     android:layout_marginEnd="20dp"
-
-                    android:background="@drawable/shape_expand_two"
+                    android:background="@drawable/border_shadow_two"
+                    android:drawableRight="@drawable/baseline_arrow_forward_ios_24_white"
                     android:fontFamily="@font/poppins_semibold"
-                    android:gravity="center_horizontal"
-                    android:padding="30dp"
+                    android:gravity="start"
+                    android:padding="16dp"
                     android:text="CLS - Invoices"
-                    android:textColor="@color/text_color"
+                    android:textColor="@color/white"
 
-                    android:textSize="20sp"
-                    app:drawableEndCompat="@drawable/third_party_invoices"
+                    android:textSize="18sp"
+
                     app:layout_constraintStart_toStartOf="parent"
 
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/iv1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/baseline_swap_horizontal_circle_24"
-                    app:layout_constraintBottom_toBottomOf="@+id/clsinvoices"
-                    app:layout_constraintStart_toStartOf="@+id/clsinvoices"
-                    app:layout_constraintTop_toTopOf="@+id/clsinvoices" />
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/iv1"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="20dp"-->
+                <!--                    android:src="@drawable/baseline_swap_horizontal_circle_24"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="@+id/clsinvoices"-->
+                <!--                    app:layout_constraintStart_toStartOf="@+id/clsinvoices"-->
+                <!--                    app:layout_constraintTop_toTopOf="@+id/clsinvoices" />-->
 
-                <ImageView
-                    android:id="@+id/iv2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/baseline_swap_horizontal_circle_24"
-                    app:layout_constraintBottom_toBottomOf="@+id/otherinvoices"
-                    app:layout_constraintStart_toStartOf="@+id/otherinvoices"
-                    app:layout_constraintTop_toTopOf="@+id/otherinvoices" />
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/iv2"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="20dp"-->
+                <!--                    android:src="@drawable/baseline_swap_horizontal_circle_24"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="@+id/otherinvoices"-->
+                <!--                    app:layout_constraintStart_toStartOf="@+id/otherinvoices"-->
+                <!--                    app:layout_constraintTop_toTopOf="@+id/otherinvoices" />-->
 
                 <TextView
                     android:id="@+id/otherinvoices"
@@ -81,16 +81,23 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="20dp"
-                    android:background="@drawable/shape_expand_two"
-                    android:elevation="8dp"
+                    android:background="@drawable/border_shadow"
                     android:fontFamily="@font/poppins_semibold"
-                    android:gravity="center_horizontal"
-                    android:padding="30dp"
+                    android:gravity="start"
+
+                    android:padding="16dp"
                     android:text="3rd Party Invoices"
-                    android:textColor="@color/text_color"
-                    android:textSize="20sp"
-                    app:drawableEndCompat="@drawable/third_party_invoices"
+                    android:textColor="@color/orange"
+                    android:textSize="18sp"
+                    app:drawableEndCompat="@drawable/baseline_orange"
                     app:layout_constraintTop_toBottomOf="@id/clsinvoices" />
+<!--                <View-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="4dp"-->
+<!--                    android:layout_marginStart="20dp"-->
+<!--                    android:layout_marginEnd="20dp"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/otherinvoices"-->
+<!--                    android:background="@drawable/shadow"/>-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

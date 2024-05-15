@@ -2,7 +2,6 @@ package com.clebs.celerity.fragments
 
 import android.Manifest
 import android.app.Activity
-import android.content.ClipDescription
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -11,7 +10,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.ImageButton
@@ -22,6 +20,8 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
@@ -89,7 +89,7 @@ abstract class BaseInteriorFragment : Fragment() {
         loadingDialog = (activity as HomeActivity).loadingDialog
         var strikedxRegNo = view.findViewById<LinearLayout>(R.id.strikedxRegNo)
         var strikedxLoc = view.findViewById<LinearLayout>(R.id.strikedxLoc)
-
+        imageView = ImageView(requireContext()) as ImageView
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
             .also { name -> ana_carolin.text = name }
         dxm5.text = (activity as HomeActivity).date
@@ -241,17 +241,31 @@ abstract class BaseInteriorFragment : Fragment() {
     private fun showPictureDialog(iv: ImageView) {
         imageView = iv
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, 101)
+        resultLauncher.launch(intent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-            base64 = convertBitmapToBase64(imageBitmap)
-            setImageView(imageView, base64.toString())
+    private val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val imageBitmap = result.data?.extras?.get("data") as Bitmap
+                imageView.setImageBitmap(imageBitmap)
+
+                Log.e("Dskjdjsdkhsjsdhjkdshjshjkefdui", ": "+imageBitmap )
+                base64 = convertBitmapToBase64(imageBitmap)
+//                setImageView(imageView, base64.toString())
+                Log.e("herehrherhehre", ":cdddfdv " + imageView)
+
+            }
         }
-    }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+//            val imageBitmap = data?.extras?.get("data") as Bitmap
+//            base64 = convertBitmapToBase64(imageBitmap)
+//            setImageView(imageView, base64.toString())
+//        }
+//    }
 
     fun editMil1Visibilty(
         tvNext: TextView,
@@ -407,11 +421,12 @@ abstract class BaseInteriorFragment : Fragment() {
         fragmentStack.push(fragmentId)
         val enterAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_left)
         val navOptions = NavOptions.Builder()
-            .setEnterAnim(R.anim.slide_left) // Animation for entering the new fragment
+//            .setEnterAnim(R.anim.slide_left) // Animation for entering the new fragment
             // Animation for exiting the current fragment
 //            .setPopEnterAnim(R.anim.slide_in_right) // Animation for entering the previous fragment when navigating back
 //            .setPopExitAnim(R.anim.slide_left) // Animation for exiting the current fragment when navigating back
             .build()
+
         findNavController().navigate(fragmentId, null, navOptions)
 
         prefs.saveNavigationHistory(fragmentStack)

@@ -10,6 +10,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.graphics.Path
+import android.graphics.PathMeasure
+import android.util.Log
+import android.widget.Toast
 import com.clebs.celerity.DeductionAgreement.Companion.brush
 import com.clebs.celerity.DeductionAgreement.Companion.path
 
@@ -17,8 +20,16 @@ class DrawViewClass : View {
     private var params: ViewGroup.LayoutParams? = null
 
     companion object {
+        private var touchMoved = false
         var pathList = ArrayList<android.graphics.Path>()
         var currentBrush = Color.BLACK
+        fun isSignatureValid(): Boolean {
+            val averagePathLength = pathList.size
+            val threshold = 25f // Set your desired threshold value here
+            return averagePathLength >= threshold
+            Log.e("moved", "isSignatureValid: "+ touchMoved )
+        }
+
     }
 
     constructor(context: Context) : this(context, null) {
@@ -55,15 +66,24 @@ class DrawViewClass : View {
             MotionEvent.ACTION_DOWN -> {
                 path = Path()
                 path.moveTo(x, y)
-                return true
+                touchMoved = false
+                  return true
+
             }
 
             MotionEvent.ACTION_MOVE -> {
                 path.lineTo(x, y)
-                pathList.add(path)
+                touchMoved = true
+                    pathList.add(path)
+
+
+            }
+            else -> {
+
+                return false
             }
 
-            else -> return false
+
         }
         postInvalidate()
         return false
@@ -73,7 +93,9 @@ class DrawViewClass : View {
         for (i in pathList.indices) {
             canvas.drawPath(pathList[i], brush)
             invalidate()
+
         }
+        Log.e("drawviewsizes", "onDraw: "+ pathList.size.toString() )
         super.onDraw(canvas)
     }
 
