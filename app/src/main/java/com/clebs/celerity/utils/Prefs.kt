@@ -8,6 +8,7 @@ import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.Invoice
 import com.clebs.celerity.models.response.InvoiceX
+import com.clebs.celerity.models.response.InvoiceXX
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
@@ -370,7 +371,7 @@ class Prefs(context: Context) {
         return gson.fromJson(data, Doc::class.java) ?: null
     }
 
-    fun saveInvoice(item: Invoice) {
+    fun saveInvoice(item: InvoiceXX) {
         val editor = sharedPreferences.edit()
         val gson = Gson()
         val json = gson.toJson(item)
@@ -378,13 +379,13 @@ class Prefs(context: Context) {
         editor.apply()
     }
 
-    fun getInvoice(): Invoice? {
+    fun getInvoice(): InvoiceXX? {
         val gson = Gson()
         val data = sharedPreferences.getString("CurrInvoice", null)
-        return gson.fromJson(data, Invoice::class.java) ?: null
+        return gson.fromJson(data, InvoiceXX::class.java) ?: null
     }
 
-    fun saveInvoiceX(item: InvoiceX) {
+    fun saveInvoiceX(item: InvoiceXX) {
         val editor = sharedPreferences.edit()
         val gson = Gson()
         val json = gson.toJson(item)
@@ -392,10 +393,10 @@ class Prefs(context: Context) {
         editor.apply()
     }
 
-    fun getInvoiceX(): InvoiceX? {
+    fun getInvoiceX(): InvoiceXX? {
         val gson = Gson()
         val data = sharedPreferences.getString("CurrInvoiceX", null)
-        return gson.fromJson(data, InvoiceX::class.java) ?: null
+        return gson.fromJson(data, InvoiceXX::class.java) ?: null
     }
 
     fun updateInspectionStatus(isInspectionDone: Boolean) {

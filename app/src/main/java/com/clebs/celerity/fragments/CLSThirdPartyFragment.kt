@@ -2,14 +2,18 @@ package com.clebs.celerity.fragments
 
 import android.Manifest
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
+import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
@@ -21,6 +25,8 @@ import com.clebs.celerity.utils.PermissionCallback
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
 import java.time.Year
 import java.util.Calendar
 
@@ -59,12 +65,9 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
         showYearPickerNew()
         showDialog()
         observers()
-        viewLifecycleOwner.lifecycleScope.launch{
 
+        viewModel.GetThirdPartyInvoiceList(prefs.clebUserId.toInt(), selectedYear, 0)
 
-            viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
-        }
-//        viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
         return binding.root
     }
 
@@ -72,7 +75,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
         adapter = CLSThirdPartyInvoiceAdapter(ArrayList(), requireContext(), prefs, this)
         binding.clsInvoicesThirdParty.adapter = adapter
         binding.clsInvoicesThirdParty.layoutManager = LinearLayoutManager(requireContext())
-        viewModel.liveDataDownloadThirdPartyInvoicePDF.observe(viewLifecycleOwner) {
+        viewModel.liveDataGetThirdPartyInvoiceList.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
                 if (it.Invoices.size > 0) {
@@ -100,9 +103,24 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
     override fun onStoragePermissionResult(granted: Boolean) {
         if (granted) {
             val item = prefs.getInvoiceX()!!
-            adapter.downloadPDF(item.FileName, item.FileContent)
+            dowloadPDF(item.InvoiceId, item.FileName)
         } else {
             showToast("Please allow storag permission to download and view pdf", requireContext())
+        }
+    }
+
+    override fun dowloadPDF(invoiceID: Int, fileName: String) {
+        showDialog()
+        viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), invoiceID)
+        viewModel.liveDataDownloadThirdPartyInvoicePDF.observe(viewLifecycleOwner) {
+            if (it != null) {
+                var fileContent = it.Invoices[0].FileContent
+                try {
+                    downloadPDFData(fileName, fileContent)
+                } catch (_: Exception) {
+
+                }
+            }
         }
     }
 
@@ -156,10 +174,54 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
                     if (position != 0) {
                         selectedYear = nonNullParent.getItemAtPosition(position) as Int
                         showDialog()
-                        viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
+                        viewModel.DownloadThirdPartyInvoicePDF(
+                            prefs.clebUserId.toInt(),
+                            selectedYear
+                        )
                     }
                 }
             }
+        }
+    }
+
+    public fun downloadPDFData(fileName: String, fileContent: String) {
+        try {
+            val file = File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                fileName
+            )
+            val fos = FileOutputStream(file)
+            fos.write(Base64.decode(fileContent, Base64.DEFAULT))
+            fos.close()
+            showToast("PDF Downloaded!", requireContext())
+            openPDF(file)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showToast("Failed to download PDF", requireContext())
+        }
+    }
+
+
+    private fun openPDF(file: File) {
+        //BuildConfig.APPLICATION_ID + ".provider", file
+        /*       val uri=  FileProvider.getUriForFile(
+                   context,
+                    BuildConfig.APPLICATION_ID + ".com.vansuita.pickimage.provider", file);*/
+        //val uri = FileProvider.getUriForFile(context,  context.packageName + ".fileprovider", file)
+        val uri = FileProvider.getUriForFile(
+            requireContext(),
+            "${requireContext().packageName}.fileprovider",
+            file
+        )
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.setDataAndType(uri, "application/pdf")
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        try {
+            requireContext().startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showToast("No PDF viewer found", requireContext())
         }
     }
 

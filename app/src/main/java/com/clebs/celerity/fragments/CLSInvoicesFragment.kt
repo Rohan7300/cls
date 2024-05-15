@@ -2,14 +2,20 @@ package com.clebs.celerity.fragments
 
 import android.Manifest
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
@@ -21,6 +27,8 @@ import com.clebs.celerity.utils.PermissionCallback
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
 import java.time.Year
 import java.util.Calendar
 
@@ -52,9 +60,11 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
         showDialog()
         selectedYear = Year.now().value
         binding.selectYearET.setText(selectedYear.toString())
-        /*      binding.dateUpdater.setOnClickListener {
+        /*
+         binding.dateUpdater.setOnClickListener {
                   showYearPicker()
-              }*/
+           }
+              */
         observers()
         showYearPickerNew()
        //getting response faster from api
@@ -62,9 +72,8 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
 
             //getting response faster from api
 
-        viewLifecycleOwner.lifecycleScope.launch{
-            viewModel.DownloadInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
-        }
+            viewModel.GetDriverInvoiceList(prefs.clebUserId.toInt(), selectedYear,0)
+
 
 
         return binding.root
@@ -76,7 +85,7 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
         binding.clsInvoices.adapter = adapter
         binding.clsInvoices.setHasFixedSize(true)
         binding.clsInvoices.layoutManager = LinearLayoutManager(requireContext())
-        viewModel.liveDataDownloadInvoicePDF.observe(viewLifecycleOwner) {
+        viewModel.liveDataGetDriverInvoiceList.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
                 if (it.Invoices.size > 0) {
@@ -104,9 +113,36 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
     override fun onStoragePermissionResult(granted: Boolean) {
         if (granted) {
             val item = prefs.getInvoice()!!
-            adapter.downloadPDF(item.FileName, item.FileContent)
+            dowloadPDF(item.InvoiceId, item.FileName)
         } else {
             showToast("Please allow storag permission to download and view pdf", requireContext())
+        }
+    }
+
+    override fun dowloadPDF(invoiceID: Int, fileName: String) {
+        showDialog()
+        viewModel.DownloadInvoicePDF(prefs.clebUserId.toInt(),invoiceID)
+        viewModel.liveDataDownloadInvoicePDF.observe(viewLifecycleOwner){
+            hideDialog()
+            if(it!=null){
+                try {
+                    val fileContent = it.Invoices[0].FileContent
+                    val file = File(
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                        fileName
+                    )
+                    val fos = FileOutputStream(file)
+                    fos.write(Base64.decode(fileContent, Base64.DEFAULT))
+                    fos.close()
+                    showToast("PDF Downloaded!", requireContext())
+                    openPDF(file)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    showToast("Failed to download PDF", requireContext())
+                }
+            }else{
+
+            }
         }
     }
 
@@ -133,7 +169,6 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
                     binding.dateTV.text = year.toString()
                     showDialog()
                     viewModel.DownloadInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
-                    //  showToast("Selected Year: $selectedYear", requireContext())
                 }
             },
             currentYear,
@@ -166,6 +201,26 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
                     }
                 }
             }
+        }
+    }
+
+    private fun openPDF(file: File) {
+
+        val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            FileProvider.getUriForFile(requireContext(), "${requireContext().packageName}.fileprovider", file)
+        } else {
+            Uri.fromFile(file)
+        }
+
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.setDataAndType(uri, "application/pdf")
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        try {
+            requireContext().startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showToast("No PDF viewer found", requireContext())
         }
     }
 }

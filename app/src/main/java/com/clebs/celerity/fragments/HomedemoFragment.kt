@@ -34,6 +34,7 @@ class HomedemoFragment : Fragment() {
     private var isclicked: Boolean = true
     var thirdpartydeductions: Float = 0.0f
     var week: Int = 0
+    var entries= ArrayList<PieEntry>()
     var year: Int = 0
 
     protected val months = arrayOf(
@@ -149,7 +150,7 @@ class HomedemoFragment : Fragment() {
 
         mbinding.pieChart.dragDecelerationFrictionCoef = 0.95f;
 
-        mbinding.pieChart.setDrawCenterText(false);
+        mbinding.pieChart.setDrawCenterText(true);
 
         mbinding.pieChart.isRotationEnabled = true;
         mbinding.pieChart.isHighlightPerTapEnabled = false;
@@ -171,9 +172,11 @@ class HomedemoFragment : Fragment() {
 
         mbinding.viewfullschedule.setOnClickListener {
             if (isclicked) {
+//                mbinding.vieww.visibility=View.VISIBLE
                 mbinding.viewfulldatalayout.visibility = View.VISIBLE
             } else {
                 mbinding.viewfulldatalayout.visibility = View.GONE
+//                mbinding.vieww.visibility=View.GONE
             }
             isclicked = !isclicked
         }
@@ -258,8 +261,6 @@ class HomedemoFragment : Fragment() {
                     Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 2, year
                 )
                 mbinding.btPrev.text = "Previous"
-
-
             }
         }
 
@@ -303,6 +304,7 @@ class HomedemoFragment : Fragment() {
         }
         viewModel.livedataCashFlowWeek.observe(viewLifecycleOwner) { depts ->
             hideDialog()
+
             mbinding.consttwo.visibility = View.VISIBLE
             if (depts != null) {
                 mbinding.demo.visibility = View.GONE
@@ -319,12 +321,15 @@ class HomedemoFragment : Fragment() {
                     avdeductions = it.totalDeduction / average.toFloat()
                     Log.e("djhfdfhhdhjfdjearning", "Observers: " + it.totalEarning)
                     if (it.charterHireDeduction != 0) {
+
                         thirdpartydeductions = it.charterHireDeduction / average.toFloat()
                     } else {
                         thirdpartydeductions = 0f
                     }
                 }
-                val entries = ArrayList<PieEntry>()
+                entries.clear();
+                mbinding.pieChart.invalidate();
+                mbinding.pieChart.clear();
 
                 entries.add(PieEntry(avprofit, "Profits\n $totalearning"))
                 entries.add(PieEntry(avdeductions, "Deductions\n $totaldedecutions"))
@@ -352,7 +357,7 @@ class HomedemoFragment : Fragment() {
                 data.setValueTextSize(11f)
                 data.setValueTextColor(resources.getColor(io.clearquote.assessment.cq_sdk.R.color.transparent))
 
-                mbinding.pieChart.setData(data)
+                mbinding.pieChart.data=data
 
                 // undo all highlights
                 mbinding.pieChart.highlightValues(null)
@@ -380,11 +385,15 @@ class HomedemoFragment : Fragment() {
 
             }
             else {
+
                 hideDialog()
+                entries.clear();
+                mbinding.pieChart.invalidate();
+                mbinding.pieChart.clear();
                 mbinding.demo.visibility = View.VISIBLE
-                mbinding.pieChart.setNoDataText("No cash flow data found!")
+                mbinding.pieChart.setNoDataText("No cash flow data found.")
                 mbinding.pieChart.setNoDataTextColor(resources.getColor(R.color.red))
-                mbinding.pieChart.setCenterTextSize(1.0f)
+                mbinding.pieChart.setCenterTextSize(5f)
                 mbinding.pieChart.visibility = View.VISIBLE
 
             }
@@ -447,13 +456,13 @@ class HomedemoFragment : Fragment() {
                     mbinding.viewfullschedule.visibility = View.VISIBLE
                     mbinding.yourNext.text = "Your next working day"
                     try{
-               /*         mbinding.textView5.text =
-                            "${convertDateFormat(it.NextWorkingDate)} - ${it.NextWorkingDay}\n${it.NextWorkingLoc}"*/
+                        /*         mbinding.textView5.text =
+                                     "${convertDateFormat(it.NextWorkingDate)} - ${it.NextWorkingDay}\n${it.NextWorkingLoc}"*/
                         var time = it.NextWorkingDayWaveTime?:" "
                         var date = it.NextWorkingDate?:" "
                         var nextLoc = it.NextWorkingLoc?:" "
                         mbinding.textView5.text =
-                            "${convertDateFormat(date)} ${time.split(":")[0]} : ${time.split(":")[1]} - ${nextLoc}"
+                            "${convertDateFormat(date)} ${time} - ${nextLoc}"
 
                     }catch (_:Exception){
                         mbinding.textView5.text = "Not allocated"
@@ -479,7 +488,6 @@ class HomedemoFragment : Fragment() {
                 mbinding.llnodata.visibility = View.VISIBLE
                 mbinding.rlicons.visibility = View.GONE
                 mbinding.textView5.text = "Not allocated"
-
             }
 
         }

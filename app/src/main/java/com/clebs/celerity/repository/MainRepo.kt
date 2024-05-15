@@ -38,11 +38,13 @@ import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.DeductionAgreementResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
 import com.clebs.celerity.models.response.DownloadInvoicePDFResponse
+import com.clebs.celerity.models.response.DownloadInvoicePDFResponseX
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
 import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverInvoiceListResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
@@ -1026,8 +1028,8 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun DownloadInvoicePDF(
-        userID: Int, selyear: Int
-    ): SimpleNetworkResponse<DownloadInvoicePDFResponse> {
+        userID: Int, invoiceId: Int
+    ): SimpleNetworkResponse<DownloadInvoicePDFResponseX> {
         /*        val response = ApiService.DownloadInvoicePDF(userID, selyear)
                 if (response.isSuccessful) {
                     return response.body()
@@ -1036,22 +1038,16 @@ class MainRepo(private val ApiService: ApiService) {
                     println("Error Response Body: $errorBody")
                 }*/
         return safeApiCall {
-            ApiService.DownloadInvoicePDF(userID, selyear)
+            ApiService.DownloadInvoicePDF(userID, invoiceId)
         }
     }
 
     suspend fun DownloadThirdPartyInvoicePDF(
-        userID: Int, selyear: Int
-    ): SimpleNetworkResponse<DownloadThirdPartyInvoicePDFResponse> {
-        /*        val response = ApiService.DownloadThirdPartyInvoicePDF(userID, selyear)
-                if (response.isSuccessful) {
-                    return response.body()
-                } else {
-                    val errorBody = response.errorBody()?.string()
-                    println("Error Response Body: $errorBody")
-                }*/
+        userID: Int, invoiceId: Int
+    ): SimpleNetworkResponse<DownloadInvoicePDFResponseX> {
+
         return safeApiCall {
-            ApiService.DownloadThirdPartyInvoicePDF(userID, selyear)
+            ApiService.DownloadThirdPartyInvoicePDF(userID, invoiceId)
         }
     }
 
@@ -1373,6 +1369,26 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun DownloadTrucksServiceLevelAgreementPolicy(): SimpleNetworkResponse<ResponseBody> {
         return safeApiCall {
             ApiService.DownloadTrucksServiceLevelAgreementPolicy()
+        }
+    }
+
+    suspend fun GetDriverInvoiceList(
+        userID: Int,
+        selyear: Int,
+        selweek: Int
+    ): SimpleNetworkResponse<GetDriverInvoiceListResponse> {
+        return safeApiCall {
+            ApiService.GetDriverInvoiceList(userID, selyear, selweek)
+        }
+    }
+
+    suspend fun GetThirdPartyInvoiceList(
+        userID: Int,
+        selyear: Int,
+        selweek: Int
+    ):SimpleNetworkResponse<GetDriverInvoiceListResponse>{
+        return safeApiCall {
+            ApiService.GetThirdPartyInvoiceList(userID,selyear,selweek)
         }
     }
 

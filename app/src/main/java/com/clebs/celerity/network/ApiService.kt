@@ -41,6 +41,7 @@ import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.DeductionAgreementResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
 import com.clebs.celerity.models.response.DownloadInvoicePDFResponse
+import com.clebs.celerity.models.response.DownloadInvoicePDFResponseX
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
 import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
@@ -48,6 +49,7 @@ import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverInvoiceListResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
@@ -473,17 +475,6 @@ interface ApiService {
     @PUT("/api/Dashboard/RemoveThirdPartyAccess")
     suspend fun RemoveThirdPartyAccess(@Query("userId") userId: Int): Response<SimpleStatusMsgResponse>
 
-    @GET("/api/HtmlToPDF/DownloadInvoicePDF")
-    suspend fun DownloadInvoicePDF(
-        @Query("UserId") userId: Int,
-        @Query("selYear") selYear: Int
-    ): Response<DownloadInvoicePDFResponse>
-
-    @GET("/api/HtmlToPDF/DownloadThirdPartyInvoicePDF")
-    suspend fun DownloadThirdPartyInvoicePDF(
-        @Query("UserId") userId: Int,
-        @Query("selYear") selYear: Int
-    ): Response<DownloadThirdPartyInvoicePDFResponse>
 
     @GET("/api/HtmlToPDF/DownloadSignedDAHandbook/{handBookId}")
     suspend fun DownloadSignedDAHandbook(
@@ -635,6 +626,32 @@ interface ApiService {
 
     @GET("/api/HtmlToPDF/DownloadTrucksServiceLevelAgreementPolicy")
     suspend fun DownloadTrucksServiceLevelAgreementPolicy(): Response<ResponseBody>
+
+    @GET("/api/HtmlToPDF/GetDriverInvoiceList")
+    suspend fun GetDriverInvoiceList(
+        @Query("UserId") UserId: Int,
+        @Query("selYear") selYear: Int,
+        @Query("selWeek") selWeek: Int
+    ): Response<GetDriverInvoiceListResponse>
+
+    suspend fun GetThirdPartyInvoiceList(
+        @Query("UserId") UserId: Int,
+        @Query("setYear") setYear: Int,
+        @Query("selWeek") selWeek: Int
+    ): Response<GetDriverInvoiceListResponse>
+
+    @GET("/api/HtmlToPDF/DownloadInvoicePDF")
+    suspend fun DownloadInvoicePDF(
+        @Query("UserId") userId: Int,
+        @Query("InvoiceId") invoiceId: Int
+    ): Response<DownloadInvoicePDFResponseX>
+
+    @GET("/api/HtmlToPDF/DownloadThirdPartyInvoicePDF")
+    suspend fun DownloadThirdPartyInvoicePDF(
+        @Query("UserId") userId: Int,
+        @Query("InvoiceId") invoiceId: Int
+    ): Response<DownloadInvoicePDFResponseX>
+
 
 }
 
