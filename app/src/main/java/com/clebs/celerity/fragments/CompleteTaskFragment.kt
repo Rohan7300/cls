@@ -141,12 +141,20 @@ class CompleteTaskFragment : Fragment() {
             }.toTypedArray()
     }
 
+    override fun onStart() {
+        super.onStart()
+        mbinding.mainCompleteTask.visibility = View.GONE
+        mbinding.llmain.visibility=View.GONE
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentCompleteTaskBinding.inflate(inflater, container, false)
         }
+        mbinding.mainCompleteTask.visibility = View.GONE
+        mbinding.llmain.visibility=View.GONE
         val clickListener = View.OnClickListener {
             showAlert()
         }
@@ -155,9 +163,9 @@ class CompleteTaskFragment : Fragment() {
                 Date()
             )
 
-        val animFadein: Animation =
-            AnimationUtils.loadAnimation(context, R.anim.left2right)
-        mbinding.mainCompleteTask.animation = animFadein
+//        val animFadein: Animation =
+//            AnimationUtils.loadAnimation(context, R.anim.left2right)
+//        mbinding.mainCompleteTask.animation = animFadein
 
         loadingDialog = (activity as HomeActivity).loadingDialog
         oSyncViewModel = (activity as HomeActivity).oSyncViewModel
@@ -415,8 +423,9 @@ class CompleteTaskFragment : Fragment() {
             mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
             mbinding.headerTop.strikedxLoc.visibility = View.GONE
-
+        showDialog()
         viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner) {
+            hideDialog()
             if (it != null) {
                 scannedvrn = it.vmRegNo
                 Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
@@ -425,7 +434,7 @@ class CompleteTaskFragment : Fragment() {
                 }
             }
         }
-
+        showDialog()
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
@@ -501,13 +510,17 @@ class CompleteTaskFragment : Fragment() {
             }
             setVisibiltyLevel()
         }
-
+showDialog()
         viewModel.ldcompleteTaskLayoutObserver.observe(viewLifecycleOwner) {
             if (it == -1) {
                 mbinding.mainCompleteTask.visibility = View.VISIBLE
                 mbinding.searchLayout.visibility = View.GONE
+                mbinding.llmain.visibility=View.VISIBLE
+                hideDialog()
             } else {
+                hideDialog()
                 mbinding.mainCompleteTask.visibility = View.GONE
+                mbinding.llmain.visibility=View.GONE
                 mbinding.searchLayout.visibility = View.VISIBLE
             }
         }
@@ -532,8 +545,9 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.livedataUpdateClockOutTime.observe(viewLifecycleOwner) {
             hideDialog()
-            viewModel.GetDailyWorkInfoById(clebUserID)
             showDialog()
+            viewModel.GetDailyWorkInfoById(clebUserID)
+
             if (it != null) {
                 mbinding.clockOutMark.setImageResource(R.drawable.finalclockout)
                 mbinding.rlcomtwoClockOut.isEnabled = false
@@ -1271,7 +1285,6 @@ class CompleteTaskFragment : Fragment() {
         inspectionstarted = osData.isInspectionDoneToday
         imagesUploaded = osData.isImagesUploadedToday
         isClockedIn = osData.isClockedInToday
-        oSyncViewModel.insertData(osData)
 
         print("OSData ISImage $imagesUploaded\n")
         print("OSData ISInspection $inspectionstarted\n")
