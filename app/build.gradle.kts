@@ -146,7 +146,6 @@ dependencies {
 
     implementation("com.github.tapadoo:alerter:7.2.4")
     implementation("com.github.oky2abbas:chainChart:v0+")
-
     val room_version = "2.6.1"
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:$room_version")

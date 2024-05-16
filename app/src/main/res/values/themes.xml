@@ -30,7 +30,10 @@
         <item name="android:textSize">11sp</item>
 
     </style>
-
+<style name="complete_border">
+    <item name="android:ambientShadowAlpha">0.01</item>
+    <item name="android:spotShadowAlpha">0.08</item>
+</style>
     <style name="ctanine" parent="Theme.MaterialComponents.NoActionBar">
 
 

@@ -19,6 +19,5 @@
         android:toXScale="1"
         android:toYScale="1"
         android:duration="500"
-
         />
 </set>

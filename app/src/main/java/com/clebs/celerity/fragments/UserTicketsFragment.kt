@@ -68,21 +68,22 @@ class UserTicketsFragment : Fragment() {
     }
 
     private fun observers() {
-        val ticketAdapter =
-            TicketAdapter(GetUserTicketsResponse(ArrayList()), requireContext(), prefs)
-        mbinding.rvTickets.adapter = ticketAdapter
-        mbinding.rvTickets.layoutManager = LinearLayoutManager(requireContext())
+        homeActivity.showDialog()
+
         viewModel.liveDataGetUserTickets.observe(viewLifecycleOwner) {
             homeActivity.hideDialog()
             if (it != null) {
                 if (it.Docs.size > 0) {
                     mbinding.noticketLayout.visibility = View.GONE
-                    mbinding.rvTickets.scheduleLayoutAnimation()
                     mbinding.rvTickets.visibility = View.VISIBLE
                 } else {
                     mbinding.noticketLayout.visibility = View.VISIBLE
                     mbinding.rvTickets.visibility = View.GONE
                 }
+                val ticketAdapter =
+                    TicketAdapter(GetUserTicketsResponse(ArrayList()), requireContext(), prefs)
+                mbinding.rvTickets.adapter = ticketAdapter
+                mbinding.rvTickets.layoutManager = LinearLayoutManager(requireContext())
                 ticketAdapter.ticketList.Docs.clear()
                 val reversedList = it.Docs.reversed()
                 ticketAdapter.ticketList.Docs.addAll(reversedList)

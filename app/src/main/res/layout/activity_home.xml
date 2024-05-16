@@ -7,6 +7,8 @@
         android:id="@+id/my_drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
+        android:backgroundTint="@color/very_light_orange"
         tools:context=".MainActivity"
         tools:ignore="HardcodedText">
 
@@ -15,12 +17,17 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="@color/white"
-            app:itemIconTint="@null"
+            android:layoutAnimation="@anim/animation"
+            app:drawerLayoutCornerSize="30dp"
+            android:backgroundTint="@color/very_light_orange"
+            android:background="@color/very_light_orange"
+            app:itemIconTint="@color/medium_orange"
+            app:headerLayout="@layout/header_drawer"
             app:menu="@menu/navigation_view"
+            >
 
-            />
-        >
+
+        </com.google.android.material.navigation.NavigationView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -34,7 +41,7 @@
                 android:id="@+id/consts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/very_light_orange"
+                android:background="@color/medium_orange"
                 android:orientation="horizontal"
                 android:padding="4dp"
                 app:layout_constraintBottom_toTopOf="@+id/nav_fragment"

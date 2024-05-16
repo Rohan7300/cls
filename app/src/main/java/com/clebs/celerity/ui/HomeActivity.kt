@@ -19,6 +19,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
@@ -27,7 +28,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.ImageViewModel
@@ -67,11 +73,14 @@ import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.invoiceReadyToView
 import com.clebs.celerity.utils.logOSEntity
+import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.parseToInt
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.weeklyLocationRota
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
 import org.jetbrains.anko.find
@@ -117,7 +126,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var date = ""
     lateinit var loadingDialog: LoadingDialog
     lateinit var networkManager: NetworkManager
-
+    private lateinit var appBarConfig: AppBarConfiguration
     private var isApiResponseTrue = false
     private var trueCount = 0
     private var isChangesSaved = false
@@ -333,10 +342,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
 
         val toggle = ActionBarDrawerToggle(
-            this, ActivityHomeBinding.myDrawerLayout,R.string.CANCEL,R.string.celerity_ls
+            this, ActivityHomeBinding.myDrawerLayout, R.string.CANCEL, R.string.celerity_ls
         )
         ActivityHomeBinding.myDrawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
 
         prefs = Prefs.getInstance(this)
         loadingDialog = LoadingDialog(this)
@@ -439,7 +449,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.liveDataGetDAVehicleExpiredDocuments.observe(this) {
                 if (it != null) {
                     prefs.saveExpiredDocuments(it)
-                 //   expiredDocDialog.showDialog(supportFragmentManager)
+                    //   expiredDocDialog.showDialog(supportFragmentManager)
                     expiredDocDialog.isCancelable = false
                 }
             }
@@ -480,11 +490,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
             ActivityHomeBinding.imgDrawer.setOnClickListener {
-                navController.navigate(R.id.profileFragment)
-//                if (!ActivityHomeBinding.myDrawerLayout.isDrawerOpen(ActivityHomeBinding.navigationView)) {
-//                    ActivityHomeBinding.myDrawerLayout.openDrawer(ActivityHomeBinding.navigationView)
-//                }
+//                navController.navigate(R.id.profileFragment)
+                if (!ActivityHomeBinding.myDrawerLayout.isDrawerOpen(ActivityHomeBinding.navigationView)) {
+                    ActivityHomeBinding.myDrawerLayout.openDrawer(ActivityHomeBinding.navigationView)
+                }
             }
+
+
 
             ActivityHomeBinding.imgNotification.setOnClickListener {
                 ActivityHomeBinding.title.text = "Notifications"
@@ -547,6 +559,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
             }
+
+
+
+
+
+
             ActivityHomeBinding.logout.setOnClickListener {
                 showAlertLogout()
             }
@@ -607,6 +625,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         } catch (_: Exception) {
 
+        }
+        if (ActivityHomeBinding.myDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            ActivityHomeBinding.myDrawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
         }
     }
 
@@ -888,4 +911,5 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         super.onResume()
         oSyncViewModel.getData()
     }
+
 }
