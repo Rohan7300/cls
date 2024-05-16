@@ -54,35 +54,23 @@ fun showDailyRotaDialog(
     dailyRotaDialogBinding.rotaweek.text = rotaWeek.toString()
     dailyRotaDialogBinding.rotayear.text = rotaYear.toString()
     dailyRotaDialogBinding.rotalocation.text = rotaLocation
+    if (!dailyRotaDialog.isShowing)
+        dailyRotaDialog.show()
+
+
     var acceptRBChecked = false
     var rejectRNcheck = false
     var selectedItem = 0
     dailyRotaDialogBinding.acceptRB.setOnClickListener {
-        if (!acceptRBChecked) {
             dailyRotaDialogBinding.acceptRB.isChecked = true
             dailyRotaDialogBinding.rejectRB.isChecked = false
-            acceptRBChecked = true
             selectedItem = 1
-        } else {
-            selectedItem = 0
-            acceptRBChecked = false
-            dailyRotaDialogBinding.acceptRB.isChecked = false
-            dailyRotaDialogBinding.rejectRB.isChecked = false
-        }
     }
 
     dailyRotaDialogBinding.rejectRB.setOnClickListener {
-        if (!rejectRNcheck) {
             dailyRotaDialogBinding.acceptRB.isChecked = false
             dailyRotaDialogBinding.rejectRB.isChecked = true
-            rejectRNcheck = true
             selectedItem = 2
-        } else {
-            dailyRotaDialogBinding.acceptRB.isChecked = false
-            dailyRotaDialogBinding.rejectRB.isChecked = false
-            rejectRNcheck = false
-            selectedItem = 0
-        }
     }
 
     dailyRotaDialogBinding.submit.setOnClickListener {
@@ -121,8 +109,7 @@ fun showDailyRotaDialog(
         }
     }
 
-    if (!dailyRotaDialog.isShowing)
-        dailyRotaDialog.show()
+
 }
 
 fun dailyRota(
@@ -153,6 +140,7 @@ fun dailyRota(
             )
         } else {
             showToast("Failed to fetch Data!!", context)
+            viewModel.MarkNotificationAsRead(notificationId)
         }
     }
 }

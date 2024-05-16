@@ -1834,19 +1834,20 @@ class MainViewModel(
         }
     }
 
-    fun GetDriverInvoiceList(userID: Int,selYear: Int,selWeek: Int){
+    fun GetDriverInvoiceList(userID: Int, selYear: Int, selWeek: Int) {
         viewModelScope.launch {
-            val response = repo.GetDriverInvoiceList(userID,selYear,selWeek)
-            if(!response.isSuccessful||response.failed)
+            val response = repo.GetDriverInvoiceList(userID, selYear, selWeek)
+            if (!response.isSuccessful || response.failed)
                 liveDataGetDriverInvoiceList.postValue(null)
             else
                 liveDataGetDriverInvoiceList.postValue(response.body)
         }
     }
- fun GetThirdPartyInvoiceList(userID: Int,selYear: Int,selWeek: Int){
+
+    fun GetThirdPartyInvoiceList(userID: Int, selYear: Int, selWeek: Int) {
         viewModelScope.launch {
-            val response = repo.GetDriverInvoiceList(userID,selYear,selWeek)
-            if(!response.isSuccessful||response.failed)
+            val response = repo.GetThirdPartyInvoiceList(userID, selYear, selWeek)
+            if (!response.isSuccessful || response.failed)
                 liveDataGetThirdPartyInvoiceList.postValue(null)
             else
                 liveDataGetThirdPartyInvoiceList.postValue(response.body)

@@ -105,7 +105,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
             val item = prefs.getInvoiceX()!!
             dowloadPDF(item.InvoiceId, item.FileName)
         } else {
-            showToast("Please allow storag permission to download and view pdf", requireContext())
+            showToast("Please allow storage permission to download and view pdf", requireContext())
         }
     }
 
@@ -113,12 +113,12 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
         showDialog()
         viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), invoiceID)
         viewModel.liveDataDownloadThirdPartyInvoicePDF.observe(viewLifecycleOwner) {
+            hideDialog()
             if (it != null) {
-                var fileContent = it.Invoices[0].FileContent
+                val fileContent = it.Invoices[0].FileContent
                 try {
                     downloadPDFData(fileName, fileContent)
                 } catch (_: Exception) {
-
                 }
             }
         }
@@ -147,7 +147,6 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
                     binding.dateTV.text = year.toString()
                     showDialog()
                     viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
-                    //  showToast("Selected Year: $selectedYear", requireContext())
                 }
             },
             currentYear,
@@ -184,7 +183,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
         }
     }
 
-    public fun downloadPDFData(fileName: String, fileContent: String) {
+    private fun downloadPDFData(fileName: String, fileContent: String) {
         try {
             val file = File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),

@@ -51,6 +51,7 @@ import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.utils.DependencyProvider.getMainVM
+import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
 import com.clebs.celerity.utils.checkIfInspectionFailed
@@ -337,7 +338,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         val todayDate = dateFormat.format(Date())
 
-        val osRepo = OSyncRepo(OfflineSyncDB.invoke(this))
+        val osRepo = offlineSyncRepo(this)
         oSyncViewModel = ViewModelProvider(
             this,
             OSyncVMProvider(osRepo, prefs.clebUserId.toInt(), todayDate)
@@ -417,8 +418,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         navController.navigate(R.id.completeTaskFragment)
                     }
                 } else {
-                    navController.navigate(R.id.homeFragment)
-                    navController.currentDestination!!.id = R.id.homeFragment
+                    try {
+                        navController.navigate(R.id.homeFragment)
+                        navController.currentDestination!!.id = R.id.homeFragment
+                    }catch (_:Exception){
+
+                    }
+/*                    navController.navigate(R.id.homeFragment)
+                    navController.currentDestination!!.id = R.id.homeFragment*/
                 }
             }
 
@@ -427,7 +434,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.liveDataGetDAVehicleExpiredDocuments.observe(this) {
                 if (it != null) {
                     prefs.saveExpiredDocuments(it)
-                 //   expiredDocDialog.showDialog(supportFragmentManager)
+                    //   expiredDocDialog.showDialog(supportFragmentManager)
                     expiredDocDialog.isCancelable = false
                 }
             }

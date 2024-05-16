@@ -241,6 +241,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:gravity="center"
+                android:id="@+id/AcceptnDisputemainLL"
                 android:background="@drawable/shape_accept_close"
                 android:orientation="horizontal"
                 android:padding="16dp">
@@ -268,6 +269,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:gravity="center"
+                android:id="@+id/acceptncloseMainLL"
                 android:background="@drawable/shape_accept_close"
                 android:orientation="horizontal"
                 android:padding="16dp">

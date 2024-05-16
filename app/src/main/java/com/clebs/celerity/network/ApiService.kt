@@ -634,9 +634,10 @@ interface ApiService {
         @Query("selWeek") selWeek: Int
     ): Response<GetDriverInvoiceListResponse>
 
+    @GET("/api/HtmlToPDF/GetThirdPartyInvoiceList")
     suspend fun GetThirdPartyInvoiceList(
         @Query("UserId") UserId: Int,
-        @Query("setYear") setYear: Int,
+        @Query("selYear") setYear: Int,
         @Query("selWeek") selWeek: Int
     ): Response<GetDriverInvoiceListResponse>
 

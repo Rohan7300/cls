@@ -32,6 +32,7 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.BackgroundUploadDialog
 import com.clebs.celerity.utils.BackgroundUploadDialogListener
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.checkIfInspectionFailed
@@ -94,7 +95,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         val todayDate = dateFormat.format(Date())
         var currentDateTime = getCurrentDateTime()
 
-        val osRepo = OSyncRepo(OfflineSyncDB.invoke(this))
+        val osRepo = offlineSyncRepo(this)
         oSyncViewModel = ViewModelProvider(
             this,
             OSyncVMProvider(osRepo, prefs.clebUserId.toInt(), todayDate)
@@ -179,6 +180,13 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                 uploadImage()
             else
                 requestpermissions()
+        }
+        binding.fullClick.setOnClickListener {
+            if (allPermissionsGranted())
+                uploadImage()
+            else {
+                requestpermissions()
+            }
         }
         binding.imageViewBack.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
@@ -520,6 +528,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
                 binding.tvUploadMainTV.isEnabled = false
                 binding.ivUploadImage.isEnabled = false
+                binding.fullClick.isEnabled = false
             }
 
         }

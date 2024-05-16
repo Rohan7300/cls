@@ -189,10 +189,11 @@ class CompleteTaskFragment : Fragment() {
         inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
         viewModel = (activity as HomeActivity).viewModel
 
+        oSyncViewModel.getData()
         oSyncViewModel.osData.observe(viewLifecycleOwner) {
             osData = it!!
             showDialog()
-            if(it.isIni){
+            if (it.isIni) {
                 hideDialog()
                 osData.isDefectSheetFilled = true
                 logOSEntity("OSData CompleteTaskFragment", osData)
@@ -588,8 +589,8 @@ class CompleteTaskFragment : Fragment() {
             hideDialog()
             if (it != null) {
                 if (it.Status == "200") {
-                    showDialog()
-                    viewModel.GetVehicleImageUploadInfo(clebUserID, getCurrentDateTime())
+                    //    showDialog()
+                    //   viewModel.GetVehicleImageUploadInfo(clebUserID, getCurrentDateTime())
                     setImageUploadViews(requestCode, 1)
                 } else {
                     setImageUploadViews(requestCode, 0)
@@ -616,7 +617,7 @@ class CompleteTaskFragment : Fragment() {
                 ) {
                     osData.isImagesUploadedToday = true
                     osData.isInspectionDoneToday = true
-                    oSyncViewModel.insertData(osData)
+                    //oSyncViewModel.insertData(osData)
                 } else {
                     if (osData.faceMaskImage == null ||
                         osData.dashboardImage == null ||
@@ -630,12 +631,13 @@ class CompleteTaskFragment : Fragment() {
                         mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
                         showImageUploadLayout = true
                         imagesUploaded = false
-                        if(it.DaVehicleAddBlueImage != null &&
+                        if (it.DaVehicleAddBlueImage != null &&
                             it.DaVehImgOilLevelFileName != null &&
                             it.DaVehImgNearSideFileName != null &&
                             it.DaVehImgRearFileName != null &&
                             it.DaVehImgDashBoardFileName != null &&
-                            it.DaVehImgOffSideFileName != null){
+                            it.DaVehImgOffSideFileName != null
+                        ) {
 
                             osData.isInspectionDoneToday = true
                             osData.isImagesUploadedToday = false
@@ -645,21 +647,19 @@ class CompleteTaskFragment : Fragment() {
                             osData.isInspectionDoneToday = false
                             osData.isImagesUploadedToday = false
                             inspectionstarted = false
-                        }
-                        else {
+                        } else {
                             osData.isInspectionDoneToday = true
                             osData.isImagesUploadedToday = false
                         }
 
-                        if (osData.faceMaskImage != null||it.DaVehImgFaceMaskFileName!=null) {
+                        if (osData.faceMaskImage != null || it.DaVehImgFaceMaskFileName != null) {
                             osData.isImagesUploadedToday = true
                         }
                     } else {
                         backgroundImageSync()
                     }
                 }
-            }
-            else {
+            } else {
                 if (osData.faceMaskImage == null ||
                     osData.dashboardImage == null ||
                     osData.nearSideImage == null ||
@@ -779,7 +779,7 @@ class CompleteTaskFragment : Fragment() {
         osData.isInspectionDoneToday = true
         if (osData.faceMaskImage != null)
             osData.isImagesUploadedToday = true
-        oSyncViewModel.insertData(osData)
+        //   oSyncViewModel.insertData(osData)
 
         setVisibiltyLevel()
     }
@@ -863,7 +863,6 @@ class CompleteTaskFragment : Fragment() {
                 showErrorDialog(fragmentManager, "CTF-02", "Please add valid time information")
             }
         }
-
     }
 
     private fun sendBreakTimeData() {
@@ -920,8 +919,13 @@ class CompleteTaskFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
-            imageView.setImageBitmap(imageBitmap)
+          //  imageView.setImageBitmap(imageBitmap)
+            osData.faceMaskImage = bitmapToBase64(imageBitmap)
+            osData.isImagesUploadedToday = true
+            oSyncViewModel.insertData(osData)
             sendImage(imageBitmap, requestCode)
+        }else{
+            showToast("Failed to fetch image content",requireContext())
         }
     }
 
@@ -984,8 +988,10 @@ class CompleteTaskFragment : Fragment() {
 
         osData.faceMaskImage = bitmapToBase64(imageBitmap)
         osData.isImagesUploadedToday = true
-
+        oSyncViewModel.insertData(osData)
         imagesUploaded = true
+        print("OSData ISImage1 ${osData.isImagesUploadedToday}\n")
+        print("OSData ISInspection1 ${osData.isInspectionDoneToday}\n")
         visibilityLevel = 1
         startUploadWithWorkManager(1, Prefs.getInstance(requireContext()), requireContext())
         setVisibiltyLevel()
@@ -1065,7 +1071,8 @@ class CompleteTaskFragment : Fragment() {
                 showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
             }
         }
-        *//*        } else {
+        *//*
+         } else {
                     showErrorDialog(
                         fragmentManager,
                         "CTF-1",
@@ -1263,16 +1270,19 @@ class CompleteTaskFragment : Fragment() {
         inspectionstarted = osData.isInspectionDoneToday
         imagesUploaded = osData.isImagesUploadedToday
         isClockedIn = osData.isClockedInToday
-        oSyncViewModel.insertData(osData)
 
+        print("OSData ISImage $imagesUploaded\n")
+        print("OSData ISInspection $inspectionstarted\n")
         if (!inspectionstarted) {
             visibilityLevel = -1
             visibiltyControlls()
+            oSyncViewModel.insertData(osData)
             return
         }
         if (!imagesUploaded) {
             visibilityLevel = 0
             visibiltyControlls()
+            oSyncViewModel.insertData(osData)
             return
         } else {
             visibilityLevel = 1
@@ -1283,6 +1293,7 @@ class CompleteTaskFragment : Fragment() {
         if (isBreakTimeAdded && isOnRoadHours) {
             visibilityLevel = 5
             visibiltyControlls()
+            oSyncViewModel.insertData(osData)
             return
         }
 
@@ -1293,6 +1304,7 @@ class CompleteTaskFragment : Fragment() {
             visibilityLevel = 4
 
         visibiltyControlls()
+        oSyncViewModel.insertData(osData)
     }
 
     /*    private fun setProgress() {

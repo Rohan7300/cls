@@ -84,15 +84,21 @@ class NotificationAdapter(
 
             if (item.ActionToPerform == "Deductions" ||
                 item.ActionToPerform == "Driver Deduction with Agreement" ||
+                item.ActionToPerform == "DriverDeductionWithAgreement" ||
                 item.ActionToPerform == "Daily Location Rota" ||
                 item.ActionToPerform == "Invoice Ready To Review" ||
                 item.ActionToPerform == "Invoice Ready to Review" ||
+                item.ActionToPerform == "InvoiceReadyToReview" ||
                 item.ActionToPerform == "Weekly Location Rota" ||
                 item.ActionToPerform == "Expired Document" ||
+                item.ActionToPerform == "ExpiredDocuments" ||
                 item.ActionToPerform == "Vehicle Advance Payment Aggrement" ||
                 item.ActionToPerform == "Vehicle Advance Payment Agreement" ||
                 item.ActionToPerform == "Expiring Document" ||
+                item.ActionToPerform == "ExpiringDocuments" ||
                 item.ActionToPerform == "Weekly Rota Approval" ||
+                item.ActionToPerform == "WeeklyRotaApproval" ||
+                item.ActionToPerform == "DailyRotaApproval" ||
                 item.ActionToPerform == "Daily Rota Approval"
             ) {
                 binding.notficationArrow.visibility = View.VISIBLE
@@ -146,6 +152,8 @@ class NotificationAdapter(
                                 dailyRotatoken
                             )
                         } else {
+                            viewModel.MarkNotificationAsRead(item.NotificationId)
+                         //   callback.refresh()
                             showToast("Daily Rota not found!!", context)
                         }
                     }
@@ -316,35 +324,20 @@ class NotificationAdapter(
         dailyRotaDialogBinding!!.rotaweek.text = rotaWeek.toString()
         dailyRotaDialogBinding!!.rotayear.text = rotaYear.toString()
         dailyRotaDialogBinding!!.rotalocation.text = rotaLocation
-        var acceptRBChecked = false
-        var rejectRNcheck = false
+        if (!dailyRotaDialog!!.isShowing)
+            dailyRotaDialog!!.show()
         var selectedItem = 0
+
         dailyRotaDialogBinding!!.acceptRB.setOnClickListener {
-            if (!acceptRBChecked) {
-                dailyRotaDialogBinding!!.acceptRB.isChecked = true
-                dailyRotaDialogBinding!!.rejectRB.isChecked = false
-                acceptRBChecked = true
-                selectedItem = 1
-            } else {
-                selectedItem = 0
-                acceptRBChecked = false
-                dailyRotaDialogBinding!!.acceptRB.isChecked = false
-                dailyRotaDialogBinding!!.rejectRB.isChecked = false
-            }
+            dailyRotaDialogBinding!!.acceptRB.isChecked = true
+            dailyRotaDialogBinding!!.rejectRB.isChecked = false
+            selectedItem = 1
         }
 
         dailyRotaDialogBinding!!.rejectRB.setOnClickListener {
-            if (!rejectRNcheck) {
-                dailyRotaDialogBinding!!.acceptRB.isChecked = false
-                dailyRotaDialogBinding!!.rejectRB.isChecked = true
-                rejectRNcheck = true
-                selectedItem = 2
-            } else {
-                dailyRotaDialogBinding!!.acceptRB.isChecked = false
-                dailyRotaDialogBinding!!.rejectRB.isChecked = false
-                rejectRNcheck = false
-                selectedItem = 0
-            }
+            dailyRotaDialogBinding!!.acceptRB.isChecked = false
+            dailyRotaDialogBinding!!.rejectRB.isChecked = true
+            selectedItem = 2
         }
 
         dailyRotaDialogBinding!!.submit.setOnClickListener {
@@ -384,9 +377,6 @@ class NotificationAdapter(
                 }
             }
         }
-
-        if (!dailyRotaDialog!!.isShowing)
-            dailyRotaDialog!!.show()
     }
 
     override fun getItemId(position: Int): Long {
