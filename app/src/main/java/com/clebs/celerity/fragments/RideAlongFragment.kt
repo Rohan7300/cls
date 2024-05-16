@@ -196,7 +196,7 @@ class RideAlongFragment : Fragment() {
             if (it != null) {
                 loadingDialog.show()
                 rtAddMode = it.RtAddMode
-                viewModel.GetRouteLocationInfo(it.RtLocationId)
+
                 if (selectedDriverId != null)
                     viewModel.GetRideAlongRouteInfoById(it.RtId, selectedDriverId!!)
             } else {
@@ -210,6 +210,7 @@ class RideAlongFragment : Fragment() {
                 rtType = it.RtType
                 trainingDays = it.TrainingDays
                 rtFinishMileage = it.RtFinishMileage
+                viewModel.GetRouteLocationInfo(it.RtLocationId)
                 rtNoOfParcelsDelivered = it.RtNoOfParcelsDelivered
                 rtNoParcelsbroughtback = it.RtNoParcelsbroughtback
             } else {
@@ -337,7 +338,7 @@ class RideAlongFragment : Fragment() {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun setSpinners(spinner: Spinner, items: List<String>, ids: List<Int>) {
+/*    private fun setSpinners(spinner: Spinner, items: List<String>, ids: List<Int>) {
         val dummyItem = "Select Item"
         val itemsList = mutableListOf<String>()
         itemsList.addAll(items)
@@ -386,7 +387,8 @@ class RideAlongFragment : Fragment() {
                                     selectedRouteId =
                                         ids[position - 1]
                                     loadingDialog.show()
-                                    viewModel.GetRouteInfoById(selectedRouteId!!)
+                                    //viewModel.GetRouteInfoById(selectedRouteId!!)
+                                    viewModel.GetRideAlongRouteInfoById(selectedRouteId!!, selectedDriverId!!)
                                 }
 
                                 binding.spinnerRouteLocation -> {
@@ -403,7 +405,7 @@ class RideAlongFragment : Fragment() {
             }
         }
 
-    }
+    }*/
 
     private fun setInputListener(editText: EditText) {
         editText.addTextChangedListener(object : TextWatcher {
@@ -475,7 +477,10 @@ class RideAlongFragment : Fragment() {
                                 selectedRouteId =
                                     ids[position]
                                 loadingDialog.show()
-                                viewModel.GetRouteInfoById(selectedRouteId!!)
+                                binding.spinnerRouteLocation.setAdapter(null)
+                                binding.spinnerRouteLocation.setText("")
+                               // viewModel.GetRouteInfoById(selectedRouteId!!)
+                                viewModel.GetRideAlongRouteInfoById(selectedRouteId!!, pref.clebUserId.toInt()!!)
                             }
 
                             binding.spinnerRouteLocation -> {

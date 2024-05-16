@@ -40,7 +40,7 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
     lateinit var homeActivity: HomeActivity
     private var REQUEST_STORAGE_PERMISSION_CODE = 101
     private var selectedYear = 2024
-
+    private var isDownloading = false
     lateinit var adapter: CLSInvoiceAdapter
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
@@ -100,6 +100,29 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
                 binding.noinvoices.visibility = View.VISIBLE
             }
         }
+        viewModel.liveDataDownloadInvoicePDF.observe(viewLifecycleOwner){
+            hideDialog()
+            if(it!=null){
+                try {
+                    val fileContent = it.Invoices[0].FileContent
+                    val fileName = it.Invoices[0].FileName
+                    val file = File(
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                        fileName
+                    )
+                    val fos = FileOutputStream(file)
+                    fos.write(Base64.decode(fileContent, Base64.DEFAULT))
+                    fos.close()
+                    showToast("PDF Downloaded!", requireContext())
+                    openPDF(file)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    showToast("Failed to download PDF", requireContext())
+                }
+            }else{
+            }
+            isDownloading = false
+        }
     }
 
     override fun requestStoragePermission() {
@@ -120,30 +143,14 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
     }
 
     override fun dowloadPDF(invoiceID: Int, fileName: String) {
+        if (isDownloading) {
+            showToast("Please wait other file is downloading", requireContext())
+            return
+        }
+        isDownloading = true
         showDialog()
         viewModel.DownloadInvoicePDF(prefs.clebUserId.toInt(),invoiceID)
-        viewModel.liveDataDownloadInvoicePDF.observe(viewLifecycleOwner){
-            hideDialog()
-            if(it!=null){
-                try {
-                    val fileContent = it.Invoices[0].FileContent
-                    val file = File(
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                        fileName
-                    )
-                    val fos = FileOutputStream(file)
-                    fos.write(Base64.decode(fileContent, Base64.DEFAULT))
-                    fos.close()
-                    showToast("PDF Downloaded!", requireContext())
-                    openPDF(file)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    showToast("Failed to download PDF", requireContext())
-                }
-            }else{
 
-            }
-        }
     }
 
     override fun onRequestPermissionsResult(

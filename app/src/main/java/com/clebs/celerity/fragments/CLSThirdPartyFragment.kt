@@ -45,7 +45,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
         (activity as HomeActivity).hideDialog()
     }
     private var REQUEST_STORAGE_PERMISSION_CODE = 101
-
+    private var isDownloading = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -90,6 +90,18 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
                 binding.clsInvoicesThirdParty.visibility = View.GONE
             }
         }
+        viewModel.liveDataDownloadThirdPartyInvoicePDF.observe(viewLifecycleOwner) {
+            hideDialog()
+            if (it != null) {
+                val fileContent = it.Invoices[0].FileContent
+                val fileName = it.Invoices[0].FileName
+                try {
+                    downloadPDFData(fileName, fileContent)
+                } catch (_: Exception) {
+                }
+            }
+            isDownloading = false
+        }
     }
 
     override fun requestStoragePermission() {
@@ -110,18 +122,14 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
     }
 
     override fun dowloadPDF(invoiceID: Int, fileName: String) {
+        if (isDownloading) {
+            showToast("Please wait other file is downloading", requireContext())
+            return
+        }
+        isDownloading = true
         showDialog()
         viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), invoiceID)
-        viewModel.liveDataDownloadThirdPartyInvoicePDF.observe(viewLifecycleOwner) {
-            hideDialog()
-            if (it != null) {
-                val fileContent = it.Invoices[0].FileContent
-                try {
-                    downloadPDFData(fileName, fileContent)
-                } catch (_: Exception) {
-                }
-            }
-        }
+
     }
 
     override fun onRequestPermissionsResult(
