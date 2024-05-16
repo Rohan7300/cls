@@ -141,20 +141,12 @@ class CompleteTaskFragment : Fragment() {
             }.toTypedArray()
     }
 
-    override fun onStart() {
-        super.onStart()
-        mbinding.mainCompleteTask.visibility = View.GONE
-        mbinding.llmain.visibility=View.GONE
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentCompleteTaskBinding.inflate(inflater, container, false)
         }
-        mbinding.mainCompleteTask.visibility = View.GONE
-        mbinding.llmain.visibility=View.GONE
         val clickListener = View.OnClickListener {
             showAlert()
         }
@@ -163,10 +155,9 @@ class CompleteTaskFragment : Fragment() {
                 Date()
             )
 
-//        val animFadein: Animation =
-//            AnimationUtils.loadAnimation(context, R.anim.left2right)
-//
-//        mbinding.mainCompleteTask.animation = animFadein
+        val animFadein: Animation =
+            AnimationUtils.loadAnimation(context, R.anim.left2right)
+        mbinding.mainCompleteTask.animation = animFadein
 
         loadingDialog = (activity as HomeActivity).loadingDialog
         oSyncViewModel = (activity as HomeActivity).oSyncViewModel
@@ -197,20 +188,20 @@ class CompleteTaskFragment : Fragment() {
 
         inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
         viewModel = (activity as HomeActivity).viewModel
-        showDialog()
-        showDialog()
+
+        oSyncViewModel.getData()
         oSyncViewModel.osData.observe(viewLifecycleOwner) {
             osData = it!!
-
+            showDialog()
             if (it.isIni) {
-
+                hideDialog()
                 osData.isDefectSheetFilled = true
                 logOSEntity("OSData CompleteTaskFragment", osData)
                 viewModel.GetVehicleImageUploadInfo(
                     Prefs.getInstance(requireContext()).clebUserId.toInt(),
                     getCurrentDateTime()
                 )
-
+                showDialog()
                 viewModel.GetDriverBreakTimeInfo(clebUserID)
                 showDialog()
                 viewModel.GetDailyWorkInfoById(clebUserID)
@@ -424,9 +415,8 @@ class CompleteTaskFragment : Fragment() {
             mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
             mbinding.headerTop.strikedxLoc.visibility = View.GONE
-        showDialog()
+
         viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner) {
-            hideDialog()
             if (it != null) {
                 scannedvrn = it.vmRegNo
                 Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
@@ -435,7 +425,7 @@ class CompleteTaskFragment : Fragment() {
                 }
             }
         }
-        showDialog()
+
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
@@ -511,17 +501,13 @@ class CompleteTaskFragment : Fragment() {
             }
             setVisibiltyLevel()
         }
-showDialog()
+
         viewModel.ldcompleteTaskLayoutObserver.observe(viewLifecycleOwner) {
             if (it == -1) {
                 mbinding.mainCompleteTask.visibility = View.VISIBLE
                 mbinding.searchLayout.visibility = View.GONE
-                mbinding.llmain.visibility=View.VISIBLE
-                hideDialog()
             } else {
-                hideDialog()
                 mbinding.mainCompleteTask.visibility = View.GONE
-                mbinding.llmain.visibility=View.GONE
                 mbinding.searchLayout.visibility = View.VISIBLE
             }
         }
@@ -546,9 +532,8 @@ showDialog()
 
         viewModel.livedataUpdateClockOutTime.observe(viewLifecycleOwner) {
             hideDialog()
-            showDialog()
             viewModel.GetDailyWorkInfoById(clebUserID)
-
+            showDialog()
             if (it != null) {
                 mbinding.clockOutMark.setImageResource(R.drawable.finalclockout)
                 mbinding.rlcomtwoClockOut.isEnabled = false
@@ -604,8 +589,8 @@ showDialog()
             hideDialog()
             if (it != null) {
                 if (it.Status == "200") {
-                    showDialog()
-                    viewModel.GetVehicleImageUploadInfo(clebUserID, getCurrentDateTime())
+                    //    showDialog()
+                    //   viewModel.GetVehicleImageUploadInfo(clebUserID, getCurrentDateTime())
                     setImageUploadViews(requestCode, 1)
                 } else {
                     setImageUploadViews(requestCode, 0)
@@ -632,7 +617,7 @@ showDialog()
                 ) {
                     osData.isImagesUploadedToday = true
                     osData.isInspectionDoneToday = true
-                    oSyncViewModel.insertData(osData)
+                    //oSyncViewModel.insertData(osData)
                 } else {
                     if (osData.faceMaskImage == null ||
                         osData.dashboardImage == null ||
@@ -794,7 +779,7 @@ showDialog()
         osData.isInspectionDoneToday = true
         if (osData.faceMaskImage != null)
             osData.isImagesUploadedToday = true
-        oSyncViewModel.insertData(osData)
+        //   oSyncViewModel.insertData(osData)
 
         setVisibiltyLevel()
     }
@@ -935,8 +920,13 @@ showDialog()
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
-            imageView.setImageBitmap(imageBitmap)
+          //  imageView.setImageBitmap(imageBitmap)
+            osData.faceMaskImage = bitmapToBase64(imageBitmap)
+            osData.isImagesUploadedToday = true
+            oSyncViewModel.insertData(osData)
             sendImage(imageBitmap, requestCode)
+        }else{
+            showToast("Failed to fetch image content",requireContext())
         }
     }
 
@@ -999,8 +989,10 @@ showDialog()
 
         osData.faceMaskImage = bitmapToBase64(imageBitmap)
         osData.isImagesUploadedToday = true
-
+        oSyncViewModel.insertData(osData)
         imagesUploaded = true
+        print("OSData ISImage1 ${osData.isImagesUploadedToday}\n")
+        print("OSData ISInspection1 ${osData.isInspectionDoneToday}\n")
         visibilityLevel = 1
         startUploadWithWorkManager(1, Prefs.getInstance(requireContext()), requireContext())
         setVisibiltyLevel()
@@ -1080,7 +1072,8 @@ showDialog()
                 showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
             }
         }
-        *//*        } else {
+        *//*
+         } else {
                     showErrorDialog(
                         fragmentManager,
                         "CTF-1",
@@ -1280,14 +1273,18 @@ showDialog()
         isClockedIn = osData.isClockedInToday
         oSyncViewModel.insertData(osData)
 
+        print("OSData ISImage $imagesUploaded\n")
+        print("OSData ISInspection $inspectionstarted\n")
         if (!inspectionstarted) {
             visibilityLevel = -1
             visibiltyControlls()
+            oSyncViewModel.insertData(osData)
             return
         }
         if (!imagesUploaded) {
             visibilityLevel = 0
             visibiltyControlls()
+            oSyncViewModel.insertData(osData)
             return
         } else {
             visibilityLevel = 1
@@ -1298,6 +1295,7 @@ showDialog()
         if (isBreakTimeAdded && isOnRoadHours) {
             visibilityLevel = 5
             visibiltyControlls()
+            oSyncViewModel.insertData(osData)
             return
         }
 
@@ -1308,6 +1306,7 @@ showDialog()
             visibilityLevel = 4
 
         visibiltyControlls()
+        oSyncViewModel.insertData(osData)
     }
 
     /*    private fun setProgress() {

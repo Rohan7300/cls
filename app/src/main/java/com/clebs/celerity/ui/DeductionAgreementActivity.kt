@@ -85,6 +85,33 @@ class DeductionAgreementActivity : AppCompatActivity() {
                     isAcceptChecked = true
                     isCloseChecked = false
                     binding.rbAcceptDispute.isChecked = false
+                    binding.rbAcceptClose.isChecked = true
+                    binding.deductionTXT.visibility = View.GONE
+                    binding.dedctionContent.visibility = View.GONE
+                    binding.disputeSection.visibility = View.GONE
+                    binding.signSection.visibility = View.VISIBLE
+                } else {
+                    showToast("Failed to fetch data!! Pls try again", this)
+                }
+            } else {
+                isAcceptChecked = false
+                binding.rbAcceptDispute.isChecked = false
+                binding.rbAcceptClose.isChecked = false
+                binding.deductionTXT.visibility = View.VISIBLE
+                binding.dedctionContent.visibility = View.VISIBLE
+                binding.disputeSection.visibility = View.GONE
+                binding.signSection.visibility = View.GONE
+            }
+        }
+
+        binding.acceptncloseMainLL.setOnClickListener {
+            if (!isAcceptChecked) {
+                type = 0
+                if (isEnabled) {
+                    isAcceptChecked = true
+                    isCloseChecked = false
+                    binding.rbAcceptDispute.isChecked = false
+                    binding.rbAcceptClose.isChecked = true
                     binding.deductionTXT.visibility = View.GONE
                     binding.dedctionContent.visibility = View.GONE
                     binding.disputeSection.visibility = View.GONE
@@ -110,7 +137,34 @@ class DeductionAgreementActivity : AppCompatActivity() {
                     isCloseChecked = true
                     isAcceptChecked = false
                     binding.rbAcceptClose.isChecked = false
+                    binding.rbAcceptDispute.isChecked = true
                     binding.dedctionContent.visibility = View.GONE
+                    binding.deductionTXT.visibility = View.GONE
+                    binding.disputeSection.visibility = View.VISIBLE
+                    binding.signSection.visibility = View.VISIBLE
+                } else {
+                    showToast("Failed to fetch data!! Pls try again", this)
+                }
+            } else {
+                isCloseChecked = false
+                binding.rbAcceptDispute.isChecked = false
+                binding.rbAcceptClose.isChecked = false
+                binding.dedctionContent.visibility = View.VISIBLE
+                binding.deductionTXT.visibility = View.VISIBLE
+                binding.disputeSection.visibility = View.GONE
+                binding.signSection.visibility = View.GONE
+            }
+        }
+
+        binding.AcceptnDisputemainLL.setOnClickListener {
+            if (!isCloseChecked) {
+                if (isEnabled) {
+                    type = 1
+                    isCloseChecked = true
+                    isAcceptChecked = false
+                    binding.rbAcceptClose.isChecked = false
+                    binding.dedctionContent.visibility = View.GONE
+                    binding.rbAcceptDispute.isChecked = true
                     binding.deductionTXT.visibility = View.GONE
                     binding.disputeSection.visibility = View.VISIBLE
                     binding.signSection.visibility = View.VISIBLE

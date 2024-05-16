@@ -32,7 +32,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 
 
-class NotificationsFragment : Fragment(),NotificationAdapterCallback {
+class NotificationsFragment : Fragment(), NotificationAdapterCallback {
 
     lateinit var binding: FragmentNotifficationsBinding
     lateinit var viewModel: MainViewModel
@@ -85,6 +85,11 @@ class NotificationsFragment : Fragment(),NotificationAdapterCallback {
                     notificationAdapter.saveData(it)
                 }
             }
+        }
+
+        viewModel.liveDataMarkNotificationAsRead.observe(viewLifecycleOwner) {
+            if (it != null)
+                refresh()
         }
     }
 

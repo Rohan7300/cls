@@ -21,6 +21,9 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.multidex.BuildConfig
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.models.response.InvoiceXX
 import com.clebs.celerity.utils.PermissionCallback
 import com.clebs.celerity.utils.Prefs
 import java.io.FileOutputStream
@@ -30,7 +33,7 @@ import java.util.Locale
 import java.util.Objects
 
 class CLSInvoiceAdapter(
-    var data: ArrayList<Invoice>,
+    var data: ArrayList<InvoiceXX>,
     var context: Context,
     var pref: Prefs,
     var permissionCallback: PermissionCallback
@@ -38,7 +41,7 @@ class CLSInvoiceAdapter(
     inner class CLSInvoicViewHolder(val binding: ClsInvoicesAdapterLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Invoice) {
+        fun bind(item: InvoiceXX) {
             binding.date.text = ""
             binding.flname.text = "CLS Invoice Week ${item.Week}.pdf"
             binding.download.setOnClickListener {
@@ -51,10 +54,10 @@ class CLSInvoiceAdapter(
                     ) {
                         permissionCallback.requestStoragePermission()
                     } else {
-                        downloadPDF(item.FileName, item.FileContent)
+                        permissionCallback.dowloadPDF(item.InvoiceId, item.FileName)
                     }
                 } else {
-                    downloadPDF(item.FileName, item.FileContent)
+                    permissionCallback.dowloadPDF(item.InvoiceId, item.FileName)
                 }
             }
         }
@@ -89,43 +92,24 @@ class CLSInvoiceAdapter(
     }
 
 
-    fun downloadPDF(fileName: String, fileContent: String) {
-        try {
-            val file = File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                fileName
-            )
-            val fos = FileOutputStream(file)
-            fos.write(Base64.decode(fileContent, Base64.DEFAULT))
-            fos.close()
-            showToast("PDF Downloaded!", context)
-            openPDF(file)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            showToast("Failed to download PDF", context)
-        }
-    }
+    /*   fun downloadPDF(invoiceID: Int,fileName:String) {
+           try {
+               val file = File(
+                   Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                   fileName
+               )
+               val fos = FileOutputStream(file)
+               fos.write(Base64.decode(fileContent, Base64.DEFAULT))
+               fos.close()
+               showToast("PDF Downloaded!", context)
+               openPDF(file)
+           } catch (e: Exception) {
+               e.printStackTrace()
+               showToast("Failed to download PDF", context)
+           }
+       }
+   */
 
-
-    private fun openPDF(file: File) {
-
-        val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
-        } else {
-            Uri.fromFile(file)
-        }
-
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.setDataAndType(uri, "application/pdf")
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        try {
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            showToast("No PDF viewer found", context)
-        }
-    }
 
     override fun getItemId(position: Int): Long {
         return position.toLong()

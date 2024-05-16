@@ -43,11 +43,13 @@ import com.clebs.celerity.models.response.DailyWorkInfoByIdResponse
 import com.clebs.celerity.models.response.DeductionAgreementResponse
 import com.clebs.celerity.models.response.DepartmentRequestResponse
 import com.clebs.celerity.models.response.DownloadInvoicePDFResponse
+import com.clebs.celerity.models.response.DownloadInvoicePDFResponseX
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
 import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverInvoiceListResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
@@ -143,9 +145,9 @@ class MainViewModel(
     val liveDataSaveTicketComment = MutableLiveData<SaveCommentResponse?>()
     val livedatathirdpartyaccess = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataremovethirdpartyaccess = MutableLiveData<SimpleStatusMsgResponse?>()
-    val liveDataDownloadInvoicePDF = MutableLiveData<DownloadInvoicePDFResponse?>()
+    val liveDataDownloadInvoicePDF = MutableLiveData<DownloadInvoicePDFResponseX?>()
     val liveDataDownloadThirdPartyInvoicePDF =
-        MutableLiveData<DownloadThirdPartyInvoicePDFResponse?>()
+        MutableLiveData<DownloadInvoicePDFResponseX?>()
     val liveDataDownloadSignedDAHandbook = MutableLiveData<ResponseBody?>()
     val liveDataDownloadSignedGDPRPOLICY = MutableLiveData<ResponseBody?>()
     val liveDataDownloadSignedServiceLevelAgreement = MutableLiveData<ResponseBody?>()
@@ -185,6 +187,8 @@ class MainViewModel(
     val liveDataDownloadServiceLevelAgreementPolicy = MutableLiveData<ResponseBody?>()
     val liveDataDownloadPrivacyPolicy = MutableLiveData<ResponseBody?>()
     val liveDataDownloadTrucksServiceLevelAgreementPolicy = MutableLiveData<ResponseBody?>()
+    val liveDataGetDriverInvoiceList = MutableLiveData<GetDriverInvoiceListResponse?>()
+    val liveDataGetThirdPartyInvoiceList = MutableLiveData<GetDriverInvoiceListResponse?>()
 
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
@@ -1345,51 +1349,17 @@ class MainViewModel(
         }
     }
 
-    fun DownloadInvoicePDF(
-        userID: Int, selYear: Int
-    ) {
-        viewModelScope.launch {
-            var response = repo.DownloadInvoicePDF(userID, selYear)
-            if (response.failed)
-                liveDataDownloadInvoicePDF.postValue(null)
-            if (!response.isSuccessful)
-                liveDataDownloadInvoicePDF.postValue(null)
-            else
-                liveDataDownloadInvoicePDF.postValue(response.body)
-
-            /*           val result = runCatching {
-                           repo.DownloadInvoicePDF(userID, selYear)
-                       }
-                       result.onSuccess { res ->
-                           liveDataDownloadInvoicePDF.postValue(res)
-                       }
-                       result.onFailure { ex ->
-                           Log.e("DownloadInvoicePDF ", "Error ${ex.message}")
-                       }*/
-        }
-    }
-
     fun DownloadThirdPartyInvoicePDF(
-        userID: Int, selYear: Int
+        userID: Int, invoiceId: Int
     ) {
         viewModelScope.launch {
-            var response = repo.DownloadThirdPartyInvoicePDF(userID, selYear)
+            var response = repo.DownloadThirdPartyInvoicePDF(userID, invoiceId)
             if (response.failed)
                 liveDataDownloadThirdPartyInvoicePDF.postValue(null)
             if (!response.isSuccessful)
                 liveDataDownloadThirdPartyInvoicePDF.postValue(null)
             else
                 liveDataDownloadThirdPartyInvoicePDF.postValue(response.body)
-
-            /*            val result = runCatching {
-                            repo.DownloadThirdPartyInvoicePDF(userID, selYear)
-                        }
-                        result.onSuccess { res ->
-                            liveDataDownloadThirdPartyInvoicePDF.postValue(res)
-                        }
-                        result.onFailure { ex ->
-                            Log.e("DownloadInvoicePDF ", "Error ${ex.message}")
-                        }*/
         }
     }
 
@@ -1863,4 +1833,40 @@ class MainViewModel(
                 liveDataDownloadTrucksServiceLevelAgreementPolicy.postValue(response.body)
         }
     }
+
+    fun GetDriverInvoiceList(userID: Int, selYear: Int, selWeek: Int) {
+        viewModelScope.launch {
+            val response = repo.GetDriverInvoiceList(userID, selYear, selWeek)
+            if (!response.isSuccessful || response.failed)
+                liveDataGetDriverInvoiceList.postValue(null)
+            else
+                liveDataGetDriverInvoiceList.postValue(response.body)
+        }
+    }
+
+    fun GetThirdPartyInvoiceList(userID: Int, selYear: Int, selWeek: Int) {
+        viewModelScope.launch {
+            val response = repo.GetThirdPartyInvoiceList(userID, selYear, selWeek)
+            if (!response.isSuccessful || response.failed)
+                liveDataGetThirdPartyInvoiceList.postValue(null)
+            else
+                liveDataGetThirdPartyInvoiceList.postValue(response.body)
+        }
+    }
+
+    fun DownloadInvoicePDF(
+        userID: Int, invoiceId: Int
+    ) {
+        viewModelScope.launch {
+            var response = repo.DownloadInvoicePDF(userID, invoiceId)
+            if (response.failed)
+                liveDataDownloadInvoicePDF.postValue(null)
+            if (!response.isSuccessful)
+                liveDataDownloadInvoicePDF.postValue(null)
+            else
+                liveDataDownloadInvoicePDF.postValue(response.body)
+        }
+    }
+
+
 }
