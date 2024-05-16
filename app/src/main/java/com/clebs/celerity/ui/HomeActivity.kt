@@ -58,6 +58,8 @@ import com.clebs.celerity.utils.InspectionIncompleteListener
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.dialogs.NoInternetDialog
+import com.clebs.celerity.fragments.InvoicesFragment
+import com.clebs.celerity.fragments.Userprofile
 import com.clebs.celerity.utils.DependencyProvider.getMainVM
 import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
 import com.clebs.celerity.utils.Prefs
@@ -443,11 +445,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     try {
                         navController.navigate(R.id.homeFragment)
                         navController.currentDestination!!.id = R.id.homeFragment
-                    }catch (_:Exception){
+                    } catch (_: Exception) {
 
                     }
-/*                    navController.navigate(R.id.homeFragment)
-                    navController.currentDestination!!.id = R.id.homeFragment*/
+                    /*                    navController.navigate(R.id.homeFragment)
+                                        navController.currentDestination!!.id = R.id.homeFragment*/
                 }
             }
 
@@ -566,10 +568,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
             }
-
-
-
-
 
 
             ActivityHomeBinding.logout.setOnClickListener {

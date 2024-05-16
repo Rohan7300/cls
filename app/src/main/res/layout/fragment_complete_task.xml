@@ -248,6 +248,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
+                    android:elevation="8dp"
                     android:background="@drawable/complete_task_border">
 
                     <RelativeLayout
@@ -482,6 +483,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
+                    android:elevation="8dp"
                     android:background="@drawable/complete_task_border"
                     android:padding="18dp">
 
@@ -518,7 +520,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:background="@drawable/shape_expand_main"
+                    android:background="@drawable/complete_task_border"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="18dp">
