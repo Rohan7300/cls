@@ -469,6 +469,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_margin="14dp"
                                 android:orientation="vertical"
+                                android:visibility="gone"
                                 app:layout_constraintTop_toBottomOf="@+id/ll4">
 
                                 <RelativeLayout
@@ -514,6 +515,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="14dp"
+                                android:visibility="gone"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@+id/ll4">
 
@@ -552,14 +554,19 @@
 
                                 </RelativeLayout>
 
-
                             </LinearLayout>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/otherDocsRV"
+                                />
 
                             <LinearLayout
                                 android:id="@+id/llnine"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="14dp"
+                                android:visibility="gone"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@+id/ll4">
 
@@ -605,6 +612,7 @@
                                 android:id="@+id/ll10"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:visibility="gone"
                                 android:layout_margin="14dp"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@+id/ll4">
@@ -652,6 +660,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="14dp"
+                                android:visibility="gone"
                                 android:orientation="vertical"
                                 app:layout_constraintTop_toBottomOf="@+id/ll4">
 

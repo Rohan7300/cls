@@ -141,6 +141,9 @@ class ImageUploadWorker(
                                 data.isfaceMaskImageFailed = true
                         }
                     }
+                    2->{
+
+                    }
                 }
 
             } catch (e: Exception) {

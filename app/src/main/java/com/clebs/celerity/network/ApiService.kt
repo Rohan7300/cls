@@ -1,6 +1,7 @@
 package com.clebs.celerity.network
 
 import com.clebs.celerity.models.CashFlowPieChartResponse
+import com.clebs.celerity.models.DownloadDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
 import com.clebs.celerity.models.TicketDepartmentsResponse
@@ -50,6 +51,7 @@ import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverInvoiceListResponse
+import com.clebs.celerity.models.response.GetDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
@@ -652,6 +654,18 @@ interface ApiService {
         @Query("UserId") userId: Int,
         @Query("InvoiceId") invoiceId: Int
     ): Response<DownloadInvoicePDFResponseX>
+
+    @GET("/api/HtmlToPDF/GetDriverOtherCompaniesPolicy/{userId}")
+    suspend fun GetDriverOtherCompaniesPolicy(
+        @Path("userId") userId: Int
+    ): Response<GetDriverOtherCompaniesPolicyResponse>
+
+    @GET("/api/HtmlToPDF/DownloadDriverOtherCompaniesPolicy")
+    suspend fun DownloadDriverOtherCompaniesPolicy(
+        @Query("userId") userId: Int,
+        @Query("companyId") companyId: Int,
+        @Query("companyDocId") companyDocId: Int
+    ): Response<DownloadDriverOtherCompaniesPolicyResponse>
 
 
 }

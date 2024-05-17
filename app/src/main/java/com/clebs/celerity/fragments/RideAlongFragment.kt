@@ -326,6 +326,7 @@ class RideAlongFragment : Fragment() {
         return listOf(
             selectedDriverId,
             selectedRouteId,
+            selectedLocId,
             routeName,
             retraining,
             training,
@@ -479,6 +480,7 @@ class RideAlongFragment : Fragment() {
                                 loadingDialog.show()
                                 binding.spinnerRouteLocation.setAdapter(null)
                                 binding.spinnerRouteLocation.setText("")
+                                selectedLocId = null
                                // viewModel.GetRouteInfoById(selectedRouteId!!)
                                 viewModel.GetRideAlongRouteInfoById(selectedRouteId!!, pref.clebUserId.toInt()!!)
                             }

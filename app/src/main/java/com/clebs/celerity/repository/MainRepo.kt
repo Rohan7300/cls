@@ -3,6 +3,7 @@ package com.clebs.celerity.repository
 import android.util.Log
 import com.clebs.celerity.dialogs.VehicleAdvancePaymentDialog
 import com.clebs.celerity.models.CashFlowPieChartResponse
+import com.clebs.celerity.models.DownloadDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
 import com.clebs.celerity.models.SimpleNetworkResponse
@@ -45,6 +46,7 @@ import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverInvoiceListResponse
+import com.clebs.celerity.models.response.GetDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
@@ -1386,9 +1388,27 @@ class MainRepo(private val ApiService: ApiService) {
         userID: Int,
         selyear: Int,
         selweek: Int
-    ):SimpleNetworkResponse<GetDriverInvoiceListResponse>{
+    ): SimpleNetworkResponse<GetDriverInvoiceListResponse> {
         return safeApiCall {
-            ApiService.GetThirdPartyInvoiceList(userID,selyear,selweek)
+            ApiService.GetThirdPartyInvoiceList(userID, selyear, selweek)
+        }
+    }
+
+    suspend fun GetDriverOtherCompaniesPolicy(
+        userID: Int
+    ): SimpleNetworkResponse<GetDriverOtherCompaniesPolicyResponse> {
+        return safeApiCall {
+            ApiService.GetDriverOtherCompaniesPolicy(userID)
+        }
+    }
+
+    suspend fun DownloadDriverOtherCompaniesPolicy(
+            userID: Int,
+            companyId: Int,
+            companyDocID: Int
+    ): SimpleNetworkResponse<DownloadDriverOtherCompaniesPolicyResponse> {
+        return safeApiCall {
+            ApiService.DownloadDriverOtherCompaniesPolicy(userID, companyId, companyDocID)
         }
     }
 

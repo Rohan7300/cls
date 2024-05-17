@@ -28,19 +28,16 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.DrawViewClass
-import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.adapters.OtherCompanyPolicyAdapter
 import com.clebs.celerity.databinding.ActivityPolicyDocsBinding
 import com.clebs.celerity.models.requests.CompanySignedDocX
 import com.clebs.celerity.models.requests.DriverHireAgreementX
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
-import com.clebs.celerity.network.ApiService
-import com.clebs.celerity.network.RetrofitService
-import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.dialogs.DownloadingDialog
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.DependencyProvider
@@ -62,7 +59,7 @@ class PolicyDocsActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
 
     private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
-    private var userId = 0
+    private var clebuserId = 0
     var isImage1 = true
     private var handbookID: Int = 0
     var openModeDAHandBook: OpenMode = OpenMode.VIEW
@@ -105,7 +102,7 @@ class PolicyDocsActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]*/
 
         viewModel = DependencyProvider.getMainVM(this)
-        userId = Prefs.getInstance(this).clebUserId.toInt()
+        clebuserId = Prefs.getInstance(this).clebUserId.toInt()
         handbookID = Prefs.getInstance(this).handbookId
         viewModel.liveDataGetDriverSignatureInformation.observe(this) {
             if (it != null) {
@@ -113,7 +110,7 @@ class PolicyDocsActivity : AppCompatActivity() {
 
             }
         }
-        viewModel.getDriverSignatureInfo(userId.toDouble()).observe(this) {
+        viewModel.getDriverSignatureInfo(clebuserId.toDouble()).observe(this) {
             if (it != null) {
                 handbookID = it.handbookId
                 Prefs.getInstance(this).handbookId = handbookID
@@ -124,8 +121,8 @@ class PolicyDocsActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.GetDriverSignatureInformation(userId)
-
+        viewModel.GetDriverSignatureInformation(clebuserId)
+        viewModel.GetDriverOtherCompaniesPolicy(clebuserId)
         observers()
         clickListeners()
 
@@ -208,6 +205,15 @@ class PolicyDocsActivity : AppCompatActivity() {
                 )
             }
         }*/
+        var otherDocAdapter = OtherCompanyPolicyAdapter()
+        mbinding.otherDocsRV.adapter = otherDocAdapter
+        mbinding.otherDocsRV.layoutManager = LinearLayoutManager(this)
+
+        viewModel.liveDataGetDriverOtherCompaniesPolicy.observe(this){
+            if(it!=null){
+                otherDocAdapter.saveData(it)
+            }
+        }
 
         viewModel.liveDataDownloadServiceLevelAgreementPolicy.observe(this){
             downloadingDialog.dismiss()
@@ -431,8 +437,9 @@ class PolicyDocsActivity : AppCompatActivity() {
         save.setOnClickListener {
             Log.d("DrawViewSize",DrawViewClass.pathList.size.toString())
             if (DrawViewClass.pathList.isEmpty()) {
-                showToast("Please sign before saving", this)
+                showToast("Please add valid signature saving", this)
             } else {
+               // showToast("Signature length ${DrawViewClass.pathList.size}", this)
                 val signatureBitmap: Bitmap = drawView.getBitmap()
                 testIV.setImageBitmap(signatureBitmap)
 
@@ -521,7 +528,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                     IsGDPRChecked = driverSignatureInfo!!.GDPRSectionReq,
                     IsSLAChecked = driverSignatureInfo!!.SLASectionReq,
                     Signature = bse64,
-                    UserID = userId,
+                    UserID = clebuserId,
                     IsAmazonSignatureUpdated = driverSignatureInfo!!.isAmazonSignatureReq,
                     IsDAEngagementChecked = driverSignatureInfo!!.DAEngagementSectionReq
                 )
@@ -585,8 +592,6 @@ class PolicyDocsActivity : AppCompatActivity() {
                     }
                 }
                 val uri = getFileUri(file)
-
-
 
 
                 if(mode==OpenMode.DOWNLOAD){

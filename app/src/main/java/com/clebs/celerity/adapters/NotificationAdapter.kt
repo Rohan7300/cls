@@ -67,8 +67,8 @@ class NotificationAdapter(
         ): Boolean {
             return oldItem == newItem
         }
-
     }
+
     private val asyncListDiffer = AsyncListDiffer(this, diffUtil)
     fun saveData(data: List<NotificationResponseItem>) {
         asyncListDiffer.submitList(data)

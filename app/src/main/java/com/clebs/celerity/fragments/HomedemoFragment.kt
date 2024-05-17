@@ -1,12 +1,15 @@
 package com.clebs.celerity.ui
 
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.clebs.celerity.R
@@ -173,8 +176,13 @@ class HomedemoFragment : Fragment() {
         mbinding.viewfullschedule.setOnClickListener {
             if (isclicked) {
 //                mbinding.vieww.visibility=View.VISIBLE
+                mbinding.consttwo.visibility=View.GONE
+                mbinding.const1.visibility=View.GONE
+                mbinding.ss.fullScroll(ScrollView.FOCUS_UP);
                 mbinding.viewfulldatalayout.visibility = View.VISIBLE
             } else {
+                mbinding.consttwo.visibility=View.VISIBLE
+                mbinding.const1.visibility=View.VISIBLE
                 mbinding.viewfulldatalayout.visibility = View.GONE
 //                mbinding.vieww.visibility=View.GONE
             }
@@ -190,7 +198,9 @@ class HomedemoFragment : Fragment() {
 
         Observers()
         mbinding.btPrev.setOnClickListener {
+            mbinding.viewfulldatalayout.visibility=View.GONE
             mbinding.btPrev.visibility = View.GONE
+            mbinding.const1.visibility=View.VISIBLE
             mbinding.btThisWeek.visibility = View.VISIBLE
             val weekprev = week - 3
             mbinding.txtLastWeek.text = "Week " + weekprev
@@ -212,6 +222,8 @@ class HomedemoFragment : Fragment() {
 
 
         mbinding.btThisWeek.setOnClickListener {
+            mbinding.const1.visibility=View.VISIBLE
+            mbinding.viewfulldatalayout.visibility=View.GONE
             mbinding.btThisWeek.visibility = View.GONE
             mbinding.btPrev.visibility = View.VISIBLE
             showDialog()
@@ -461,8 +473,21 @@ class HomedemoFragment : Fragment() {
                         var time = it.NextWorkingDayWaveTime?:" "
                         var date = it.NextWorkingDate?:" "
                         var nextLoc = it.NextWorkingLoc?:" "
-                        mbinding.textView5.text =
-                            "${convertDateFormat(date)} ${time} - ${nextLoc}"
+
+
+
+                        if (it.NextWorkingDayWaveTime!=null){
+                            mbinding.textView5.text =
+                                "${convertDateFormat(date)} ${time.split(":")[0]} : ${time.split(":")[1]} - ${nextLoc}"
+                        }
+                        else{
+                            mbinding.textView5.text =
+                                "${convertDateFormat(date)} ${time} : ${time} - ${nextLoc}"
+                        }
+                        if(it.NextWorkingDay.isNullOrEmpty()||it.NextWorkingDay.isNullOrEmpty()){
+                            mbinding.textView5.text = "Not allocated"
+                        }
+
 
                     }catch (_:Exception){
                         mbinding.textView5.text = "Not allocated"
@@ -488,10 +513,60 @@ class HomedemoFragment : Fragment() {
                 mbinding.llnodata.visibility = View.VISIBLE
                 mbinding.rlicons.visibility = View.GONE
                 mbinding.textView5.text = "Not allocated"
+
             }
 
         }
     }
+    private fun crossfade() {
+        val   shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
+        mbinding.const1.apply {
 
+            // Set the content view to 0% opacity but visible, so that it is
+            // visible but fully transparent during the animation.
+            alpha = 0f
+            visibility = View.VISIBLE
+
+            // Animate the content view to 100% opacity and clear any animation
+            // listener set on the view.
+            animate()
+                .alpha(1f)
+                .setDuration(shortAnimationDuration.toLong())
+                .setListener(null)
+        }
+        // Animate the loading view to 0% opacity. After the animation ends,
+        // set its visibility to GONE as an optimization step so it doesn't
+        // participate in layout passes.
+        mbinding.const1.animate()
+            .alpha(0f)
+            .setDuration(shortAnimationDuration.toLong())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    mbinding.const1.visibility = View.GONE
+                }
+            })
+        mbinding.consttwo.apply {
+
+            // Set the content view to 0% opacity but visible, so that it is
+            // visible but fully transparent during the animation.
+            alpha = 0f
+            visibility = View.VISIBLE
+
+            // Animate the content view to 100% opacity and clear any animation
+            // listener set on the view.
+            animate()
+                .alpha(1f)
+                .setDuration(shortAnimationDuration.toLong())
+                .setListener(null)
+        }
+        mbinding.consttwo.animate()
+            .alpha(0f)
+            .setDuration(shortAnimationDuration.toLong())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    mbinding.consttwo.visibility = View.GONE
+                }
+            })
+    }
 
 }

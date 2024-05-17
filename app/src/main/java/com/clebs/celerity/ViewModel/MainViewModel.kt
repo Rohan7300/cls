@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.clebs.celerity.models.CashFlowPieChartResponse
 import com.clebs.celerity.models.CashFlowPieChartResponseItem
+import com.clebs.celerity.models.DownloadDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
 import com.clebs.celerity.models.TicketDepartmentsResponse
@@ -50,6 +51,7 @@ import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverInvoiceListResponse
+import com.clebs.celerity.models.response.GetDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
@@ -189,6 +191,11 @@ class MainViewModel(
     val liveDataDownloadTrucksServiceLevelAgreementPolicy = MutableLiveData<ResponseBody?>()
     val liveDataGetDriverInvoiceList = MutableLiveData<GetDriverInvoiceListResponse?>()
     val liveDataGetThirdPartyInvoiceList = MutableLiveData<GetDriverInvoiceListResponse?>()
+
+    val liveDataGetDriverOtherCompaniesPolicy =
+        MutableLiveData<GetDriverOtherCompaniesPolicyResponse?>()
+    val liveDataDownloadDriverOtherCompaniesPolicy =
+        MutableLiveData<DownloadDriverOtherCompaniesPolicyResponse?>()
 
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
@@ -1865,6 +1872,30 @@ class MainViewModel(
                 liveDataDownloadInvoicePDF.postValue(null)
             else
                 liveDataDownloadInvoicePDF.postValue(response.body)
+        }
+    }
+
+    fun GetDriverOtherCompaniesPolicy(userID: Int) {
+        viewModelScope.launch {
+            var response = repo.GetDriverOtherCompaniesPolicy(userID)
+            if (response.failed || !response.isSuccessful)
+                liveDataGetDriverOtherCompaniesPolicy.postValue(null)
+            else
+                liveDataGetDriverOtherCompaniesPolicy.postValue(response.body)
+        }
+    }
+
+    fun DownloadDriverOtherCompaniesPolicy(
+        userID: Int,
+        companyId: Int,
+        companyDocID: Int
+    ) {
+        viewModelScope.launch {
+            val response = repo.DownloadDriverOtherCompaniesPolicy(userID, companyId, companyDocID)
+            if (response.failed || !response.isSuccessful)
+                liveDataDownloadDriverOtherCompaniesPolicy.postValue(null)
+            else
+                liveDataDownloadDriverOtherCompaniesPolicy.postValue(response.body)
         }
     }
 

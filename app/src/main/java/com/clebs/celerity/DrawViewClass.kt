@@ -12,9 +12,18 @@ import android.view.ViewGroup
 import android.graphics.Path
 import com.clebs.celerity.DeductionAgreement.Companion.brush
 import com.clebs.celerity.DeductionAgreement.Companion.path
+import com.clebs.celerity.utils.showToast
+import kotlin.math.hypot
 
 class DrawViewClass : View {
     private var params: ViewGroup.LayoutParams? = null
+    private var currentPath: Path? = null
+    private var isDrawing = false
+    private var isMoving = false
+    private var totalPathLength = 0.0f
+    private var lastX = 0.0f
+    private var lastY = 0.0f
+    private val minimumSignatureLength = 100.0f
 
     companion object {
         var pathList = ArrayList<android.graphics.Path>()
@@ -53,16 +62,38 @@ class DrawViewClass : View {
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                path = Path()
-                path.moveTo(x, y)
+                currentPath = Path().apply {
+                    moveTo(x, y)
+                }
+                isDrawing = true
+                lastX = x
+                lastY = y
+                totalPathLength = 0.0f
+                lastX = x
+                lastY = y
                 return true
             }
-
             MotionEvent.ACTION_MOVE -> {
-                path.lineTo(x, y)
-                pathList.add(path)
+                currentPath?.lineTo(x, y)
+                isMoving = true
+                totalPathLength += calculateDistance(lastX, lastY, x, y)
+                lastX = x
+                lastY = y
+                isDrawing = true
             }
+            MotionEvent.ACTION_UP -> {
 
+                if (isDrawing&&isMoving&& totalPathLength >= minimumSignatureLength) {
+                    currentPath?.let {
+                        pathList.add(it)
+                    }
+                    //showToast("Sign length $totalPathLength", context)
+                }else {
+                   // showToast("Signature is too short", context)
+                }
+                isMoving = false
+                isDrawing = false
+            }
             else -> return false
         }
         postInvalidate()
@@ -86,9 +117,12 @@ class DrawViewClass : View {
 
     fun clearSignature() {
         pathList.clear()
+        currentPath = null
         invalidate()
     }
-
+    private fun calculateDistance(x1: Float, y1: Float, x2: Float, y2: Float): Float {
+        return hypot((x2 - x1), (y2 - y1))
+    }
 
 }
 
