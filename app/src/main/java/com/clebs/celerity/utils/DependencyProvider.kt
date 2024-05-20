@@ -16,6 +16,7 @@ object DependencyProvider {
     private var apiService: ApiService? = null
     private var mainRepo: MainRepo? = null
     private var oSyncRepo:OSyncRepo?=null
+    var dailyRotaNotificationShowing:Boolean = false
 
     fun getMainVM(owner: ViewModelStoreOwner): MainViewModel {
 

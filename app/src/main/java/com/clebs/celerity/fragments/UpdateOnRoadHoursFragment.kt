@@ -40,6 +40,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
     var routeTypeSelection: Int? = null
     private var vehID: Int = 0
     var rtID: Int = 0
+    var rtName: String = " "
     private var parcelBack = 0
     lateinit var edtRoutes: EditText
     private lateinit var loadingDialog: LoadingDialog
@@ -88,6 +89,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
             binding.parcelsBroughtBack.text = routeInfo.RtNoParcelsbroughtback.toString()
             binding.edtMileage.setText(routeInfo.RtFinishMileage.toString())
             //binding.edtRouteComment.setText(routeInfo.RtComment)
+            rtName = routeInfo.RtName
             binding.edtRoutesORH.setText(routeInfo.RtName)
             binding.edtParcels.setText(routeInfo.RtNoOfParcelsDelivered.toString())
             dwID = routeInfo.RtDwId
@@ -97,11 +99,9 @@ class UpdateOnRoadHoursFragment : Fragment() {
             routeName = routeInfo.RtName
             if (routeInfo.RtComment == "null") {
                 binding.edtRouteComment.setText(" ")
-
-            }
-            else{
+            } else {
                 binding.edtRouteComment.setText(routeInfo.RtComment)
-                routeComment =routeInfo.RtComment
+                routeComment = routeInfo.RtComment
             }
 
             rtID = routeInfo.RtId
@@ -110,7 +110,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
         rideAlongApiCall()
 
         binding.pbbPlus.setOnClickListener {
-            parcelBack =  binding.parcelsBroughtBack.text.toString().toInt()
+            parcelBack = binding.parcelsBroughtBack.text.toString().toInt()
             parcelBack += 1
             binding.parcelsBroughtBack.text = parcelBack.toString()
         }
@@ -121,7 +121,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
         }
 
         binding.pbbMinus.setOnClickListener {
-            parcelBack =  binding.parcelsBroughtBack.text.toString().toInt()
+            parcelBack = binding.parcelsBroughtBack.text.toString().toInt()
             if (parcelBack > 0) {
                 parcelBack -= 1
                 binding.parcelsBroughtBack.text = parcelBack.toString()
@@ -167,8 +167,8 @@ class UpdateOnRoadHoursFragment : Fragment() {
             }
 
             if (it != null) {
-                prefs.vmRegNo= it.vmRegNo ?: ""
-                if(it.vmId!=0)
+                prefs.vmRegNo = it.vmRegNo ?: ""
+                if (it.vmId != 0)
                     Prefs.getInstance(requireContext()).vmId = it.vmId
                 if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
                     binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
@@ -272,7 +272,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
         if (prefs.getLocationID() == 0) {
             viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
                 if (it != null) {
-                    if(it.vmId!=0)
+                    if (it.vmId != 0)
                         Prefs.getInstance(requireContext()).vmId = it.vmId
                     prefs.saveLocationID(it.vmLocId)
                     locID = it.vmLocId
@@ -284,7 +284,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 Prefs.getInstance(App.instance).clebUserId.toDouble()
             ).observe(viewLifecycleOwner) {
                 if (it != null) {
-                    if(it.vmID!=null && prefs.vmId==0)
+                    if (it.vmID != null && prefs.vmId == 0)
                         prefs.vmId = it.vmID
                     it.vmRegNo?.let { it1 ->
                         prefs.vmRegNo = it1
@@ -296,8 +296,10 @@ class UpdateOnRoadHoursFragment : Fragment() {
                     prefs.workLocationName = it.workinglocation
                     prefs.currLocationName = it.currentlocation
 
-                    binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
-                    binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
+                    binding.headerTop.dxLoc.text =
+                        getLoc(prefs = Prefs.getInstance(requireContext()))
+                    binding.headerTop.dxReg.text =
+                        getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
                     if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
                         binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
@@ -355,8 +357,12 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 } catch (_: Exception) {
 
                 }
+                try {
+                    selectedRouteType = routeNames[routeIDs.indexOf(selectedRouteId)]
 
-                selectedRouteType = routeNames[routeIDs.indexOf(selectedRouteId)]
+                } catch (_: Exception) {
+                    selectedRouteType = rtName
+                }
                 setSpinnerNew(
                     binding.spinnerRouteType,
                     routeNames,

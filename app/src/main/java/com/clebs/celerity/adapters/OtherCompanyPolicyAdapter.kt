@@ -10,14 +10,25 @@ import com.clebs.celerity.R
 import com.clebs.celerity.databinding.AdapterOtherCompanyPolicyBinding
 import com.clebs.celerity.models.response.CompanyDocument
 import com.clebs.celerity.models.response.GetDriverOtherCompaniesPolicyResponse
+import com.clebs.celerity.utils.OpenMode
 
-class OtherCompanyPolicyAdapter :
+interface OtherPolicyCallbackInterface {
+    fun docClick(companyDocID: Int, companyID: Int, viewMode: OpenMode)
+}
+
+class OtherCompanyPolicyAdapter(var callback: OtherPolicyCallbackInterface) :
     RecyclerView.Adapter<OtherCompanyPolicyAdapter.OtherCompanyPolicyViewHolder>() {
 
     inner class OtherCompanyPolicyViewHolder(val binding: AdapterOtherCompanyPolicyBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CompanyDocument) {
             binding.otherpolicy = item
+            binding.otherDocView.setOnClickListener {
+                callback.docClick(item.CompanyDocId!!, item.CompanyId!!, OpenMode.VIEW)
+            }
+            binding.otherDocDownload.setOnClickListener {
+                callback.docClick(item.CompanyDocId!!, item.CompanyId!!, OpenMode.DOWNLOAD)
+            }
         }
     }
 

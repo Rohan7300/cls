@@ -60,9 +60,9 @@ class Prepardness : Fragment() {
                     pref.quesID = it.QuestionId
                     pref.qStage = 1
                 }
-
             }
         }
+
         binding.prepCancel.setOnClickListener {
             findNavController().navigate(R.id.completeTaskFragment)
             findNavController().clearBackStack(R.id.completeTaskFragment)
@@ -71,7 +71,8 @@ class Prepardness : Fragment() {
             val allQuestionsSelected = adapter.areAllQuestionsSelected()
             val comment =
                 if (binding.prepComment.text.isNullOrEmpty()) " " else binding.prepComment.text
-            if (allQuestionsSelected) {
+            var commentTxt  =
+            if (allQuestionsSelected ) {
                 val selectedOptions = questions.map { it.selectedOption }
 
                 savePrepardnessApi(selectedOptions,comment)

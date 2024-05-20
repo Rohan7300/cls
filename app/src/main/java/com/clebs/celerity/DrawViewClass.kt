@@ -79,6 +79,7 @@ class DrawViewClass : View {
                 totalPathLength += calculateDistance(lastX, lastY, x, y)
                 lastX = x
                 lastY = y
+                postInvalidate()
                 isDrawing = true
             }
             MotionEvent.ACTION_UP -> {
@@ -89,23 +90,26 @@ class DrawViewClass : View {
                     }
                     //showToast("Sign length $totalPathLength", context)
                 }else {
-                   // showToast("Signature is too short", context)
+                   showToast("Signature is too short", context)
                 }
+                currentPath = null
+                postInvalidate()
                 isMoving = false
                 isDrawing = false
             }
             else -> return false
         }
-        postInvalidate()
         return false
     }
 
     override fun onDraw(canvas: Canvas) {
-        for (i in pathList.indices) {
-            canvas.drawPath(pathList[i], brush)
-            invalidate()
-        }
         super.onDraw(canvas)
+        for (path in pathList) {
+            canvas.drawPath(path, brush)
+        }
+        currentPath?.let {
+            canvas.drawPath(it, brush) // Draw the current path in real-time
+        }
     }
 
     fun getBitmap(): Bitmap {

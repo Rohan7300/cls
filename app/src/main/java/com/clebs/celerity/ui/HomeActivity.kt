@@ -100,10 +100,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var firstName = ""
 
     var apiCount = 0
-    val currentDate =
-        SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(
-            Date()
-        )
+    val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(
+        Date()
+    )
     var ninetydaysBoolean: Boolean? = null
     var lastName = ""
     var isLeadDriver = false
@@ -421,11 +420,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     try {
                         navController.navigate(R.id.homeFragment)
                         navController.currentDestination!!.id = R.id.homeFragment
-                    }catch (_:Exception){
+                    } catch (_: Exception) {
 
                     }
-/*                    navController.navigate(R.id.homeFragment)
-                    navController.currentDestination!!.id = R.id.homeFragment*/
+                    /*                    navController.navigate(R.id.homeFragment)
+                                        navController.currentDestination!!.id = R.id.homeFragment*/
                 }
             }
 
@@ -434,7 +433,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.liveDataGetDAVehicleExpiredDocuments.observe(this) {
                 if (it != null) {
                     prefs.saveExpiredDocuments(it)
-                  expiredDocDialog.showDialog(supportFragmentManager)
+                    expiredDocDialog.showDialog(supportFragmentManager)
                     expiredDocDialog.isCancelable = false
                 }
             }

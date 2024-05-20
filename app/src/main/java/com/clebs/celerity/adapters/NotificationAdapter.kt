@@ -27,6 +27,7 @@ import com.clebs.celerity.models.response.NotificationResponseItem
 import com.clebs.celerity.ui.DeductionAgreementActivity
 import com.clebs.celerity.ui.ExpiringDocumentsActivity
 import com.clebs.celerity.ui.WeeklyRotaApprovalActivity
+import com.clebs.celerity.utils.DependencyProvider.dailyRotaNotificationShowing
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentWeek
 import com.clebs.celerity.utils.getCurrentYear
@@ -142,15 +143,19 @@ class NotificationAdapter(
                     viewModel.liveDataDaDailyLocationRota.observe(viewLifecycleOwner) {
                         loadingDialog.dismiss()
                         if (it != null) {
-                            showDailyRotaDialog(
-                                item.NotificationId,
-                                it.DriverName,
-                                it.DayOfWeek,
-                                it.WeekNo,
-                                it.YearNo,
-                                it.LocationName,
-                                dailyRotatoken
-                            )
+                            if(!dailyRotaNotificationShowing){
+                                showDailyRotaDialog(
+                                    item.NotificationId,
+                                    it.DriverName,
+                                    it.DayOfWeek,
+                                    it.WeekNo,
+                                    it.YearNo,
+                                    it.LocationName,
+                                    dailyRotatoken
+                                )
+                                dailyRotaNotificationShowing = true
+                            }
+
                         } else {
                             viewModel.MarkNotificationAsRead(item.NotificationId)
                          //   callback.refresh()
@@ -339,8 +344,12 @@ class NotificationAdapter(
             dailyRotaDialogBinding!!.rejectRB.isChecked = true
             selectedItem = 2
         }
+        dailyRotaDialog!!.setOnCancelListener {
+            dailyRotaNotificationShowing = false
+        }
 
         dailyRotaDialogBinding!!.submit.setOnClickListener {
+            dailyRotaNotificationShowing = false
             if (selectedItem == 0) {
                 showToast("Please select first!!", context)
             } else {

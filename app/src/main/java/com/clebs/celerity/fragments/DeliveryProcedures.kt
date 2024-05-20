@@ -58,8 +58,7 @@ class DeliveryProcedures : Fragment() {
         )
 
 
-
-        val adapter = QuestionAdapter(questions,requireContext())
+        val adapter = QuestionAdapter(questions, requireContext())
         binding.DeliveryRV.adapter = adapter
         binding.DeliveryRV.layoutManager = LinearLayoutManager(requireContext())
 
@@ -68,27 +67,27 @@ class DeliveryProcedures : Fragment() {
             findNavController().clearBackStack(R.id.completeTaskFragment)
         }
 
-        viewModel.liveDataQuestionareDeliveryProcedures.observe(viewLifecycleOwner){
+        viewModel.liveDataQuestionareDeliveryProcedures.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            if(it!=null){
-                if(pref.submittedDeliveryProcedures){
+            if (it != null) {
+                if (pref.submittedDeliveryProcedures) {
                     viewModel.currentViewPage.postValue(4)
                     pref.quesID = it.QuestionId
                     pref.qStage = 4
                 }
-            }else{
-                showToast("Failed to submit!!",requireContext())
+            } else {
+                showToast("Failed to submit!!", requireContext())
             }
         }
 
         binding.deliverSaveBtn.setOnClickListener {
-            if(pref.qStage<3||pref.quesID==0){
+            if (pref.qStage < 3 || pref.quesID == 0) {
                 showToast("Please complete previous assessment first", requireContext())
-            }else{
+            } else {
                 val allQuestionsSelected = adapter.areAllQuestionsSelected()
                 val comment =
                     if (binding.etDeliveryComment.text.isNullOrEmpty()) "" else binding.etDeliveryComment.text
-                if (allQuestionsSelected) {
+                if (allQuestionsSelected && !binding.etDeliveryComment.text.isNullOrEmpty()) {
                     val selectedOptions = questions.map { it.selectedOption }
                     saveDeliveryProcedureApi(selectedOptions, comment)
                 } else {
