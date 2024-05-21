@@ -74,7 +74,7 @@ class StartUp : Fragment() {
                 val allQuestionsSelected = adapter.areAllQuestionsSelected()
                 val comment =
                     if (binding.startupComment.text.isNullOrEmpty()) " " else binding.startupComment.text
-                if (allQuestionsSelected) {
+                if (allQuestionsSelected&&!binding.startupComment.text.isNullOrEmpty()) {
                     val selectedOptions = questions.map { it.selectedOption }
                     if (comment != null) {
                         saveStartupApi(selectedOptions, comment)

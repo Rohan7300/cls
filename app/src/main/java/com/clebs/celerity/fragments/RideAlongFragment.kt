@@ -76,7 +76,10 @@ class RideAlongFragment : Fragment() {
         clickListeners()
 
         observers()
-
+        binding.SpinnerRouteType.setText("")
+        binding.SpinnerRouteType.setAdapter(null)
+        binding.spinnerRouteLocation.setAdapter(null)
+        binding.spinnerRouteLocation.setText("")
         setInputListener(binding.edtParcels)
         setInputListener(binding.edtRouteComment)
 
@@ -254,7 +257,6 @@ class RideAlongFragment : Fragment() {
                     showToast("Please try again!.", requireContext())
                 }
             }
-
         }
     }
 
@@ -263,9 +265,10 @@ class RideAlongFragment : Fragment() {
         var isReTrainingSelected = false
         var isTrainingSelected = false
 
+        loadingDialog.show()
         viewModel.GetRideAlongDriversList()
         if (!vehicleListCalled) {
-
+            loadingDialog.show()
             viewModel.GetRideAlongVehicleLists()
         }
 
@@ -326,6 +329,7 @@ class RideAlongFragment : Fragment() {
         return listOf(
             selectedDriverId,
             selectedRouteId,
+            selectedLocId,
             routeName,
             retraining,
             training,
@@ -479,6 +483,7 @@ class RideAlongFragment : Fragment() {
                                 loadingDialog.show()
                                 binding.spinnerRouteLocation.setAdapter(null)
                                 binding.spinnerRouteLocation.setText("")
+                                selectedLocId = null
                                // viewModel.GetRouteInfoById(selectedRouteId!!)
                                 viewModel.GetRideAlongRouteInfoById(selectedRouteId!!, pref.clebUserId.toInt()!!)
                             }

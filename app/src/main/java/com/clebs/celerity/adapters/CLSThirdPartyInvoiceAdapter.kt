@@ -40,21 +40,28 @@ class CLSThirdPartyInvoiceAdapter(
             binding.date.text = convertWeekYearToMonthYear(item.Week, item.Year)
             binding.flname.text = "Invoice Week - ${item.Week}.pdf"
             binding.download.setOnClickListener {
-                pref.saveInvoiceX(item)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
-                    if (ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        permissionCallback.requestStoragePermission()
-                    } else {
-                        permissionCallback.dowloadPDF(item.InvoiceId, item.FileName)
-                    }
-                } else {
-                    permissionCallback.dowloadPDF(item.InvoiceId, item.FileName)
-                }
+                pdfDownload(item)
             }
+            binding.fullClickPDFDownload.setOnClickListener {
+                pdfDownload(item)
+            }
+        }
+    }
+
+    public fun pdfDownload(item: InvoiceXX) {
+        pref.saveInvoiceX(item)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionCallback.requestStoragePermission()
+            } else {
+                permissionCallback.dowloadPDF(item.InvoiceId, item.FileName)
+            }
+        } else {
+            permissionCallback.dowloadPDF(item.InvoiceId, item.FileName)
         }
     }
 
@@ -88,8 +95,6 @@ class CLSThirdPartyInvoiceAdapter(
         val item = data[position]
         holder.bind(item)
     }
-
-
 
 
     override fun getItemId(position: Int): Long {

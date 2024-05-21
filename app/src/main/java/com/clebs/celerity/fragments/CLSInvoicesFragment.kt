@@ -41,6 +41,7 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
     private var REQUEST_STORAGE_PERMISSION_CODE = 101
     private var selectedYear = 2024
     private var isDownloading = false
+    var isClicked = false
     lateinit var adapter: CLSInvoiceAdapter
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
@@ -60,21 +61,9 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
         showDialog()
         selectedYear = Year.now().value
         binding.selectYearET.setText(selectedYear.toString())
-        /*
-         binding.dateUpdater.setOnClickListener {
-                  showYearPicker()
-           }
-              */
         observers()
         showYearPickerNew()
-       //getting response faster from api
-
-
-            //getting response faster from api
-
-            viewModel.GetDriverInvoiceList(prefs.clebUserId.toInt(), selectedYear,0)
-
-
+        viewModel.GetDriverInvoiceList(prefs.clebUserId.toInt(), selectedYear, 0)
 
         return binding.root
     }
@@ -100,26 +89,30 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
                 binding.noinvoices.visibility = View.VISIBLE
             }
         }
-        viewModel.liveDataDownloadInvoicePDF.observe(viewLifecycleOwner){
+        viewModel.liveDataDownloadInvoicePDF.observe(viewLifecycleOwner) {
             hideDialog()
-            if(it!=null){
-                try {
-                    val fileContent = it.Invoices[0].FileContent
-                    val fileName = it.Invoices[0].FileName
-                    val file = File(
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                        fileName
-                    )
-                    val fos = FileOutputStream(file)
-                    fos.write(Base64.decode(fileContent, Base64.DEFAULT))
-                    fos.close()
-                    showToast("PDF Downloaded!", requireContext())
-                    openPDF(file)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    showToast("Failed to download PDF", requireContext())
+            if (it != null) {
+                if (isClicked) {
+                    try {
+
+                        val fileContent = it.Invoices[0].FileContent
+                        val fileName = it.Invoices[0].FileName
+                        val file = File(
+                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                            fileName
+                        )
+                        val fos = FileOutputStream(file)
+                        fos.write(Base64.decode(fileContent, Base64.DEFAULT))
+                        fos.close()
+                        showToast("PDF Downloaded!", requireContext())
+                        openPDF(file)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        showToast("Failed to download PDF", requireContext())
+                    }
                 }
-            }else{
+
+            } else {
             }
             isDownloading = false
         }
@@ -131,6 +124,7 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
             arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
             REQUEST_STORAGE_PERMISSION_CODE
         )
+        isClicked = true
     }
 
     override fun onStoragePermissionResult(granted: Boolean) {
@@ -143,13 +137,14 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
     }
 
     override fun dowloadPDF(invoiceID: Int, fileName: String) {
+        isClicked = true
         if (isDownloading) {
             showToast("Please wait other file is downloading", requireContext())
             return
         }
         isDownloading = true
         showDialog()
-        viewModel.DownloadInvoicePDF(prefs.clebUserId.toInt(),invoiceID)
+        viewModel.DownloadInvoicePDF(prefs.clebUserId.toInt(), invoiceID)
 
     }
 
@@ -214,7 +209,11 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
     private fun openPDF(file: File) {
 
         val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            FileProvider.getUriForFile(requireContext(), "${requireContext().packageName}.fileprovider", file)
+            FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.fileprovider",
+                file
+            )
         } else {
             Uri.fromFile(file)
         }

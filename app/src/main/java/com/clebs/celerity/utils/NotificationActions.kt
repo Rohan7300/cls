@@ -20,6 +20,7 @@ import com.clebs.celerity.models.response.NotificationResponseItem
 import com.clebs.celerity.ui.DeductionAgreementActivity
 import com.clebs.celerity.ui.ExpiringDocumentsActivity
 import com.clebs.celerity.ui.WeeklyRotaApprovalActivity
+import com.clebs.celerity.utils.DependencyProvider.dailyRotaNotificationShowing
 
 fun deductions(context: Context, notificationActionId: Int, notificationId: Int) {
     val intent = Intent(context, DeductionAgreementActivity::class.java)
@@ -72,8 +73,12 @@ fun showDailyRotaDialog(
             dailyRotaDialogBinding.rejectRB.isChecked = true
             selectedItem = 2
     }
+    dailyRotaDialog.setOnCancelListener {
+        dailyRotaNotificationShowing = false
+    }
 
     dailyRotaDialogBinding.submit.setOnClickListener {
+        dailyRotaNotificationShowing = false
         if (selectedItem == 0) {
             showToast("Please select first!!", context)
         } else {
@@ -126,18 +131,22 @@ fun dailyRota(
     viewModel.liveDataDaDailyLocationRota.observe(viewLifecycleOwner) {
         loadingDialog.dismiss()
         if (it != null) {
-            showDailyRotaDialog(
-                notificationId.toInt(),
-                it.DriverName,
-                it.DayOfWeek,
-                it.WeekNo,
-                it.YearNo,
-                it.LocationName,
-                dailyRotatoken,
-                context,
-                viewModel,
-                viewLifecycleOwner
-            )
+            if(!dailyRotaNotificationShowing){
+                showDailyRotaDialog(
+                    notificationId.toInt(),
+                    it.DriverName,
+                    it.DayOfWeek,
+                    it.WeekNo,
+                    it.YearNo,
+                    it.LocationName,
+                    dailyRotatoken,
+                    context,
+                    viewModel,
+                    viewLifecycleOwner
+                )
+                dailyRotaNotificationShowing = true
+            }
+
         } else {
             showToast("Failed to fetch Data!!", context)
             viewModel.MarkNotificationAsRead(notificationId)

@@ -3,6 +3,7 @@ package com.clebs.celerity.repository
 import android.util.Log
 import com.clebs.celerity.dialogs.VehicleAdvancePaymentDialog
 import com.clebs.celerity.models.CashFlowPieChartResponse
+import com.clebs.celerity.models.DownloadDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
 import com.clebs.celerity.models.SimpleNetworkResponse
@@ -45,6 +46,7 @@ import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverInvoiceListResponse
+import com.clebs.celerity.models.response.GetDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
@@ -73,6 +75,7 @@ import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.models.response.WeeklyLocationRotabyIdResponse
 import com.clebs.celerity.network.ApiService
+import com.clebs.celerity.utils.DBImages
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -1386,10 +1389,243 @@ class MainRepo(private val ApiService: ApiService) {
         userID: Int,
         selyear: Int,
         selweek: Int
-    ):SimpleNetworkResponse<GetDriverInvoiceListResponse>{
+    ): SimpleNetworkResponse<GetDriverInvoiceListResponse> {
         return safeApiCall {
-            ApiService.GetThirdPartyInvoiceList(userID,selyear,selweek)
+            ApiService.GetThirdPartyInvoiceList(userID, selyear, selweek)
         }
     }
 
+    suspend fun GetDriverOtherCompaniesPolicy(
+        userID: Int
+    ): SimpleNetworkResponse<GetDriverOtherCompaniesPolicyResponse> {
+        return safeApiCall {
+            ApiService.GetDriverOtherCompaniesPolicy(userID)
+        }
+    }
+
+    suspend fun DownloadDriverOtherCompaniesPolicy(
+        userID: Int,
+        companyId: Int,
+        companyDocID: Int
+    ): SimpleNetworkResponse<DownloadDriverOtherCompaniesPolicyResponse> {
+        return safeApiCall {
+            ApiService.DownloadDriverOtherCompaniesPolicy(userID, companyId, companyDocID)
+        }
+    }
+
+    suspend fun UploadVehicleDefectImages(
+        userID: Int,
+        vmId: Int,
+        lmid: Int,
+        date: Int,
+        type: Enum<DBImages>
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
+        return safeApiCall {
+            when (type) {
+                DBImages.WIND_SCREEN -> {
+                    ApiService.UploadVehicleWindscreenDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.WINDOW_GLASS ->{
+                    ApiService.UploadVehicleWindscreenDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.WIPERS_WASHERS ->{
+                    ApiService.UploadVehicleWipersOrWashersDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.MIRRORS ->{
+                    ApiService.UploadVehicleMirrorDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.CAB_SECURITY_INTERIOR->{
+                    ApiService.UploadVehicleCabSecurityOrInteriorDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.SEAT_BELT->{
+                    ApiService.UploadVehicleSeatBeltDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.WARNING_SERVICE_LIGHTS->{
+                    ApiService.UploadVehicleWarningOrServiceLightDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.FUEL_ADBLUE_LEVEL->{
+                    ApiService.UploadVehicleFuelOrAdBlueLevelDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.OIL_FUEL_COOLANT_LEAKS->{
+                    ApiService.UploadVehicleOilOrCoolantLeaksDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.FOG_LIGHTS->{
+                    ApiService.UploadVehicleLightsDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.INDICATORS_SIDE_REPEATERS->{
+                    ApiService.UploadVehicleIndicatorsOrSideRepeatersDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.HORN_REVERSE_BEEPER->{
+                    ApiService.UploadVehicleHornOrReverseBeeperDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.STEERING_CONTROL->{
+                    ApiService.UploadVehicleSteeringDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.BRAKED_EBS_ABS->{
+                    ApiService.UploadVehicleBrakesDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.VEHICLE_LOCKING_SYSTEM->{
+                    ApiService.UploadVehicleLockingSystemDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.BODY_DAMAGE_FRONT->{
+                    ApiService.UploadVehicleFrontDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.NEAR_SIDE->{
+                    ApiService.UploadVehicleNearSideDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.REAR->{
+                    ApiService.UploadVehicleRearDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.OFF_SIDE->{
+                    ApiService.UploadVehicleOffSideDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.REGISTRATION_NUMBER_PLATES->{
+                    ApiService.UploadVehicleRegistrationNumberPlateDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.REFLECTORS_MARKERS->{
+                    ApiService.UploadVehicleReflectorOrMarkerDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.WHEEL_FIXINGS->{
+                    ApiService.UploadVehicleWheelsOrWheelFixingDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.TYRE_CONDITION_THREAD_DEPTH->{
+                    ApiService.UploadVehicleTyresDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.EXCESSIVE_ENG_EXHAUST_SMOKE->{
+                    ApiService.UploadVehicleExcessiveEngineExhaustSmokeDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                DBImages.SPARE_WHEEL->{
+                    ApiService.UploadVehicleSpareWheelDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date
+                    )
+                }
+                else -> {
+                    throw IllegalArgumentException()
+                }
+            }
+        }
+    }
 }

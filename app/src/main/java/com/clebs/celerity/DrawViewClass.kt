@@ -10,26 +10,24 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.graphics.Path
-import android.graphics.PathMeasure
-import android.util.Log
-import android.widget.Toast
 import com.clebs.celerity.DeductionAgreement.Companion.brush
 import com.clebs.celerity.DeductionAgreement.Companion.path
+import com.clebs.celerity.utils.showToast
+import kotlin.math.hypot
 
 class DrawViewClass : View {
     private var params: ViewGroup.LayoutParams? = null
+    private var currentPath: Path? = null
+    private var isDrawing = false
+    private var isMoving = false
+    private var totalPathLength = 0.0f
+    private var lastX = 0.0f
+    private var lastY = 0.0f
+    private val minimumSignatureLength = 100.0f
 
     companion object {
-        private var touchMoved = false
         var pathList = ArrayList<android.graphics.Path>()
         var currentBrush = Color.BLACK
-        fun isSignatureValid(): Boolean {
-            val averagePathLength = pathList.size
-            val threshold = 25f // Set your desired threshold value here
-            return averagePathLength >= threshold
-            Log.e("moved", "isSignatureValid: "+ touchMoved )
-        }
-
     }
 
     constructor(context: Context) : this(context, null) {
@@ -64,39 +62,54 @@ class DrawViewClass : View {
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                path = Path()
-                path.moveTo(x, y)
-                touchMoved = false
-                  return true
-
+                currentPath = Path().apply {
+                    moveTo(x, y)
+                }
+                isDrawing = true
+                lastX = x
+                lastY = y
+                totalPathLength = 0.0f
+                lastX = x
+                lastY = y
+                return true
             }
-
             MotionEvent.ACTION_MOVE -> {
-                path.lineTo(x, y)
-                touchMoved = true
-                    pathList.add(path)
-
-
+                currentPath?.lineTo(x, y)
+                isMoving = true
+                totalPathLength += calculateDistance(lastX, lastY, x, y)
+                lastX = x
+                lastY = y
+                postInvalidate()
+                isDrawing = true
             }
-            else -> {
+            MotionEvent.ACTION_UP -> {
 
-                return false
+                if (isDrawing&&isMoving&& totalPathLength >= minimumSignatureLength) {
+                    currentPath?.let {
+                        pathList.add(it)
+                    }
+                    //showToast("Sign length $totalPathLength", context)
+                }else {
+                   showToast("Signature is too short", context)
+                }
+                currentPath = null
+                postInvalidate()
+                isMoving = false
+                isDrawing = false
             }
-
-
+            else -> return false
         }
-        postInvalidate()
         return false
     }
 
     override fun onDraw(canvas: Canvas) {
-        for (i in pathList.indices) {
-            canvas.drawPath(pathList[i], brush)
-            invalidate()
-
-        }
-        Log.e("drawviewsizes", "onDraw: "+ pathList.size.toString() )
         super.onDraw(canvas)
+        for (path in pathList) {
+            canvas.drawPath(path, brush)
+        }
+        currentPath?.let {
+            canvas.drawPath(it, brush) // Draw the current path in real-time
+        }
     }
 
     fun getBitmap(): Bitmap {
@@ -108,9 +121,12 @@ class DrawViewClass : View {
 
     fun clearSignature() {
         pathList.clear()
+        currentPath = null
         invalidate()
     }
-
+    private fun calculateDistance(x1: Float, y1: Float, x2: Float, y2: Float): Float {
+        return hypot((x2 - x1), (y2 - y1))
+    }
 
 }
 

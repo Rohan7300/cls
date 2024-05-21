@@ -228,7 +228,7 @@ class RideAlongAdapter(
             oldItem: leadDriverIdItem,
             newItem: leadDriverIdItem
         ): Boolean {
-            return oldItem.DriverId == newItem.DriverId
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(

@@ -38,10 +38,11 @@ import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentCameraBinding
 import com.clebs.celerity.fragments.DailyWorkFragment
 import com.clebs.celerity.ui.AddInspection
-import com.clebs.celerity.utils.DependencyProvider.currentimagebase64
-import com.clebs.celerity.utils.DependencyProvider.imagebitmap
+import com.clebs.celerity.utils.ClsCapture
+
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.invisible
+import com.clebs.celerity.utils.scaleBitmapToWidth
 import com.clebs.celerity.utils.showToast
 import kotlinx.coroutines.runBlocking
 
@@ -167,9 +168,9 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
 
                         if (bitmapBuffer2 != null) {
                             Log.e(TAG, "onImageSaved-==============: " + bitmapBuffer2)
-                            currentimagebase64=     bitmapToBase64(bitmapBuffer2!!)
-
-                            activity?.onBackPressed()
+                            //currentimagebase64=     bitmapToBase64(bitmapBuffer2!!)
+                            var scaleBitmap = scaleBitmapToWidth(bitmapBuffer2!!,1024)
+                            (activity as ClsCapture).passBitmap(output.savedUri!!)
                         }
 
 //                    if (imageBitmap != null) {
@@ -475,4 +476,5 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
         super.onDestroy()
         objectDetectorHelper.clearObjectDetector()
     }
+
 }

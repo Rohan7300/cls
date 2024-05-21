@@ -1,18 +1,12 @@
 package com.clebs.celerity.utils
 
-
-
-import ObjectDetectorHelper
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.clebs.celerity.databinding.ActivityMainBinding
+import com.clebs.celerity.utils.DependencyProvider.currentUri
 
-
-/**
- * Main entry point into our app. This app follows the single-activity pattern, and all
- * functionality is implemented in the form of fragments.
- */
 class ClsCapture : AppCompatActivity() {
 
     private lateinit var activityMainBinding: ActivityMainBinding
@@ -32,5 +26,10 @@ class ClsCapture : AppCompatActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+    fun passBitmap(crrURI: Uri){
+        DependencyProvider.isComingBackFromCLSCapture = true
+        currentUri = crrURI
+        finish()
     }
 }

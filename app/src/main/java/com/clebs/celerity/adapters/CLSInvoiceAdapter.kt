@@ -45,24 +45,30 @@ class CLSInvoiceAdapter(
             binding.date.text = ""
             binding.flname.text = "CLS Invoice Week ${item.Week}.pdf"
             binding.download.setOnClickListener {
-                pref.saveInvoice(item)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
-                    if (ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        permissionCallback.requestStoragePermission()
-                    } else {
-                        permissionCallback.dowloadPDF(item.InvoiceId, item.FileName)
-                    }
-                } else {
-                    permissionCallback.dowloadPDF(item.InvoiceId, item.FileName)
-                }
+                pdfDownload(item)
+            }
+            binding.fullClickPDFDownload.setOnClickListener {
+                pdfDownload(item)
             }
         }
     }
 
+    public fun pdfDownload(item: InvoiceXX) {
+        pref.saveInvoice(item)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionCallback.requestStoragePermission()
+            } else {
+                permissionCallback.dowloadPDF(item.InvoiceId, item.FileName)
+            }
+        } else {
+            permissionCallback.dowloadPDF(item.InvoiceId, item.FileName)
+        }
+    }
     private fun convertWeekYearToMonthYear(week: Int, year: Int): String {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)

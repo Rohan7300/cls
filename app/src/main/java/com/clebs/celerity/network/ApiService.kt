@@ -1,6 +1,7 @@
 package com.clebs.celerity.network
 
 import com.clebs.celerity.models.CashFlowPieChartResponse
+import com.clebs.celerity.models.DownloadDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
 import com.clebs.celerity.models.TicketDepartmentsResponse
@@ -50,6 +51,7 @@ import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverInvoiceListResponse
+import com.clebs.celerity.models.response.GetDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
@@ -653,6 +655,200 @@ interface ApiService {
         @Query("InvoiceId") invoiceId: Int
     ): Response<DownloadInvoicePDFResponseX>
 
+    @GET("/api/HtmlToPDF/GetDriverOtherCompaniesPolicy/{userId}")
+    suspend fun GetDriverOtherCompaniesPolicy(
+        @Path("userId") userId: Int
+    ): Response<GetDriverOtherCompaniesPolicyResponse>
+
+    @GET("/api/HtmlToPDF/DownloadDriverOtherCompaniesPolicy")
+    suspend fun DownloadDriverOtherCompaniesPolicy(
+        @Query("userId") userId: Int,
+        @Query("companyId") companyId: Int,
+        @Query("companyDocId") companyDocId: Int
+    ): Response<DownloadDriverOtherCompaniesPolicyResponse>
+
+    @POST("/api/Vehicle/UploadVehicleWindscreenDefect")
+    suspend fun UploadVehicleWindscreenDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleWindowsOrGlassVisibilityDefect")
+    suspend fun UploadVehicleWindowsOrGlassVisibilityDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleWipersOrWashersDefect")
+    suspend fun UploadVehicleWipersOrWashersDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleMirrorDefect")
+    suspend fun UploadVehicleMirrorDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleCabSecurityOrInteriorDefect")
+    suspend fun UploadVehicleCabSecurityOrInteriorDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleSeatBeltDefect")
+    suspend fun UploadVehicleSeatBeltDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleWarningOrServiceLightDefect")
+    suspend fun UploadVehicleWarningOrServiceLightDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleFuelOrAdBlueLevelDefect")
+    suspend fun UploadVehicleFuelOrAdBlueLevelDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleOilOrCoolantLeaksDefect")
+    suspend fun UploadVehicleOilOrCoolantLeaksDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleLightsDefect")
+    suspend fun UploadVehicleLightsDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleIndicatorsOrSideRepeatersDefect")
+    suspend fun UploadVehicleIndicatorsOrSideRepeatersDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleHornOrReverseBeeperDefect")
+    suspend fun UploadVehicleHornOrReverseBeeperDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleSteeringDefect")
+    suspend fun UploadVehicleSteeringDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleBrakesDefect")
+    suspend fun UploadVehicleBrakesDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleLockingSystemDefect")
+    suspend fun UploadVehicleLockingSystemDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleFrontDefect")
+    suspend fun UploadVehicleFrontDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleNearSideDefect")
+    suspend fun UploadVehicleNearSideDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleRearDefect")
+    suspend fun UploadVehicleRearDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleOffSideDefect")
+    suspend fun UploadVehicleOffSideDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleRegistrationNumberPlateDefect")
+    suspend fun UploadVehicleRegistrationNumberPlateDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleReflectorOrMarkerDefect")
+    suspend fun UploadVehicleReflectorOrMarkerDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleWheelsOrWheelFixingDefect")
+    suspend fun UploadVehicleWheelsOrWheelFixingDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleTyresDefect")
+    suspend fun UploadVehicleTyresDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleOilOrFuelOrCoolantLeaksDefect")
+    suspend fun UploadVehicleOilOrFuelOrCoolantLeaksDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleExcessiveEngineExhaustSmokeDefect")
+    suspend fun UploadVehicleExcessiveEngineExhaustSmokeDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehicleSpareWheelDefect")
+    suspend fun UploadVehicleSpareWheelDefect(
+        @Query("userId") userId: Int,
+        @Query("vmId") vmId:Int,
+        @Query("lmId") lmID: Int,
+        @Query("date") date:Int
+    ):Response<SimpleStatusMsgResponse>
 
 }
 

@@ -17,8 +17,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
-import android.view.GestureDetector
-import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -30,19 +28,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.DrawViewClass
-import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.adapters.OtherCompanyPolicyAdapter
+import com.clebs.celerity.adapters.OtherPolicyCallbackInterface
 import com.clebs.celerity.databinding.ActivityPolicyDocsBinding
 import com.clebs.celerity.models.requests.CompanySignedDocX
 import com.clebs.celerity.models.requests.DriverHireAgreementX
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
-import com.clebs.celerity.network.ApiService
-import com.clebs.celerity.network.RetrofitService
-import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.dialogs.DownloadingDialog
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.DependencyProvider
@@ -50,21 +46,23 @@ import com.clebs.celerity.utils.OpenMode
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.showToast
+import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.text.SimpleDateFormat
+import java.util.Base64
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
 
-class PolicyDocsActivity : AppCompatActivity() {
+class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
     lateinit var mbinding: ActivityPolicyDocsBinding
     lateinit var viewModel: MainViewModel
 
     private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
-    private var userId = 0
+    private var clebuserId = 0
     var isImage1 = true
     private var handbookID: Int = 0
     var openModeDAHandBook: OpenMode = OpenMode.VIEW
@@ -107,7 +105,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                 viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]*/
 
         viewModel = DependencyProvider.getMainVM(this)
-        userId = Prefs.getInstance(this).clebUserId.toInt()
+        clebuserId = Prefs.getInstance(this).clebUserId.toInt()
         handbookID = Prefs.getInstance(this).handbookId
         viewModel.liveDataGetDriverSignatureInformation.observe(this) {
             if (it != null) {
@@ -115,7 +113,7 @@ class PolicyDocsActivity : AppCompatActivity() {
 
             }
         }
-        viewModel.getDriverSignatureInfo(userId.toDouble()).observe(this) {
+        viewModel.getDriverSignatureInfo(clebuserId.toDouble()).observe(this) {
             if (it != null) {
                 handbookID = it.handbookId
                 Prefs.getInstance(this).handbookId = handbookID
@@ -126,8 +124,8 @@ class PolicyDocsActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.GetDriverSignatureInformation(userId)
-
+        viewModel.GetDriverSignatureInformation(clebuserId)
+        viewModel.GetDriverOtherCompaniesPolicy(clebuserId)
         observers()
         clickListeners()
 
@@ -158,7 +156,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                 mbinding.amazonHeader.isClickable = false
                 viewGoneAnimator(mbinding.amazonLayout)
                 viewGoneAnimator(mbinding.views1)
-                mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.frame__2_))
+                mbinding.amazonArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
 
                 if (mbinding.llTrucks.visibility == View.GONE) {
                     showAlert()
@@ -180,7 +178,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                 viewGoneAnimator(mbinding.truckLayout)
                 viewGoneAnimator(mbinding.viewss2)
                 mbinding.truckHeaderLL.isClickable = false
-                mbinding.truckArrow.setImageDrawable(resources.getDrawable(R.drawable.frame__2_))
+                mbinding.truckArrow.setImageDrawable(resources.getDrawable(R.drawable.checkin))
                 mbinding.viewss2.visibility = View.GONE
                 if (mbinding.llAmazon.visibility == View.GONE) {
                     showAlert()
@@ -200,7 +198,46 @@ class PolicyDocsActivity : AppCompatActivity() {
     }
 
     private fun observers() {
-/*        viewModel.liveDataDownloadSignedServiceLevelAgreement.observe(this) {
+
+        viewModel.liveDataDownloadDriverOtherCompaniesPolicy.observe(this) {
+            downloadingDialog.dismiss()
+            if (it != null) {
+              //  try {
+
+                    downloadPDF(
+                        it.CompanyDocuments[0].FileName,
+                        ByteArrayInputStream(
+                            Base64.getDecoder().decode(it.CompanyDocuments[0].FileContent)
+                        ),
+                        currentMode
+                    )
+                /*} catch (_: Exception) {
+
+                }*/
+            }
+        }
+
+        /*        viewModel.liveDataDownloadSignedServiceLevelAgreement.observe(this) {
+                    downloadingDialog.dismiss()
+                    if (it != null) {
+                        downloadPDF(
+                            "SignedServiceLevelAgreement",
+                            it.byteStream(),
+                            openModeSignedServiceLevelAgreement
+                        )
+                    }
+                }*/
+        var otherDocAdapter = OtherCompanyPolicyAdapter(this@PolicyDocsActivity)
+        mbinding.otherDocsRV.adapter = otherDocAdapter
+        mbinding.otherDocsRV.layoutManager = LinearLayoutManager(this)
+
+        viewModel.liveDataGetDriverOtherCompaniesPolicy.observe(this) {
+            if (it != null) {
+                otherDocAdapter.saveData(it)
+            }
+        }
+
+        viewModel.liveDataDownloadServiceLevelAgreementPolicy.observe(this) {
             downloadingDialog.dismiss()
             if (it != null) {
                 downloadPDF(
@@ -209,81 +246,74 @@ class PolicyDocsActivity : AppCompatActivity() {
                     openModeSignedServiceLevelAgreement
                 )
             }
-        }*/
+        }
 
-        viewModel.liveDataDownloadServiceLevelAgreementPolicy.observe(this){
+
+        /*        viewModel.liveDataDownloadSignedDAHandbook.observe(this) {
+                    downloadingDialog.dismiss()
+                    if (it != null) {
+                        downloadPDF("DAHandbook", it.byteStream(), openModeDAHandBook)
+                    }
+                }*/
+
+        viewModel.liveDataDownloadDAHandbookPolicy.observe(this) {
+            downloadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF("DAHandbook", it.byteStream(), openModeDAHandBook)
+            }
+        }
+
+        /*       viewModel.liveDataDownloadSignedGDPRPOLICY.observe(this) {
+                   downloadingDialog.dismiss()
+                   if (it != null) {
+                       downloadPDF("GDPRPOLICY", it.byteStream(), openModeSignedGDPRPOLICY)
+                   }
+               }*/
+
+        viewModel.liveDataDownloadGDPRPolicy.observe(this) {
+            downloadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF("GDPRPOLICY", it.byteStream(), openModeSignedGDPRPOLICY)
+            }
+        }
+
+        /*        viewModel.liveDataDownloadSignedPrivacyPolicy.observe(this) {
+                    downloadingDialog.dismiss()
+                    if (it != null) {
+                        downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
+                    }
+                }*/
+
+        viewModel.liveDataDownloadPrivacyPolicy.observe(this) {
+            downloadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
+            }
+        }
+
+        /*        viewModel.liveDataDownloadSignedDAEngagement.observe(this) {
+                    downloadingDialog.dismiss()
+                    if (it != null) {
+                        downloadPDF("DAEngagement", it.byteStream(), openModeSignedDAEngagement)
+                    }
+                }*/
+
+        viewModel.liveDataDownloadDAEngagementPolicy.observe(this) {
+            downloadingDialog.dismiss()
+            if (it != null) {
+                downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
+            }
+        }
+
+
+        viewModel.liveDataDownloadTrucksServiceLevelAgreementPolicy.observe(this) {
             downloadingDialog.dismiss()
             if (it != null) {
                 downloadPDF(
-                    "SignedServiceLevelAgreement",
+                    "TruckSLAPolicy",
                     it.byteStream(),
-                    openModeSignedServiceLevelAgreement
+                    openModeTrucksServiceLevelAgreementPolicy
                 )
-            }
-        }
-
-
-/*        viewModel.liveDataDownloadSignedDAHandbook.observe(this) {
-            downloadingDialog.dismiss()
-            if (it != null) {
-                downloadPDF("DAHandbook", it.byteStream(), openModeDAHandBook)
-            }
-        }*/
-
-        viewModel.liveDataDownloadDAHandbookPolicy.observe(this){
-            downloadingDialog.dismiss()
-            if (it != null) {
-                downloadPDF("DAHandbook", it.byteStream(), openModeDAHandBook)
-            }
-        }
-
- /*       viewModel.liveDataDownloadSignedGDPRPOLICY.observe(this) {
-            downloadingDialog.dismiss()
-            if (it != null) {
-                downloadPDF("GDPRPOLICY", it.byteStream(), openModeSignedGDPRPOLICY)
-            }
-        }*/
-
-        viewModel.liveDataDownloadGDPRPolicy.observe(this){
-            downloadingDialog.dismiss()
-            if (it != null) {
-                downloadPDF("GDPRPOLICY", it.byteStream(), openModeSignedGDPRPOLICY)
-            }
-        }
-
-/*        viewModel.liveDataDownloadSignedPrivacyPolicy.observe(this) {
-            downloadingDialog.dismiss()
-            if (it != null) {
-                downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
-            }
-        }*/
-
-        viewModel.liveDataDownloadPrivacyPolicy.observe(this){
-            downloadingDialog.dismiss()
-            if (it != null) {
-                downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
-            }
-        }
-
-/*        viewModel.liveDataDownloadSignedDAEngagement.observe(this) {
-            downloadingDialog.dismiss()
-            if (it != null) {
-                downloadPDF("DAEngagement", it.byteStream(), openModeSignedDAEngagement)
-            }
-        }*/
-
-        viewModel.liveDataDownloadDAEngagementPolicy.observe(this){
-            downloadingDialog.dismiss()
-            if (it != null) {
-                downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
-            }
-        }
-
-
-        viewModel.liveDataDownloadTrucksServiceLevelAgreementPolicy.observe(this){
-            downloadingDialog.dismiss()
-            if(it!=null){
-                downloadPDF("TruckSLAPolicy", it.byteStream(), openModeTrucksServiceLevelAgreementPolicy)
             }
         }
     }
@@ -319,7 +349,7 @@ class PolicyDocsActivity : AppCompatActivity() {
         mbinding.downloadSLA1.setOnClickListener {
             downloadingDialog.show()
             openModeSignedServiceLevelAgreement = OpenMode.DOWNLOAD
-          //  viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+            //  viewModel.DownloadSignedServiceLevelAgreement(handbookID)
             viewModel.DownloadServiceLevelAgreementPolicy()
         }
         mbinding.imgSLA1.setOnClickListener {
@@ -331,14 +361,14 @@ class PolicyDocsActivity : AppCompatActivity() {
         mbinding.downloadSLA2.setOnClickListener {
             downloadingDialog.show()
             openModeTrucksServiceLevelAgreementPolicy = OpenMode.DOWNLOAD
-           // viewModel.DownloadSignedServiceLevelAgreement(handbookID)
-           // viewModel.DownloadServiceLevelAgreementPolicy()
+            // viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+            // viewModel.DownloadServiceLevelAgreementPolicy()
             viewModel.DownloadTrucksServiceLevelAgreementPolicy()
         }
         mbinding.imgSLA2.setOnClickListener {
             downloadingDialog.show()
             openModeTrucksServiceLevelAgreementPolicy = OpenMode.VIEW
-           // viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+            // viewModel.DownloadSignedServiceLevelAgreement(handbookID)
             //viewModel.DownloadServiceLevelAgreementPolicy()
             viewModel.DownloadTrucksServiceLevelAgreementPolicy()
         }
@@ -353,7 +383,7 @@ class PolicyDocsActivity : AppCompatActivity() {
         mbinding.imgPrivacyPolicy1.setOnClickListener {
             downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.VIEW
-           // viewModel.DownloadSignedPrivacyPolicy(handbookID)
+            // viewModel.DownloadSignedPrivacyPolicy(handbookID)
             viewModel.DownloadPrivacyPolicy()
         }
         mbinding.downloadPrivacyPolicy2.setOnClickListener {
@@ -410,13 +440,13 @@ class PolicyDocsActivity : AppCompatActivity() {
         mbinding.imgGDPR1.setOnClickListener {
             downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.VIEW
-          //  viewModel.DownloadSignedGDPRPOLICY(handbookID)
+            //  viewModel.DownloadSignedGDPRPOLICY(handbookID)
             viewModel.DownloadGDPRPolicy()
         }
         mbinding.imgGDPR2.setOnClickListener {
             downloadingDialog.show()
             openModeSignedPrivacyPolicy = OpenMode.VIEW
-           // viewModel.DownloadSignedGDPRPOLICY(handbookID)
+            // viewModel.DownloadSignedGDPRPOLICY(handbookID)
             viewModel.DownloadGDPRPolicy()
         }
     }
@@ -433,17 +463,14 @@ class PolicyDocsActivity : AppCompatActivity() {
         save.setOnClickListener {
             Log.d("DrawViewSize", DrawViewClass.pathList.size.toString())
             if (DrawViewClass.pathList.isEmpty()) {
-                showToast("Please sign before saving", this)
-            } else if (!DrawViewClass.isSignatureValid()) {
-                DrawViewClass.pathList.clear()
-                showToast("Please do valid signature", this)
+                showToast("Please add valid signature before saving", this)
             } else {
+                // showToast("Signature length ${DrawViewClass.pathList.size}", this)
                 val signatureBitmap: Bitmap = drawView.getBitmap()
                 testIV.setImageBitmap(signatureBitmap)
 
                 loadingDialog.show()
                 updateSignatureInfoApi(signatureBitmap)
-
             }
         }
 
@@ -473,7 +500,6 @@ class PolicyDocsActivity : AppCompatActivity() {
                 if (it.Status == "200") {
                     Prefs.getInstance(applicationContext)
                         .saveBoolean("isSignatureReq", false)
-                    DrawViewClass.pathList.clear()
                 }
                 val intent = Intent(this, HomeActivity::class.java)
                 intent.putExtra("destinationFragment", "HomeFragment")
@@ -528,7 +554,7 @@ class PolicyDocsActivity : AppCompatActivity() {
                     IsGDPRChecked = driverSignatureInfo!!.GDPRSectionReq,
                     IsSLAChecked = driverSignatureInfo!!.SLASectionReq,
                     Signature = bse64,
-                    UserID = userId,
+                    UserID = clebuserId,
                     IsAmazonSignatureUpdated = driverSignatureInfo!!.isAmazonSignatureReq,
                     IsDAEngagementChecked = driverSignatureInfo!!.DAEngagementSectionReq
                 )
@@ -551,7 +577,6 @@ class PolicyDocsActivity : AppCompatActivity() {
 
     private fun setVisibility(ll: LinearLayout, visibility: Boolean) {
 
-
         if (visibility) {
             ll.visibility = View.VISIBLE
 
@@ -560,16 +585,9 @@ class PolicyDocsActivity : AppCompatActivity() {
 
         }
 
-
     }
 
     private fun downloadPDF(fileName: String, fileContent: InputStream, mode: OpenMode) {
-//        val androidData =fileContent// Replace with your actual data
-//
-//// Calculate the processedData value (for demonstration purposes, let's use a fixed value)
-//        val processedData = androidData.read().
-
-
         currentfileName = fileName
         currentMode = mode
         currentFileContent = fileContent
@@ -590,10 +608,6 @@ class PolicyDocsActivity : AppCompatActivity() {
                     }
                 }
                 val uri = getFileUri(file)
-
-
-
-
                 if (mode == OpenMode.DOWNLOAD) {
                     showNotification(
                         "PDF Downloaded",
@@ -644,10 +658,10 @@ class PolicyDocsActivity : AppCompatActivity() {
 
         val intent = Intent(Intent.ACTION_VIEW)
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        //intent.setType("*/*");
-
-        intent.setDataAndType(uri, "*/*")
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+        intent.setDataAndType(uri, "application/pdf")
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
         var pendingIntent: PendingIntent? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -765,5 +779,13 @@ class PolicyDocsActivity : AppCompatActivity() {
             })
     }
 
-
+    override fun docClick(companyDocID: Int, companyID: Int, viewMode: OpenMode) {
+        currentMode = viewMode
+        downloadingDialog.show()
+        viewModel.DownloadDriverOtherCompaniesPolicy(
+            Prefs.getInstance(this).clebUserId.toInt(),
+            companyID,
+            companyDocID
+        )
+    }
 }

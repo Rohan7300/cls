@@ -73,7 +73,7 @@ class ReturnToStation : Fragment() {
                 val allQuestionsSelected = adapter.areAllQuestionsSelected()
                 val comment =
                     if (binding.etReturnComment.text.isNullOrEmpty()) " " else binding.etReturnComment.text
-                if (allQuestionsSelected) {
+                if (allQuestionsSelected&&!binding.etReturnComment.text.isNullOrEmpty()) {
                     val selectedOptions = questions.map { it.selectedOption }
                     saveReturnQuesApi(selectedOptions, comment)
 

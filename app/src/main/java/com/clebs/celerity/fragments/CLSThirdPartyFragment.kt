@@ -38,6 +38,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
     lateinit var adapter: CLSThirdPartyInvoiceAdapter
     lateinit var homeActivity: HomeActivity
     private var selectedYear = 2024
+    var isClicked = false
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
     }
@@ -94,11 +95,13 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
         viewModel.liveDataDownloadThirdPartyInvoicePDF.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
-                val fileContent = it.Invoices[0].FileContent
-                val fileName = it.Invoices[0].FileName
-                try {
-                    downloadPDFData(fileName, fileContent)
-                } catch (_: Exception) {
+                if(isClicked){
+                    val fileContent = it.Invoices[0].FileContent
+                    val fileName = it.Invoices[0].FileName
+                    try {
+                        downloadPDFData(fileName, fileContent)
+                    } catch (_: Exception) {
+                    }
                 }
             }
             isDownloading = false
@@ -106,6 +109,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
     }
 
     override fun requestStoragePermission() {
+        isClicked = true
         ActivityCompat.requestPermissions(
             requireActivity(),
             arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
@@ -123,6 +127,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
     }
 
     override fun dowloadPDF(invoiceID: Int, fileName: String) {
+        isClicked = true
         if (isDownloading) {
             showToast("Please wait other file is downloading", requireContext())
             return

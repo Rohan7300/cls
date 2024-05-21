@@ -2,6 +2,7 @@ package com.clebs.celerity.utils
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.clebs.celerity.Factory.MyViewModelFactory
@@ -17,9 +18,10 @@ object DependencyProvider {
     private var apiService: ApiService? = null
     private var mainRepo: MainRepo? = null
     private var oSyncRepo:OSyncRepo?=null
-     var currentimagebase64: String? = null
-    var imagebitmap:Bitmap?=null
-
+    var dailyRotaNotificationShowing:Boolean = false
+    var isComingBackFromCLSCapture:Boolean = false
+    var isComingBackFromFaceScan:Boolean = false
+    var currentUri: Uri? = null
     fun getMainVM(owner: ViewModelStoreOwner): MainViewModel {
 
             viewModelInstance = ViewModelProvider(
