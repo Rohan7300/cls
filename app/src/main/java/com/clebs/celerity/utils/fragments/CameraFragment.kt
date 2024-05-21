@@ -37,6 +37,9 @@ import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentCameraBinding
 import com.clebs.celerity.fragments.DailyWorkFragment
+import com.clebs.celerity.ui.AddInspection
+import com.clebs.celerity.utils.DependencyProvider.currentimagebase64
+import com.clebs.celerity.utils.DependencyProvider.imagebitmap
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.invisible
 import com.clebs.celerity.utils.showToast
@@ -160,9 +163,11 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
                         showToast("Photo capture succeeded processing photo", requireContext())
                         bitmapBuffer2 =
                             getImageBitmapFromUri(requireContext(), output.savedUri!!)
+
+
                         if (bitmapBuffer2 != null) {
                             Log.e(TAG, "onImageSaved-==============: " + bitmapBuffer2)
-                            bitmapToBase64(bitmapBuffer2!!)
+                            currentimagebase64=     bitmapToBase64(bitmapBuffer2!!)
 
                             activity?.onBackPressed()
                         }

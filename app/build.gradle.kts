@@ -141,6 +141,7 @@ dependencies {
 
     //implementation("com.github.quickpermissions:quickpermissions-kotlin:0.4.0")
     implementation("com.github.quickpermissions:quickpermissions-kotlin:0.4.0")
+
     implementation("ru.superjob:kotlin-permissions:1.0.3")
     implementation("org.jetbrains.anko:anko-commons:0.10.4")
 
