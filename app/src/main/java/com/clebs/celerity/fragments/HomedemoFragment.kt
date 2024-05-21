@@ -9,13 +9,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ScrollView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentHomedemoBinding
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.TutTrackerTwo
+import com.clebs.celerity.utils.TutorialTracker
 import com.clebs.celerity.utils.convertDateFormat
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
@@ -24,6 +29,24 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.MPPointF
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAlign
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonCenterAlign
+import com.skydoves.balloon.BalloonHighlightAnimation
+import com.skydoves.balloon.BalloonSizeSpec
+import com.skydoves.balloon.IconGravity
+import com.skydoves.balloon.awaitBalloons
+import com.skydoves.balloon.balloon
+import com.skydoves.balloon.overlay.BalloonOverlayAnimation
+import com.skydoves.balloon.overlay.BalloonOverlayCircle
+import com.skydoves.balloon.overlay.BalloonOverlayOval
+import com.skydoves.balloon.overlay.BalloonOverlayRect
+import com.skydoves.balloon.overlay.BalloonOverlayRoundRect
+import com.skydoves.balloon.showAlign
+import com.skydoves.balloon.showAtCenter
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -37,7 +60,8 @@ class HomedemoFragment : Fragment() {
     private var isclicked: Boolean = true
     var thirdpartydeductions: Float = 0.0f
     var week: Int = 0
-    var entries= ArrayList<PieEntry>()
+    var entries = ArrayList<PieEntry>()
+    private var hasRunOnce = false
     var year: Int = 0
 
     protected val months = arrayOf(
@@ -83,6 +107,16 @@ class HomedemoFragment : Fragment() {
 
 
         viewModel.GetWeekAndYear()
+        if (TutorialTracker.hasTutorialBeenShown()) {
+            if (!TutTrackerTwo.hasTutorialBeenShown()) {
+                TUT()
+                TutTrackerTwo.markTutorialAsShown()
+            } else {
+                mbinding.llmain.isClickable = true
+            }
+
+        }
+
 //        mbinding.web.settings.allowContentAccess
 //        mbinding.web.settings.setRenderPriority(WebSettings.RenderPriority.HIGH)
 //        mbinding.web.settings.setCacheMode(WebSettings.LOAD_NO_CACHE)
@@ -176,14 +210,16 @@ class HomedemoFragment : Fragment() {
         mbinding.viewfullschedule.setOnClickListener {
             if (isclicked) {
 //                mbinding.vieww.visibility=View.VISIBLE
-                mbinding.consttwo.visibility=View.GONE
-                mbinding.const1.visibility=View.GONE
+                mbinding.consttwo.visibility = View.GONE
+                mbinding.const1.visibility = View.GONE
                 mbinding.ss.fullScroll(ScrollView.FOCUS_UP);
                 mbinding.viewfulldatalayout.visibility = View.VISIBLE
+                mbinding.up.visibility=View.VISIBLE
             } else {
-                mbinding.consttwo.visibility=View.VISIBLE
-                mbinding.const1.visibility=View.VISIBLE
+                mbinding.consttwo.visibility = View.VISIBLE
+                mbinding.const1.visibility = View.VISIBLE
                 mbinding.viewfulldatalayout.visibility = View.GONE
+                mbinding.up.visibility=View.GONE
 //                mbinding.vieww.visibility=View.GONE
             }
             isclicked = !isclicked
@@ -194,13 +230,19 @@ class HomedemoFragment : Fragment() {
             Prefs.getInstance(requireContext()).lmid
         )
 
+mbinding.up.setOnClickListener {
+    mbinding.consttwo.visibility = View.VISIBLE
+    mbinding.const1.visibility = View.VISIBLE
+    mbinding.viewfulldatalayout.visibility = View.GONE
+    mbinding.up.visibility=View.GONE
 
+}
 
         Observers()
         mbinding.btPrev.setOnClickListener {
-            mbinding.viewfulldatalayout.visibility=View.GONE
+            mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
-            mbinding.const1.visibility=View.VISIBLE
+            mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility = View.VISIBLE
             val weekprev = week - 3
             mbinding.txtLastWeek.text = "Week " + weekprev
@@ -222,8 +264,8 @@ class HomedemoFragment : Fragment() {
 
 
         mbinding.btThisWeek.setOnClickListener {
-            mbinding.const1.visibility=View.VISIBLE
-            mbinding.viewfulldatalayout.visibility=View.GONE
+            mbinding.const1.visibility = View.VISIBLE
+            mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btThisWeek.visibility = View.GONE
             mbinding.btPrev.visibility = View.VISIBLE
             showDialog()
@@ -262,7 +304,7 @@ class HomedemoFragment : Fragment() {
 
 
                 viewModel.GetcashFlowWeek(
-                    Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week-2
+                    Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 2
                 )
                 showDialog()
                 viewModel.GetViewFullScheduleInfo(
@@ -369,7 +411,7 @@ class HomedemoFragment : Fragment() {
                 data.setValueTextSize(11f)
                 data.setValueTextColor(resources.getColor(io.clearquote.assessment.cq_sdk.R.color.transparent))
 
-                mbinding.pieChart.data=data
+                mbinding.pieChart.data = data
 
                 // undo all highlights
                 mbinding.pieChart.highlightValues(null)
@@ -395,8 +437,7 @@ class HomedemoFragment : Fragment() {
 //                pieChart.holeRatio = 0f
 //                pieChart.overlayRatio = 0f
 
-            }
-            else {
+            } else {
 
                 hideDialog()
                 entries.clear();
@@ -467,24 +508,23 @@ class HomedemoFragment : Fragment() {
 //
                     mbinding.viewfullschedule.visibility = View.VISIBLE
                     mbinding.yourNext.text = "Your next working day"
-                    try{
+                    try {
                         /*         mbinding.textView5.text =
                                      "${convertDateFormat(it.NextWorkingDate)} - ${it.NextWorkingDay}\n${it.NextWorkingLoc}"*/
-                        var time = it.NextWorkingDayWaveTime?:" "
-                        var date = it.NextWorkingDate?:" "
-                        var nextLoc = it.NextWorkingLoc?:" "
+                        var time = it.NextWorkingDayWaveTime ?: " "
+                        var date = it.NextWorkingDate ?: " "
+                        var nextLoc = it.NextWorkingLoc ?: " "
 
-                        if (it.NextWorkingDayWaveTime!=null){
+                        if (it.NextWorkingDayWaveTime != null) {
                             mbinding.textView5.text =
                                 "${convertDateFormat(date)} ${time.split(":")[0]} : ${time.split(":")[1]} - ${nextLoc}"
-                        }
-                        else{
+                        } else {
                             mbinding.textView5.text =
                                 "${convertDateFormat(date)} ${time} : ${time} - ${nextLoc}"
                         }
 
 
-                    }catch (_:Exception){
+                    } catch (_: Exception) {
                         mbinding.textView5.text = "Not allocated"
                     }
 
@@ -499,8 +539,7 @@ class HomedemoFragment : Fragment() {
                     mbinding.tvIsWorkingShowSat.text = it.saturdayLocation
 
                 }
-            }
-            else {
+            } else {
                 mbinding.viewfullschedule.isClickable = false
                 mbinding.viewfullschedule.isEnabled = false
                 mbinding.viewfulldatalayout.visibility = View.GONE
@@ -513,8 +552,9 @@ class HomedemoFragment : Fragment() {
 
         }
     }
+
     private fun crossfade() {
-        val   shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
+        val shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
         mbinding.const1.apply {
 
             // Set the content view to 0% opacity but visible, so that it is
@@ -564,4 +604,117 @@ class HomedemoFragment : Fragment() {
             })
     }
 
+    fun TUT() {
+        mbinding.llmain.isClickable = false
+
+
+        val balloontwo = Balloon.Builder(requireContext())
+            .setWidthRatio(1.0f)
+            .setHeight(BalloonSizeSpec.WRAP)
+            .setText("Your average and week score")
+            .setTextColorResource(R.color.black)
+            .setTextSize(13f)
+            .setMarginLeft(20)
+            .setBalloonHighlightAnimation(BalloonHighlightAnimation.BREATH)
+            .setMarginRight(20)
+            .setOverlayShape(BalloonOverlayRect)
+            .setIsVisibleOverlay(true)
+            // sets the visibility of the overlay for highlighting an anchor.
+            .setOverlayColorResource(R.color.overlay)
+            .setArrowSize(5)
+            .setAutoDismissDuration(3000)
+            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+            .setArrowSize(10)
+            .setShowCounts(1)
+            .setDismissWhenShowAgain(true)
+            .setArrowPosition(0.5f)
+            .setPadding(12)
+            .setBackgroundColor(ContextCompat.getColor(requireContext(),     R.color.medium_orange))
+            .setCornerRadius(8f)
+            .setBalloonAnimation(BalloonAnimation.CIRCULAR)
+            .setLifecycleOwner(viewLifecycleOwner)
+            .build()
+
+        val balloonthree = Balloon.Builder(requireContext())
+            .setWidthRatio(1.0f)
+            .setHeight(BalloonSizeSpec.WRAP)
+            .setText("Map showing Profits and deductions")
+            .setTextColorResource(R.color.black)
+            .setTextSize(13f)
+            .setMarginLeft(20)
+            .setBalloonHighlightAnimation(BalloonHighlightAnimation.BREATH)
+            .setMarginRight(20)
+            .setAutoDismissDuration(3000)
+            .setIsVisibleOverlay(true)
+            .setOverlayShape(BalloonOverlayRect)
+            // sets the visibility of the overlay for highlighting an anchor.
+            .setOverlayColorResource(R.color.overlay)
+            .setArrowSize(5)
+            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+            .setArrowSize(10)
+            .setDismissWhenShowAgain(true)
+            .setArrowPosition(0.5f)
+            .setPadding(12)
+            .setShowCounts(1)
+            .setBackgroundColor(ContextCompat.getColor(requireContext(),     R.color.medium_orange))
+            .setCornerRadius(8f)
+            .setBalloonAnimation(BalloonAnimation.CIRCULAR)
+            .setLifecycleOwner(viewLifecycleOwner)
+            .build()
+
+        val balloonfour = Balloon.Builder(requireContext())
+            .setWidthRatio(1.0f)
+            .setHeight(BalloonSizeSpec.WRAP)
+            .setText("View your schedules")
+            .setTextColorResource(R.color.black)
+            .setTextSize(13f)
+            .setMarginLeft(20)
+            .setBalloonHighlightAnimation(BalloonHighlightAnimation.BREATH)
+            .setMarginRight(20)
+            .setAutoDismissDuration(3000)
+            .setIsVisibleOverlay(true)
+            .setOverlayShape(BalloonOverlayRect)
+            // sets the visibility of the overlay for highlighting an anchor.
+            .setOverlayColorResource(R.color.overlay)
+            .setArrowSize(5)
+            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+            .setArrowSize(10)
+            .setShowCounts(1)
+            .setDismissWhenShowAgain(true)
+            .setArrowPosition(0.5f)
+            .setPadding(12)
+            .setBackgroundColor(ContextCompat.getColor(requireContext(),     R.color.medium_orange))
+            .setCornerRadius(8f)
+            .setBalloonAnimation(BalloonAnimation.CIRCULAR)
+            .setLifecycleOwner(viewLifecycleOwner)
+            .build()
+
+
+
+        lifecycleScope.launch {
+            // shows balloons at the same time
+
+            // shows another group after dismissing the previous group.
+            awaitBalloons {
+                dismissSequentially = true // balloons dismissed individually
+                mbinding.const1.alignBottom(balloontwo)
+                balloontwo.clearAllPreferences()
+
+            }
+            awaitBalloons {
+                dismissSequentially = true // balloons dismissed individually
+                mbinding.consttwo.alignBottom(balloonthree)
+                balloonthree.clearAllPreferences()
+
+            }
+            awaitBalloons {
+                dismissSequentially = true // balloons dismissed individually
+                mbinding.layoutfullschedule.alignBottom(balloonfour)
+                balloonfour.clearAllPreferences()
+
+            }
+
+
+        }
+    }
 }

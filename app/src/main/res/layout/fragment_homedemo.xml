@@ -58,6 +58,7 @@ android:id="@+id/ss"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:weightSum="2"
+                        android:id="@+id/llm"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:layout_editor_absoluteX="10dp">
 
@@ -268,6 +269,7 @@ android:id="@+id/ss"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
+                        android:id="@+id/llm2"
                         android:orientation="vertical">
 
                         <TextView
@@ -591,6 +593,15 @@ android:id="@+id/ss"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_gravity="end"
+                            android:src="@drawable/up_arrow"
+                            android:id="@+id/up"
+                            android:visibility="gone"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="30dp"
+                            app:tint="@color/medium_orange" />
                         <!--                        <androidx.recyclerview.widget.RecyclerView-->
                         <!--                            android:id="@+id/viewfullschedule"-->
                         <!--                            android:layout_width="match_parent"-->

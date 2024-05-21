@@ -107,6 +107,7 @@ dependencies {
 //    implementation("com.google.firebase:firebase-core:21.1.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.github.skydoves:balloon:1.6.4")
 
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
 

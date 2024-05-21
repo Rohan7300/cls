@@ -7,6 +7,8 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.speech.tts.TextToSpeech
+import android.speech.tts.Voice
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -19,19 +21,19 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.clebs.celerity.Factory.MyViewModelFactory
@@ -43,50 +45,52 @@ import com.clebs.celerity.ViewModel.OSyncVMProvider
 import com.clebs.celerity.ViewModel.OSyncViewModel
 import com.clebs.celerity.database.ImageDatabase
 import com.clebs.celerity.database.ImagesRepo
-import com.clebs.celerity.database.OSyncRepo
-import com.clebs.celerity.database.OfflineSyncDB
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.ActivityHomeBinding
 import com.clebs.celerity.dialogs.ExpiredDocDialog
-import com.clebs.celerity.dialogs.InvoiceReadytoViewDialog
-import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
+import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.dialogs.NoInternetDialog
+import com.clebs.celerity.fragments.HomeFragment
+import com.clebs.celerity.fragments.Userprofile
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
-import com.clebs.celerity.utils.InspectionIncompleteDialog
-import com.clebs.celerity.utils.InspectionIncompleteListener
-import com.clebs.celerity.dialogs.LoadingDialog
-import com.clebs.celerity.utils.NetworkManager
-import com.clebs.celerity.dialogs.NoInternetDialog
-import com.clebs.celerity.fragments.InvoicesFragment
-import com.clebs.celerity.fragments.Userprofile
 import com.clebs.celerity.utils.DependencyProvider.getMainVM
 import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
+import com.clebs.celerity.utils.InspectionIncompleteDialog
+import com.clebs.celerity.utils.InspectionIncompleteListener
+import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
+import com.clebs.celerity.utils.TutorialTracker
 import com.clebs.celerity.utils.checkIfInspectionFailed
 import com.clebs.celerity.utils.dailyRota
 import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.deductions
 import com.clebs.celerity.utils.expiredDocuments
 import com.clebs.celerity.utils.expiringDocument
-import com.clebs.celerity.utils.getCurrentWeek
-import com.clebs.celerity.utils.getCurrentYear
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.invoiceReadyToView
 import com.clebs.celerity.utils.logOSEntity
-import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.parseToInt
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.weeklyLocationRota
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
-import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
+import com.skydoves.balloon.ArrowOrientation
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonHighlightAnimation
+import com.skydoves.balloon.BalloonSizeSpec
+import com.skydoves.balloon.awaitBalloons
+import com.skydoves.balloon.overlay.BalloonOverlayAnimation
+import com.skydoves.balloon.overlay.BalloonOverlayCircle
+import com.skydoves.balloon.overlay.BalloonOverlayRect
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
-import org.jetbrains.anko.find
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -99,6 +103,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     SaveChangesCallback, InspectionIncompleteListener {
     private var saveChangesCallback: SaveChangesCallback? = null
     private lateinit var bottomNavigationView: BottomNavigationView
+    var textToSpeech: TextToSpeech? = null
 
     lateinit var imageViewModel: ImageViewModel
     private var screenid: Int = 0
@@ -342,13 +347,43 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 //    internetDialog.showDialog(fragmentManager)
             }
         }
-
-
         val toggle = ActionBarDrawerToggle(
-            this, ActivityHomeBinding.myDrawerLayout, R.string.CANCEL, R.string.celerity_ls
+            this,
+            ActivityHomeBinding.myDrawerLayout,
+
+            R.string.open_nav,
+            R.string.close_nav
         )
         ActivityHomeBinding.myDrawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
+//        if (savedInstanceState == null) {
+//            supportFragmentManager.beginTransaction().replace(R.id.nav_fragment, HomedemoFragment())
+//                .commit()
+//            ActivityHomeBinding.navigationView.setCheckedItem(R.id.nav_home)
+//        }
+//        ActivityHomeBinding.navigationView.setNavigationItemSelectedListener {
+//            when (it.itemId) {
+//                R.id.nav_settings -> {
+//
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.nav_fragment, Userprofile())
+//                        .commit()
+//                    ActivityHomeBinding.navigationView.setCheckedItem(R.id.nav_settings)
+//                    true
+//                }
+//
+//
+//                else -> {
+//                    false
+//                }
+//            }
+//        }
+//        val toggle = ActionBarDrawerToggle(
+//            this, ActivityHomeBinding.myDrawerLayout, R.string.CANCEL, R.string.celerity_ls
+//        )
+//        ActivityHomeBinding.myDrawerLayout.addDrawerListener(toggle)
+//        toggle.syncState()
 
 
         prefs = Prefs.getInstance(this)
@@ -388,6 +423,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
 
         cqSDKInitializer()
+
         clebuserID = prefs.clebUserId.toInt()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment
@@ -397,8 +433,40 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         fragmentManager = this.supportFragmentManager
         bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
+        ActivityHomeBinding.navigationView.setupWithNavController(navController)
+        ActivityHomeBinding.navigationView.setNavigationItemSelectedListener {
 
+            when(it.itemId){
+                R.id.nav_home->{
+                    navController.navigate(R.id.homedemoFragment)
+                    true
+                }
+                R.id.nav_settings->{
+                    navController.navigate(R.id.profileFragment)
+                    true
+                }
+
+                else -> {
+                    false
+                }
+            }
+        }
+        navController.addOnDestinationChangedListener(object :NavController.OnDestinationChangedListener{
+            override fun onDestinationChanged(
+                controller: NavController,
+                destination: NavDestination,
+                arguments: Bundle?
+            ) {
+
+            }
+        })
         getDeviceID()
+        if (!TutorialTracker.hasTutorialBeenShown()) {
+            TUT()
+            TutorialTracker.markTutorialAsShown()
+        } else {
+            ActivityHomeBinding.navFragment.isClickable = true
+        }
         val deviceID =
             Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()
         Log.e("kjkcjkvckvck", "onCreate: " + deviceID)
@@ -521,6 +589,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         ActivityHomeBinding.logout.visibility = View.GONE
                         ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
                         navController.navigate(R.id.homedemoFragment)
+
                         true
                     }
 
@@ -588,6 +657,22 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             navController.navigate(R.id.completeTaskFragment)
         }
 
+    }
+
+    override fun onPause() {
+        if (textToSpeech != null) {
+            textToSpeech!!.stop();
+            textToSpeech!!.shutdown();
+        }
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        if (textToSpeech != null) {
+            textToSpeech!!.stop();
+            textToSpeech!!.shutdown();
+        }
+        super.onDestroy()
     }
 
     private fun logout() {
@@ -917,4 +1002,203 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         oSyncViewModel.getData()
     }
 
+    fun TUT() {
+        ActivityHomeBinding.navFragment.isClickable = false
+        // Your function code here
+        val balloon = Balloon.Builder(this)
+            .setTextSize(15f)
+            .setLayout(R.layout.welcome_dialog)
+            .setCornerRadius(8f)
+            .setArrowSize(0)
+
+            .setMarginTop(60)
+            .setIsVisibleOverlay(true)
+            .setOverlayShape(BalloonOverlayRect)
+            // sets the visibility of the overlay for highlighting an anchor.
+            .setOverlayColorResource(R.color.overlay)
+            .setAutoDismissDuration(4000)
+            .setCornerRadius(6f)
+            .setDismissWhenShowAgain(true)
+            .setDismissWhenLifecycleOnPause(true)
+            // sets the visibility of the overlay for highlighting an anchor.
+            .setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE) // default is fade.
+            .setDismissWhenOverlayClicked(false)
+            .setShowCounts(1)
+            .setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            .setBalloonAnimation(BalloonAnimation.CIRCULAR)
+            .setLifecycleOwner(this)
+
+            .build()
+
+        val button: ImageView = balloon.getContentView().findViewById<ImageView>(R.id.crossing)
+        button.setOnClickListener {
+
+            balloon.dismiss()
+        }
+
+        val balloontwo = Balloon.Builder(this)
+            .setHeight(BalloonSizeSpec.WRAP)
+            .setWidth(BalloonSizeSpec.WRAP)
+            .setText("Notifications")
+            .setTextColorResource(R.color.black)
+            .setTextSize(13f)
+            .setMarginLeft(20)
+            .setBalloonHighlightAnimation(BalloonHighlightAnimation.BREATH)
+            .setMarginRight(20)
+
+            .setOverlayShape(BalloonOverlayCircle(radius = 36f))
+            .setIsVisibleOverlay(true)
+            // sets the visibility of the overlay for highlighting an anchor.
+            .setOverlayColorResource(R.color.overlay)
+            .setArrowSize(5)
+            .setShowCounts(1)
+            .setArrowOrientation(ArrowOrientation.START)
+            .setAutoDismissDuration(4000)
+            .setDismissWhenShowAgain(true)
+            .setArrowPosition(0.5f)
+            .setPadding(12)
+            .setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.medium_orange
+                )
+            )
+            .setCornerRadius(8f)
+            .setBalloonAnimation(BalloonAnimation.CIRCULAR)
+            .setLifecycleOwner(this)
+            .build()
+
+        val balloonthree = Balloon.Builder(this)
+            .setWidthRatio(1.0f)
+            .setHeight(BalloonSizeSpec.WRAP)
+            .setText("Navigate to other screens")
+            .setTextColorResource(R.color.black)
+            .setTextSize(13f)
+            .setMarginLeft(20)
+            .setBalloonHighlightAnimation(BalloonHighlightAnimation.BREATH)
+            .setMarginRight(20)
+            .setIsVisibleOverlay(true)
+            .setOverlayShape(BalloonOverlayCircle(radius = 36f))
+            // sets the visibility of the overlay for highlighting an anchor.
+            .setOverlayColorResource(R.color.overlay)
+            .setArrowSize(5)
+            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+            .setArrowSize(10)
+            .setAutoDismissDuration(4000)
+            .setDismissWhenShowAgain(true)
+            .setArrowPosition(0.5f)
+            .setPadding(12)
+            .setShowCounts(1)
+            .setBackgroundColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.medium_orange
+                )
+            )
+            .setCornerRadius(8f)
+            .setBalloonAnimation(BalloonAnimation.CIRCULAR)
+            .setLifecycleOwner(this)
+            .build()
+
+
+
+        lifecycleScope.launch {
+            // shows balloons at the same time
+            awaitBalloons {
+                // dismissing of any balloon dismisses all of them. Default behaviour
+                dismissSequentially = true
+                textToSpeech = TextToSpeech(this@HomeActivity, TextToSpeech.OnInitListener {
+
+                    // setting the language to the default phone language.
+                    val ttsLang = textToSpeech!!.setLanguage(Locale.getDefault())
+                    val text = "Welcome to CLS. Please follow the instructions to get started"
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+
+                        val voices: Set<Voice> = textToSpeech!!.getVoices()
+                        val voiceList: List<Voice> = ArrayList(voices)
+                        val selectedVoice = voiceList[8] // Change to the desired voice index
+
+                        textToSpeech!!.setVoice(selectedVoice)
+                        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+                    } else {
+                        val voices: Set<Voice> = textToSpeech!!.getVoices()
+                        val voiceList: List<Voice> = ArrayList(voices)
+                        val selectedVoice = voiceList[8] // Change to the desired voice index
+
+                        textToSpeech!!.setVoice(selectedVoice)
+                        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                    }
+
+                    // check if the language is supportable.
+                    if (ttsLang == TextToSpeech.LANG_MISSING_DATA || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        showToast("error", this@HomeActivity)
+                    }
+
+
+                })
+                ActivityHomeBinding.consts.alignBottom(balloon)
+
+
+
+            }
+
+            // shows another group after dismissing the previous group.
+            awaitBalloons {
+                dismissSequentially = true // balloons dismissed individually
+                ActivityHomeBinding.imgNotification.alignBottom(balloontwo)
+
+
+            }
+            awaitBalloons {
+                dismissSequentially = true // balloons dismissed individually
+                ActivityHomeBinding.bottomNavigatinView.alignTop(balloonthree)
+                textToSpeech = TextToSpeech(this@HomeActivity, TextToSpeech.OnInitListener {
+
+                    // setting the language to the default phone language.
+                    val ttsLang = textToSpeech!!.setLanguage(Locale.getDefault())
+                    val text =
+                            " Click on the bottom bar to explore more of the CLS. Happy journey"
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+
+                        val voices: Set<Voice> = textToSpeech!!.getVoices()
+                        val voiceList: List<Voice> = ArrayList(voices)
+                        val selectedVoice = voiceList[8] // Change to the desired voice index
+
+                        textToSpeech!!.setVoice(selectedVoice)
+                        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+                    } else {
+                        val voices: Set<Voice> = textToSpeech!!.getVoices()
+                        val voiceList: List<Voice> = ArrayList(voices)
+                        val selectedVoice = voiceList[8] // Change to the desired voice index
+
+                        textToSpeech!!.setVoice(selectedVoice)
+                        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+                    }
+
+                    // check if the language is supportable.
+                    if (ttsLang == TextToSpeech.LANG_MISSING_DATA || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        showToast("error", this@HomeActivity)
+                    }
+
+
+                })
+
+            }
+//            awaitBalloons {
+//                dismissSequentially = true // balloons dismissed individually
+//                ActivityHomeBinding.bottomNavigatinView.get(2).alignTop(balloonfour)
+//
+//            }
+
+
+        }
+
+
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_fragment)
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
 }
