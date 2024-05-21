@@ -81,6 +81,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
             if (it != null) {
                 if (it.Invoices.size > 0) {
                     binding.noinvoices.visibility = View.GONE
+                    binding.clsInvoicesThirdParty.scheduleLayoutAnimation();
                     binding.clsInvoicesThirdParty.visibility = View.VISIBLE
                 }
                 adapter.data.clear()

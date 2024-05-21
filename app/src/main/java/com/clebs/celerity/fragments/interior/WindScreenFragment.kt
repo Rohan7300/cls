@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,28 +15,20 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.ImageViewModel
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.databinding.FragmentWindScreenBinding
-import com.clebs.celerity.network.ApiService
-import com.clebs.celerity.network.RetrofitService
-import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.ui.HomeActivity
-import com.clebs.celerity.utils.DBImages
-import com.clebs.celerity.utils.DBNames
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertBitmapToBase64
 import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.setImageView
-import com.clebs.celerity.utils.visible
 import com.elconfidencial.bubbleshowcase.BubbleShowCase
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
@@ -53,7 +46,7 @@ class WindScreenFragment : Fragment() {
     var defectName: String? = null
     lateinit var imageViewModel: ImageViewModel
     var imageEntity = ImageEntity()
-
+    lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,6 +60,7 @@ class WindScreenFragment : Fragment() {
 //
 //                toolTip(tooltip[0].msg,tooltip[0].dec,tooltip[0].id,tooltip[0].view)
 
+        loadingDialog = (activity as HomeActivity).loadingDialog
 
         val vm_id = arguments?.get("vm_mileage")
         Log.e("vmvmvmv", "onCreateView: $vm_id")
@@ -234,6 +228,7 @@ class WindScreenFragment : Fragment() {
                     imageEntity.dfNameWindScreen = "f"
                     imageViewModel.insertDefectName(imageEntity)
                 }
+                loadingDialog.show()
                 navigateTo(R.id.windowsGlassFragment)
                 //findNavController().navigate(R.id.windowsGlassFragment)
             }
@@ -418,7 +413,7 @@ class WindScreenFragment : Fragment() {
         var prefs = Prefs.getInstance(requireContext())
         val fragmentStack = prefs.getNavigationHistory()
         val navOptions = NavOptions.Builder()
-            .setEnterAnim(R.anim.slide_left) // Animation for entering the new fragment
+//            .setEnterAnim(R.anim.slide_left) // Animation for entering the new fragment
             // Animation for exiting the current fragment
 //            .setPopEnterAnim(R.anim.slide_in_right) // Animation for entering the previous fragment when navigating back
 //            .setPopExitAnim(R.anim.slide_left) // Animation for exiting the current fragment when navigating back
@@ -447,6 +442,10 @@ class WindScreenFragment : Fragment() {
         imageViewModel.insertImage(imageEntity)
         imageEntity.dfNameWindScreen = "f"
         imageViewModel.insertDefectName(imageEntity)
+        loadingDialog.show()
+//        Handler().postDelayed(Runnable {  navigateTo(R.id.windowsGlassFragment) }, 1000)
         navigateTo(R.id.windowsGlassFragment)
+
+
     }
 }

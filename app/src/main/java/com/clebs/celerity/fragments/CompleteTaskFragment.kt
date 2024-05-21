@@ -1,6 +1,7 @@
 package com.clebs.celerity.fragments
 
 import android.Manifest
+import android.R.attr.bitmap
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
@@ -14,18 +15,17 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.blue
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -42,6 +42,7 @@ import com.clebs.celerity.adapters.RideAlongAdapter
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
 import com.clebs.celerity.databinding.TimePickerDialogBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
@@ -51,9 +52,7 @@ import com.clebs.celerity.ui.AddInspection
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
-import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.addLeadingZeroIfNeeded
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.getLoc
@@ -65,14 +64,22 @@ import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.toRequestBody
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
+import com.google.firebase.ml.vision.face.FirebaseVisionFace
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import com.tapadoo.alerter.Alerter
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
 import io.clearquote.assessment.cq_sdk.models.CustomerDetails
 import io.clearquote.assessment.cq_sdk.models.InputDetails
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
-import io.ktor.util.reflect.instanceOf
 import okhttp3.MultipartBody
+import org.checkerframework.checker.units.qual.degrees
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -91,6 +98,8 @@ class CompleteTaskFragment : Fragment() {
     private var clebUserID: Int = 0
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
+    var image: FirebaseVisionImage? = null
+    var detector: FirebaseVisionFaceDetector? = null
     lateinit var ivX: ImageView
     var codeX = 0
     var uploadInProgress = false
@@ -141,12 +150,20 @@ class CompleteTaskFragment : Fragment() {
             }.toTypedArray()
     }
 
+    override fun onStart() {
+        super.onStart()
+        mbinding.mainCompleteTask.visibility = View.GONE
+        mbinding.llmain.visibility = View.GONE
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentCompleteTaskBinding.inflate(inflater, container, false)
         }
+        mbinding.mainCompleteTask.visibility = View.GONE
+        mbinding.llmain.visibility = View.GONE
         val clickListener = View.OnClickListener {
             showAlert()
         }
@@ -154,10 +171,11 @@ class CompleteTaskFragment : Fragment() {
             SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(
                 Date()
             )
+        FirebaseApp.initializeApp(requireContext())
 
-        val animFadein: Animation =
-            AnimationUtils.loadAnimation(context, R.anim.left2right)
-        mbinding.mainCompleteTask.animation = animFadein
+//        val animFadein: Animation =
+//            AnimationUtils.loadAnimation(context, R.anim.left2right)
+//        mbinding.mainCompleteTask.animation = animFadein
 
         loadingDialog = (activity as HomeActivity).loadingDialog
         oSyncViewModel = (activity as HomeActivity).oSyncViewModel
@@ -415,8 +433,9 @@ class CompleteTaskFragment : Fragment() {
             mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
             mbinding.headerTop.strikedxLoc.visibility = View.GONE
-
+        showDialog()
         viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner) {
+            hideDialog()
             if (it != null) {
                 scannedvrn = it.vmRegNo
                 Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
@@ -425,7 +444,7 @@ class CompleteTaskFragment : Fragment() {
                 }
             }
         }
-
+        showDialog()
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
@@ -501,13 +520,17 @@ class CompleteTaskFragment : Fragment() {
             }
             setVisibiltyLevel()
         }
-
+        showDialog()
         viewModel.ldcompleteTaskLayoutObserver.observe(viewLifecycleOwner) {
             if (it == -1) {
                 mbinding.mainCompleteTask.visibility = View.VISIBLE
                 mbinding.searchLayout.visibility = View.GONE
+                mbinding.llmain.visibility = View.VISIBLE
+                hideDialog()
             } else {
+                hideDialog()
                 mbinding.mainCompleteTask.visibility = View.GONE
+                mbinding.llmain.visibility = View.GONE
                 mbinding.searchLayout.visibility = View.VISIBLE
             }
         }
@@ -532,8 +555,9 @@ class CompleteTaskFragment : Fragment() {
 
         viewModel.livedataUpdateClockOutTime.observe(viewLifecycleOwner) {
             hideDialog()
-            viewModel.GetDailyWorkInfoById(clebUserID)
             showDialog()
+            viewModel.GetDailyWorkInfoById(clebUserID)
+
             if (it != null) {
                 mbinding.clockOutMark.setImageResource(R.drawable.finalclockout)
                 mbinding.rlcomtwoClockOut.isEnabled = false
@@ -863,6 +887,7 @@ class CompleteTaskFragment : Fragment() {
                 showErrorDialog(fragmentManager, "CTF-02", "Please add valid time information")
             }
         }
+
     }
 
     private fun sendBreakTimeData() {
@@ -919,13 +944,17 @@ class CompleteTaskFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
-          //  imageView.setImageBitmap(imageBitmap)
+            //  imageView.setImageBitmap(imageBitmap)
             osData.faceMaskImage = bitmapToBase64(imageBitmap)
             osData.isImagesUploadedToday = true
             oSyncViewModel.insertData(osData)
-            sendImage(imageBitmap, requestCode)
-        }else{
-            showToast("Failed to fetch image content",requireContext())
+
+                sendImage(imageBitmap, requestCode)
+
+
+
+        } else {
+            showToast("Failed to fetch image content", requireContext())
         }
     }
 
@@ -1375,5 +1404,6 @@ class CompleteTaskFragment : Fragment() {
                 }
             })
     }
+
 
 }

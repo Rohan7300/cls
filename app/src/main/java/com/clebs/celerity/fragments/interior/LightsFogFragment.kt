@@ -9,17 +9,22 @@ import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentLightsFogBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.fragments.BaseInteriorFragment
+import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.setImageView
 
 
 class LightsFogFragment : BaseInteriorFragment() {
     private lateinit var mBinding: FragmentLightsFogBinding
+    lateinit var loadingDialog: LoadingDialog
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.lightsFogFragment)
         mBinding.tvNext.visibility = View.GONE
         clickListeners()
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        loadingDialog.dismiss()
         setDefault(mBinding.imageUploadIV,mBinding.edtDefect)
     }
     override fun clickListeners() {
@@ -120,6 +125,7 @@ class LightsFogFragment : BaseInteriorFragment() {
             imageEntity.dfNameFogLights = "f"
             imageViewModel.insertDefectName(imageEntity)
         }
+        loadingDialog.show()
         navigateTo(R.id.indicatorsSideRepeatorFragment)
         //findNavController().navigate(R.id.indicatorsSideRepeatorFragment)
     }

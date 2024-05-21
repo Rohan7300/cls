@@ -30,7 +30,7 @@
                 android:layout_weight="1"
 
                 android:gravity="center_vertical"
-                android:drawableEnd="@drawable/baseline_preview_24"
+                android:drawableEnd="@drawable/baseline_remove_red_eye_24"
                 android:layout_marginStart="2dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:text=" CLS - 2082"
@@ -45,7 +45,7 @@
                 android:layout_marginStart="2dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="Active"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color"
                 android:textSize="13sp" />
             <ImageView
                 android:id="@+id/commentIV"
@@ -53,7 +53,7 @@
                 android:layout_marginEnd="3dp"
                 android:layout_height="25dp"
                 android:src="@drawable/comment3"
-                app:tint="@color/white" />
+               />
 
 <!--            <View-->
 <!--                android:layout_width="1dp"-->
@@ -117,7 +117,7 @@
                 android:layout_marginStart="-8dp"
                 android:src="@drawable/circleleft"
                 android:background="@drawable/ticket_round"
-                app:tint="@color/very_light_orange" />
+                app:tint="@color/white" />
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="10dp"
@@ -245,7 +245,7 @@
                 android:layout_marginEnd="-8dp"
                 android:background="@drawable/ticket_round"
                 android:src="@drawable/circleright"
-                app:tint="@color/very_light_orange" />
+                app:tint="@color/white" />
         </LinearLayout>
 
         <LinearLayout

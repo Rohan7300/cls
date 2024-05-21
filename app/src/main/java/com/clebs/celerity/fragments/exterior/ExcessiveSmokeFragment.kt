@@ -9,12 +9,15 @@ import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentExcessiveSmokeBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.fragments.BaseInteriorFragment
+import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.setImageView
 
 class ExcessiveSmokeFragment : BaseInteriorFragment() {
 
     private lateinit var mBinding: FragmentExcessiveSmokeBinding
+    lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,6 +32,8 @@ class ExcessiveSmokeFragment : BaseInteriorFragment() {
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.excessiveSmokeFragment)
         mBinding.tvNext.visibility = View.GONE
         clickListeners()
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        loadingDialog.dismiss()
         setDefault(mBinding.imageUploadIV, mBinding.edtDefect)
     }
 
@@ -128,6 +133,7 @@ class ExcessiveSmokeFragment : BaseInteriorFragment() {
             imageEntity.dfNameExcessiveEngExhaustSmoke = "f"
             imageViewModel.insertDefectName(imageEntity)
         }
+        loadingDialog.show()
         //findNavController().navigate(R.id.spareWheelFragment)
         navigateTo(R.id.spareWheelFragment)
     }

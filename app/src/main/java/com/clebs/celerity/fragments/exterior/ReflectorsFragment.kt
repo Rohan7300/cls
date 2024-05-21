@@ -9,12 +9,15 @@ import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentReflectorsBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.fragments.BaseInteriorFragment
+import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.setImageView
 
 class ReflectorsFragment : BaseInteriorFragment() {
 
     private lateinit var mBinding: FragmentReflectorsBinding
+    lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,6 +32,8 @@ class ReflectorsFragment : BaseInteriorFragment() {
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.reflectorsFragment)
         mBinding.tvNext.visibility = View.GONE
         clickListeners()
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        loadingDialog.dismiss()
         setDefault(mBinding.imageUploadIV, mBinding.edtDefect)
     }
 
@@ -128,6 +133,7 @@ class ReflectorsFragment : BaseInteriorFragment() {
             imageEntity.dfNameReflectorsMarkers = "f"
             imageViewModel.insertDefectName(imageEntity)
         }
+        loadingDialog.show()
         //findNavController().navigate(R.id.wheelsWheelFixingFragment)
         navigateTo(R.id.wheelsWheelFixingFragment)
     }

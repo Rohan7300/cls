@@ -9,16 +9,21 @@ import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentWarningBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.fragments.BaseInteriorFragment
+import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.setImageView
 
 
 class WarningFragment : BaseInteriorFragment() {
     private lateinit var mBinding: FragmentWarningBinding
+    lateinit var loadingDialog: LoadingDialog
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.warningServiceLightsFragment)
         mBinding.tvNext.visibility = View.GONE
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        loadingDialog.dismiss()
         clickListeners()
         setDefault(mBinding.imageUploadIV, mBinding.edtDefect)
     }
@@ -123,6 +128,7 @@ class WarningFragment : BaseInteriorFragment() {
             imageEntity.dfNameWarningServiceLights = "f"
             imageViewModel.insertDefectName(imageEntity)
         }
+        loadingDialog.show()
         navigateTo(R.id.fuelAddBlueFragment)
         //findNavController().navigate(R.id.fuelAddBlueFragment)
     }

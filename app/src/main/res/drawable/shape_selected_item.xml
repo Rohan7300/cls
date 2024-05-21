@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
-android:insetLeft="5dp"
+android:insetLeft="8dp"
+    android:insetTop="3dp"
+    android:insetBottom="3dp"
     android:insetRight="8dp">
     <shape android:shape="rectangle"
         >
@@ -8,9 +10,6 @@ android:insetLeft="5dp"
             />
 
         <corners
-            android:bottomLeftRadius="8dp"
-            android:bottomRightRadius="8dp"
-            android:topLeftRadius="10dp"
-            android:topRightRadius="10dp" />
+          android:radius="600dp" />
     </shape>
 </inset>

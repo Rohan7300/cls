@@ -16,16 +16,24 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.ImageViewModel
@@ -50,6 +58,8 @@ import com.clebs.celerity.utils.InspectionIncompleteListener
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.dialogs.NoInternetDialog
+import com.clebs.celerity.fragments.InvoicesFragment
+import com.clebs.celerity.fragments.Userprofile
 import com.clebs.celerity.utils.DependencyProvider.getMainVM
 import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
 import com.clebs.celerity.utils.Prefs
@@ -66,13 +76,17 @@ import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.invoiceReadyToView
 import com.clebs.celerity.utils.logOSEntity
+import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.parseToInt
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.weeklyLocationRota
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
+import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -85,12 +99,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     SaveChangesCallback, InspectionIncompleteListener {
     private var saveChangesCallback: SaveChangesCallback? = null
     private lateinit var bottomNavigationView: BottomNavigationView
+
     lateinit var imageViewModel: ImageViewModel
     private var screenid: Int = 0
     private lateinit var navController: NavController
     lateinit var viewModel: MainViewModel
     private lateinit var navGraph: NavGraph
     private var completeTaskScreen: Boolean = false
+
     private lateinit var cqSDKInitializer: CQSDKInitializer
     lateinit var fragmentManager: FragmentManager
     lateinit var internetDialog: NoInternetDialog
@@ -112,7 +128,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var date = ""
     lateinit var loadingDialog: LoadingDialog
     lateinit var networkManager: NetworkManager
-
+    private lateinit var appBarConfig: AppBarConfiguration
     private var isApiResponseTrue = false
     private var trueCount = 0
     private var isChangesSaved = false
@@ -326,6 +342,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         }
 
+
+        val toggle = ActionBarDrawerToggle(
+            this, ActivityHomeBinding.myDrawerLayout, R.string.CANCEL, R.string.celerity_ls
+        )
+        ActivityHomeBinding.myDrawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+
         prefs = Prefs.getInstance(this)
         loadingDialog = LoadingDialog(this)
         sdkkey = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
@@ -474,8 +498,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
             ActivityHomeBinding.imgDrawer.setOnClickListener {
-                navController.navigate(R.id.profileFragment)
+//                navController.navigate(R.id.profileFragment)
+                if (!ActivityHomeBinding.myDrawerLayout.isDrawerOpen(ActivityHomeBinding.navigationView)) {
+                    ActivityHomeBinding.myDrawerLayout.openDrawer(ActivityHomeBinding.navigationView)
+                }
             }
+
+
 
             ActivityHomeBinding.imgNotification.setOnClickListener {
                 ActivityHomeBinding.title.text = "Notifications"
@@ -538,6 +567,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
 
             }
+
+
             ActivityHomeBinding.logout.setOnClickListener {
                 showAlertLogout()
             }
@@ -598,6 +629,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         } catch (_: Exception) {
 
+        }
+        if (ActivityHomeBinding.myDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            ActivityHomeBinding.myDrawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
         }
     }
 
@@ -879,4 +915,5 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         super.onResume()
         oSyncViewModel.getData()
     }
+
 }

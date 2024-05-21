@@ -3,121 +3,180 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/my_drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+
         android:backgroundTint="@color/very_light_orange"
-        tools:context=".ui.HomeActivity">
+        tools:context=".MainActivity"
+        tools:ignore="HardcodedText">
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigationView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layoutAnimation="@anim/animation"
+            app:drawerLayoutCornerSize="30dp"
+            android:backgroundTint="@color/very_light_orange"
+            android:background="@color/very_light_orange"
+            app:itemIconTint="@color/medium_orange"
+            app:headerLayout="@layout/header_drawer"
+            app:menu="@menu/navigation_view"
+            >
 
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@color/medium_orange"
-                        android:elevation="30dp"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@id/consts" />
+        </com.google.android.material.navigation.NavigationView>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/consts"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="16dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:backgroundTint="@color/white"
+            tools:context=".ui.HomeActivity">
 
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
 
-                        <ImageView
-                            android:id="@+id/img_drawer"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/status_list"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/consts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/medium_orange"
+                android:orientation="horizontal"
+                android:padding="4dp"
+                app:layout_constraintBottom_toTopOf="@+id/nav_fragment"
+                app:layout_constraintStart_toStartOf="parent">
 
-                        <TextView
-                            android:id="@+id/title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:letterSpacing="0.02"
-                            android:textColor="@color/text_color"
-                            android:textSize="20sp"
+                <ImageView
+                    android:id="@+id/img_drawer"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="16dp"
 
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginTop="4dp"
+                    android:src="@drawable/status_list"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:id="@+id/img_notification"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/baseline_notifications_none_24"
-                            app:layout_constraintEnd_toEndOf="@+id/logout"
-                            app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:letterSpacing="0.02"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
 
-                        <ImageView
-                            android:id="@+id/img_logout_main"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:visibility="gone"
-                            android:background="@drawable/baseline_logout_24"
-                            android:backgroundTint="@color/orange"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:id="@+id/logout"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:visibility="gone"
-                            android:rotation="90"
+                <ImageView
+                    android:id="@+id/img_notification"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/baseline_notifications_none_24"
+                    app:layout_constraintEnd_toEndOf="@+id/logout"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                            android:src="@drawable/logoutnew"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/orange" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/img_logout_main"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/baseline_logout_24"
+                    android:backgroundTint="@color/orange"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.fragment.app.FragmentContainerView
-                        android:id="@+id/nav_fragment"
-                        android:name="androidx.navigation.fragment.NavHostFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="4dp"
-                        app:defaultNavHost="true"
-                        app:layout_constraintBottom_toTopOf="@id/bottom_navigatin_view"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/consts"
-                        app:navGraph="@navigation/nav_graph" />
+                <ImageView
+                    android:id="@+id/logout"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:rotation="90"
+                    android:src="@drawable/logoutnew"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/orange" />
 
-                    <com.google.android.material.bottomnavigation.BottomNavigationView
-                        android:id="@+id/bottom_navigatin_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/layer"
-                        android:paddingVertical="4dp"
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        app:itemBackground="@drawable/bg_selected_item"
-                        app:itemIconSize="22dp"
-                        app:itemIconTint="@color/selectedcolor"
-                        app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"
-                        app:itemTextColor="@color/selectedcolor"
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
 
-                        app:labelVisibilityMode="labeled"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
+                android:background="@drawable/shadow"
+                app:layout_constraintTop_toBottomOf="@+id/consts" />
 
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/nav_fragment"
-                        app:menu="@menu/bottom_nav" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/nav_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="2dp"
+                app:defaultNavHost="true"
+                app:layout_constraintBottom_toTopOf="@id/bottom_navigatin_view"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view1"
+                app:navGraph="@navigation/nav_graph" />
 
-            </layout>
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_navigatin_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/medium_orange"
+                android:paddingVertical="4dp"
+
+                app:curveRadius="25dp"
+                app:itemBackground="@drawable/bg_selected_item"
+                app:itemIconSize="22dp"
+                app:itemIconTint="@color/selectedcolor"
+                app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"
+                app:itemTextColor="@color/selectedcolor"
+                app:labelVisibilityMode="labeled"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nav_fragment"
+                app:menu="@menu/bottom_nav" />
+
+            <!--        <com.akshay.library.CurveBottomBar-->
+            <!--            android:id="@+id/bottom_navigatin_view"-->
+            <!--            android:layout_width="match_parent"-->
+
+            <!--            app:itemIconSize="16dp"-->
+            <!--            app:itemBackground="@drawable/bg_selected_item"-->
+            <!--            app:itemTextColor="@color/selectedcolor"-->
+            <!--            app:itemIconTint="@color/selectedcolor"-->
+            <!--            app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyle"-->
+            <!--            app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/layer"-->
+            <!--            android:layout_gravity="bottom"-->
+            <!--            app:labelVisibilityMode="labeled"-->
+            <!--            app:bottomBarColor="@color/medium_orange"-->
+            <!--            app:curveRadius="0dp"-->
+
+            <!--            android:paddingVertical="4dp"-->
+            <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--            app:layout_constraintEnd_toEndOf="parent"-->
+            <!--            app:layout_constraintHorizontal_bias="0.0"-->
+
+            <!--            app:layout_constraintStart_toStartOf="parent"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/nav_fragment"-->
+            <!--            app:menu="@menu/bottom_nav" />-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+</layout>

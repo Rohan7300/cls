@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
             android:layout_marginTop="24dp"
             android:src="@drawable/cls_final_logo"
             app:layout_constraintEnd_toEndOf="parent"

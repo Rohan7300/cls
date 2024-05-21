@@ -5,6 +5,7 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
+        android:id="@+id/constss"
         android:layout_height="match_parent"
         tools:context=".fragments.CompleteTaskFragment">
 
@@ -17,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -25,6 +26,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
+                android:id="@+id/llmain"
+                android:visibility="gone"
                 android:orientation="vertical">
 
 
@@ -35,12 +38,12 @@
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="40dp"
                     android:layout_marginBottom="20dp"
-                    android:background="@drawable/shape_expand_main">
+                    android:background="@drawable/complete_task_border">
 
                     <View
                         android:id="@+id/view2"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
+                        android:layout_height="1.5dp"
                         android:layout_below="@+id/rlcom"
                         android:layout_marginHorizontal="1dp"
                         android:background="#6DA95E"
@@ -62,12 +65,13 @@
                             android:textColor="@color/text_color"
                             android:textSize="16sp" />
 
-                        <ImageButton
+                        <ImageView
                             android:id="@+id/down_iv"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
-                            android:layout_centerHorizontal="true"
+
                             android:backgroundTint="@color/white"
                             android:src="@drawable/grey_right_arrow" />
 
@@ -205,7 +209,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:background="@drawable/shape_expand_main"
+                    android:background="@drawable/complete_task_border"
                     android:padding="18dp">
 
                     <TextView
@@ -225,7 +229,7 @@
                         android:layout_height="25dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
-                        android:src="@drawable/finalclockout" />
+                        android:src="@drawable/baseline_access_time_filled_24" />
 
                     <ImageButton
                         android:id="@+id/down_ivs"
@@ -244,7 +248,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:background="@drawable/shape_expand_main">
+                    android:elevation="8dp"
+                    android:background="@drawable/complete_task_border">
 
                     <RelativeLayout
                         android:id="@+id/rlcomtwo_road"
@@ -274,7 +279,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_alignParentRight="true"
-                            android:layout_centerHorizontal="true"
+                       android:layout_centerVertical="true"
                             android:backgroundTint="@color/white"
                             android:src="@drawable/grey_right_arrow" />
 
@@ -478,7 +483,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:background="@drawable/shape_expand_main"
+                    android:elevation="8dp"
+                    android:background="@drawable/complete_task_border"
                     android:padding="18dp">
 
                     <TextView
@@ -514,7 +520,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:background="@drawable/shape_expand_main"
+                    android:background="@drawable/complete_task_border"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="18dp">
@@ -581,7 +587,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:background="@drawable/shape_expand_main"
+                    android:background="@drawable/complete_task_border"
                     android:padding="18dp"
                     android:visibility="gone">
 

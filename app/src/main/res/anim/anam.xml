@@ -1,9 +1,9 @@
 <rotate
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:fromDegrees="1"
-    android:toDegrees="180"
+    android:fromDegrees="270"
+    android:toDegrees="370"
     android:pivotX="50%"
-    android:pivotY="50%"
+android:pivotY="50%"
     android:duration="2500"
-    android:interpolator="@android:anim/cycle_interpolator"
-    android:repeatCount="infinite" />
+    android:interpolator="@android:anim/bounce_interpolator"
+    android:repeatCount="2" />

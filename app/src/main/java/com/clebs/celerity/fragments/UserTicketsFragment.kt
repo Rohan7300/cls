@@ -34,7 +34,7 @@ class UserTicketsFragment : Fragment() {
     var d1: Boolean = false
     var d2: Boolean = false
     lateinit var deleteDialog: AlertDialog
-    lateinit var deleteDailogBinding:DialogSortFiltersBinding
+    lateinit var deleteDailogBinding: DialogSortFiltersBinding
     var includeCompleted = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,10 +68,8 @@ class UserTicketsFragment : Fragment() {
     }
 
     private fun observers() {
-        val ticketAdapter =
-            TicketAdapter(GetUserTicketsResponse(ArrayList()), requireContext(), prefs)
-        mbinding.rvTickets.adapter = ticketAdapter
-        mbinding.rvTickets.layoutManager = LinearLayoutManager(requireContext())
+        homeActivity.showDialog()
+
         viewModel.liveDataGetUserTickets.observe(viewLifecycleOwner) {
             homeActivity.hideDialog()
             if (it != null) {
@@ -82,10 +80,14 @@ class UserTicketsFragment : Fragment() {
                     mbinding.noticketLayout.visibility = View.VISIBLE
                     mbinding.rvTickets.visibility = View.GONE
                 }
+                val ticketAdapter =
+                    TicketAdapter(GetUserTicketsResponse(ArrayList()), requireContext(), prefs)
+                mbinding.rvTickets.adapter = ticketAdapter
+                mbinding.rvTickets.layoutManager = LinearLayoutManager(requireContext())
                 ticketAdapter.ticketList.Docs.clear()
                 val reversedList = it.Docs.reversed()
                 ticketAdapter.ticketList.Docs.addAll(reversedList)
-                ticketAdapter.notifyDataSetChanged()
+                ticketAdapter.notifyItemInserted(it.Docs.size)
             } else {
                 mbinding.noticketLayout.visibility = View.VISIBLE
                 mbinding.rvTickets.visibility = View.GONE
@@ -94,12 +96,12 @@ class UserTicketsFragment : Fragment() {
     }
 
     fun showAlert() {
-/*        val factory = LayoutInflater.from(requireActivity())
-        //val view: View = factory.inflate(R.layout.dialog_sort_filters, null)
-        val deleteDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
+        /*        val factory = LayoutInflater.from(requireActivity())
+                //val view: View = factory.inflate(R.layout.dialog_sort_filters, null)
+                val deleteDialog: AlertDialog = AlertDialog.Builder(requireContext()).create()
 
-        val deleteDailogBinding =
-            DialogSortFiltersBinding.inflate(LayoutInflater.from(requireContext()))*/
+                val deleteDailogBinding =
+                    DialogSortFiltersBinding.inflate(LayoutInflater.from(requireContext()))*/
 
         deleteDailogBinding.tvNext.isClickable = false
         deleteDailogBinding.icCrossOrange.setOnClickListener {

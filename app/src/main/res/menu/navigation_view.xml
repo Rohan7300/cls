@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/home_ic"
+        android:iconTint="@color/medium_orange"
+        android:title="Home"
+
+        />
+    <item
+        android:id="@+id/profile"
+        android:iconTint="@color/medium_orange"
+        android:icon="@drawable/user_profile_icon"
+        android:title="Profile" />
+    <item
+        android:id="@+id/invoices"
+        android:icon="@drawable/invoices"
+        android:iconTint="@color/medium_orange"
+        android:title="Invoices" />
+    <item android:id="@+id/logout"
+        android:title="Logout"
+        android:iconTint="@color/medium_orange"
+        android:icon="@drawable/logout_icon"/>
+    <!--    <item-->
+    <!--        android:id="@+id/passwords"-->
+    <!--        android:icon="@drawable/passwords"-->
+    <!--        android:title="Alerts" />-->
+<!--    <item-->
+<!--        android:id="@+id/tickets"-->
+<!--        android:icon="@drawable/tickets_ic"-->
+<!--        android:title="Tickets" />-->
+</menu>

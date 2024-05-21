@@ -362,6 +362,7 @@ fun dbLog(it: ImageEntity) {
 }
 
 fun setImageView(im: ImageView, value: String) {
+    Log.e("xldjfhdfhdgfjhfdfjdfgd", "setImageView: ", )
     try {
         val bitmap: Bitmap = decodeBase64Image(value)
         im.setImageBitmap(bitmap)

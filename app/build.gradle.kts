@@ -81,6 +81,10 @@ dependencies {
 //    implementation(files("libs/android-support-v4.jar"))
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.12.0")
+    implementation("org.tensorflow:tensorflow-lite-task-vision:0.4.0")
+    // Import the GPU delegate plugin Library for GPU inference
+    implementation("org.tensorflow:tensorflow-lite-gpu-delegate-plugin:0.4.0")
+    implementation("org.tensorflow:tensorflow-lite-gpu:2.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
 //    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("id.zelory:compressor:3.0.1")
@@ -107,6 +111,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
 
     val camerax_version = "1.0.0-rc01"
+    implementation("com.github.Akshay-Katariya:CurveBottomBar:1.0")
     implementation("androidx.camera:camera-camera2:$camerax_version")
     implementation("androidx.camera:camera-lifecycle:$camerax_version")
     implementation("androidx.camera:camera-view:1.0.0-alpha20")
@@ -136,12 +141,12 @@ dependencies {
 
     //implementation("com.github.quickpermissions:quickpermissions-kotlin:0.4.0")
     implementation("com.github.quickpermissions:quickpermissions-kotlin:0.4.0")
+
     implementation("ru.superjob:kotlin-permissions:1.0.3")
     implementation("org.jetbrains.anko:anko-commons:0.10.4")
 
     implementation("com.github.tapadoo:alerter:7.2.4")
     implementation("com.github.oky2abbas:chainChart:v0+")
-
     val room_version = "2.6.1"
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:$room_version")

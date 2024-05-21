@@ -9,15 +9,20 @@ import android.widget.ImageView
 import androidx.core.widget.doAfterTextChanged
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.FragmentOilBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.fragments.BaseInteriorFragment
+import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.setImageView
 
 
 class OilFragment : BaseInteriorFragment() {
     private lateinit var mBinding: FragmentOilBinding
+    lateinit var loadingDialog: LoadingDialog
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.oilCoolantFragment)
+        loadingDialog = (activity as HomeActivity).loadingDialog
+        loadingDialog.dismiss()
         mBinding.tvNext.visibility = View.GONE
         clickListeners()
         setDefault(mBinding.imageUploadIV,mBinding.edtDefect)
@@ -120,6 +125,7 @@ class OilFragment : BaseInteriorFragment() {
             imageEntity.dfNameOilCoolantLevel = "f"
             imageViewModel.insertDefectName(imageEntity)
         }
+        loadingDialog.show()
         navigateTo(R.id.lightsFogFragment)
         //findNavController().navigate(R.id.lightsFogFragment)
     }

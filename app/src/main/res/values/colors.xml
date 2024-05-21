@@ -23,10 +23,12 @@
     <color name="commentbg">#E5ECF5</color>
     <color name="darkcommentbg">#A6BBDC</color>
     <color name="hintColor">#676C74</color>
-    <color name="very_light_grey_two">#f3f3f3</color>
+    <color name="grey_main">#676C74</color>
+    <color name="very_light_grey_two">#FAFAFA</color>
     <color name="new_light_orange">#FCD9C8</color>
     <color name="home_blue">#EAFEFD</color>
     <color name="next_working_day_blue">#00c1bc</color>
     <color name="semi_transparent_color">#80000000</color>
+    <color name="defaultOutlineAmbientShadowColor">#0A000000</color> <color name="defaultOutlineSpotShadowColor">#30000000</color>
 
 </resources>
