@@ -89,7 +89,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
             val right = boundingBox.right * scaleFactor
             for (results in results) {
 
-                if (results.categories[0].label.equals("car") || results.categories[0].label.equals("truck")){
+                if (results.categories[0].label.equals("car") || results.categories[0].label.equals("truck")||results.categories[0].label.equals("bus")){
                     boxPaint.color=Color.GREEN
                 }
                 else{

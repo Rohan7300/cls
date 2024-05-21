@@ -29,7 +29,9 @@ import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.dialogs.NoInternetDialog
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.getCurrentAppVersion
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.showToast
 import com.google.android.gms.tasks.OnCompleteListener
@@ -92,9 +94,9 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
 
-        ActivitySplashBinding =
-            DataBindingUtil.setContentView(this@SplashActivity, R.layout.activity_splash)
+        ActivitySplashBinding = DataBindingUtil.setContentView(this@SplashActivity, R.layout.activity_splash)
 
+        ActivitySplashBinding.appVersionTv.text = getCurrentAppVersion(this)
         val rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.anam_two)
         val rotateAnimationtwo = AnimationUtils.loadAnimation(this, R.anim.slide_slide)
         fragmentManager = this.supportFragmentManager
@@ -122,8 +124,13 @@ class SplashActivity : AppCompatActivity() {
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
 
-        mainViewModel =
-            ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
+        /*mainViewModel =
+            ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)*/
+
+
+        mainViewModel = DependencyProvider.getMainVM(this)
+
+
 
         mainViewModel.liveDataSaveDeviceInformation.observe(this) {
             if (it != null) {
@@ -200,6 +207,10 @@ class SplashActivity : AppCompatActivity() {
                 HomeActivity::class.java
             )
             intent.putExtra("destinationFragment", "HomeFragment")
+            intent.putExtra("actionToperform", "undef")
+            intent.putExtra("actionID", "0")
+            intent.putExtra("tokenUrl", "undef")
+            intent.putExtra("notificationId", "0")
             startActivity(i)
         }
     }
@@ -229,7 +240,10 @@ class SplashActivity : AppCompatActivity() {
                     } else {
                         val intent = Intent(this, HomeActivity::class.java)
                         intent.putExtra("destinationFragment", "HomeFragment")
-                        intent.putExtra("no_signature_required", "0")
+                        intent.putExtra("actionToperform", "undef")
+                        intent.putExtra("actionID", "0")
+                        intent.putExtra("tokenUrl", "undef")
+                        intent.putExtra("notificationId", "0")
                         startActivity(intent)
                         finish()
                     }

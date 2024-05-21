@@ -8,45 +8,48 @@
     android:fitsSystemWindows="true"
     android:background="@drawable/background"
     tools:context=".ui.SplashActivity">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    android:layout_height="match_parent">
 
-    <ImageView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout9"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/img_circle_logo"
-        android:alpha="0.5"
-        android:src="@drawable/splash_screen_ic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="80dp"
-        android:id="@+id/ls"
-        android:src="@drawable/cls_final_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/white" />
+        app:layout_constraintTop_toTopOf="parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/img_circle_logo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.5"
+            android:src="@drawable/splash_screen_ic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ls"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:src="@drawable/cls_final_logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:id="@+id/appVersionTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="v0.0.1"
-        android:id="@+id/appVersionTv"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="v 0.0.1"
+        android:padding="10dp"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        android:fontFamily="@font/poppins"
-        android:layout_marginEnd="5dp"
-        android:layout_marginTop="5dp"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
