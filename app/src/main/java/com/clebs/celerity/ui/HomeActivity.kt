@@ -16,24 +16,16 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.ImageViewModel
@@ -58,9 +50,8 @@ import com.clebs.celerity.utils.InspectionIncompleteListener
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.dialogs.NoInternetDialog
-import com.clebs.celerity.fragments.InvoicesFragment
-import com.clebs.celerity.fragments.Userprofile
 import com.clebs.celerity.utils.DependencyProvider.getMainVM
+import com.clebs.celerity.utils.DependencyProvider.isComingBackFromFaceScan
 import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
@@ -76,17 +67,13 @@ import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.invoiceReadyToView
 import com.clebs.celerity.utils.logOSEntity
-import com.clebs.celerity.utils.navigateTo
 import com.clebs.celerity.utils.parseToInt
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.weeklyLocationRota
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
-import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
-import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -99,14 +86,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     SaveChangesCallback, InspectionIncompleteListener {
     private var saveChangesCallback: SaveChangesCallback? = null
     private lateinit var bottomNavigationView: BottomNavigationView
-
     lateinit var imageViewModel: ImageViewModel
     private var screenid: Int = 0
     private lateinit var navController: NavController
     lateinit var viewModel: MainViewModel
     private lateinit var navGraph: NavGraph
     private var completeTaskScreen: Boolean = false
-
     private lateinit var cqSDKInitializer: CQSDKInitializer
     lateinit var fragmentManager: FragmentManager
     lateinit var internetDialog: NoInternetDialog
@@ -128,7 +113,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var date = ""
     lateinit var loadingDialog: LoadingDialog
     lateinit var networkManager: NetworkManager
-    private lateinit var appBarConfig: AppBarConfiguration
+
     private var isApiResponseTrue = false
     private var trueCount = 0
     private var isChangesSaved = false
@@ -146,6 +131,257 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     fun getAutofillType(): Int {
         return AUTOFILL_TYPE_NONE
+    }
+
+    @SuppressLint("HardwareIds")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        ActivityHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
+        bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
+        fragmentManager = this.supportFragmentManager
+        internetDialog = NoInternetDialog()
+        networkManager = NetworkManager(this)
+
+        networkManager.observe(this) {
+            isNetworkActive = if (it) {
+                true
+                //  internetDialog.hideDialog()
+            } else {
+                false
+                //    internetDialog.showDialog(fragmentManager)
+            }
+        }
+
+        prefs = Prefs.getInstance(this)
+        loadingDialog = LoadingDialog(this)
+        sdkkey = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            window.decorView.importantForAutofill =
+                View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS;
+        }
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val todayDate = dateFormat.format(Date())
+
+        val osRepo = offlineSyncRepo(this)
+        oSyncViewModel = ViewModelProvider(
+            this,
+            OSyncVMProvider(osRepo, prefs.clebUserId.toInt(), todayDate)
+        )[OSyncViewModel::class.java]
+
+        val inspectionFailedDialog = InspectionIncompleteDialog()
+        inspectionFailedDialog.setListener(this)
+
+        oSyncViewModel.osData.observe(this) {
+            logOSEntity("HomeActivity", it)
+            osData = it
+            if (it.isIni) {
+                if (checkIfInspectionFailed(it)) {
+                    inspectionFailedDialog.showDialog(this.supportFragmentManager)
+                }
+            } else {
+                osData.clebID = prefs.clebUserId.toInt()
+                osData.dawDate = todayDate
+                osData.vehicleID = prefs.scannedVmRegNo
+                osData.isIni = true
+            }
+        }
+
+
+        cqSDKInitializer()
+        clebuserID = prefs.clebUserId.toInt()
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+        navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
+        navController.addOnDestinationChangedListener(this)
+        fragmentManager = this.supportFragmentManager
+        bottomNavigationView.selectedItemId = R.id.home
+        bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
+
+        getDeviceID()
+        val deviceID =
+            Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()
+        Log.e("kjkcjkvckvck", "onCreate: " + deviceID)
+
+
+        try {
+            val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+            val mainRepo = MainRepo(apiService)
+            val imagesRepo =
+                ImagesRepo(ImageDatabase.invoke(this), Prefs.getInstance(applicationContext))
+
+            viewModel =
+                ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
+
+            GetDriversBasicInformation()
+            getscannednumbervehicleinfo()
+            if (ninetydaysBoolean?.equals(true) == true) {
+                showAlertChangePasword90dys()
+            }
+
+            viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
+                Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
+                hideDialog()
+                if (it != null) {
+                    completeTaskScreen = it.IsSubmited
+                    if (!completeTaskScreen) {
+                        screenid = viewModel.getLastVisitedScreenId(this)
+                        if (screenid == 0 || screenid == R.id.completeTaskFragment) {
+                            navController.navigate(R.id.homeFragment)
+                            navController.currentDestination!!.id = R.id.homeFragment
+                        } else {
+                            try {
+                                navController.navigate(screenid)
+                                navController.currentDestination!!.id = screenid
+                            } catch (_: Exception) {
+                                navController.navigate(R.id.homeFragment)
+                                navController.currentDestination!!.id = R.id.homeFragment
+                            }
+                        }
+                    } else {
+                        navController.navigate(R.id.completeTaskFragment)
+                    }
+                } else {
+                    try {
+                        navController.navigate(R.id.homeFragment)
+                        navController.currentDestination!!.id = R.id.homeFragment
+                    } catch (_: Exception) {
+
+                    }
+                    /*                    navController.navigate(R.id.homeFragment)
+                                        navController.currentDestination!!.id = R.id.homeFragment*/
+                }
+            }
+
+            viewModel.GetDAVehicleExpiredDocuments(prefs.clebUserId.toInt())
+            var expiredDocDialog = ExpiredDocDialog(prefs, this)
+            viewModel.liveDataGetDAVehicleExpiredDocuments.observe(this) {
+                if (it != null) {
+                    prefs.saveExpiredDocuments(it)
+                    expiredDocDialog.showDialog(supportFragmentManager)
+                    expiredDocDialog.isCancelable = false
+                }
+            }
+
+            imageViewModel = ViewModelProvider(
+                this,
+                ImageViewModelProviderFactory(imagesRepo)
+            )[ImageViewModel::class.java]
+
+            onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    try {
+                        val prefs = Prefs.getInstance(applicationContext)
+                        val fragmentStack = prefs.getNavigationHistory()
+                        if (prefs.get("90days")
+                                .equals("1") && navController.currentDestination?.id == R.id.profileFragment
+                        ) {
+                            showToast("Please do profile changes first", this@HomeActivity)
+                        }
+                        if (navController.currentDestination?.id == R.id.completeTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
+                            prefs.clearNavigationHistory()
+                        } else if (fragmentStack.size > 1) {
+                            fragmentStack.pop()
+                            val previousFragment = fragmentStack.peek()
+                            if (previousFragment != R.id.dailyWorkFragment) {
+                                navController.navigate(previousFragment)
+                                prefs.saveNavigationHistory(fragmentStack)
+                            }
+                        }
+                    } catch (_: Exception) {
+                    }
+                }
+            })
+
+
+            imageViewModel.images.observe(this) { imageEntity ->
+                dbLog(imageEntity)
+            }
+
+            ActivityHomeBinding.imgDrawer.setOnClickListener {
+                navController.navigate(R.id.profileFragment)
+            }
+
+            ActivityHomeBinding.imgNotification.setOnClickListener {
+                ActivityHomeBinding.title.text = "Notifications"
+                navController.navigate(R.id.notifficationsFragment)
+            }
+
+
+            bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+                when (item.itemId) {
+
+                    R.id.home -> {
+                        ActivityHomeBinding.title.text = ""
+                        ActivityHomeBinding.logout.visibility = View.GONE
+                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                        navController.navigate(R.id.homedemoFragment)
+                        true
+                    }
+
+                    R.id.daily -> {
+                        /*     navController.navigate(R.id.homeFragment)
+                             navController.currentDestination!!.id = R.id.homeFragment
+         */
+                        if (isNetworkActive) {
+
+                            ActivityHomeBinding.logout.visibility = View.GONE
+                            ActivityHomeBinding.title.text = ""
+                            ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                            viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
+                            showDialog()
+                        } else {
+                            if (osData.isDefectSheetFilled)
+                                navController.navigate(R.id.completeTaskFragment)
+                            else {
+                                navController.navigate(R.id.homeFragment)
+                                navController.currentDestination!!.id = R.id.homeFragment
+                            }
+                        }
+                        true
+                    }
+
+                    R.id.invoices -> {
+                        ActivityHomeBinding.title.text = "Invoices"
+                        ActivityHomeBinding.logout.visibility = View.GONE
+                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                        navController.navigate(R.id.invoicesFragment)
+                        true
+                    }
+
+                    R.id.tickets -> {
+                        ActivityHomeBinding.logout.visibility = View.GONE
+                        ActivityHomeBinding.title.text = "User Tickets"
+                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                        navController.navigate(R.id.userTicketsFragment)
+
+                        true
+
+                    }
+
+                    else -> false
+                }
+
+            }
+            ActivityHomeBinding.logout.setOnClickListener {
+                showAlertLogout()
+            }
+        } catch (e: Exception) {
+            RetrofitService.handleNetworkError(e, fragmentManager)
+        }
+        val destinationFragment = intent.getStringExtra("destinationFragment")
+        if (destinationFragment != null) {
+
+            Log.d("HomeActivityX", destinationFragment!!)
+            if (destinationFragment == "NotificationsFragment") {
+                ActivityHomeBinding.title.text = "Notifications"
+                navController.navigate(R.id.notifficationsFragment)
+            }
+        } else if (destinationFragment == "CompleteTask") {
+            navController.navigate(R.id.completeTaskFragment)
+        }
+
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -322,273 +558,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
         Log.d("hdhsdshdsdjshhsds", "No Intent")
     }
-
-    @SuppressLint("HardwareIds")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        ActivityHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
-        bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
-        fragmentManager = this.supportFragmentManager
-        internetDialog = NoInternetDialog()
-        networkManager = NetworkManager(this)
-
-        networkManager.observe(this) {
-            isNetworkActive = if (it) {
-                true
-                //  internetDialog.hideDialog()
-            } else {
-                false
-                //    internetDialog.showDialog(fragmentManager)
-            }
-        }
-
-
-        val toggle = ActionBarDrawerToggle(
-            this, ActivityHomeBinding.myDrawerLayout, R.string.CANCEL, R.string.celerity_ls
-        )
-        ActivityHomeBinding.myDrawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-
-
-        prefs = Prefs.getInstance(this)
-        loadingDialog = LoadingDialog(this)
-        sdkkey = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            window.decorView.importantForAutofill =
-                View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS;
-        }
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
-        val todayDate = dateFormat.format(Date())
-
-        val osRepo = offlineSyncRepo(this)
-        oSyncViewModel = ViewModelProvider(
-            this,
-            OSyncVMProvider(osRepo, prefs.clebUserId.toInt(), todayDate)
-        )[OSyncViewModel::class.java]
-
-        val inspectionFailedDialog = InspectionIncompleteDialog()
-        inspectionFailedDialog.setListener(this)
-
-        oSyncViewModel.osData.observe(this) {
-            logOSEntity("HomeActivity", it)
-            osData = it
-            if (it.isIni) {
-                if (checkIfInspectionFailed(it)) {
-                    inspectionFailedDialog.showDialog(this.supportFragmentManager)
-                }
-            } else {
-                osData.clebID = prefs.clebUserId.toInt()
-                osData.dawDate = todayDate
-                osData.vehicleID = prefs.scannedVmRegNo
-                osData.isIni = true
-            }
-        }
-
-
-        cqSDKInitializer()
-        clebuserID = prefs.clebUserId.toInt()
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment
-        navController = navHostFragment.navController
-        navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
-        navController.addOnDestinationChangedListener(this)
-        fragmentManager = this.supportFragmentManager
-        bottomNavigationView.selectedItemId = R.id.home
-        bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
-
-        getDeviceID()
-        val deviceID =
-            Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()
-        Log.e("kjkcjkvckvck", "onCreate: " + deviceID)
-
-
-        try {
-            val apiService = RetrofitService.getInstance().create(ApiService::class.java)
-            val mainRepo = MainRepo(apiService)
-            val imagesRepo =
-                ImagesRepo(ImageDatabase.invoke(this), Prefs.getInstance(applicationContext))
-
-            viewModel =
-                ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
-
-            GetDriversBasicInformation()
-            getscannednumbervehicleinfo()
-            if (ninetydaysBoolean?.equals(true) == true) {
-                showAlertChangePasword90dys()
-            }
-
-            viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
-                Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
-                hideDialog()
-                if (it != null) {
-                    completeTaskScreen = it.IsSubmited
-                    if (!completeTaskScreen) {
-                        screenid = viewModel.getLastVisitedScreenId(this)
-                        if (screenid == 0 || screenid == R.id.completeTaskFragment) {
-                            navController.navigate(R.id.homeFragment)
-                            navController.currentDestination!!.id = R.id.homeFragment
-                        } else {
-                            try {
-                                navController.navigate(screenid)
-                                navController.currentDestination!!.id = screenid
-                            } catch (_: Exception) {
-                                navController.navigate(R.id.homeFragment)
-                                navController.currentDestination!!.id = R.id.homeFragment
-                            }
-                        }
-                    } else {
-                        navController.navigate(R.id.completeTaskFragment)
-                    }
-                } else {
-                    try {
-                        navController.navigate(R.id.homeFragment)
-                        navController.currentDestination!!.id = R.id.homeFragment
-                    } catch (_: Exception) {
-
-                    }
-                    /*                    navController.navigate(R.id.homeFragment)
-                                        navController.currentDestination!!.id = R.id.homeFragment*/
-                }
-            }
-
-            viewModel.GetDAVehicleExpiredDocuments(prefs.clebUserId.toInt())
-            var expiredDocDialog = ExpiredDocDialog(prefs, this)
-            viewModel.liveDataGetDAVehicleExpiredDocuments.observe(this) {
-                if (it != null) {
-                    prefs.saveExpiredDocuments(it)
-                    expiredDocDialog.showDialog(supportFragmentManager)
-                    expiredDocDialog.isCancelable = false
-                }
-            }
-
-            imageViewModel = ViewModelProvider(
-                this,
-                ImageViewModelProviderFactory(imagesRepo)
-            )[ImageViewModel::class.java]
-
-            onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    try {
-                        val prefs = Prefs.getInstance(applicationContext)
-                        val fragmentStack = prefs.getNavigationHistory()
-                        if (prefs.get("90days")
-                                .equals("1") && navController.currentDestination?.id == R.id.profileFragment
-                        ) {
-                            showToast("Please do profile changes first", this@HomeActivity)
-                        }
-                        if (navController.currentDestination?.id == R.id.completeTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
-                            prefs.clearNavigationHistory()
-                        } else if (fragmentStack.size > 1) {
-                            fragmentStack.pop()
-                            val previousFragment = fragmentStack.peek()
-                            if (previousFragment != R.id.dailyWorkFragment) {
-                                navController.navigate(previousFragment)
-                                prefs.saveNavigationHistory(fragmentStack)
-                            }
-                        }
-                    } catch (_: Exception) {
-                    }
-                }
-            })
-
-
-            imageViewModel.images.observe(this) { imageEntity ->
-                dbLog(imageEntity)
-            }
-
-            ActivityHomeBinding.imgDrawer.setOnClickListener {
-//                navController.navigate(R.id.profileFragment)
-                if (!ActivityHomeBinding.myDrawerLayout.isDrawerOpen(ActivityHomeBinding.navigationView)) {
-                    ActivityHomeBinding.myDrawerLayout.openDrawer(ActivityHomeBinding.navigationView)
-                }
-            }
-
-
-
-            ActivityHomeBinding.imgNotification.setOnClickListener {
-                ActivityHomeBinding.title.text = "Notifications"
-                navController.navigate(R.id.notifficationsFragment)
-            }
-
-
-            bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-                when (item.itemId) {
-
-                    R.id.home -> {
-                        ActivityHomeBinding.title.text = ""
-                        ActivityHomeBinding.logout.visibility = View.GONE
-                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                        navController.navigate(R.id.homedemoFragment)
-                        true
-                    }
-
-                    R.id.daily -> {
-                        /*     navController.navigate(R.id.homeFragment)
-                             navController.currentDestination!!.id = R.id.homeFragment
-         */
-                        if (isNetworkActive) {
-
-                            ActivityHomeBinding.logout.visibility = View.GONE
-                            ActivityHomeBinding.title.text = ""
-                            ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                            viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
-                            showDialog()
-                        } else {
-                            if (osData.isDefectSheetFilled)
-                                navController.navigate(R.id.completeTaskFragment)
-                            else {
-                                navController.navigate(R.id.homeFragment)
-                                navController.currentDestination!!.id = R.id.homeFragment
-                            }
-                        }
-                        true
-                    }
-
-                    R.id.invoices -> {
-                        ActivityHomeBinding.title.text = "Invoices"
-                        ActivityHomeBinding.logout.visibility = View.GONE
-                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                        navController.navigate(R.id.invoicesFragment)
-                        true
-                    }
-
-                    R.id.tickets -> {
-                        ActivityHomeBinding.logout.visibility = View.GONE
-                        ActivityHomeBinding.title.text = "User Tickets"
-                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                        navController.navigate(R.id.userTicketsFragment)
-
-                        true
-
-                    }
-
-                    else -> false
-                }
-
-            }
-
-
-            ActivityHomeBinding.logout.setOnClickListener {
-                showAlertLogout()
-            }
-        } catch (e: Exception) {
-            RetrofitService.handleNetworkError(e, fragmentManager)
-        }
-        val destinationFragment = intent.getStringExtra("destinationFragment")
-        if (destinationFragment != null) {
-
-            Log.d("HomeActivityX", destinationFragment!!)
-            if (destinationFragment == "NotificationsFragment") {
-                ActivityHomeBinding.title.text = "Notifications"
-                navController.navigate(R.id.notifficationsFragment)
-            }
-        } else if (destinationFragment == "CompleteTask") {
-            navController.navigate(R.id.completeTaskFragment)
-        }
-
-    }
-
     private fun logout() {
         viewModel.Logout().observe(this@HomeActivity) {
             if (it!!.responseType == "Success") {
@@ -629,11 +598,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         } catch (_: Exception) {
 
-        }
-        if (ActivityHomeBinding.myDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            ActivityHomeBinding.myDrawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
         }
     }
 
@@ -914,6 +878,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onResume() {
         super.onResume()
         oSyncViewModel.getData()
+        if(isComingBackFromFaceScan)
+            navController.navigate(R.id.completeTaskFragment)
     }
+
+
+
 
 }

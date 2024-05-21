@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -28,6 +30,8 @@ import android.view.KeyEvent
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.*
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
 import androidx.core.content.ContextCompat
 import androidx.core.view.KeyEventDispatcher.dispatchKeyEvent
 import androidx.core.view.isVisible
@@ -362,7 +366,7 @@ fun dbLog(it: ImageEntity) {
 }
 
 fun setImageView(im: ImageView, value: String) {
-    Log.e("xldjfhdfhdgfjhfdfjdfgd", "setImageView: ", )
+    Log.e("xldjfhdfhdgfjhfdfjdfgd", "setImageView: ")
     try {
         val bitmap: Bitmap = decodeBase64Image(value)
         im.setImageBitmap(bitmap)
@@ -446,16 +450,27 @@ fun showTimePickerDialog(context: Context, tv: TextView) {
 
             val formattedTime: String = when {
                 selectedHour == 0 -> {
-                    "${(selectedHour + 12).toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')} am"
+                    "${(selectedHour + 12).toString().padStart(2, '0')}:${
+                        selectedMinute.toString().padStart(2, '0')
+                    } am"
                 }
+
                 selectedHour > 12 -> {
-                    "${(selectedHour - 12).toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')} pm"
+                    "${(selectedHour - 12).toString().padStart(2, '0')}:${
+                        selectedMinute.toString().padStart(2, '0')
+                    } pm"
                 }
+
                 selectedHour == 12 -> {
-                    "${selectedHour.toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')} pm"
+                    "${selectedHour.toString().padStart(2, '0')}:${
+                        selectedMinute.toString().padStart(2, '0')
+                    } pm"
                 }
+
                 else -> {
-                    "${selectedHour.toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')} am"
+                    "${selectedHour.toString().padStart(2, '0')}:${
+                        selectedMinute.toString().padStart(2, '0')
+                    } am"
                 }
             }
 
@@ -732,14 +747,15 @@ fun getCurrentYear(): Int {
     val calendar = Calendar.getInstance()
     return calendar.get(Calendar.YEAR)
 }
+
 fun convertDateFormat(inputDate: String): String {
     try {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
         val outputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         val date = inputFormat.parse(inputDate)
         return outputFormat.format(date!!)
-    }catch (_:Exception){
-        return  " "
+    } catch (_: Exception) {
+        return " "
     }
 }
 
@@ -747,6 +763,7 @@ fun getMimeType(uri: Uri): String? {
     val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
     return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
 }
+
 fun getCurrentAppVersion(context: Context): String {
     try {
         val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
@@ -768,6 +785,91 @@ fun addLeadingZeroIfNeeded(text: Editable): String {
         }
     }
     return time
+}
+
+fun printBitmapSize(bitmap: Bitmap) {
+    val width = bitmap.width
+    val height = bitmap.height
+    val byteCount = bitmap.byteCount
+    val kilobyteCount = byteCount / 1024.0
+    val mb = kilobyteCount / 1024.0
+
+    Log.d(
+        "BitmapSize",
+        "Width: $width, Height: $height, Size: $byteCount bytes\n ($kilobyteCount KB)\n ($mb MB"
+    )
+}
+
+fun scaleBitmapToWidth(bitmap: Bitmap, newWidth: Int): Bitmap {
+
+    val originalWidth = bitmap.width
+    val originalHeight = bitmap.height
+
+    val aspectRatio = originalHeight.toFloat() / originalWidth.toFloat()
+    val newHeight = (newWidth * aspectRatio).toInt()
+
+    return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+}
+
+fun getImageBitmapFromUri(context: Context, uri: Uri): Bitmap? {
+    var bitmap: Bitmap? = null
+    try {
+        val contentResolver: ContentResolver = context.contentResolver
+        val inputStream = contentResolver.openInputStream(uri)
+        bitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream?.close()
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return bitmap
+}
+
+fun getCameraURI(context: Context): Uri? {
+    var savedUri: Uri? = null
+    val imageCapture = ImageCapture.Builder().build() ?: throw IOException("Camera not connected")
+    val name = SimpleDateFormat(DailyWorkFragment.FILENAME_FORMAT, Locale.US)
+        .format(System.currentTimeMillis())
+    val contentValues = ContentValues().apply {
+        put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+        put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+        }
+    }
+    val outputOptions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+        ImageCapture.OutputFileOptions
+            .Builder(
+                context.contentResolver,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                contentValues
+            ).build()
+    else
+        ImageCapture.OutputFileOptions
+            .Builder(
+                context.contentResolver,
+                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
+                contentValues
+            ).build()
+    imageCapture.takePicture(
+        outputOptions, ContextCompat.getMainExecutor(context),
+        object : ImageCapture.OnImageSavedCallback {
+            override fun onError(exc: ImageCaptureException) {
+                Log.d(ContentValues.TAG, "Photo capture failed")
+                println("Photo capture failed")
+            }
+
+            override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                Log.d(ContentValues.TAG, "Photo capture succeeded processing photo")
+
+                showToast("Photo capture succeeded processing photo", context)
+
+                if (getImageBitmapFromUri(context, output.savedUri!!) != null) {
+                    savedUri = output.savedUri!!
+                }
+            }
+        }
+    )
+    return savedUri
 }
 
 

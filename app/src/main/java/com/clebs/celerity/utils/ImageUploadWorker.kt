@@ -2,6 +2,7 @@ package com.clebs.celerity.utils
 
 import android.content.Context
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -23,7 +24,7 @@ import java.util.TimeZone
 import java.util.UUID
 
 class ImageUploadWorker(
-    appContext: Context, workerParams: WorkerParameters
+    var appContext: Context, workerParams: WorkerParameters
 ) : Worker(appContext, workerParams) {
 
     override fun doWork(): Result {
@@ -34,7 +35,7 @@ class ImageUploadWorker(
         var todayDate = dateFormat.format(Date())
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
-        val osRepo = OSyncRepo(OfflineSyncDB.invoke(applicationContext))
+        val osRepo = OSyncRepo(OfflineSyncDB.invoke(appContext))
             var currentDateTime = getCurrentDateTime()
         GlobalScope.launch {
 
@@ -46,7 +47,8 @@ class ImageUploadWorker(
                     0->{
                         if (data.dashboardImage != null) {
                             val partBody = createMultipartPart(
-                                data.dashboardImage!!, "uploadVehicleDashBoardImage"
+                                data.dashboardImage!!, "uploadVehicleDashBoardImage",
+                                appContext
                             )
                             val dashresponse =
                                 mainRepo.uploadVehicleImage(clebUserId, partBody, 1, currentDateTime)
@@ -57,7 +59,8 @@ class ImageUploadWorker(
 
                         if (data.frontImage != null) {
                             val partBody = createMultipartPart(
-                                data.frontImage!!, "uploadVehicleFrontImage"
+                                data.frontImage!!, "uploadVehicleFrontImage",
+                                appContext
                             )
                             val frontresponse =
                                 mainRepo.uploadVehicleImage(clebUserId, partBody, 2, currentDateTime)
@@ -68,7 +71,8 @@ class ImageUploadWorker(
 
                         if (data.nearSideImage != null) {
                             val partBody = createMultipartPart(
-                                data.nearSideImage!!, "uploadVehicleNearSideImage"
+                                data.nearSideImage!!, "uploadVehicleNearSideImage",
+                                appContext
                             )
 
                             val nearResponse =
@@ -80,7 +84,8 @@ class ImageUploadWorker(
 
                         if (data.rearSideImage != null) {
                             val partBody = createMultipartPart(
-                                data.rearSideImage!!, "uploadVehicleRearImage"
+                                data.rearSideImage!!, "uploadVehicleRearImage",
+                                appContext
                             )
                             val rearResponse =
                                 mainRepo.uploadVehicleImage(clebUserId, partBody, 4, currentDateTime)
@@ -91,7 +96,8 @@ class ImageUploadWorker(
 
                         if (data.offSideImage != null) {
                             val partBody = createMultipartPart(
-                                data.offSideImage!!, "uploadVehicleOffSideImage"
+                                data.offSideImage!!, "uploadVehicleOffSideImage",
+                                appContext
                             )
 
                             val offsideResponse =
@@ -103,7 +109,8 @@ class ImageUploadWorker(
 
                         if (data.addblueImage != null) {
                             val partBody = createMultipartPart(
-                                data.addblueImage!!, "uploadVehicleAddBlueImage"
+                                data.addblueImage!!, "uploadVehicleAddBlueImage",
+                                appContext
                             )
                             val addBlueResponse = mainRepo.uploadVehicleImage(
                                 clebUserId, partBody, 7, currentDateTime
@@ -114,7 +121,8 @@ class ImageUploadWorker(
 
                         if (data.oillevelImage != null) {
                             val partBody = createMultipartPart(
-                                data.oillevelImage!!, "uploadVehicleOilLevelImage"
+                                data.oillevelImage!!, "uploadVehicleOilLevelImage",
+                                appContext
                             )
                             val oilLevelResponse = mainRepo.uploadVehicleImage(
                                 clebUserId, partBody, 5, currentDateTime
@@ -124,7 +132,8 @@ class ImageUploadWorker(
                         }
                         if(data.faceMaskImage!=null){
                             val partBody = createMultipartPart(
-                                data.faceMaskImage!!,"uploadFaceMaskImage"
+                                data.faceMaskImage!!,"uploadFaceMaskImage",
+                                appContext
                             )
                             val selfieeRes = mainRepo.uploadVehicleImage(clebUserId,partBody,0,currentDateTime)
                             if(!selfieeRes.isSuccessful)
@@ -134,7 +143,8 @@ class ImageUploadWorker(
                     1->{
                         if(data.faceMaskImage!=null){
                             val partBody = createMultipartPart(
-                                data.faceMaskImage!!,"uploadFaceMaskImage"
+                                data.faceMaskImage!!,"uploadFaceMaskImage",
+                                appContext
                             )
                             val selfieeRes = mainRepo.uploadVehicleImage(clebUserId,partBody,0,currentDateTime)
                             if(!selfieeRes.isSuccessful)
@@ -154,9 +164,10 @@ class ImageUploadWorker(
         return Result.success()
     }
 
-    private fun createMultipartPart(image: String, partName: String): MultipartBody.Part {
+    private fun createMultipartPart(image: String, partName: String,context: Context): MultipartBody.Part {
         val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
-        val requestBody = decodeBase64Image(image).toRequestBody()
+        var bs64ImageString = getImageBitmapFromUri(context, image.toUri())
+        val requestBody = bs64ImageString!!.toRequestBody()
         return MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
     }
 }

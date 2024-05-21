@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,11 +22,8 @@ import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.ViewModel.OSyncVMProvider
 import com.clebs.celerity.ViewModel.OSyncViewModel
-import com.clebs.celerity.database.OSyncRepo
-import com.clebs.celerity.database.OfflineSyncDB
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.ActivityAddInspectionBinding
-import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
@@ -33,13 +31,14 @@ import com.clebs.celerity.utils.BackgroundUploadDialog
 import com.clebs.celerity.utils.BackgroundUploadDialogListener
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.ClsCapture
-import com.clebs.celerity.utils.DependencyProvider.currentimagebase64
-import com.clebs.celerity.utils.DependencyProvider.imagebitmap
+import com.clebs.celerity.utils.DependencyProvider.currentUri
+import com.clebs.celerity.utils.DependencyProvider.isComingBackFromCLSCapture
 import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.checkIfInspectionFailed
 import com.clebs.celerity.utils.getCurrentDateTime
+import com.clebs.celerity.utils.printBitmapSize
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.toRequestBody
@@ -103,78 +102,6 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
             this,
             OSyncVMProvider(osRepo, prefs.clebUserId.toInt(), todayDate)
         )[OSyncViewModel::class.java]
-        val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
-        val requestBody = imagebitmap?.toRequestBody()
-        var partName = ""
-        var x = b64ImageList.size
-        if (currentimagebase64!=null && imagebitmap!=null){
-            when (x) {
-                0 -> {
-                    partName = "uploadVehicleDashBoardImage"
-                    osData.dashboardImage = currentimagebase64
-                    oSyncViewModel.insertData(osData)
-                    b64ImageList.add(currentimagebase64.toString())
-                }
-
-                1 -> {
-                    partName = "uploadVehicleFrontImage"
-                    osData.frontImage = currentimagebase64
-                    oSyncViewModel.insertData(osData)
-                    b64ImageList.add(currentimagebase64.toString())
-                }
-
-                2 -> {
-                    partName = "uploadVehicleNearSideImage"
-                    osData.nearSideImage = currentimagebase64
-                    oSyncViewModel.insertData(osData)
-                    b64ImageList.add(currentimagebase64.toString())
-                }
-
-                3 -> {
-                    partName = "uploadVehicleRearImage"
-                    osData.rearSideImage = currentimagebase64
-                    oSyncViewModel.insertData(osData)
-                    b64ImageList.add(currentimagebase64.toString())
-                }
-
-                4 -> {
-                    partName = "uploadVehicleOffSideImage"
-                    osData.offSideImage =currentimagebase64
-                    oSyncViewModel.insertData(osData)
-                    b64ImageList.add(currentimagebase64.toString())
-                }
-
-                5 -> {
-                    partName = "uploadVehicleAddBlueImage"
-                    osData.addblueImage = currentimagebase64
-                    oSyncViewModel.insertData(osData)
-                    b64ImageList.add(currentimagebase64.toString())
-                }
-
-                6 -> {
-                    partName = "uploadVehicleOilLevelImage"
-                    osData.oillevelImage = currentimagebase64
-                    oSyncViewModel.insertData(osData)
-                    b64ImageList.add(currentimagebase64.toString())
-                }
-
-                else -> "Invalid"
-            }
-
-            x = b64ImageList.size
-
-            val imagePart =
-                MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody!!)
-
-            imagePartsList.add(imagePart)
-
-            uploadStatus(x)
-            if (x == 7) {
-                binding.tvNext.isEnabled = true
-                oSyncViewModel.insertData(osData)
-                binding.tvNext.setTextColor(ContextCompat.getColor(this, R.color.white))
-            }
-        }
 
 
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
@@ -245,23 +172,23 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
         binding.ivUploadImage.setOnClickListener {
             if (allPermissionsGranted())
-//                uploadImage()
-                startUploadtwo()
+                openClsCapture()
+            //uploadImage()
             else {
                 requestpermissions()
             }
         }
         binding.tvUploadMainTV.setOnClickListener {
             if (allPermissionsGranted())
-//                uploadImage()
-                startUploadtwo()
+                openClsCapture()
+            //uploadImage()
             else
                 requestpermissions()
         }
         binding.fullClick.setOnClickListener {
             if (allPermissionsGranted())
-//                uploadImage()
-                startUploadtwo()
+                openClsCapture()
+            //uploadImage()
             else {
                 requestpermissions()
             }
@@ -615,65 +542,65 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-
             val imageBitmap = data?.extras?.get("data") as Bitmap
-//            sendImage(imageBitmap, requestCode)
+            //sendImage(imageBitmap, requestCode)
         }
     }
 
- fun sendImage(imageBitmap: Bitmap, requestCode: Int) {
-        val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
-        val requestBody = imageBitmap.toRequestBody()
+    private fun sendImage(imageUri: Uri, requestCode: Int) {
+/*        val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
+        val requestBody = imageBitmap.toRequestBody()*/
         var partName = ""
         var x = b64ImageList.size
         when (x) {
             0 -> {
                 partName = "uploadVehicleDashBoardImage"
-                osData.dashboardImage = currentimagebase64
+                //osData.dashboardImage = bitmapToBase64(imageBitmap)
+                osData.dashboardImage = imageUri.toString()
                 oSyncViewModel.insertData(osData)
-                b64ImageList.add(currentimagebase64.toString())
+                b64ImageList.add(imageUri.toString())
             }
 
             1 -> {
                 partName = "uploadVehicleFrontImage"
-                osData.frontImage = currentimagebase64
+                osData.frontImage = imageUri.toString()
                 oSyncViewModel.insertData(osData)
-                b64ImageList.add(currentimagebase64.toString())
+                b64ImageList.add(imageUri.toString())
             }
 
             2 -> {
                 partName = "uploadVehicleNearSideImage"
-                osData.nearSideImage = currentimagebase64
+                osData.nearSideImage = imageUri.toString()
                 oSyncViewModel.insertData(osData)
-                b64ImageList.add(currentimagebase64.toString())
+                b64ImageList.add(imageUri.toString())
             }
 
             3 -> {
                 partName = "uploadVehicleRearImage"
-                osData.rearSideImage = currentimagebase64
+                osData.rearSideImage = imageUri.toString()
                 oSyncViewModel.insertData(osData)
-                b64ImageList.add(currentimagebase64.toString())
+                b64ImageList.add(imageUri.toString())
             }
 
             4 -> {
                 partName = "uploadVehicleOffSideImage"
-                osData.offSideImage =currentimagebase64
+                osData.offSideImage = imageUri.toString()
                 oSyncViewModel.insertData(osData)
-                b64ImageList.add(currentimagebase64.toString())
+                b64ImageList.add(imageUri.toString())
             }
 
             5 -> {
                 partName = "uploadVehicleAddBlueImage"
-                osData.addblueImage = currentimagebase64
+                osData.addblueImage = imageUri.toString()
                 oSyncViewModel.insertData(osData)
-                b64ImageList.add(currentimagebase64.toString())
+                b64ImageList.add(imageUri.toString())
             }
 
             6 -> {
                 partName = "uploadVehicleOilLevelImage"
-                osData.oillevelImage = currentimagebase64
+                osData.oillevelImage = imageUri.toString()
                 oSyncViewModel.insertData(osData)
-                b64ImageList.add(currentimagebase64.toString())
+                b64ImageList.add(imageUri.toString())
             }
 
             else -> "Invalid"
@@ -681,10 +608,10 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
         x = b64ImageList.size
 
-        val imagePart =
+/*        val imagePart =
             MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
 
-        imagePartsList.add(imagePart)
+        imagePartsList.add(imagePart)*/
 
         uploadStatus(x)
         if (x == 7) {
@@ -779,23 +706,24 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
             if (!permissionGranted) {
                 showToast("Permission denied", this)
             } else {
-                startUploadtwo()
-//                uploadImage()
+                openClsCapture()
+                //uploadImage()
             }
         }
 
     override fun onResume() {
         super.onResume()
-
-
-
+        if (isComingBackFromCLSCapture) {
+            if (currentUri != null)
+               // printBitmapSize(currentUri!!)
+                sendImage(currentUri!!,0)
+            isComingBackFromCLSCapture = false
+        }
     }
-    fun startUploadtwo() {
+
+    fun openClsCapture() {
         val intent = Intent(this, ClsCapture::class.java)
         startActivity(intent)
-
-
-
     }
 
 }
