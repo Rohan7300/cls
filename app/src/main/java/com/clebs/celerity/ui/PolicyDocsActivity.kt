@@ -64,6 +64,7 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
 
     private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
     private var clebuserId = 0
+    var notificationID:Int = 1
     var isImage1 = true
     private var handbookID: Int = 0
     var openModeDAHandBook: OpenMode = OpenMode.VIEW
@@ -677,7 +678,9 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
             )
         }
 
-        val toastIntent = Intent(this, NotificationBroadcastReciever::class.java)
+        val toastIntent = Intent(this, NotificationBroadcastReciever::class.java).apply {
+            putExtra("notification_id", notificationID)
+        }
         val toastPendingIntent = PendingIntent.getBroadcast(
             this, 0, toastIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
@@ -699,7 +702,8 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
             ) {
                 return
             }
-            notify(1, notificationBuilder.build())
+            notify(notificationID, notificationBuilder.build())
+            notificationID+=1
         }
     }
 
