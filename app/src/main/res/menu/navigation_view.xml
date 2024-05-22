@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/home"
-        android:icon="@drawable/home_ic"
-        android:iconTint="@color/medium_orange"
-        android:title="Home"
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
 
-        />
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home_ic"
+            android:iconTint="@color/orange"
+            android:title="Home"/>
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/user_profile_icon"
+            android:iconTint="@color/orange"
+            android:title="Profile"/>
+
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/invoices"
+            android:iconTint="@color/orange"
+            android:title="Invoices"/>
+
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/download_icon"
+            android:iconTint="@color/orange"
+            android:title="Share"/>
+    </group>
     <item
-        android:id="@+id/profile"
-        android:iconTint="@color/medium_orange"
-        android:icon="@drawable/user_profile_icon"
-        android:title="Profile" />
-    <item
-        android:id="@+id/invoices"
-        android:icon="@drawable/invoices"
-        android:iconTint="@color/medium_orange"
-        android:title="Invoices" />
-    <item android:id="@+id/logout"
-        android:title="Logout"
-        android:iconTint="@color/medium_orange"
-        android:icon="@drawable/logout_icon"/>
-    <!--    <item-->
-    <!--        android:id="@+id/passwords"-->
-    <!--        android:icon="@drawable/passwords"-->
-    <!--        android:title="Alerts" />-->
-<!--    <item-->
-<!--        android:id="@+id/tickets"-->
-<!--        android:icon="@drawable/tickets_ic"-->
-<!--        android:title="Tickets" />-->
+        android:title="">
+
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/logout_icon"
+                android:title="Logout"/>
+        </menu>
+
+    </item>
+
 </menu>

@@ -16,6 +16,8 @@ Place the Rectangle area as on Vehicle Reg plate as shown in the image and captu
     <string name="label_fps">Frames per Second</string>
     <string name="label_confidence_threshold">Threshold</string>
     <string name="label_max_results">Max Results</string>
+    <string name="open_nav">Open Navigation Drawer</string>
+    <string name="close_nav">Close Navigation Drawer</string>
     <string name="label_threads">Number of Threads</string>
     <string name="label_delegate">Delegate</string>
     <string name="label_models">ML Model</string>
