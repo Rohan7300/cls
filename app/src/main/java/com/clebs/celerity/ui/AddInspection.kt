@@ -2,6 +2,7 @@ package com.clebs.celerity.ui
 
 import android.Manifest
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -13,6 +14,11 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
@@ -65,9 +71,8 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     lateinit var viewModel: MainViewModel
     lateinit var oSyncViewModel: OSyncViewModel
     lateinit var osData: OfflineSyncEntity
-
+    private var imageCapture: ImageCapture? = null
     companion object {
-
 
         private val REQUIRED_PERMISSIONS =
             mutableListOf(
@@ -80,7 +85,6 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                 }
             }.toTypedArray()
 
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,6 +96,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         backgroundUploadDialog = BackgroundUploadDialog()
         backgroundUploadDialog.setListener(this)
 
+        initPreviewView()
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         val todayDate = dateFormat.format(Date())
@@ -193,6 +198,14 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                 requestpermissions()
             }
         }
+        binding.newUploadBtn.setOnClickListener{
+            if (allPermissionsGranted())
+                openClsCapture()
+            //uploadImage()
+            else {
+                requestpermissions()
+            }
+        }
         binding.imageViewBack.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -209,6 +222,32 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
             onSaveClick()
 
         }
+    }
+
+    private fun initPreviewView() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+        cameraProviderFuture.addListener({
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    it.setSurfaceProvider(binding.inspectionPreviewView.surfaceProvider)
+                }
+            imageCapture = ImageCapture.Builder().build()
+            PreviewView.ImplementationMode.COMPATIBLE
+            val cameraSelector =
+                CameraSelector.DEFAULT_BACK_CAMERA
+            try {
+
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    this, cameraSelector, preview, imageCapture
+                )
+            } catch (e: Exception) {
+                Log.d(ContentValues.TAG, "Use case binding failed ${e.message}")
+            }
+
+        }, ContextCompat.getMainExecutor(this))
     }
 
     private fun uploadImage() {
@@ -296,10 +335,12 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         when (i) {
             0 -> {
                 binding.tvUploadType.text = "Dashboard Image"
+                binding.uploadBtnText.text = "Upload Dashboard Image"
             }
 
             1 -> {
                 binding.tvUploadType.text = "Front Image"
+                binding.uploadBtnText.text = "Upload Front Image"
                 binding.dashboardStatusIV.setImageDrawable(
                     ContextCompat.getDrawable(
                         this,
@@ -310,6 +351,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
             2 -> {
                 binding.tvUploadType.text = "Near Side Image"
+                binding.uploadBtnText.text = "Upload Near Side Image"
                 binding.dashboardStatusIV.setImageDrawable(
                     ContextCompat.getDrawable(
                         this,
@@ -326,6 +368,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
             3 -> {
                 binding.tvUploadType.text = "Rear Side Image"
+                binding.uploadBtnText.text = "Upload Rear Side Image"
                 binding.dashboardStatusIV.setImageDrawable(
                     ContextCompat.getDrawable(
                         this,
@@ -348,6 +391,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
             4 -> {
                 binding.tvUploadType.text = "Offside Image"
+                binding.uploadBtnText.text = "Upload Offside Image"
                 binding.dashboardStatusIV.setImageDrawable(
                     ContextCompat.getDrawable(
                         this,
@@ -376,6 +420,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
             5 -> {
                 binding.tvUploadType.text = "Add Blue Level Image"
+                binding.uploadBtnText.text = "Upload Add Blue Level Image"
                 binding.dashboardStatusIV.setImageDrawable(
                     ContextCompat.getDrawable(
                         this,
@@ -416,6 +461,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
             6 -> {
                 binding.tvUploadType.text = "Oil Level Image"
+                binding.uploadBtnText.text = "Upload Oil Level Image"
                 binding.dashboardStatusIV.setImageDrawable(
                     ContextCompat.getDrawable(
                         this,
@@ -470,10 +516,11 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                         )
                     )
                     binding.tvUploadMainTV.text = "Inspection Completed"
+                    binding.uploadBtnText.text = "Inspection Completed"
+
                     binding.tvUploadType.text = "You can exit and continue on remaining steps."
                 } else {
                     binding.ivUploadImage.visibility = View.GONE
-                    //binding.tvUploadMainTV.text = "Save and Upload"
                     binding.tvUploadMainTV.visibility = View.GONE
                     binding.tvUploadType.text =
                         "You can save and exit while images are being uploaded."
@@ -484,7 +531,6 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                     osData.isoffSideFailed = false
                     osData.isaddblueImageFailed = false
                     osData.isoillevelImageFailed = false
-
                     startUploadWithWorkManager(0, prefs, this)
                 }
 
@@ -533,7 +579,11 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
                 binding.tvUploadMainTV.isEnabled = false
                 binding.ivUploadImage.isEnabled = false
+                binding.uploadBtnText.text = "Inspection Complete"
+                binding.uploadBtnIV.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.check_new))
+                binding.newUploadBtn.isEnabled = false
                 binding.fullClick.isEnabled = false
+
             }
 
         }
@@ -713,6 +763,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
     override fun onResume() {
         super.onResume()
+        initPreviewView()
         if (isComingBackFromCLSCapture) {
             if (currentUri != null)
                // printBitmapSize(currentUri!!)
@@ -722,6 +773,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     }
 
     fun openClsCapture() {
+        currentUri = null
         val intent = Intent(this, ClsCapture::class.java)
         startActivity(intent)
     }

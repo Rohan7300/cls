@@ -167,8 +167,13 @@ class CompleteTaskFragment : Fragment() {
         loadingDialog = (activity as HomeActivity).loadingDialog
         oSyncViewModel = (activity as HomeActivity).oSyncViewModel
         clebUserID = Prefs.getInstance(requireContext()).clebUserId.toInt()
-        if ((activity as HomeActivity).osData != null)
-            osData = (activity as HomeActivity).osData
+        try {
+
+            if ((activity as HomeActivity).osData != null)
+                osData = (activity as HomeActivity).osData
+        } catch (_: Exception) {
+
+        }
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.addBreakIV.setOnClickListener(clickListener)
 
@@ -208,7 +213,7 @@ class CompleteTaskFragment : Fragment() {
                     getCurrentDateTime()
                 )
                 showDialog()
-                if(DependencyProvider.isComingBackFromFaceScan){
+                if (DependencyProvider.isComingBackFromFaceScan) {
                     sendFaceMask()
                 }
                 viewModel.GetDriverBreakTimeInfo(clebUserID)
