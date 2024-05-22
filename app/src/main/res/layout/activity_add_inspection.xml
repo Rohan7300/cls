@@ -424,7 +424,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
                     android:text="Vehicle Inspection Status"
-                    android:textColor="@color/text_color" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/uploadStatus"
@@ -455,7 +455,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#F1EFEF"
+                android:backgroundTint="@color/medium_orange"
                 android:id="@+id/newUploadBtn"
                 app:cardCornerRadius="20dp">
 
@@ -474,7 +474,7 @@
                         android:src="@drawable/capture"
                         android:id="@+id/uploadBtnIV"
                         android:textColor="@color/text_color"
-                        app:tint="@color/medium_orange" />
+                        app:tint="@color/white" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -483,7 +483,7 @@
                         android:gravity="center"
                         android:id="@+id/uploadBtnText"
                         android:text="Upload Dashboard Image"
-                        android:textColor="@color/text_color" />
+                        android:textColor="@color/white" />
 
 
                 </LinearLayout>

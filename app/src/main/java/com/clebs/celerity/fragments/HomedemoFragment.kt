@@ -175,18 +175,43 @@ class HomedemoFragment : Fragment() {
 
         mbinding.viewfullschedule.setOnClickListener {
             if (isclicked) {
+                mbinding.fullScheduleDownArrow.visibility = View.GONE
 //                mbinding.vieww.visibility=View.VISIBLE
                 mbinding.consttwo.visibility=View.GONE
                 mbinding.const1.visibility=View.GONE
                 mbinding.ss.fullScroll(ScrollView.FOCUS_UP);
                 mbinding.viewfulldatalayout.visibility = View.VISIBLE
             } else {
+                mbinding.fullScheduleDownArrow.visibility = View.VISIBLE
                 mbinding.consttwo.visibility=View.VISIBLE
                 mbinding.const1.visibility=View.VISIBLE
                 mbinding.viewfulldatalayout.visibility = View.GONE
 //                mbinding.vieww.visibility=View.GONE
             }
             isclicked = !isclicked
+        }
+        mbinding.viewFullScheduleLL.setOnClickListener {
+            if (isclicked) {
+                mbinding.fullScheduleDownArrow.visibility = View.GONE
+//                mbinding.vieww.visibility=View.VISIBLE
+                mbinding.consttwo.visibility=View.GONE
+                mbinding.const1.visibility=View.GONE
+                mbinding.ss.fullScroll(ScrollView.FOCUS_UP);
+                mbinding.viewfulldatalayout.visibility = View.VISIBLE
+            } else {
+                mbinding.fullScheduleDownArrow.visibility = View.VISIBLE
+                mbinding.consttwo.visibility=View.VISIBLE
+                mbinding.const1.visibility=View.VISIBLE
+                mbinding.viewfulldatalayout.visibility = View.GONE
+//                mbinding.vieww.visibility=View.GONE
+            }
+            isclicked = !isclicked
+        }
+        mbinding.collapseArrow.setOnClickListener {
+            mbinding.consttwo.visibility=View.VISIBLE
+            mbinding.const1.visibility=View.VISIBLE
+            mbinding.fullScheduleDownArrow.visibility = View.VISIBLE
+            mbinding.viewfulldatalayout.visibility = View.GONE
         }
 
         viewModel.GetAVGscore(

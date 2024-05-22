@@ -42,6 +42,7 @@ import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.dialogs.DownloadingDialog
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.DependencyProvider
+import com.clebs.celerity.utils.NotificationBroadcastReciever
 import com.clebs.celerity.utils.OpenMode
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
@@ -646,7 +647,6 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 "Download Complete",
@@ -655,34 +655,41 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
             )
             notificationManager.createNotificationChannel(channel)
         }
+        DependencyProvider.isComingFromPolicyNotification = true
+        DependencyProvider.policyDocPDFURI = uri
 
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.setDataAndType(uri, "application/pdf")
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
-        var pendingIntent: PendingIntent? = null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            pendingIntent = PendingIntent.getActivity(
+        val viewPendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(
                 this, 0, intent,
                 PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
             )
         } else {
-            pendingIntent = PendingIntent.getActivity(
+            PendingIntent.getActivity(
                 this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
             )
         }
 
+        val toastIntent = Intent(this, NotificationBroadcastReciever::class.java)
+        val toastPendingIntent = PendingIntent.getBroadcast(
+            this, 0, toastIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val notificationBuilder = NotificationCompat.Builder(this, "Download Complete")
             .setSmallIcon(R.drawable.logo_new)
             .setContentTitle(title)
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
+            .setContentIntent(viewPendingIntent)
+            .addAction(R.drawable.ic_launcher_foreground, "View PDF", toastPendingIntent)
 
         with(NotificationManagerCompat.from(this)) {
             if (ActivityCompat.checkSelfPermission(
@@ -695,6 +702,7 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
             notify(1, notificationBuilder.build())
         }
     }
+
 
     private fun checkForStoragePermission(): Boolean {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {

@@ -38,6 +38,7 @@ import com.clebs.celerity.utils.BackgroundUploadDialogListener
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.ClsCapture
 import com.clebs.celerity.utils.DependencyProvider.currentUri
+import com.clebs.celerity.utils.DependencyProvider.insLevel
 import com.clebs.celerity.utils.DependencyProvider.isComingBackFromCLSCapture
 import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
 import com.clebs.celerity.utils.Prefs
@@ -238,7 +239,6 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
             val cameraSelector =
                 CameraSelector.DEFAULT_BACK_CAMERA
             try {
-
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture
@@ -517,7 +517,6 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                     )
                     binding.tvUploadMainTV.text = "Inspection Completed"
                     binding.uploadBtnText.text = "Inspection Completed"
-
                     binding.tvUploadType.text = "You can exit and continue on remaining steps."
                 } else {
                     binding.ivUploadImage.visibility = View.GONE
@@ -580,6 +579,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                 binding.tvUploadMainTV.isEnabled = false
                 binding.ivUploadImage.isEnabled = false
                 binding.uploadBtnText.text = "Inspection Complete"
+                binding.newUploadBtn.background.setTint(ContextCompat.getColor(this,R.color.very_light_orange))
                 binding.uploadBtnIV.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.check_new))
                 binding.newUploadBtn.isEnabled = false
                 binding.fullClick.isEnabled = false
@@ -775,7 +775,9 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     fun openClsCapture() {
         currentUri = null
         val intent = Intent(this, ClsCapture::class.java)
+        insLevel = b64ImageList.size
         startActivity(intent)
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
 }

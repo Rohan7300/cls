@@ -53,6 +53,8 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup"
         tools:targetApi="tiramisu">
+        <receiver android:name=".utils.NotificationBroadcastReciever"/>
+
         <activity
             android:name=".ui.FaceScanActivity"
             android:exported="false" />
@@ -61,6 +63,7 @@
             android:exported="false" />
         <activity
             android:name=".utils.ClsCapture"
+            android:screenOrientation="landscape"
             android:exported="false" />
         <activity
             android:name=".ui.AddInspection"

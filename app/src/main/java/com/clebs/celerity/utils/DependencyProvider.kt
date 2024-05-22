@@ -21,7 +21,11 @@ object DependencyProvider {
     var dailyRotaNotificationShowing:Boolean = false
     var isComingBackFromCLSCapture:Boolean = false
     var isComingBackFromFaceScan:Boolean = false
+    var isComingFromPolicyNotification:Boolean = false
     var currentUri: Uri? = null
+    var insLevel:Int = 0
+    var policyDocPDFURI:Uri? = null
+
     fun getMainVM(owner: ViewModelStoreOwner): MainViewModel {
 
             viewModelInstance = ViewModelProvider(
