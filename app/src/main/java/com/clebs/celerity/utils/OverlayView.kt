@@ -22,9 +22,10 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
+import android.media.FaceDetector.Face
+import android.speech.tts.TextToSpeech
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.content.ContextCompat
 import java.util.LinkedList
 import kotlin.math.max
 import org.tensorflow.lite.task.vision.detector.Detection
@@ -32,9 +33,11 @@ import org.tensorflow.lite.task.vision.detector.Detection
 class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     private var results: List<Detection> = LinkedList<Detection>()
+
     private var boxPaint = Paint()
     private var textBackgroundPaint = Paint()
     private var textPaint = Paint()
+    var textToSpeech: TextToSpeech? = null
     private var cardetected = false
     private var scaleFactor: Float = 1f
 
@@ -91,6 +94,39 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
 
                 if (results.categories[0].label.equals("car") || results.categories[0].label.equals("truck")){
                     boxPaint.color=Color.GREEN
+
+
+//                    textToSpeech = TextToSpeech(context, TextToSpeech.OnInitListener {
+//
+//                        // setting the language to the default phone language.
+//                        val ttsLang = textToSpeech!!.setLanguage(Locale.getDefault())
+//                        val text =
+//                            "Vehicle Detected"
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//
+//
+//                            val voices: Set<Voice> = textToSpeech!!.getVoices()
+//                            val voiceList: List<Voice> = ArrayList(voices)
+//                            val selectedVoice = voiceList[8] // Change to the desired voice index
+//
+//                            textToSpeech!!.setVoice(selectedVoice)
+//                            textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+//                        } else {
+//                            val voices: Set<Voice> = textToSpeech!!.getVoices()
+//                            val voiceList: List<Voice> = ArrayList(voices)
+//                            val selectedVoice = voiceList[8] // Change to the desired voice index
+//
+//                            textToSpeech!!.setVoice(selectedVoice)
+//                            textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+//                        }
+//
+//                        // check if the language is supportable.
+//                        if (ttsLang == TextToSpeech.LANG_MISSING_DATA || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
+////                            showToast("error", this@HomeActivity)
+//                        }
+//
+//
+//                    })
                 }
                 else{
                     boxPaint.color=Color.RED
@@ -121,6 +157,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
             // Draw text for detected object
             canvas.drawText(drawableText, left, top + bounds.height(), textPaint)
         }
+
     }
 
     fun setResults(
@@ -134,6 +171,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         // the size that the captured images will be displayed.
         scaleFactor = max(width * 1f / imageWidth, height * 1f / imageHeight)
     }
+
 
     companion object {
         private const val BOUNDING_RECT_TEXT_PADDING = 8

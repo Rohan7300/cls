@@ -99,6 +99,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.firebase:firebase-messaging:23.4.1")
     implementation("com.google.firebase:firebase-crashlytics:18.6.4")
+    implementation("com.google.android.gms:play-services-mlkit-face-detection:17.1.0")
     //implementation("com.google.firebase:firebase-messaging:23.4.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
     implementation("com.google.android.gms:play-services-vision:20.1.3")

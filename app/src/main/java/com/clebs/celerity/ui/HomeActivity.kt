@@ -347,15 +347,17 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 //    internetDialog.showDialog(fragmentManager)
             }
         }
-        val toggle = ActionBarDrawerToggle(
-            this,
-            ActivityHomeBinding.myDrawerLayout,
 
-            R.string.open_nav,
-            R.string.close_nav
-        )
-        ActivityHomeBinding.myDrawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+
+//        val toggle = ActionBarDrawerToggle(
+//            this,
+////            ActivityHomeBinding.myDrawerLayout,
+//
+//            R.string.open_nav,
+//            R.string.close_nav
+//        )
+//        ActivityHomeBinding.myDrawerLayout.addDrawerListener(toggle)
+//        toggle.syncState()
 
 //        if (savedInstanceState == null) {
 //            supportFragmentManager.beginTransaction().replace(R.id.nav_fragment, HomedemoFragment())
@@ -432,34 +434,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         navController.addOnDestinationChangedListener(this)
         fragmentManager = this.supportFragmentManager
         bottomNavigationView.selectedItemId = R.id.home
-        bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
-        ActivityHomeBinding.navigationView.setupWithNavController(navController)
-        ActivityHomeBinding.navigationView.setNavigationItemSelectedListener {
+//        bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
 
-            when(it.itemId){
-                R.id.nav_home->{
-                    navController.navigate(R.id.homedemoFragment)
-                    true
-                }
-                R.id.nav_settings->{
-                    navController.navigate(R.id.profileFragment)
-                    true
-                }
-
-                else -> {
-                    false
-                }
-            }
-        }
-        navController.addOnDestinationChangedListener(object :NavController.OnDestinationChangedListener{
-            override fun onDestinationChanged(
-                controller: NavController,
-                destination: NavDestination,
-                arguments: Bundle?
-            ) {
-
-            }
-        })
         getDeviceID()
         if (!TutorialTracker.hasTutorialBeenShown()) {
             TUT()
@@ -566,12 +542,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 dbLog(imageEntity)
             }
 
-            ActivityHomeBinding.imgDrawer.setOnClickListener {
-//                navController.navigate(R.id.profileFragment)
-                if (!ActivityHomeBinding.myDrawerLayout.isDrawerOpen(ActivityHomeBinding.navigationView)) {
-                    ActivityHomeBinding.myDrawerLayout.openDrawer(ActivityHomeBinding.navigationView)
-                }
-            }
+//            ActivityHomeBinding.imgDrawer.setOnClickListener {
+////                navController.navigate(R.id.profileFragment)
+//                if (!ActivityHomeBinding.myDrawerLayout.isDrawerOpen(ActivityHomeBinding.navigationView)) {
+//                    ActivityHomeBinding.myDrawerLayout.openDrawer(ActivityHomeBinding.navigationView)
+//                }
+//            }
 
 
 
@@ -716,20 +692,15 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         } catch (_: Exception) {
 
         }
-        if (ActivityHomeBinding.myDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            ActivityHomeBinding.myDrawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
+//        if (ActivityHomeBinding.myDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+//            ActivityHomeBinding.myDrawerLayout.closeDrawer(GravityCompat.START)
+//        } else {
+//            super.onBackPressed()
+//        }
     }
 
 
-    override fun onDestinationChanged(
-        controller: NavController, destination: NavDestination, arguments: Bundle?
-    ) {
 
-
-    }
 
     private fun setLoggedIn(isLoggedIn: Boolean) {
         Prefs.getInstance(applicationContext).saveBoolean("isLoggedIn", isLoggedIn)
@@ -1107,36 +1078,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             awaitBalloons {
                 // dismissing of any balloon dismisses all of them. Default behaviour
                 dismissSequentially = true
-                textToSpeech = TextToSpeech(this@HomeActivity, TextToSpeech.OnInitListener {
 
-                    // setting the language to the default phone language.
-                    val ttsLang = textToSpeech!!.setLanguage(Locale.getDefault())
-                    val text = "Welcome to CLS. Please follow the instructions to get started"
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-
-                        val voices: Set<Voice> = textToSpeech!!.getVoices()
-                        val voiceList: List<Voice> = ArrayList(voices)
-                        val selectedVoice = voiceList[8] // Change to the desired voice index
-
-                        textToSpeech!!.setVoice(selectedVoice)
-                        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
-                    } else {
-                        val voices: Set<Voice> = textToSpeech!!.getVoices()
-                        val voiceList: List<Voice> = ArrayList(voices)
-                        val selectedVoice = voiceList[8] // Change to the desired voice index
-
-                        textToSpeech!!.setVoice(selectedVoice)
-                        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-                    }
-
-                    // check if the language is supportable.
-                    if (ttsLang == TextToSpeech.LANG_MISSING_DATA || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        showToast("error", this@HomeActivity)
-                    }
-
-
-                })
                 ActivityHomeBinding.consts.alignBottom(balloon)
 
 
@@ -1153,37 +1095,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             awaitBalloons {
                 dismissSequentially = true // balloons dismissed individually
                 ActivityHomeBinding.bottomNavigatinView.alignTop(balloonthree)
-                textToSpeech = TextToSpeech(this@HomeActivity, TextToSpeech.OnInitListener {
 
-                    // setting the language to the default phone language.
-                    val ttsLang = textToSpeech!!.setLanguage(Locale.getDefault())
-                    val text =
-                            " Click on the bottom bar to explore more of the CLS. Happy journey"
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-
-                        val voices: Set<Voice> = textToSpeech!!.getVoices()
-                        val voiceList: List<Voice> = ArrayList(voices)
-                        val selectedVoice = voiceList[8] // Change to the desired voice index
-
-                        textToSpeech!!.setVoice(selectedVoice)
-                        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
-                    } else {
-                        val voices: Set<Voice> = textToSpeech!!.getVoices()
-                        val voiceList: List<Voice> = ArrayList(voices)
-                        val selectedVoice = voiceList[8] // Change to the desired voice index
-
-                        textToSpeech!!.setVoice(selectedVoice)
-                        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-                    }
-
-                    // check if the language is supportable.
-                    if (ttsLang == TextToSpeech.LANG_MISSING_DATA || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        showToast("error", this@HomeActivity)
-                    }
-
-
-                })
 
             }
 //            awaitBalloons {
@@ -1200,5 +1112,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_fragment)
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    override fun onDestinationChanged(
+        controller: NavController,
+        destination: NavDestination,
+        arguments: Bundle?
+    ) {
+
     }
 }
