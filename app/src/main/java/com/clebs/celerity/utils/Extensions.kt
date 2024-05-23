@@ -33,6 +33,8 @@ import android.widget.*
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.core.view.KeyEventDispatcher.dispatchKeyEvent
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -365,12 +367,16 @@ fun dbLog(it: ImageEntity) {
 
 }
 
-fun setImageView(im: ImageView, value: String) {
-    Log.e("xldjfhdfhdgfjhfdfjdfgd", "setImageView: ")
+fun setImageView(im: ImageView, value: String, context: Context) {
     try {
-        val bitmap: Bitmap = decodeBase64Image(value)
-        im.setImageBitmap(bitmap)
+        if (value.isNullOrEmpty() || value == "empty")
+            im.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.upload_bt))
+        else
+            im.setImageURI(value.toUri())
+
+
     } catch (_: Exception) {
+        im.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.upload_bt))
     }
 }
 
@@ -715,8 +721,7 @@ fun logOSEntity(base: String, osData: OfflineSyncEntity) {
     Log.d("$base", "OS DATA LOG + --------------------")
 }
 
-fun startUploadWithWorkManager(uploadType: Int, prefs: Prefs, context: Context) {
-
+fun startUploadWithWorkManager(uploadType: Int, prefs: Prefs, context: Context,lmID:Int=0,vmID:Int=0) {
 
     val userId = prefs.clebUserId.toInt()
 
@@ -873,4 +878,10 @@ fun getCameraURI(context: Context): Uri? {
 }
 
 
-
+fun getFileUri(file: File, context: Context): Uri {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+    } else {
+        Uri.fromFile(file)
+    }
+}

@@ -100,7 +100,7 @@ class FuelFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if(it!=null){
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.inFuelAdBlueLevel.toString())
+                setImageView(defaultIv, it.inFuelAdBlueLevel.toString(),requireContext())
                 if (it.dfNameFuelAdBlueLevel!!.isNotEmpty() && it.dfNameFuelAdBlueLevel != "f") {
                     edtDefect.setText(it.dfNameFuelAdBlueLevel.toString())
                 }

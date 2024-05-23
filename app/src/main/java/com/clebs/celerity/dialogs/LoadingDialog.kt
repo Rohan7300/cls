@@ -19,7 +19,7 @@ class LoadingDialog(context: Context) : Dialog(context) {
         window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         window?.setStatusBarColor(context.resources.getColor(R.color.medium_orange))
-        window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+      //  window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
     }
 

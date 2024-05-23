@@ -109,7 +109,7 @@ class TierConditonlegalFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.exTyreConditionThreadDepth.toString())
+                setImageView(defaultIv, it.exTyreConditionThreadDepth.toString(),requireContext())
                 if (it.dfNameTyreConditionThreadDepth!!.isNotEmpty() && it.dfNameTyreConditionThreadDepth != "f") {
                     edtDefect.setText(it.dfNameTyreConditionThreadDepth.toString())
                 }

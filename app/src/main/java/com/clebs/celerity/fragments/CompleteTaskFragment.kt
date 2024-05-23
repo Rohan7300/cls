@@ -500,6 +500,7 @@ class CompleteTaskFragment : Fragment() {
                 if (it.ClockedInTime != null) {
                     mbinding.tvClockedIN.text = it.ClockedInTime.toString()
                     isClockedIn = true
+                    osData.isClockedInToday = true
 
                 } else {
                     isClockedIn = false
@@ -512,6 +513,8 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.rlcomtwoClockOut.isClickable = false
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
                 }
+            }else{
+
             }
             setVisibiltyLevel()
         }
@@ -1320,17 +1323,17 @@ class CompleteTaskFragment : Fragment() {
         if (isClockedIn) {
             visibilityLevel = 2
         }
-        if (isBreakTimeAdded && isOnRoadHours) {
+        if (isBreakTimeAdded && isOnRoadHours && isClockedIn) {
             visibilityLevel = 5
             visibiltyControlls()
             oSyncViewModel.insertData(osData)
             return
         }
 
-        if (isBreakTimeAdded)
+        if (isClockedIn&&isBreakTimeAdded)
             visibilityLevel = 3
 
-        if (isOnRoadHours)
+        if (isOnRoadHours&& isClockedIn)
             visibilityLevel = 4
 
         visibiltyControlls()

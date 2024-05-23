@@ -104,7 +104,7 @@ class WarningFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.inWarningServiceLights.toString())
+                setImageView(defaultIv, it.inWarningServiceLights.toString(),requireContext())
                 if (it.dfNameWarningServiceLights!!.isNotEmpty() && it.dfNameWarningServiceLights != "f") {
                     edtDefect.setText(it.dfNameWarningServiceLights.toString())
                 }

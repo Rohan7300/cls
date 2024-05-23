@@ -3,9 +3,10 @@ package com.clebs.celerity.fragments.interior
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
@@ -25,7 +27,7 @@ import com.clebs.celerity.databinding.FragmentWindScreenBinding
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.convertBitmapToBase64
+import com.clebs.celerity.utils.getFileUri
 import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.setImageView
@@ -33,6 +35,11 @@ import com.elconfidencial.bubbleshowcase.BubbleShowCase
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.UUID
 
 
 class WindScreenFragment : Fragment() {
@@ -46,10 +53,12 @@ class WindScreenFragment : Fragment() {
     var defectName: String? = null
     lateinit var imageViewModel: ImageViewModel
     var imageEntity = ImageEntity()
+    private lateinit var photoFile: File
+    var timeStamp = "FileWindDefect"
+    private lateinit var photoURI: Uri
     lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentWindScreenBinding.inflate(inflater, container, false)
@@ -100,9 +109,7 @@ class WindScreenFragment : Fragment() {
                         //Called when the user clicks on the background dim
                     }
                 })
-            )
-            .targetView(mbinding.lln)
-            .showOnce("1")
+            ).targetView(mbinding.lln).showOnce("1")
             .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE)
             .backgroundColor(resources.getColor(R.color.very_light_orange)) //View to point out
             .show().finishSequence()
@@ -113,36 +120,35 @@ class WindScreenFragment : Fragment() {
         imageEntity = imageViewModel.images.value!!
         imageViewModel.images.value.let {
             if (it != null) {
-                setImageView(mbinding.windScreenIV, it.inWindScreen.toString())
                 if (it.dfNameWindScreen!!.isNotEmpty() && it.dfNameWindScreen != "f") {
+                    setImageView(mbinding.windScreenIV, it.inWindScreen.toString(),requireContext())
                     mbinding.edtDefect.setText(it.dfNameWindScreen.toString())
                 }
             }
         }
-        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-            .also { name -> mbinding.headerTop.anaCarolin.text = name }
-        mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
-/*
-        if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
-            mbinding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).currLocationName ?: ""
-        } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
-            mbinding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).workLocationName ?: ""
-        }*/
+        timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+            mbinding.headerTop.anaCarolin.text = name
+        }
+        mbinding.headerTop.dxm5.text = (activity as HomeActivity).date/*
+                if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
+                    mbinding.headerTop.dxLoc.text =
+                        Prefs.getInstance(requireContext()).currLocationName ?: ""
+                } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
+                    mbinding.headerTop.dxLoc.text =
+                        Prefs.getInstance(requireContext()).workLocationName ?: ""
+                }*/
 
         mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
         mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
-        if(mbinding.headerTop.dxReg.text.isEmpty())
-            mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
-        else
-            mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+        if (mbinding.headerTop.dxReg.text.isEmpty()) mbinding.headerTop.strikedxRegNo.visibility =
+            View.VISIBLE
+        else mbinding.headerTop.strikedxRegNo.visibility = View.GONE
 
-        if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text==""||mbinding.headerTop.dxLoc.text=="Not Allocated")
-            mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
-        else
-            mbinding.headerTop.strikedxLoc.visibility = View.GONE
+        if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "" || mbinding.headerTop.dxLoc.text == "Not Allocated") mbinding.headerTop.strikedxLoc.visibility =
+            View.VISIBLE
+        else mbinding.headerTop.strikedxLoc.visibility = View.GONE
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
 
@@ -155,28 +161,25 @@ class WindScreenFragment : Fragment() {
             } else {
                 if (it != null) {
                     mbinding.headerTop.dxLoc.text = it.locationName ?: ""
-                    if(it.vmId!=0)
-                        Prefs.getInstance(requireContext()).vmId = it.vmId
+                    if (it.vmId != 0) Prefs.getInstance(requireContext()).vmId = it.vmId
                 }
             }
             if (it != null) {
                 Prefs.getInstance(requireContext()).vmRegNo = it.vmRegNo ?: ""
-                if(it.vmId!=0)
-                    Prefs.getInstance(requireContext()).vmId = it.vmId
+                if (it.vmId != 0) Prefs.getInstance(requireContext()).vmId = it.vmId
             }
             mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
-            if(mbinding.headerTop.dxReg.text.isEmpty())
-                mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
-            else
-                mbinding.headerTop.strikedxRegNo.visibility = View.GONE
-            if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text==""||mbinding.headerTop.dxLoc.text=="Not Allocated")
-                mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
-            else
-                mbinding.headerTop.strikedxLoc.visibility = View.GONE
+            if (mbinding.headerTop.dxReg.text.isEmpty()) mbinding.headerTop.strikedxRegNo.visibility =
+                View.VISIBLE
+            else mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+            if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "" || mbinding.headerTop.dxLoc.text == "Not Allocated") mbinding.headerTop.strikedxLoc.visibility =
+                View.VISIBLE
+            else mbinding.headerTop.strikedxLoc.visibility = View.GONE
 
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-                .also { name -> mbinding.headerTop.anaCarolin.text = name }
+            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+                mbinding.headerTop.anaCarolin.text = name
+            }
             mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
         }
 
@@ -204,8 +207,7 @@ class WindScreenFragment : Fragment() {
         mbinding.run {
             edtDefect.doAfterTextChanged {
                 mbinding.tvNext.isEnabled = (edtDefect.text?.length!! > 0)
-                if (edtDefect.text?.length!! > 0)
-                    defectName = edtDefect.text?.toString()
+                if (edtDefect.text?.length!! > 0) defectName = edtDefect.text?.toString()
                 if (tvNext.isEnabled) {
                     tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                 } else {
@@ -255,8 +257,7 @@ class WindScreenFragment : Fragment() {
                 .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
                 .image(requireContext().resources.getDrawable(R.drawable.ic_info)!!) //Bubble main image
                 .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
-                .showOnce(id)
-                .listener(
+                .showOnce(id).listener(
                     (object : BubbleShowCaseListener { //Listener for user actions
                         override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
                             //Called when the user clicks the target
@@ -278,8 +279,7 @@ class WindScreenFragment : Fragment() {
                             //Called when the user clicks on the background dim
                         }
                     })
-                )
-                .targetView(it)
+                ).targetView(it)
                 .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
                 .show()
         }
@@ -291,28 +291,24 @@ class WindScreenFragment : Fragment() {
             mbinding.rlUploadDefect.visibility = View.VISIBLE
             mbinding.edtMil.setBackgroundDrawable(
                 ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.shape_filled_textview
+                    requireContext(), R.drawable.shape_filled_textview
                 )
             )
 
             mbinding.imageRadio.setImageDrawable(
                 ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.round_circle_orange
+                    requireContext(), R.drawable.round_circle_orange
                 )
             )
 
             mbinding.edtMilTwo.setBackgroundDrawable(
                 ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.shape_textview_button
+                    requireContext(), R.drawable.shape_textview_button
                 )
             )
             mbinding.imageRadioTwo.setImageDrawable(
                 ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.round_circle_white
+                    requireContext(), R.drawable.round_circle_white
                 )
             )
         } else {
@@ -325,27 +321,23 @@ class WindScreenFragment : Fragment() {
             mbinding.rlUploadDefect.visibility = View.GONE
             mbinding.edtMilTwo.setBackgroundDrawable(
                 ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.shape_filled_textview
+                    requireContext(), R.drawable.shape_filled_textview
                 )
             )
             mbinding.imageRadioTwo.setImageDrawable(
                 ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.round_circle_orange
+                    requireContext(), R.drawable.round_circle_orange
                 )
             )
 
             mbinding.edtMil.setBackgroundDrawable(
                 ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.shape_textview_button
+                    requireContext(), R.drawable.shape_textview_button
                 )
             )
             mbinding.imageRadio.setImageDrawable(
                 ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.round_circle_white
+                    requireContext(), R.drawable.round_circle_white
                 )
             )
         }
@@ -361,14 +353,12 @@ class WindScreenFragment : Fragment() {
 
             ) {
                 showPictureDialog()
-
             }
         } else {
             runWithPermissions(
                 android.Manifest.permission.CAMERA,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-
             ) {
                 showPictureDialog()
             }
@@ -376,16 +366,24 @@ class WindScreenFragment : Fragment() {
     }
 
     fun showPictureDialog() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, 101)
+        val storageDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        if (!storageDir.exists()) {
+            storageDir.mkdirs()
+        }
+        val m_intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val uniqueFileName = "Defect_$timeStamp.jpg"
+        photoFile = File(storageDir, uniqueFileName)
+        photoURI = getFileUri(photoFile, (activity as HomeActivity))
+        m_intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+        startActivityForResult(m_intent, 101)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-            base64 = convertBitmapToBase64(imageBitmap)
-            setImageView(mbinding.windScreenIV, base64.toString())
+            base64 = photoURI.toString()
+            setImageView(mbinding.windScreenIV, base64.toString(),requireContext())
             Log.d("WindScreenFragment", "Base64 : ${base64!!.take(50)}")
         }
     }
@@ -394,16 +392,14 @@ class WindScreenFragment : Fragment() {
         if (mbinding.tvNext.isEnabled) {
             mbinding.tvNext.setTextColor(
                 ContextCompat.getColor(
-                    requireContext(),
-                    R.color.white
+                    requireContext(), R.color.white
                 )
             )
 
         } else {
             mbinding.tvNext.setTextColor(
                 ContextCompat.getColor(
-                    requireContext(),
-                    R.color.orange
+                    requireContext(), R.color.orange
                 )
             )
         }
@@ -413,10 +409,6 @@ class WindScreenFragment : Fragment() {
         var prefs = Prefs.getInstance(requireContext())
         val fragmentStack = prefs.getNavigationHistory()
         val navOptions = NavOptions.Builder()
-//            .setEnterAnim(R.anim.slide_left) // Animation for entering the new fragment
-            // Animation for exiting the current fragment
-//            .setPopEnterAnim(R.anim.slide_in_right) // Animation for entering the previous fragment when navigating back
-//            .setPopExitAnim(R.anim.slide_left) // Animation for exiting the current fragment when navigating back
             .build()
         fragmentStack.push(fragmentId)
         findNavController().navigate(fragmentId, null, navOptions)
@@ -443,7 +435,6 @@ class WindScreenFragment : Fragment() {
         imageEntity.dfNameWindScreen = "f"
         imageViewModel.insertDefectName(imageEntity)
         loadingDialog.show()
-//        Handler().postDelayed(Runnable {  navigateTo(R.id.windowsGlassFragment) }, 1000)
         navigateTo(R.id.windowsGlassFragment)
 
 

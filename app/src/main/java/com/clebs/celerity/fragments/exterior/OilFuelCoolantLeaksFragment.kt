@@ -109,7 +109,7 @@ class OilFuelCoolantLeaksFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.exOilFuelCoolantLeaks.toString())
+                setImageView(defaultIv, it.exOilFuelCoolantLeaks.toString(),requireContext())
                 if (it.dfNameOilFuelCoolantLeaks!!.isNotEmpty() && it.dfNameOilFuelCoolantLeaks != "f") {
                     edtDefect.setText(it.dfNameOilFuelCoolantLeaks.toString())
                 }

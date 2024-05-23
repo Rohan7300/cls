@@ -102,7 +102,7 @@ class CabSecurityFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if(it!=null){
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.inCabSecurityInterior.toString())
+                setImageView(defaultIv, it.inCabSecurityInterior.toString(),requireContext())
                 if (it.dfNameCabSecurityInterior!!.isNotEmpty() && it.dfNameCabSecurityInterior != "f") {
                     edtDefect.setText(it.dfNameCabSecurityInterior.toString())
                 }

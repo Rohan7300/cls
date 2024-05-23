@@ -101,7 +101,7 @@ class MirrorsFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if(it!=null){
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.inMirrors.toString())
+                setImageView(defaultIv, it.inMirrors.toString(),requireContext())
                 if (it.dfNameMirrors!!.isNotEmpty() && it.dfNameMirrors != "f") {
                     edtDefect.setText(it.dfNameMirrors.toString())
                 }

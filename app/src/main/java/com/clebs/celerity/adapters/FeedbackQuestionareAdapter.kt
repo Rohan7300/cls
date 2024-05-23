@@ -80,7 +80,7 @@ class FeedbackQuestionareAdapter(var list: ArrayList<QuestionWithOption>, var co
             }
 
             radio1.setOnClickListener {
-                item.selectedOption = "Yes"
+                item.selectedOption = "Y"
                 binding.radioLayQ1.visibility = View.GONE
                 binding.badgeArrow.setImageDrawable(
                     ContextCompat.getDrawable(
@@ -94,7 +94,7 @@ class FeedbackQuestionareAdapter(var list: ArrayList<QuestionWithOption>, var co
             }
 
             radio2.setOnClickListener {
-                item.selectedOption = "No"
+                item.selectedOption = "N"
                 binding.radioLayQ1.visibility = View.GONE
                 binding.badgeArrow.setImageDrawable(
                     ContextCompat.getDrawable(

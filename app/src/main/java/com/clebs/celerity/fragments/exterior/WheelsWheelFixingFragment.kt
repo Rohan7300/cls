@@ -109,7 +109,7 @@ class WheelsWheelFixingFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.exWheelFixings.toString())
+                setImageView(defaultIv, it.exWheelFixings.toString(),requireContext())
                 if (it.dfNameWheelFixings!!.isNotEmpty() && it.dfNameWheelFixings != "f") {
                     edtDefect.setText(it.dfNameWheelFixings.toString())
                 }

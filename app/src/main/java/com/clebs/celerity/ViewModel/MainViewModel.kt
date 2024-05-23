@@ -82,6 +82,7 @@ import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.models.response.WeeklyLocationRotabyIdResponse
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
+import com.clebs.celerity.utils.DBImages
 import com.clebs.celerity.utils.Prefs
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -196,14 +197,13 @@ class MainViewModel(
         MutableLiveData<GetDriverOtherCompaniesPolicyResponse?>()
     val liveDataDownloadDriverOtherCompaniesPolicy =
         MutableLiveData<DownloadDriverOtherCompaniesPolicyResponse?>()
-
+    val liveDataUploadVehicleDefectImages = MutableLiveData<SimpleStatusMsgResponse?>()
 
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
 
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
     }
-
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -1899,5 +1899,20 @@ class MainViewModel(
         }
     }
 
+    /*fun UploadVehicleDefectImages(
+        userID: Int,
+        vmId: Int,
+        lmid: Int,
+        date: Int,
+        type: Enum<DBImages>
+    ) {
+        viewModelScope.launch {
+            val response = repo.UploadVehicleDefectImages(userID, vmId, lmid, date, type)
+            if (response.failed || !response.isSuccessful)
+                liveDataUploadVehicleDefectImages.postValue(null)
+            else
+                liveDataUploadVehicleDefectImages.postValue(response.body)
+        }
+    }*/
 
 }

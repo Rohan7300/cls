@@ -39,11 +39,13 @@ class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context
                 binding.ticketSubjectTV.text = ticketDescription
             }
 
-            if(ticketItem.IsActive){
+/*            if(ticketItem.IsActive){
                 binding.ticketStatus.text = "Active"
-            }
-            if(!ticketItem.IsActive&&ticketItem.IsCompleted!=null){
+            }*/
+            if(ticketItem.IsCompleted!=null){
                 binding.ticketStatus.text = "Completed"
+            }else{
+                binding.ticketStatus.text = "Active"
             }
 /*            var time = try {
                 ticketItem.UserTicketCreatedOn.split("T")[0] + " " + ticketItem.UserTicketCreatedOn.split(

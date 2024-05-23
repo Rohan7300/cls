@@ -5,8 +5,10 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -19,6 +21,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -32,6 +35,7 @@ import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertBitmapToBase64
+import com.clebs.celerity.utils.getFileUri
 import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.setImageView
@@ -39,6 +43,10 @@ import com.clebs.celerity.utils.showToast
 import com.elconfidencial.bubbleshowcase.BubbleShowCase
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.Stack
 
 abstract class BaseInteriorFragment : Fragment() {
@@ -51,6 +59,8 @@ abstract class BaseInteriorFragment : Fragment() {
     private lateinit var imageView: ImageView
     private var nextEnabled: Boolean = false
     var functionalView: Boolean = false
+    private lateinit var photoFile: File
+    private lateinit var photoURI: Uri
     var defectView: Boolean = false
     var defectName: String? = null
     var imageEntity = ImageEntity()
@@ -87,8 +97,8 @@ abstract class BaseInteriorFragment : Fragment() {
         dxm5 = view.findViewById(R.id.dxm5)
         ana_carolin = view.findViewById(R.id.ana_carolin)
         loadingDialog = (activity as HomeActivity).loadingDialog
-        var strikedxRegNo = view.findViewById<LinearLayout>(R.id.strikedxRegNo)
-        var strikedxLoc = view.findViewById<LinearLayout>(R.id.strikedxLoc)
+        val strikedxRegNo = view.findViewById<LinearLayout>(R.id.strikedxRegNo)
+        val strikedxLoc = view.findViewById<LinearLayout>(R.id.strikedxLoc)
         imageView = ImageView(requireContext()) as ImageView
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
             .also { name -> ana_carolin.text = name }
@@ -239,22 +249,31 @@ abstract class BaseInteriorFragment : Fragment() {
         }
 
     private fun showPictureDialog(iv: ImageView) {
+        val storageDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        if (!storageDir.exists()) {
+            storageDir.mkdirs()
+        }
+        var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val m_intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val uniqueFileName = "Defect_$timeStamp.jpg"
+        photoFile = File(storageDir, uniqueFileName)
+        photoURI = getFileUri(photoFile, (activity as HomeActivity))
+        m_intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
         imageView = iv
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        resultLauncher.launch(intent)
+        resultLauncher.launch(m_intent)
     }
 
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val imageBitmap = result.data?.extras?.get("data") as Bitmap
-                imageView.setImageBitmap(imageBitmap)
+               // val imageBitmap = result.data?.extras?.get("data") as Bitmap
+                imageView.setImageURI(photoURI)
 
-                Log.e("Dskjdjsdkhsjsdhjkdshjshjkefdui", ": "+imageBitmap )
-                base64 = convertBitmapToBase64(imageBitmap)
+              //  Log.e("Dskjdjsdkhsjsdhjkdshjshjkefdui", ": "+imageBitmap )
+                base64 = photoURI.toString()
 //                setImageView(imageView, base64.toString())
                 Log.e("herehrherhehre", ":cdddfdv " + imageView)
-
             }
         }
 

@@ -303,7 +303,7 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
         viewModel.liveDataDownloadDAEngagementPolicy.observe(this) {
             downloadingDialog.dismiss()
             if (it != null) {
-                downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
+                downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedDAEngagement)
             }
         }
 
@@ -405,7 +405,8 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
         mbinding.downloadDAEngagement1.setOnClickListener {
             downloadingDialog.show()
             openModeSignedDAEngagement = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedDAEngagement(handbookID)
+            //viewModel.DownloadSignedDAEngagement(handbookID)
+            viewModel.DownloadDAEngagementPolicy()
         }
         mbinding.imgDAEngagement1.setOnClickListener {
             downloadingDialog.show()
@@ -429,25 +430,25 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
 
         mbinding.downloadGDPR1.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+            openModeSignedGDPRPOLICY = OpenMode.DOWNLOAD
             //viewModel.DownloadSignedGDPRPOLICY(handbookID)
             viewModel.DownloadGDPRPolicy()
         }
         mbinding.downloadGDPR2.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+            openModeSignedGDPRPOLICY = OpenMode.DOWNLOAD
             //viewModel.DownloadSignedGDPRPOLICY(handbookID)
             viewModel.DownloadGDPRPolicy()
         }
         mbinding.imgGDPR1.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.VIEW
+            openModeSignedGDPRPOLICY = OpenMode.VIEW
             //  viewModel.DownloadSignedGDPRPOLICY(handbookID)
             viewModel.DownloadGDPRPolicy()
         }
         mbinding.imgGDPR2.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.VIEW
+            openModeSignedGDPRPOLICY = OpenMode.VIEW
             // viewModel.DownloadSignedGDPRPOLICY(handbookID)
             viewModel.DownloadGDPRPolicy()
         }

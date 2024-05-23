@@ -667,187 +667,264 @@ interface ApiService {
         @Query("companyDocId") companyDocId: Int
     ): Response<DownloadDriverOtherCompaniesPolicyResponse>
 
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleWindscreenDefect")
     suspend fun UploadVehicleWindscreenDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleWindowsOrGlassVisibilityDefect")
     suspend fun UploadVehicleWindowsOrGlassVisibilityDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleWipersOrWashersDefect")
     suspend fun UploadVehicleWipersOrWashersDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleMirrorDefect")
     suspend fun UploadVehicleMirrorDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleCabSecurityOrInteriorDefect")
     suspend fun UploadVehicleCabSecurityOrInteriorDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleSeatBeltDefect")
     suspend fun UploadVehicleSeatBeltDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleWarningOrServiceLightDefect")
     suspend fun UploadVehicleWarningOrServiceLightDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleFuelOrAdBlueLevelDefect")
     suspend fun UploadVehicleFuelOrAdBlueLevelDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleOilOrCoolantLeaksDefect")
     suspend fun UploadVehicleOilOrCoolantLeaksDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleLightsDefect")
     suspend fun UploadVehicleLightsDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleIndicatorsOrSideRepeatersDefect")
     suspend fun UploadVehicleIndicatorsOrSideRepeatersDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleHornOrReverseBeeperDefect")
     suspend fun UploadVehicleHornOrReverseBeeperDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleSteeringDefect")
     suspend fun UploadVehicleSteeringDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleBrakesDefect")
     suspend fun UploadVehicleBrakesDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleLockingSystemDefect")
     suspend fun UploadVehicleLockingSystemDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleFrontDefect")
     suspend fun UploadVehicleFrontDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleNearSideDefect")
     suspend fun UploadVehicleNearSideDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleRearDefect")
     suspend fun UploadVehicleRearDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleOffSideDefect")
     suspend fun UploadVehicleOffSideDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleRegistrationNumberPlateDefect")
     suspend fun UploadVehicleRegistrationNumberPlateDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleReflectorOrMarkerDefect")
     suspend fun UploadVehicleReflectorOrMarkerDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleWheelsOrWheelFixingDefect")
     suspend fun UploadVehicleWheelsOrWheelFixingDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleTyresDefect")
     suspend fun UploadVehicleTyresDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleOilOrFuelOrCoolantLeaksDefect")
     suspend fun UploadVehicleOilOrFuelOrCoolantLeaksDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleExcessiveEngineExhaustSmokeDefect")
     suspend fun UploadVehicleExcessiveEngineExhaustSmokeDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
+    
+    @Multipart
     @POST("/api/Vehicle/UploadVehicleSpareWheelDefect")
     suspend fun UploadVehicleSpareWheelDefect(
         @Query("userId") userId: Int,
         @Query("vmId") vmId:Int,
         @Query("lmId") lmID: Int,
-        @Query("date") date:Int
+        @Query("date") date:String,
+        @Part multipartBody: MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
 
 }
