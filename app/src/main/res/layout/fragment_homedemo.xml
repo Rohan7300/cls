@@ -102,7 +102,7 @@
                                     android:id="@+id/ProgressBar"
                                     style="?android:attr/progressBarStyleHorizontal"
                                     android:layout_width="match_parent"
-                                    android:layout_height="30dp"
+                                    android:layout_height="27dp"
                                     android:layout_marginTop="8dp"
                                     android:elevation="30dp"
                                     android:indeterminate="false"
@@ -135,7 +135,7 @@
                                 android:id="@+id/ProgressBartwo"
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:layout_width="match_parent"
-                                android:layout_height="30dp"
+                                android:layout_height="27dp"
                                 android:layout_below="@id/txt_last_week"
                                 android:layout_marginTop="8dp"
                                 android:elevation="30dp"
@@ -207,7 +207,7 @@
                         android:layout_height="300dp"
                         android:layout_marginTop="10dp"
                         android:visibility="visible"
-
+android:background="@color/transparent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/txt_this_week"
                         app:layout_constraintTop_toBottomOf="@+id/txt_this_week" />

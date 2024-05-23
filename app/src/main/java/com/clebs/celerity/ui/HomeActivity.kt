@@ -542,12 +542,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 dbLog(imageEntity)
             }
 
-//            ActivityHomeBinding.imgDrawer.setOnClickListener {
-////                navController.navigate(R.id.profileFragment)
+            ActivityHomeBinding.imgDrawer.setOnClickListener {
+                navController.navigate(R.id.profileFragment)
 //                if (!ActivityHomeBinding.myDrawerLayout.isDrawerOpen(ActivityHomeBinding.navigationView)) {
 //                    ActivityHomeBinding.myDrawerLayout.openDrawer(ActivityHomeBinding.navigationView)
 //                }
-//            }
+            }
 
 
 

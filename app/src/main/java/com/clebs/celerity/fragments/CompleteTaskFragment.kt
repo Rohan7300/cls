@@ -327,6 +327,7 @@ class CompleteTaskFragment : Fragment() {
 //                mbinding.view2.visibility = View.VISIBLE
             } else {
                 showTaskBottomSheet()
+                mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
 //                mbinding.taskDetails.visibility = View.GONE
 //                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
 //                mbinding.view2.visibility = View.GONE
@@ -338,9 +339,11 @@ class CompleteTaskFragment : Fragment() {
                 showTaskBottomSheet()
 //                mbinding.taskDetails.visibility = View.VISIBLE
                 mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
+
 //                mbinding.view2.visibility = View.VISIBLE
             } else {
                 showTaskBottomSheet()
+                mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
 //                showTaskBottomSheet()
 //                mbinding.taskDetails.visibility = View.GONE
 //                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)

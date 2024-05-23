@@ -15,7 +15,7 @@
 
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="25dp">
+        android:padding="16dp">
 
         <ImageView
             android:layout_width="159dp"
@@ -30,65 +30,48 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/inter_bold"
+            android:fontFamily="@font/inter_semibold"
             android:text="Upload Ticket Image(Optional)"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+android:layout_marginTop="22dp"
             android:orientation="horizontal">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="10dp"
                 android:id="@+id/cancel"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins_semibold"
+                android:enabled="true"
+
                 android:backgroundTint="@color/light_grey"
-                android:padding="10dp"
-                app:cardCornerRadius="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_bold"
-                    android:paddingHorizontal="15dp"
-                    android:paddingVertical="8dp"
-                    android:text="Save Anyways"
-                    android:textColor="@color/text_color"
-                    android:textSize="12sp" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
+                style="@style/ctaStyle1"
+                android:text="Save anyway"/>
+            <TextView
+                android:layout_width="wrap_content"
                 android:id="@+id/upload"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1"
-                android:backgroundTint="#FBA27A"
+                android:text="Add attachment"
+                android:layout_alignParentEnd="true"
+                android:gravity="end"
+                android:textSize="12sp"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/green_200"
+                android:fontFamily="@font/poppins_semibold"
                 android:padding="10dp"
-                app:cardCornerRadius="10dp">
+                android:enabled="true"
+                style="@style/ctaStyle1"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_bold"
-                    android:paddingHorizontal="15dp"
-                    android:paddingVertical="8dp"
-                    android:text="Add Attachment"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
-            </androidx.cardview.widget.CardView>
 
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 

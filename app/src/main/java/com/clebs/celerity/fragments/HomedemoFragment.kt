@@ -358,7 +358,8 @@ mbinding.up.setOnClickListener {
         }
         viewModel.livedataCashFlowWeek.observe(viewLifecycleOwner) { depts ->
             hideDialog()
-
+            mbinding.consttwo.setBackgroundColor(ContextCompat.getColor(requireContext(),
+                io.clearquote.assessment.cq_sdk.R.color.transparent))
             mbinding.consttwo.visibility = View.VISIBLE
             if (depts != null) {
                 mbinding.demo.visibility = View.GONE
@@ -443,6 +444,8 @@ mbinding.up.setOnClickListener {
                 entries.clear();
                 mbinding.pieChart.invalidate();
                 mbinding.pieChart.clear();
+                mbinding.consttwo.setBackgroundColor(ContextCompat.getColor(requireContext(),
+                    io.clearquote.assessment.cq_sdk.R.color.transparent))
                 mbinding.demo.visibility = View.VISIBLE
                 mbinding.pieChart.setNoDataText("No cash flow data found.")
                 mbinding.pieChart.setNoDataTextColor(resources.getColor(R.color.red))
@@ -622,6 +625,7 @@ mbinding.up.setOnClickListener {
             // sets the visibility of the overlay for highlighting an anchor.
             .setOverlayColorResource(R.color.overlay)
             .setArrowSize(5)
+            .setCornerRadius(12f)
             .setAutoDismissDuration(3000)
             .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
             .setArrowSize(10)
@@ -668,6 +672,7 @@ mbinding.up.setOnClickListener {
             .setText("View your schedules")
             .setTextColorResource(R.color.black)
             .setTextSize(13f)
+            .setCornerRadius(12f)
             .setMarginLeft(20)
             .setBalloonHighlightAnimation(BalloonHighlightAnimation.BREATH)
             .setMarginRight(20)
@@ -702,6 +707,7 @@ mbinding.up.setOnClickListener {
 
             }
             awaitBalloons {
+
                 dismissSequentially = true // balloons dismissed individually
                 mbinding.consttwo.alignBottom(balloonthree)
                 balloonthree.clearAllPreferences()
@@ -713,8 +719,6 @@ mbinding.up.setOnClickListener {
                 balloonfour.clearAllPreferences()
 
             }
-
-
         }
     }
 }
