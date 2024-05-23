@@ -7,7 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/ss"
-        android:background="@color/home_blue"
+        android:background="@color/home_blue_two"
+
         android:overScrollMode="never"
         android:scrollbars="none">
 
