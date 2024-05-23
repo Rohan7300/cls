@@ -197,6 +197,8 @@ class ImageUploadWorker(
                     }
 
                     2 -> {
+                        vmId = Prefs.getInstance(appContext).VmID.toInt()
+                        lmId = Prefs.getInstance(appContext).getLocationID().toInt()
                         val imageEntity = imagesRepo.getImagesbyUser()
                         if (imageEntity != null) {
                             if (checkNullorEmpty(imageEntity.front)) {
