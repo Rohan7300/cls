@@ -21,7 +21,7 @@ class FeedbackQuestionareAdapter(var list: ArrayList<QuestionWithOption>, var co
             binding.heading.text = item.question
             val radio1 = binding.radio1
             val radio2 = binding.radio2
-            if (item.selectedOption == "Yes") {
+            if (item.selectedOption == "Y") {
                 radio1.isChecked = true
                 radio2.isChecked = false
                 binding.radioLayQ1.visibility = View.GONE
@@ -33,7 +33,7 @@ class FeedbackQuestionareAdapter(var list: ArrayList<QuestionWithOption>, var co
                 )
                 binding.FeedbackmainLayout.setBackgroundResource(R.drawable.shape_green_new)
             }
-            else if (item.selectedOption == "No") {
+            else if (item.selectedOption == "N") {
                 radio2.isChecked = true
                 radio1.isChecked = false
                 binding.radioLayQ1.visibility = View.GONE
@@ -80,7 +80,7 @@ class FeedbackQuestionareAdapter(var list: ArrayList<QuestionWithOption>, var co
             }
 
             radio1.setOnClickListener {
-                item.selectedOption = "Yes"
+                item.selectedOption = "Y"
                 binding.radioLayQ1.visibility = View.GONE
                 binding.badgeArrow.setImageDrawable(
                     ContextCompat.getDrawable(
@@ -94,7 +94,7 @@ class FeedbackQuestionareAdapter(var list: ArrayList<QuestionWithOption>, var co
             }
 
             radio2.setOnClickListener {
-                item.selectedOption = "No"
+                item.selectedOption = "N"
                 binding.radioLayQ1.visibility = View.GONE
                 binding.badgeArrow.setImageDrawable(
                     ContextCompat.getDrawable(

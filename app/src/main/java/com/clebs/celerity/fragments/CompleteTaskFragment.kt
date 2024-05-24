@@ -82,6 +82,7 @@ import io.clearquote.assessment.cq_sdk.models.InputDetails
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
 import io.ktor.util.reflect.instanceOf
 import okhttp3.MultipartBody
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -127,7 +128,6 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
     private lateinit var oSyncViewModel: OSyncViewModel
-    private var imageUploadLevel = 0
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
     }
@@ -174,8 +174,13 @@ class CompleteTaskFragment : Fragment() {
         loadingDialog = (activity as HomeActivity).loadingDialog
         oSyncViewModel = (activity as HomeActivity).oSyncViewModel
         clebUserID = Prefs.getInstance(requireContext()).clebUserId.toInt()
-        if ((activity as HomeActivity).osData != null)
-            osData = (activity as HomeActivity).osData
+        try {
+
+            if ((activity as HomeActivity).osData != null)
+                osData = (activity as HomeActivity).osData
+        } catch (_: Exception) {
+
+        }
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.addBreakIV.setOnClickListener(clickListener)
 
@@ -511,6 +516,7 @@ class CompleteTaskFragment : Fragment() {
                     clockedinTime = it.ClockedInTime.toString()
                     mbinding.tvClockedIN.text = it.ClockedInTime.toString()
                     isClockedIn = true
+                    osData.isClockedInToday = true
 
                 } else {
                     isClockedIn = false
@@ -524,6 +530,8 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
                     clockedouttime=it.ClockedOutTime.toString()
                 }
+            }else{
+
             }
             setVisibiltyLevel()
         }
@@ -816,17 +824,29 @@ class CompleteTaskFragment : Fragment() {
 
 
     private fun chkTime(edtBreakstart: TextView, edtBreakend: TextView): Boolean {
-
         val startTime = edtBreakstart.text.toString()
         val endTime = edtBreakend.text.toString()
-        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
-        val start = sdf.parse(startTime)
-        val end = sdf.parse(endTime)
-        if (start != null) {
-            if (start.before(end)) return true
+        print("starttime $startTime")
+        print("endtime $endTime")
+
+        // Use 12-hour format with AM/PM
+        val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
+
+        return try {
+            val start = sdf.parse(startTime)
+            val end = sdf.parse(endTime)
+
+            if (start != null && end != null) {
+                start.before(end)
+            } else {
+                false
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            false
         }
-        return false
     }
+
 
     private fun showAlert() {
         b1 = false
@@ -1332,17 +1352,17 @@ class CompleteTaskFragment : Fragment() {
         if (isClockedIn) {
             visibilityLevel = 2
         }
-        if (isBreakTimeAdded && isOnRoadHours) {
+        if (isBreakTimeAdded && isOnRoadHours && isClockedIn) {
             visibilityLevel = 5
             visibiltyControlls()
             oSyncViewModel.insertData(osData)
             return
         }
 
-        if (isBreakTimeAdded)
+        if (isClockedIn&&isBreakTimeAdded)
             visibilityLevel = 3
 
-        if (isOnRoadHours)
+        if (isOnRoadHours&& isClockedIn)
             visibilityLevel = 4
 
         visibiltyControlls()

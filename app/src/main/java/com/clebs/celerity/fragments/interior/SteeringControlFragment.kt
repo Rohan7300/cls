@@ -104,7 +104,7 @@ class SteeringControlFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.inSteeringControl.toString())
+                setImageView(defaultIv, it.inSteeringControl.toString(),requireContext())
                 if (it.dfNameSteeringControl!!.isNotEmpty() && it.dfNameSteeringControl != "f") {
                     edtDefect.setText(it.dfNameSteeringControl.toString())
                 }

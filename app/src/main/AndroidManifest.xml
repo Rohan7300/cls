@@ -54,8 +54,11 @@
         tools:replace="android:allowBackup"
         tools:targetApi="tiramisu">
         <activity
-            android:name=".utils.ClsCaptureTwo"
+            android:name=".ui.VehicleExpiringDocuments"
             android:exported="false" />
+
+        <receiver android:name=".utils.NotificationBroadcastReciever" />
+
         <activity
             android:name=".ui.FaceScanActivity"
             android:exported="false" />
@@ -64,7 +67,8 @@
             android:exported="false" />
         <activity
             android:name=".utils.ClsCapture"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ui.AddInspection"
             android:exported="true">
@@ -109,6 +113,9 @@
             android:name=".ui.CommentDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.DeductionAgreementActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.AddCommentActivity"
             android:exported="false" />
         <activity
@@ -119,6 +126,15 @@
             android:name=".ui.CreateTicketsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Celerity" />
+        <activity
+            android:name=".ui.WeeklyRotaApprovalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DeductionAgreement"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ExpiringDocumentsActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.HomeActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"

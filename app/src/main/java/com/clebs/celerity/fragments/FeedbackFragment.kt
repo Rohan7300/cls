@@ -90,22 +90,20 @@ class FeedbackFragment : Fragment() {
 
         binding.feedbackAddSignature.setOnClickListener {
 
-
             val areAllQuestionsSelected = adapter.areAllQuestionsSelected()
             if (areAllQuestionsSelected) {
                 dialog.show((activity as HomeActivity).supportFragmentManager, "sign")
-
             } else {
                 showToast("Please complete questionnaire first!!", requireContext())
             }
         }
-
 
         return binding.root
     }
 
     private fun saveFeedbackQuestions(selectedOptions: List<String>, bse64: String) {
         pref.submittedFeedback = true
+        print("Base64 $bse64")
         var request = SubmitRideAlongDriverFeedbackRequest(
             DaDailyWorkId = pref.daWID,
             LeadDriverId = pref.clebUserId.toInt(),

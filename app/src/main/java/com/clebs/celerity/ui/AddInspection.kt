@@ -521,12 +521,12 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                     )
                     binding.tvUploadMainTV.text = "Inspection Completed"
                     binding.uploadBtnText.text = "Inspection Completed"
+                    binding.uploadBtnText.setTextColor(ContextCompat.getColor(this,R.color.orange))
                     binding.tvUploadType.text = "You can exit and continue on remaining steps."
                 } else {
                     binding.ivUploadImage.visibility = View.GONE
                     binding.tvUploadMainTV.visibility = View.GONE
-                    binding.tvUploadType.text =
-                        "You can save and exit while images are being uploaded."
+                    binding.tvUploadType.text = "You can save and exit while images are being uploaded."
                     osData.isdashboardUploadedFailed = false
                     osData.isfrontImageFailed = false
                     osData.isnearSideFailed = false
@@ -582,7 +582,8 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
                 binding.tvUploadMainTV.isEnabled = false
                 binding.ivUploadImage.isEnabled = false
-                binding.uploadBtnText.text = "Inspection Complete"
+                binding.uploadBtnText.text = "Inspection Completed"
+                binding.uploadBtnText.setTextColor(ContextCompat.getColor(this,R.color.orange))
                 binding.newUploadBtn.background.setTint(ContextCompat.getColor(this,R.color.very_light_orange))
                 binding.uploadBtnIV.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.check_new))
                 binding.newUploadBtn.isEnabled = false

@@ -109,7 +109,7 @@ class ExcessiveSmokeFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.exExcessiveEngExhaustSmoke.toString())
+                setImageView(defaultIv, it.exExcessiveEngExhaustSmoke.toString(),requireContext())
                 if (it.dfNameExcessiveEngExhaustSmoke!!.isNotEmpty() && it.dfNameExcessiveEngExhaustSmoke != "f") {
                     edtDefect.setText(it.dfNameExcessiveEngExhaustSmoke.toString())
                 }

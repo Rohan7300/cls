@@ -19,6 +19,8 @@ import com.clebs.celerity.models.requests.ApproveDaDailyRotaRequest
 import com.clebs.celerity.models.response.NotificationResponseItem
 import com.clebs.celerity.ui.DeductionAgreementActivity
 import com.clebs.celerity.ui.ExpiringDocumentsActivity
+import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.ui.VehicleExpiringDocuments
 import com.clebs.celerity.ui.WeeklyRotaApprovalActivity
 import com.clebs.celerity.utils.DependencyProvider.dailyRotaNotificationShowing
 
@@ -43,41 +45,50 @@ fun showDailyRotaDialog(
 ) {
     val pref = Prefs.getInstance(context)
     val loadingDialog = LoadingDialog(context)
-    val dailyRotaDialog = AlertDialog.Builder(context).create()
-    val dailyRotaDialogBinding =
+    var dailyRotaDialog = AlertDialog.Builder(context).create()
+    var dailyRotaDialogBinding =
         DailyrotaapprovaldialogBinding.inflate(LayoutInflater.from(context))
     dailyRotaDialog.setView(dailyRotaDialogBinding.root)
     dailyRotaDialog.setCanceledOnTouchOutside(true)
     dailyRotaDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-    dailyRotaDialogBinding.rotaname.text = rotaName
-    dailyRotaDialogBinding.rotaday.text = rotaDay
-    dailyRotaDialogBinding.rotaweek.text = rotaWeek.toString()
-    dailyRotaDialogBinding.rotayear.text = rotaYear.toString()
-    dailyRotaDialogBinding.rotalocation.text = rotaLocation
-    if (!dailyRotaDialog.isShowing)
-        dailyRotaDialog.show()
+    if (dailyRotaDialog == null && dailyRotaDialogBinding == null) {
+        dailyRotaDialog = AlertDialog.Builder(context).create()
+        dailyRotaDialogBinding =
+            DailyrotaapprovaldialogBinding.inflate(LayoutInflater.from(context))
+        dailyRotaDialog!!.setView(dailyRotaDialogBinding!!.root)
+        dailyRotaDialog!!.setCanceledOnTouchOutside(true)
+        dailyRotaDialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    } else {
+        dailyRotaDialogBinding!!.acceptRB.isChecked = false
+        dailyRotaDialogBinding!!.rejectRB.isChecked = false
+    }
 
-
-    var acceptRBChecked = false
-    var rejectRNcheck = false
+    dailyRotaDialogBinding!!.rotaname.text = rotaName
+    dailyRotaDialogBinding!!.rotaday.text = rotaDay
+    dailyRotaDialogBinding!!.rotaweek.text = rotaWeek.toString()
+    dailyRotaDialogBinding!!.rotayear.text = rotaYear.toString()
+    dailyRotaDialogBinding!!.rotalocation.text = rotaLocation
+    if (!dailyRotaDialog!!.isShowing)
+        dailyRotaDialog!!.show()
     var selectedItem = 0
-    dailyRotaDialogBinding.acceptRB.setOnClickListener {
-            dailyRotaDialogBinding.acceptRB.isChecked = true
-            dailyRotaDialogBinding.rejectRB.isChecked = false
-            selectedItem = 1
+
+    dailyRotaDialogBinding!!.acceptRB.setOnClickListener {
+        dailyRotaDialogBinding!!.acceptRB.isChecked = true
+        dailyRotaDialogBinding!!.rejectRB.isChecked = false
+        selectedItem = 1
     }
 
-    dailyRotaDialogBinding.rejectRB.setOnClickListener {
-            dailyRotaDialogBinding.acceptRB.isChecked = false
-            dailyRotaDialogBinding.rejectRB.isChecked = true
-            selectedItem = 2
+    dailyRotaDialogBinding!!.rejectRB.setOnClickListener {
+        dailyRotaDialogBinding!!.acceptRB.isChecked = false
+        dailyRotaDialogBinding!!.rejectRB.isChecked = true
+        selectedItem = 2
     }
-    dailyRotaDialog.setOnCancelListener {
+    dailyRotaDialog!!.setOnCancelListener {
         dailyRotaNotificationShowing = false
     }
 
-    dailyRotaDialogBinding.submit.setOnClickListener {
+    dailyRotaDialogBinding!!.submit.setOnClickListener {
         dailyRotaNotificationShowing = false
         if (selectedItem == 0) {
             showToast("Please select first!!", context)
@@ -101,9 +112,10 @@ fun showDailyRotaDialog(
                     UserId = pref.clebUserId.toInt()
                 )
             )
+
             viewModel.liveDataApproveDailyRotabyDA.observe(viewLifecycleOwner) {
                 loadingDialog.dismiss()
-                dailyRotaDialog.dismiss()
+                dailyRotaDialog!!.dismiss()
                 viewModel.MarkNotificationAsRead(notificationId)
                 if (it != null) {
                     showToast("Submitted Successfully!!", context)
@@ -113,8 +125,6 @@ fun showDailyRotaDialog(
             }
         }
     }
-
-
 }
 
 fun dailyRota(
@@ -131,7 +141,7 @@ fun dailyRota(
     viewModel.liveDataDaDailyLocationRota.observe(viewLifecycleOwner) {
         loadingDialog.dismiss()
         if (it != null) {
-            if(!dailyRotaNotificationShowing){
+            if (!dailyRotaNotificationShowing) {
                 showDailyRotaDialog(
                     notificationId.toInt(),
                     it.DriverName,
@@ -148,8 +158,8 @@ fun dailyRota(
             }
 
         } else {
-            showToast("Failed to fetch Data!!", context)
             viewModel.MarkNotificationAsRead(notificationId)
+            showToast("Daily Rota not found!!", context)
         }
     }
 }
@@ -184,14 +194,12 @@ fun expiredDocuments(
     viewModel.liveDataGetDAVehicleExpiredDocuments.observe(viewLifecycleOwner) {
         loadingDialog.dismiss()
         val dialog = ExpiredDocDialog(pref, context)
-
+        viewModel.MarkNotificationAsRead(notificationId)
         if (it != null) {
             pref.saveExpiredDocuments(it)
             dialog.showDialog(fragmentManager)
-            viewModel.MarkNotificationAsRead(notificationId)
         } else {
             showToast("No expired document founds", context)
-            //dialog.showDialog(fragmentManager)
         }
     }
 }
@@ -274,6 +282,22 @@ fun expiringDocument(
 ) {
     val intent = Intent(context, ExpiringDocumentsActivity::class.java)
     intent.putExtra("notificationID", notificationId)
+    context.startActivity(intent)
+}
+
+
+fun vehicleExpiringDocuments(
+    context: Context,
+    notificationId: Int
+) {
+    val intent = Intent(context, VehicleExpiringDocuments::class.java)
+    intent.putExtra("notificationID", notificationId)
+    context.startActivity(intent)
+}
+
+fun thirdPartyAcessRequest(context: Context,notificationId: Int){
+    val intent = Intent(context, HomeActivity::class.java)
+    intent.putExtra("destinationFragment", "ThirdPartyAcess")
     context.startActivity(intent)
 }
 

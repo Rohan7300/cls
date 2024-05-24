@@ -74,6 +74,7 @@ import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
+import com.clebs.celerity.models.response.VehicleExpiringDocumentsResponse
 import com.clebs.celerity.models.response.WeeklyLocationRotabyIdResponse
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.utils.DBImages
@@ -1419,10 +1420,11 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun UploadVehicleDefectImages(
         userID: Int,
-        vmId: Int,
         lmid: Int,
-        date: Int,
-        type: Enum<DBImages>
+        vmId: Int,
+        date: String,
+        type: Enum<DBImages>,
+        multipartBody: MultipartBody.Part
     ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
         return safeApiCall {
             when (type) {
@@ -1431,205 +1433,261 @@ class MainRepo(private val ApiService: ApiService) {
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.WINDOW_GLASS ->{
+
+                DBImages.WINDOW_GLASS -> {
                     ApiService.UploadVehicleWindscreenDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.WIPERS_WASHERS ->{
+
+                DBImages.WIPERS_WASHERS -> {
                     ApiService.UploadVehicleWipersOrWashersDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.MIRRORS ->{
+
+                DBImages.MIRRORS -> {
                     ApiService.UploadVehicleMirrorDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.CAB_SECURITY_INTERIOR->{
+
+                DBImages.CAB_SECURITY_INTERIOR -> {
                     ApiService.UploadVehicleCabSecurityOrInteriorDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.SEAT_BELT->{
+
+                DBImages.SEAT_BELT -> {
                     ApiService.UploadVehicleSeatBeltDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.WARNING_SERVICE_LIGHTS->{
+
+                DBImages.WARNING_SERVICE_LIGHTS -> {
                     ApiService.UploadVehicleWarningOrServiceLightDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.FUEL_ADBLUE_LEVEL->{
+
+                DBImages.FUEL_ADBLUE_LEVEL -> {
                     ApiService.UploadVehicleFuelOrAdBlueLevelDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.OIL_FUEL_COOLANT_LEAKS->{
+
+                DBImages.OIL_FUEL_COOLANT_LEAKS -> {
                     ApiService.UploadVehicleOilOrCoolantLeaksDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.FOG_LIGHTS->{
+
+                DBImages.FOG_LIGHTS -> {
                     ApiService.UploadVehicleLightsDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.INDICATORS_SIDE_REPEATERS->{
+
+                DBImages.INDICATORS_SIDE_REPEATERS -> {
                     ApiService.UploadVehicleIndicatorsOrSideRepeatersDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.HORN_REVERSE_BEEPER->{
+
+                DBImages.HORN_REVERSE_BEEPER -> {
                     ApiService.UploadVehicleHornOrReverseBeeperDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.STEERING_CONTROL->{
+
+                DBImages.STEERING_CONTROL -> {
                     ApiService.UploadVehicleSteeringDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.BRAKED_EBS_ABS->{
+
+                DBImages.BRAKED_EBS_ABS -> {
                     ApiService.UploadVehicleBrakesDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.VEHICLE_LOCKING_SYSTEM->{
+
+                DBImages.VEHICLE_LOCKING_SYSTEM -> {
                     ApiService.UploadVehicleLockingSystemDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.BODY_DAMAGE_FRONT->{
+
+                DBImages.BODY_DAMAGE_FRONT -> {
                     ApiService.UploadVehicleFrontDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.NEAR_SIDE->{
+
+                DBImages.NEAR_SIDE -> {
                     ApiService.UploadVehicleNearSideDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.REAR->{
+
+                DBImages.REAR -> {
                     ApiService.UploadVehicleRearDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.OFF_SIDE->{
+
+                DBImages.OFF_SIDE -> {
                     ApiService.UploadVehicleOffSideDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.REGISTRATION_NUMBER_PLATES->{
+
+                DBImages.REGISTRATION_NUMBER_PLATES -> {
                     ApiService.UploadVehicleRegistrationNumberPlateDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.REFLECTORS_MARKERS->{
+
+                DBImages.REFLECTORS_MARKERS -> {
                     ApiService.UploadVehicleReflectorOrMarkerDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.WHEEL_FIXINGS->{
+
+                DBImages.WHEEL_FIXINGS -> {
                     ApiService.UploadVehicleWheelsOrWheelFixingDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.TYRE_CONDITION_THREAD_DEPTH->{
+
+                DBImages.TYRE_CONDITION_THREAD_DEPTH -> {
                     ApiService.UploadVehicleTyresDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.EXCESSIVE_ENG_EXHAUST_SMOKE->{
+
+                DBImages.EXCESSIVE_ENG_EXHAUST_SMOKE -> {
                     ApiService.UploadVehicleExcessiveEngineExhaustSmokeDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
-                DBImages.SPARE_WHEEL->{
+
+                DBImages.SPARE_WHEEL -> {
                     ApiService.UploadVehicleSpareWheelDefect(
                         userID,
                         vmId,
                         lmid,
-                        date
+                        date,
+                        multipartBody
                     )
                 }
+
                 else -> {
                     throw IllegalArgumentException()
                 }
             }
+        }
+    }
+
+    suspend fun GetDAVehicleExpiringDocuments(userID: Int):SimpleNetworkResponse<VehicleExpiringDocumentsResponse>{
+        return safeApiCall {
+            ApiService.GetDAVehicleExpiringDocuments(userID)
         }
     }
 }

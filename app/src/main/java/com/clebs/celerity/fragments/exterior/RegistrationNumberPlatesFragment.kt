@@ -109,7 +109,7 @@ class RegistrationNumberPlatesFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.exRegistrationNumberPlates.toString())
+                setImageView(defaultIv, it.exRegistrationNumberPlates.toString(),requireContext())
                 if (it.dfNameRegistrationNumberPlates!!.isNotEmpty() && it.dfNameRegistrationNumberPlates != "f") {
                     edtDefect.setText(it.dfNameRegistrationNumberPlates.toString())
                 }

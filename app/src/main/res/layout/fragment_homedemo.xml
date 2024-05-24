@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ScrollView
+        android:id="@+id/ss"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/ss"
-        android:background="@color/home_blue_two"
-
+        android:background="@color/home_blue"
         android:overScrollMode="never"
         android:scrollbars="none">
 
@@ -59,7 +58,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:weightSum="2"
-                        android:id="@+id/llm"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:layout_editor_absoluteX="10dp">
 
@@ -102,7 +100,7 @@
                                     android:id="@+id/ProgressBar"
                                     style="?android:attr/progressBarStyleHorizontal"
                                     android:layout_width="match_parent"
-                                    android:layout_height="27dp"
+                                    android:layout_height="30dp"
                                     android:layout_marginTop="8dp"
                                     android:elevation="30dp"
                                     android:indeterminate="false"
@@ -135,7 +133,7 @@
                                 android:id="@+id/ProgressBartwo"
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:layout_width="match_parent"
-                                android:layout_height="27dp"
+                                android:layout_height="30dp"
                                 android:layout_below="@id/txt_last_week"
                                 android:layout_marginTop="8dp"
                                 android:elevation="30dp"
@@ -207,7 +205,7 @@
                         android:layout_height="300dp"
                         android:layout_marginTop="10dp"
                         android:visibility="visible"
-android:background="@color/transparent"
+
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/txt_this_week"
                         app:layout_constraintTop_toBottomOf="@+id/txt_this_week" />
@@ -260,25 +258,24 @@ android:background="@color/transparent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:elevation="30dp"
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/shape_expand_main"
+                    android:elevation="30dp"
                     android:orientation="vertical"
                     android:padding="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:id="@+id/llm2"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:padding="5dp">
 
                         <TextView
                             android:id="@+id/your_next"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/inter_bold"
                             android:layout_marginVertical="5dp"
+                            android:fontFamily="@font/inter_bold"
                             android:text="Your next working day for week :"
                             android:textColor="@color/text_color"
                             android:textSize="15sp" />
@@ -594,15 +591,6 @@ android:background="@color/transparent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_gravity="end"
-                            android:src="@drawable/up_arrow"
-                            android:id="@+id/up"
-                            android:visibility="gone"
-                            android:layout_marginTop="20dp"
-                            android:layout_height="30dp"
-                            app:tint="@color/medium_orange" />
                         <!--                        <androidx.recyclerview.widget.RecyclerView-->
                         <!--                            android:id="@+id/viewfullschedule"-->
                         <!--                            android:layout_width="match_parent"-->
@@ -612,7 +600,19 @@ android:background="@color/transparent"
                         <!--                            tools:itemCount="10"-->
 
                         <!--                            tools:listitem="@layout/view_full_schedule" />-->
+                        <LinearLayout
+                            android:id="@+id/collapseArrow"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="5dp"
+                            android:gravity="right">
 
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/uparrow"
+                                app:tint="@color/text_color" />
+                        </LinearLayout>
                     </LinearLayout>
 
 
@@ -630,38 +630,41 @@ android:background="@color/transparent"
                     <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:cardElevation="30dp"
-                        android:elevation="30dp"
-                        app:cardCornerRadius="8dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="10dp"
-                        app:layout_constraintStart_toStartOf="parent" >
+                        android:elevation="30dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="30dp"
+                        app:layout_constraintStart_toStartOf="parent">
+
                         <TextView
                             android:id="@+id/bt_prev"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@color/medium_orange"
                             android:fontFamily="@font/poppins_semibold"
-                            android:padding="6dp"
                             android:gravity="center"
+                            android:padding="6dp"
                             android:text="Previous"
                             android:textColor="@color/white"
                             android:textSize="12sp"
-                            android:visibility="visible"/>
+                            android:visibility="visible" />
                     </androidx.cardview.widget.CardView>
+
                     <View
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
+
                     <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="8dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="10dp"
-                        >
+                        app:cardCornerRadius="8dp">
+
                         <TextView
                             android:id="@+id/bt_this_week"
                             android:layout_width="wrap_content"

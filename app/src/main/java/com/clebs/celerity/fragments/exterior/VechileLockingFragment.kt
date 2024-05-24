@@ -109,7 +109,7 @@ class VechileLockingFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.exVehicleLockingSystem.toString())
+                setImageView(defaultIv, it.exVehicleLockingSystem.toString(),requireContext())
                 if (it.dfNameVehicleLockingSystem!!.isNotEmpty() && it.dfNameVehicleLockingSystem != "f") {
                     edtDefect.setText(it.dfNameVehicleLockingSystem.toString())
                 }

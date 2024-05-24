@@ -111,8 +111,8 @@ class WindowsGlassFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if(it!=null){
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.inWindowGlass.toString())
                 if (it.dfNameWindowGlass!!.isNotEmpty() && it.dfNameWindowGlass != "f") {
+                    setImageView(defaultIv, it.inWindowGlass.toString(),requireContext())
                     edtDefect.setText(it.dfNameWindowGlass.toString())
                 }
             }
@@ -137,7 +137,7 @@ class WindowsGlassFragment : BaseInteriorFragment() {
 
         }
         val navOptions = NavOptions.Builder()
-            .setEnterAnim(R.anim.slide_left) // Animation for entering the new fragment
+            .setEnterAnim(R.anim.slide_left)
             .setExitAnim(R.anim.slide_in_right) // Animation for exiting the current fragment
 //            .setPopEnterAnim(R.anim.slide_in_right) // Animation for entering the previous fragment when navigating back
 //            .setPopExitAnim(R.anim.slide_left) // Animation for exiting the current fragment when navigating back

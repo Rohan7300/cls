@@ -109,7 +109,7 @@ class BodyDamageFrontFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.exBodyDamageFront.toString())
+                setImageView(defaultIv, it.exBodyDamageFront.toString(),requireContext())
                 if (it.dfNameBodyDamageFront!!.isNotEmpty() && it.dfNameBodyDamageFront != "f") {
                     edtDefect.setText(it.dfNameBodyDamageFront.toString())
                 }

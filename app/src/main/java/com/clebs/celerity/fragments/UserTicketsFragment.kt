@@ -70,9 +70,9 @@ class UserTicketsFragment : Fragment() {
     private fun observers() {
 
         viewModel.liveDataGetUserTickets.observe(viewLifecycleOwner) {
-         if (loadingDialog.isShowing){
-             loadingDialog.dismiss()
-         }
+            if (loadingDialog.isShowing) {
+                loadingDialog.dismiss()
+            }
             if (it != null) {
                 if (it.Docs.size > 0) {
                     mbinding.noticketLayout.visibility = View.GONE
@@ -147,7 +147,7 @@ class UserTicketsFragment : Fragment() {
         }
 
         deleteDailogBinding.tvNext.setOnClickListener {
-       loadingDialog.show()
+            loadingDialog.show()
             val tDate1 = deleteDailogBinding.edtBreakstart.text.toString()
             var tDate2 = deleteDailogBinding.edtBreakend.text.toString()
             val inputFormat = "yyyy-MM-dd"

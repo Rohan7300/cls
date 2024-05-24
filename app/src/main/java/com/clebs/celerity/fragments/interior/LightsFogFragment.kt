@@ -101,7 +101,7 @@ class LightsFogFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if(it!=null){
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.inFogLights.toString())
+                setImageView(defaultIv, it.inFogLights.toString(),requireContext())
                 if (it.dfNameFogLights!!.isNotEmpty() && it.dfNameFogLights != "f") {
                     edtDefect.setText(it.dfNameFogLights.toString())
                 }

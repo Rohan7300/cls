@@ -10,14 +10,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/home_blue_two"
+        android:background="@color/white"
         android:orientation="vertical"
         tools:context=".ui.AddInspection">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/home_blue_two"
+            android:background="@color/very_light_orange"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingHorizontal="20dp"
@@ -58,7 +58,6 @@
             <androidx.camera.view.PreviewView
                 android:id="@+id/inspectionPreviewView"
                 android:layout_width="match_parent"
-                android:backgroundTint="@color/home_blue_two"
                 android:layout_height="match_parent" />
 <View
     android:layout_width="match_parent"
@@ -73,274 +72,261 @@
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="10dp"
                 android:visibility="visible">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                  android:elevation="90dp"
-                    android:padding="20dp"
-                    android:alpha="0.5"
-                    android:background="@drawable/shape_camera_docs"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    android:layout_marginVertical="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp"
-                        android:gravity="center"
+                        android:fontFamily="@font/poppins"
+                        android:text="1. "
+                        android:textColor="@color/white" />
 
-                        android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/steeringcontrol"
+                        android:textColor="@color/text_color" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins"
-                            android:text="1. "
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/steeringcontrol"
-                            android:textColor="@color/text_color" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Dashboard Image"
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:id="@+id/dashboardStatusIV"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/fileins" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Dashboard Image"
+                        android:textColor="@color/white" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins"
-                            android:text="2. "
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/bodydamagefront" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Front Image"
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:id="@+id/frontStatusIV"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/fileins" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins"
-                            android:text="3. "
-                            android:textColor="@color/black"/>
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/bodydamagenearside" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Near Side Image"
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:id="@+id/nearSideStatusIV"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/fileins" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins"
-                            android:text="4. "
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/bodydamagerear" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Rear Side Image"
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:id="@+id/rearSideStatusIV"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/fileins" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins"
-                            android:text="5. "
-                            android:textColor="@color/black"/>
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/bodydamageoffside" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Offside Image"
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:id="@+id/offsideStatusIV"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/fileins" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/addbluell"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins"
-                            android:text="6. "
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/adbluelevel" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Add Blue Level"
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:id="@+id/addBlueIV"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/fileins" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/oilLevelll"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins"
-                            android:text="7. "
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/coolantleaks" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Oil Level"
-                            android:textColor="@color/black" />
-
-                        <ImageView
-                            android:id="@+id/oilLevelIV"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:src="@drawable/fileins" />
-                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/dashboardStatusIV"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/fileins" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="2. "
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/bodydamagefront" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Front Image"
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:id="@+id/frontStatusIV"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/fileins" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="3. "
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/bodydamagenearside" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Near Side Image"
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:id="@+id/nearSideStatusIV"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/fileins" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="4. "
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/bodydamagerear" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Rear Side Image"
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:id="@+id/rearSideStatusIV"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/fileins" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="5. "
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/bodydamageoffside" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Offside Image"
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:id="@+id/offsideStatusIV"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/fileins" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/addbluell"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="6. "
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/adbluelevel" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Add Blue Level"
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:id="@+id/addBlueIV"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/fileins" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/oilLevelll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="7. "
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/coolantleaks" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Oil Level"
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:id="@+id/oilLevelIV"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/fileins" />
+                </LinearLayout>
             </LinearLayout>
         </FrameLayout>
 
@@ -416,7 +402,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:background="@color/home_blue_two"
+            android:background="@color/very_light_orange"
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
             android:paddingBottom="5dp">

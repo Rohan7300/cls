@@ -109,7 +109,7 @@ class ReflectorsFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.exReflectorsMarkers.toString())
+                setImageView(defaultIv, it.exReflectorsMarkers.toString(),requireContext())
                 if (it.dfNameReflectorsMarkers!!.isNotEmpty() && it.dfNameReflectorsMarkers != "f") {
                     edtDefect.setText(it.dfNameReflectorsMarkers.toString())
                 }

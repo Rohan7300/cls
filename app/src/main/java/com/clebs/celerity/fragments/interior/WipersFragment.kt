@@ -103,7 +103,7 @@ class WipersFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if(it!=null){
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.inWipersWashers.toString())
+                setImageView(defaultIv, it.inWipersWashers.toString(),requireContext())
                 if (it.dfNameWipersWashers!!.isNotEmpty() && it.dfNameWipersWashers != "f") {
                     edtDefect.setText(it.dfNameWipersWashers.toString())
                 }

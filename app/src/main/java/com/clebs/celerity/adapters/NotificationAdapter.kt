@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.DailyrotaapprovaldialogBinding
 import com.clebs.celerity.databinding.DialogvehicleadvancepaymentBinding
@@ -22,6 +23,7 @@ import com.clebs.celerity.databinding.NotificationAdapterDialogBinding
 import com.clebs.celerity.dialogs.ExpiredDocDialog
 import com.clebs.celerity.dialogs.InvoiceReadytoViewDialog
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.dialogs.VehicleAdvancePaymentDialog
 import com.clebs.celerity.models.requests.ApproveDaDailyRotaRequest
 import com.clebs.celerity.models.response.NotificationResponseItem
 import com.clebs.celerity.ui.DeductionAgreementActivity
@@ -29,9 +31,17 @@ import com.clebs.celerity.ui.ExpiringDocumentsActivity
 import com.clebs.celerity.ui.WeeklyRotaApprovalActivity
 import com.clebs.celerity.utils.DependencyProvider.dailyRotaNotificationShowing
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.dailyRota
+import com.clebs.celerity.utils.deductions
+import com.clebs.celerity.utils.expiredDocuments
+import com.clebs.celerity.utils.expiringDocument
 import com.clebs.celerity.utils.getCurrentWeek
 import com.clebs.celerity.utils.getCurrentYear
+import com.clebs.celerity.utils.invoiceReadyToView
 import com.clebs.celerity.utils.showToast
+import com.clebs.celerity.utils.thirdPartyAcessRequest
+import com.clebs.celerity.utils.vehicleExpiringDocuments
+import com.clebs.celerity.utils.weeklyLocationRota
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -100,6 +110,9 @@ class NotificationAdapter(
                 item.ActionToPerform == "Weekly Rota Approval" ||
                 item.ActionToPerform == "WeeklyRotaApproval" ||
                 item.ActionToPerform == "DailyRotaApproval" ||
+                item.ActionToPerform == "ThirdPartyAccessRequestNotification" ||
+                item.ActionToPerform == "VehicleExpiringDocuments" ||
+                item.ActionToPerform == "UserExpiringDocuments" ||
                 item.ActionToPerform == "Daily Rota Approval"
             ) {
                 binding.notficationArrow.visibility = View.VISIBLE
@@ -130,20 +143,29 @@ class NotificationAdapter(
                     item.ActionToPerform == "Driver Deduction with Agreement" ||
                     item.ActionToPerform == "DriverDeductionWithAgreement"
                 ) {
-                    val intent = Intent(context, DeductionAgreementActivity::class.java)
+                    deductions(context, item.NotificationActionId, item.NotificationId)
+                    /*val intent = Intent(context, DeductionAgreementActivity::class.java)
                     intent.putExtra("actionID", item.NotificationActionId)
                     intent.putExtra("notificationID", item.NotificationId)
-                    context.startActivity(intent)
+                    context.startActivity(intent)*/
                 } else if (item.ActionToPerform.equals("Daily Location Rota") ||
                     item.ActionToPerform.equals("Daily Rota Approval") ||
                     item.ActionToPerform.equals("DailyRotaApproval")
                 ) {
+                    /*                  dailyRota(
+                                          viewModel,
+                                          dailyRotatoken,
+                                          viewLifecycleOwner,
+                                          context,
+                                          item.NotificationId
+                                      )*/
+
                     viewModel.GetDaDailyLocationRota(pref.clebUserId.toInt(), dailyRotatoken)
                     loadingDialog.show()
                     viewModel.liveDataDaDailyLocationRota.observe(viewLifecycleOwner) {
                         loadingDialog.dismiss()
                         if (it != null) {
-                            if(!dailyRotaNotificationShowing){
+                            if (!dailyRotaNotificationShowing) {
                                 showDailyRotaDialog(
                                     item.NotificationId,
                                     it.DriverName,
@@ -158,52 +180,63 @@ class NotificationAdapter(
 
                         } else {
                             viewModel.MarkNotificationAsRead(item.NotificationId)
-                         //   callback.refresh()
+                            //   callback.refresh()
                             showToast("Daily Rota not found!!", context)
                         }
                     }
-                    //dialog.showDialog(fragmentManager)
-                    //      showDailyRotaDialog(item.NotificationId)
                 } else if (item.ActionToPerform.equals("Invoice Ready To Review")
                     || item.ActionToPerform.equals("Invoice Ready to Review") ||
                     item.ActionToPerform.equals("InvoiceReadyToReview")
                 ) {
-                    val dialog = InvoiceReadytoViewDialog.newInstance(
-                        getCurrentWeek().toString(),
-                        getCurrentYear().toString(),
-                        item.NotificationId
-                    )
-                    dialog.showDialog(fragmentManager)
+                    invoiceReadyToView(item.NotificationId, fragmentManager)
+                    /*            val dialog = InvoiceReadytoViewDialog.newInstance(
+                                    getCurrentWeek().toString(),
+                                    getCurrentYear().toString(),
+                                    item.NotificationId
+                                )
+                                dialog.showDialog(fragmentManager)*/
                     //viewModel.MarkNotificationAsRead(item.NotificationId)
                 } else if (item.ActionToPerform == "Weekly Location Rota" ||
                     item.ActionToPerform == "Weekly Rota Approval" ||
                     item.ActionToPerform.equals("WeeklyRotaApproval")
                 ) {
-                    val intent = Intent(context, WeeklyRotaApprovalActivity::class.java)
-                    intent.putExtra("actionID", item.NotificationActionId)
-                    intent.putExtra("notificationID", item.NotificationId)
-                    context.startActivity(intent)
+                    weeklyLocationRota(context, item.NotificationId, item.NotificationActionId)
+                    /*                   val intent = Intent(context, WeeklyRotaApprovalActivity::class.java)
+                                       intent.putExtra("actionID", item.NotificationActionId)
+                                       intent.putExtra("notificationID", item.NotificationId)
+                                       context.startActivity(intent)*/
                 } else if (
                     item.ActionToPerform == "Expired Document" ||
-                    item.ActionToPerform.equals("ExpiredDocuments")
+                    item.ActionToPerform == "ExpiredDocuments"
                 ) {
-                    loadingDialog.show()
-                    viewModel.GetDAVehicleExpiredDocuments(pref.clebUserId.toInt())
-                    viewModel.liveDataGetDAVehicleExpiredDocuments.observe(viewLifecycleOwner) {
-                        loadingDialog.dismiss()
-                        val dialog = ExpiredDocDialog(pref, context)
-                        viewModel.MarkNotificationAsRead(item.NotificationId)
-                        if (it != null) {
-                            pref.saveExpiredDocuments(it)
-                            dialog.showDialog(fragmentManager)
-                        } else {
-                            showToast("No expired document founds", context)
-                            //dialog.showDialog(fragmentManager)
-                        }
-                    }
+                    expiredDocuments(
+                        viewModel,
+                        viewLifecycleOwner,
+                        context,
+                        fragmentManager,
+                        item.NotificationId
+                    )
+                    /*                  loadingDialog.show()
+                                      viewModel.GetDAVehicleExpiredDocuments(pref.clebUserId.toInt())
+                                      viewModel.liveDataGetDAVehicleExpiredDocuments.observe(viewLifecycleOwner) {
+                                          loadingDialog.dismiss()
+                                          val dialog = ExpiredDocDialog(pref, context)
+                                          viewModel.MarkNotificationAsRead(item.NotificationId)
+                                          if (it != null) {
+                                              pref.saveExpiredDocuments(it)
+                                              dialog.showDialog(fragmentManager)
+                                          } else {
+                                              showToast("No expired document founds", context)
+                                              //dialog.showDialog(fragmentManager)
+                                          }
+                                      }*/
                 } else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement") ||
                     item.ActionToPerform.equals("Vehicle Advance Payment Agreement")
                 ) {
+                    /*                    vehicleAdvancePaymentAgreement(
+                                            context,item.NotificationId,viewModel,viewLifecycleOwner
+                                        )*/
+
                     loadingDialog.show()
                     viewModel.GetVehicleAdvancePaymentAgreement(pref.clebUserId.toInt())
                     viewModel.liveDataGetAdvancePaymentAgreement.observe(viewLifecycleOwner) {
@@ -212,10 +245,10 @@ class NotificationAdapter(
                             val amount = it.VehAdvancePaymentAgreementAmount ?: "null"
                             val date = it.AgreementDate ?: "null"
                             val comment = it.VehicleAdvancePaymentContent ?: "null"
-                            /*                       val dialog = VehicleAdvancePaymentDialog.newInstance(
-                                                       amount.toString(),
-                                                       date.toString()
-                                                   )*/
+                            val dialog = VehicleAdvancePaymentDialog.newInstance(
+                                amount.toString(),
+                                date.toString()
+                            )
                             showAdvancePaymentDialog(
                                 amount.toString(),
                                 date.toString(),
@@ -229,13 +262,22 @@ class NotificationAdapter(
                         }
                     }
                 } else if (item.ActionToPerform.equals("Expiring Document") ||
-                    item.ActionToPerform.equals("ExpiringDocuments")
+                    item.ActionToPerform.equals("UserExpiringDocuments")
                 ) {
-                    val intent = Intent(context, ExpiringDocumentsActivity::class.java)
-                    intent.putExtra("notificationID", item.NotificationId)
-                    context.startActivity(intent)
-                } else {
+                    expiringDocument(context, item.NotificationId)
+                    /*                val intent = Intent(context, ExpiringDocumentsActivity::class.java)
+                                    intent.putExtra("notificationID", item.NotificationId)
+                                    context.startActivity(intent)*/
+                }else if(item.ActionToPerform=="VehicleExpiringDocuments"){
+                    vehicleExpiringDocuments(context,item.NotificationId)
+                }else if(item.ActionToPerform=="ThirdPartyAccessRequestNotification"){
+                    viewModel.MarkNotificationAsRead(item.NotificationId)
+                    navController.navigate(R.id.profileFragment)
+                }
+                else {
                     //viewModel.MarkNotificationAsRead(item.NotificationId)
+                    viewModel.MarkNotificationAsRead(item.NotificationId)
+                    callback.refresh()
                     binding.notficationArrow.visibility = View.GONE
                 }
             }

@@ -42,6 +42,7 @@ import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.dialogs.DownloadingDialog
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.DependencyProvider
+import com.clebs.celerity.utils.NotificationBroadcastReciever
 import com.clebs.celerity.utils.OpenMode
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
@@ -63,6 +64,7 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
 
     private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
     private var clebuserId = 0
+    var notificationID:Int = 1
     var isImage1 = true
     private var handbookID: Int = 0
     var openModeDAHandBook: OpenMode = OpenMode.VIEW
@@ -301,7 +303,7 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
         viewModel.liveDataDownloadDAEngagementPolicy.observe(this) {
             downloadingDialog.dismiss()
             if (it != null) {
-                downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
+                downloadPDF("PrivacyPolicy", it.byteStream(), openModeSignedDAEngagement)
             }
         }
 
@@ -403,7 +405,8 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
         mbinding.downloadDAEngagement1.setOnClickListener {
             downloadingDialog.show()
             openModeSignedDAEngagement = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedDAEngagement(handbookID)
+            //viewModel.DownloadSignedDAEngagement(handbookID)
+            viewModel.DownloadDAEngagementPolicy()
         }
         mbinding.imgDAEngagement1.setOnClickListener {
             downloadingDialog.show()
@@ -427,25 +430,25 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
 
         mbinding.downloadGDPR1.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+            openModeSignedGDPRPOLICY = OpenMode.DOWNLOAD
             //viewModel.DownloadSignedGDPRPOLICY(handbookID)
             viewModel.DownloadGDPRPolicy()
         }
         mbinding.downloadGDPR2.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+            openModeSignedGDPRPOLICY = OpenMode.DOWNLOAD
             //viewModel.DownloadSignedGDPRPOLICY(handbookID)
             viewModel.DownloadGDPRPolicy()
         }
         mbinding.imgGDPR1.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.VIEW
+            openModeSignedGDPRPOLICY = OpenMode.VIEW
             //  viewModel.DownloadSignedGDPRPOLICY(handbookID)
             viewModel.DownloadGDPRPolicy()
         }
         mbinding.imgGDPR2.setOnClickListener {
             downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.VIEW
+            openModeSignedGDPRPOLICY = OpenMode.VIEW
             // viewModel.DownloadSignedGDPRPOLICY(handbookID)
             viewModel.DownloadGDPRPolicy()
         }
@@ -646,7 +649,6 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 "Download Complete",
@@ -655,34 +657,43 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
             )
             notificationManager.createNotificationChannel(channel)
         }
+        DependencyProvider.isComingFromPolicyNotification = true
+        DependencyProvider.policyDocPDFURI = uri
 
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.setDataAndType(uri, "application/pdf")
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
-        var pendingIntent: PendingIntent? = null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            pendingIntent = PendingIntent.getActivity(
+        val viewPendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(
                 this, 0, intent,
                 PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
             )
         } else {
-            pendingIntent = PendingIntent.getActivity(
+            PendingIntent.getActivity(
                 this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
             )
         }
 
+        val toastIntent = Intent(this, NotificationBroadcastReciever::class.java).apply {
+            putExtra("notification_id", notificationID)
+        }
+        val toastPendingIntent = PendingIntent.getBroadcast(
+            this, 0, toastIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val notificationBuilder = NotificationCompat.Builder(this, "Download Complete")
             .setSmallIcon(R.drawable.logo_new)
             .setContentTitle(title)
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
+            .setContentIntent(viewPendingIntent)
+            .addAction(R.drawable.ic_launcher_foreground, "View PDF", toastPendingIntent)
 
         with(NotificationManagerCompat.from(this)) {
             if (ActivityCompat.checkSelfPermission(
@@ -692,9 +703,11 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
             ) {
                 return
             }
-            notify(1, notificationBuilder.build())
+            notify(notificationID, notificationBuilder.build())
+            notificationID+=1
         }
     }
+
 
     private fun checkForStoragePermission(): Boolean {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {

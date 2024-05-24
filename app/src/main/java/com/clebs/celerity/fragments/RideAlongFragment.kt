@@ -25,6 +25,7 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getLoc
+import com.clebs.celerity.utils.getLocID
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.showToast
 
@@ -142,6 +143,8 @@ class RideAlongFragment : Fragment() {
             binding.headerTop.dxm5.text = (activity as HomeActivity).date
         }
 
+        viewModel.GetRouteLocationInfo(getLocID(Prefs.getInstance(requireContext())))
+
         viewModel.livedataGetRideAlongVehicleLists.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
             if (it != null) {
@@ -165,8 +168,6 @@ class RideAlongFragment : Fragment() {
                     binding.SpinnerRouteType.setText("")
                     selectedRouteId = null
                     binding.SpinnerRouteType.setAdapter(null)
-                    binding.spinnerRouteLocation.setAdapter(null)
-                    binding.spinnerRouteLocation.setText("")
                     selectedLocId = null
                     setSpinnerNew(
                         binding.spinnerSelectDriver, driverName, driverId, "Select Driver"
@@ -213,7 +214,7 @@ class RideAlongFragment : Fragment() {
                 rtType = it.RtType
                 trainingDays = it.TrainingDays
                 rtFinishMileage = it.RtFinishMileage
-                viewModel.GetRouteLocationInfo(it.RtLocationId)
+
                 rtNoOfParcelsDelivered = it.RtNoOfParcelsDelivered
                 rtNoParcelsbroughtback = it.RtNoParcelsbroughtback
             } else {
@@ -235,7 +236,6 @@ class RideAlongFragment : Fragment() {
                         "Select Route Location"
                     )
                 }
-
 
             } else {
                 Log.d("Exec", "NULL#4")
@@ -269,7 +269,7 @@ class RideAlongFragment : Fragment() {
         viewModel.GetRideAlongDriversList()
         if (!vehicleListCalled) {
             loadingDialog.show()
-            viewModel.GetRideAlongVehicleLists()
+            //viewModel.GetRideAlongVehicleLists()
         }
 
         binding.rideAlongCancel.setOnClickListener {
@@ -312,12 +312,12 @@ class RideAlongFragment : Fragment() {
                 RtAddMode = rtAddMode,
                 RtComment = routeComment?:" ",
                 RtFinishMileage = rtFinishMileage!!,
-                RtId = selectedRouteId!!,
+                RtId = 0,
                 RtLocationId = selectedLocId!!,
                 RtName = routeName!!,
                 RtNoOfParcelsDelivered = rtNoOfParcelsDelivered!!,
                 RtNoParcelsbroughtback = rtNoParcelsbroughtback!!,
-                RtType = rtType!!,
+                RtType = selectedRouteId!!,
                 RtUsrId = selectedDriverId!!,
                 TrainingDays = 0,
                 VehicleId = pref.vmId
@@ -462,12 +462,10 @@ class RideAlongFragment : Fragment() {
                                 selectedDriverName = nonNullSelectedItem
                                 loadingDialog.show()
                                 Log.d("Exec", "SelectedDriverID $selectedDriverId")
-                                viewModel.GetRideAlongRouteTypeInfo(selectedDriverId!!)
+                                viewModel.GetRideAlongRouteTypeInfo(leadDriverID!!)
                                 binding.SpinnerRouteType.setText("")
                                 selectedRouteId = null
                                 binding.SpinnerRouteType.setAdapter(null)
-                                binding.spinnerRouteLocation.setAdapter(null)
-                                binding.spinnerRouteLocation.setText("")
                                 selectedLocId = null
                             }
 
@@ -481,8 +479,6 @@ class RideAlongFragment : Fragment() {
                                 selectedRouteId =
                                     ids[position]
                                 loadingDialog.show()
-                                binding.spinnerRouteLocation.setAdapter(null)
-                                binding.spinnerRouteLocation.setText("")
                                 selectedLocId = null
                                // viewModel.GetRouteInfoById(selectedRouteId!!)
                                 viewModel.GetRideAlongRouteInfoById(selectedRouteId!!, pref.clebUserId.toInt()!!)

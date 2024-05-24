@@ -110,7 +110,7 @@ class BodyOffsideFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.exBodyDamageOffside.toString())
+                setImageView(defaultIv, it.exBodyDamageOffside.toString(),requireContext())
                 if (it.dfNameBodyDamageOffside!!.isNotEmpty() && it.dfNameBodyDamageOffside != "f") {
                     edtDefect.setText(it.dfNameBodyDamageOffside.toString())
                 }

@@ -46,4 +46,6 @@ data class DriversBasicInformationModel(
     val UserName: String,
     @SerializedName("IsVehicleInspectionDone")
     val IsVehicleInspectionDone: Boolean,
+    @SerializedName("UsrDOB")
+    val UsrDOB:String
 )

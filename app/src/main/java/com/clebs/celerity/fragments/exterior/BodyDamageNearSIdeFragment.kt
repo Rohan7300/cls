@@ -109,7 +109,7 @@ class BodyDamageNearSIdeFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.exBodyDamageNearSide.toString())
+                setImageView(defaultIv, it.exBodyDamageNearSide.toString(),requireContext())
                 if (it.dfNameBodyDamageNearSide!!.isNotEmpty() && it.dfNameBodyDamageNearSide != "f") {
                     edtDefect.setText(it.dfNameBodyDamageNearSide.toString())
                 }

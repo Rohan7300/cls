@@ -215,7 +215,7 @@
                         android:layout_centerVertical="true"
                         android:fontFamily="@font/poppins_bold"
                         android:letterSpacing="0.02"
-                        android:text="Clocked in"
+                        android:text="Clock In"
                         android:textColor="@color/text_color"
                         android:textSize="16sp" />
 
@@ -603,7 +603,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
                         android:backgroundTint="@color/white"
-                        android:src="@drawable/baseline_access_time_filled_24"
+                        android:src="@drawable/finalclockout"
                         android:visibility="visible" />
 
                 </RelativeLayout>

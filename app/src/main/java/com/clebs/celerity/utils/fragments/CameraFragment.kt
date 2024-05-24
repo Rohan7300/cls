@@ -39,6 +39,8 @@ import com.clebs.celerity.databinding.FragmentCameraBinding
 import com.clebs.celerity.fragments.DailyWorkFragment
 import com.clebs.celerity.ui.AddInspection
 import com.clebs.celerity.utils.ClsCapture
+import com.clebs.celerity.utils.DependencyProvider
+import com.clebs.celerity.utils.DependencyProvider.insLevel
 
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.invisible
@@ -102,6 +104,36 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
         _fragmentCameraBinding = FragmentCameraBinding.inflate(inflater, container, false)
         fragmentCameraBinding = _fragmentCameraBinding!!
         imageCapture = ImageCapture.Builder().build()
+      when(insLevel){
+          0->{
+              fragmentCameraBinding.focusTxt.text= "Focus Camera on Vehicle Dashboard"
+              fragmentCameraBinding.dashboardStatusIV.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ins_dashboard))
+          }
+          1->{
+              fragmentCameraBinding.focusTxt.text= "Focus Camera on Vehicle Front"
+              fragmentCameraBinding.dashboardStatusIV.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ins_front))
+          }
+          2->{
+              fragmentCameraBinding.focusTxt.text= "Focus Camera on Vehicle Near Side"
+              fragmentCameraBinding.dashboardStatusIV.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ins_nearside))
+          }
+          3->{
+              fragmentCameraBinding.focusTxt.text= "Focus Camera on Vehicle Rear Side"
+              fragmentCameraBinding.dashboardStatusIV.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ins_rear))
+          }
+          4->{
+                  fragmentCameraBinding.focusTxt.text= "Focus Camera on Vehicle Offside"
+                  fragmentCameraBinding.dashboardStatusIV.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ins_offside))
+          }
+          5->{
+              fragmentCameraBinding.focusTxt.text= "Focus Camera on Add Blue Level Meter"
+              fragmentCameraBinding.dashboardStatusIV.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ins_addblue))
+          }
+          6->{
+              fragmentCameraBinding.focusTxt.text= "Focus Camera on Oil Level Meter"
+              fragmentCameraBinding.dashboardStatusIV.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ins_oillevel))
+          }
+      }
         return fragmentCameraBinding.root
     }
 

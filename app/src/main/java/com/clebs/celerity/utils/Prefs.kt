@@ -159,6 +159,23 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putInt("workLocationId", value).apply()
         }
 
+    var dob: String?
+        get() {
+            return sharedPreferences.getString("dob", null)
+        }
+        set(value) {
+            sharedPreferences.edit().putString("dob", value).apply()
+        }
+
+    var isBirthdayCardShown: Boolean?
+        get() {
+            return sharedPreferences.getBoolean("isBirthdayCardShown", false)
+        }
+        set(value) {
+            sharedPreferences.edit().putBoolean("isBirthdayCardShown", value?:false).apply()
+        }
+
+
     var quesID: Int
         get() = sharedPreferences.getInt("quesID", 0)
         set(value) = sharedPreferences.edit().putInt("quesID", value).apply()

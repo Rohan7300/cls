@@ -99,7 +99,7 @@ class HornFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if(it!=null){
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.inHornReverseBeeper.toString())
+                setImageView(defaultIv, it.inHornReverseBeeper.toString(),requireContext())
                 if (it.dfNameHornReverseBeeper!!.isNotEmpty() && it.dfNameHornReverseBeeper != "f") {
                     edtDefect.setText(it.dfNameHornReverseBeeper.toString())
                 }

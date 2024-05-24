@@ -8,11 +8,15 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.ViewModel.MainViewModel
+import com.clebs.celerity.database.ImageDatabase
+import com.clebs.celerity.database.ImageEntity
+import com.clebs.celerity.database.ImagesRepo
 import com.clebs.celerity.database.OSyncRepo
 import com.clebs.celerity.database.OfflineSyncDB
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.ui.HomeActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -24,34 +28,44 @@ import java.util.TimeZone
 import java.util.UUID
 
 class ImageUploadWorker(
-    var appContext: Context, workerParams: WorkerParameters
+    var appContext: Context, workerParams: WorkerParameters,
 ) : Worker(appContext, workerParams) {
-
+    private var lmId: Int = 0
+    private var vmId: Int = 0
     override fun doWork(): Result {
         val clebUserId = inputData.getInt("clebUserId", 0)
         val uploadtype = inputData.getInt("uploadtype", 0)
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
-        var todayDate = dateFormat.format(Date())
+        val todayDate = dateFormat.format(Date())
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         val osRepo = OSyncRepo(OfflineSyncDB.invoke(appContext))
-            var currentDateTime = getCurrentDateTime()
+        val currentDateTime = getCurrentDateTime()
+        val imagesRepo =
+            ImagesRepo(ImageDatabase.invoke(appContext), Prefs.getInstance(appContext))
+
         GlobalScope.launch {
 
-            val data = osRepo.getData(clebUserId, todayDate)
-            logOSEntity("ImageWorker",data)
 
             try {
-                when(uploadtype){
-                    0->{
+                when (uploadtype) {
+
+                    0 -> {
+                        val data = osRepo.getData(clebUserId, todayDate)
+                        logOSEntity("ImageWorker", data)
                         if (data.dashboardImage != null) {
                             val partBody = createMultipartPart(
                                 data.dashboardImage!!, "uploadVehicleDashBoardImage",
                                 appContext
                             )
                             val dashresponse =
-                                mainRepo.uploadVehicleImage(clebUserId, partBody, 1, currentDateTime)
+                                mainRepo.uploadVehicleImage(
+                                    clebUserId,
+                                    partBody,
+                                    1,
+                                    currentDateTime
+                                )
                             if (!dashresponse.isSuccessful) {
                                 data.isdashboardUploadedFailed = true
                             }
@@ -63,7 +77,12 @@ class ImageUploadWorker(
                                 appContext
                             )
                             val frontresponse =
-                                mainRepo.uploadVehicleImage(clebUserId, partBody, 2, currentDateTime)
+                                mainRepo.uploadVehicleImage(
+                                    clebUserId,
+                                    partBody,
+                                    2,
+                                    currentDateTime
+                                )
                             if (!frontresponse.isSuccessful) {
                                 data.isfrontImageFailed = true
                             }
@@ -76,7 +95,12 @@ class ImageUploadWorker(
                             )
 
                             val nearResponse =
-                                mainRepo.uploadVehicleImage(clebUserId, partBody, 3, currentDateTime)
+                                mainRepo.uploadVehicleImage(
+                                    clebUserId,
+                                    partBody,
+                                    3,
+                                    currentDateTime
+                                )
                             if (!nearResponse.isSuccessful) {
                                 data.isnearSideFailed = true
                             }
@@ -88,7 +112,12 @@ class ImageUploadWorker(
                                 appContext
                             )
                             val rearResponse =
-                                mainRepo.uploadVehicleImage(clebUserId, partBody, 4, currentDateTime)
+                                mainRepo.uploadVehicleImage(
+                                    clebUserId,
+                                    partBody,
+                                    4,
+                                    currentDateTime
+                                )
                             if (!rearResponse.isSuccessful) {
                                 data.isrearSideFailed = true
                             }
@@ -101,7 +130,12 @@ class ImageUploadWorker(
                             )
 
                             val offsideResponse =
-                                mainRepo.uploadVehicleImage(clebUserId, partBody, 6, currentDateTime)
+                                mainRepo.uploadVehicleImage(
+                                    clebUserId,
+                                    partBody,
+                                    6,
+                                    currentDateTime
+                                )
                             if (!offsideResponse.isSuccessful) {
                                 data.isoffSideFailed = true
                             }
@@ -130,28 +164,428 @@ class ImageUploadWorker(
                             if (!oilLevelResponse.isSuccessful)
                                 data.isoillevelImageFailed = true
                         }
-                        if(data.faceMaskImage!=null){
+                        if (data.faceMaskImage != null) {
                             val partBody = createMultipartPart(
-                                data.faceMaskImage!!,"uploadFaceMaskImage",
+                                data.faceMaskImage!!, "uploadFaceMaskImage",
                                 appContext
                             )
-                            val selfieeRes = mainRepo.uploadVehicleImage(clebUserId,partBody,0,currentDateTime)
-                            if(!selfieeRes.isSuccessful)
+                            val selfieeRes = mainRepo.uploadVehicleImage(
+                                clebUserId,
+                                partBody,
+                                0,
+                                currentDateTime
+                            )
+                            if (!selfieeRes.isSuccessful)
                                 data.isfaceMaskImageFailed = true
                         }
                     }
-                    1->{
-                        if(data.faceMaskImage!=null){
+
+                    1 -> {
+                        val data = osRepo.getData(clebUserId, todayDate)
+                        logOSEntity("ImageWorker", data)
+
+                        if (data.faceMaskImage != null) {
                             val partBody = createMultipartPart(
-                                data.faceMaskImage!!,"uploadFaceMaskImage",
+                                data.faceMaskImage!!, "uploadFaceMaskImage",
                                 appContext
                             )
-                            val selfieeRes = mainRepo.uploadVehicleImage(clebUserId,partBody,0,currentDateTime)
-                            if(!selfieeRes.isSuccessful)
+                            val selfieeRes = mainRepo.uploadVehicleImage(
+                                clebUserId,
+                                partBody,
+                                0,
+                                currentDateTime
+                            )
+                            if (!selfieeRes.isSuccessful)
                                 data.isfaceMaskImageFailed = true
                         }
                     }
-                    2->{
+
+                    2 -> {
+                        vmId = Prefs.getInstance(appContext).VmID.toInt()
+                        lmId = Prefs.getInstance(appContext).getLocationID().toInt()
+                        val imageEntity = imagesRepo.getImagesbyUser()
+                        if (imageEntity != null) {
+                            if (checkNullorEmpty(imageEntity.front)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.front!!, "uploadVehicleFrontDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.FRONT,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inWindScreen)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inWindScreen!!, "uploadWindscreenDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.WIND_SCREEN,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inWindowGlass)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inWindowGlass!!,
+                                    "uploadWindowsOrGlassVisibilityDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.WINDOW_GLASS,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inWipersWashers)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inWipersWashers!!,
+                                    "uploadVehicleWipersOrWashersDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.WIPERS_WASHERS,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inMirrors)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inMirrors!!, "uploadMirrorDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.MIRRORS,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inCabSecurityInterior)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inCabSecurityInterior!!,
+                                    "uploadVehicleCabSecurityOrInteriorDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.CAB_SECURITY_INTERIOR,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inSeatBelt)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inSeatBelt!!, "uploadVehicleSeatBeltDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.SEAT_BELT,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inWarningServiceLights)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inWarningServiceLights!!,
+                                    "uploadVehicleWarningOrServiceLightDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.WARNING_SERVICE_LIGHTS,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inFuelAdBlueLevel)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inFuelAdBlueLevel!!,
+                                    "uploadVehicleFuelOrAdBlueLevelDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.ADD_BLUE,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inOilCoolantLevel)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inOilCoolantLevel!!,
+                                    "uploadVehicleOilOrCoolantLeaksDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.OIL_COOLANT_LEVEL,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inFogLights)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inFogLights!!, "uploadVehicleLightsDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.FOG_LIGHTS,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inIndicatorsSideRepeaters)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inIndicatorsSideRepeaters!!,
+                                    "uploadVehicleIndicatorsOrSideRepeatersDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.INDICATORS_SIDE_REPEATERS,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inHornReverseBeeper)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inHornReverseBeeper!!,
+                                    "uploadVehicleHornOrReverseBeeperDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.HORN_REVERSE_BEEPER,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inSteeringControl)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inSteeringControl!!, "uploadVehicleSteeringDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.STEERING_CONTROL,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.inBrakedEbsAbs)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.inBrakedEbsAbs!!, "uploadVehicleBrakesDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.BRAKED_EBS_ABS,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.exVehicleLockingSystem)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.exVehicleLockingSystem!!,
+                                    "uploadVehicleLockingSystemDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.VEHICLE_LOCKING_SYSTEM,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.exBodyDamageNearSide)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.nearSide!!, "uploadVehicleNearSideDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.NEAR_SIDE,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.exBodyDamageRear)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.rear!!, "uploadVehicleRearDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.REAR,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.exBodyDamageOffside)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.exBodyDamageOffside!!, "uploadVehicleOffSideDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.OFF_SIDE,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.exRegistrationNumberPlates)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.exRegistrationNumberPlates!!,
+                                    "uploadVehicleRegistrationNumberPlateDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.REGISTRATION_NUMBER_PLATES,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.exReflectorsMarkers)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.exReflectorsMarkers!!,
+                                    "uploadVehicleReflectorOrMarkerDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.REFLECTORS_MARKERS,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.exWheelFixings)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.exWheelFixings!!,
+                                    "uploadVehicleWheelsOrWheelFixingDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.WHEEL_FIXINGS,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.exTyreConditionThreadDepth)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.exTyreConditionThreadDepth!!,
+                                    "uploadVehicleTyresDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.TYRE_CONDITION_THREAD_DEPTH,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.exOilFuelCoolantLeaks)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.exOilFuelCoolantLeaks!!,
+                                    "uploadVehicleOilOrFuelOrCoolantLeaksDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.OIL_FUEL_COOLANT_LEAKS,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.exExcessiveEngExhaustSmoke)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.exExcessiveEngExhaustSmoke!!,
+                                    "uploadVehExcessiveEngineExhaustSmokeDef",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.EXCESSIVE_ENG_EXHAUST_SMOKE,
+                                    partBody
+                                )
+                            }
+                            if (checkNullorEmpty(imageEntity.exSpareWheel)) {
+                                val partBody = createMultipartPart(
+                                    imageEntity.exSpareWheel!!, "uploadSpareWheelDefect",
+                                    appContext
+                                )
+                                mainRepo.UploadVehicleDefectImages(
+                                    clebUserId,
+                                    lmId,
+                                    vmId,
+                                    currentDateTime,
+                                    DBImages.SPARE_WHEEL,
+                                    partBody
+                                )
+                            }
+
+                        }
 
                     }
                 }
@@ -164,10 +598,18 @@ class ImageUploadWorker(
         return Result.success()
     }
 
-    private fun createMultipartPart(image: String, partName: String,context: Context): MultipartBody.Part {
+    private fun createMultipartPart(
+        image: String,
+        partName: String,
+        context: Context
+    ): MultipartBody.Part {
         val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
         var bs64ImageString = getImageBitmapFromUri(context, image.toUri())
         val requestBody = bs64ImageString!!.toRequestBody()
         return MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
+    }
+
+    private fun checkNullorEmpty(value: String?): Boolean {
+        return !(value.isNullOrEmpty() || value == "empty")
     }
 }

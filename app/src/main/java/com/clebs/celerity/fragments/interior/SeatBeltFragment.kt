@@ -103,7 +103,7 @@ class SeatBeltFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.inSeatBelt.toString())
+                setImageView(defaultIv, it.inSeatBelt.toString(),requireContext())
                 if (it.dfNameSeatBelt!!.isNotEmpty() && it.dfNameSeatBelt != "f") {
                     edtDefect.setText(it.dfNameSeatBelt.toString())
                 }

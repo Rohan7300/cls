@@ -40,7 +40,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     var textToSpeech: TextToSpeech? = null
     private var cardetected = false
     private var scaleFactor: Float = 1f
-
+    var drawableText = String()
     private var bounds = Rect()
 
     init {
@@ -92,8 +92,12 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
             val right = boundingBox.right * scaleFactor
             for (results in results) {
 
-                if (results.categories[0].label.equals("car") || results.categories[0].label.equals("truck")){
-                    boxPaint.color=Color.GREEN
+                if (results.categories[0].label.equals("car") || results.categories[0].label.equals(
+                        "truck"
+                    ) || results.categories[0].label.equals("bus")
+                    || results.categories[0].label.equals("train")
+                ) {
+                    boxPaint.color = Color.GREEN
 
 
 //                    textToSpeech = TextToSpeech(context, TextToSpeech.OnInitListener {
@@ -127,10 +131,21 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
 //
 //
 //                    })
+                } else {
+                    boxPaint.color = Color.RED
                 }
-                else{
-                    boxPaint.color=Color.RED
+                if (results.categories[0].label.equals("car") || results.categories[0].label.equals(
+                        "truck"
+                    ) || results.categories[0].label.equals("bus")
+                    || results.categories[0].label.equals("train")
+                ) {
+                    drawableText =
+                      "Vehicle detected"
+                }else{
+                    drawableText =
+                        result.categories[0].label
                 }
+
             }
             // Draw bounding box around detected objects
             val drawableRect = RectF(left, top, right, bottom)
@@ -139,8 +154,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
             canvas.drawRect(drawableRect, boxPaint)
 
             // Create text to display alongside detected objects
-            val drawableText =
-                result.categories[0].label
+
 
             // Draw rect behind display text
             textBackgroundPaint.getTextBounds(drawableText, 0, drawableText.length, bounds)

@@ -102,7 +102,7 @@ class IndictorsFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if(it!=null){
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.inIndicatorsSideRepeaters.toString())
+                setImageView(defaultIv, it.inIndicatorsSideRepeaters.toString(),requireContext())
                 if (it.dfNameIndicatorsSideRepeaters!!.isNotEmpty() && it.dfNameIndicatorsSideRepeaters != "f") {
                     edtDefect.setText(it.dfNameIndicatorsSideRepeaters.toString())
                 }

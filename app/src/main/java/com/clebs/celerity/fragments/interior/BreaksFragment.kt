@@ -102,7 +102,7 @@ class BreaksFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if(it!=null){
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.inBrakedEbsAbs.toString())
+                setImageView(defaultIv, it.inBrakedEbsAbs.toString(),requireContext())
                 if (it.dfNameBrakedEbsAbs!!.isNotEmpty() && it.dfNameBrakedEbsAbs != "f") {
                     edtDefect.setText(it.dfNameBrakedEbsAbs.toString())
                 }

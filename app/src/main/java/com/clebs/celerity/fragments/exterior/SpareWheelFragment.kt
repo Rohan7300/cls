@@ -23,6 +23,7 @@ import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.isNetworkAvailable
 import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.showErrorDialog
+import com.clebs.celerity.utils.startUploadWithWorkManager
 
 class SpareWheelFragment : BaseInteriorFragment() {
 
@@ -139,7 +140,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.exSpareWheel.toString())
+                setImageView(defaultIv, it.exSpareWheel.toString(),requireContext())
                 if (it.dfNameSpareWheel!!.isNotEmpty() && it.dfNameSpareWheel != "f") {
                     edtDefect.setText(it.dfNameSpareWheel.toString())
                 }
@@ -250,6 +251,9 @@ class SpareWheelFragment : BaseInteriorFragment() {
                             vdhFuelOilLeaksComment = imageEntity.dfNameOilCoolantLevel!!,
                             vdhIsDefected = isDefected,
                         )
+                        if(isDefected){
+                            startUploadWithWorkManager(2,prefs,requireContext(),VdhLmId,VdhVmId)
+                        }
 
                         viewModel.SaveVehDefectSheet(request)
                     }
