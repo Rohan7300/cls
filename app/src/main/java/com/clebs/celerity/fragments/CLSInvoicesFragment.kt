@@ -29,8 +29,12 @@ import com.clebs.celerity.utils.showToast
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
 import java.time.Year
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.UUID
 
 
 class CLSInvoicesFragment : Fragment(), PermissionCallback {
@@ -94,12 +98,22 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
             if (it != null) {
                 if (isClicked) {
                     try {
+                        val uniqueId = UUID.randomUUID().toString()
 
                         val fileContent = it.Invoices[0].FileContent
                         val fileName = it.Invoices[0].FileName
+                        val currentDate = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
+                            Date()
+                        )
+                        val uniqueFileName = "$fileName-$currentDate-$uniqueId.pdf"
+                        val storageDir =
+                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                        if (!storageDir.exists()) {
+                            storageDir.mkdirs()
+                        }
                         val file = File(
-                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                            fileName
+                            storageDir,
+                            uniqueFileName
                         )
                         val fos = FileOutputStream(file)
                         fos.write(Base64.decode(fileContent, Base64.DEFAULT))

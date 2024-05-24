@@ -436,7 +436,5 @@ class WindScreenFragment : Fragment() {
         imageViewModel.insertDefectName(imageEntity)
         loadingDialog.show()
         navigateTo(R.id.windowsGlassFragment)
-
-
     }
 }

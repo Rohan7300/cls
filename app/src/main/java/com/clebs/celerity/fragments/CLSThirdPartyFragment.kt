@@ -4,6 +4,8 @@ import android.Manifest
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Base64
@@ -13,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,8 +30,12 @@ import com.clebs.celerity.utils.showToast
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
 import java.time.Year
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.UUID
 
 
 class CLSThirdPartyFragment : Fragment(), PermissionCallback {
@@ -47,6 +54,20 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
     }
     private var REQUEST_STORAGE_PERMISSION_CODE = 101
     private var isDownloading = false
+
+    companion object {
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ).apply {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    add(Manifest.permission.READ_MEDIA_IMAGES)
+                }
+            }.toTypedArray()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -95,11 +116,12 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
         viewModel.liveDataDownloadThirdPartyInvoicePDF.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
-                if(isClicked){
+                if (isClicked) {
                     val fileContent = it.Invoices[0].FileContent
                     val fileName = it.Invoices[0].FileName
                     try {
-                        downloadPDFData(fileName, fileContent)
+                        if (checkForStoragePermission())
+                            downloadPDFData(fileName, fileContent)
                     } catch (_: Exception) {
                     }
                 }
@@ -199,15 +221,26 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
 
     private fun downloadPDFData(fileName: String, fileContent: String) {
         try {
-            val file = File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                fileName
-            )
-            val fos = FileOutputStream(file)
-            fos.write(Base64.decode(fileContent, Base64.DEFAULT))
-            fos.close()
-            showToast("PDF Downloaded!", requireContext())
-            openPDF(file)
+        val currentDate = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
+            Date()
+        )
+        val uniqueId = UUID.randomUUID().toString()
+        val uniqueFileName = "$fileName-$currentDate-$uniqueId.pdf"
+        val storageDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        if (!storageDir.exists()) {
+            storageDir.mkdirs()
+        }
+        val file = File(
+            storageDir,
+            uniqueFileName
+        )
+        val fos = FileOutputStream(file)
+        fos.write(Base64.decode(fileContent, Base64.DEFAULT))
+        fos.close()
+        showToast("PDF Downloaded!", requireContext())
+        openPDF(file)
+
         } catch (e: Exception) {
             e.printStackTrace()
             showToast("Failed to download PDF", requireContext())
@@ -221,11 +254,15 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
                    context,
                     BuildConfig.APPLICATION_ID + ".com.vansuita.pickimage.provider", file);*/
         //val uri = FileProvider.getUriForFile(context,  context.packageName + ".fileprovider", file)
-        val uri = FileProvider.getUriForFile(
-            requireContext(),
-            "${requireContext().packageName}.fileprovider",
-            file
-        )
+        val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.fileprovider",
+                file
+            )
+        } else {
+            Uri.fromFile(file)
+        }
         val intent = Intent(Intent.ACTION_VIEW)
         intent.setDataAndType(uri, "application/pdf")
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -236,6 +273,27 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
             e.printStackTrace()
             showToast("No PDF viewer found", requireContext())
         }
+    }
+
+    private fun checkForStoragePermission(): Boolean {
+        if (Build.VERSION.SDK_INT <= 32) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    REQUEST_STORAGE_PERMISSION_CODE
+                )
+            } else {
+                return true
+            }
+        } else {
+            return true
+        }
+        return false
     }
 
 }

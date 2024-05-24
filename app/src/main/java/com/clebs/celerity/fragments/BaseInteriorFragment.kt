@@ -268,7 +268,12 @@ abstract class BaseInteriorFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                // val imageBitmap = result.data?.extras?.get("data") as Bitmap
-                imageView.setImageURI(photoURI)
+                try {
+                    imageView.setImageURI(photoURI)
+                }catch (_:Exception){
+
+                }
+
 
               //  Log.e("Dskjdjsdkhsjsdhjkdshjshjkefdui", ": "+imageBitmap )
                 base64 = photoURI.toString()
