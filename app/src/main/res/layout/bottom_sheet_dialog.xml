@@ -1,285 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomSheetRealCL"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content"
+    android:background="@color/transparent">
 
     <LinearLayout
-        android:id="@+id/viewfulldatalayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:padding="6dp"
-        android:layout_marginEnd="4dp"
         android:orientation="vertical"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <RelativeLayout
-            android:id="@+id/rlicons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:id="@+id/ss"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/cross4" />
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_toRightOf="@id/ss"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/map" />
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginStart="60dp"
-                android:src="@drawable/schedule" />
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginEnd="60dp"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/map" />
-
-        </RelativeLayout>
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/shape_expand_main"
+            android:layout_height="wrap_content">
 
-            android:padding="13dp">
-
-
-            <TextView
-                android:id="@+id/tv_date_show1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="date"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/blueRactIV"
+                android:layout_width="match_parent"
+                android:layout_height="71dp"
+                android:background="@drawable/ic_rectangle_blue"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/cancleIV"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
 
-            <TextView
-                android:id="@+id/tv_is_working_show_sunday"
+                android:backgroundTint="@color/black"
+                android:src="@drawable/cross4"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_date_show1" />
+                android:gravity="center"
+                android:paddingHorizontal="30dp"
+                android:text="Completed Tasks"
+                app:textAllCaps="false"
+                android:fontFamily="@font/poppins_semibold"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/blueRactIV"
+                app:layout_constraintEnd_toEndOf="@id/blueRactIV"
+                app:layout_constraintStart_toStartOf="@+id/blueRactIV"
+                app:layout_constraintTop_toTopOf="@id/blueRactIV" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/shape_expand_main"
-            android:padding="13dp">
+        >
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:background="@color/very_light_orange"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tv_date_show2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="date"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <RelativeLayout
+                    android:id="@+id/task_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toTopOf="parent">
 
+                    <RelativeLayout
+                        android:id="@+id/vichle_defect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
 
-            <TextView
-                android:id="@+id/tv_is_working_show_monday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_date_show2" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+                        <TextView
+                            android:id="@+id/child_Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
+                            android:letterSpacing="0.02"
+                            android:text="Vehicle Defect Sheet "
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
 
-            android:background="@drawable/shape_expand_main"
-            android:padding="13dp">
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
 
+                            android:layout_alignParentRight="true"
 
-            <TextView
-                android:id="@+id/tv_date_show3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="date"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                            android:src="@drawable/frame__2_" />
 
+                    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tv_is_working_show_tuesday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_date_show3" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <RelativeLayout
+                        android:id="@+id/vichel_pictures"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/vichle_defect"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
+                            android:letterSpacing="0.02"
+                            android:text="Vehicle Pictures "
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
 
-            android:background="@drawable/shape_expand_main"
-            android:padding="13dp">
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:id="@+id/frame"
+                            android:layout_alignParentRight="true"
+                            android:backgroundTint="@color/white"
+                            android:src="@drawable/frame__2_" />
 
+                    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tv_date_show4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="date"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    <RelativeLayout
+                        android:id="@+id/clocked_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/vichel_pictures"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
+                            android:letterSpacing="0.02"
+                            android:text="Clocked In"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/tv_is_working_show_wed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_date_show4" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/tv_ClockedIN"
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:layout_alignParentRight="true"
+                            android:backgroundTint="@color/white"
+                            android:text="- - - -"
+                            android:textColor="#6DA95E"
+                            android:textSize="15sp" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+                    </RelativeLayout>
 
-            android:background="@drawable/shape_expand_main"
-            android:padding="13dp">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/clocked_in"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins"
+                            android:letterSpacing="0.02"
+                            android:text="Clocked Out"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/tv_date_show5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="date"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                        <TextView
+                            android:id="@+id/clocked_outTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:layout_alignParentRight="true"
+                            android:backgroundTint="@color/white"
+                            android:text="- - - -"
+                            android:textColor="#6DA95E"
+                            android:textSize="15sp" />
 
+                    </RelativeLayout>
+                </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tv_is_working_show_thu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_date_show5" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-
-            android:background="@drawable/shape_expand_main"
-
-            android:padding="13dp">
-
-
-            <TextView
-                android:id="@+id/tv_date_show6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="date"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_is_working_show_fri"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_date_show6" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-
-            android:background="@drawable/shape_expand_main"
-            android:padding="13dp">
-
-
-            <TextView
-                android:id="@+id/tv_date_show7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="date"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <TextView
-                android:id="@+id/tv_is_working_show_sat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <!--                        <androidx.recyclerview.widget.RecyclerView-->
-        <!--                            android:id="@+id/viewfullschedule"-->
-        <!--                            android:layout_width="match_parent"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:layout_marginTop="16dp"-->
-        <!--                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-        <!--                            tools:itemCount="10"-->
-
-        <!--                            tools:listitem="@layout/view_full_schedule" />-->
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

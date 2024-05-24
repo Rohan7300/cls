@@ -59,7 +59,7 @@ class ViewTicketsActivity : AppCompatActivity() {
             binding.edtDes.text = ticketData!!.TicketDescription
             binding.tvDepart.text = ticketData!!.DepartmentName
             binding.tvRequests.text = ticketData!!.ReqTypeName
-
+            binding.llpb.visibility=View.VISIBLE
             viewModel.GetUserTicketDocuments(
                 userID = prefs.clebUserId.toInt(),
                 ticketId = ticketData!!.UserTicketID.toInt()
@@ -71,14 +71,17 @@ class ViewTicketsActivity : AppCompatActivity() {
         binding.attachmentRV.adapter = attachmentAdapter
         binding.attachmentRV.layoutManager = LinearLayoutManager(this)
         binding.llAttachment.visibility = View.GONE
+
         viewModel.liveDataGetUserTicketDocuments.observe(this){
             if(it!=null){
                 attachmentAdapter.data.clear()
                 attachmentAdapter.data.addAll(it.Docs)
+                binding.llpb.visibility=View.GONE
                 attachmentAdapter.notifyDataSetChanged()
                 binding.llAttachment.visibility = View.VISIBLE
             }else{
                 binding.llAttachment.visibility = View.GONE
+                binding.llpb.visibility=View.GONE
             }
         }
     }

@@ -1,18 +1,15 @@
 package com.clebs.celerity.ui
 
+
 import ObjectDetectorHelper
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
@@ -23,44 +20,23 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleOwner
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.ActivityFaceScanBinding
 import com.clebs.celerity.fragments.DailyWorkFragment
 import com.clebs.celerity.utils.DependencyProvider.currentUri
 import com.clebs.celerity.utils.DependencyProvider.isComingBackFromFaceScan
 import com.clebs.celerity.utils.showToast
-
-
-import com.google.android.gms.tasks.Task
-import com.google.common.util.concurrent.ListenableFuture
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.face.Face
-import com.google.mlkit.vision.face.FaceDetection
-import com.google.mlkit.vision.face.FaceDetector
-import com.google.mlkit.vision.face.FaceDetectorOptions
 import org.jetbrains.anko.runOnUiThread
-import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.task.vision.detector.Detection
-import java.io.ByteArrayOutputStream
-import java.io.FileInputStream
 import java.io.IOException
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.nio.MappedByteBuffer
-import java.nio.ReadOnlyBufferException
-import java.nio.channels.FileChannel
 import java.text.SimpleDateFormat
 import java.util.LinkedList
 import java.util.Locale
-import java.util.concurrent.ExecutionException
-import java.util.concurrent.Executor
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import kotlin.experimental.inv
+import kotlin.text.Typography.registered
 
 
 class FaceScanActivity : AppCompatActivity(),ObjectDetectorHelper.DetectorListener {
@@ -313,4 +289,5 @@ class FaceScanActivity : AppCompatActivity(),ObjectDetectorHelper.DetectorListen
         // Pass Bitmap and rotation to the object detector helper for processing and detection
         objectDetectorHelper.detect(bitmapBuffer, imageRotation)
     }
+
 }

@@ -347,14 +347,14 @@ class Userprofile : Fragment() {
         deleteDialog.setView(view)
         button.setOnClickListener {
             if (edt_old.text.isEmpty()) {
-                edt_old.setError("please enter old password")
+                showToast("Please enter old password", requireActivity())
             } else if (edt_new.text.isEmpty()) {
-                edt_new.setError("please enter new password")
-            } else if (edt_new_two.text.isEmpty()) {
-                edt_new_two.setError("please re-enter new password")
-            } else if (!edt_new.text.toString().equals(edt_new_two.text.toString())) {
+                showToast("Please enter new password", requireActivity())
 
-                showToast("New password fields doesnot match", requireActivity())
+            } else if (edt_new_two.text.isEmpty()) {
+                showToast("Please re-enter new password", requireActivity())
+            } else if (!edt_new.text.toString().equals(edt_new_two.text.toString())) {
+                showToast("New password fields do not match", requireActivity())
             } else {
                 edtold = edt_old.text.toString()
                 edtnew = edt_new.text.toString()
@@ -368,7 +368,14 @@ class Userprofile : Fragment() {
         }
         deleteDialog.setCancelable(true)
         deleteDialog.setCanceledOnTouchOutside(true);
-        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        deleteDialog.window?.setBackgroundDrawable(
+            ColorDrawable(
+                ContextCompat.getColor(
+                    requireContext(),
+                    io.clearquote.assessment.cq_sdk.R.color.transparent
+                )
+            )
+        );
         deleteDialog.show();
 
     }
@@ -560,15 +567,19 @@ class Userprofile : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                     Log.e("succcessssss", "updateProfilePassword1: ")
-//                    showToast("Password has been changed", requireContext())
+                    //                    showToast("Password has been changed", requireContext())
                 }
-
+                else{
+                    showErrorDialog(fragmentManager, "400", it.Message.toString())
+                }
             } else {
-                showErrorDialog(fragmentManager, "0", "Error in changing password.")
-                Log.e("succcessssss", "updateProfilePassword1: ")
-//                    showToast("Error in changing password", requireContext())
+                Log.e("changepasswordsssss", "updateProfilePassword: "+it?.Message.toString() )
+
+
             }
+
         }
+
     }
 
     fun updateprofileregular() {

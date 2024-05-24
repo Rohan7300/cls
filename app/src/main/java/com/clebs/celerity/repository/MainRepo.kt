@@ -65,6 +65,7 @@ import com.clebs.celerity.models.response.GetVehicleAdvancePaymentAgreementRespo
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.GetvehicleInfoByDriverId
+import com.clebs.celerity.models.response.InvoiceXX
 import com.clebs.celerity.models.response.NotificationResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
 import com.clebs.celerity.models.response.SaveCommentResponse
@@ -76,6 +77,7 @@ import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.models.response.WeeklyLocationRotabyIdResponse
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.utils.DBImages
+import com.google.gson.Gson
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -115,21 +117,22 @@ class MainRepo(private val ApiService: ApiService) {
         userID: Double,
         oldpass: String,
         newpass: String
-    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
+    ): SimpleStatusMsgResponse? {
 
-        /*        val response = ApiService.updateprofilepassword(userID, oldpass, newpass)
+                val response = ApiService.updateprofilepassword(userID, oldpass, newpass)
 
                 if (response.isSuccessful) {
-                    return response.body()
+                    return response.body()!!
                 } else {
-                    val errorBody = response.errorBody()?.string()
+                    val errorBody = response.errorBody()?.string()!!
                     println("Error Response body: $errorBody")
-
+                    val gson = Gson()
+                    return gson.fromJson(errorBody, SimpleStatusMsgResponse::class.java) ?: null
                 }
-                return null*/
-        return safeApiCall {
-            ApiService.updateprofilepassword(userID, oldpass, newpass)
-        }
+
+//        return safeApiCall {
+//            ApiService.updateprofilepassword(userID, oldpass, newpass)
+//        }
     }
 
     suspend fun updteprofileregular(request: UpdateProfileRequestBody): SimpleNetworkResponse<SimpleStatusMsgResponse> {
@@ -182,6 +185,7 @@ class MainRepo(private val ApiService: ApiService) {
             return response.body()
         }*/
         return safeApiCall {
+
             ApiService.GetDriversBasicInfo(userID)
         }
     }

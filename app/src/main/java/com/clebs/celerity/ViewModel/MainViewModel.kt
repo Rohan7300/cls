@@ -226,12 +226,7 @@ class MainViewModel(
     fun updateProfilepassword(userID: Double, oldpass: String, newpass: String) {
         viewModelScope.launch {
             val response = repo.updateprofilePassword(userID, oldpass, newpass)
-            if (response.failed)
-                updateprofilelivedata.postValue(null)
-            if (!response.isSuccessful)
-                updateprofilelivedata.postValue(null)
-            else
-                updateprofilelivedata.postValue(response.body)
+            updateprofilelivedata.postValue(response)
         }
     }
 

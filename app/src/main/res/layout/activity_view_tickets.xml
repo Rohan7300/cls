@@ -17,7 +17,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/very_light_orange"
+            android:background="@color/home_blue_two"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -25,6 +25,7 @@
                 android:id="@+id/cdsss"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/medium_orange"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -43,6 +44,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
                     android:letterSpacing="0.02"
+                    android:padding="8dp"
                     android:text="View Ticket"
                     android:textColor="@color/black"
                     android:textSize="20sp"
@@ -139,9 +141,9 @@
                             android:fontFamily="@font/poppins"
                             android:letterSpacing="0.01"
                             android:padding="10dp"
-                            android:textSize="12sp"
                             android:text="Department Name"
                             android:textColor="@color/text_color"
+                            android:textSize="12sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -203,9 +205,9 @@
                                 android:fontFamily="@font/poppins"
                                 android:letterSpacing="0.01"
                                 android:padding="10dp"
-                                android:textSize="12sp"
                                 android:text="Request Type"
                                 android:textColor="@color/text_color"
+                                android:textSize="12sp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -358,14 +360,29 @@
                                     android:textColor="@color/text_color"
                                     android:textSize="12sp" />
 
+                                <RelativeLayout
+                                    android:id="@+id/llpb"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/edt_des"
+                                    android:visibility="gone"
+                                    android:layout_centerInParent="true"
+                                    android:layout_marginTop="10dp">
+
+                                    <ProgressBar
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp" />
+                                </RelativeLayout>
+
                                 <LinearLayout
                                     android:id="@+id/llAttachment"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_below="@id/edt_des"
-                                    android:layout_marginTop="15dp"
+                                    android:layout_below="@id/llpb"
+                                    android:layout_marginTop="10dp"
                                     android:gravity="center"
                                     android:orientation="horizontal">
+
 
                                     <TextView
                                         android:layout_width="wrap_content"

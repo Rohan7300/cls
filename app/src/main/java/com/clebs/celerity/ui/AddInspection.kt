@@ -42,13 +42,10 @@ import com.clebs.celerity.utils.DependencyProvider.insLevel
 import com.clebs.celerity.utils.DependencyProvider.isComingBackFromCLSCapture
 import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.checkIfInspectionFailed
 import com.clebs.celerity.utils.getCurrentDateTime
-import com.clebs.celerity.utils.printBitmapSize
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.startUploadWithWorkManager
-import com.clebs.celerity.utils.toRequestBody
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -56,7 +53,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-import java.util.UUID
 
 class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     lateinit var binding: ActivityAddInspectionBinding

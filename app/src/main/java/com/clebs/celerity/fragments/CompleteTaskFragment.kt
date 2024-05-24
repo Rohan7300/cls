@@ -23,9 +23,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -35,6 +37,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
+import com.clebs.celerity.R.style.BottomSheetDialogTheme
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.ViewModel.OSyncViewModel
 import com.clebs.celerity.adapters.BreakTimeAdapter
@@ -70,6 +73,7 @@ import com.clebs.celerity.utils.showTimePickerDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.toRequestBody
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.tapadoo.alerter.Alerter
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
@@ -91,11 +95,13 @@ import java.util.UUID
 class CompleteTaskFragment : Fragment() {
     lateinit var mbinding: FragmentCompleteTaskBinding
     private var isclicked: Boolean = true
+    private var isclickedtwo: Boolean = true
     private lateinit var viewModel: MainViewModel
     private lateinit var imageView: ImageView
     private var clebUserID: Int = 0
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
+    var clockedouttime=String()
     lateinit var ivX: ImageView
     var codeX = 0
     var uploadInProgress = false
@@ -117,6 +123,7 @@ class CompleteTaskFragment : Fragment() {
     private var b1 = false
     private var b2 = false
     var breakTimeSent = false
+    var clockedinTime = String()
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
     private lateinit var oSyncViewModel: OSyncViewModel
@@ -319,27 +326,35 @@ class CompleteTaskFragment : Fragment() {
 
         mbinding.rlcom.setOnClickListener {
             if (isclicked) {
-                mbinding.taskDetails.visibility = View.VISIBLE
+                showTaskBottomSheet()
+//                mbinding.taskDetails.visibility = View.VISIBLE
                 mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
-                mbinding.view2.visibility = View.VISIBLE
+//                mbinding.view2.visibility = View.VISIBLE
             } else {
-                mbinding.taskDetails.visibility = View.GONE
-                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
-                mbinding.view2.visibility = View.GONE
+                showTaskBottomSheet()
+                mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
+//                mbinding.taskDetails.visibility = View.GONE
+//                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
+//                mbinding.view2.visibility = View.GONE
             }
             isclicked = !isclicked
         }
         mbinding.downIv.setOnClickListener {
-            if (isclicked) {
-                mbinding.taskDetails.visibility = View.VISIBLE
+            if (isclickedtwo) {
+                showTaskBottomSheet()
+//                mbinding.taskDetails.visibility = View.VISIBLE
                 mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
-                mbinding.view2.visibility = View.VISIBLE
+
+//                mbinding.view2.visibility = View.VISIBLE
             } else {
-                mbinding.taskDetails.visibility = View.GONE
-                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
-                mbinding.view2.visibility = View.GONE
+                showTaskBottomSheet()
+                mbinding.downIv.setImageResource(R.drawable.green_down_arrow)
+//                showTaskBottomSheet()
+//                mbinding.taskDetails.visibility = View.GONE
+//                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
+//                mbinding.view2.visibility = View.GONE
             }
-            isclicked = !isclicked
+            isclickedtwo = !isclickedtwo
         }
 
 
@@ -498,6 +513,7 @@ class CompleteTaskFragment : Fragment() {
             hideDialog()
             if (it != null) {
                 if (it.ClockedInTime != null) {
+                    clockedinTime = it.ClockedInTime.toString()
                     mbinding.tvClockedIN.text = it.ClockedInTime.toString()
                     isClockedIn = true
                     osData.isClockedInToday = true
@@ -512,6 +528,7 @@ class CompleteTaskFragment : Fragment() {
                     mbinding.clockOutTV.text = "Clocked Out"
                     mbinding.rlcomtwoClockOut.isClickable = false
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
+                    clockedouttime=it.ClockedOutTime.toString()
                 }
             }else{
 
@@ -1368,6 +1385,7 @@ class CompleteTaskFragment : Fragment() {
             }
         }*/
 
+
     private fun checkInspection() {
         if (inspectionstarted?.equals(true) == true) {
             Timer().scheduleAtFixedRate(object : TimerTask() {
@@ -1408,5 +1426,135 @@ class CompleteTaskFragment : Fragment() {
                 }
             })
     }
+
+    fun showTaskBottomSheet() {
+        val bottomSheetDialog =
+            BottomSheetDialog(requireContext(), BottomSheetDialogTheme)
+        val showSheet = LayoutInflater.from(requireContext())
+            .inflate(
+                R.layout.bottom_sheet_dialog,
+                requireActivity().findViewById<View>(R.id.bottomSheetRealCL) as ConstraintLayout?
+            )
+        val cancelIV = showSheet.findViewById<ImageView>(R.id.cancleIV)
+        val tvclockedin = showSheet.findViewById<TextView>(R.id.tv_ClockedIN)
+        val tvclockedout=showSheet.findViewById<TextView>(R.id.clocked_outTime)
+        if (!clockedinTime.isNullOrEmpty()){
+            tvclockedin.setText(clockedinTime)
+        }
+        else{
+            tvclockedin.setText("- - - -")
+        }
+     if (!clockedouttime.isNullOrEmpty()){
+         tvclockedout.setText(clockedouttime)
+     }
+        else{
+            tvclockedout.setText("- - - -")
+        }
+        cancelIV.setOnClickListener {
+            bottomSheetDialog.dismiss()
+
+        }
+
+        val imageView = showSheet.findViewById<ImageView>(R.id.frame)
+        when (visibilityLevel) {
+            -1 -> {
+                imageView.setImageResource(R.drawable.cross3)
+                /*mbinding.clFaceMask.visibility = View.GONE
+                mbinding.clOilLevel.visibility = View.GONE*/
+                /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
+                         mbinding.uploadLayouts.visibility = View.VISIBLE
+                         mbinding.taskDetails.visibility = View.VISIBLE
+                         mbinding.imageUploadView.visibility = View.VISIBLE*/
+                // mbinding.vehiclePicturesIB.setImageResource(R.drawable.check1)
+            }
+
+            0 -> {
+                mbinding.uploadLayouts.visibility = View.VISIBLE
+//                mbinding.taskDetails.visibility = View.VISIBLE
+                mbinding.imageUploadView.visibility = View.VISIBLE
+                imageView.setImageResource(R.drawable.not_uploaded)
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.shape_expand_main
+                    )
+                );
+            }
+
+            1 -> {
+                imageView.setImageResource(R.drawable.frame__2_)
+                mbinding.rlcomtwoClock.visibility = View.VISIBLE
+                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
+                //mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+            }
+
+            2 -> {
+                imageView.setImageResource(R.drawable.frame__2_)
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
+                mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
+            }
+
+            3 -> {
+                imageView.setImageResource(R.drawable.frame__2_)
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
+                mbinding.BreakTimeTable.visibility = View.VISIBLE
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
+            }
+
+            4 -> {
+                imageView.setImageResource(R.drawable.frame__2_)
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
+                mbinding.rlcomtwoBreak.visibility = View.VISIBLE
+                mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
+            }
+
+            5 -> {
+                imageView.setImageResource(R.drawable.frame__2_)
+                mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                mbinding.onRoadView.visibility = View.VISIBLE
+                mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
+                mbinding.BreakTimeTable.visibility = View.VISIBLE
+                mbinding.complete.setBackground(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_complete_task_done
+                    )
+                );
+            }
+
+        }
+        bottomSheetDialog.setContentView(showSheet)
+        bottomSheetDialog.show()
+        bottomSheetDialog.setOnDismissListener {
+            mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
+        }
+    }
+
 
 }
