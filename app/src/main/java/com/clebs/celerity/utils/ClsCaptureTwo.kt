@@ -65,6 +65,37 @@ class ClsCaptureTwo : AppCompatActivity() {
         mbinding = DataBindingUtil.setContentView(this, R.layout.activity_cls_capture_two)
         setContentView(mbinding.root)
         cameraExecutor = Executors.newSingleThreadExecutor()
+
+        if (DependencyProvider.insLevel.equals(0)) {
+            mbinding.dashboardStatusIV.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ins_dashboard
+                )
+            )
+        } else if (DependencyProvider.insLevel.equals(5)) {
+            mbinding.dashboardStatusIV.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ins_addblue
+                )
+            )
+        } else if (DependencyProvider.insLevel.equals(6)) {
+            mbinding.dashboardStatusIV.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ins_oillevel
+                )
+            )
+        }
+        else{
+            mbinding.dashboardStatusIV.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ins_dashboard
+                )
+            )
+        }
         startCamera()
         if (allPermissionsGranted()) {
             startCamera()
@@ -148,9 +179,9 @@ class ClsCaptureTwo : AppCompatActivity() {
 
                     showToast("Photo capture succeeded processing photo", this@ClsCaptureTwo)
                     val uri = output.savedUri
-if (uri!=null){
-    passBitmap(uri)
-}
+                    if (uri != null) {
+                        passBitmap(uri)
+                    }
 
 
 //                    imageBitmap = getImageBitmapFromUri(requireContext(), output.savedUri!!)
@@ -215,10 +246,11 @@ if (uri!=null){
     } catch (e: Exception) {
         Log.d(ContentValues.TAG, "Photo capture failed: ${e.message}")
     }
-    fun passBitmap(crrURI: Uri){
+
+    fun passBitmap(crrURI: Uri) {
         DependencyProvider.isComingBackFromCLSCapture = true
         DependencyProvider.currentUri = crrURI
-        Log.e("skdhhsjdfhfdh", "passBitmap: "+ DependencyProvider.currentUri)
+        Log.e("skdhhsjdfhfdh", "passBitmap: " + DependencyProvider.currentUri)
         finish()
     }
 }

@@ -63,7 +63,7 @@
             android:name=".ui.FaceScanActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.Addinspectiontwo"
+            android:name=".utils.ClsCaptureTwo"
             android:exported="false" />
         <activity
             android:name=".utils.ClsCapture"
