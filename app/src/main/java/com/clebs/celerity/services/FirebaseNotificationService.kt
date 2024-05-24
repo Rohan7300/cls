@@ -16,6 +16,7 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getDeviceID
+import com.clebs.celerity.utils.parseToInt
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.CoroutineScope
@@ -59,7 +60,14 @@ class FirebaseNotificationService : FirebaseMessagingService() {
 
         Log.d(TAG, "FCMMessage MessageBody ${message.notification?.body} ")
         Log.d(TAG, "FCMMessage AlertType ${message.data["alertType"]} ")
-        showCustomNotification(title, messageBody, actionToperform, actionID, tokenUrl,notificationId)
+        showCustomNotification(
+            title,
+            messageBody,
+            actionToperform,
+            actionID,
+            tokenUrl,
+            notificationId
+        )
     }
 
     override fun onNewToken(token: String) {
@@ -89,7 +97,7 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         actionToPerform: String,
         actionID: String,
         tokenUrl: String,
-        notificationID:String
+        notificationID: String
     ) {
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -99,7 +107,11 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         intent.putExtra("tokenUrl", tokenUrl)
         intent.putExtra("notificationId", notificationID)
         val channel_id = "notification_channel"
-        val notificationId = 0
+        val notificationId = try {
+            parseToInt(actionID) ?: 0
+        } catch (_: Exception) {
+            1
+        }
 
         var pendingIntent: PendingIntent? = null
         pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -126,21 +138,19 @@ class FirebaseNotificationService : FirebaseMessagingService() {
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val notificationChannel = NotificationChannel(
-                channel_id, "web_app", NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager.createNotificationChannel(notificationChannel)
-        }
+        val notificationChannel = NotificationChannel(
+            "notification_channel", "web_app", NotificationManager.IMPORTANCE_HIGH
+        )
+        notificationManager.createNotificationChannel(notificationChannel)
 
-        val builder = NotificationCompat.Builder(this, channel_id)
+        val builder = NotificationCompat.Builder(this, "notification_channel")
             .setSmallIcon(R.drawable.logo_new)
             .setContentTitle(title)
             .setContentText(message)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setOnlyAlertOnce(true)
-            .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
+            .setVibrate(longArrayOf(2000, 2000, 2000, 2000, 2000))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             builder.setCustomContentView(getCustomDesign(title, message))

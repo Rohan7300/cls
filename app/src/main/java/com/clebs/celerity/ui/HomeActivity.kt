@@ -39,6 +39,7 @@ import com.clebs.celerity.database.OSyncRepo
 import com.clebs.celerity.database.OfflineSyncDB
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.ActivityHomeBinding
+import com.clebs.celerity.dialogs.BirthdayDialog
 import com.clebs.celerity.dialogs.ExpiredDocDialog
 import com.clebs.celerity.dialogs.InvoiceReadytoViewDialog
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
@@ -68,8 +69,11 @@ import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.invoiceReadyToView
 import com.clebs.celerity.utils.logOSEntity
 import com.clebs.celerity.utils.parseToInt
+import com.clebs.celerity.utils.showBirthdayCard
 import com.clebs.celerity.utils.showToast
+import com.clebs.celerity.utils.thirdPartyAcessRequest
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
+import com.clebs.celerity.utils.vehicleExpiringDocuments
 import com.clebs.celerity.utils.weeklyLocationRota
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
@@ -377,11 +381,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (destinationFragment == "NotificationsFragment") {
                 ActivityHomeBinding.title.text = "Notifications"
                 navController.navigate(R.id.notifficationsFragment)
+            } else if (destinationFragment == "ThirdPartyAcess") {
+                navController.navigate(R.id.profileFragment)
             }
         } else if (destinationFragment == "CompleteTask") {
             navController.navigate(R.id.completeTaskFragment)
+        } else if (destinationFragment == "ThirdPartyAcess") {
+            navController.navigate(R.id.profileFragment)
         }
-
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -466,14 +473,18 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         )
                     } else if (
                         actionToPerform.equals("Expiring Document") ||
-                        actionToPerform.equals("ExpiringDocuments")
+                        actionToPerform.equals("ExpiringDocuments") ||
+                        actionToPerform.equals("UserExpiringDocuments")
                     ) {
                         expiringDocument(
                             this,
                             parseToInt(notificationID)
                         )
+                    } else if (actionToPerform == "VehicleExpiringDocuments") {
+                        vehicleExpiringDocuments(this, parseToInt(notificationID))
+                    } else if (actionToPerform == "ThirdPartyAccessRequestNotification") {
+                        navController.navigate(R.id.profileFragment)
                     } else {
-
                         ActivityHomeBinding.title.text = "Notifications"
                         navController.navigate(R.id.notifficationsFragment)
                         return
@@ -489,9 +500,19 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                         navController.navigate(R.id.notifficationsFragment)
                                         return*/
                     return
-                } else if (destinationFragment == "CompleteTask") {
-                    navController.navigate(R.id.completeTaskFragment)
                 }
+                else if (destinationFragment == "CompleteTask") {
+                    navController.navigate(R.id.completeTaskFragment)
+                } else if (destinationFragment == "ThirdPartyAcess") {
+                    try {
+                        viewModel.MarkNotificationAsRead(parseToInt(notificationID))
+                    } catch (_: Exception) {
+
+                    }
+
+                    navController.navigate(R.id.profileFragment)
+                }
+
             }
 
             val tempCode =
@@ -558,6 +579,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
         Log.d("hdhsdshdsdjshhsds", "No Intent")
     }
+
     private fun logout() {
         viewModel.Logout().observe(this@HomeActivity) {
             if (it!!.responseType == "Success") {
@@ -780,6 +802,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 isLeadDriver = it.IsLeadDriver
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
                 isApiResponseTrue = it.IsUsrProfileUpdateReqin90days
+                if (showBirthdayCard(it.UsrDOB, prefs)) {
+                    BirthdayDialog(prefs).showDialog(supportFragmentManager)
+
+                }
                 if (isApiResponseTrue) {
                     trueCount++
                 } else {
@@ -791,7 +817,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 } else {
                     Prefs.getInstance(applicationContext).days = "0"
                 }
-
                 // prefs.updateInspectionStatus(it.IsVehicleInspectionDone)
             }
         })
@@ -878,11 +903,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onResume() {
         super.onResume()
         oSyncViewModel.getData()
-        if(isComingBackFromFaceScan)
+        if (isComingBackFromFaceScan)
             navController.navigate(R.id.completeTaskFragment)
     }
-
-
 
 
 }

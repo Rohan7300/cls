@@ -74,6 +74,7 @@ import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
+import com.clebs.celerity.models.response.VehicleExpiringDocumentsResponse
 import com.clebs.celerity.models.response.WeeklyLocationRotabyIdResponse
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.utils.DBImages
@@ -1419,8 +1420,8 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun UploadVehicleDefectImages(
         userID: Int,
-        vmId: Int,
         lmid: Int,
+        vmId: Int,
         date: String,
         type: Enum<DBImages>,
         multipartBody: MultipartBody.Part
@@ -1681,6 +1682,12 @@ class MainRepo(private val ApiService: ApiService) {
                     throw IllegalArgumentException()
                 }
             }
+        }
+    }
+
+    suspend fun GetDAVehicleExpiringDocuments(userID: Int):SimpleNetworkResponse<VehicleExpiringDocumentsResponse>{
+        return safeApiCall {
+            ApiService.GetDAVehicleExpiringDocuments(userID)
         }
     }
 }

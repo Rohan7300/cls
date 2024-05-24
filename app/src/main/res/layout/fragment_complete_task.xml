@@ -603,7 +603,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
                         android:backgroundTint="@color/white"
-                        android:src="@drawable/baseline_access_time_filled_24"
+                        android:src="@drawable/finalclockout"
                         android:visibility="visible" />
 
                 </RelativeLayout>

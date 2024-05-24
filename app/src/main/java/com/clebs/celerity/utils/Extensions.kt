@@ -59,6 +59,8 @@ import java.util.regex.Pattern
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.text.ParseException
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 @SuppressLint("HardwareIds")
@@ -566,17 +568,37 @@ fun showDatePickerDialog(context: Context, tv1: TextView, tv2: TextView, tvNext:
     val datePickerDialog = DatePickerDialog(
         context,
         { _, selectedYear, selectedMonth, selectedDayOfMonth ->
+
+            val selectedCalendar = Calendar.getInstance().apply {
+                set(selectedYear, selectedMonth, selectedDayOfMonth, 0, 0, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+
+            if (i != 0) {
+                selectedCalendar.set(Calendar.HOUR_OF_DAY, 23)
+                selectedCalendar.set(Calendar.MINUTE, 59)
+                selectedCalendar.set(Calendar.SECOND, 59)
+            }
+
             val date = String.format(
                 Locale.getDefault(),
-                "%04d-%02d-%02d",
-                selectedYear,
-                selectedMonth + 1,
-                selectedDayOfMonth
+                "%04d-%02d-%02dT%02d:%02d:%02d",
+                selectedCalendar.get(Calendar.YEAR),
+                selectedCalendar.get(Calendar.MONTH) + 1,
+                selectedCalendar.get(Calendar.DAY_OF_MONTH),
+                selectedCalendar.get(Calendar.HOUR_OF_DAY),
+                selectedCalendar.get(Calendar.MINUTE),
+                selectedCalendar.get(Calendar.SECOND)
             )
-            if (i == 0)
+
+
+            if (i == 0) {
                 tv1.text = date
-            else
+            } else {
                 tv2.text = date
+            }
+
+
 
             if (tv1.text != "DD-MM-YYYY" && tv2.text != "DD-MM-YYYY" && isEndDateGreaterThanStartDate(
                     tv1.text.toString(),
@@ -674,6 +696,13 @@ fun getLoc(prefs: Prefs): String {
         prefs.workLocationName ?: ""
 }
 
+fun getLocID(prefs: Prefs): Int {
+    return if (prefs.currLocationId != 0)
+        prefs.currLocationId
+    else
+        prefs.workLocationId
+}
+
 fun checkIfInspectionFailed(osData: OfflineSyncEntity): Boolean {
     return osData.isdashboardUploadedFailed || osData.isfrontImageFailed || osData.isnearSideFailed || osData.isoffSideFailed || osData.isrearSideFailed || osData.isoillevelImageFailed || osData.isaddblueImageFailed
 }
@@ -721,7 +750,13 @@ fun logOSEntity(base: String, osData: OfflineSyncEntity) {
     Log.d("$base", "OS DATA LOG + --------------------")
 }
 
-fun startUploadWithWorkManager(uploadType: Int, prefs: Prefs, context: Context,lmID:Int=0,vmID:Int=0) {
+fun startUploadWithWorkManager(
+    uploadType: Int,
+    prefs: Prefs,
+    context: Context,
+    lmID: Int = 0,
+    vmID: Int = 0
+) {
 
     val userId = prefs.clebUserId.toInt()
 
@@ -883,5 +918,25 @@ fun getFileUri(file: File, context: Context): Uri {
         FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
     } else {
         Uri.fromFile(file)
+    }
+}
+
+fun showBirthdayCard(dateString: String, prefs: Prefs): Boolean {
+    val formatter = DateTimeFormatter.ISO_DATE_TIME
+    try {
+        val inputDate = LocalDate.parse(dateString, formatter)
+        prefs.dob = dateString
+
+        val today = LocalDate.now()
+        var isToday = inputDate == today
+        if (!prefs.isBirthdayCardShown!! && isToday) {
+            prefs.isBirthdayCardShown = true
+            return true
+        } else {
+            prefs.isBirthdayCardShown = true
+            return false
+        }
+    } catch (_: Exception) {
+        return false
     }
 }

@@ -79,6 +79,7 @@ import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
+import com.clebs.celerity.models.response.VehicleExpiringDocumentsResponse
 import com.clebs.celerity.models.response.WeeklyLocationRotabyIdResponse
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
@@ -137,7 +138,6 @@ class MainViewModel(
     val liveDataSaveTicketResponse = MutableLiveData<SaveTicketResponse?>()
     val liveDataUploadTicketCommentAttachmentDoc = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataGetUserTicketDocuments = MutableLiveData<GetUserTicketDocumentsResponse?>()
-
     val livedataAvgScoreResponse = MutableLiveData<GetAvgScoreResponse?>()
     val livedatalastweekresponse = MutableLiveData<GetLastWeekScore?>()
     val livedataCashFlowWeek = MutableLiveData<CashFlowPieChartResponse?>()
@@ -157,13 +157,11 @@ class MainViewModel(
     val liveDataDownloadSignedPrivacyPolicy = MutableLiveData<ResponseBody?>()
     val liveDataDownloadSignedDAEngagement = MutableLiveData<ResponseBody?>()
     val liveDataSaveDeviceInformation = MutableLiveData<SimpleStatusMsgResponse?>()
-
     val liveDataGetRideAlongDriverFeedbackQuestion =
         MutableLiveData<GetRideAlongDriverFeedbackQuestionResponse?>()
     val ldcompleteTaskLayoutObserver = MutableLiveData<Int>().apply {
         postValue(0)
     }
-
     val livedataGetNotificationListByUserId = MutableLiveData<NotificationResponse?>()
     val livedataSavevehicleinspectioninfo = MutableLiveData<SimpleStatusMsgResponse?>()
     val livedataGetVehicleInfobyDriverId = MutableLiveData<GetvehicleInfoByDriverId?>()
@@ -183,7 +181,6 @@ class MainViewModel(
     val liveDataMarkNotificationAsRead = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataDaDailyLocationRota = MutableLiveData<DaDailyLocationRotaResponse?>()
     val liveDataApproveDailyRotabyDA = MutableLiveData<SimpleStatusMsgResponse?>()
-
     val liveDataDownloadDAHandbookPolicy = MutableLiveData<ResponseBody?>()
     val liveDataDownloadDAEngagementPolicy = MutableLiveData<ResponseBody?>()
     val liveDataDownloadGDPRPolicy = MutableLiveData<ResponseBody?>()
@@ -198,12 +195,12 @@ class MainViewModel(
     val liveDataDownloadDriverOtherCompaniesPolicy =
         MutableLiveData<DownloadDriverOtherCompaniesPolicyResponse?>()
     val liveDataUploadVehicleDefectImages = MutableLiveData<SimpleStatusMsgResponse?>()
-
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
-
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
     }
+    val liveDataVehicleExpiringDocumentsResponse =
+        MutableLiveData<VehicleExpiringDocumentsResponse?>()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -1891,6 +1888,16 @@ class MainViewModel(
                 liveDataDownloadDriverOtherCompaniesPolicy.postValue(null)
             else
                 liveDataDownloadDriverOtherCompaniesPolicy.postValue(response.body)
+        }
+    }
+
+    fun GetDAVehicleExpiringDocuments(userID: Int) {
+        viewModelScope.launch {
+            val response = repo.GetDAVehicleExpiringDocuments(userID)
+            if (response.failed || !response.isSuccessful)
+                liveDataVehicleExpiringDocumentsResponse.postValue(null)
+            else
+                liveDataVehicleExpiringDocumentsResponse.postValue(response.body)
         }
     }
 
