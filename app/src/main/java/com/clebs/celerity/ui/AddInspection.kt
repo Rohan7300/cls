@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -37,6 +38,7 @@ import com.clebs.celerity.utils.BackgroundUploadDialog
 import com.clebs.celerity.utils.BackgroundUploadDialogListener
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.ClsCapture
+import com.clebs.celerity.utils.ClsCaptureTwo
 import com.clebs.celerity.utils.DependencyProvider.currentUri
 import com.clebs.celerity.utils.DependencyProvider.insLevel
 import com.clebs.celerity.utils.DependencyProvider.isComingBackFromCLSCapture
@@ -46,6 +48,7 @@ import com.clebs.celerity.utils.checkIfInspectionFailed
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.startUploadWithWorkManager
+import com.clebs.celerity.utils.toast
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -53,6 +56,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+
 
 class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     lateinit var binding: ActivityAddInspectionBinding
@@ -198,6 +202,10 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         binding.newUploadBtn.setOnClickListener{
             if (allPermissionsGranted())
                 openClsCapture()
+//                if(b64ImageList.size==0){
+//
+//                }
+
             //uploadImage()
             else {
                 requestpermissions()
@@ -769,11 +777,32 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     }
 
     fun openClsCapture() {
-        currentUri = null
-        val intent = Intent(this, ClsCapture::class.java)
-        insLevel = b64ImageList.size
-        startActivity(intent)
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-    }
+        Log.e("sdkdfjfdjfdjhfd", "openClsCapture: "+b64ImageList.size.toString() )
 
+        b64ImageList.size
+        if (b64ImageList.size==0){
+            val intent = Intent(this, ClsCaptureTwo::class.java)
+            insLevel = b64ImageList.size
+            startActivity(intent)
+        }
+        else if (b64ImageList.size==5){
+            val intent = Intent(this, ClsCaptureTwo::class.java)
+            insLevel = b64ImageList.size
+            startActivity(intent)
+        }
+        else if (b64ImageList.size==6){
+            val intent = Intent(this, ClsCaptureTwo::class.java)
+            insLevel = b64ImageList.size
+            startActivity(intent)
+        }
+        else{
+            currentUri = null
+            val intent = Intent(this, ClsCapture::class.java)
+            insLevel = b64ImageList.size
+            intent.putExtra("source_activity", "")
+            startActivity(intent)
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+
+    }
 }
