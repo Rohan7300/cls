@@ -20,21 +20,16 @@ class OSyncViewModel(val oSyncRepo: OSyncRepo, var clebID: Int, var dawDate: Str
             } else {
                 Log.d("OSynceViewModel", "Init Fetch Issue")
             }
-            /*     osEntity.let {
-                     osData.postValue(it)
-                 }*/
         }
     }
 
     fun insertData(data: OfflineSyncEntity) {
         viewModelScope.launch(Dispatchers.IO) {
-            oSyncRepo.insertData(data)
-        //    val osEntity = oSyncRepo.getData(clebID, dawDate)
-            /*            osEntity.let {
-                            osData.postValue(it)
-                        }*/
+            oSyncRepo.insertOrUpdateData(data)
         }
     }
+
+
 
     fun getData() {
         viewModelScope.launch(Dispatchers.IO) {

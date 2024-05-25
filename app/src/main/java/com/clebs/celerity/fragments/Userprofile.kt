@@ -80,13 +80,13 @@ class Userprofile : Fragment() {
             ViewModelProvider(this, MyViewModelFactory(mainRepo)).get(MainViewModel::class.java)
 
         GetDriversBasicInformation()
-        HomeActivity.ActivityHomeBinding.title.setText("")
+        (activity as HomeActivity).ActivityHomeBinding.title.setText("")
 
 //        mbinding.logout.setOnClickListener {
 //            (activity as HomeActivity).showAlertLogout()
 //        }
-        HomeActivity.ActivityHomeBinding.imgNotification.visibility = View.GONE
-        HomeActivity.ActivityHomeBinding.logout.visibility = View.VISIBLE
+        (activity as HomeActivity).ActivityHomeBinding.imgNotification.visibility = View.GONE
+        (activity as HomeActivity).ActivityHomeBinding.logout.visibility = View.VISIBLE
 
 
 //        if (isthirdpartyAccessRequested != null && isthirdpartyAccessRequested!!.equals(true)) {

@@ -22,18 +22,26 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.R
+import com.clebs.celerity.ViewModel.OSyncVMProvider
+import com.clebs.celerity.ViewModel.OSyncViewModel
 import com.clebs.celerity.databinding.ActivityFaceScanBinding
 import com.clebs.celerity.fragments.DailyWorkFragment
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.currentUri
 import com.clebs.celerity.utils.DependencyProvider.isComingBackFromFaceScan
+import com.clebs.celerity.utils.DependencyProvider.osData
+import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 import org.jetbrains.anko.runOnUiThread
 import org.tensorflow.lite.task.vision.detector.Detection
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.LinkedList
 import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.text.Typography.registered
@@ -45,14 +53,12 @@ class FaceScanActivity : AppCompatActivity(),ObjectDetectorHelper.DetectorListen
 
 
     private lateinit var objectDetectorHelper: ObjectDetectorHelper
+    lateinit var oSyncViewModel: OSyncViewModel
     private lateinit var bitmapBuffer: Bitmap
-    var bitmapBuffer2: Bitmap? = null
     private var preview: Preview? = null
     private var imageAnalyzer: ImageAnalysis? = null
     private var camera: Camera? = null
     private var cameraProvider: ProcessCameraProvider? = null
-
-    /** Blocking camera operations are performed using this executor */
     private lateinit var cameraExecutor: ExecutorService
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,13 +70,18 @@ class FaceScanActivity : AppCompatActivity(),ObjectDetectorHelper.DetectorListen
             context = this,
             objectDetectorListener = this
         )
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val todayDate = dateFormat.format(Date())
+        val osRepo = DependencyProvider.offlineSyncRepo(this)
+        oSyncViewModel = ViewModelProvider(
+            this,
+            OSyncVMProvider(osRepo, Prefs.getInstance(this).clebUserId.toInt(), todayDate)
+        )[OSyncViewModel::class.java]
 
-        // Initialize our background executor
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        // Wait for the views to be properly laid out
         binding.faceScanPreviewView.post {
-            // Set up the camera and its use cases
             setUpCamera()
             binding.capture.setOnClickListener {
                 try {
@@ -111,6 +122,12 @@ class FaceScanActivity : AppCompatActivity(),ObjectDetectorHelper.DetectorListen
                                     this@FaceScanActivity
                                 )
                                 currentUri = output.savedUri
+                                if(osData.isIni){
+                                    osData.faceMaskImage = currentUri.toString()
+                                    osData.isImagesUploadedToday = true
+                                    oSyncViewModel.insertData(osData)
+                                }
+                                print("CurrentURi $currentUri")
                                 isComingBackFromFaceScan = true
                                 finish()
                             }
@@ -176,34 +193,6 @@ class FaceScanActivity : AppCompatActivity(),ObjectDetectorHelper.DetectorListen
             )
 
             binding.overlay.invalidate()
-//            val detectionList: MutableList<Detection> = results ?: ArrayList()
-//
-//            val containsCar = detectionList.any { detection ->
-//                detection.equals("car")
-//            }
-//
-//            if (containsCar) {
-//                _fragmentCameraBinding?.relativeLayout3!!.visibility=View.VISIBLE
-//                // "car" is present in the list
-//                // Perform your desired actions here
-//            } else {
-//                _fragmentCameraBinding?.relativeLayout3!!.visibility=View.GONE
-//                // "car" is not present in the list
-//            }
-//            fragmentCameraBinding.bottomSheetLayout.inferenceTimeVal.text =
-//                            String.format("%d ms", inferenceTime)
-
-            // Pass necessary information to OverlayView for drawing on the canvas
-
-
-//            fragmentCameraBinding.overlay.setResults(
-//                results ?: LinkedList<Detection>(),
-//                imageHeight,
-//                imageWidth
-//            )
-
-            // Force a redraw
-
         }
     }
     private fun setUpCamera() {

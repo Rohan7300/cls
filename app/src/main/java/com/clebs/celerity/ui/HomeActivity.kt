@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
+import b.O
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.ImageViewModel
@@ -51,9 +52,11 @@ import com.clebs.celerity.utils.InspectionIncompleteListener
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.dialogs.NoInternetDialog
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.getMainVM
 import com.clebs.celerity.utils.DependencyProvider.isComingBackFromFaceScan
 import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
+import com.clebs.celerity.utils.DependencyProvider.osData
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
 import com.clebs.celerity.utils.checkIfInspectionFailed
@@ -103,7 +106,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private var sdkkey = ""
     var clebuserID: Int = 0
     var firstName = ""
-
+    lateinit var osData: OfflineSyncEntity
     var apiCount = 0
     val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(
         Date()
@@ -112,7 +115,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     var lastName = ""
     var isLeadDriver = false
     lateinit var oSyncViewModel: OSyncViewModel
-    lateinit var osData: OfflineSyncEntity
     lateinit var prefs: Prefs
     var date = ""
     lateinit var loadingDialog: LoadingDialog
@@ -121,13 +123,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private var isApiResponseTrue = false
     private var trueCount = 0
     private var isChangesSaved = false
+    lateinit var ActivityHomeBinding: ActivityHomeBinding
 
     companion object {
         fun showLog(tag: String, message: String) {
             Log.e(tag, message)
         }
 
-        lateinit var ActivityHomeBinding: ActivityHomeBinding
         var checked: String? = ""
         var Boolean: Boolean = false
         var lmId: Int = 0
@@ -166,7 +168,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         val todayDate = dateFormat.format(Date())
-
+        this.osData = DependencyProvider.osData
         val osRepo = offlineSyncRepo(this)
         oSyncViewModel = ViewModelProvider(
             this,
@@ -179,7 +181,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         oSyncViewModel.osData.observe(this) {
             logOSEntity("HomeActivity", it)
             osData = it
+            DependencyProvider.osData = it
             if (it.isIni) {
+                osData.vehicleID = prefs.scannedVmRegNo
+                osData.dawDate = todayDate
                 if (checkIfInspectionFailed(it)) {
                     inspectionFailedDialog.showDialog(this.supportFragmentManager)
                 }
@@ -500,8 +505,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                         navController.navigate(R.id.notifficationsFragment)
                                         return*/
                     return
-                }
-                else if (destinationFragment == "CompleteTask") {
+                } else if (destinationFragment == "CompleteTask") {
                     navController.navigate(R.id.completeTaskFragment)
                 } else if (destinationFragment == "ThirdPartyAcess") {
                     try {
@@ -511,8 +515,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     }
 
                     navController.navigate(R.id.profileFragment)
+                } else {
+                    navController.navigate(R.id.completeTaskFragment)
                 }
-
             }
 
             val tempCode =
@@ -560,12 +565,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             } else {
                 Log.d("hdhsdshdsdjshhsds", "else $message")
                 navController.navigate(R.id.completeTaskFragment)
-                // showToast("inspection Failed", this)
-                /*            prefs.saveBoolean("Inspection", false)
-                            prefs.updateInspectionStatus(false)*/
-                //inspectionstarted = false
             }
-            // Check if identifier is valid
             if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
                 // Get code
                 val code = if (tempCode == -1) {
@@ -903,8 +903,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onResume() {
         super.onResume()
         oSyncViewModel.getData()
-        if (isComingBackFromFaceScan)
+        if (isComingBackFromFaceScan) {
             navController.navigate(R.id.completeTaskFragment)
+        }
     }
 
 

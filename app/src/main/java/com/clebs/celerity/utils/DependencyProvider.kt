@@ -9,6 +9,7 @@ import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.OSyncRepo
 import com.clebs.celerity.database.OfflineSyncDB
+import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
@@ -25,6 +26,7 @@ object DependencyProvider {
     var currentUri: Uri? = null
     var insLevel:Int = 0
     var policyDocPDFURI:Uri? = null
+    var osData: OfflineSyncEntity = OfflineSyncEntity()
 
     fun getMainVM(owner: ViewModelStoreOwner): MainViewModel {
 

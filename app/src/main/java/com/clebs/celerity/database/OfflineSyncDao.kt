@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface OfflineSyncDao {
@@ -13,4 +14,11 @@ interface OfflineSyncDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertData(data: OfflineSyncEntity)
+
+    @Query("SELECT COUNT(*) FROM OfflineSync WHERE clebID = :clebID AND DaWDate = :dawDate")
+    suspend fun countEntries(clebID: Int, dawDate: String): Int
+
+    @Update
+    suspend fun updateData(data: OfflineSyncEntity)
+
 }

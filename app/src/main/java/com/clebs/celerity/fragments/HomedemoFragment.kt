@@ -77,7 +77,7 @@ class HomedemoFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
 
 //        pieChart.isAnimationEnabled=true
-
+        (activity as HomeActivity).ActivityHomeBinding.title.text = ""
         showDialog()
 //            mbinding.constmains.visibility=View.GONE
 

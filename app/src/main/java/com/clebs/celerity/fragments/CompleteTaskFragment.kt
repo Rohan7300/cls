@@ -59,6 +59,7 @@ import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.ui.FaceScanActivity
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.currentUri
+import com.clebs.celerity.utils.DependencyProvider.osData
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.addLeadingZeroIfNeeded
 import com.clebs.celerity.utils.bitmapToBase64
@@ -106,7 +107,6 @@ class CompleteTaskFragment : Fragment() {
     lateinit var ivX: ImageView
     var codeX = 0
     var uploadInProgress = false
-    lateinit var osData: OfflineSyncEntity
     private var requestCode: Int = 0
     private var showImageUploadLayout: Boolean = false
     private var isAllImageUploaded: Boolean = false
@@ -174,13 +174,7 @@ class CompleteTaskFragment : Fragment() {
         loadingDialog = (activity as HomeActivity).loadingDialog
         oSyncViewModel = (activity as HomeActivity).oSyncViewModel
         clebUserID = Prefs.getInstance(requireContext()).clebUserId.toInt()
-        try {
-
-            if ((activity as HomeActivity).osData != null)
-                osData = (activity as HomeActivity).osData
-        } catch (_: Exception) {
-
-        }
+        (activity as HomeActivity).ActivityHomeBinding.title.text = ""
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.addBreakIV.setOnClickListener(clickListener)
 
@@ -206,15 +200,14 @@ class CompleteTaskFragment : Fragment() {
 
         inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
         viewModel = (activity as HomeActivity).viewModel
-
-        oSyncViewModel.getData()
+        Log.d("DependencyProvider" ,DependencyProvider.isComingBackFromFaceScan.toString())
         oSyncViewModel.osData.observe(viewLifecycleOwner) {
             osData = it!!
             showDialog()
             if (it.isIni) {
                 hideDialog()
-                osData.isDefectSheetFilled = true
-                logOSEntity("OSData CompleteTaskFragment", osData)
+                osData!!.isDefectSheetFilled = true
+                logOSEntity("OSData CompleteTaskFragment", osData!!)
                 viewModel.GetVehicleImageUploadInfo(
                     Prefs.getInstance(requireContext()).clebUserId.toInt(),
                     getCurrentDateTime()
@@ -241,9 +234,6 @@ class CompleteTaskFragment : Fragment() {
                 setVisibiltyLevel()
             }
         }
-
-
-
 
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.completeTaskFragment)
 
@@ -296,7 +286,7 @@ class CompleteTaskFragment : Fragment() {
             pictureDialogBase64(mbinding.ivFaceMask, requestCode)
         }
         mbinding.startinspection.setOnClickListener {
-            // startInspection()
+            //startInspection()
             val intent = Intent(requireContext(), AddInspection::class.java)
             startActivity(intent)
         }
@@ -307,7 +297,7 @@ class CompleteTaskFragment : Fragment() {
         mbinding.clOilLevel.setOnClickListener {
             requestCode = 5
             pictureDialogBase64(mbinding.ivOilLevel, requestCode)
-//            startInspection()
+            //startInspection()
         }
         mbinding.ivAddBlueImg.setOnClickListener {
             requestCode = 7
@@ -357,7 +347,6 @@ class CompleteTaskFragment : Fragment() {
             isclickedtwo = !isclickedtwo
         }
 
-
         mbinding.tvNext.setOnClickListener {
             isInspectionDone = true
             mbinding.tvNext.visibility = View.GONE
@@ -377,7 +366,6 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.downIvsRoad.setImageResource(R.drawable.grey_right_arrow)
             }
         }
-
 
         return mbinding.root
     }
@@ -978,16 +966,20 @@ class CompleteTaskFragment : Fragment() {
     }
 
     private fun sendFaceMask() {
+        Log.d("CurrentURI"," $currentUri")
         if (currentUri != null) {
-            osData.faceMaskImage = currentUri.toString()
-            osData.isImagesUploadedToday = true
-            oSyncViewModel.insertData(osData)
+            if(!osData.isImagesUploadedToday|| osData.faceMaskImage==null){
+                osData.faceMaskImage = currentUri.toString()
+                osData.isImagesUploadedToday = true
+                oSyncViewModel.insertData(osData)
+            }
             imagesUploaded = true
             print("OSData ISImage1 ${osData.isImagesUploadedToday}\n")
             print("OSData ISInspection1 ${osData.isInspectionDoneToday}\n")
             visibilityLevel = 1
             startUploadWithWorkManager(1, Prefs.getInstance(requireContext()), requireContext())
             setVisibiltyLevel()
+            DependencyProvider.isComingBackFromFaceScan = false
         }
     }
 

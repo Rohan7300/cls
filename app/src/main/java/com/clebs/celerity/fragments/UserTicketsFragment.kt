@@ -48,7 +48,7 @@ class UserTicketsFragment : Fragment() {
 
         homeActivity.showDialog()
         viewModel.GetUserTickets(prefs.clebUserId.toInt())
-
+        homeActivity.ActivityHomeBinding.title.text = "User Tickets"
         deleteDialog = AlertDialog.Builder(requireContext()).create()
 
         deleteDailogBinding =
@@ -68,7 +68,6 @@ class UserTicketsFragment : Fragment() {
     }
 
     private fun observers() {
-
         viewModel.liveDataGetUserTickets.observe(viewLifecycleOwner) {
             if (loadingDialog.isShowing) {
                 loadingDialog.dismiss()

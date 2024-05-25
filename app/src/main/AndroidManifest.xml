@@ -65,6 +65,7 @@
             android:exported="false" />
         <activity
             android:name=".utils.ClsCaptureTwo"
+            android:screenOrientation="landscape"
             android:exported="false" />
         <activity
             android:name=".utils.ClsCapture"

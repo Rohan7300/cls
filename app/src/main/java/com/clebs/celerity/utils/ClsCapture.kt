@@ -5,12 +5,14 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.ActivityMainBinding
 import com.clebs.celerity.utils.DependencyProvider.currentUri
 
 class ClsCapture : AppCompatActivity() {
 
     private lateinit var activityMainBinding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

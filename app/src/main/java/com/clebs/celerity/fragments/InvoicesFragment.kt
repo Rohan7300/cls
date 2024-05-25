@@ -33,6 +33,7 @@ class InvoicesFragment : Fragment() {
     ): View? {
         binding = FragmentInvoicesBinding.inflate(layoutInflater)
         viewModel = (activity as HomeActivity).viewModel
+        (activity as HomeActivity).ActivityHomeBinding.title.text = "Invoices"
         prefs = Prefs.getInstance(requireContext())
         observers()
         binding.clsinvoices.setOnClickListener {

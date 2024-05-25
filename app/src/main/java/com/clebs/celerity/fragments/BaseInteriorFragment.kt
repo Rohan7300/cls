@@ -267,29 +267,17 @@ abstract class BaseInteriorFragment : Fragment() {
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-               // val imageBitmap = result.data?.extras?.get("data") as Bitmap
                 try {
                     imageView.setImageURI(photoURI)
+                    base64 = photoURI.toString()
                 }catch (_:Exception){
-
+                    showToast("Something went wrong!!Please retry",requireContext())
                 }
 
-
-              //  Log.e("Dskjdjsdkhsjsdhjkdshjshjkefdui", ": "+imageBitmap )
-                base64 = photoURI.toString()
-//                setImageView(imageView, base64.toString())
                 Log.e("herehrherhehre", ":cdddfdv " + imageView)
             }
         }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-//            val imageBitmap = data?.extras?.get("data") as Bitmap
-//            base64 = convertBitmapToBase64(imageBitmap)
-//            setImageView(imageView, base64.toString())
-//        }
-//    }
 
     fun editMil1Visibilty(
         tvNext: TextView,

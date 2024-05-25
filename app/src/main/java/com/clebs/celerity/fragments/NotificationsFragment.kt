@@ -56,6 +56,7 @@ class NotificationsFragment : Fragment(), NotificationAdapterCallback {
         binding = FragmentNotifficationsBinding.inflate(inflater, container, false)
         homeActivity = (activity as HomeActivity)
         viewModel = homeActivity.viewModel
+        (activity as HomeActivity).ActivityHomeBinding.title.text = "Notifications"
         prefs = Prefs.getInstance(requireContext())
         notificationAdapter = NotificationAdapter(
             findNavController(),
@@ -70,6 +71,9 @@ class NotificationsFragment : Fragment(), NotificationAdapterCallback {
         binding.rvNotifications.adapter = notificationAdapter
         binding.rvNotifications.layoutManager = LinearLayoutManager(requireContext())
 
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            refresh()
+        }
 
         observers()
         showDialog()
@@ -80,6 +84,7 @@ class NotificationsFragment : Fragment(), NotificationAdapterCallback {
     private fun observers() {
         viewModel.livedataGetNotificationListByUserId.observe(viewLifecycleOwner) {
             hideDialog()
+            binding.swipeRefreshLayout.isRefreshing = false
             if (it != null) {
                 if (it.size > 0) {
                     notificationAdapter.saveData(it)
