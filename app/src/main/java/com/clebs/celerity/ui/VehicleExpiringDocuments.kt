@@ -46,7 +46,9 @@ class VehicleExpiringDocuments : AppCompatActivity(), VehicleExpiringUploadListe
     private var selectedFileUri: Uri? = null
     lateinit var filePart: MultipartBody.Part
     var documentID: Int = -1
-    lateinit var binding:ActivityVehicleExpiringDocumentsBinding
+    var expiredDocIDX: Int = -1
+    var vehIdX: Int = -1
+    lateinit var binding: ActivityVehicleExpiringDocumentsBinding
 
     companion object {
         private val REQUIRED_PERMISSIONS =
@@ -63,13 +65,13 @@ class VehicleExpiringDocuments : AppCompatActivity(), VehicleExpiringUploadListe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_vehicle_expiring_documents)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_vehicle_expiring_documents)
         setContentView(binding.root)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         repo = MainRepo(apiService)
         pref = Prefs(this)
         loadingDialog = LoadingDialog(this)
-        notificationID = intent.getIntExtra("notificationID",0)
+        notificationID = intent.getIntExtra("notificationID", 0)
         viewmodel = ViewModelProvider(this, MyViewModelFactory(repo))[MainViewModel::class.java]
         val adapter = VehicleExpiringDocAdapter(this@VehicleExpiringDocuments)
         binding.expringDocRV.adapter = adapter
@@ -77,9 +79,13 @@ class VehicleExpiringDocuments : AppCompatActivity(), VehicleExpiringUploadListe
         loadingDialog.show()
         viewmodel.GetDAVehicleExpiringDocuments(pref.clebUserId.toInt())
 
-        viewmodel.liveDataVehicleExpiringDocumentsResponse.observe(this){
+        viewmodel.liveDataVehicleExpiringDocumentsResponse.observe(this) {
             loadingDialog.dismiss()
             if (it != null) {
+                if (it.isEmpty()) {
+                    viewmodel.MarkNotificationAsRead(notificationID)
+                    finish()
+                }
                 adapter.saveData(it)
             } else {
                 showToast("No Documents found!!", this)
@@ -89,16 +95,16 @@ class VehicleExpiringDocuments : AppCompatActivity(), VehicleExpiringUploadListe
         }
 
         binding.expringDocSave.isEnabled = false
-        binding.expringDocSave.setOnClickListener {
 
-        }
         binding.expringDocCancel.setOnClickListener {
             finish()
         }
     }
 
-    override fun uploadIntent(documentTypeID: Int) {
+    override fun uploadIntent(documentTypeID: Int, expiredDocID: Int, vehId: Int) {
         documentID = documentTypeID
+        expiredDocIDX = expiredDocID
+        vehIdX = vehId
         if (allPermissionsGranted()) {
             upload()
         } else {
@@ -169,7 +175,7 @@ class VehicleExpiringDocuments : AppCompatActivity(), VehicleExpiringUploadListe
 
                         val requestBody = tmpFile.asRequestBody(mimeType)
                         filePart = MultipartBody.Part.createFormData(
-                            "uploadUserDocument",
+                            "UploadVehDocument",
                             selectedFileUri!!.lastPathSegment + "." + (fileExtension ?: "jpg"),
                             requestBody
                         )
@@ -210,8 +216,14 @@ class VehicleExpiringDocuments : AppCompatActivity(), VehicleExpiringUploadListe
 
     fun uploadDoc() {
         loadingDialog.show()
-        viewmodel.UploadExpiringDocs(pref.clebUserId.toInt(), documentID, filePart)
-        viewmodel.liveDataUploadExpiringDocs.observe(this) {
+        viewmodel.UploadVehDocumentFileByDriver(
+            vehIdX,
+            documentID,
+            expiredDocIDX,
+            pref.clebUserId.toInt(),
+            filePart
+        )
+        viewmodel.liveDataUploadVehDocumentFileByDriverResponse.observe(this) {
             loadingDialog.dismiss()
             if (it != null) {
                 loadingDialog.show()
@@ -219,7 +231,7 @@ class VehicleExpiringDocuments : AppCompatActivity(), VehicleExpiringUploadListe
                 showToast("Document Uploaded successfully!!", this)
             } else {
                 finish()
-                showToast("Something went wrong!!", this)
+               // showToast("Something went wrong!!", this)
             }
         }
     }

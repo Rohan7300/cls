@@ -39,8 +39,12 @@ class RideAlongFragment : Fragment() {
     var selectedVehicleName = ""
     var selectedRouteId: Int? = null
     private lateinit var pref: Prefs
-    private var isSpinnerTouched = false
-
+    val showDialog: () -> Unit = {
+        (activity as HomeActivity).showDialog()
+    }
+    val hideDialog: () -> Unit = {
+        (activity as HomeActivity).hideDialog()
+    }
     var rtAddMode: String = "A"
     var selectedLocId: Int? = null
     private var rtType: Int? = null
@@ -52,7 +56,6 @@ class RideAlongFragment : Fragment() {
     private var trainingDays: Int? = null
     private var rtFinishMileage: Int? = null
     private var rtNoOfParcelsDelivered: Int? = null
-    private var vehicleListCalled: Boolean = false
     private var rtNoParcelsbroughtback: Int? = null
     lateinit var loadingDialog: LoadingDialog
 
@@ -77,6 +80,14 @@ class RideAlongFragment : Fragment() {
         clickListeners()
 
         observers()
+        showDialog()
+        viewModel.GetRideAlongDriversList()
+        showDialog()
+        viewModel.GetRouteLocationInfo(getLocID(Prefs.getInstance(requireContext())))
+        showDialog()
+        viewModel.GetRideAlongRouteTypeInfo(leadDriverID!!)
+
+
         binding.SpinnerRouteType.setText("")
         binding.SpinnerRouteType.setAdapter(null)
         binding.spinnerRouteLocation.setAdapter(null)
@@ -84,13 +95,12 @@ class RideAlongFragment : Fragment() {
         setInputListener(binding.edtParcels)
         setInputListener(binding.edtRouteComment)
 
-
         return binding.root
     }
 
 
     private fun observers() {
-        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+/*        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
             binding.headerTop.anaCarolin.text = name
         }
         binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
@@ -107,7 +117,7 @@ class RideAlongFragment : Fragment() {
         binding.headerTop.dxm5.text = (activity as HomeActivity).date
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
+            hideDialog()
             if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
                 binding.headerTop.dxLoc.text =
                     Prefs.getInstance(requireContext()).currLocationName ?: ""
@@ -141,12 +151,12 @@ class RideAlongFragment : Fragment() {
             else
                 binding.headerTop.strikedxLoc.visibility = View.GONE
             binding.headerTop.dxm5.text = (activity as HomeActivity).date
-        }
+        }*/
 
-        viewModel.GetRouteLocationInfo(getLocID(Prefs.getInstance(requireContext())))
+
 
         viewModel.livedataGetRideAlongVehicleLists.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
+            hideDialog()
             if (it != null) {
                 val vehIds = it.mapNotNull { vehicleList -> vehicleList.VehicleId }
                 val vehNames = it.mapNotNull { vehicleList -> vehicleList.VehicleName }
@@ -159,32 +169,25 @@ class RideAlongFragment : Fragment() {
         }
 
         viewModel.livedataGetRideAlongDriversList.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
+            hideDialog()
             if (it != null) {
                 val driverId = it.map { drivers -> drivers.Id }
                 val driverName = it.map { drivers -> drivers.Name }
 
                 if (driverId.isNotEmpty() && driverName.isNotEmpty()) {
-                    binding.SpinnerRouteType.setText("")
+             /*       binding.SpinnerRouteType.setText("")
                     selectedRouteId = null
                     binding.SpinnerRouteType.setAdapter(null)
-                    selectedLocId = null
+                    selectedLocId = null*/
                     setSpinnerNew(
                         binding.spinnerSelectDriver, driverName, driverId, "Select Driver"
                     )
                 }
-
-                /*
-                    setSpinners(
-                    binding.spinnerSelectDriver, driverName, driverId
-                )*/
-                loadingDialog.cancel()
-
             }
         }
 
         viewModel.liveDataRideAlongRouteTypeInfo.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
+            hideDialog()
             if (it != null) {
                 val typeName = it.map { type -> type.RtName }
                 val typeId = it.map { type -> type.RtId }
@@ -195,10 +198,10 @@ class RideAlongFragment : Fragment() {
             }
         }
 
-        viewModel.livedataGetRouteInfoById.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
+/*        viewModel.livedataGetRouteInfoById.observe(viewLifecycleOwner) {
+            hideDialog()
             if (it != null) {
-                loadingDialog.show()
+                showDialog()
                 rtAddMode = it.RtAddMode
 
                 if (selectedDriverId != null)
@@ -206,10 +209,10 @@ class RideAlongFragment : Fragment() {
             } else {
                 Log.d("Exec", "NULL#2")
             }
-        }
+        }*/
 
         viewModel.livedataRideAlongRouteInfoById.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
+            hideDialog()
             if (it != null) {
                 rtType = it.RtType
                 trainingDays = it.TrainingDays
@@ -223,7 +226,7 @@ class RideAlongFragment : Fragment() {
         }
 
         viewModel.liveDataRouteLocationResponse.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
+            hideDialog()
             if (it != null) {
                 val locationNames = it.map { loc -> loc.LocationName }
                 val locationId = it.map { loc -> loc.LocId }
@@ -249,7 +252,7 @@ class RideAlongFragment : Fragment() {
         }
 
         viewModel.livedataRideAlongSubmitApiRes.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
+            hideDialog()
             if (pref.submittedRideAlong) {
                 if (it != null) {
                     findNavController().navigate(R.id.completeTaskFragment)
@@ -262,15 +265,10 @@ class RideAlongFragment : Fragment() {
 
 
     private fun clickListeners() {
-        var isReTrainingSelected = false
-        var isTrainingSelected = false
-
-        loadingDialog.show()
-        viewModel.GetRideAlongDriversList()
-        if (!vehicleListCalled) {
-            loadingDialog.show()
+/*        if (!vehicleListCalled) {
+            showDialog()
             //viewModel.GetRideAlongVehicleLists()
-        }
+        }*/
 
         binding.rideAlongCancel.setOnClickListener {
             findNavController().navigate(R.id.completeTaskFragment)
@@ -283,28 +281,12 @@ class RideAlongFragment : Fragment() {
 
         binding.rbReTraining.setOnClickListener(::onRadioButtonClicked)
         binding.rbTraining.setOnClickListener(::onRadioButtonClicked)
-//            binding.rbReTraining.setOnClickListener {
-//
-//                retraining = true
-//                training = false
-//                radio1.setOnClickListener(::onRadioButtonClicked)
-//                radio2.setOnClickListener(::onRadioButtonClicked)
-//            }
-//
-//            binding.rbTraining.setOnClickListener {
-//                isTrainingSelected = !isTrainingSelected
-//                isReTrainingSelected = false
-//                retraining = false
-//                training = true
-//                binding.rbReTraining.isChecked = false
-//                binding.rbTraining.isChecked = isTrainingSelected
-//            }
     }
 
 
     private fun rideAlongApi() {
         pref.submittedRideAlong = true
-        loadingDialog.show()
+        showDialog()
         viewModel.AddOnRideAlongRouteInfo(
             AddOnRideAlongRouteInfoRequest(
                 IsReTraining = retraining!!,
@@ -340,76 +322,6 @@ class RideAlongFragment : Fragment() {
             rtNoParcelsbroughtback
         ).any { it == null }
     }
-
-    @SuppressLint("ClickableViewAccessibility")
-/*    private fun setSpinners(spinner: Spinner, items: List<String>, ids: List<Int>) {
-        val dummyItem = "Select Item"
-        val itemsList = mutableListOf<String>()
-        itemsList.addAll(items)
-        val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemsList)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        spinner.adapter = adapter
-
-        spinner.setOnTouchListener { _, _ ->
-            isSpinnerTouched = true
-            false
-        }
-
-        // spinner.setSelection(0)
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if (!isSpinnerTouched) return
-                parent?.let { nonNullParent ->
-                    if (position != 0) {
-                        val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
-                        selectedItem.let { nonNullSelectedItem ->
-                            when (spinner) {
-                                binding.spinnerSelectDriver -> {
-                                    selectedDriverId =
-                                        ids[position - 1]
-                                    selectedDriverName = nonNullSelectedItem
-                                    loadingDialog.show()
-                                    Log.d("Exec", "SelectedDriverID $selectedDriverId")
-                                    viewModel.GetRideAlongRouteTypeInfo(selectedDriverId!!)
-                                }
-
-                                binding.spinnerSelectVehicle -> {
-                                    selectedVehicleName = nonNullSelectedItem
-                                    selectedVehicleId =
-                                        ids[position - 1]
-                                }
-
-                                binding.SpinnerRouteType -> {
-                                    selectedRouteId =
-                                        ids[position - 1]
-                                    loadingDialog.show()
-                                    //viewModel.GetRouteInfoById(selectedRouteId!!)
-                                    viewModel.GetRideAlongRouteInfoById(selectedRouteId!!, selectedDriverId!!)
-                                }
-
-                                binding.spinnerRouteLocation -> {
-                                    selectedLocId =
-                                        ids[position - 1]
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-        }
-
-    }*/
 
     private fun setInputListener(editText: EditText) {
         editText.addTextChangedListener(object : TextWatcher {
@@ -460,13 +372,7 @@ class RideAlongFragment : Fragment() {
                                 selectedDriverId =
                                     ids[position]
                                 selectedDriverName = nonNullSelectedItem
-                                loadingDialog.show()
                                 Log.d("Exec", "SelectedDriverID $selectedDriverId")
-                                viewModel.GetRideAlongRouteTypeInfo(leadDriverID!!)
-                                binding.SpinnerRouteType.setText("")
-                                selectedRouteId = null
-                                binding.SpinnerRouteType.setAdapter(null)
-                                selectedLocId = null
                             }
 
                             binding.spinnerSelectVehicle -> {
@@ -478,9 +384,7 @@ class RideAlongFragment : Fragment() {
                             binding.SpinnerRouteType -> {
                                 selectedRouteId =
                                     ids[position]
-                                loadingDialog.show()
-                                selectedLocId = null
-                               // viewModel.GetRouteInfoById(selectedRouteId!!)
+                                showDialog()
                                 viewModel.GetRideAlongRouteInfoById(selectedRouteId!!, pref.clebUserId.toInt()!!)
                             }
 

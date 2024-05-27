@@ -90,9 +90,9 @@
             android:layout_height="60dp"
             android:layout_centerVertical="true"
             android:contentDescription="@string/alt_bottom_sheet_chevron"
-            android:src="@drawable/camera_ivs"
+            android:src="@drawable/camerahome"
             android:visibility="gone"
-            app:tint="@color/white" />
+            />
 
 
     </RelativeLayout>

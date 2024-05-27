@@ -933,5 +933,16 @@ interface ApiService {
         @Path("userId") userId: Int
     ): Response<VehicleExpiringDocumentsResponse>
 
+    @Multipart
+    @POST("/api/Vehicle/UploadVehDocumentFileByDriver")
+    suspend fun UploadVehDocumentFileByDriver(
+        @Query("VehId") VehId: Int,
+        @Query("docTypeId") docTypeId: Int,
+        @Query("expiredDocId") expiredDocId: Int,
+        @Query("userId") userId: Int,
+        /*@Query("uploadedByUser") uploadedByUser:Int,*/
+        @Part multipartBody: MultipartBody.Part
+    ): Response<SimpleStatusMsgResponse>
+
 }
 

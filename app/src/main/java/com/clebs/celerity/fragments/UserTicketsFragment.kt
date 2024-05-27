@@ -152,12 +152,11 @@ class UserTicketsFragment : Fragment() {
             val inputFormat = "yyyy-MM-dd"
             val outputFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
 
-            val t1 = convertDateFormat(tDate1, inputFormat, outputFormat)
-            val t2 = convertDateFormat(tDate2, inputFormat, outputFormat)
+
             viewModel.GetUserTickets(
                 userID = prefs.clebUserId.toInt(),
-                startDate = t1,
-                endDate = t2,
+                startDate = tDate1.toString(),
+                endDate = tDate2.toString(),
                 includeCompleted = includeCompleted
             )
             deleteDialog.cancel()

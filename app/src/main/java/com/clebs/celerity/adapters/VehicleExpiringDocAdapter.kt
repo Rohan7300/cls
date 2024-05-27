@@ -12,7 +12,7 @@ import com.clebs.celerity.models.response.VehicleExpiringDocumentsResponseItem
 import com.clebs.celerity.utils.convertDateFormat
 
 interface VehicleExpiringUploadListener {
-    fun uploadIntent(documentTypeID: Int)
+    fun uploadIntent(documentTypeID: Int,expiredDocID:Int,vehId:Int)
 }
 
 class VehicleExpiringDocAdapter(val uploadCallback: VehicleExpiringUploadListener) :
@@ -48,12 +48,15 @@ class VehicleExpiringDocAdapter(val uploadCallback: VehicleExpiringUploadListene
             if (position != 0)
                 binding.headerh1.visibility = View.GONE
             binding.uploadDocIV.setOnClickListener {
-                uploadCallback.uploadIntent(item.VehDocTypeId)
+                uploadCallback.uploadIntent(item.VehDocTypeId,item.VehDocId,item.VehDocVmId)
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VehicleExpiringDocViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): VehicleExpiringDocViewHolder {
         val binding =
             ItemExpiringDocsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VehicleExpiringDocViewHolder(binding)

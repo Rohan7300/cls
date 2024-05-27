@@ -194,6 +194,7 @@ class MainViewModel(
         MutableLiveData<GetDriverOtherCompaniesPolicyResponse?>()
     val liveDataDownloadDriverOtherCompaniesPolicy =
         MutableLiveData<DownloadDriverOtherCompaniesPolicyResponse?>()
+
     val liveDataUploadVehicleDefectImages = MutableLiveData<SimpleStatusMsgResponse?>()
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -201,6 +202,8 @@ class MainViewModel(
     }
     val liveDataVehicleExpiringDocumentsResponse =
         MutableLiveData<VehicleExpiringDocumentsResponse?>()
+
+    val liveDataUploadVehDocumentFileByDriverResponse = MutableLiveData<SimpleStatusMsgResponse?>()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -1898,6 +1901,27 @@ class MainViewModel(
                 liveDataVehicleExpiringDocumentsResponse.postValue(null)
             else
                 liveDataVehicleExpiringDocumentsResponse.postValue(response.body)
+        }
+    }
+
+    fun UploadVehDocumentFileByDriver(
+        VehId: Int,
+        docTypeID: Int,
+        expiredDocID: Int,
+        userID: Int,
+        filepart:MultipartBody.Part) {
+        viewModelScope.launch {
+            val response =
+                repo.UploadVehDocumentFileByDriver(
+                    VehId,
+                    docTypeID,
+                    expiredDocID,
+                    userID,
+                    filepart)
+            if (response.failed || !response.isSuccessful)
+                liveDataUploadVehDocumentFileByDriverResponse.postValue(null)
+            else
+                liveDataUploadVehDocumentFileByDriverResponse.postValue(response.body)
         }
     }
 

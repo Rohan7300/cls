@@ -86,9 +86,9 @@ class NotificationsFragment : Fragment(), NotificationAdapterCallback {
             hideDialog()
             binding.swipeRefreshLayout.isRefreshing = false
             if (it != null) {
-                if (it.size > 0) {
                     notificationAdapter.saveData(it)
-                }
+            }else{
+                notificationAdapter.saveData(listOf())
             }
         }
 

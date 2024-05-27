@@ -7,9 +7,11 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
@@ -24,6 +26,7 @@ import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentUserprofileBinding
+import com.clebs.celerity.databinding.ThirdPartyAcessChangeDialogBinding
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
@@ -35,6 +38,10 @@ import com.clebs.celerity.utils.SaveChangesCallback
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showToast
 import com.tapadoo.alerter.Alerter
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class Userprofile : Fragment() {
@@ -140,10 +147,17 @@ class Userprofile : Fragment() {
 
 
         mbinding.checkbox.setOnClickListener {
-            if (mbinding.checkbox.isChecked) {
-                mainViewModel.GetThirdPartyAccess(Prefs.getInstance(requireContext()).clebUserId.toInt())
-            } else {
-                mainViewModel.RemoveThirdPartyAccess(Prefs.getInstance(requireContext()).clebUserId.toInt())
+            val checkBoxState = mbinding.checkbox.isChecked
+            mbinding.checkbox.isChecked = !checkBoxState
+            CoroutineScope(Dispatchers.Main).launch {
+                if (showThirdPartyAcessUpdateDialog()) {
+                    mbinding.checkbox.isChecked = checkBoxState
+                    if (mbinding.checkbox.isChecked) {
+                        mainViewModel.GetThirdPartyAccess(Prefs.getInstance(requireContext()).clebUserId.toInt())
+                    } else {
+                        mainViewModel.RemoveThirdPartyAccess(Prefs.getInstance(requireContext()).clebUserId.toInt())
+                    }
+                }
             }
         }
         mainViewModel.livedatathirdpartyaccess.observe(viewLifecycleOwner) {
@@ -174,6 +188,24 @@ class Userprofile : Fragment() {
             }
 
 
+        }
+
+        mainViewModel.updateprofilelivedata.observe(viewLifecycleOwner) {
+            if (it != null) {
+                Log.e("UpdateProfileLiveData"," $it")
+                if (it.Status == "200") {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Password has been changed",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    if(it.Status == "400")
+                        showErrorDialog(fragmentManager, "400", it.Message.toString())
+                }
+            } else {
+                Log.e("changepasswordsssss", "updateProfilePassword: " + it?.Message.toString())
+            }
         }
 
         mainViewModel.livedataremovethirdpartyaccess.observe(viewLifecycleOwner) {
@@ -360,8 +392,6 @@ class Userprofile : Fragment() {
                 edtnew = edt_new.text.toString()
                 updateProfilePassword()
                 deleteDialog.dismiss()
-
-
             }
 
 
@@ -556,30 +586,6 @@ class Userprofile : Fragment() {
             Prefs.getInstance(App.instance).clebUserId.toDouble(),
             edtold!!, edtnew!!
         )
-        mainViewModel.updateprofilelivedata.observe(viewLifecycleOwner) {
-
-            if (it != null) {
-
-                if (it.Status == "200") {
-                    Toast.makeText(
-                        requireActivity(),
-                        "Password has been changed",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.e("succcessssss", "updateProfilePassword1: ")
-                    //                    showToast("Password has been changed", requireContext())
-                }
-                else{
-                    showErrorDialog(fragmentManager, "400", it.Message.toString())
-                }
-            } else {
-                Log.e("changepasswordsssss", "updateProfilePassword: "+it?.Message.toString() )
-
-
-            }
-
-        }
-
     }
 
     fun updateprofileregular() {
@@ -648,4 +654,42 @@ class Userprofile : Fragment() {
     }
 
 
+    private suspend fun showThirdPartyAcessUpdateDialog(): Boolean {
+        val customAlertDialog = AlertDialog.Builder(context).create()
+        val customAlertDialogBinding =
+            ThirdPartyAcessChangeDialogBinding.inflate(LayoutInflater.from(context))
+        customAlertDialog.setView(customAlertDialogBinding.root)
+        customAlertDialog.setCanceledOnTouchOutside(false)
+
+        val result = CompletableDeferred<Boolean>()
+
+        customAlertDialogBinding.tpCross.setOnClickListener {
+            customAlertDialog.dismiss()
+            result.complete(false)
+        }
+        customAlertDialogBinding.tpYes.setOnClickListener {
+            customAlertDialog.dismiss()
+            result.complete(true)
+        }
+        customAlertDialogBinding.tpNo.setOnClickListener {
+            customAlertDialog.dismiss()
+            result.complete(false)
+        }
+
+        customAlertDialog.show()
+        try {
+            val window = customAlertDialog.window
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val layoutParams = WindowManager.LayoutParams()
+            layoutParams.copyFrom(window?.attributes)
+            layoutParams.width = ((context?.resources?.displayMetrics?.widthPixels ?:WindowManager.LayoutParams.WRAP_CONTENT ) * 0.9).toInt()
+            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window?.attributes = layoutParams
+            window?.setGravity(Gravity.CENTER)
+        }catch (_:Exception){
+
+        }
+
+        return result.await()
+    }
 }

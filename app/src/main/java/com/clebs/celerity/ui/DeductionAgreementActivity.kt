@@ -227,7 +227,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
                 FromLocation = FromLocation,
                 IsDaDedAggAccepted = true,
                 PaymentKey = PaymentKey,
-                RejectionComment = "null",
+                RejectionComment = null,
                 Signature = bse64
             )
         )
@@ -235,8 +235,9 @@ class DeductionAgreementActivity : AppCompatActivity() {
         viewmodel.liveDataUpdateDeducton.observe(this) {
             loadingDialog.dismiss()
             viewmodel.MarkNotificationAsRead(notificationID)
+            finish()
             if (it != null) {
-                finish()
+
             }else{
                 showToast("Something went wrong!!",this)
             }
@@ -267,8 +268,9 @@ class DeductionAgreementActivity : AppCompatActivity() {
             viewmodel.liveDataUpdateDeducton.observe(this) {
                 viewmodel.MarkNotificationAsRead(notificationID)
                 loadingDialog.dismiss()
+                finish()
                 if (it != null) {
-                    finish()
+
                     //onBackPressed()
                 }else{
                     showToast("Something went wrong!!",this)

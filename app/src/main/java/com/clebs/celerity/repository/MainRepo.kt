@@ -120,16 +120,16 @@ class MainRepo(private val ApiService: ApiService) {
         newpass: String
     ): SimpleStatusMsgResponse? {
 
-                val response = ApiService.updateprofilepassword(userID, oldpass, newpass)
+        val response = ApiService.updateprofilepassword(userID, oldpass, newpass)
 
-                if (response.isSuccessful) {
-                    return response.body()!!
-                } else {
-                    val errorBody = response.errorBody()?.string()!!
-                    println("Error Response body: $errorBody")
-                    val gson = Gson()
-                    return gson.fromJson(errorBody, SimpleStatusMsgResponse::class.java) ?: null
-                }
+        if (response.isSuccessful) {
+            return response.body()!!
+        } else {
+            val errorBody = response.errorBody()?.string()!!
+            println("Error Response body: $errorBody")
+            val gson = Gson()
+            return gson.fromJson(errorBody, SimpleStatusMsgResponse::class.java) ?: null
+        }
 
 //        return safeApiCall {
 //            ApiService.updateprofilepassword(userID, oldpass, newpass)
@@ -1685,9 +1685,27 @@ class MainRepo(private val ApiService: ApiService) {
         }
     }
 
-    suspend fun GetDAVehicleExpiringDocuments(userID: Int):SimpleNetworkResponse<VehicleExpiringDocumentsResponse>{
+    suspend fun GetDAVehicleExpiringDocuments(userID: Int): SimpleNetworkResponse<VehicleExpiringDocumentsResponse> {
         return safeApiCall {
             ApiService.GetDAVehicleExpiringDocuments(userID)
+        }
+    }
+
+    suspend fun UploadVehDocumentFileByDriver(
+        VehId: Int,
+        docTypeID: Int,
+        expiredDocId: Int,
+        userID: Int,
+        filepart: MultipartBody.Part
+    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.UploadVehDocumentFileByDriver(
+                VehId,
+                docTypeID,
+                expiredDocId,
+                userID,
+                filepart
+            )
         }
     }
 }
