@@ -90,6 +90,17 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
                 finish()
             }
         }
+
+        viewmodel.liveDataUploadExpiringDocs.observe(this) {
+            if (it != null) {
+                loadingDialog.show()
+                viewmodel.GetDAExpiringDocuments(pref.clebUserId.toInt())
+                showToast("Document Uploaded successfully!!", this)
+            } else {
+                showToast("Something went wrong!!", this)
+            }
+        }
+
         binding.expringDocSave.isEnabled = false
         binding.expringDocSave.setOnClickListener {
 
@@ -214,15 +225,6 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
     fun uploadDoc() {
         loadingDialog.show()
         viewmodel.UploadExpiringDocs(pref.clebUserId.toInt(), documentID, filePart)
-        viewmodel.liveDataUploadExpiringDocs.observe(this) {
-            if (it != null) {
-                loadingDialog.show()
-                viewmodel.GetDAExpiringDocuments(pref.clebUserId.toInt())
-                showToast("Document Uploaded successfully!!", this)
-            } else {
-                showToast("Something went wrong!!", this)
-            }
-        }
     }
 
 

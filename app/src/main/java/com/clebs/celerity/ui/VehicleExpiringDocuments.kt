@@ -93,6 +93,17 @@ class VehicleExpiringDocuments : AppCompatActivity(), VehicleExpiringUploadListe
                 finish()
             }
         }
+        viewmodel.liveDataUploadVehDocumentFileByDriverResponse.observe(this) {
+            loadingDialog.dismiss()
+            if (it != null) {
+                loadingDialog.show()
+                viewmodel.GetDAVehicleExpiringDocuments(pref.clebUserId.toInt())
+                showToast("Document Uploaded successfully!!", this)
+            } else {
+                finish()
+                // showToast("Something went wrong!!", this)
+            }
+        }
 
         binding.expringDocSave.isEnabled = false
 
@@ -223,16 +234,6 @@ class VehicleExpiringDocuments : AppCompatActivity(), VehicleExpiringUploadListe
             pref.clebUserId.toInt(),
             filePart
         )
-        viewmodel.liveDataUploadVehDocumentFileByDriverResponse.observe(this) {
-            loadingDialog.dismiss()
-            if (it != null) {
-                loadingDialog.show()
-                viewmodel.GetDAVehicleExpiringDocuments(pref.clebUserId.toInt())
-                showToast("Document Uploaded successfully!!", this)
-            } else {
-                finish()
-               // showToast("Something went wrong!!", this)
-            }
-        }
+
     }
 }

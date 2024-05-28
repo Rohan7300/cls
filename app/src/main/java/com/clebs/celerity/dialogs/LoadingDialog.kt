@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -20,13 +21,21 @@ class LoadingDialog(context: Context) : Dialog(context) {
         window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         window?.statusBarColor = ContextCompat.getColor(context, R.color.medium_orange)
+        setCancelable(false)
+        setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+                // Handle back press
+                dismiss()
+                true
+            } else {
+                false
+            }
+        }
 //        window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
         // Set the system UI visibility
 
     }
-
-
 
     override fun show() {
         if (!isShowing)

@@ -22,6 +22,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -33,6 +34,7 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.ImageTakerActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertBitmapToBase64
 import com.clebs.celerity.utils.getFileUri
@@ -220,15 +222,12 @@ abstract class BaseInteriorFragment : Fragment() {
         if (allPermissionsGranted()) {
             showPictureDialog(iv)
         } else {
-
             requestpermissions()
         }
     }
 
     private fun requestpermissions() {
-
         activityResultLauncher.launch(BaseInteriorFragment.REQUIRED_PERMISSIONS)
-
     }
 
     private val activityResultLauncher =
@@ -249,7 +248,7 @@ abstract class BaseInteriorFragment : Fragment() {
         }
 
     private fun showPictureDialog(iv: ImageView) {
-        val storageDir =
+/*        val storageDir =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         if (!storageDir.exists()) {
             storageDir.mkdirs()
@@ -257,23 +256,33 @@ abstract class BaseInteriorFragment : Fragment() {
         var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val m_intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val uniqueFileName = "Defect_$timeStamp.jpg"
+        Log.d("BaseInterior", "UniqueFileName1 $uniqueFileName")
         photoFile = File(storageDir, uniqueFileName)
         photoURI = getFileUri(photoFile, (activity as HomeActivity))
         m_intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+        */
         imageView = iv
-        resultLauncher.launch(m_intent)
+        val imageTakerActivityIntent  =Intent(requireContext(),ImageTakerActivity::class.java)
+        resultLauncher.launch(imageTakerActivityIntent)
     }
 
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 try {
-                    imageView.setImageURI(photoURI)
-                    base64 = photoURI.toString()
-                }catch (_:Exception){
-                    showToast("Something went wrong!!Please retry",requireContext())
+                    val data = result.data
+                    if(data!=null){
+                        val outputUri = data.getStringExtra("outputUri")
+                        if (outputUri != null) {
+                            photoURI = outputUri.toUri()
+                            imageView.setImageURI(photoURI)
+                            base64 = photoURI.toString()
+                        }
+                    }
+                    Log.d("BaseInterior", "UniqueFileName2 URI ${photoURI.toString()}")
+                } catch (_: Exception) {
+                    showToast("Something went wrong!!Please retry", requireContext())
                 }
-
                 Log.e("herehrherhehre", ":cdddfdv " + imageView)
             }
         }

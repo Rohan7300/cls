@@ -228,7 +228,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginVertical="25dp"
                 android:id="@+id/deductionTXT"
                 android:text="Important Information - I hereby authorise CLS to make the above deduction from my pay in accordance with the above terms. I understand and agree I am responsible for the satisfying the above amounts. I understand and agree that any amount that is due and outstanding at the time of SLA termination, regardless of whether the SLA termination was voluntary or not, will be deducted from my last invoice or any other amounts that may be owed to me. This authorizes CLS to retain the entire amount of my last invoice in compliance with the law."
                 android:textSize="12sp" />
@@ -294,6 +294,7 @@
                 android:id="@+id/disputeSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:orientation="vertical">
 
                 <TextView
@@ -327,6 +328,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:visibility="gone"
         android:layout_marginHorizontal="10dp"
         android:orientation="vertical">
 

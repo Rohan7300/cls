@@ -211,7 +211,7 @@ class FaceScanActivity : AppCompatActivity(),ObjectDetectorHelper.DetectorListen
     }
 
     // Declare and bind preview, capture and analysis use cases
-    @SuppressLint("UnsafeOptInUsageError")
+    @SuppressLint("UnsafeOptInUsageE    rror")
     private fun bindCameraUseCases() {
 
         // CameraProvider

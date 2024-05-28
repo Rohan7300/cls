@@ -1,5 +1,6 @@
 package com.clebs.celerity.fragments.interior
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,8 +14,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
@@ -26,11 +29,13 @@ import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.databinding.FragmentWindScreenBinding
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.ImageTakerActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getFileUri
 import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.setImageView
+import com.clebs.celerity.utils.showToast
 import com.elconfidencial.bubbleshowcase.BubbleShowCase
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
@@ -365,8 +370,8 @@ class WindScreenFragment : Fragment() {
         }
     }
 
-    fun showPictureDialog() {
-        val storageDir =
+    private fun showPictureDialog() {
+/*        val storageDir =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         if (!storageDir.exists()) {
             storageDir.mkdirs()
@@ -376,17 +381,37 @@ class WindScreenFragment : Fragment() {
         photoFile = File(storageDir, uniqueFileName)
         photoURI = getFileUri(photoFile, (activity as HomeActivity))
         m_intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-        startActivityForResult(m_intent, 101)
+        startActivityForResult(m_intent, 101)*/
+        val imageTakerActivityIntent  =Intent(requireContext(), ImageTakerActivity::class.java)
+        resultLauncher.launch(imageTakerActivityIntent)
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    private val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                try {
+                    val data = result.data
+                    if(data!=null){
+                        val outputUri = data.getStringExtra("outputUri")
+                        if (outputUri != null) {
+                            photoURI = outputUri.toUri()
+                            setImageView(mbinding.windScreenIV, outputUri,requireContext())
+                            base64 = photoURI.toString()
+                        }
+                    }
+                    Log.d("BaseInterior", "UniqueFileName2 URI ${photoURI.toString()}")
+                } catch (_: Exception) {
+                    showToast("Something went wrong!!Please retry", requireContext())
+                }
+            }
+        }
+/*    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             base64 = photoURI.toString()
             setImageView(mbinding.windScreenIV, base64.toString(),requireContext())
             Log.d("WindScreenFragment", "Base64 : ${base64!!.take(50)}")
         }
-    }
+    }*/
 
     private fun tvNextColorUpdate() {
         if (mbinding.tvNext.isEnabled) {

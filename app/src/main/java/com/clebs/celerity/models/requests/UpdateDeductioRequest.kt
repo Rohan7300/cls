@@ -6,6 +6,6 @@ data class UpdateDeductioRequest(
     val FromLocation: String,
     val IsDaDedAggAccepted: Boolean,
     val PaymentKey: String,
-    val RejectionComment: String?,
+    val DisputeComment: String?,
     val Signature: String
 )
