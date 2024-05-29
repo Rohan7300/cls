@@ -43,13 +43,12 @@ class InvoicesFragment : Fragment() {
             findNavController().navigate(R.id.CLSThirdPartyFragment)
         }
         binding.otherinvoices.visibility = View.GONE
-//        binding.iv2.visibility=View.GONE
+
         GetDriversBasicInformation()
         return binding.root
     }
 
     private fun GetDriversBasicInformation() {
-
         showDialog()
 
         viewModel.GetDriversBasicInformation(
@@ -60,6 +59,7 @@ class InvoicesFragment : Fragment() {
                 it.vmRegNo?.let { it1 ->
                     prefs.vmRegNo = it.vmRegNo
 
+                    showDialog()
                     viewModel.GetVehicleInformation(Prefs.getInstance(requireContext()).clebUserId.toInt(),
                         getVRegNo(prefs)
                     )
@@ -77,10 +77,10 @@ class InvoicesFragment : Fragment() {
 
                 if (it.IsThirdPartyChargeAccessAllowed) {
                     binding.otherinvoices.visibility = View.VISIBLE
-//                    binding.iv2.visibility=View.VISIBLE
+
                 } else {
                     binding.otherinvoices.visibility = View.GONE
-//                    binding.iv2.visibility=View.GONE
+
                 }
 
                 if(binding.headerTop.dxReg.text.isEmpty())

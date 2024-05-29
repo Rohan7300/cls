@@ -125,8 +125,6 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
         super.onViewCreated(view, savedInstanceState)
         fragmentManager = (activity as HomeActivity).fragmentManager
         //   cameraExecutor = Executors.newSingleThreadExecutor()
-
-
     }
 
     override fun onResume() {
@@ -492,13 +490,6 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                     imageBitmap = getImageBitmapFromUri(requireContext(), output.savedUri!!)
 
                     uploadImageToServerAndGetResults(output.savedUri)
-
-//                    if (imageBitmap != null) {
-//
-//                        detectTxt()
-//                    }
-
-//                    mbinding.rectangle4.setImageBitmap(imageBitmap)
                 }
             }
         )
@@ -546,54 +537,66 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                         compressedImageFile
                     )
                 )
-                val response =
-                    apiService.getNumberPlateDetails(
-                        token = "TOKEN $API_TOKEN",
-                        imagePart = imageFilePart
-                    )
-                if (response.isSuccessful && response.body() != null) {
-                    if ((response.body()?.results?.size ?: 0) > 0) {
-                        withContext(Dispatchers.Main) {
-
-                            // Set variables for vehicle data.
-                            vrn = response.body()?.results?.get(0)?.plate.toString().uppercase()
-                            countryCode = response.body()?.results?.get(0)?.region?.code.toString()
-                                .uppercase()
-                            vehicleType = response.body()?.results?.get(0)?.vehicle?.type.toString()
-                                .uppercase()
-
-                            score = response.body()?.results?.get(0)?.score.toString()
-
-                            bounding = response.body()?.results?.get(0)?.box.toString()
-
-                            Log.d(TAG, response.body()?.results.toString())
-                            getVichleinformation()
-
-                        }
-                    } else {
-                        showScanErrorDialog(
-                            this@DailyWorkFragment,
-                            fragmentManager,
-                            "DWF-03",
-                            " This Vehicle ${if (vrn.isNotEmpty()) (vrn) else ""} doesn't exists. Please scan again or contact your supervisor."
+                try {
+                    val response =
+                        apiService.getNumberPlateDetails(
+                            token = "TOKEN $API_TOKEN",
+                            imagePart = imageFilePart
                         )
+                    if (response.isSuccessful && response.body() != null) {
+                        if ((response.body()?.results?.size ?: 0) > 0) {
+                            withContext(Dispatchers.Main) {
+
+                                // Set variables for vehicle data.
+                                vrn = response.body()?.results?.get(0)?.plate.toString().uppercase()
+                                countryCode = response.body()?.results?.get(0)?.region?.code.toString()
+                                    .uppercase()
+                                vehicleType = response.body()?.results?.get(0)?.vehicle?.type.toString()
+                                    .uppercase()
+
+                                score = response.body()?.results?.get(0)?.score.toString()
+
+                                bounding = response.body()?.results?.get(0)?.box.toString()
+
+                                Log.d(TAG, response.body()?.results.toString())
+                                getVichleinformation()
+
+                            }
+                        } else {
+                            showScanErrorDialog(
+                                this@DailyWorkFragment,
+                                fragmentManager,
+                                "DWF-03",
+                                " This Vehicle ${if (vrn.isNotEmpty()) (vrn) else ""} doesn't exists. Please scan again or contact your supervisor."
+                            )
 //                        if (loadingDialog.isShowing){
 //                            loadingDialog.dismiss()
 //                        }
 
 //                        mbinding.pb.visibility=View.GONE
-                        withContext(Dispatchers.Main) {
-                            Log.d(TAG, "No VRN found in image.")
+                            withContext(Dispatchers.Main) {
+                                Log.d(TAG, "No VRN found in image.")
 
+                            }
+                            if (loadingDialog.isShowing) {
+                                loadingDialog.dismiss()
+                            }
                         }
+                    }
+                    else {
                         if (loadingDialog.isShowing) {
                             loadingDialog.dismiss()
                         }
                     }
-                } else {
-                    if (loadingDialog.isShowing) {
-                        loadingDialog.dismiss()
-                    }
+                }catch (e:Exception){
+                    loadingDialog.dismiss()
+                    showScanErrorDialog(
+                        this@DailyWorkFragment,
+                        fragmentManager,
+                        "DWF-99",
+                        "I/O error, Connection reset by peer"
+                    )
+                    Log.d("DailyWException","DailyWorkNetworkException $e")
                 }
             }
         }

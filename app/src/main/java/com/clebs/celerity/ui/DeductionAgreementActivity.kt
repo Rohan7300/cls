@@ -1,6 +1,5 @@
 package com.clebs.celerity.ui
 
-import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,12 +10,14 @@ import com.clebs.celerity.DrawViewClass
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.DeducationAgreementBinding
+import com.clebs.celerity.dialogs.CustDialogDeduction
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.models.requests.SaveTicketDataRequestBody
 import com.clebs.celerity.models.requests.UpdateDeductioRequest
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.utils.DeductionSignatureListener
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.convertDateFormat
@@ -72,125 +73,57 @@ class DeductionAgreementActivity : AppCompatActivity() {
             }
         }
         viewmodel.GetDeductionAgreement(pref.clebUserId.toInt(), actionID!!.toInt())
-        binding.disputeSection.visibility = View.GONE
-        binding.signSection.visibility = View.GONE
 
-        var isAcceptChecked = false
-        var isCloseChecked = false
 
         binding.rbAcceptClose.setOnClickListener {
-            if (!isAcceptChecked) {
-                type = 0
                 if (isEnabled) {
-                    isAcceptChecked = true
-                    isCloseChecked = false
+                    type = 0
                     binding.rbAcceptDispute.isChecked = false
                     binding.rbAcceptClose.isChecked = true
-                    binding.deductionTXT.visibility = View.GONE
-                    binding.dedctionContent.visibility = View.GONE
-                    binding.disputeSection.visibility = View.GONE
-                    binding.signSection.visibility = View.VISIBLE
+                    showSignDialog(type)
                 } else {
                     showToast("Failed to fetch data!! Pls try again", this)
                 }
-            } else {
-                isAcceptChecked = false
-                binding.rbAcceptDispute.isChecked = false
-                binding.rbAcceptClose.isChecked = false
-                binding.deductionTXT.visibility = View.VISIBLE
-                binding.dedctionContent.visibility = View.VISIBLE
-                binding.disputeSection.visibility = View.GONE
-                binding.signSection.visibility = View.GONE
-            }
         }
 
         binding.acceptncloseMainLL.setOnClickListener {
-            if (!isAcceptChecked) {
-                type = 0
                 if (isEnabled) {
-                    isAcceptChecked = true
-                    isCloseChecked = false
+                    type = 0
                     binding.rbAcceptDispute.isChecked = false
                     binding.rbAcceptClose.isChecked = true
-                    binding.deductionTXT.visibility = View.GONE
-                    binding.dedctionContent.visibility = View.GONE
-                    binding.disputeSection.visibility = View.GONE
-                    binding.signSection.visibility = View.VISIBLE
+                    showSignDialog(type)
                 } else {
                     showToast("Failed to fetch data!! Pls try again", this)
                 }
-            } else {
-                isAcceptChecked = false
-                binding.rbAcceptDispute.isChecked = false
-                binding.rbAcceptClose.isChecked = false
-                binding.deductionTXT.visibility = View.VISIBLE
-                binding.dedctionContent.visibility = View.VISIBLE
-                binding.disputeSection.visibility = View.GONE
-                binding.signSection.visibility = View.GONE
-            }
         }
 
         binding.rbAcceptDispute.setOnClickListener {
-            if (!isCloseChecked) {
                 if (isEnabled) {
                     type = 1
-                    isCloseChecked = true
-                    isAcceptChecked = false
                     binding.rbAcceptClose.isChecked = false
                     binding.rbAcceptDispute.isChecked = true
-                    binding.dedctionContent.visibility = View.GONE
-                    binding.deductionTXT.visibility = View.GONE
-                    binding.disputeSection.visibility = View.VISIBLE
-                    binding.signSection.visibility = View.VISIBLE
+                    showSignDialog(type)
                 } else {
                     showToast("Failed to fetch data!! Pls try again", this)
                 }
-            } else {
-                isCloseChecked = false
-                binding.rbAcceptDispute.isChecked = false
-                binding.rbAcceptClose.isChecked = false
-                binding.dedctionContent.visibility = View.VISIBLE
-                binding.deductionTXT.visibility = View.VISIBLE
-                binding.disputeSection.visibility = View.GONE
-                binding.signSection.visibility = View.GONE
-            }
         }
 
         binding.AcceptnDisputemainLL.setOnClickListener {
-            if (!isCloseChecked) {
                 if (isEnabled) {
                     type = 1
-                    isCloseChecked = true
-                    isAcceptChecked = false
                     binding.rbAcceptClose.isChecked = false
-                    binding.dedctionContent.visibility = View.GONE
                     binding.rbAcceptDispute.isChecked = true
-                    binding.deductionTXT.visibility = View.GONE
-                    binding.disputeSection.visibility = View.VISIBLE
-                    binding.signSection.visibility = View.VISIBLE
+                    showSignDialog(type)
                 } else {
                     showToast("Failed to fetch data!! Pls try again", this)
                 }
-            } else {
-                isCloseChecked = false
-                binding.rbAcceptDispute.isChecked = false
-                binding.rbAcceptClose.isChecked = false
-                binding.dedctionContent.visibility = View.VISIBLE
-                binding.deductionTXT.visibility = View.VISIBLE
-                binding.disputeSection.visibility = View.GONE
-                binding.signSection.visibility = View.GONE
-            }
         }
-
-        /*        binding.saveNdispute.setOnClickListener {
-                    disputeCondition()
-                }*/
 
         binding.backIcon.setOnClickListener {
             finish()
         }
 
-        val retry = binding.signSV.RetryLay
+     /*   val retry = binding.signSV.RetryLay
         val save = binding.signSV.sv
         val testIV = binding.signSV.textIV
         val drawView = binding.signSV.paintView.drawView
@@ -205,15 +138,12 @@ class DeductionAgreementActivity : AppCompatActivity() {
                 testIV.setImageBitmap(signatureBitmap)
 
                 loadingDialog.show()
-                if (type == 0)
-                    submitCondition(signatureBitmap)
-                if (type == 1)
-                    disputeCondition(signatureBitmap)
+
             }
         }
         retry.setOnClickListener {
             drawView.clearSignature()
-        }
+        }*/
 
     }
 
@@ -227,7 +157,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
                 FromLocation = FromLocation,
                 IsDaDedAggAccepted = true,
                 PaymentKey = PaymentKey,
-                RejectionComment = null,
+                DisputeComment = null,
                 Signature = bse64
             )
         )
@@ -244,9 +174,9 @@ class DeductionAgreementActivity : AppCompatActivity() {
         }
     }
 
-    private fun disputeCondition(signatureBitmap: Bitmap) {
+    private fun disputeCondition(signatureBitmap: Bitmap, disputeDesciption: String?) {
         val bse64 = "data:image/png;base64," + bitmapToBase64(signatureBitmap)
-        if (binding.etDisputeDis.text.isNullOrEmpty()) {
+        if (disputeDesciption.isNullOrEmpty()) {
             showToast("Please add dispute reason", this)
         } else {
             var disputeComment = binding.etDisputeDis.text.toString() ?: " "
@@ -258,7 +188,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
                     FromLocation = FromLocation,
                     IsDaDedAggAccepted = true,
                     PaymentKey = PaymentKey,
-                    RejectionComment = disputeComment,
+                    DisputeComment = disputeDesciption?:"Disputed",
                     Signature = bse64
                 )
             )
@@ -309,6 +239,20 @@ class DeductionAgreementActivity : AppCompatActivity() {
             actionID,
             request
         )
+    }
+
+    private fun showSignDialog(type:Int){
+        val dialog = CustDialogDeduction(type)
+        dialog.setSignatureListener(object : DeductionSignatureListener {
+            override fun onDeductionSignatureSaved(bitmap: Bitmap, disputeDesciption: String?) {
+                if (type == 0)
+                    submitCondition(bitmap)
+                if (type == 1)
+                    disputeCondition(bitmap,disputeDesciption)
+            }
+        })
+
+        dialog.show(supportFragmentManager, "sign")
     }
 
 }

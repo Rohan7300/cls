@@ -180,15 +180,35 @@ class HomedemoFragment : Fragment() {
                 mbinding.const1.visibility=View.GONE
                 mbinding.ss.fullScroll(ScrollView.FOCUS_UP);
                 mbinding.viewfulldatalayout.visibility = View.VISIBLE
+                mbinding.fullscheduleIV.visibility = View.GONE
             } else {
                 mbinding.consttwo.visibility=View.VISIBLE
                 mbinding.const1.visibility=View.VISIBLE
                 mbinding.viewfulldatalayout.visibility = View.GONE
 //                mbinding.vieww.visibility=View.GONE
+                mbinding.fullscheduleIV.visibility = View.VISIBLE
+            }
+            isclicked = !isclicked
+        }
+        mbinding.fullscheduleIV.setOnClickListener {
+            if (isclicked) {
+//                mbinding.vieww.visibility=View.VISIBLE
+                mbinding.consttwo.visibility=View.GONE
+                mbinding.const1.visibility=View.GONE
+                mbinding.ss.fullScroll(ScrollView.FOCUS_UP);
+                mbinding.viewfulldatalayout.visibility = View.VISIBLE
+                mbinding.fullscheduleIV.visibility = View.GONE
+            } else {
+                mbinding.consttwo.visibility=View.VISIBLE
+                mbinding.const1.visibility=View.VISIBLE
+                mbinding.viewfulldatalayout.visibility = View.GONE
+//                mbinding.vieww.visibility=View.GONE
+                mbinding.fullscheduleIV.visibility = View.VISIBLE
             }
             isclicked = !isclicked
         }
         mbinding.collapseArrow.setOnClickListener {
+            mbinding.fullscheduleIV.visibility = View.VISIBLE
             mbinding.consttwo.visibility=View.VISIBLE
             mbinding.const1.visibility=View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
@@ -512,6 +532,7 @@ class HomedemoFragment : Fragment() {
             }
             else {
                 mbinding.viewfullschedule.isClickable = false
+                mbinding.fullscheduleIV.visibility = View.GONE
                 mbinding.viewfullschedule.isEnabled = false
                 mbinding.viewfulldatalayout.visibility = View.GONE
                 mbinding.viewfullschedule.visibility = View.GONE

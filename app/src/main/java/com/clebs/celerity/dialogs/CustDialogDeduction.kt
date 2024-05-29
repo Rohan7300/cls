@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
@@ -14,12 +16,13 @@ import androidx.fragment.app.DialogFragment
 import com.clebs.celerity.DrawViewClass
 import com.clebs.celerity.DrawViewClass.Companion.pathList
 import com.clebs.celerity.R
+import com.clebs.celerity.utils.DeductionSignatureListener
 import com.clebs.celerity.utils.SignatureListener
 import com.clebs.celerity.utils.showToast
 
-class CustDialogDeduction : DialogFragment() {
+class CustDialogDeduction(var type: Int) : DialogFragment() {
     private lateinit var drawView: DrawViewClass
-    private var signatureListener: SignatureListener? = null
+    private var signatureListener: DeductionSignatureListener? = null
 
 
     override fun onResume() {
@@ -40,17 +43,32 @@ class CustDialogDeduction : DialogFragment() {
         val retry = rootView.findViewById<RelativeLayout>(R.id.RetryLay)
         val close = rootView.findViewById<TextView>(R.id.cl)
         val save = rootView.findViewById<AppCompatButton>(R.id.sv)
-        val testIV = rootView.findViewById<ImageView>(R.id.textIV)
         drawView = rootView.findViewById(R.id.drawView)
-
+        drawView.clearSignature()
+        val disputeSection = rootView.findViewById<LinearLayout>(R.id.disputeSectionDialog)
+        val etDisputeSection = rootView.findViewById<EditText>(R.id.et_dispute_dis_dialog)
+        if (type != 1)
+            disputeSection.visibility = View.GONE
         save.setOnClickListener {
-            if (pathList.isEmpty()) {
-                showToast("Please sign before saving", requireContext())
+            if (type == 1 && etDisputeSection.text.isNullOrEmpty()) {
+                showToast("Please add comment & signature before saving", requireContext())
             } else {
-                val signatureBitmap: Bitmap = drawView.getBitmap()
-                testIV.setImageBitmap(signatureBitmap)
-                signatureListener?.onSignatureSaved(signatureBitmap)
-                dismiss()
+                if (pathList.isEmpty()) {
+                    showToast("Please sign before saving", requireContext())
+                } else {
+                    val signatureBitmap: Bitmap = drawView.getBitmap()
+                    if (type == 1)
+                        signatureListener?.onDeductionSignatureSaved(
+                            signatureBitmap,
+                            etDisputeSection.text.toString()
+                        )
+                    else
+                        signatureListener?.onDeductionSignatureSaved(
+                            signatureBitmap,
+                            null
+                        )
+                    dismiss()
+                }
             }
         }
 
@@ -62,7 +80,7 @@ class CustDialogDeduction : DialogFragment() {
         return rootView
     }
 
-    fun setSignatureListener(listener: SignatureListener) {
+    fun setSignatureListener(listener: DeductionSignatureListener) {
         signatureListener = listener
     }
 
