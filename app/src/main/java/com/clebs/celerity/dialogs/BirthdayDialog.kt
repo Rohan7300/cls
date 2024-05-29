@@ -36,6 +36,7 @@ class BirthdayDialog(val prefs: Prefs) : DialogFragment() {
     }
 
     fun showDialog(fragmentManager: FragmentManager) {
+        prefs.isBirthdayCardShown = true
         val fragment = fragmentManager.findFragmentByTag(TAG)
         if (!isVisible && fragment == null) {
             show(fragmentManager, TAG)

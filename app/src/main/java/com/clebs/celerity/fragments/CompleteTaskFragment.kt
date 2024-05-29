@@ -192,7 +192,7 @@ class CompleteTaskFragment : Fragment() {
             }
         }
 
-        mbinding.ivFaceMask.setImageResource(io.clearquote.assessment.cq_sdk.R.drawable.camera_icon)
+        mbinding.ivFaceMask.setImageResource(R.drawable.camera_ivs)
         Prefs.getInstance(requireContext()).clearNavigationHistory()
         fragmentManager = (activity as HomeActivity).fragmentManager
         cqSDKInitializer = CQSDKInitializer(requireContext())
@@ -208,6 +208,7 @@ class CompleteTaskFragment : Fragment() {
                 hideDialog()
                 osData!!.isDefectSheetFilled = true
                 logOSEntity("OSData CompleteTaskFragment", osData!!)
+                showDialog()
                 viewModel.GetVehicleImageUploadInfo(
                     Prefs.getInstance(requireContext()).clebUserId.toInt(),
                     getCurrentDateTime()

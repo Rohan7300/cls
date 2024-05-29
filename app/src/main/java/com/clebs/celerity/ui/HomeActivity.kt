@@ -268,7 +268,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.liveDataGetDAVehicleExpiredDocuments.observe(this) {
                 if (it != null) {
                     prefs.saveExpiredDocuments(it)
-                    expiredDocDialog.showDialog(supportFragmentManager)
+                    //
+                    // expiredDocDialog.showDialog(supportFragmentManager)
                     expiredDocDialog.isCancelable = false
                 }
             }
@@ -802,9 +803,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 isLeadDriver = it.IsLeadDriver
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
                 isApiResponseTrue = it.IsUsrProfileUpdateReqin90days
+                Log.d("BirthdayDialog"," ${showBirthdayCard(it.UsrDOB, prefs)}")
                 if (showBirthdayCard(it.UsrDOB, prefs)) {
                     BirthdayDialog(prefs).showDialog(supportFragmentManager)
-
                 }
                 if (isApiResponseTrue) {
                     trueCount++

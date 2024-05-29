@@ -37,7 +37,7 @@ class HomedemoFragment : Fragment() {
     private var isclicked: Boolean = true
     var thirdpartydeductions: Float = 0.0f
     var week: Int = 0
-    var entries= ArrayList<PieEntry>()
+    var entries = ArrayList<PieEntry>()
     var year: Int = 0
 
     protected val months = arrayOf(
@@ -176,14 +176,14 @@ class HomedemoFragment : Fragment() {
         mbinding.viewfullschedule.setOnClickListener {
             if (isclicked) {
 //                mbinding.vieww.visibility=View.VISIBLE
-                mbinding.consttwo.visibility=View.GONE
-                mbinding.const1.visibility=View.GONE
+                mbinding.consttwo.visibility = View.GONE
+                mbinding.const1.visibility = View.GONE
                 mbinding.ss.fullScroll(ScrollView.FOCUS_UP);
                 mbinding.viewfulldatalayout.visibility = View.VISIBLE
                 mbinding.fullscheduleIV.visibility = View.GONE
             } else {
-                mbinding.consttwo.visibility=View.VISIBLE
-                mbinding.const1.visibility=View.VISIBLE
+                mbinding.consttwo.visibility = View.VISIBLE
+                mbinding.const1.visibility = View.VISIBLE
                 mbinding.viewfulldatalayout.visibility = View.GONE
 //                mbinding.vieww.visibility=View.GONE
                 mbinding.fullscheduleIV.visibility = View.VISIBLE
@@ -193,14 +193,14 @@ class HomedemoFragment : Fragment() {
         mbinding.fullscheduleIV.setOnClickListener {
             if (isclicked) {
 //                mbinding.vieww.visibility=View.VISIBLE
-                mbinding.consttwo.visibility=View.GONE
-                mbinding.const1.visibility=View.GONE
+                mbinding.consttwo.visibility = View.GONE
+                mbinding.const1.visibility = View.GONE
                 mbinding.ss.fullScroll(ScrollView.FOCUS_UP);
                 mbinding.viewfulldatalayout.visibility = View.VISIBLE
                 mbinding.fullscheduleIV.visibility = View.GONE
             } else {
-                mbinding.consttwo.visibility=View.VISIBLE
-                mbinding.const1.visibility=View.VISIBLE
+                mbinding.consttwo.visibility = View.VISIBLE
+                mbinding.const1.visibility = View.VISIBLE
                 mbinding.viewfulldatalayout.visibility = View.GONE
 //                mbinding.vieww.visibility=View.GONE
                 mbinding.fullscheduleIV.visibility = View.VISIBLE
@@ -209,8 +209,8 @@ class HomedemoFragment : Fragment() {
         }
         mbinding.collapseArrow.setOnClickListener {
             mbinding.fullscheduleIV.visibility = View.VISIBLE
-            mbinding.consttwo.visibility=View.VISIBLE
-            mbinding.const1.visibility=View.VISIBLE
+            mbinding.consttwo.visibility = View.VISIBLE
+            mbinding.const1.visibility = View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
         }
 
@@ -223,9 +223,9 @@ class HomedemoFragment : Fragment() {
 
         Observers()
         mbinding.btPrev.setOnClickListener {
-            mbinding.viewfulldatalayout.visibility=View.GONE
+            mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
-            mbinding.const1.visibility=View.VISIBLE
+            mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility = View.VISIBLE
             val weekprev = week - 3
             mbinding.txtLastWeek.text = "Week " + weekprev
@@ -247,8 +247,8 @@ class HomedemoFragment : Fragment() {
 
 
         mbinding.btThisWeek.setOnClickListener {
-            mbinding.const1.visibility=View.VISIBLE
-            mbinding.viewfulldatalayout.visibility=View.GONE
+            mbinding.const1.visibility = View.VISIBLE
+            mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btThisWeek.visibility = View.GONE
             mbinding.btPrev.visibility = View.VISIBLE
             showDialog()
@@ -287,7 +287,7 @@ class HomedemoFragment : Fragment() {
 
 
                 viewModel.GetcashFlowWeek(
-                    Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week-2
+                    Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 2
                 )
                 showDialog()
                 viewModel.GetViewFullScheduleInfo(
@@ -349,19 +349,23 @@ class HomedemoFragment : Fragment() {
                 depts.map {
 
 
-                    val average = it.totalEarning + it.totalDeduction + it.charterHireDeduction
+                    val average =
+                        it.totalEarning + it.totalDeduction + it.charterHireDeduction + it.ThirdPartyDeduction
                     totalearning = it.totalEarning.toInt().toString()
                     totaldedecutions = it.totalDeduction.toDouble().toString()
-                    thirdparty = it.charterHireDeduction.toDouble().toString()
+                    //thirdparty = it.charterHireDeduction.toDouble().toString()
+                    thirdparty = it.ThirdPartyDeduction.toDouble().toString()
 
                     avprofit = (it.totalEarning / average).toFloat()
-                    avdeductions = it.totalDeduction / average.toFloat()
+                    avdeductions = if (it.totalDeduction > 0)
+                        it.totalDeduction / average.toFloat()
+                    else
+                        0f
                     Log.e("djhfdfhhdhjfdjearning", "Observers: " + it.totalEarning)
-                    if (it.charterHireDeduction != 0) {
-
-                        thirdpartydeductions = it.charterHireDeduction / average.toFloat()
+                    thirdpartydeductions = if (it.ThirdPartyDeduction > 0) {
+                        it.ThirdPartyDeduction.toInt() / average.toFloat()
                     } else {
-                        thirdpartydeductions = 0f
+                        0f
                     }
                 }
                 entries.clear();
@@ -370,12 +374,7 @@ class HomedemoFragment : Fragment() {
 
                 entries.add(PieEntry(avprofit, "Profits\n $totalearning"))
                 entries.add(PieEntry(avdeductions, "Deductions\n $totaldedecutions"))
-                entries.add(
-                    PieEntry(
-                        thirdpartydeductions,
-                        "3rd party Deductions\n $thirdparty"
-                    )
-                )
+                entries.add(PieEntry(thirdpartydeductions, "3rd party Deductions\n $thirdparty"))
                 val dataSet = PieDataSet(entries, "")
 //
                 val colors = ArrayList<Int>()
@@ -394,14 +393,14 @@ class HomedemoFragment : Fragment() {
                 data.setValueTextSize(11f)
                 data.setValueTextColor(resources.getColor(io.clearquote.assessment.cq_sdk.R.color.transparent))
 
-                mbinding.pieChart.data=data
+                mbinding.pieChart.data = data
 
                 // undo all highlights
                 mbinding.pieChart.highlightValues(null)
                 mbinding.pieChart.invalidate()
 
 
-                if (thirdpartydeductions.equals(0.0f)) {
+/*                if (thirdpartydeductions.equals(0.0f)) {
                     entries.removeAt(2)
 //                    slices.remove(pieChart.slices[0])
                 }
@@ -412,7 +411,7 @@ class HomedemoFragment : Fragment() {
                 if (avdeductions.equals(0.0f)) {
                     entries.removeAt(1)
 //                    slices.remove(pieChart.slices[2])
-                }
+                }*/
 
 //                pieChart.slices = slices
 //                pieChart.labelType = PieChart.LabelType.INSIDE
@@ -420,8 +419,7 @@ class HomedemoFragment : Fragment() {
 //                pieChart.holeRatio = 0f
 //                pieChart.overlayRatio = 0f
 
-            }
-            else {
+            } else {
 
                 hideDialog()
                 entries.clear();
@@ -492,29 +490,28 @@ class HomedemoFragment : Fragment() {
 //
                     mbinding.viewfullschedule.visibility = View.VISIBLE
                     mbinding.yourNext.text = "Your next working day"
-                    try{
+                    try {
                         /*         mbinding.textView5.text =
                                      "${convertDateFormat(it.NextWorkingDate)} - ${it.NextWorkingDay}\n${it.NextWorkingLoc}"*/
-                        var time = it.NextWorkingDayWaveTime?:" "
-                        var date = it.NextWorkingDate?:" "
-                        var nextLoc = it.NextWorkingLoc?:" "
+                        var time = it.NextWorkingDayWaveTime ?: " "
+                        var date = it.NextWorkingDate ?: " "
+                        var nextLoc = it.NextWorkingLoc ?: " "
 
 
 
-                        if (it.NextWorkingDayWaveTime!=null){
+                        if (it.NextWorkingDayWaveTime != null) {
                             mbinding.textView5.text =
                                 "${convertDateFormat(date)} ${time.split(":")[0]} : ${time.split(":")[1]} - ${nextLoc}"
-                        }
-                        else{
+                        } else {
                             mbinding.textView5.text =
                                 "${convertDateFormat(date)} ${time} : ${time} - ${nextLoc}"
                         }
-                        if(it.NextWorkingDay.isNullOrEmpty()||it.NextWorkingDay.isNullOrEmpty()){
+                        if (it.NextWorkingDay.isNullOrEmpty() || it.NextWorkingDay.isNullOrEmpty()) {
                             mbinding.textView5.text = "Not allocated"
                         }
 
 
-                    }catch (_:Exception){
+                    } catch (_: Exception) {
                         mbinding.textView5.text = "Not allocated"
                     }
 
@@ -529,8 +526,7 @@ class HomedemoFragment : Fragment() {
                     mbinding.tvIsWorkingShowSat.text = it.saturdayLocation
 
                 }
-            }
-            else {
+            } else {
                 mbinding.viewfullschedule.isClickable = false
                 mbinding.fullscheduleIV.visibility = View.GONE
                 mbinding.viewfullschedule.isEnabled = false
@@ -544,8 +540,9 @@ class HomedemoFragment : Fragment() {
 
         }
     }
+
     private fun crossfade() {
-        val   shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
+        val shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
         mbinding.const1.apply {
 
             // Set the content view to 0% opacity but visible, so that it is

@@ -10,6 +10,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.webkit.MimeTypeMap
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -24,6 +25,7 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -54,7 +56,15 @@ class AddCommentActivity : AppCompatActivity() {
         ticketID = intent.getIntExtra("ticketID", -1)
         loadingDialog = LoadingDialog(this)
         observer()
-
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                try {
+                    finish()
+                    DependencyProvider.comingFromViewTickets = true
+                } catch (_: Exception) {
+                }
+            }
+        })
         binding.addImage.setOnClickListener {
             uploadCommentAttachment = true
             val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -63,7 +73,8 @@ class AddCommentActivity : AppCompatActivity() {
         }
 
         binding.imageViewBack.setOnClickListener {
-            onBackPressed()
+            finish()
+            DependencyProvider.comingFromViewTickets = true
         }
 
         loadingDialog.show()

@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.ActivityImageTakerBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -28,14 +29,17 @@ import java.util.concurrent.Executors
 class ImageTakerActivity : AppCompatActivity() {
     lateinit var binding: ActivityImageTakerBinding
     private lateinit var cameraExecutor: ExecutorService
+    lateinit var loadingDialog: LoadingDialog
     private var imageCapture: ImageCapture? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_image_taker)
         imageCapture = ImageCapture.Builder().build()
+        loadingDialog = LoadingDialog(this)
         cameraExecutor = Executors.newSingleThreadExecutor()
         initCamera()
         binding.imgCapture.setOnClickListener {
+            loadingDialog.show()
             takePhoto()
         }
     }
@@ -97,11 +101,13 @@ class ImageTakerActivity : AppCompatActivity() {
             outputOptions, ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
+                    loadingDialog.dismiss()
                     Log.d(ContentValues.TAG, "Photo capture failed")
                     println("Photo capture failed")
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                    loadingDialog.dismiss()
                     val resultIntent = Intent()
                     resultIntent.putExtra("outputUri", output.savedUri.toString())
                     setResult(Activity.RESULT_OK, resultIntent)

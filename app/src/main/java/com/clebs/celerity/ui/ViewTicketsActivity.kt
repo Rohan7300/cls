@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,8 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.utils.DependencyProvider
+import com.clebs.celerity.utils.DependencyProvider.comingFromViewTickets
 import com.clebs.celerity.utils.Prefs
 
 class ViewTicketsActivity : AppCompatActivity() {
@@ -37,8 +40,18 @@ class ViewTicketsActivity : AppCompatActivity() {
         )[MainViewModel::class.java]
         prefs = Prefs.getInstance(this)
         ticketData = prefs.getCurrentTicket()
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                try {
+                    finish()
+                    DependencyProvider.comingFromViewTickets = true
+                } catch (_: Exception) {
+                }
+            }
+        })
         binding.imageViewBack.setOnClickListener {
             finish()
+            comingFromViewTickets = true
             //onBackPressed()
         }
         binding.commentIV.setOnClickListener {
@@ -53,13 +66,18 @@ class ViewTicketsActivity : AppCompatActivity() {
 
         if (ticketData != null) {
             binding.ticketID.text = "CLS : " + ticketData!!.UserTicketID.toString()
-            if (ticketData!!.OtherRegNo != null)
-                binding.tvRegistration.text = ticketData!!.OtherRegNo.toString()
+            if (ticketData!!.OtherRegNo != null) {
+                if (ticketData!!.OtherRegNo == "undefined")
+                    binding.tvRegistration.text = " - - - - "
+                else
+                    binding.tvRegistration.text = ticketData!!.OtherRegNo.toString()
+            }
+
             binding.edtTitle.text = ticketData!!.TicketTitle
             binding.edtDes.text = ticketData!!.TicketDescription
             binding.tvDepart.text = ticketData!!.DepartmentName
             binding.tvRequests.text = ticketData!!.ReqTypeName
-            binding.llpb.visibility=View.VISIBLE
+            binding.llpb.visibility = View.VISIBLE
             viewModel.GetUserTicketDocuments(
                 userID = prefs.clebUserId.toInt(),
                 ticketId = ticketData!!.UserTicketID.toInt()
@@ -72,16 +90,16 @@ class ViewTicketsActivity : AppCompatActivity() {
         binding.attachmentRV.layoutManager = LinearLayoutManager(this)
         binding.llAttachment.visibility = View.GONE
 
-        viewModel.liveDataGetUserTicketDocuments.observe(this){
-            if(it!=null){
+        viewModel.liveDataGetUserTicketDocuments.observe(this) {
+            if (it != null) {
                 attachmentAdapter.data.clear()
                 attachmentAdapter.data.addAll(it.Docs)
-                binding.llpb.visibility=View.GONE
+                binding.llpb.visibility = View.GONE
                 attachmentAdapter.notifyDataSetChanged()
                 binding.llAttachment.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.llAttachment.visibility = View.GONE
-                binding.llpb.visibility=View.GONE
+                binding.llpb.visibility = View.GONE
             }
         }
     }

@@ -20,6 +20,8 @@ data class CashFlowPieChartResponseItem(
     val routeCounter: Int,
     @SerializedName("TotalDeduction")
     val totalDeduction: Int,
+    @SerializedName("ThirdPartyDeduction")
+    val ThirdPartyDeduction:Double,
     @SerializedName("TotalEarning")
     val totalEarning: Double,
     @SerializedName("TotalMileage")

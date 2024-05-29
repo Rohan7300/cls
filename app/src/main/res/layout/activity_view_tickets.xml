@@ -267,10 +267,9 @@
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/shape_edittext_onroad"
                                     android:fontFamily="@font/poppins"
-                                    android:hint="Vehicle registration number"
+                                    android:hint="- - - - "
                                     android:importantForAutofill="no"
                                     android:letterSpacing="0.01"
-
                                     android:padding="10dp"
                                     android:textColor="@color/text_color"
                                     android:textSize="12sp"
