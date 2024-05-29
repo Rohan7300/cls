@@ -7,27 +7,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:backgroundTint="@color/very_light_orange"
+        android:backgroundTint="@color/home_blue"
         tools:context=".ui.HomeActivity">
 
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/medium_orange"
+
+            android:background="@color/very_light_orange"
             android:elevation="30dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/consts" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/consts"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginStart="16dp"
-
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_height="wrap_content"
+            android:background="@color/medium_orange"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -36,6 +33,10 @@
                 android:id="@+id/img_drawer"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:src="@drawable/status_list"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -43,12 +44,18 @@
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:letterSpacing="0.02"
                 android:textColor="@color/text_color"
-                android:textSize="20sp"
 
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -57,6 +64,10 @@
                 android:id="@+id/img_notification"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:src="@drawable/baseline_notifications_none_24"
                 app:layout_constraintEnd_toEndOf="@+id/logout"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -65,9 +76,9 @@
                 android:id="@+id/img_logout_main"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:visibility="gone"
                 android:background="@drawable/baseline_logout_24"
                 android:backgroundTint="@color/orange"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -75,10 +86,12 @@
                 android:id="@+id/logout"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:visibility="gone"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:rotation="90"
-
                 android:src="@drawable/logoutnew"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/orange" />
@@ -101,9 +114,8 @@
             android:id="@+id/bottom_navigatin_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/layer"
+            android:background="@color/medium_orange"
             android:paddingVertical="4dp"
-
             app:itemBackground="@drawable/bg_selected_item"
             app:itemIconSize="22dp"
             app:itemIconTint="@color/selectedcolor"

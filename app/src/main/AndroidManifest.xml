@@ -54,6 +54,8 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup"
         tools:targetApi="tiramisu">
+        <activity android:name=".utils.MyCustomAppIntro"
+            android:exported="false"/>
         <activity
             android:name=".ui.VehicleExpiringDocuments"
             android:exported="false" />
