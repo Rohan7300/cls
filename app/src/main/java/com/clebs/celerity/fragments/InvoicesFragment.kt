@@ -50,7 +50,7 @@ class InvoicesFragment : Fragment() {
 
     private fun GetDriversBasicInformation() {
         showDialog()
-
+        showDialog()
         viewModel.GetDriversBasicInformation(
             Prefs.getInstance(App.instance).clebUserId.toDouble()
         ).observe(viewLifecycleOwner) {
@@ -58,6 +58,13 @@ class InvoicesFragment : Fragment() {
             if (it != null) {
                 it.vmRegNo?.let { it1 ->
                     prefs.vmRegNo = it.vmRegNo
+
+                    if (it.IsThirdPartyChargeAccessAllowed) {
+                        binding.otherinvoices.visibility = View.VISIBLE
+
+                    } else {
+                        binding.otherinvoices.visibility = View.GONE
+                    }
 
                     showDialog()
                     viewModel.GetVehicleInformation(Prefs.getInstance(requireContext()).clebUserId.toInt(),
@@ -75,13 +82,7 @@ class InvoicesFragment : Fragment() {
                 binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
                 binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
-                if (it.IsThirdPartyChargeAccessAllowed) {
-                    binding.otherinvoices.visibility = View.VISIBLE
 
-                } else {
-                    binding.otherinvoices.visibility = View.GONE
-
-                }
 
                 if(binding.headerTop.dxReg.text.isEmpty())
                     binding.headerTop.strikedxRegNo.visibility = View.VISIBLE

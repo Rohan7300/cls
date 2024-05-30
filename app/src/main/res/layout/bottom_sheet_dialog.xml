@@ -19,45 +19,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/blueRactIV"
                 android:layout_width="match_parent"
                 android:layout_height="51dp"
-
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
                 android:background="@drawable/ic_rectangle_blue"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" >
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/cancleIV"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="16dp"
-                    android:backgroundTint="@color/black"
-                    android:src="@drawable/cross4"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Completed Tasks"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:textAllCaps="false" />
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/cancleIV"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:backgroundTint="@color/black"
+                android:src="@drawable/cross4"
+                android:visibility="visible" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_semibold"
-
-              android:layout_marginStart="16dp"
-                android:text="Completed Tasks"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@id/blueRactIV"
-                app:layout_constraintStart_toStartOf="@+id/blueRactIV"
-                app:layout_constraintTop_toTopOf="@id/blueRactIV"
-                app:textAllCaps="false" />
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

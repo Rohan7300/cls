@@ -27,7 +27,9 @@ object DependencyProvider {
     var insLevel:Int = 0
     var policyDocPDFURI:Uri? = null
     var osData: OfflineSyncEntity = OfflineSyncEntity()
-
+    var brkStart:String = ""
+    var brkEnd:String = ""
+    var comingFromViewTickets:Boolean = false
     fun getMainVM(owner: ViewModelStoreOwner): MainViewModel {
 
             viewModelInstance = ViewModelProvider(

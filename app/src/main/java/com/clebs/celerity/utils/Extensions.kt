@@ -51,6 +51,8 @@ import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.dialogs.ErrorDialog
 import com.clebs.celerity.dialogs.ScanErrorDialog
 import com.clebs.celerity.fragments.DailyWorkFragment
+import com.clebs.celerity.utils.DependencyProvider.brkEnd
+import com.clebs.celerity.utils.DependencyProvider.brkStart
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -60,7 +62,9 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.text.ParseException
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 
 @SuppressLint("HardwareIds")
@@ -593,9 +597,11 @@ fun showDatePickerDialog(context: Context, tv1: TextView, tv2: TextView, tvNext:
 
 
             if (i == 0) {
-                tv1.text = date
+                brkStart = date
+                tv1.text = convertDateFormat(date)
             } else {
-                tv2.text = date
+                brkEnd = date
+                tv2.text = convertDateFormat(date)
             }
 
 
@@ -922,21 +928,26 @@ fun getFileUri(file: File, context: Context): Uri {
 }
 
 fun showBirthdayCard(dateString: String, prefs: Prefs): Boolean {
-    val formatter = DateTimeFormatter.ISO_DATE_TIME
-    try {
-        val inputDate = LocalDate.parse(dateString, formatter)
+    val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+    return try {
+        val inputDateTime = LocalDateTime.parse(dateString, formatter)
+        val inputDate = inputDateTime.toLocalDate()
         prefs.dob = dateString
+        val isCardShown = prefs.isBirthdayCardShown
 
         val today = LocalDate.now()
-        var isToday = inputDate == today
-        if (!prefs.isBirthdayCardShown!! && isToday) {
-            prefs.isBirthdayCardShown = true
-            return true
+        val isToday = (inputDate.month == today.month) && (inputDate.dayOfMonth == today.dayOfMonth)
+
+        Log.d("BirthdayDialog", " $isToday\n ${inputDate}\n ${today}\n ${isCardShown}")
+        if (!isCardShown!! && isToday) {
+            Log.d("BirthdayDialog", "in if")
+            true
         } else {
-            prefs.isBirthdayCardShown = true
-            return false
+            Log.d("BirthdayDialog", "in else")
+            false
         }
-    } catch (_: Exception) {
-        return false
+    } catch (e: DateTimeParseException) {
+        e.printStackTrace()
+        false
     }
 }

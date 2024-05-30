@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -86,9 +87,15 @@ class NotificationsFragment : Fragment(), NotificationAdapterCallback {
             hideDialog()
             binding.swipeRefreshLayout.isRefreshing = false
             if (it != null) {
+                if(it.size>0){
+                    noDataLayout(false)
                     notificationAdapter.saveData(it)
+                }else{
+                    noDataLayout(true)
+                }
             }else{
                 notificationAdapter.saveData(listOf())
+                noDataLayout(true)
             }
         }
 
@@ -96,6 +103,16 @@ class NotificationsFragment : Fragment(), NotificationAdapterCallback {
             if (it != null)
                 refresh()
         }
+    }
+
+    private fun noDataLayout(visibility: Boolean) {
+            if(visibility){
+                binding.notificationNodataLayout.visibility = View.VISIBLE
+                binding.rvNotifications.visibility = View.GONE
+            }else{
+                binding.notificationNodataLayout.visibility = View.GONE
+                binding.rvNotifications.visibility = View.VISIBLE
+            }
     }
 
     override fun onResume() {

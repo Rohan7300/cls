@@ -20,6 +20,9 @@ import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.ui.CreateTicketsActivity
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.utils.DependencyProvider.brkEnd
+import com.clebs.celerity.utils.DependencyProvider.brkStart
+import com.clebs.celerity.utils.DependencyProvider.comingFromViewTickets
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertDateFormat
 import com.clebs.celerity.utils.showDatePickerDialog
@@ -36,6 +39,7 @@ class UserTicketsFragment : Fragment() {
     lateinit var deleteDialog: AlertDialog
     lateinit var deleteDailogBinding: DialogSortFiltersBinding
     var includeCompleted = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -155,8 +159,8 @@ class UserTicketsFragment : Fragment() {
 
             viewModel.GetUserTickets(
                 userID = prefs.clebUserId.toInt(),
-                startDate = tDate1.toString(),
-                endDate = tDate2.toString(),
+                startDate = brkStart,
+                endDate = brkEnd,
                 includeCompleted = includeCompleted
             )
             deleteDialog.cancel()
@@ -188,7 +192,12 @@ class UserTicketsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        loadingDialog.show()
-        viewModel.GetUserTickets(prefs.clebUserId.toInt())
+
+        if(!comingFromViewTickets){
+            loadingDialog.show()
+            viewModel.GetUserTickets(prefs.clebUserId.toInt())
+            comingFromViewTickets = false
+        }
+
     }
 }

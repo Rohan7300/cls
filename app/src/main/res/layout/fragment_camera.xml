@@ -39,11 +39,11 @@
     />
             <ImageView
                 android:id="@+id/dashboardStatusIV"
-                android:layout_width="500dp"
+                android:layout_width="600dp"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="10dp"
 
-                android:src="@drawable/ins_dashboard"
+                android:src="@drawable/ic_near"
                 app:tint="#BEFFFFFF" />
         </LinearLayout>
 
