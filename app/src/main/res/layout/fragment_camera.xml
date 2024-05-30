@@ -43,7 +43,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="10dp"
 
-                android:src="@drawable/ic_near"
+                android:src="@drawable/ic_near_two"
                 app:tint="#BEFFFFFF" />
         </LinearLayout>
 
