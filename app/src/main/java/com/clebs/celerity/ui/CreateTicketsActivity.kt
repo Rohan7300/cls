@@ -35,6 +35,7 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.showToast
@@ -85,7 +86,7 @@ class CreateTicketsActivity : AppCompatActivity() {
         viewmodel =
             ViewModelProvider(this, MyViewModelFactory(repo))[MainViewModel::class.java]
         loadingDialog = LoadingDialog(this)
-
+        DependencyProvider.comingFromViewTickets = false
         observers()
         viewmodel.GetUserDepartmentList()
         showDialog()
@@ -93,10 +94,9 @@ class CreateTicketsActivity : AppCompatActivity() {
         setInputListener(mbinding.edtDes)
 
         mbinding.saveTickets.setOnClickListener {
-            if (chkNull())
-                showToast("Please complete form first!!", this)
-            else
-                showUploadDialog()
+            if(chkNull()==1){
+                    showUploadDialog()
+            }
         }
 
         mbinding.imageViewBack.setOnClickListener {
@@ -132,8 +132,21 @@ class CreateTicketsActivity : AppCompatActivity() {
         )
     }
 
-    private fun chkNull(): Boolean {
-        return selectedDeptID == -1 || selectedRequestTypeID == -1 || title == null || desc == null || mbinding.edtDes.text.isNullOrBlank()
+    private fun chkNull(): Int {
+        if(selectedDeptID == -1 || selectedRequestTypeID == -1 || title == null || desc == null || mbinding.edtDes.text.isNullOrBlank()){
+            if(selectedDeptID == -1)
+                showToast("Department not Selected!!",this)
+            else if(selectedRequestTypeID == -1)
+                showToast("Please add request type!!",this)
+            else if(title == null)
+                showToast("Please add ticket title!!",this)
+            else if( mbinding.edtDes.text.isNullOrBlank())
+                showToast("Please add ticket description!!",this)
+            else
+                showToast("Please complete the form first!!",this)
+            return -1
+        }
+        return 1
     }
 
     private fun saveTicket() {

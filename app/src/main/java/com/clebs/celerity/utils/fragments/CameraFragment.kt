@@ -115,7 +115,7 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
           }
           2->{
               fragmentCameraBinding.focusTxt.text= "Focus Camera on Vehicle Near Side"
-              fragmentCameraBinding.dashboardStatusIV.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_near))
+              fragmentCameraBinding.dashboardStatusIV.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_near_two))
           }
           3->{
               fragmentCameraBinding.focusTxt.text= "Focus Camera on Vehicle Rear Side"
@@ -123,7 +123,7 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
           }
           4->{
                   fragmentCameraBinding.focusTxt.text= "Focus Camera on Vehicle Offside"
-                  fragmentCameraBinding.dashboardStatusIV.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_off))
+                  fragmentCameraBinding.dashboardStatusIV.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_offtwo))
           }
           5->{
               fragmentCameraBinding.focusTxt.text= "Focus Camera on Add Blue Level Meter"

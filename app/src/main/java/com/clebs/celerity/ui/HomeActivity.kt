@@ -269,7 +269,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 if (it != null) {
                     prefs.saveExpiredDocuments(it)
                     //
-                    // expiredDocDialog.showDialog(supportFragmentManager)
+                     expiredDocDialog.showDialog(supportFragmentManager)
                     expiredDocDialog.isCancelable = false
                 }
             }
