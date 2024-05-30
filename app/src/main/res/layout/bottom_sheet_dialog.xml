@@ -23,41 +23,41 @@
                 android:id="@+id/blueRactIV"
                 android:layout_width="match_parent"
                 android:layout_height="51dp"
+
                 android:background="@drawable/ic_rectangle_blue"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" >
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/cancleIV"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:backgroundTint="@color/black"
-                android:src="@drawable/cross4"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/title"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/cancleIV"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="@color/black"
+                    android:src="@drawable/cross4"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingHorizontal="30dp"
-                android:text="Completed Tasks"
-                app:textAllCaps="false"
                 android:fontFamily="@font/poppins_semibold"
+
+              android:layout_marginStart="16dp"
+                android:text="Completed Tasks"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@id/blueRactIV"
-                app:layout_constraintEnd_toEndOf="@id/blueRactIV"
                 app:layout_constraintStart_toStartOf="@+id/blueRactIV"
-                app:layout_constraintTop_toTopOf="@id/blueRactIV" />
+                app:layout_constraintTop_toTopOf="@id/blueRactIV"
+                app:textAllCaps="false" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

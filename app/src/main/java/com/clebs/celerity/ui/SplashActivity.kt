@@ -30,12 +30,10 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.utils.DependencyProvider
-import com.clebs.celerity.utils.MyCustomAppIntro
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentAppVersion
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.showToast
-import com.github.appintro.AppIntro
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 
@@ -186,7 +184,7 @@ class SplashActivity : AppCompatActivity() {
         // Navigate to the login screen
         val i = Intent(
             this@SplashActivity,
-            MyCustomAppIntro::class.java
+            LoginActivity::class.java
         )
 
         startActivity(i)
@@ -200,13 +198,13 @@ class SplashActivity : AppCompatActivity() {
         ) {
             val i = Intent(
                 this@SplashActivity,
-                MyCustomAppIntro::class.java
+                PolicyDocsActivity::class.java
             )
             startActivity(i)
         } else {
             val i = Intent(
                 this@SplashActivity,
-                MyCustomAppIntro::class.java
+                HomeActivity::class.java
             )
             intent.putExtra("destinationFragment", "HomeFragment")
             intent.putExtra("actionToperform", "undef")
