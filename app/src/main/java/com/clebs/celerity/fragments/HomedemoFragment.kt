@@ -455,6 +455,7 @@ class HomedemoFragment : Fragment() {
 //                Log.e("tomotmoit", "onCreateView: " + formattedDate)
                 mbinding.viewfullschedule.isClickable = true
                 mbinding.viewfullschedule.isEnabled = true
+                mbinding.fullscheduleIV.visibility = View.VISIBLE
                 mbinding.llnodata.visibility = View.GONE
                 mbinding.rlicons.visibility = View.VISIBLE
                 it.map {

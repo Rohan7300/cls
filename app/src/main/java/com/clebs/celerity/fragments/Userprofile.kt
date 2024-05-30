@@ -648,9 +648,7 @@ class Userprofile : Fragment() {
 
                 }
             }
-
         }
-
     }
 
 

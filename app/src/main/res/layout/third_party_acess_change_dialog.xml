@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/very_light_orange"
         android:gravity="center"
         android:orientation="vertical"
         android:paddingHorizontal="10dp"
@@ -58,7 +58,7 @@
                 android:id="@+id/tpNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/very_light_grey_two"
+                android:backgroundTint="@color/medium_orange"
                 android:padding="10dp"
                 app:cardCornerRadius="10dp">
 
@@ -70,7 +70,7 @@
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="6dp"
                     android:text="No"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="13sp" />
             </androidx.cardview.widget.CardView>
 

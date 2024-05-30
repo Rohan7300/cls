@@ -32,9 +32,9 @@
             <LinearLayout
                 android:id="@+id/headings"
                 android:layout_width="match_parent"
-
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginVertical="8dp"
                 android:gravity="center"
 
@@ -42,8 +42,8 @@
 
                 <ImageView
                     android:id="@+id/icpnUser"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_margin="4dp"
                     android:src="@drawable/user_profile_icon" />
 
@@ -54,6 +54,7 @@
                     android:fontFamily="@font/poppins_bold"
                     android:gravity="center_horizontal|top"
                     android:letterSpacing="0.04"
+                    android:layout_marginEnd="6dp"
                     android:elevation="30dp"
                     android:lineSpacingExtra="0.02dp"
                     android:text="@string/ana_carolin"
@@ -62,7 +63,6 @@
 
 
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"

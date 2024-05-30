@@ -20,6 +20,7 @@ import com.clebs.celerity.models.response.GetUserTicketsResponse
 import com.clebs.celerity.ui.CreateTicketsActivity
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.brkEnd
 import com.clebs.celerity.utils.DependencyProvider.brkStart
 import com.clebs.celerity.utils.DependencyProvider.comingFromViewTickets
@@ -49,7 +50,7 @@ class UserTicketsFragment : Fragment() {
         viewModel = homeActivity.viewModel
         prefs = Prefs.getInstance(requireContext())
         loadingDialog = homeActivity.loadingDialog
-
+        comingFromViewTickets = false
         homeActivity.showDialog()
         viewModel.GetUserTickets(prefs.clebUserId.toInt())
         homeActivity.ActivityHomeBinding.title.text = "User Tickets"
