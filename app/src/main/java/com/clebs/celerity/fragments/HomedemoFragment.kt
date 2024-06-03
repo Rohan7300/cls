@@ -393,21 +393,21 @@ class HomedemoFragment : Fragment() {
                 colors.add(resources.getColor(R.color.red_light))
 
 
-                if (thirdpartydeductions.equals(0.0f)){
+                if (thirdpartydeductions.equals(0.0f)) {
                     entries.removeAt(2)
                 }
-                if (avdeductions.equals(0.0f)){
+                if (avdeductions.equals(0.0f)) {
                     colors[1] = resources.getColor(R.color.red_light)
                     entries.removeAt(1)
                 }
-                if (avprofit.equals(0.0f)){
+                if (avprofit.equals(0.0f)) {
                     colors[0] = resources.getColor(R.color.peek_orange)
                     entries.removeAt(0)
                 }
 
 
 
-                if(avprofit.equals(0.0f)&&avdeductions.equals(0.0f)){
+                if (avprofit.equals(0.0f) && avdeductions.equals(0.0f)) {
                     colors[0] = resources.getColor(R.color.red_light)
                     colors[1] = resources.getColor(R.color.red_light)
                 }

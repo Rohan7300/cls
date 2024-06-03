@@ -457,7 +457,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/medium_orange"
                 android:id="@+id/newUploadBtn"
-                app:cardCornerRadius="20dp">
+                app:cardCornerRadius="15dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -474,7 +474,7 @@
                         android:src="@drawable/capture"
                         android:id="@+id/uploadBtnIV"
                         android:textColor="@color/text_color"
-                        app:tint="@color/white" />
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"

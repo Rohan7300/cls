@@ -301,6 +301,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                     osData.isoilLevelImageRequired = it.DaVehImgOilLevelFileName == null
 
                     oSyncViewModel.insertData(osData)
+                    uploadStatus(1)
                 }
             }
         }
@@ -605,12 +606,11 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                     R.color.very_light_orange
                 )
             )
-            binding.uploadBtnIV.setImageDrawable(
-                ContextCompat.getDrawable(
-                    this,
-                    R.drawable.check_new
-                )
-            )
+
+            val drawable = ContextCompat.getDrawable(this, R.drawable.check_new)
+
+            binding.uploadBtnIV.setImageDrawable(drawable)
+
             binding.newUploadBtn.isEnabled = false
             binding.fullClick.isEnabled = false
         }
