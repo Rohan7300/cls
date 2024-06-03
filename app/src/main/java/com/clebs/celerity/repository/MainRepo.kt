@@ -265,7 +265,9 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun GetVehicleImageUploadInfo(
         userID: Int,
+        vmId:Int,
         date: String
+
     ): SimpleNetworkResponse<GetVehicleImageUploadInfoResponse> {
         /*        val response = ApiService.GetVehicleImageUploadInfo(userID)
                 Log.d("GetVehicleImageUploadInfoRes : ", "$response")
@@ -276,7 +278,7 @@ class MainRepo(private val ApiService: ApiService) {
                     return Gson().fromJson(res, GetVehicleImageUploadInfoResponse::class.java)
                 }*/
         return safeApiCall {
-            ApiService.GetVehicleImageUploadInfo(userID, date)
+            ApiService.GetVehicleImageUploadInfo(userID,vmId, date)
         }
     }
 

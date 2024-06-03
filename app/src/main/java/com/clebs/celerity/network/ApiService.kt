@@ -169,6 +169,7 @@ interface ApiService {
     @GET("/api/DailyWorks/GetVehicleImageUploadedInfo/{userId}")
     suspend fun GetVehicleImageUploadInfo(
         @Path("userId") userId: Int,
+        @Query("vmId") vmId:Int,
         @Query("date") date: String
     ): Response<GetVehicleImageUploadInfoResponse>
 

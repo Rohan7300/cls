@@ -13,6 +13,7 @@ import com.clebs.celerity.R
 import com.clebs.celerity.adapters.ExpiredDocAdapter
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.utils.Prefs
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class BirthdayDialog(val prefs: Prefs) : DialogFragment() {
 
@@ -30,6 +31,10 @@ class BirthdayDialog(val prefs: Prefs) : DialogFragment() {
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             setBackgroundDrawableResource(R.color.semi_transparent_color)
         }
+        val fab: FloatingActionButton = dialog.findViewById(R.id.fab)
+        fab.setOnClickListener {
+            dialog.dismiss()
+        }
         dialog.findViewById<TextView>(R.id.birthdaytvMain).text =
             "Happy Birthday :${prefs.userName}"
         return dialog
@@ -37,6 +42,7 @@ class BirthdayDialog(val prefs: Prefs) : DialogFragment() {
 
     fun showDialog(fragmentManager: FragmentManager) {
         prefs.isBirthdayCardShown = true
+
         val fragment = fragmentManager.findFragmentByTag(TAG)
         if (!isVisible && fragment == null) {
             show(fragmentManager, TAG)

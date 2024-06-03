@@ -47,7 +47,7 @@
                         android:layout_height="25dp"
                         android:fontFamily="@font/poppins"
 
-                        android:src="@drawable/ic_user"
+                        android:src="@drawable/user_profile_icon"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
 
@@ -188,7 +188,7 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:fontFamily="@font/poppins"
-                        android:src="@drawable/ic_user"
+                        android:src="@drawable/user_profile_icon"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
 

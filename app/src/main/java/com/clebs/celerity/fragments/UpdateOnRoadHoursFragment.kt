@@ -30,6 +30,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
     lateinit var binding: FragmentUpdateOnRoadHoursBinding
     lateinit var viewModel: MainViewModel
     lateinit var prefs: Prefs
+    private var numberbroghtbac: String = "0"
     private var locID: Int = 0
     private var selectedRouteType: String? = null
     private var routeName: String? = null
@@ -79,14 +80,14 @@ class UpdateOnRoadHoursFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         prefs = Prefs.getInstance(requireContext())
         loadingDialog = (activity as HomeActivity).loadingDialog
-        parcelBack = binding.parcelsBroughtBack.text.toString().toInt()
+//        parcelBack = binding.parcelsBroughtBack.text.toString().toInt()
 
         var routeInfo = prefs.getDriverRouteInfoByDate()
 
         selectedLocId = prefs.getLocationID()
 
         if (routeInfo != null) {
-            binding.parcelsBroughtBack.text = routeInfo.RtNoParcelsbroughtback.toString()
+            binding.parcelsBroughtBack.setText(routeInfo.RtNoParcelsbroughtback.toString())
             binding.edtMileage.setText(routeInfo.RtFinishMileage.toString())
             //binding.edtRouteComment.setText(routeInfo.RtComment)
             rtName = routeInfo.RtName
@@ -109,24 +110,24 @@ class UpdateOnRoadHoursFragment : Fragment() {
 
         rideAlongApiCall()
 
-        binding.pbbPlus.setOnClickListener {
-            parcelBack = binding.parcelsBroughtBack.text.toString().toInt()
-            parcelBack += 1
-            binding.parcelsBroughtBack.text = parcelBack.toString()
-        }
+//        binding.pbbPlus.setOnClickListener {
+//            parcelBack = binding.parcelsBroughtBack.text.toString().toInt()
+//            parcelBack += 1
+//            binding.parcelsBroughtBack.text = parcelBack.toString()
+//        }
 
         binding.cancel.setOnClickListener {
             findNavController().navigate(R.id.completeTaskFragment)
             findNavController().clearBackStack(R.id.completeTaskFragment)
         }
 
-        binding.pbbMinus.setOnClickListener {
-            parcelBack = binding.parcelsBroughtBack.text.toString().toInt()
-            if (parcelBack > 0) {
-                parcelBack -= 1
-                binding.parcelsBroughtBack.text = parcelBack.toString()
-            }
-        }
+//        binding.pbbMinus.setOnClickListener {
+//            parcelBack = binding.parcelsBroughtBack.text.toString().toInt()
+//            if (parcelBack > 0) {
+//                parcelBack -= 1
+//                binding.parcelsBroughtBack.text = parcelBack.toString()
+//            }
+//        }
 
         viewModel.livedataDailyWorkInfoByIdResponse.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -189,6 +190,10 @@ class UpdateOnRoadHoursFragment : Fragment() {
         binding.onRoadHoursSave.setOnClickListener {
             parcelsDelivered = binding.edtParcels.text.toString()
             totalMileage = binding.edtMileage.text.toString()
+            numberbroghtbac=binding.parcelsBroughtBack.text.toString()
+            if (numberbroghtbac.isEmpty()){
+                numberbroghtbac="0"
+            }
             if (parcelsDelivered.isEmpty())
                 parcelsDelivered = "0"
             if (totalMileage.isEmpty())
@@ -232,7 +237,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 RtLocationId = locationID,
                 RtName = routeName!!,
                 RtNoOfParcelsDelivered = parcelsDelivered?.toInt() ?: 0,
-                RtNoParcelsbroughtback = binding.parcelsBroughtBack.text.toString().toInt(),
+                RtNoParcelsbroughtback = numberbroghtbac.toInt(),
                 RtUsrId = prefs.clebUserId.toInt(),
                 VehicleId = prefs.vmId,
                 RtId = rtID

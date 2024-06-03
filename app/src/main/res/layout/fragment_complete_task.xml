@@ -60,7 +60,7 @@
                             android:layout_centerVertical="true"
                             android:fontFamily="@font/poppins_bold"
                             android:layout_weight="1"
-                            android:text="Completed Task"
+                            android:text="Completed Tasks"
                             android:textColor="@color/text_color"
                             android:textSize="16sp" />
 

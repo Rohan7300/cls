@@ -410,9 +410,9 @@ class MainViewModel(
         }
     }
 
-    fun GetVehicleImageUploadInfo(userID: Int, date: String) {
+    fun GetVehicleImageUploadInfo(userID: Int,vmId:Int, date: String) {
         viewModelScope.launch {
-            val response = repo.GetVehicleImageUploadInfo(userID, date)
+            val response = repo.GetVehicleImageUploadInfo(userID,vmId, date)
             if (response.failed)
                 vehicleImageUploadInfoLiveData.postValue(null)
             if (!response.isSuccessful)

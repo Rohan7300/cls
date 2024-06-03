@@ -20,5 +20,6 @@ data class GetVehicleImageUploadInfoResponse(
     @SerializedName("DaVehicleFaceMaskImage") var DaVehImgFaceMaskFileName: String? = null,
     @SerializedName("DaVehicleOilLevelImage") var DaVehImgOilLevelFileName: String? = null,
     @SerializedName("DaVehicleAddBlueImage") var DaVehicleAddBlueImage: String? = null,
-    @SerializedName("IsVehicleImageUploaded") var IsVehicleImageUploaded: Boolean? = null
+    @SerializedName("IsVehicleImageUploaded") var IsVehicleImageUploaded: Boolean? = null,
+    @SerializedName("IsAdBlueRequired") var IsAdBlueRequired:Boolean?=null
 ) : Parcelable

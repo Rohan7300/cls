@@ -6,6 +6,18 @@
     android:layout_gravity="center"
     android:elevation="4dp"
     app:cardCornerRadius="20dp">
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        app:backgroundTint="@color/black"
+        android:layout_width="wrap_content"
+        app:fabCustomSize="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:backgroundTint="@color/home_blue"
+
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@drawable/cross2" />
     <RelativeLayout
         android:layout_width="250dp"
         android:layout_height="380dp"
@@ -15,7 +27,15 @@
         android:padding="25dp">
 
 
+
     </RelativeLayout>
+ <RelativeLayout
+     android:layout_width="230dp"
+     android:layout_height="wrap_content"
+     android:gravity="top">
+
+
+ </RelativeLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_gravity="bottom"
@@ -26,15 +46,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:id="@+id/birthdaytvMain"
             android:layout_marginTop="8dp"
+            android:background="@drawable/shape_home"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:fontFamily="@font/beth_ellen"
+            android:fontFamily="@font/poppins_semibold"
             android:gravity="center"
             android:text="Happy Birthday"
             android:textColor="@color/black"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
     </RelativeLayout>
 

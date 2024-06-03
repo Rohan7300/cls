@@ -90,7 +90,19 @@ class NotificationAdapter(
         fun bind(item: NotificationResponseItem) {
             val dailyRotatoken = item.NotificationUrl.replace(" ", "")
 
-            binding.title.text = item.NotificationTitle
+            when (item.NotificationTitle) {
+                "UserExpiringDocuments" -> binding.title.setText("User Expiring Documents")
+                "VehicleExpiringDocuments" -> binding.title.setText("Vehicle Expiring Documents")
+                "ExpiredDocuments" -> binding.title.setText("Expired Documents")
+                "WeeklyRotaApproval" -> binding.title.setText("Weekly Rota Approval")
+                "DailyRotaApproval" -> binding.title.setText("Daily Rota Approval")
+                "InvoiceReadyToReview" -> binding.title.setText("Invoice Ready To Review")
+                "DriverDeductionWithAgreement" -> binding.title.setText("Driver Deduction With Agreement")
+                "ThirdPartyAccessRequestNotification" -> binding.title.setText("Third Party Access Request Notification")
+            }
+//            binding.title.text = item.NotificationTitle
+            Log.e("jhdjsfhjfdjnotification", "bind: " + item.NotificationTitle)
+
             binding.descripotionX.text = item.NotificationBody
 
             if (item.ActionToPerform == "Deductions" ||
@@ -268,13 +280,12 @@ class NotificationAdapter(
                     /*                val intent = Intent(context, ExpiringDocumentsActivity::class.java)
                                     intent.putExtra("notificationID", item.NotificationId)
                                     context.startActivity(intent)*/
-                }else if(item.ActionToPerform=="VehicleExpiringDocuments"){
-                    vehicleExpiringDocuments(context,item.NotificationId)
-                }else if(item.ActionToPerform=="ThirdPartyAccessRequestNotification"){
+                } else if (item.ActionToPerform == "VehicleExpiringDocuments") {
+                    vehicleExpiringDocuments(context, item.NotificationId)
+                } else if (item.ActionToPerform == "ThirdPartyAccessRequestNotification") {
                     viewModel.MarkNotificationAsRead(item.NotificationId)
                     navController.navigate(R.id.profileFragment)
-                }
-                else {
+                } else {
                     //viewModel.MarkNotificationAsRead(item.NotificationId)
                     viewModel.MarkNotificationAsRead(item.NotificationId)
                     callback.refresh()

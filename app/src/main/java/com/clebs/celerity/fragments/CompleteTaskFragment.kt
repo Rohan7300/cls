@@ -210,7 +210,7 @@ class CompleteTaskFragment : Fragment() {
                 logOSEntity("OSData CompleteTaskFragment", osData!!)
                 showDialog()
                 viewModel.GetVehicleImageUploadInfo(
-                    Prefs.getInstance(requireContext()).clebUserId.toInt(),
+                    Prefs.getInstance(requireContext()).clebUserId.toInt(),Prefs.getInstance(requireContext()).vmId,
                     getCurrentDateTime()
                 )
                 showDialog()

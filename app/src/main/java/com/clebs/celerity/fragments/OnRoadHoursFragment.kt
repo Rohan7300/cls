@@ -39,6 +39,7 @@ class OnRoadHoursFragment : Fragment() {
     private var selectedRouteType: String? = null
     private var routeName: String? = null
     private var parcelsDelivered: String = "0"
+    private var numberbroghtbac: String = "0"
     private var totalMileage: String = "0"
     private var routeComment: String? = null
     private var dwID: Int = 0
@@ -75,20 +76,20 @@ class OnRoadHoursFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
         prefs = Prefs.getInstance(requireContext())
         loadingDialog = (activity as HomeActivity).loadingDialog
-        parcelBack = binding.parcelsBroughtBack.text.toString().toInt()
+//        parcelBack = binding.parcelsBroughtBack.text.toString().toInt()
 
-        binding.pbbPlus.setOnClickListener {
-            parcelBack += 1
-            binding.parcelsBroughtBack.text = parcelBack.toString()
-        }
-
-        binding.pbbMinus.setOnClickListener {
-
-            if (parcelBack > 0) {
-                parcelBack -= 1
-                binding.parcelsBroughtBack.text = parcelBack.toString()
-            }
-        }
+//        binding.pbbPlus.setOnClickListener {
+//            parcelBack += 1
+//            binding.parcelsBroughtBack.text = parcelBack.toString()
+//        }
+//
+//        binding.pbbMinus.setOnClickListener {
+//
+//            if (parcelBack > 0) {
+//                parcelBack -= 1
+//                binding.parcelsBroughtBack.text = parcelBack.toString()
+//            }
+//        }
 
         viewModel.livedataDailyWorkInfoByIdResponse.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -158,7 +159,11 @@ class OnRoadHoursFragment : Fragment() {
         }
         binding.onRoadHoursSave.setOnClickListener {
             parcelsDelivered = binding.edtParcels.text.toString()
+            numberbroghtbac = binding.parcelsBroughtBack.text.toString()
             totalMileage = binding.edtMileage.text.toString()
+            if (numberbroghtbac.isEmpty()) {
+                numberbroghtbac = "0"
+            }
             if (parcelsDelivered.isEmpty())
                 parcelsDelivered = "0"
             if (totalMileage.isEmpty())
@@ -197,7 +202,8 @@ class OnRoadHoursFragment : Fragment() {
                 RtLocationId = locationID,
                 RtName = routeName!!,
                 RtNoOfParcelsDelivered = parcelsDelivered?.toLongOrNull() ?: 0,
-                RtNoParcelsbroughtback = binding.parcelsBroughtBack.text.toString().toInt(),
+
+                RtNoParcelsbroughtback = numberbroghtbac.toInt(),
                 RtUsrId = prefs.clebUserId.toInt(),
                 VehicleId = prefs.vmId
             )

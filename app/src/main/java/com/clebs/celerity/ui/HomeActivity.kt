@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
@@ -15,6 +17,7 @@ import android.view.View.AUTOFILL_TYPE_NONE
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +29,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
-import b.O
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.ImageViewModel
@@ -36,27 +38,22 @@ import com.clebs.celerity.ViewModel.OSyncVMProvider
 import com.clebs.celerity.ViewModel.OSyncViewModel
 import com.clebs.celerity.database.ImageDatabase
 import com.clebs.celerity.database.ImagesRepo
-import com.clebs.celerity.database.OSyncRepo
-import com.clebs.celerity.database.OfflineSyncDB
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.ActivityHomeBinding
 import com.clebs.celerity.dialogs.BirthdayDialog
 import com.clebs.celerity.dialogs.ExpiredDocDialog
-import com.clebs.celerity.dialogs.InvoiceReadytoViewDialog
-import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
+import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
-import com.clebs.celerity.utils.InspectionIncompleteDialog
-import com.clebs.celerity.utils.InspectionIncompleteListener
-import com.clebs.celerity.dialogs.LoadingDialog
-import com.clebs.celerity.utils.NetworkManager
-import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.getMainVM
 import com.clebs.celerity.utils.DependencyProvider.isComingBackFromFaceScan
 import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
-import com.clebs.celerity.utils.DependencyProvider.osData
+import com.clebs.celerity.utils.InspectionIncompleteDialog
+import com.clebs.celerity.utils.InspectionIncompleteListener
+import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
 import com.clebs.celerity.utils.checkIfInspectionFailed
@@ -65,8 +62,6 @@ import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.deductions
 import com.clebs.celerity.utils.expiredDocuments
 import com.clebs.celerity.utils.expiringDocument
-import com.clebs.celerity.utils.getCurrentWeek
-import com.clebs.celerity.utils.getCurrentYear
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.invoiceReadyToView
@@ -74,11 +69,11 @@ import com.clebs.celerity.utils.logOSEntity
 import com.clebs.celerity.utils.parseToInt
 import com.clebs.celerity.utils.showBirthdayCard
 import com.clebs.celerity.utils.showToast
-import com.clebs.celerity.utils.thirdPartyAcessRequest
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.vehicleExpiringDocuments
 import com.clebs.celerity.utils.weeklyLocationRota
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
 import java.text.SimpleDateFormat
@@ -92,6 +87,7 @@ import java.util.TimeZone
 class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedListener,
     SaveChangesCallback, InspectionIncompleteListener {
     private var saveChangesCallback: SaveChangesCallback? = null
+    private var doubleBackToExitPressedOnce = false
     private lateinit var bottomNavigationView: BottomNavigationView
     lateinit var imageViewModel: ImageViewModel
     private var screenid: Int = 0
@@ -301,6 +297,18 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         }
                     } catch (_: Exception) {
                     }
+                    if (doubleBackToExitPressedOnce) {
+                        moveTaskToBack(true);
+                    }
+
+                   doubleBackToExitPressedOnce = true
+                    Snackbar.make(ActivityHomeBinding.bottomNavigatinView, "Please click BACK again to exit", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show()
+//                    Toast.makeText(applicationContext, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        doubleBackToExitPressedOnce = false
+                    }, 2000)
                 }
             })
 
@@ -595,6 +603,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
+
         //super.onBackPressed()
         screenid = viewModel.getLastVisitedScreenId(this)
         if (Prefs.getInstance(App.instance).get("90days")
@@ -617,6 +626,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     prefs.saveNavigationHistory(fragmentStack)
                 }
             } else {
+
                 super.onBackPressed()
             }
         } catch (_: Exception) {
@@ -805,7 +815,20 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 isApiResponseTrue = it.IsUsrProfileUpdateReqin90days
                 Log.d("BirthdayDialog"," ${showBirthdayCard(it.UsrDOB, prefs)}")
                 if (showBirthdayCard(it.UsrDOB, prefs)) {
-                    BirthdayDialog(prefs).showDialog(supportFragmentManager)
+                    val firstrun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean(
+                        "firstrun",
+                        true
+                    )
+                    if (firstrun) {
+                        BirthdayDialog(prefs).showDialog(supportFragmentManager)
+                        //... Display the dialog message here ...
+                        // Save the state
+                        getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                            .edit()
+                            .putBoolean("firstrun", false)
+                            .apply()
+                    }
+
                 }
                 if (isApiResponseTrue) {
                     trueCount++

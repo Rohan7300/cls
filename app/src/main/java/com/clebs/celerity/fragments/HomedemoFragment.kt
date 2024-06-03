@@ -3,6 +3,8 @@ package com.clebs.celerity.ui
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -19,12 +21,13 @@ import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertDateFormat
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
-import com.github.mikephil.charting.utils.MPPointF
 import java.text.SimpleDateFormat
+import java.util.Arrays
 import java.util.Calendar
 import java.util.Locale
 
@@ -149,47 +152,54 @@ class HomedemoFragment : Fragment() {
 
 
 //        mbinding.pieChart.setUsePercentValues(true);
-        mbinding.pieChart.description.isEnabled = false;
+
 
         mbinding.pieChart.dragDecelerationFrictionCoef = 0.95f;
-
+        mbinding.pieChart.getDescription().setEnabled(false);
         mbinding.pieChart.setDrawCenterText(true);
 
-        mbinding.pieChart.isRotationEnabled = true;
-        mbinding.pieChart.isHighlightPerTapEnabled = false;
-        mbinding.pieChart.isDrawHoleEnabled = false
-        mbinding.pieChart.holeRadius = 0f;
+//        mbinding.pieChart.isRotationEnabled = true;
+        mbinding.pieChart.isHighlightPerTapEnabled = true;
+        mbinding.pieChart.isDrawHoleEnabled = true
+        mbinding.pieChart.holeRadius = 48f;
         mbinding.pieChart.rotationAngle = 0f;
-        mbinding.pieChart.animateY(1400, Easing.EaseInOutQuad)
         mbinding.pieChart.setEntryLabelColor(resources.getColor(R.color.black))
-
-        mbinding.pieChart.setEntryLabelTextSize(12f)
-        val l: Legend = mbinding.pieChart.legend
-        l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-        l.orientation = Legend.LegendOrientation.HORIZONTAL
-        l.setDrawInside(false)
-        l.xEntrySpace = 7f
-        l.yEntrySpace = 0f
-        l.yOffset = 0f
+        val font = Typeface.createFromAsset(
+            requireContext().assets,
+            "OpenSans-Bold.ttf"
+        )
+        mbinding.pieChart.setEntryLabelTypeface(font)
+        mbinding.pieChart.setCenterTextTypeface(font)
 
 
-        mbinding.viewfullschedule.setOnClickListener {
-            if (isclicked) {
-//                mbinding.vieww.visibility=View.VISIBLE
-                mbinding.consttwo.visibility = View.GONE
-                mbinding.const1.visibility = View.GONE
-                mbinding.ss.fullScroll(ScrollView.FOCUS_UP);
-                mbinding.viewfulldatalayout.visibility = View.VISIBLE
-                mbinding.fullscheduleIV.visibility = View.GONE
-            } else {
-                mbinding.consttwo.visibility = View.VISIBLE
-                mbinding.const1.visibility = View.VISIBLE
-                mbinding.viewfulldatalayout.visibility = View.GONE
-//                mbinding.vieww.visibility=View.GONE
-                mbinding.fullscheduleIV.visibility = View.VISIBLE
-            }
-            isclicked = !isclicked
-        }
+        mbinding.pieChart.setDrawHoleEnabled(true);
+        mbinding.pieChart.setHoleColor(Color.WHITE);
+
+        mbinding.pieChart.setTransparentCircleColor(Color.WHITE);
+        mbinding.pieChart.setTransparentCircleAlpha(110);
+
+        mbinding.pieChart.setDrawEntryLabels(true)
+        mbinding.pieChart.setEntryLabelColor(Color.BLACK);
+        mbinding.pieChart.setEntryLabelTypeface(font)
+        mbinding.pieChart.setEntryLabelTextSize(12f);
+
+//        mbinding.viewfullschedule.setOnClickListener {
+//            if (isclicked) {
+////                mbinding.vieww.visibility=View.VISIBLE
+//                mbinding.consttwo.visibility = View.GONE
+//                mbinding.const1.visibility = View.GONE
+//                mbinding.ss.fullScroll(ScrollView.FOCUS_UP);
+//                mbinding.viewfulldatalayout.visibility = View.VISIBLE
+//                mbinding.fullscheduleIV.visibility = View.GONE
+//            } else {
+//                mbinding.consttwo.visibility = View.VISIBLE
+//                mbinding.const1.visibility = View.VISIBLE
+//                mbinding.viewfulldatalayout.visibility = View.GONE
+////                mbinding.vieww.visibility=View.GONE
+//                mbinding.fullscheduleIV.visibility = View.VISIBLE
+//            }
+//            isclicked = !isclicked
+//        }
         mbinding.fullscheduleIV.setOnClickListener {
             if (isclicked) {
 //                mbinding.vieww.visibility=View.VISIBLE
@@ -228,10 +238,12 @@ class HomedemoFragment : Fragment() {
             mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility = View.VISIBLE
             val weekprev = week - 3
-            mbinding.txtLastWeek.text = "Week " + weekprev
+            mbinding.txtLastWeek.text = "Week : " + weekprev
             val weekschedule = week - 1
             mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
             showDialog()
+            val w = week - 3
+            mbinding.pieChart.setCenterText("Cash flow week :" + w);
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 1
             )
@@ -253,6 +265,8 @@ class HomedemoFragment : Fragment() {
             mbinding.btPrev.visibility = View.VISIBLE
             showDialog()
             val weekprev = week - 2
+            val w = week - 3
+            mbinding.pieChart.setCenterText("Cash flow week :" + weekprev);
             mbinding.txtLastWeek.text = "Week " + weekprev
             mbinding.viewfullschedule.text = "Full schedule for week " + week
             viewModel.GetViewFullScheduleInfo(
@@ -284,7 +298,7 @@ class HomedemoFragment : Fragment() {
                 val weekprev = week - 2
                 mbinding.txtLastWeek.text = "Week $weekprev"
                 mbinding.viewfullschedule.text = "Full schedule for week $week"
-
+                mbinding.pieChart.setCenterText("Cash flow week :" + weekprev);
 
                 viewModel.GetcashFlowWeek(
                     Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 2
@@ -297,7 +311,7 @@ class HomedemoFragment : Fragment() {
                 viewModel.GetLastWeekSCore(
                     Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 2, year
                 )
-                mbinding.btPrev.text = "Previous"
+                mbinding.btPrev.text = "Load Previous Week Data"
             }
         }
 
@@ -309,16 +323,16 @@ class HomedemoFragment : Fragment() {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBar.setProgress(it.avgTotalScore.toDouble().toInt())
                     mbinding.tvPbone.text =
-                        "${it.avgTotalScore.toDouble().toInt()}% Score"
+                        "${it.avgTotalScore.toDouble().toInt()}%"
 
                     mbinding.ProgressBar.tooltipText = it.avgTotalScore.toDouble().toString() + "%"
                 } else {
                     mbinding.ProgressBar.setProgress(0)
-                    mbinding.tvPbone.setText("0% Score")
+                    mbinding.tvPbone.setText("0%")
                 }
             } else {
                 mbinding.ProgressBar.setProgress(0)
-                mbinding.tvPbone.setText("0% Score")
+                mbinding.tvPbone.setText("0%")
             }
         }
         viewModel.livedatalastweekresponse.observe(viewLifecycleOwner) {
@@ -328,7 +342,7 @@ class HomedemoFragment : Fragment() {
                     Log.e("hreheyey", "Observers: " + it.avgTotalScore)
                     mbinding.ProgressBartwo.setProgress(it.avgTotalScore.toDouble().toInt())
                     mbinding.tvPbTwo.text =
-                        "${it.avgTotalScore.toDouble().toInt()}% Score"
+                        "${it.avgTotalScore.toDouble().toInt()}%"
                     mbinding.ProgressBartwo.tooltipText =
                         it.avgTotalScore.toDouble().toString() + "%"
                 } else {
@@ -336,7 +350,7 @@ class HomedemoFragment : Fragment() {
                 }
             } else {
                 mbinding.ProgressBartwo.setProgress(0)
-                mbinding.tvPbTwo.setText("0%" + " Score")
+                mbinding.tvPbTwo.setText("0%")
             }
         }
         viewModel.livedataCashFlowWeek.observe(viewLifecycleOwner) { depts ->
@@ -372,46 +386,75 @@ class HomedemoFragment : Fragment() {
                 mbinding.pieChart.invalidate();
                 mbinding.pieChart.clear();
 
-                entries.add(PieEntry(avprofit, "Profits\n $totalearning"))
-                entries.add(PieEntry(avdeductions, "Deductions\n $totaldedecutions"))
-                entries.add(PieEntry(thirdpartydeductions, "3rd party Deductions\n $thirdparty"))
+                entries.add(PieEntry(avprofit, totalearning))
+                entries.add(PieEntry(avdeductions, totaldedecutions))
+                entries.add(PieEntry(thirdpartydeductions, thirdparty))
                 val dataSet = PieDataSet(entries, "")
-//
+
                 val colors = ArrayList<Int>()
                 colors.add(resources.getColor(R.color.blue_hex))
                 colors.add(resources.getColor(R.color.peek_orange))
                 colors.add(resources.getColor(R.color.red_light))
 
                 dataSet.colors = colors
-                dataSet.sliceSpace = 3f
-                dataSet.iconsOffset = MPPointF(0f, 40f)
-                dataSet.selectionShift = 5f
+
                 val data = PieData(dataSet)
 
 
                 data.setValueFormatter(PercentFormatter())
-                data.setValueTextSize(11f)
+//                data.setValueTextSize(11f)
                 data.setValueTextColor(resources.getColor(io.clearquote.assessment.cq_sdk.R.color.transparent))
+
+                val l: Legend = mbinding.pieChart.getLegend()
+                l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+                l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+                l.orientation = Legend.LegendOrientation.HORIZONTAL
+                l.setDrawInside(false)
+                l.xEntrySpace = 7f
+                l.yEntrySpace = 7f
+                l.yOffset = 7f
+                val legendEntryA = LegendEntry()
+                legendEntryA.label = "Profits"
+                legendEntryA.formColor = resources.getColor(R.color.blue_hex)
+
+                val legendEntryb = LegendEntry()
+                legendEntryb.label = "Deductions"
+                legendEntryb.formColor = resources.getColor(R.color.peek_orange)
+
+                val legendEntryc = LegendEntry()
+                legendEntryc.label = "Third party Deductions"
+                legendEntryc.formColor = resources.getColor(R.color.red_light)
+
+
+                mbinding.pieChart.legend.setCustom(
+                    listOf(
+                        legendEntryA,
+                        legendEntryb,
+                        legendEntryc
+                    )
+                )
 
                 mbinding.pieChart.data = data
 
                 // undo all highlights
+
+
                 mbinding.pieChart.highlightValues(null)
                 mbinding.pieChart.invalidate()
 
 
-/*                if (thirdpartydeductions.equals(0.0f)) {
-                    entries.removeAt(2)
-//                    slices.remove(pieChart.slices[0])
-                }
-                if (avprofit.equals(0.0f)) {
-                    entries.removeAt(0)
-//                    slices.remove(pieChart.slices[1])
-                }
-                if (avdeductions.equals(0.0f)) {
-                    entries.removeAt(1)
-//                    slices.remove(pieChart.slices[2])
-                }*/
+                /*                if (thirdpartydeductions.equals(0.0f)) {
+                                    entries.removeAt(2)
+                //                    slices.remove(pieChart.slices[0])
+                                }
+                                if (avprofit.equals(0.0f)) {
+                                    entries.removeAt(0)
+                //                    slices.remove(pieChart.slices[1])
+                                }
+                                if (avdeductions.equals(0.0f)) {
+                                    entries.removeAt(1)
+                //                    slices.remove(pieChart.slices[2])
+                                }*/
 
 //                pieChart.slices = slices
 //                pieChart.labelType = PieChart.LabelType.INSIDE
@@ -428,7 +471,7 @@ class HomedemoFragment : Fragment() {
                 mbinding.demo.visibility = View.VISIBLE
                 mbinding.pieChart.setNoDataText("No cash flow data found.")
                 mbinding.pieChart.setNoDataTextColor(resources.getColor(R.color.red))
-                mbinding.pieChart.setCenterTextSize(5f)
+//                mbinding.pieChart.setCenterTextSize(5f)
                 mbinding.pieChart.visibility = View.VISIBLE
 
             }

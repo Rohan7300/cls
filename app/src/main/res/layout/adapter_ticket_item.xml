@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="7dp"
-  android:background="@color/very_light_orange"
+
    >
 
     <LinearLayout
@@ -115,9 +115,10 @@
                 android:layout_width="18dp"
                 android:layout_height="22dp"
                 android:layout_marginStart="-8dp"
+                android:backgroundTint="@color/home_blue"
                 android:src="@drawable/circleleft"
                 android:background="@drawable/ticket_round"
-                app:tint="@color/white" />
+                app:tint="@color/home_blue" />
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="10dp"
@@ -243,9 +244,10 @@
                 android:layout_height="22dp"
                 android:visibility="visible"
                 android:layout_marginEnd="-8dp"
+                android:backgroundTint="@color/home_blue"
                 android:background="@drawable/ticket_round"
                 android:src="@drawable/circleright"
-                app:tint="@color/white" />
+                app:tint="@color/home_blue" />
         </LinearLayout>
 
         <LinearLayout

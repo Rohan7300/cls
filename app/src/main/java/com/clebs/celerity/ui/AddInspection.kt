@@ -67,12 +67,16 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     var b64ImageList = mutableListOf<String>()
     var i = 0
     lateinit var fragmentManager: FragmentManager
+    var isadBluerequire: Boolean = false
+    var DaVehicleAddBlueImage = String()
+    var DaVehicleAddOilImage = String()
     private val imagePartsList = mutableListOf<MultipartBody.Part>()
     private var allImagesUploaded: Boolean = false
     lateinit var viewModel: MainViewModel
     lateinit var oSyncViewModel: OSyncViewModel
     lateinit var osData: OfflineSyncEntity
     private var imageCapture: ImageCapture? = null
+
     companion object {
 
         private val REQUIRED_PERMISSIONS =
@@ -171,7 +175,11 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         }
         observers()
 
-        viewModel.GetVehicleImageUploadInfo(prefs.clebUserId.toInt(), currentDateTime)
+        viewModel.GetVehicleImageUploadInfo(
+            prefs.clebUserId.toInt(),
+            prefs.vmId.toInt(),
+            currentDateTime
+        )
         loadingDialog.show()
         clientUniqueID()
 
@@ -199,7 +207,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                 requestpermissions()
             }
         }
-        binding.newUploadBtn.setOnClickListener{
+        binding.newUploadBtn.setOnClickListener {
             if (allPermissionsGranted())
                 openClsCapture()
 //                if(b64ImageList.size==0){
@@ -265,7 +273,21 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
             loadingDialog.dismiss()
             i = 0
             if (it != null) {
-
+//                if (it.IsAdBlueRequired != null) {
+//                    isadBluerequire = it.IsAdBlueRequired!!
+//                }
+//                DaVehicleAddBlueImage = it.DaVehicleAddBlueImage.toString()
+//                if (it.IsAdBlueRequired == true && it.DaVehicleAddBlueImage.equals(null)) {
+//                    binding.addbluell.visibility = View.VISIBLE
+//                } else {
+//                    binding.addbluell.visibility = View.GONE
+//                }
+//
+//                if (it.DaVehImgOilLevelFileName.isNullOrEmpty()) {
+//                    binding.oilLevelll.visibility = View.VISIBLE
+//                } else {
+//                    binding.oilLevelll.visibility = View.GONE
+//                }
                 Log.d("OSData2 ", "$osData")
                 /*                    if (it.DaVehImgDashBoardFileName != null || osData.dashboardImage != null)
                                         i += 1
@@ -310,7 +332,11 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         viewModel.liveDatauploadVehicleImages.observe(this) {
             loadingDialog.show()
             if (it != null) {
-                viewModel.GetVehicleImageUploadInfo(prefs.clebUserId.toInt(), getCurrentDateTime())
+                viewModel.GetVehicleImageUploadInfo(
+                    prefs.clebUserId.toInt(),
+                    prefs.vmId,
+                    getCurrentDateTime()
+                )
             }
         }
     }
@@ -521,12 +547,13 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                     )
                     binding.tvUploadMainTV.text = "Inspection Completed"
                     binding.uploadBtnText.text = "Inspection Completed"
-                    binding.uploadBtnText.setTextColor(ContextCompat.getColor(this,R.color.orange))
+                    binding.uploadBtnText.setTextColor(ContextCompat.getColor(this, R.color.orange))
                     binding.tvUploadType.text = "You can exit and continue on remaining steps."
                 } else {
                     binding.ivUploadImage.visibility = View.GONE
                     binding.tvUploadMainTV.visibility = View.GONE
-                    binding.tvUploadType.text = "You can save and exit while images are being uploaded."
+                    binding.tvUploadType.text =
+                        "You can save and exit while images are being uploaded."
                     osData.isdashboardUploadedFailed = false
                     osData.isfrontImageFailed = false
                     osData.isnearSideFailed = false
@@ -583,9 +610,19 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
                 binding.tvUploadMainTV.isEnabled = false
                 binding.ivUploadImage.isEnabled = false
                 binding.uploadBtnText.text = "Inspection Completed"
-                binding.uploadBtnText.setTextColor(ContextCompat.getColor(this,R.color.orange))
-                binding.newUploadBtn.background.setTint(ContextCompat.getColor(this,R.color.very_light_orange))
-                binding.uploadBtnIV.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.check_new))
+                binding.uploadBtnText.setTextColor(ContextCompat.getColor(this, R.color.orange))
+                binding.newUploadBtn.background.setTint(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.very_light_orange
+                    )
+                )
+                binding.uploadBtnIV.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.check_new
+                    )
+                )
                 binding.newUploadBtn.isEnabled = false
                 binding.fullClick.isEnabled = false
 
@@ -603,8 +640,8 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     }
 
     private fun sendImage(imageUri: Uri, requestCode: Int) {
-/*        val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
-        val requestBody = imageBitmap.toRequestBody()*/
+        /*        val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
+                val requestBody = imageBitmap.toRequestBody()*/
         var partName = ""
         var x = b64ImageList.size
         when (x) {
@@ -663,10 +700,10 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
         x = b64ImageList.size
 
-/*        val imagePart =
-            MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
+        /*        val imagePart =
+                    MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
 
-        imagePartsList.add(imagePart)*/
+                imagePartsList.add(imagePart)*/
 
         uploadStatus(x)
         if (x == 7) {
@@ -771,32 +808,30 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         initPreviewView()
         if (isComingBackFromCLSCapture) {
             if (currentUri != null)
-               // printBitmapSize(currentUri!!)
-                sendImage(currentUri!!,0)
+            // printBitmapSize(currentUri!!)
+                sendImage(currentUri!!, 0)
             isComingBackFromCLSCapture = false
         }
     }
 
     fun openClsCapture() {
-        Log.e("sdkdfjfdjfdjhfd", "openClsCapture: "+b64ImageList.size.toString() )
+        Log.e("sdkdfjfdjfdjhfd", "openClsCapture: " + b64ImageList.size.toString())
 
         b64ImageList.size
-        if (b64ImageList.size==0){
+        if (b64ImageList.size == 0) {
             val intent = Intent(this, ClsCaptureTwo::class.java)
             insLevel = b64ImageList.size
             startActivity(intent)
-        }
-        else if (b64ImageList.size==5){
+
+        } else if (b64ImageList.size == 5  && isadBluerequire.equals(true) && DaVehicleAddBlueImage.isNotEmpty()) {
             val intent = Intent(this, ClsCaptureTwo::class.java)
             insLevel = b64ImageList.size
             startActivity(intent)
-        }
-        else if (b64ImageList.size==6){
+        } else if (b64ImageList.size == 6) {
             val intent = Intent(this, ClsCaptureTwo::class.java)
             insLevel = b64ImageList.size
             startActivity(intent)
-        }
-        else{
+        } else {
             currentUri = null
             val intent = Intent(this, ClsCapture::class.java)
             insLevel = b64ImageList.size

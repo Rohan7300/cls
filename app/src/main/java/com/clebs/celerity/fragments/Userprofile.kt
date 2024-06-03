@@ -1,6 +1,7 @@
 package com.clebs.celerity.fragments
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -192,15 +193,48 @@ class Userprofile : Fragment() {
 
         mainViewModel.updateprofilelivedata.observe(viewLifecycleOwner) {
             if (it != null) {
-                Log.e("UpdateProfileLiveData"," $it")
+                Log.e("UpdateProfileLiveData", " $it")
                 if (it.Status == "200") {
-                    Toast.makeText(
-                        requireActivity(),
-                        "Password has been changed",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    val newColor = resources.getColor(R.color.very_light_grey_two)
+                    mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(newColor)
+                    mbinding.passtext.backgroundTintList = ColorStateList.valueOf(newColor)
+                    mbinding.phonetext.backgroundTintList = ColorStateList.valueOf(newColor)
+                    mbinding.addresstext.backgroundTintList = ColorStateList.valueOf(newColor)
+                    mbinding.save.visibility = View.GONE
+                    mbinding.emailtext.isEnabled = false
+                    mbinding.emailtext.isFocusable = false
+                    mbinding.emailtext.isFocusableInTouchMode = false
+                    val colorRes = R.color.very_light_grey_two
+                    val color = ContextCompat.getColor(requireContext(), colorRes)
+
+                    mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(color)
+                    mbinding.passtext.backgroundTintList = ColorStateList.valueOf(color)
+                    mbinding.phonetext.backgroundTintList = ColorStateList.valueOf(color)
+                    mbinding.addresstext.backgroundTintList = ColorStateList.valueOf(color)
+                    mbinding.txtChangePassword.visibility = View.GONE
+
+                    mbinding.usertext.isEnabled = false
+                    mbinding.usertext.isFocusable = false
+                    mbinding.usertext.isFocusableInTouchMode = false
+
+                    mbinding.passtext.isEnabled = false
+                    mbinding.passtext.isFocusable = false
+                    mbinding.passtext.isFocusableInTouchMode = false
+
+                    mbinding.phonetext.isEnabled = false
+                    mbinding.phonetext.isFocusable = false
+                    mbinding.phonetext.isFocusableInTouchMode = false
+
+                    mbinding.addresstext.isEnabled = false
+                    mbinding.addresstext.isFocusable = false
+                    mbinding.addresstext.isFocusableInTouchMode = false
+
+                    mbinding.editImg.alpha = 1f
+//                mbinding.icInfos.visibility = View.GONE
+                    mbinding.useEmailas.visibility = View.GONE
+                    showToast("Profile Successfully Updated", requireContext())
                 } else {
-                    if(it.Status == "400")
+                    if (it.Status == "400")
                         showErrorDialog(fragmentManager, "400", it.Message.toString())
                 }
             } else {
@@ -390,6 +424,7 @@ class Userprofile : Fragment() {
             } else {
                 edtold = edt_old.text.toString()
                 edtnew = edt_new.text.toString()
+                edt_new_two.hideKeyboard()
                 updateProfilePassword()
                 deleteDialog.dismiss()
             }
@@ -680,14 +715,20 @@ class Userprofile : Fragment() {
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             val layoutParams = WindowManager.LayoutParams()
             layoutParams.copyFrom(window?.attributes)
-            layoutParams.width = ((context?.resources?.displayMetrics?.widthPixels ?:WindowManager.LayoutParams.WRAP_CONTENT ) * 0.9).toInt()
+            layoutParams.width = ((context?.resources?.displayMetrics?.widthPixels
+                ?: WindowManager.LayoutParams.WRAP_CONTENT) * 0.9).toInt()
             layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
             window?.attributes = layoutParams
             window?.setGravity(Gravity.CENTER)
-        }catch (_:Exception){
+        } catch (_: Exception) {
 
         }
 
         return result.await()
+    }
+
+    fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 }
