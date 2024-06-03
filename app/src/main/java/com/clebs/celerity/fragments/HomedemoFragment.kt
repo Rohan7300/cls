@@ -229,8 +229,6 @@ class HomedemoFragment : Fragment() {
             Prefs.getInstance(requireContext()).lmid
         )
 
-
-
         Observers()
         mbinding.btPrev.setOnClickListener {
             mbinding.viewfulldatalayout.visibility = View.GONE
@@ -256,8 +254,6 @@ class HomedemoFragment : Fragment() {
             )
         }
 
-
-
         mbinding.btThisWeek.setOnClickListener {
             mbinding.const1.visibility = View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
@@ -282,9 +278,7 @@ class HomedemoFragment : Fragment() {
 
         }
 
-
         return mbinding.root
-
     }
 
     private fun Observers() {
@@ -353,6 +347,7 @@ class HomedemoFragment : Fragment() {
                 mbinding.tvPbTwo.setText("0%")
             }
         }
+
         viewModel.livedataCashFlowWeek.observe(viewLifecycleOwner) { depts ->
             hideDialog()
 
@@ -362,12 +357,11 @@ class HomedemoFragment : Fragment() {
                 mbinding.pieChart.visibility = View.VISIBLE
                 depts.map {
 
-
+                    val totalEarning = it.totalEarning.toDouble()
                     val average =
-                        it.totalEarning + it.totalDeduction + it.charterHireDeduction + it.ThirdPartyDeduction
-                    totalearning = it.totalEarning.toInt().toString()
+                        totalEarning + it.totalDeduction + it.charterHireDeduction + it.ThirdPartyDeduction
+                    totalearning = totalEarning.toString()
                     totaldedecutions = it.totalDeduction.toDouble().toString()
-                    //thirdparty = it.charterHireDeduction.toDouble().toString()
                     thirdparty = it.ThirdPartyDeduction.toDouble().toString()
 
                     avprofit = (it.totalEarning / average).toFloat()
@@ -381,10 +375,12 @@ class HomedemoFragment : Fragment() {
                     } else {
                         0f
                     }
+
                 }
                 entries.clear();
                 mbinding.pieChart.invalidate();
                 mbinding.pieChart.clear();
+
 
                 entries.add(PieEntry(avprofit, totalearning))
                 entries.add(PieEntry(avdeductions, totaldedecutions))
@@ -395,6 +391,27 @@ class HomedemoFragment : Fragment() {
                 colors.add(resources.getColor(R.color.blue_hex))
                 colors.add(resources.getColor(R.color.peek_orange))
                 colors.add(resources.getColor(R.color.red_light))
+
+
+                if (thirdpartydeductions.equals(0.0f)){
+                    entries.removeAt(2)
+                }
+                if (avdeductions.equals(0.0f)){
+                    colors[1] = resources.getColor(R.color.red_light)
+                    entries.removeAt(1)
+                }
+                if (avprofit.equals(0.0f)){
+                    colors[0] = resources.getColor(R.color.peek_orange)
+                    entries.removeAt(0)
+                }
+
+
+
+                if(avprofit.equals(0.0f)&&avdeductions.equals(0.0f)){
+                    colors[0] = resources.getColor(R.color.red_light)
+                    colors[1] = resources.getColor(R.color.red_light)
+                }
+
 
                 dataSet.colors = colors
 
@@ -441,20 +458,6 @@ class HomedemoFragment : Fragment() {
 
                 mbinding.pieChart.highlightValues(null)
                 mbinding.pieChart.invalidate()
-
-
-                /*                if (thirdpartydeductions.equals(0.0f)) {
-                                    entries.removeAt(2)
-                //                    slices.remove(pieChart.slices[0])
-                                }
-                                if (avprofit.equals(0.0f)) {
-                                    entries.removeAt(0)
-                //                    slices.remove(pieChart.slices[1])
-                                }
-                                if (avdeductions.equals(0.0f)) {
-                                    entries.removeAt(1)
-                //                    slices.remove(pieChart.slices[2])
-                                }*/
 
 //                pieChart.slices = slices
 //                pieChart.labelType = PieChart.LabelType.INSIDE

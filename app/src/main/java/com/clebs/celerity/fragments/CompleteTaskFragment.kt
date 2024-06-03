@@ -638,10 +638,20 @@ class CompleteTaskFragment : Fragment() {
                     it.DaVehImgDashBoardFileName != null &&
                     it.DaVehImgOffSideFileName != null
                 ) {
+                    osData.isaddBlueImageRequired = false
+                    osData.isDashboardImageRequired = false
+                    osData.isRearImageRequired = false
+                    osData.isOffsideImageRequired = false
+                    osData.isnearImageRequired = false
+                    osData.isfaceMaskImageRequired = false
+                    osData.isoilLevelImageRequired = false
+                    osData.isFrontImageRequired = false
+
                     osData.isImagesUploadedToday = true
                     osData.isInspectionDoneToday = true
                     //oSyncViewModel.insertData(osData)
-                } else {
+                }
+                else {
                     if (osData.faceMaskImage == null ||
                         osData.dashboardImage == null ||
                         osData.nearSideImage == null ||
@@ -661,24 +671,37 @@ class CompleteTaskFragment : Fragment() {
                             it.DaVehImgDashBoardFileName != null &&
                             it.DaVehImgOffSideFileName != null
                         ) {
-
                             osData.isInspectionDoneToday = true
                             osData.isImagesUploadedToday = false
-
-                        } else if (!osData.isInspectionDoneToday
-                        ) {
-                            osData.isInspectionDoneToday = false
+                        }
+                        else if (!osData.isInspectionDoneToday) {
                             osData.isImagesUploadedToday = false
                             inspectionstarted = false
                         } else {
-                            osData.isInspectionDoneToday = true
-                            osData.isImagesUploadedToday = false
-                        }
+                            if (it.IsAdBlueRequired == true)
+                                osData.isaddBlueImageRequired = it.DaVehicleAddBlueImage == null
+                            else
+                                osData.isaddBlueImageRequired = false
 
+                            osData.isDashboardImageRequired = it.DaVehImgDashBoardFileName == null
+
+                            osData.isRearImageRequired = it.DaVehImgRearFileName==null
+
+                            osData.isOffsideImageRequired = it.DaVehImgOffSideFileName == null
+
+                            osData.isnearImageRequired = it.DaVehImgNearSideFileName == null
+
+                            osData.isFrontImageRequired = it.DaVehImgFrontFileName == null
+
+                            osData.isoilLevelImageRequired = it.DaVehImgOilLevelFileName == null
+
+                            backgroundImageSync()
+                        }
                         if (osData.faceMaskImage != null || it.DaVehImgFaceMaskFileName != null) {
                             osData.isImagesUploadedToday = true
                         }
-                    } else {
+                    }
+                    else {
                         backgroundImageSync()
                     }
                 }
@@ -710,6 +733,7 @@ class CompleteTaskFragment : Fragment() {
                     backgroundImageSync()
                 }
             }
+
             setVisibiltyLevel()
         })
 
@@ -802,7 +826,6 @@ class CompleteTaskFragment : Fragment() {
         osData.isInspectionDoneToday = true
         if (osData.faceMaskImage != null)
             osData.isImagesUploadedToday = true
-        //   oSyncViewModel.insertData(osData)
 
         setVisibiltyLevel()
     }
