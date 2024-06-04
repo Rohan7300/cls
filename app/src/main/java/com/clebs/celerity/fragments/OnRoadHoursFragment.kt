@@ -64,12 +64,26 @@ class OnRoadHoursFragment : Fragment() {
         init()
     }
 
-    private fun chkNotNullInputs(): Boolean {
-        return selectedRouteType.isNullOrEmpty() ||
-                routeName.isNullOrEmpty() ||
-                parcelsDelivered.isEmpty()
-                || totalMileage.isEmpty()
-                || parcelsDelivered.isEmpty()
+    private fun chkNotNullInputs(): Int {
+        if (selectedRouteType.isNullOrEmpty() ||
+            routeName.isNullOrEmpty() ||
+            parcelsDelivered.isEmpty()
+            || totalMileage.isEmpty()
+        ) {
+            if (routeName.isNullOrBlank())
+                showToast("Please add route name.", requireContext())
+            else if (selectedRouteType.isNullOrEmpty())
+                showToast("Please select route type.", requireContext())
+            else if(parcelsDelivered.isEmpty())
+                showToast("Please add parcels delivered.", requireContext())
+            else if(totalMileage.isEmpty())
+                showToast("Please add total mileage.",requireContext())
+            else
+                showToast("Please fill all fields.",requireContext())
+
+            return -1
+        }
+        return 1
     }
 
     private fun init() {
@@ -168,11 +182,9 @@ class OnRoadHoursFragment : Fragment() {
                 parcelsDelivered = "0"
             if (totalMileage.isEmpty())
                 totalMileage = "0"
-            if (chkNotNullInputs()) {
-                showToast("Please fill Route name.", requireContext())
-            } else {
+            if (chkNotNullInputs()==1)
                 sendData()
-            }
+
         }
     }
 

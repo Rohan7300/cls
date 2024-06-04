@@ -100,58 +100,58 @@ class RideAlongFragment : Fragment() {
 
 
     private fun observers() {
-/*        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-            binding.headerTop.anaCarolin.text = name
-        }
-        binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
-        binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
-
-        if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
-            binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
-        else
-            binding.headerTop.strikedxRegNo.visibility = View.GONE
-        if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
-            binding.headerTop.strikedxLoc.visibility = View.VISIBLE
-        else
-            binding.headerTop.strikedxLoc.visibility = View.GONE
-        binding.headerTop.dxm5.text = (activity as HomeActivity).date
-
-        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-            hideDialog()
-            if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
-                binding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).currLocationName ?: ""
-            } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
-                binding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).workLocationName ?: ""
-            } else {
-                if (it != null) {
-                    binding.headerTop.dxLoc.text = it.locationName ?: ""
+        /*        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+                    binding.headerTop.anaCarolin.text = name
                 }
-            }
+                binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+                binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
-            if (it != null) {
-                pref.vmRegNo = it.vmRegNo ?: ""
-                if(it.vmId!=0)
-                    Prefs.getInstance(requireContext()).vmId = it.vmId
-            }
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-                binding.headerTop.anaCarolin.text = name
-            }
-            binding.headerTop.dxm5.text = (activity as HomeActivity).date
-            binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
-            binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
+                if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
+                    binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+                else
+                    binding.headerTop.strikedxRegNo.visibility = View.GONE
+                if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
+                    binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+                else
+                    binding.headerTop.strikedxLoc.visibility = View.GONE
+                binding.headerTop.dxm5.text = (activity as HomeActivity).date
 
-            if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
-                binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
-            else
-                binding.headerTop.strikedxRegNo.visibility = View.GONE
-            if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
-                binding.headerTop.strikedxLoc.visibility = View.VISIBLE
-            else
-                binding.headerTop.strikedxLoc.visibility = View.GONE
-            binding.headerTop.dxm5.text = (activity as HomeActivity).date
-        }*/
+                viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+                    hideDialog()
+                    if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
+                        binding.headerTop.dxLoc.text =
+                            Prefs.getInstance(requireContext()).currLocationName ?: ""
+                    } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
+                        binding.headerTop.dxLoc.text =
+                            Prefs.getInstance(requireContext()).workLocationName ?: ""
+                    } else {
+                        if (it != null) {
+                            binding.headerTop.dxLoc.text = it.locationName ?: ""
+                        }
+                    }
+
+                    if (it != null) {
+                        pref.vmRegNo = it.vmRegNo ?: ""
+                        if(it.vmId!=0)
+                            Prefs.getInstance(requireContext()).vmId = it.vmId
+                    }
+                    "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+                        binding.headerTop.anaCarolin.text = name
+                    }
+                    binding.headerTop.dxm5.text = (activity as HomeActivity).date
+                    binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+                    binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
+
+                    if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
+                        binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+                    else
+                        binding.headerTop.strikedxRegNo.visibility = View.GONE
+                    if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
+                        binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+                    else
+                        binding.headerTop.strikedxLoc.visibility = View.GONE
+                    binding.headerTop.dxm5.text = (activity as HomeActivity).date
+                }*/
 
 
 
@@ -175,10 +175,10 @@ class RideAlongFragment : Fragment() {
                 val driverName = it.map { drivers -> drivers.Name }
 
                 if (driverId.isNotEmpty() && driverName.isNotEmpty()) {
-             /*       binding.SpinnerRouteType.setText("")
-                    selectedRouteId = null
-                    binding.SpinnerRouteType.setAdapter(null)
-                    selectedLocId = null*/
+                    /*       binding.SpinnerRouteType.setText("")
+                           selectedRouteId = null
+                           binding.SpinnerRouteType.setAdapter(null)
+                           selectedLocId = null*/
                     setSpinnerNew(
                         binding.spinnerSelectDriver, driverName, driverId, "Select Driver"
                     )
@@ -198,18 +198,18 @@ class RideAlongFragment : Fragment() {
             }
         }
 
-/*        viewModel.livedataGetRouteInfoById.observe(viewLifecycleOwner) {
-            hideDialog()
-            if (it != null) {
-                showDialog()
-                rtAddMode = it.RtAddMode
+        /*        viewModel.livedataGetRouteInfoById.observe(viewLifecycleOwner) {
+                    hideDialog()
+                    if (it != null) {
+                        showDialog()
+                        rtAddMode = it.RtAddMode
 
-                if (selectedDriverId != null)
-                    viewModel.GetRideAlongRouteInfoById(it.RtId, selectedDriverId!!)
-            } else {
-                Log.d("Exec", "NULL#2")
-            }
-        }*/
+                        if (selectedDriverId != null)
+                            viewModel.GetRideAlongRouteInfoById(it.RtId, selectedDriverId!!)
+                    } else {
+                        Log.d("Exec", "NULL#2")
+                    }
+                }*/
 
         viewModel.livedataRideAlongRouteInfoById.observe(viewLifecycleOwner) {
             hideDialog()
@@ -265,18 +265,18 @@ class RideAlongFragment : Fragment() {
 
 
     private fun clickListeners() {
-/*        if (!vehicleListCalled) {
-            showDialog()
-            //viewModel.GetRideAlongVehicleLists()
-        }*/
+        /*        if (!vehicleListCalled) {
+                    showDialog()
+                    //viewModel.GetRideAlongVehicleLists()
+                }*/
 
         binding.rideAlongCancel.setOnClickListener {
             findNavController().navigate(R.id.completeTaskFragment)
             findNavController().clearBackStack(R.id.completeTaskFragment)
         }
         binding.saveBT.setOnClickListener {
-            if (chkNull()) showToast("Please fill all fields!!", requireContext())
-            else rideAlongApi()
+            if (chkNull() == 1)
+                rideAlongApi()
         }
 
         binding.rbReTraining.setOnClickListener(::onRadioButtonClicked)
@@ -292,7 +292,7 @@ class RideAlongFragment : Fragment() {
                 IsReTraining = retraining!!,
                 LeadDriverId = leadDriverID!!,
                 RtAddMode = rtAddMode,
-                RtComment = routeComment?:" ",
+                RtComment = routeComment ?: " ",
                 RtFinishMileage = rtFinishMileage!!,
                 RtId = 0,
                 RtLocationId = selectedLocId!!,
@@ -307,20 +307,36 @@ class RideAlongFragment : Fragment() {
         )
     }
 
-    private fun chkNull(): Boolean {
-        return listOf(
-            selectedDriverId,
-            selectedRouteId,
-            selectedLocId,
-            routeName,
-            retraining,
-            training,
-            rtType,
-            trainingDays,
-            rtFinishMileage,
-            rtNoOfParcelsDelivered,
-            rtNoParcelsbroughtback
-        ).any { it == null }
+    private fun chkNull(): Int {
+        if (listOf(
+                selectedDriverId,
+                selectedRouteId,
+                selectedLocId,
+                routeName,
+                retraining,
+                training,
+                rtType,
+                trainingDays,
+                rtFinishMileage,
+                rtNoOfParcelsDelivered,
+                rtNoParcelsbroughtback
+            ).any { it == null }
+        ) {
+            if(selectedDriverId == null)
+                showToast("Please select driver.",requireContext())
+            else if(selectedRouteId == null)
+                showToast("Please select route type",requireContext())
+            else if(selectedLocId == null)
+                showToast("Please select route location",requireContext())
+            else if(routeName.isNullOrBlank())
+                showToast("Please add route name",requireContext())
+            else if(retraining==null&&training==null)
+                showToast("Select trainee type",requireContext())
+            else
+                showToast("Please fill all the fields",requireContext())
+            return -1
+        }
+        return 1
     }
 
     private fun setInputListener(editText: EditText) {
@@ -385,7 +401,10 @@ class RideAlongFragment : Fragment() {
                                 selectedRouteId =
                                     ids[position]
                                 showDialog()
-                                viewModel.GetRideAlongRouteInfoById(selectedRouteId!!, pref.clebUserId.toInt()!!)
+                                viewModel.GetRideAlongRouteInfoById(
+                                    selectedRouteId!!,
+                                    pref.clebUserId.toInt()!!
+                                )
                             }
 
                             binding.spinnerRouteLocation -> {

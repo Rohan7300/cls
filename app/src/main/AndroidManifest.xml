@@ -54,8 +54,12 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup"
         tools:targetApi="tiramisu">
-        <activity android:name=".utils.MyCustomAppIntro"
-            android:exported="false"/>
+        <activity
+            android:name=".ui.AddInspectionActivity2"
+            android:exported="false" />
+        <activity
+            android:name=".utils.MyCustomAppIntro"
+            android:exported="false" />
         <activity
             android:name=".utils.ImageTakerActivity"
             android:exported="false" />

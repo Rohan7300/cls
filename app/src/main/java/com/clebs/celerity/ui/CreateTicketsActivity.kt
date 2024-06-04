@@ -133,12 +133,12 @@ class CreateTicketsActivity : AppCompatActivity() {
     }
 
     private fun chkNull(): Int {
-        if(selectedDeptID == -1 || selectedRequestTypeID == -1 || title == null || desc == null || mbinding.edtDes.text.isNullOrBlank()){
+        if(selectedDeptID == -1 || selectedRequestTypeID == -1 || title.isNullOrBlank() || desc.isNullOrBlank()|| mbinding.edtDes.text.isNullOrBlank()){
             if(selectedDeptID == -1)
                 showToast("Department not Selected!!",this)
             else if(selectedRequestTypeID == -1)
                 showToast("Please add request type!!",this)
-            else if(title == null)
+            else if(title.isNullOrBlank())
                 showToast("Please add ticket title!!",this)
             else if( mbinding.edtDes.text.isNullOrBlank())
                 showToast("Please add ticket description!!",this)

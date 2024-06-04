@@ -523,7 +523,7 @@ interface ApiService {
         @Path("userId") userId: Int
     ): Response<NotificationResponse>
 
-    @POST("/api/Vehicle/SaveVehInspectionInfo")
+    @POST("/api/Vehicle/SaveVehicleInspectionInfo")
     suspend fun SaveVehicleInspectionInformation(
         @Body body: SaveVehicleInspectionInfo
     ): Response<SimpleStatusMsgResponse>
