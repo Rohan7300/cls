@@ -45,6 +45,7 @@ import com.clebs.celerity.adapters.DriverRouteAdapter
 import com.clebs.celerity.adapters.RideAlongAdapter
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
+import com.clebs.celerity.databinding.FragmentNewCompleteTaskBinding
 import com.clebs.celerity.databinding.TimePickerDialogBinding
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
@@ -82,7 +83,6 @@ import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.cre
 import io.clearquote.assessment.cq_sdk.models.CustomerDetails
 import io.clearquote.assessment.cq_sdk.models.InputDetails
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
-
 import okhttp3.MultipartBody
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -95,8 +95,8 @@ import java.util.TimerTask
 import java.util.UUID
 
 
-class CompleteTaskFragment : Fragment() {
-    lateinit var mbinding: FragmentCompleteTaskBinding
+class NewCompleteTaskFragment : Fragment() {
+    lateinit var mbinding: FragmentNewCompleteTaskBinding
     private var isclicked: Boolean = true
     private var isclickedtwo: Boolean = true
     private lateinit var viewModel: MainViewModel
@@ -105,12 +105,12 @@ class CompleteTaskFragment : Fragment() {
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
     var clockedouttime = String()
+    var isInspectionDoneToday:Boolean = false
     lateinit var ivX: ImageView
     var codeX = 0
     var uploadInProgress = false
     private var requestCode: Int = 0
     private var showImageUploadLayout: Boolean = false
-    private var isAllImageUploaded: Boolean = false
     private var isInspectionDone: Boolean = false
     private var imagesUploaded: Boolean = false
     private lateinit var rideAlongAdapter: RideAlongAdapter
@@ -158,7 +158,7 @@ class CompleteTaskFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         if (!this::mbinding.isInitialized) {
-            mbinding = FragmentCompleteTaskBinding.inflate(inflater, container, false)
+            mbinding = FragmentNewCompleteTaskBinding.inflate(inflater, container, false)
         }
         val clickListener = View.OnClickListener {
             showAlert()
@@ -192,6 +192,7 @@ class CompleteTaskFragment : Fragment() {
                 mbinding.badgeArrow.setImageResource(R.drawable.down_arrow)
             }
         }
+        isInspectionDoneToday = Prefs.getInstance(requireContext()).isInspectionDoneToday()
 
         mbinding.ivFaceMask.setImageResource(R.drawable.camera_ivs)
         Prefs.getInstance(requireContext()).clearNavigationHistory()
@@ -208,8 +209,7 @@ class CompleteTaskFragment : Fragment() {
             if (it.isIni) {
                 hideDialog()
                 osData!!.isDefectSheetFilled = true
-                inspectionstarted = osData.isInspectionDoneToday
-                imagesUploaded = osData.isImagesUploadedToday
+              // inspectionstarted = osData.isInspectionDoneToday
                 logOSEntity("OSData CompleteTaskFragment", osData!!)
                 showDialog()
                 viewModel.GetVehicleImageUploadInfo(
@@ -236,11 +236,10 @@ class CompleteTaskFragment : Fragment() {
                     currentDate
                 )
                 observers()
-                setVisibiltyLevel()
             }
         }
 
-        viewModel.setLastVisitedScreenId(requireActivity(), R.id.completeTaskFragment)
+        viewModel.setLastVisitedScreenId(requireActivity(), R.id.newCompleteTaskFragment)
 
         if (mbinding.startinspection.isVisible) {
             val anim = ValueAnimator.ofFloat(1f, 1.2f)
@@ -291,7 +290,6 @@ class CompleteTaskFragment : Fragment() {
             pictureDialogBase64(mbinding.ivFaceMask, requestCode)
         }
         mbinding.startinspection.setOnClickListener {
-            //startInspection()
             val intent = Intent(requireContext(), AddInspectionActivity2::class.java)
             startActivity(intent)
         }
@@ -302,7 +300,6 @@ class CompleteTaskFragment : Fragment() {
         mbinding.clOilLevel.setOnClickListener {
             requestCode = 5
             pictureDialogBase64(mbinding.ivOilLevel, requestCode)
-            //startInspection()
         }
         mbinding.ivAddBlueImg.setOnClickListener {
             requestCode = 7
@@ -311,7 +308,6 @@ class CompleteTaskFragment : Fragment() {
         mbinding.clAddBlueImg.setOnClickListener {
             requestCode = 7
             pictureDialogBase64(mbinding.ivAddBlueImg, requestCode)
-//            startInspection()
         }
 
         mbinding.AddRoute.setOnClickListener {
@@ -635,11 +631,7 @@ class CompleteTaskFragment : Fragment() {
                 imagesUploaded = true
 
                 if (it.DaVehImgFaceMaskFileName != null &&
-                    it.DaVehImgOilLevelFileName != null &&
-                    it.DaVehImgNearSideFileName != null &&
-                    it.DaVehImgRearFileName != null &&
-                    it.DaVehImgDashBoardFileName != null &&
-                    it.DaVehImgOffSideFileName != null
+                    it.DaVehImgOilLevelFileName != null
                 ) {
                     osData.isaddBlueImageRequired = false
                     osData.isDashboardImageRequired = false
@@ -655,7 +647,7 @@ class CompleteTaskFragment : Fragment() {
                         if (osData.addblueImage == null) {
                             osData.isaddBlueImageRequired = true
                             osData.isImagesUploadedToday = false
-                            osData.isInspectionDoneToday = false
+                            isInspectionDoneToday = false
                             inspectionstarted = false
                             imagesUploaded = false
                         } else {
@@ -664,52 +656,33 @@ class CompleteTaskFragment : Fragment() {
                         }
                     } else {
                         osData.isImagesUploadedToday = true
-                        osData.isInspectionDoneToday = true
                         inspectionstarted = true
                         imagesUploaded = true
                     }
-                    //oSyncViewModel.insertData(osData)
                 } else {
                     if (osData.faceMaskImage == null ||
-                        osData.dashboardImage == null ||
-                        osData.nearSideImage == null ||
-                        osData.rearSideImage == null ||
-                        osData.offSideImage == null ||
-                        osData.frontImage == null ||
                         osData.oillevelImage == null
                     ) {
                         mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
                         showImageUploadLayout = true
                         imagesUploaded = false
-                        if (it.DaVehImgOilLevelFileName != null &&
-                            it.DaVehImgNearSideFileName != null &&
-                            it.DaVehImgRearFileName != null &&
-                            it.DaVehImgDashBoardFileName != null &&
-                            it.DaVehImgOffSideFileName != null
-                        ) {
-                            osData.isInspectionDoneToday = true
+                        if (it.DaVehImgOilLevelFileName != null) {
                             osData.isImagesUploadedToday = false
+                            isInspectionDoneToday = true
                             inspectionstarted = true
                             imagesUploaded = false
-                        } else if (!osData.isInspectionDoneToday) {
+                        }
+                        else if (osData.oillevelImage==null&&isInspectionDoneToday) {
+                            isInspectionDoneToday = false
                             osData.isImagesUploadedToday = false
                             imagesUploaded = false
                             inspectionstarted = false
                         } else {
+                            isInspectionDoneToday = true
                             if (it.IsAdBlueRequired == true)
                                 osData.isaddBlueImageRequired = it.DaVehicleAddBlueImage == null
                             else
                                 osData.isaddBlueImageRequired = false
-
-                            osData.isDashboardImageRequired = it.DaVehImgDashBoardFileName == null
-
-                            osData.isRearImageRequired = it.DaVehImgRearFileName == null
-
-                            osData.isOffsideImageRequired = it.DaVehImgOffSideFileName == null
-
-                            osData.isnearImageRequired = it.DaVehImgNearSideFileName == null
-
-                            osData.isFrontImageRequired = it.DaVehImgFrontFileName == null
 
                             osData.isoilLevelImageRequired = it.DaVehImgOilLevelFileName == null
 
@@ -719,28 +692,23 @@ class CompleteTaskFragment : Fragment() {
                             osData.isImagesUploadedToday = true
                             imagesUploaded = true
                         }
-                    } else {
+                    }
+                    else {
                         backgroundImageSync()
                     }
                 }
             } else {
                 if (osData.faceMaskImage == null ||
-                    osData.dashboardImage == null ||
-                    osData.nearSideImage == null ||
-                    osData.rearSideImage == null ||
-                    osData.offSideImage == null ||
-                    osData.frontImage == null ||
                     osData.oillevelImage == null
                 ) {
 
                     if (!osData.isInspectionDoneToday) {
                         mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
-                        osData.isInspectionDoneToday = false
                         osData.isImagesUploadedToday = false
                         inspectionstarted = false
                         imagesUploaded = false
                     } else {
-                        osData.isInspectionDoneToday = true
+                        //  osData.isInspectionDoneToday = true
                         osData.isImagesUploadedToday = false
                         inspectionstarted = true
                         imagesUploaded = false
@@ -838,13 +806,11 @@ class CompleteTaskFragment : Fragment() {
     private fun backgroundImageSync() {
         uploadInProgress = true
 
-        //Prefs.getInstance(requireContext()).updateInspectionStatus(true)
         startUploadWithWorkManager(
             0,
             Prefs.getInstance(requireContext()),
             requireContext()
         )
-        osData.isInspectionDoneToday = true
         inspectionstarted = true
         if (osData.faceMaskImage != null){
             osData.isImagesUploadedToday = true
@@ -852,10 +818,6 @@ class CompleteTaskFragment : Fragment() {
         }
 
         setVisibiltyLevel()
-    }
-
-    private fun checkNull(res: GetVehicleImageUploadInfoResponse): Boolean {
-        return res.DaVehImgFaceMaskFileName == null && osData.faceMaskImage == null  /*|| res.DaVehicleAddBlueImage == null || res.DaVehImgOilLevelFileName == null*/
     }
 
 
@@ -1129,131 +1091,6 @@ class CompleteTaskFragment : Fragment() {
         Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
     }
 
-    /*private fun startInspection() {
-        if (isAllImageUploaded) {
-            mbinding.tvNext.visibility = View.VISIBLE
-        }
-
-        //if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
-        showDialog()
-
-        if (cqSDKInitializer.isCQSDKInitialized()) {
-            // Show a loading dialog
-
-            Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
-            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
-            // Make request to start an inspection
-            try {
-                cqSDKInitializer.startInspection(activityContext = requireActivity(),
-                    clientAttrs = ClientAttrs(
-                        userName = "",
-                        dealer = "",
-                        dealerIdentifier = "",
-                        client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
-                    ),
-                    result = { isStarted, msg, code ->
-                        hideDialog()
-                        Log.e("messsagesss", "startInspection: " + msg + code)
-                        if (isStarted) {
-//
-                        } else {
-//
-                        }
-                        if (msg == "Success") {
-
-
-                        }
-                        if (!isStarted) {
-                            Log.e("startedinspection", "onCreateView: " + msg + isStarted)
-
-
-                        }
-                    })
-            } catch (_: Exception) {
-
-                showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
-            }
-        }
-        *//*
-         } else {
-                    showErrorDialog(
-                        fragmentManager,
-                        "CTF-1",
-                        "We are currently updating our app for Android 13+ devices. Please try again later."
-                    )
-                }*//*
-
-    }*/
-
-    /*private fun startInspection() {
-//        if (isAllImageUploaded) {
-//            mbinding.tvNext.visibility = View.VISIBLE
-//        }
-
-//      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
-        loadingDialog.show()
-
-        if (cqSDKInitializer.isCQSDKInitialized()) {
-
-            var vmReg = Prefs.getInstance(App.instance).scannedVmRegNo ?: ""
-            Log.e(
-                "totyototyotoytroitroi",
-                "startInspection: " + inspectionID + "VmReg ${Prefs.getInstance(App.instance).vmRegNo}"
-            )
-            if (vmReg.isEmpty()) {
-                vmReg = Prefs.getInstance(App.instance).vmRegNo
-            }
-            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
-
-            try {
-                cqSDKInitializer.startInspection(activityContext = requireActivity(),
-                    clientAttrs = ClientAttrs(
-                        userName = " ",
-                        dealer = " ",
-                        dealerIdentifier = " ",
-                        client_unique_id = inspectionID
-                        //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
-                    ),
-                    inputDetails = InputDetails(
-                        vehicleDetails = VehicleDetails(
-                            regNumber = vmReg.replace(
-                                " ",
-                                ""
-                            ), //if sent, user can't edit
-                            make = "Van", //if sent, user can't edit
-                            model = "Any Model", //if sent, user can't edit
-                            bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
-                        ),
-                        customerDetails = CustomerDetails(
-                            name = "", //if sent, user can't edit
-                            email = "", //if sent, user can't edit
-                            dialCode = "", //if sent, user can't edit
-                            phoneNumber = "", //if sent, user can't edit
-                        )
-                    ),
-                    result = { isStarted, msg, code ->
-                        Log.e("inspectionIDsssssssss", "startInspection: " + inspectionID)
-                        Log.e("messsagesss", "startInspection: " + msg + code)
-                        if (isStarted) {
-                            Prefs.getInstance(App.instance).inspectionID = inspectionID
-                        } else {
-//
-                        }
-                        if (msg == "Success") {
-                            loadingDialog.cancel()
-                        }
-                        if (!isStarted) {
-                            loadingDialog.cancel()
-                            Log.e("startedinspection", "onCreateView: " + msg + isStarted)
-                        }
-                    })
-            } catch (_: Exception) {
-
-                showErrorDialog(fragmentManager, "CTF-02", "Please try again later!!")
-            }
-        }
-
-    }*/
 
     private fun visibiltyControlls() {
         with(mbinding) {
@@ -1372,7 +1209,7 @@ class CompleteTaskFragment : Fragment() {
         visibilityLevel = 0
 
         isClockedIn = osData.isClockedInToday
-
+        inspectionstarted = isInspectionDoneToday
         print("OSData ISImage $imagesUploaded\n")
         print("OSData ISInspection $inspectionstarted\n")
         if (!inspectionstarted) {

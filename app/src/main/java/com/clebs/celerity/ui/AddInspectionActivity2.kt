@@ -38,6 +38,7 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.BackgroundUploadDialog
 import com.clebs.celerity.utils.BackgroundUploadDialogListener
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.utils.ClsCapture
 import com.clebs.celerity.utils.ClsCaptureTwo
 import com.clebs.celerity.utils.DependencyProvider
@@ -55,6 +56,10 @@ import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.toast
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
+import io.clearquote.assessment.cq_sdk.models.CustomerDetails
+import io.clearquote.assessment.cq_sdk.models.InputDetails
+import io.clearquote.assessment.cq_sdk.models.UserFlowParams
+import io.clearquote.assessment.cq_sdk.models.VehicleDetails
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
@@ -72,7 +77,12 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     lateinit var loadingDialog: LoadingDialog
     private var b64ImageList = mutableListOf<String>()
     var i = 0
+    var isInspectionDoneToday: Boolean = false
+    var isaddBlueImageRequired:Boolean = false
+    var isOilLevelImageRequired:Boolean = false
     lateinit var fragmentManager: FragmentManager
+    private var isfirst: Boolean? = false
+    private var startonetime: Boolean? = true
     private var allImagesUploaded: Boolean = false
     lateinit var viewModel: MainViewModel
     lateinit var oSyncViewModel: OSyncViewModel
@@ -108,6 +118,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         cqSDKInitializer = CQSDKInitializer(this)
         cqSDKInitializer.triggerOfflineSync()
         initPreviewView()
+        startonetime = prefs.Isfirst!!
+
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         val todayDate = dateFormat.format(Date())
@@ -123,11 +135,11 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
-        osData = DependencyProvider.osData
+
         clientUniqueID()
+
         oSyncViewModel.osData.observe(this) {
             osData = it
-            DependencyProvider.osData = it
             i = 0
             b64ImageList.clear()
             Log.d("OSData ", "$osData")
@@ -136,6 +148,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                 osData.dawDate = todayDate
                 osData.vehicleID = prefs.scannedVmRegNo
                 osData.isIni = true
+                isInspectionDoneToday = osData.isInspectionDoneToday
+
             }
             if (checkIfInspectionFailed(osData)) {
                 Log.d("OSDataFailed1 ", "$osData")
@@ -148,8 +162,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                 if (osData.addblueImage != null &&
                     osData.oillevelImage != null
                 ) {
-                    uploadStatus()
-                    generateInspectionID()
+
                     showToast("Inspection Completed", this)
                     onSaveClick()
                 }
@@ -270,12 +283,14 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     onSaveClick()
                 } else {
                     if (it.IsAdBlueRequired == true)
-                        osData.isaddBlueImageRequired = it.DaVehicleAddBlueImage == null
+                        isaddBlueImageRequired = it.DaVehicleAddBlueImage == null
                     else
-                        osData.isaddBlueImageRequired = false
+                        isaddBlueImageRequired = false
 
-                    osData.isoilLevelImageRequired = it.DaVehImgOilLevelFileName == null
+                    isOilLevelImageRequired = it.DaVehImgOilLevelFileName == null
 
+                    osData.isaddBlueImageRequired = isaddBlueImageRequired
+                    osData.isoilLevelImageRequired = isOilLevelImageRequired
                     oSyncViewModel.insertData(osData)
                     uploadStatus()
                 }
@@ -323,6 +338,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         }
         setCheckIndicator()
         setUploadLabel()
+
     }
 
 
@@ -369,8 +385,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     }
 
     private fun generateInspectionID() {
-        prefs.updateInspectionStatus(true)
-
         val currentDate =
             SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
                 Date()
@@ -423,12 +437,55 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                 sendImage(currentUri!!)
             isComingBackFromCLSCapture = false
         }
+
+
+        val message =
+            intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
+                ?: "Could not identify status message"
+        val tempCode =
+            intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
+
+        if (tempCode == 200) {
+            Log.d("hdhsdshdsdjshhsds", "200 $message")
+            prefs.saveBoolean("Inspection", true)
+            prefs.updateInspectionStatus(true)
+            prefs.Isfirst = false
+            generateInspectionID()
+            isInspectionDoneToday = true
+            val currentDate =
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
+                    Date()
+                )
+
+            val currentloction = Prefs.getInstance(App.instance).currLocationId
+            val workinglocation = Prefs.getInstance(App.instance).workLocationId
+            val locationID: Int = if (workinglocation != 0) {
+                workinglocation
+            } else {
+                currentloction
+            }
+            viewModel.SaveVehicleInspectionInfo(
+                SaveVehicleInspectionInfo(
+                    Prefs.getInstance(App.instance).clebUserId.toInt(),
+                    currentDate,
+                    Prefs.getInstance(App.instance).inspectionID,
+                    locationID,
+                    Prefs.getInstance(App.instance).VmID.toString().toInt()
+                )
+            )
+
+            uploadStatus()
+            showToast("Vehicle Inspection is successfully completed ", this)
+        } else {
+            //   showToast("Vehicle Inspection Failed!! ", this)
+        }
     }
 
     private fun openClsCapture() {
         Log.e("sdkdfjfdjfdjhfd", "openClsCapture: " + b64ImageList.size.toString())
-
-        if (!osData.isInspectionDoneToday) {
+        isInspectionDoneToday = prefs.isInspectionDoneToday()
+        if (!isInspectionDoneToday) {
+            loadingDialog.show()
             startInspection()
         } else if (osData.addblueImage == null && osData.isaddBlueImageRequired) {
             val intent = Intent(this, ClsCaptureTwo::class.java)
@@ -448,19 +505,39 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     }
 
     private fun startInspection() {
-        loadingDialog.show()
         if (cqSDKInitializer.isCQSDKInitialized()) {
-
-            Log.e("totyototyotoytroitroi", "startInspection: " + inspectionID)
             Log.e("sdkskdkdkskdkskd", "onCreateView: ")
+
             try {
-                cqSDKInitializer.startInspection(activityContext = this,
+
+                cqSDKInitializer.startInspection(activity = this,
                     clientAttrs = ClientAttrs(
-                        userName = "",
-                        dealer = "",
-                        dealerIdentifier = "",
-                        client_unique_id = inspectionID //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                        userName = " ",
+                        dealer = " ",
+                        dealerIdentifier = " ",
+                        client_unique_id = inspectionID
                     ),
+                    inputDetails = InputDetails(
+                        vehicleDetails = VehicleDetails(
+                            regNumber = prefs.scannedVmRegNo.replace(" ", ""),
+                            make = "Van", //if sent, user can't edit
+                            model = "Any Model", //if sent, user can't edit
+                            bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
+                        ),
+                        customerDetails = CustomerDetails(
+                            name = "", //if sent, user can't edit
+                            email = "", //if sent, user can't edit
+                            dialCode = "", //if sent, user can't edit
+                            phoneNumber = "", //if sent, user can't edit
+                        )
+                    ),
+                    userFlowParams = UserFlowParams(
+                        isOffline = !startonetime!!,
+
+                        skipInputPage = true, // true, Inspection will be started with camera page | false, Inspection will be started
+
+                    ),
+
                     result = { isStarted, msg, code ->
                         loadingDialog.dismiss()
                         Log.e("messsagesss", "startInspection: $msg$code")
@@ -471,55 +548,58 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                         }
                         if (msg == "Success") {
 
+                        } else {
 
                         }
                         if (!isStarted) {
-                            Log.e("startedinspection", "onCreateView: " + msg + isStarted)
+                            Log.e("startedinspection", "onCreateView: $msg$isStarted")
                         }
                     })
+                prefs.Isfirst = false
+                Log.d("Start OFfflne","$startonetime")
             } catch (_: Exception) {
-                showErrorDialog(this.fragmentManager, "CTF-02", "Please try again later!!")
+                loadingDialog.dismiss()
             }
         }
+
     }
 
     private fun setUploadLabel() {
-        if (!osData.isInspectionDoneToday) {
+        isInspectionDoneToday = prefs.isInspectionDoneToday()
+        if (!isInspectionDoneToday) {
+            prefs.updateInspectionStatus(false)
             binding.tvUploadType.text = "Start Full Inspection"
             binding.uploadBtnText.text = "Full vehicle inspection"
-        } else if (osData.addblueImage == null && osData.isaddBlueImageRequired) {
+            osData.isInspectionDoneToday = isInspectionDoneToday
+            oSyncViewModel.insertData(osData)
+        } else if (osData.addblueImage == null && isaddBlueImageRequired) {
             binding.tvUploadType.text = "Add Blue Level Image"
             binding.uploadBtnText.text = "Upload Add Blue Level Image"
-        } else if (osData.oillevelImage == null && osData.isoilLevelImageRequired) {
+        } else if (osData.oillevelImage == null && isOilLevelImageRequired) {
             binding.tvUploadType.text = "Oil Level Image"
             binding.uploadBtnText.text = "Upload Oil Level Image"
         } else {
-            if (allImagesUploaded) {
-                binding.ivUploadImage.visibility = View.VISIBLE
 
-                binding.ivUploadImage.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        this, R.drawable.ic_yes2
-                    )
+            binding.ivUploadImage.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this, R.drawable.ic_yes2
                 )
-                binding.tvUploadMainTV.text = "Inspection Completed"
-                binding.uploadBtnText.text = "Inspection Completed"
-                binding.uploadBtnText.setTextColor(ContextCompat.getColor(this, R.color.orange))
-                binding.tvUploadType.text = "You can exit and continue on remaining steps."
-            } else {
-                binding.ivUploadImage.visibility = View.GONE
-                binding.tvUploadMainTV.visibility = View.GONE
-                binding.tvUploadType.text =
-                    "You can save and exit while images are being uploaded."
-                osData.isdashboardUploadedFailed = false
-                osData.isfrontImageFailed = false
-                osData.isnearSideFailed = false
-                osData.isrearSideFailed = false
-                osData.isoffSideFailed = false
-                osData.isaddblueImageFailed = false
-                osData.isoillevelImageFailed = false
-                startUploadWithWorkManager(0, prefs, this)
-            }
+            )
+            binding.tvUploadMainTV.text = "Inspection Completed"
+            binding.uploadBtnText.text = "Inspection Completed"
+            binding.uploadBtnText.setTextColor(ContextCompat.getColor(this, R.color.orange))
+            binding.tvUploadType.text = "You can exit and continue on remaining steps."
+
+            binding.tvUploadType.text =
+                "You can save and exit while images are being uploaded."
+            osData.isdashboardUploadedFailed = false
+            osData.isfrontImageFailed = false
+            osData.isnearSideFailed = false
+            osData.isrearSideFailed = false
+            osData.isoffSideFailed = false
+            osData.isaddblueImageFailed = false
+            osData.isoillevelImageFailed = false
+            startUploadWithWorkManager(0, prefs, this)
             binding.tvUploadMainTV.isEnabled = false
             binding.ivUploadImage.isEnabled = false
             binding.uploadBtnText.text = "Inspection Completed"
@@ -544,9 +624,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         var uploadStatus = 0
 
         val imageViews = listOf(
-            Pair(null to !osData.isInspectionDoneToday, binding.fullvehicleInspection),
-            Pair(osData.addblueImage to osData.isaddBlueImageRequired, binding.addBlueIV),
-            Pair(osData.oillevelImage to osData.isoilLevelImageRequired, binding.oilLevelIV)
+            Pair(null to !isInspectionDoneToday, binding.fullvehicleInspection),
+            Pair(osData.addblueImage to isaddBlueImageRequired, binding.addBlueIV),
+            Pair(osData.oillevelImage to isOilLevelImageRequired, binding.oilLevelIV)
         )
 
         val drawable = ContextCompat.getDrawable(this, R.drawable.ic_yes2)
@@ -554,7 +634,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             if (image.first != null || !image.second) {
                 uploadStatus += 1
                 binding.uploadStatus.text = "$uploadStatus/3"
-                if (uploadStatus == 7) {
+                if (uploadStatus == 3) {
                     binding.tvNext.setTextColor(ContextCompat.getColor(this, R.color.white))
                     binding.tvNext.isEnabled = true
                 }
@@ -565,73 +645,4 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     }
 
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        if (intent != null) {
-            val identifier =
-                intent.getStringExtra(PublicConstants.quoteCreationFlowStatusIdentifierKeyInIntent)
-                    ?: "Could not identify Identifier"
-
-
-            val message =
-                intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
-                    ?: "Could not identify status message"
-            val tempCode =
-                intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
-
-            if (tempCode == 200) {
-                Log.d("hdhsdshdsdjshhsds", "200 $message")
-                prefs.saveBoolean("Inspection", true)
-                prefs.updateInspectionStatus(true)
-                //inspectionstarted = true
-
-                val currentDate =
-                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
-                        Date()
-                    )
-
-                val currentloction = Prefs.getInstance(App.instance).currLocationId
-                val workinglocation = Prefs.getInstance(App.instance).workLocationId
-                val locationID: Int
-                locationID = if (workinglocation != 0) {
-                    workinglocation
-                } else {
-                    currentloction
-                }
-
-                /*                viewModel.SaveVehicleInspectionInfo(
-                                    SaveVehicleInspectionInfo(
-                                        Prefs.getInstance(App.instance).clebUserId.toInt(),
-                                        currentDate,
-                                        Prefs.getInstance(App.instance).inspectionID,
-                                        locationID,
-                                        Prefs.getInstance(App.instance).VmID.toString().toInt()
-                                    )
-                                )*/
-
-                /*                viewModel.livedataSavevehicleinspectioninfo.observe(this, this) {
-                                    if (it != null) {
-                                        if (it.Message.equals("200"))
-                                            Log.e("verygood", "onNewIntent: " + it.Message)
-                                        showToast("Vehicle Inspection info saved", this)
-                                    }
-                                })*/
-                //navController.navigate(R.id.completeTaskFragment)
-                osData.isInspectionDoneToday = true
-                oSyncViewModel.insertData(osData)
-                uploadStatus()
-                showToast("Vehicle Inspection is successfully completed ", this)
-            } else {
-                showToast("Inspection Failed", this)
-            }
-            if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
-                val code = if (tempCode == -1) {
-                    "Could not identify status code"
-                } else {
-                    tempCode
-                }
-            }
-        }
-        Log.d("hdhsdshdsdjshhsds", "No Intent")
-    }
 }

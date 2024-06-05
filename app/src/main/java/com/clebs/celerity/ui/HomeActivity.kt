@@ -232,7 +232,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     completeTaskScreen = it.IsSubmited
                     if (!completeTaskScreen) {
                         screenid = viewModel.getLastVisitedScreenId(this)
-                        if (screenid == 0 || screenid == R.id.completeTaskFragment) {
+                        if (screenid == 0 || screenid == R.id.newCompleteTaskFragment) {
                             navController.navigate(R.id.homeFragment)
                             navController.currentDestination!!.id = R.id.homeFragment
                         } else {
@@ -245,7 +245,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             }
                         }
                     } else {
-                        navController.navigate(R.id.completeTaskFragment)
+                        navController.navigate(R.id.newCompleteTaskFragment)
                     }
                 } else {
                     try {
@@ -285,7 +285,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         ) {
                             showToast("Please do profile changes first", this@HomeActivity)
                         }
-                        if (navController.currentDestination?.id == R.id.completeTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
+                        if (navController.currentDestination?.id == R.id.newCompleteTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
                             prefs.clearNavigationHistory()
                         } else if (fragmentStack.size > 1) {
                             fragmentStack.pop()
@@ -351,7 +351,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             showDialog()
                         } else {
                             if (osData.isDefectSheetFilled)
-                                navController.navigate(R.id.completeTaskFragment)
+                                navController.navigate(R.id.newCompleteTaskFragment)
                             else {
                                 navController.navigate(R.id.homeFragment)
                                 navController.currentDestination!!.id = R.id.homeFragment
@@ -399,7 +399,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 navController.navigate(R.id.profileFragment)
             }
         } else if (destinationFragment == "CompleteTask") {
-            navController.navigate(R.id.completeTaskFragment)
+            navController.navigate(R.id.newCompleteTaskFragment)
         } else if (destinationFragment == "ThirdPartyAcess") {
             navController.navigate(R.id.profileFragment)
         }
@@ -515,7 +515,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                         return*/
                     return
                 } else if (destinationFragment == "CompleteTask") {
-                    navController.navigate(R.id.completeTaskFragment)
+                    navController.navigate(R.id.newCompleteTaskFragment)
                 } else if (destinationFragment == "ThirdPartyAcess") {
                     try {
                         viewModel.MarkNotificationAsRead(parseToInt(notificationID))
@@ -525,7 +525,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                     navController.navigate(R.id.profileFragment)
                 } else {
-                    navController.navigate(R.id.completeTaskFragment)
+                    navController.navigate(R.id.newCompleteTaskFragment)
                 }
             }
 
@@ -535,7 +535,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (tempCode == 200) {
                 Log.d("hdhsdshdsdjshhsds", "200 $message")
                 prefs.saveBoolean("Inspection", true)
-                prefs.updateInspectionStatus(true)
+                //prefs.updateInspectionStatus(true)
                 //inspectionstarted = true
 
                 val currentDate =
@@ -569,11 +569,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         showToast("Vehicle Inspection info saved", this)
                     }
                 })
-                navController.navigate(R.id.completeTaskFragment)
+                navController.navigate(R.id.newCompleteTaskFragment)
                 showToast("Vehicle Inspection is successfully completed ", this)
             } else {
                 Log.d("hdhsdshdsdjshhsds", "else $message")
-                navController.navigate(R.id.completeTaskFragment)
+                navController.navigate(R.id.newCompleteTaskFragment)
             }
             if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
                 // Get code
@@ -616,7 +616,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             val prefs = Prefs.getInstance(applicationContext)
             val fragmentStack = prefs.getNavigationHistory()
             Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
-            if (navController.currentDestination?.id == R.id.completeTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
+            if (navController.currentDestination?.id == R.id.newCompleteTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
                 prefs.clearNavigationHistory()
             } else if (fragmentStack.size > 1) {
                 fragmentStack.pop()
@@ -665,7 +665,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             val prefs = Prefs.getInstance(applicationContext)
             val fragmentStack = prefs.getNavigationHistory()
             Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
-            if (navController.currentDestination?.id == R.id.completeTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
+            if (navController.currentDestination?.id == R.id.newCompleteTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
                 prefs.clearNavigationHistory()
             } else if (fragmentStack.size > 1) {
                 fragmentStack.pop()
@@ -841,7 +841,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 } else {
                     Prefs.getInstance(applicationContext).days = "0"
                 }
-                // prefs.updateInspectionStatus(it.IsVehicleInspectionDone)
+
+                prefs.updateInspectionStatus(it.IsVehicleInspectionDone)
             }
         })
     }
@@ -928,7 +929,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         super.onResume()
         oSyncViewModel.getData()
         if (isComingBackFromFaceScan) {
-            navController.navigate(R.id.completeTaskFragment)
+            navController.navigate(R.id.newCompleteTaskFragment)
         }
     }
 

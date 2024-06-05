@@ -62,8 +62,8 @@ class ReturnToStation : Fragment() {
         }
 
         binding.cancelBtn.setOnClickListener {
-            findNavController().navigate(R.id.completeTaskFragment)
-            findNavController().clearBackStack(R.id.completeTaskFragment)
+            findNavController().navigate(R.id.newCompleteTaskFragment)
+            findNavController().clearBackStack(R.id.newCompleteTaskFragment)
         }
 
         binding.returnSaveBtn.setOnClickListener {

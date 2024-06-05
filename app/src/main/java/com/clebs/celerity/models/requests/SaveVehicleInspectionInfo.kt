@@ -10,8 +10,8 @@ data class SaveVehicleInspectionInfo(
     val inspectionDate: String,
     @SerializedName("ClientUniqueId")
     val inspectionId: String,
-    @SerializedName("InspectionLmId")
+    @SerializedName("LocationId")
     val inspectionLmId: Int,
-    @SerializedName("InspectionVmId")
+    @SerializedName("VmId")
     val inspectionVmId: Int
 )

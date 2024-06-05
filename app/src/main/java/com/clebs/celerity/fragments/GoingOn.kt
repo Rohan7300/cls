@@ -57,8 +57,8 @@ pref.submittedGoingOn = false
 
 
         binding.cancel.setOnClickListener {
-            findNavController().navigate(R.id.completeTaskFragment)
-            findNavController().clearBackStack(R.id.completeTaskFragment)
+            findNavController().navigate(R.id.newCompleteTaskFragment)
+            findNavController().clearBackStack(R.id.newCompleteTaskFragment)
         }
 
 

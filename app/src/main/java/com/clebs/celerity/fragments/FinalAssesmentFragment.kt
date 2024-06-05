@@ -42,7 +42,7 @@ class FinalAssesmentFragment : Fragment() {
             loadingDialog.cancel()
             if (it != null) {
                 if (pref.submittedFinalAssesmentFragment) {
-                    findNavController().navigate(R.id.completeTaskFragment)
+                    findNavController().navigate(R.id.newCompleteTaskFragment)
                     pref.qStage = 0
                 }
             }
@@ -50,8 +50,8 @@ class FinalAssesmentFragment : Fragment() {
 
 
         binding.cancelBtn.setOnClickListener {
-            findNavController().navigate(R.id.completeTaskFragment)
-            findNavController().clearBackStack(R.id.completeTaskFragment)
+            findNavController().navigate(R.id.newCompleteTaskFragment)
+            findNavController().clearBackStack(R.id.newCompleteTaskFragment)
         }
 
         binding.finalAssesmentSubmit.setOnClickListener {

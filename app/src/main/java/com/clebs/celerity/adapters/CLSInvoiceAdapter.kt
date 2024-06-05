@@ -21,7 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.multidex.BuildConfig
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
+
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.models.response.InvoiceXX
 import com.clebs.celerity.utils.PermissionCallback

@@ -168,8 +168,8 @@ class OnRoadHoursFragment : Fragment() {
         inputListeners()
         viewModel.GetDailyWorkInfoById(prefs.clebUserId.toInt())
         binding.cancel.setOnClickListener {
-            findNavController().navigate(R.id.completeTaskFragment)
-            findNavController().clearBackStack(R.id.completeTaskFragment)
+            findNavController().navigate(R.id.newCompleteTaskFragment)
+            findNavController().clearBackStack(R.id.newCompleteTaskFragment)
         }
         binding.onRoadHoursSave.setOnClickListener {
             parcelsDelivered = binding.edtParcels.text.toString()
@@ -193,7 +193,7 @@ class OnRoadHoursFragment : Fragment() {
         viewModel.livedataAddOnRouteInfo.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
             if (it != null) {
-                findNavController().navigate(R.id.completeTaskFragment)
+                findNavController().navigate(R.id.newCompleteTaskFragment)
             }
         }
         var locationID = 0

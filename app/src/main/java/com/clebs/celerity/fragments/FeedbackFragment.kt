@@ -69,7 +69,7 @@ class FeedbackFragment : Fragment() {
             if (pref.submittedFeedback) {
                 if (it != null) {
                     findNavController().popBackStack()
-                    findNavController().navigate(R.id.completeTaskFragment)
+                    findNavController().navigate(R.id.newCompleteTaskFragment)
                 }
             }
         }

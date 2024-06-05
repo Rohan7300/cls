@@ -255,7 +255,7 @@ class RideAlongFragment : Fragment() {
             hideDialog()
             if (pref.submittedRideAlong) {
                 if (it != null) {
-                    findNavController().navigate(R.id.completeTaskFragment)
+                    findNavController().navigate(R.id.newCompleteTaskFragment)
                 } else {
                     showToast("Please try again!.", requireContext())
                 }
@@ -271,8 +271,8 @@ class RideAlongFragment : Fragment() {
                 }*/
 
         binding.rideAlongCancel.setOnClickListener {
-            findNavController().navigate(R.id.completeTaskFragment)
-            findNavController().clearBackStack(R.id.completeTaskFragment)
+            findNavController().navigate(R.id.newCompleteTaskFragment)
+            findNavController().clearBackStack(R.id.newCompleteTaskFragment)
         }
         binding.saveBT.setOnClickListener {
             if (chkNull() == 1)
