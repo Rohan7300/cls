@@ -358,10 +358,29 @@ class Userprofile : Fragment() {
 //                updateProfile90dys()
 //
 //            } else {
+
             if (Prefs.getInstance(App.instance).days.equals("1")) {
-                updateProfile90dys()
+                if (mbinding.emailtext.text.isEmpty()){
+                    Toast.makeText(requireContext(), "Please enter email address", Toast.LENGTH_SHORT).show()
+                }
+                else if (mbinding.phonetext.text.isEmpty()){
+                    Toast.makeText(requireContext(), "Please enter phone number", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    updateProfile90dys()
+                }
+
             } else {
-                updateprofileregular()
+                if (mbinding.emailtext.text.isEmpty()){
+                    Toast.makeText(requireContext(), "Please enter email address", Toast.LENGTH_SHORT).show()
+                }
+                else if (mbinding.phonetext.text.isEmpty()){
+                    Toast.makeText(requireContext(), "Please enter phone number", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    updateprofileregular()
+                }
+
             }
 
 //            }

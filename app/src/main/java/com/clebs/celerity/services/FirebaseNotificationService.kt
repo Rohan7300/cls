@@ -161,7 +161,18 @@ class FirebaseNotificationService : FirebaseMessagingService() {
 
     private fun getCustomDesign(title: String, message: String): RemoteViews {
         val remoteViews = RemoteViews(packageName, R.layout.notification_layout)
-        remoteViews.setTextViewText(R.id.title, title)
+
+        when (title) {
+            "UserExpiringDocuments" ->  remoteViews.setTextViewText(R.id.title, "User Expiring Documents")
+            "VehicleExpiringDocuments" ->  remoteViews.setTextViewText(R.id.title,"Vehicle Expiring Documents")
+            "ExpiredDocuments" ->  remoteViews.setTextViewText(R.id.title, "Expired Documents")
+            "WeeklyRotaApproval" -> remoteViews.setTextViewText(R.id.title, "Weekly Rota Approval")
+            "DailyRotaApproval" -> remoteViews.setTextViewText(R.id.title, "Daily Rota Approval")
+            "InvoiceReadyToReview" ->  remoteViews.setTextViewText(R.id.title, "Invoice Ready ToReview")
+            "DriverDeductionWithAgreement" ->  remoteViews.setTextViewText(R.id.title, "Driver Deduction With Agreement")
+            "ThirdPartyAccessRequestNotification" ->  remoteViews.setTextViewText(R.id.title, "Third Party Access Request Notification")
+        }
+//        remoteViews.setTextViewText(R.id.title, title)
         remoteViews.setTextViewText(R.id.descriptionXX, message)
         remoteViews.setImageViewResource(R.id.icons, R.drawable.logo_new)
         return remoteViews
