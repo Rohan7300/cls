@@ -10,7 +10,7 @@
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="30dp"
             android:overScrollMode="never"
@@ -88,6 +88,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layout_marginStart="10dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -108,14 +109,14 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/dpLayout" />
 
-<!--                        <ImageView-->
-<!--                            android:id="@+id/logout"-->
-<!--                            android:layout_width="30dp"-->
-<!--                            android:layout_height="30dp"-->
-<!--                            android:src="@drawable/logoutnew"-->
-<!--                            app:layout_constraintEnd_toEndOf="parent"-->
-<!--                            app:layout_constraintTop_toBottomOf="@+id/name"-->
-<!--                            app:tint="@color/orange" />-->
+                        <!--                        <ImageView-->
+                        <!--                            android:id="@+id/logout"-->
+                        <!--                            android:layout_width="30dp"-->
+                        <!--                            android:layout_height="30dp"-->
+                        <!--                            android:src="@drawable/logoutnew"-->
+                        <!--                            app:layout_constraintEnd_toEndOf="parent"-->
+                        <!--                            app:layout_constraintTop_toBottomOf="@+id/name"-->
+                        <!--                            app:tint="@color/orange" />-->
                     </LinearLayout>
                 </LinearLayout>
 
@@ -130,22 +131,25 @@
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout16">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="right"
                         android:layout_marginStart="5dp"
+                        android:gravity="right"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical|center_horizontal"
                             android:layout_marginTop="8dp"
                             android:fontFamily="@font/poppins_semibold"
+                            android:gravity="center_vertical|center_horizontal"
                             android:letterSpacing="0.05"
                             android:text="Edit Details"
                             android:textColor="@color/text_color"
                             android:textSize="11sp" />
+
                         <ImageView
                             android:id="@+id/editImg"
                             android:layout_width="30dp"
@@ -194,7 +198,7 @@
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Email"
+                                android:hint="Email*"
                                 android:padding="2dp"
                                 app:boxBackgroundColor="@color/very_light_grey_two"
                                 app:expandedHintEnabled="false"
@@ -456,7 +460,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:hint="Phone Number"
+                                android:hint="Phone Number*"
                                 android:padding="2dp"
                                 app:boxBackgroundColor="@color/very_light_grey_two"
                                 app:expandedHintEnabled="false"
@@ -467,13 +471,13 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
-android:maxLength="13"
                                     android:enabled="false"
                                     android:fontFamily="@font/poppins"
-
                                     android:importantForAutofill="no"
+
                                     android:inputType="phone"
                                     android:letterSpacing="0.02"
+                                    android:maxLength="13"
                                     android:padding="12dp"
                                     android:paddingStart="4dp"
 
@@ -484,17 +488,7 @@ android:maxLength="13"
 
                         </LinearLayout>
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toBottomOf="@id/llfive">
 
-                            <!--                            <View-->
-                            <!--                                android:id="@+id/viewfour"-->
-                            <!--                                android:layout_width="match_parent"-->
-                            <!--                                android:layout_height="0.5dp"-->
-                            <!--                                android:background="@color/text_color" />-->
-                        </RelativeLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -524,9 +518,13 @@ android:maxLength="13"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
 
-                            app:layout_constraintTop_toTopOf="parent"
 
-                            >
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.5">
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/edtAddresslayout"
@@ -547,7 +545,7 @@ android:maxLength="13"
                                     android:layout_marginTop="4dp"
                                     android:enabled="false"
                                     android:fontFamily="@font/poppins"
-                                    android:hint="#123 Lorem Lorem Ipsum is simply text of the printing and typesetting "
+
                                     android:importantForAutofill="no"
                                     android:inputType="textEmailAddress"
                                     android:letterSpacing="0.02"

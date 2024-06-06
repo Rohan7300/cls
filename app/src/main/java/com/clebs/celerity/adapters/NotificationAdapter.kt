@@ -143,7 +143,7 @@ class NotificationAdapter(
 
                 val outputTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
                 formattedTime = dateTime.format(outputTimeFormatter)
-                binding.time.text = "$formattedTime  $formattedDate"
+                binding.time.text = "$formattedTime  ($formattedDate)"
 
             } catch (_: Exception) {
                 binding.time.text = item.NotificationSentOn

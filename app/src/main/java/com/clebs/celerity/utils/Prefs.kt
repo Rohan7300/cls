@@ -71,7 +71,13 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putString("scannedVmRegNo", value).apply()
         }
-
+    var isFirst: Boolean?
+        get() {
+            return sharedPreferences.getBoolean("isFirst", false)
+        }
+        set(value) {
+            sharedPreferences.edit().putBoolean("isFirst", value?:false).apply()
+        }
     var inspectionID: String
         get() {
             return sharedPreferences.getString("inspectionID", "") ?: ""
@@ -182,7 +188,21 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putBoolean("isBirthdayCardShown", value?:false).apply()
         }
 
+    var isdone: Boolean?
+        get() {
+            return sharedPreferences.getBoolean("isdone", false)
+        }
+        set(value) {
+            sharedPreferences.edit().putBoolean("isdone", value?:false).apply()
+        }
 
+    var isstarted: Boolean?
+        get() {
+            return sharedPreferences.getBoolean("isstarted", false)
+        }
+        set(value) {
+            sharedPreferences.edit().putBoolean("isstarted", value?:false).apply()
+        }
     var quesID: Int
         get() = sharedPreferences.getInt("quesID", 0)
         set(value) = sharedPreferences.edit().putInt("quesID", value).apply()

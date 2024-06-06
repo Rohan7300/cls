@@ -1578,6 +1578,7 @@ class MainViewModel(
             else
                 livedataSavevehicleinspectioninfo.postValue(response.body)
 
+
             /*            val result = runCatching {
                             repo.SaveVehicleInspectionInfo(body)
                         }

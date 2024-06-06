@@ -36,6 +36,7 @@ import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
+import com.clebs.celerity.utils.isEmailValid
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showToast
 import com.tapadoo.alerter.Alerter
@@ -358,10 +359,36 @@ class Userprofile : Fragment() {
 //                updateProfile90dys()
 //
 //            } else {
+
             if (Prefs.getInstance(App.instance).days.equals("1")) {
-                updateProfile90dys()
+                if (mbinding.emailtext.text.isEmpty()){
+                    Toast.makeText(requireContext(), "Please enter email address", Toast.LENGTH_SHORT).show()
+                }
+                else if (!mbinding.emailtext.text.trim().toString().isEmailValid()){
+                    Toast.makeText(requireContext(), "Please enter valid email", Toast.LENGTH_SHORT).show()
+                }
+                else if (mbinding.phonetext.text.isEmpty()){
+                    Toast.makeText(requireContext(), "Please enter phone number", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    updateProfile90dys()
+                }
+
             } else {
-                updateprofileregular()
+                if (mbinding.emailtext.text.isEmpty()){
+                    Toast.makeText(requireContext(), "Please enter email address", Toast.LENGTH_SHORT).show()
+                }
+                else if (!mbinding.emailtext.text.trim().toString().isEmailValid()){
+                    Toast.makeText(requireContext(), "Please enter valid email", Toast.LENGTH_SHORT).show()
+                }
+                else if (mbinding.phonetext.text.isEmpty()){
+                    Toast.makeText(requireContext(), "Please enter phone number", Toast.LENGTH_SHORT).show()
+                }
+
+                else{
+                    updateprofileregular()
+                }
+
             }
 
 //            }
@@ -730,5 +757,14 @@ class Userprofile : Fragment() {
     fun View.hideKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
+    }
+    fun setEnable(): Boolean {
+        mbinding.apply {
+            return if (emailtext.text.trim().toString().isEmailValid()) {
+                false
+            } else {
+                true
+            }
+        }
     }
 }
