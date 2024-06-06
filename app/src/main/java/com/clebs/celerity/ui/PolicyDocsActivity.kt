@@ -99,7 +99,7 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
         if (!Prefs.getInstance(App.instance).getBoolean("isother", false)) {
             mbinding.llTrucks.visibility = View.GONE
         } else {
-            mbinding.llAmazon.visibility = View.VISIBLE
+            mbinding.llTrucks.visibility = View.VISIBLE
         }
 
         /*        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
@@ -112,7 +112,10 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
         viewModel.liveDataGetDriverSignatureInformation.observe(this) {
             if (it != null) {
                 driverSignatureInfo = it
-
+                Prefs.getInstance(applicationContext)
+                    .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
+                Prefs.getInstance(applicationContext)
+                    .saveBoolean("isother", it.IsOtherCompanySignatureReq)
             }
         }
         viewModel.getDriverSignatureInfo(clebuserId.toDouble()).observe(this) {
@@ -126,6 +129,7 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
             }
         }
 
+        loadingDialog.show()
         viewModel.GetDriverSignatureInformation(clebuserId)
         viewModel.GetDriverOtherCompaniesPolicy(clebuserId)
         observers()
@@ -234,6 +238,7 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
         mbinding.otherDocsRV.layoutManager = LinearLayoutManager(this)
 
         viewModel.liveDataGetDriverOtherCompaniesPolicy.observe(this) {
+            loadingDialog.dismiss()
             if (it != null) {
                 otherDocAdapter.saveData(it)
             }
@@ -512,7 +517,6 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
                 intent.putExtra("notificationId", "0")
 
                 startActivity(intent)
-
             }
         }
         if (driverSignatureInfo != null) {

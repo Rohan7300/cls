@@ -11,7 +11,7 @@ import com.clebs.celerity.utils.DBNames
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ImageViewModel(val imageRepo: ImagesRepo) : ViewModel() {
+class ImageViewModel(val imageRepo: ImagesRepo, var dawDate: String) : ViewModel() {
 
 
     var images: MutableLiveData<ImageEntity> = MutableLiveData(ImageEntity())
@@ -19,7 +19,7 @@ class ImageViewModel(val imageRepo: ImagesRepo) : ViewModel() {
     init {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val imageEntity = imageRepo.getImagesbyUser()
+                val imageEntity = imageRepo.getImagesbyUser(dawDate)
                 imageEntity?.let {
                     images.postValue(it)
                 }
@@ -33,7 +33,7 @@ class ImageViewModel(val imageRepo: ImagesRepo) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 imageRepo.insertImage(image)
-                val imageEntity = imageRepo.getImagesbyUser()
+                val imageEntity = imageRepo.getImagesbyUser(dawDate)
                 imageEntity?.let {
                     images.postValue(it)
                 }
@@ -47,7 +47,7 @@ class ImageViewModel(val imageRepo: ImagesRepo) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 imageRepo.insertDefectName(name)
-                val imageEntity = imageRepo.getImagesbyUser()
+                val imageEntity = imageRepo.getImagesbyUser(dawDate)
                 imageEntity?.let {
                     images.postValue(it)
                 }

@@ -54,6 +54,8 @@ data class ImageEntity(
     var inSteeringControl: String? = "empty",
     @ColumnInfo(defaultValue = "empty")
     var inBrakedEbsAbs: String? = "empty",
+    @ColumnInfo("DaWDate")
+    var dawDate: String? = null,
 
 
     //Internal defect Names

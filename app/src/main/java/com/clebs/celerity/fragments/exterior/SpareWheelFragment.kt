@@ -177,8 +177,8 @@ class SpareWheelFragment : BaseInteriorFragment() {
                         VdhVmId = it.vmId
                         if (it.vmId != 0)
                             Prefs.getInstance(requireContext()).vmId = it.vmId
-
-                        Prefs.getInstance(App.instance).VmID = it.vmId.toString()
+                        if(it.vmId!=null&&Prefs.getInstance(App.instance).vmId==0)
+                        Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()
                         Prefs.getInstance(App.instance).save("lm", it.vmLocId.toString())
                         VdhLmId = it.vmLocId
                         VdhOdoMeterReading =

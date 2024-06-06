@@ -9,8 +9,8 @@ import androidx.room.Update
 @Dao
 interface ImageDao {
 
-    @Query("SELECT * FROM Images ORDER BY localId DESC LIMIT 1")
-    fun getImagesByUserName(): ImageEntity
+    @Query("SELECT * FROM Images WHERE DaWDate = :dawDate ORDER BY localId DESC LIMIT 1")
+    fun getImagesByUserName(dawDate:String): ImageEntity
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -290,7 +290,7 @@ class UpdateOnRoadHoursFragment : Fragment() {
             ).observe(viewLifecycleOwner) {
                 if (it != null) {
                     if (it.vmID != null && prefs.vmId == 0)
-                        prefs.vmId = it.vmID
+                        prefs.baseVmID = it.vmID.toString()
                     it.vmRegNo?.let { it1 ->
                         prefs.vmRegNo = it1
                         viewModel.GetVehicleInformation(

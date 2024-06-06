@@ -38,6 +38,7 @@ class ImageUploadWorker(
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         val todayDate = dateFormat.format(Date())
+        val prefs = Prefs.getInstance(appContext)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         val osRepo = OSyncRepo(OfflineSyncDB.invoke(appContext))
@@ -55,7 +56,7 @@ class ImageUploadWorker(
                         val data = osRepo.getData(clebUserId, todayDate)
                         logOSEntity("ImageWorker", data)
 
-                        if (data.dashboardImage != null&&data.isDashboardImageRequired) {
+/*                        if (data.dashboardImage != null&&data.isDashboardImageRequired) {
                             val partBody = createMultipartPart(
                                 data.dashboardImage!!, "uploadVehicleDashBoardImage",
                                 appContext
@@ -140,11 +141,12 @@ class ImageUploadWorker(
                             if (!offsideResponse.isSuccessful) {
                                 data.isoffSideFailed = true
                             }
-                        }
+                        }*/
 
-                        if (data.addblueImage != null&&data.isaddBlueImageRequired) {
+                        //if (data.addblueImage != null&&data.isaddBlueImageRequired) {
+                        if (prefs.addBlueUri!=null) {
                             val partBody = createMultipartPart(
-                                data.addblueImage!!, "uploadVehicleAddBlueImage",
+                                prefs.addBlueUri!!, "uploadVehicleAddBlueImage",
                                 appContext
                             )
                             val addBlueResponse = mainRepo.uploadVehicleImage(
@@ -154,9 +156,10 @@ class ImageUploadWorker(
                                 data.isaddblueImageFailed = true
                         }
 
-                        if (data.oillevelImage != null&&data.isoilLevelImageRequired) {
+                        //if (data.oillevelImage != null&&data.isoilLevelImageRequired) {
+                        if (prefs.oilLevelUri != null) {
                             val partBody = createMultipartPart(
-                                data.oillevelImage!!, "uploadVehicleOilLevelImage",
+                                prefs.oilLevelUri!!, "uploadVehicleOilLevelImage",
                                 appContext
                             )
                             val oilLevelResponse = mainRepo.uploadVehicleImage(
@@ -166,9 +169,10 @@ class ImageUploadWorker(
                                 data.isoillevelImageFailed = true
                         }
 
-                        if (data.faceMaskImage != null&&data.isfaceMaskImageRequired) {
+                        //if (data.faceMaskImage != null&&data.isfaceMaskImageRequired) {
+                        if (prefs.faceMaskUri!=null) {
                             val partBody = createMultipartPart(
-                                data.faceMaskImage!!, "uploadFaceMaskImage",
+                                prefs.faceMaskUri!!, "uploadFaceMaskImage",
                                 appContext
                             )
                             val selfieeRes = mainRepo.uploadVehicleImage(
@@ -186,9 +190,9 @@ class ImageUploadWorker(
                         val data = osRepo.getData(clebUserId, todayDate)
                         logOSEntity("ImageWorker", data)
 
-                        if (data.faceMaskImage != null) {
+                        if (prefs.faceMaskUri!=null) {
                             val partBody = createMultipartPart(
-                                data.faceMaskImage!!, "uploadFaceMaskImage",
+                                prefs.faceMaskUri!!, "uploadFaceMaskImage",
                                 appContext
                             )
                             val selfieeRes = mainRepo.uploadVehicleImage(
@@ -203,9 +207,10 @@ class ImageUploadWorker(
                     }
 
                     2 -> {
-                        vmId = Prefs.getInstance(appContext).VmID.toInt()
+                        vmId = Prefs.getInstance(appContext).baseVmID.toInt()
                         lmId = Prefs.getInstance(appContext).getLocationID().toInt()
-                        val imageEntity = imagesRepo.getImagesbyUser()
+                        val todayDate = dateFormat.format(Date())
+                        val imageEntity = imagesRepo.getImagesbyUser(todayDate)
                         if (imageEntity != null) {
                             if (checkNullorEmpty(imageEntity.front)) {
                                 val partBody = createMultipartPart(

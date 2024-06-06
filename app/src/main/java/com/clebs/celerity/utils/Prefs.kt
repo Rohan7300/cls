@@ -80,7 +80,7 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putString("inspectionID", value).apply()
         }
 
-    var VmID: String
+    var baseVmID: String
         get() {
             return sharedPreferences.getString("vm_ID", "") ?: ""
         }
@@ -450,5 +450,155 @@ class Prefs(context: Context) {
         }
     }
 
+    fun isFaceMaskAddedToday():Boolean{
+        val isFaceMaskAddedToday = sharedPreferences.getBoolean("isFaceMaskAddedToday", false)
+        if (isFaceMaskAddedToday) {
+            val lastInspectionDateTimeString =
+                sharedPreferences.getString("last_fm_datetime", "")
+            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            Log.d("isFaceMaskAddedToday", "$currentDate \n $lastInspectionDateTimeString")
+
+            return lastInspectionDateTimeString == currentDate
+        } else {
+            return false
+        }
+    }
+    fun updateFaceMaskStatus(isFaceMaskAdded:Boolean){
+        val editor = sharedPreferences.edit()
+
+        val lastInspectionDateTime = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
+            Date()
+        )
+        editor.putBoolean("isFaceMaskAddedToday", isFaceMaskAdded)
+        if (isFaceMaskAdded) {
+            editor.putString("last_fm_datetime", lastInspectionDateTime)
+        }
+        editor.apply()
+    }
+
+    var faceMaskUri: String?
+        get() {
+            val savedDate = sharedPreferences.getString("faceMaskUri_date", null)
+            return if (isToday(savedDate)) {
+                sharedPreferences.getString("faceMaskUri", null)
+            } else {
+                null
+            }
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            if (value != null) {
+                val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                editor.putString("faceMaskUri", value)
+                editor.putString("faceMaskUri_date", currentDate)
+            } else {
+                editor.remove("faceMaskUri")
+                editor.remove("faceMaskUri_date")
+            }
+            editor.apply()
+        }
+
+    var faceMaskRequired: Boolean
+        get() {
+            val savedDate = sharedPreferences.getString("faceMaskRequired_date", null)
+            return if (isToday(savedDate)) {
+                sharedPreferences.getBoolean("faceMaskRequired", false)
+            } else {
+                false
+            }
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            editor.putBoolean("faceMaskRequired", value)
+            editor.putString("faceMaskRequired_date", currentDate)
+            editor.apply()
+        }
+
+    var addBlueUri: String?
+        get() {
+            val savedDate = sharedPreferences.getString("addBlueUri_date", null)
+            return if (isToday(savedDate)) {
+                sharedPreferences.getString("addBlueUri", null)
+            } else {
+                null
+            }
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            if (value != null) {
+                val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                editor.putString("addBlueUri", value)
+                editor.putString("addBlueUri_date", currentDate)
+            } else {
+                editor.remove("addBlueUri")
+                editor.remove("addBlueUri_date")
+            }
+            editor.apply()
+        }
+
+    var addBlueRequired: Boolean
+        get() {
+            val savedDate = sharedPreferences.getString("addBlueRequired_date", null)
+            return if (isToday(savedDate)) {
+                sharedPreferences.getBoolean("addBlueRequired", false)
+            } else {
+                false
+            }
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            editor.putBoolean("addBlueRequired", value)
+            editor.putString("addBlueRequired_date", currentDate)
+            editor.apply()
+        }
+
+    var oilLevelUri: String?
+        get() {
+            val savedDate = sharedPreferences.getString("oilLevelUri_date", null)
+            return if (isToday(savedDate)) {
+                sharedPreferences.getString("oilLevelUri", null)
+            } else {
+                null
+            }
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            if (value != null) {
+                val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                editor.putString("oilLevelUri", value)
+                editor.putString("oilLevelUri_date", currentDate)
+            } else {
+                editor.remove("oilLevelUri")
+                editor.remove("oilLevelUri_date")
+            }
+            editor.apply()
+        }
+
+    var oilLevelRequired: Boolean
+        get() {
+            val savedDate = sharedPreferences.getString("oilLevelRequired_date", null)
+            return if (isToday(savedDate)) {
+                sharedPreferences.getBoolean("oilLevelRequired", false)
+            } else {
+                false
+            }
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            editor.putBoolean("oilLevelRequired", value)
+            editor.putString("oilLevelRequired_date", currentDate)
+            editor.apply()
+        }
+    fun isToday(dateString: String?): Boolean {
+        if(dateString != null){
+            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            return dateString == currentDate
+        }else{
+            return false
+        }
+    }
 
 }

@@ -77,9 +77,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     lateinit var loadingDialog: LoadingDialog
     private var b64ImageList = mutableListOf<String>()
     var i = 0
-    var isInspectionDoneToday: Boolean = false
-    var isaddBlueImageRequired:Boolean = false
-    var isOilLevelImageRequired:Boolean = false
     lateinit var fragmentManager: FragmentManager
     private var isfirst: Boolean? = false
     private var startonetime: Boolean? = true
@@ -138,6 +135,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
         clientUniqueID()
 
+
         oSyncViewModel.osData.observe(this) {
             osData = it
             i = 0
@@ -148,7 +146,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                 osData.dawDate = todayDate
                 osData.vehicleID = prefs.scannedVmRegNo
                 osData.isIni = true
-                isInspectionDoneToday = osData.isInspectionDoneToday
 
             }
             if (checkIfInspectionFailed(osData)) {
@@ -163,8 +160,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     osData.oillevelImage != null
                 ) {
 
-                    showToast("Inspection Completed", this)
-                    onSaveClick()
+                  //  showToast("Inspection Completed", this)
+                    //onSaveClick()
                 }
 
                 i = b64ImageList.size
@@ -172,19 +169,19 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
                 Log.d("OSData I= ", "$i")
             }
-            uploadStatus()
+         //  uploadStatus()
         }
 
         observers()
 
         viewModel.GetVehicleImageUploadInfo(
             prefs.clebUserId.toInt(),
-            prefs.vmId.toInt(),
+            prefs.baseVmID.toInt(),
             currentDateTime
         )
         loadingDialog.show()
 
-
+        uploadStatus()
 
         binding.ivUploadImage.setOnClickListener {
             if (allPermissionsGranted())
@@ -265,10 +262,10 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             i = 0
             if (it != null) {
                 Log.d("OSData2 ", "$osData")
-                if (it.DaVehicleAddBlueImage != null &&
-                    it.DaVehImgOilLevelFileName != null &&
-                    !checkIfInspectionFailed2(osData)
+                if (it.DaVehImgOilLevelFileName != null
+                    && !checkIfInspectionFailed2(osData)
                 ) {
+                    prefs.oilLevelRequired = false
                     osData.isaddBlueImageRequired = false
                     osData.isDashboardImageRequired = false
                     osData.isRearImageRequired = false
@@ -277,21 +274,25 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     osData.isfaceMaskImageRequired = false
                     osData.isoilLevelImageRequired = false
                     osData.isFrontImageRequired = false
-                    generateInspectionID()
-                    allImagesUploaded = true
-                    showToast("Inspection Completed", this)
-                    onSaveClick()
+                    if (it.IsAdBlueRequired == true) {
+                        if (it.DaVehicleAddBlueImage != null) {
+                            generateInspectionID()
+                            allImagesUploaded = true
+                            showToast("Inspection Completed", this)
+                            onSaveClick()
+                        }
+                        prefs.addBlueRequired = it.DaVehicleAddBlueImage == null
+                    } else {
+                        generateInspectionID()
+                        allImagesUploaded = true
+                        showToast("Inspection Completed", this)
+                        onSaveClick()
+                    }
                 } else {
-                    if (it.IsAdBlueRequired == true)
-                        isaddBlueImageRequired = it.DaVehicleAddBlueImage == null
-                    else
-                        isaddBlueImageRequired = false
 
-                    isOilLevelImageRequired = it.DaVehImgOilLevelFileName == null
+                    prefs.addBlueRequired = it.IsAdBlueRequired == true && it.DaVehicleAddBlueImage==null && prefs.addBlueUri==null
 
-                    osData.isaddBlueImageRequired = isaddBlueImageRequired
-                    osData.isoilLevelImageRequired = isOilLevelImageRequired
-                    oSyncViewModel.insertData(osData)
+                    prefs.oilLevelRequired = it.DaVehImgOilLevelFileName == null
                     uploadStatus()
                 }
             }
@@ -313,7 +314,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             if (it != null) {
                 viewModel.GetVehicleImageUploadInfo(
                     prefs.clebUserId.toInt(),
-                    prefs.vmId,
+                    prefs.baseVmID.toInt(),
                     getCurrentDateTime()
                 )
             }
@@ -321,7 +322,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     }
 
     private fun uploadStatus() {
-        val uploadStatus = "($i/7)"
+        val uploadStatus = "($i/3)"
         binding.uploadStatus.text = uploadStatus
         with(binding) {
             listOf(
@@ -344,15 +345,18 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
     private fun sendImage(imageUri: Uri) {
         var x = b64ImageList.size
-        if (osData.addblueImage == null && osData.isaddBlueImageRequired) {
+        if (prefs.addBlueUri == null && prefs.addBlueRequired) {
+            prefs.addBlueUri = imageUri.toString()
+            prefs.addBlueRequired = false
             osData.addblueImage = imageUri.toString()
             oSyncViewModel.insertData(osData)
-        } else if (osData.oillevelImage == null && osData.isoilLevelImageRequired) {
+        } else if (prefs.oilLevelUri == null && prefs.oilLevelRequired) {
+            prefs.oilLevelUri = imageUri.toString()
+            prefs.oilLevelRequired = false
             osData.oillevelImage = imageUri.toString()
             oSyncViewModel.insertData(osData)
         } else {
             binding.tvNext.isEnabled = true
-            oSyncViewModel.insertData(osData)
             binding.tvNext.setTextColor(ContextCompat.getColor(this, R.color.white))
         }
 
@@ -406,9 +410,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     }
 
     private fun requestpermissions() {
-
         activityResultLauncher.launch(REQUIRED_PERMISSIONS)
-
     }
 
     private val activityResultLauncher =
@@ -433,7 +435,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         initPreviewView()
         if (isComingBackFromCLSCapture) {
             if (currentUri != null)
-            // printBitmapSize(currentUri!!)
                 sendImage(currentUri!!)
             isComingBackFromCLSCapture = false
         }
@@ -451,7 +452,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             prefs.updateInspectionStatus(true)
             prefs.Isfirst = false
             generateInspectionID()
-            isInspectionDoneToday = true
+            prefs.updateInspectionStatus(true)
             val currentDate =
                 SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
                     Date()
@@ -470,7 +471,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     currentDate,
                     Prefs.getInstance(App.instance).inspectionID,
                     locationID,
-                    Prefs.getInstance(App.instance).VmID.toString().toInt()
+                    Prefs.getInstance(App.instance).baseVmID.toInt()
                 )
             )
 
@@ -482,16 +483,14 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     }
 
     private fun openClsCapture() {
-        Log.e("sdkdfjfdjfdjhfd", "openClsCapture: " + b64ImageList.size.toString())
-        isInspectionDoneToday = prefs.isInspectionDoneToday()
-        if (!isInspectionDoneToday) {
+        if (!prefs.isInspectionDoneToday()) {
             loadingDialog.show()
             startInspection()
-        } else if (osData.addblueImage == null && osData.isaddBlueImageRequired) {
+        } else if (prefs.addBlueUri == null && prefs.addBlueRequired) {
             val intent = Intent(this, ClsCaptureTwo::class.java)
             insLevel = 5
             startActivity(intent)
-        } else if (osData.oillevelImage == null && osData.isoilLevelImageRequired) {
+        } else if (prefs.oilLevelUri == null && prefs.oilLevelRequired) {
             val intent = Intent(this, ClsCaptureTwo::class.java)
             insLevel = 6
             startActivity(intent)
@@ -509,7 +508,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             Log.e("sdkskdkdkskdkskd", "onCreateView: ")
 
             try {
-
+                Log.e("sdkskdkdkskdkskd", "onCreateView: startone $startonetime ")
                 cqSDKInitializer.startInspection(activity = this,
                     clientAttrs = ClientAttrs(
                         userName = " ",
@@ -541,41 +540,42 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     result = { isStarted, msg, code ->
                         loadingDialog.dismiss()
                         Log.e("messsagesss", "startInspection: $msg$code")
+                        Log.e("CQSDKXX", "regNo: ${prefs.scannedVmRegNo}")
                         if (isStarted) {
-
+                            Log.d("CQSDKXX", "isStarted ")
                         } else {
-
+                            Log.d("CQSDKXX", "Not isStarted")
                         }
                         if (msg == "Success") {
-
+                            Log.d("CQSDKXX", "Success")
                         } else {
-
+                            Log.d("CQSDKXX", "Not Success")
                         }
                         if (!isStarted) {
                             Log.e("startedinspection", "onCreateView: $msg$isStarted")
                         }
                     })
                 prefs.Isfirst = false
-                Log.d("Start OFfflne","$startonetime")
-            } catch (_: Exception) {
+                Log.d("Start OFfflne", "$startonetime")
+            } catch (e: Exception) {
+                Log.d("CQSDKXX", "exc::  ${e.localizedMessage}   \n${e.message}")
                 loadingDialog.dismiss()
             }
+        }else{
+            Log.d("CQSDKXX", "Not initialized")
         }
 
     }
 
     private fun setUploadLabel() {
-        isInspectionDoneToday = prefs.isInspectionDoneToday()
-        if (!isInspectionDoneToday) {
+        if (!prefs.isInspectionDoneToday()) {
             prefs.updateInspectionStatus(false)
             binding.tvUploadType.text = "Start Full Inspection"
-            binding.uploadBtnText.text = "Full vehicle inspection"
-            osData.isInspectionDoneToday = isInspectionDoneToday
-            oSyncViewModel.insertData(osData)
-        } else if (osData.addblueImage == null && isaddBlueImageRequired) {
+            binding.uploadBtnText.text = "Full Vehicle Inspection"
+        } else if (prefs.addBlueUri == null && prefs.addBlueRequired) {
             binding.tvUploadType.text = "Add Blue Level Image"
             binding.uploadBtnText.text = "Upload Add Blue Level Image"
-        } else if (osData.oillevelImage == null && isOilLevelImageRequired) {
+        } else if (prefs.oilLevelUri == null && prefs.oilLevelRequired) {
             binding.tvUploadType.text = "Oil Level Image"
             binding.uploadBtnText.text = "Upload Oil Level Image"
         } else {
@@ -592,13 +592,20 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
             binding.tvUploadType.text =
                 "You can save and exit while images are being uploaded."
-            osData.isdashboardUploadedFailed = false
-            osData.isfrontImageFailed = false
-            osData.isnearSideFailed = false
-            osData.isrearSideFailed = false
-            osData.isoffSideFailed = false
-            osData.isaddblueImageFailed = false
-            osData.isoillevelImageFailed = false
+            /*
+         if(osData!=null){
+
+             osData.isdashboardUploadedFailed = false
+             osData.isfrontImageFailed = false
+             osData.isnearSideFailed = false
+             osData.isrearSideFailed = false
+             osData.isoffSideFailed = false
+             osData.isaddblueImageFailed = false
+             osData.isoillevelImageFailed = false
+            }
+
+             */
+
             startUploadWithWorkManager(0, prefs, this)
             binding.tvUploadMainTV.isEnabled = false
             binding.ivUploadImage.isEnabled = false
@@ -624,9 +631,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         var uploadStatus = 0
 
         val imageViews = listOf(
-            Pair(null to !isInspectionDoneToday, binding.fullvehicleInspection),
-            Pair(osData.addblueImage to isaddBlueImageRequired, binding.addBlueIV),
-            Pair(osData.oillevelImage to isOilLevelImageRequired, binding.oilLevelIV)
+            Pair(null to !prefs.isInspectionDoneToday(), binding.fullvehicleInspection),
+            Pair(prefs.addBlueUri to prefs.addBlueRequired, binding.addBlueIV),
+            Pair(prefs.oilLevelUri to prefs.oilLevelRequired, binding.oilLevelIV)
         )
 
         val drawable = ContextCompat.getDrawable(this, R.drawable.ic_yes2)

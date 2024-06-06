@@ -104,13 +104,13 @@ class NewCompleteTaskFragment : Fragment() {
     private var clebUserID: Int = 0
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
-    var clockedouttime = String()
-    var isInspectionDoneToday:Boolean = false
+    private var clockedouttime = String()
+    private var isInspectionDoneToday: Boolean = false
     lateinit var ivX: ImageView
-    var codeX = 0
-    var uploadInProgress = false
+    private var codeX = 0
+    private var uploadInProgress = false
     private var requestCode: Int = 0
-    private var showImageUploadLayout: Boolean = false
+
     private var isInspectionDone: Boolean = false
     private var imagesUploaded: Boolean = false
     private lateinit var rideAlongAdapter: RideAlongAdapter
@@ -137,6 +137,7 @@ class NewCompleteTaskFragment : Fragment() {
     }
     var inspectionOfflineImagesCHeck: Boolean? = null
     private var inspectionstarted: Boolean = false
+    lateinit var prefs: Prefs
 
     companion object {
         private val REQUIRED_PERMISSIONS =
@@ -174,6 +175,7 @@ class NewCompleteTaskFragment : Fragment() {
 
         loadingDialog = (activity as HomeActivity).loadingDialog
         oSyncViewModel = (activity as HomeActivity).oSyncViewModel
+        prefs = Prefs.getInstance(requireContext())
         clebUserID = Prefs.getInstance(requireContext()).clebUserId.toInt()
         (activity as HomeActivity).ActivityHomeBinding.title.text = ""
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
@@ -209,12 +211,12 @@ class NewCompleteTaskFragment : Fragment() {
             if (it.isIni) {
                 hideDialog()
                 osData!!.isDefectSheetFilled = true
-              // inspectionstarted = osData.isInspectionDoneToday
+                // inspectionstarted = osData.isInspectionDoneToday
                 logOSEntity("OSData CompleteTaskFragment", osData!!)
                 showDialog()
                 viewModel.GetVehicleImageUploadInfo(
                     Prefs.getInstance(requireContext()).clebUserId.toInt(),
-                    Prefs.getInstance(requireContext()).vmId,
+                    Prefs.getInstance(requireContext()).baseVmID.toInt(),
                     getCurrentDateTime()
                 )
                 showDialog()
@@ -438,8 +440,8 @@ class NewCompleteTaskFragment : Fragment() {
             if (it != null) {
                 scannedvrn = it.vmRegNo
                 Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
-                if (!Prefs.getInstance(App.instance).VmID.isNotEmpty()) {
-                    Prefs.getInstance(App.instance).VmID = it.vmId.toString()
+                if (Prefs.getInstance(App.instance).vmId==0&&it.vmId!=null) {
+                    Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()
                 }
             }
         }
@@ -543,8 +545,6 @@ class NewCompleteTaskFragment : Fragment() {
                 osData.isClockedInToday = true
             } else {
                 if (uploadInProgress) {
-                    imagesUploaded = true
-                    showImageUploadLayout = false
                     showToast("Syncing!! Pls wait", requireContext())
                 } else {
                     showToast("Pls Retry!!", requireContext())
@@ -627,102 +627,63 @@ class NewCompleteTaskFragment : Fragment() {
             hideDialog()
             println(it)
             if (it != null) {
-                showImageUploadLayout = false
-                imagesUploaded = true
-
                 if (it.DaVehImgFaceMaskFileName != null &&
                     it.DaVehImgOilLevelFileName != null
                 ) {
-                    osData.isaddBlueImageRequired = false
-                    osData.isDashboardImageRequired = false
-                    osData.isRearImageRequired = false
-                    osData.isOffsideImageRequired = false
-                    osData.isnearImageRequired = false
-                    osData.isfaceMaskImageRequired = false
-                    osData.isoilLevelImageRequired = false
-                    osData.isFrontImageRequired = false
 
+                    prefs.addBlueRequired = false
+                    prefs.oilLevelRequired = false
+                    prefs.faceMaskRequired = false
+                    prefs.updateFaceMaskStatus(true)
+                    prefs.faceMaskUri = null
+                    prefs.oilLevelUri = null
                     if (it.IsAdBlueRequired == true && it.DaVehicleAddBlueImage == null) {
-
-                        if (osData.addblueImage == null) {
-                            osData.isaddBlueImageRequired = true
-                            osData.isImagesUploadedToday = false
-                            isInspectionDoneToday = false
-                            inspectionstarted = false
-                            imagesUploaded = false
+                        if (prefs.addBlueUri == null) {
+                            prefs.addBlueRequired = true
                         } else {
-                            osData.isaddBlueImageRequired = true
+                            prefs.addBlueRequired = false
                             backgroundImageSync()
                         }
                     } else {
-                        osData.isImagesUploadedToday = true
-                        inspectionstarted = true
-                        imagesUploaded = true
+                        prefs.addBlueRequired = false
+
                     }
                 } else {
-                    if (osData.faceMaskImage == null ||
-                        osData.oillevelImage == null
+                    if (prefs.faceMaskUri == null ||
+                        prefs.oilLevelUri == null
                     ) {
                         mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
-                        showImageUploadLayout = true
-                        imagesUploaded = false
+
                         if (it.DaVehImgOilLevelFileName != null) {
-                            osData.isImagesUploadedToday = false
-                            isInspectionDoneToday = true
-                            inspectionstarted = true
-                            imagesUploaded = false
+                            prefs.oilLevelRequired = false
+                        } else if (prefs.oilLevelUri == null) {
+                            prefs.oilLevelRequired = true
+                        }else{
+                            prefs.oilLevelRequired = false
                         }
-                        else if (osData.oillevelImage==null&&isInspectionDoneToday) {
-                            isInspectionDoneToday = false
-                            osData.isImagesUploadedToday = false
-                            imagesUploaded = false
-                            inspectionstarted = false
+
+                        if (it.IsAdBlueRequired == true) {
+                            if (it.DaVehicleAddBlueImage != null)
+                                prefs.addBlueRequired = false
+                            else {
+                                prefs.addBlueRequired = prefs.addBlueUri == null
+                            }
+                        } else
+                            prefs.addBlueRequired = false
+
+                        if (prefs.faceMaskUri != null || it.DaVehImgFaceMaskFileName != null) {
+                            prefs.updateFaceMaskStatus(true)
                         } else {
-                            isInspectionDoneToday = true
-                            if (it.IsAdBlueRequired == true)
-                                osData.isaddBlueImageRequired = it.DaVehicleAddBlueImage == null
-                            else
-                                osData.isaddBlueImageRequired = false
-
-                            osData.isoilLevelImageRequired = it.DaVehImgOilLevelFileName == null
-
-                            backgroundImageSync()
+                            prefs.updateFaceMaskStatus(false)
                         }
-                        if (osData.faceMaskImage != null || it.DaVehImgFaceMaskFileName != null) {
-                            osData.isImagesUploadedToday = true
-                            imagesUploaded = true
-                        }
-                    }
-                    else {
+                    } else {
                         backgroundImageSync()
                     }
                 }
             } else {
-                if (osData.faceMaskImage == null ||
-                    osData.oillevelImage == null
-                ) {
-
-                    if (!osData.isInspectionDoneToday) {
-                        mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
-                        osData.isImagesUploadedToday = false
-                        inspectionstarted = false
-                        imagesUploaded = false
-                    } else {
-                        //  osData.isInspectionDoneToday = true
-                        osData.isImagesUploadedToday = false
-                        inspectionstarted = true
-                        imagesUploaded = false
-                    }
-
-                    if (osData.faceMaskImage != null) {
-                        osData.isImagesUploadedToday = true
-                        imagesUploaded = true
-                    }
-                } else {
+                if (prefs.addBlueUri != null || prefs.oilLevelUri != null || prefs.faceMaskUri != null)
                     backgroundImageSync()
-                }
             }
-
             setVisibiltyLevel()
         })
 
@@ -812,7 +773,7 @@ class NewCompleteTaskFragment : Fragment() {
             requireContext()
         )
         inspectionstarted = true
-        if (osData.faceMaskImage != null){
+        if (osData.faceMaskImage != null) {
             osData.isImagesUploadedToday = true
             imagesUploaded = true
         }
@@ -984,6 +945,9 @@ class NewCompleteTaskFragment : Fragment() {
                 osData.isImagesUploadedToday = true
                 oSyncViewModel.insertData(osData)
             }
+            prefs.faceMaskUri = currentUri.toString()
+            prefs.faceMaskRequired = false
+            prefs.updateFaceMaskStatus(true)
             imagesUploaded = true
             print("OSData ISImage1 ${osData.isImagesUploadedToday}\n")
             print("OSData ISInspection1 ${osData.isInspectionDoneToday}\n")
@@ -1207,9 +1171,10 @@ class NewCompleteTaskFragment : Fragment() {
 
     private fun setVisibiltyLevel() {
         visibilityLevel = 0
-
         isClockedIn = osData.isClockedInToday
-        inspectionstarted = isInspectionDoneToday
+        inspectionstarted =
+            prefs.isInspectionDoneToday() && !prefs.oilLevelRequired && !prefs.addBlueRequired
+        imagesUploaded = prefs.isFaceMaskAddedToday()
         print("OSData ISImage $imagesUploaded\n")
         print("OSData ISInspection $inspectionstarted\n")
         if (!inspectionstarted) {
@@ -1245,34 +1210,6 @@ class NewCompleteTaskFragment : Fragment() {
         visibiltyControlls()
         oSyncViewModel.insertData(osData)
     }
-
-    /*    private fun setProgress() {
-            val progressBar = mbinding.progressContainer.progressBarStep1
-            mbinding.clAddBlueImg.visibility = View.GONE
-            mbinding.clFaceMask.visibility = View.GONE
-            mbinding.clOilLevel.visibility = View.GONE
-            when (imageUploadLevel) {
-                0 -> {
-                    progressBar.setProgress(13, true)
-                }
-
-                1 -> {
-                    progressBar.setProgress(45, true)
-                    mbinding.clAddBlueImg.visibility = View.VISIBLE
-
-                }
-
-                2 -> {
-                    progressBar.setProgress(70, true)
-                    mbinding.clOilLevel.visibility = View.VISIBLE
-                }
-
-                else -> {
-                    progressBar.setProgress(100, true)
-                    progressBar.setBackgroundColor(Color.GREEN)
-                }
-            }
-        }*/
 
 
     private fun checkInspection() {

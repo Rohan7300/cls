@@ -442,8 +442,8 @@ class CompleteTaskFragment : Fragment() {
             if (it != null) {
                 scannedvrn = it.vmRegNo
                 Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
-                if (!Prefs.getInstance(App.instance).VmID.isNotEmpty()) {
-                    Prefs.getInstance(App.instance).VmID = it.vmId.toString()
+                if (it.vmId!=null&&Prefs.getInstance(App.instance).vmId==0) {
+                    Prefs.getInstance(App.instance).vmId = it.vmId.toInt()
                 }
             }
         }

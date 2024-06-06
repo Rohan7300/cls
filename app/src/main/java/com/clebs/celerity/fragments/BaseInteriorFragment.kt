@@ -134,7 +134,7 @@ abstract class BaseInteriorFragment : Fragment() {
                 }
             }
             if (it != null) {
-                if (it.vmId != 0)
+                if (it.vmId != 0&&Prefs.getInstance(requireContext()).vmId == 0)
                     Prefs.getInstance(requireContext()).vmId = it.vmId
             }
 

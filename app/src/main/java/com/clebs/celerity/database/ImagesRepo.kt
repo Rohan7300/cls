@@ -7,8 +7,8 @@ import com.clebs.celerity.utils.Prefs
 
 class ImagesRepo(private val db: ImageDatabase, private val pref: Prefs) {
 
-    fun getImagesbyUser(): ImageEntity? {
-        return db.imageDao().getImagesByUserName()
+    fun getImagesbyUser(dawDate:String): ImageEntity? {
+        return db.imageDao().getImagesByUserName(dawDate)
     }
 
     suspend fun insertImage(image: ImageEntity) {

@@ -801,8 +801,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         prefs.workLocationName = it.workinglocation
                     prefs.lmid = it.lmID
                     lmId = it.lmID
-                    if (it.vmID != null && prefs.vmId == 0)
-                        prefs.vmId = it.vmID
+
+                    if (it.vmID != null)
+                        prefs.baseVmID = it.vmID.toString()
                 } catch (e: Exception) {
                     Log.d("sds", e.toString())
                 }
@@ -913,8 +914,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (it != null) {
 
                 Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
-                if (!Prefs.getInstance(App.instance).VmID.isNotEmpty()) {
-                    Prefs.getInstance(App.instance).VmID = it.vmId.toString()
+                if (Prefs.getInstance(App.instance).vmId==0) {
+                    Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()
                 }
             }
         }
