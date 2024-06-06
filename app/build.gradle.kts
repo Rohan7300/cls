@@ -18,7 +18,7 @@ android {
         minSdk = 27
         targetSdk = 34
         versionCode = 1
-        versionName = "0.1.5"
+        versionName = "0.1.6"
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -151,7 +151,6 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
 //    implementation("org.mozilla.geckoview:geckoview-nightly:100.0.20220308100756")
-    implementation("com.github.clearquotetech:cq-android-sdk:2.0.4-test")
 
     kapt("androidx.room:room-compiler:2.6.1")
 

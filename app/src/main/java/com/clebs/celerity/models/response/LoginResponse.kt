@@ -13,5 +13,7 @@ data class LoginResponse(
     @SerializedName("TokenExpiredOn")
     var tokenExpiredOn: String = "",
     @SerializedName("UserID")
-    var userID: Int = 0
+    var userID: Int = 0,
+    @SerializedName("UserRole")
+    var UserRole:String?=null
 )

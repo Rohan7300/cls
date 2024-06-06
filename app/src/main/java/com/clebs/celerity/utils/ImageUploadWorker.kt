@@ -54,7 +54,8 @@ class ImageUploadWorker(
                     0 -> {
                         val data = osRepo.getData(clebUserId, todayDate)
                         logOSEntity("ImageWorker", data)
-                        if (data.dashboardImage != null) {
+
+                        if (data.dashboardImage != null&&data.isDashboardImageRequired) {
                             val partBody = createMultipartPart(
                                 data.dashboardImage!!, "uploadVehicleDashBoardImage",
                                 appContext
@@ -71,7 +72,7 @@ class ImageUploadWorker(
                             }
                         }
 
-                        if (data.frontImage != null) {
+                        if (data.frontImage != null&&data.isFrontImageRequired) {
                             val partBody = createMultipartPart(
                                 data.frontImage!!, "uploadVehicleFrontImage",
                                 appContext
@@ -88,7 +89,7 @@ class ImageUploadWorker(
                             }
                         }
 
-                        if (data.nearSideImage != null) {
+                        if (data.nearSideImage != null&&data.isnearImageRequired) {
                             val partBody = createMultipartPart(
                                 data.nearSideImage!!, "uploadVehicleNearSideImage",
                                 appContext
@@ -106,7 +107,7 @@ class ImageUploadWorker(
                             }
                         }
 
-                        if (data.rearSideImage != null) {
+                        if (data.rearSideImage != null&&data.isRearImageRequired) {
                             val partBody = createMultipartPart(
                                 data.rearSideImage!!, "uploadVehicleRearImage",
                                 appContext
@@ -123,7 +124,7 @@ class ImageUploadWorker(
                             }
                         }
 
-                        if (data.offSideImage != null) {
+                        if (data.offSideImage != null&&data.isOffsideImageRequired) {
                             val partBody = createMultipartPart(
                                 data.offSideImage!!, "uploadVehicleOffSideImage",
                                 appContext
@@ -141,7 +142,7 @@ class ImageUploadWorker(
                             }
                         }
 
-                        if (data.addblueImage != null) {
+                        if (data.addblueImage != null&&data.isaddBlueImageRequired) {
                             val partBody = createMultipartPart(
                                 data.addblueImage!!, "uploadVehicleAddBlueImage",
                                 appContext
@@ -153,7 +154,7 @@ class ImageUploadWorker(
                                 data.isaddblueImageFailed = true
                         }
 
-                        if (data.oillevelImage != null) {
+                        if (data.oillevelImage != null&&data.isoilLevelImageRequired) {
                             val partBody = createMultipartPart(
                                 data.oillevelImage!!, "uploadVehicleOilLevelImage",
                                 appContext
@@ -164,7 +165,8 @@ class ImageUploadWorker(
                             if (!oilLevelResponse.isSuccessful)
                                 data.isoillevelImageFailed = true
                         }
-                        if (data.faceMaskImage != null) {
+
+                        if (data.faceMaskImage != null&&data.isfaceMaskImageRequired) {
                             val partBody = createMultipartPart(
                                 data.faceMaskImage!!, "uploadFaceMaskImage",
                                 appContext

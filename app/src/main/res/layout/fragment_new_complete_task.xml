@@ -1,0 +1,1226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <include
+            android:id="@+id/headerTop"
+            layout="@layout/fragment_headers" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/mainCompleteTask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:visibility="visible"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:id="@+id/complete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/shape_expand_main">
+
+                    <View
+                        android:id="@+id/view2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/rlcom"
+                        android:layout_marginHorizontal="1dp"
+                        android:background="#6DA95E"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/rlcom"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="18dp">
+
+                        <TextView
+                            android:id="@+id/parent_Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:fontFamily="@font/poppins_bold"
+                            android:layout_weight="1"
+                            android:text="Completed Tasks"
+                            android:textColor="@color/text_color"
+                            android:textSize="16sp" />
+
+                        <ImageButton
+                            android:id="@+id/down_iv"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerHorizontal="true"
+                            android:backgroundTint="@color/white"
+                            android:src="@drawable/grey_right_arrow" />
+
+                    </LinearLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/task_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rlcom"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="18dp"
+                        android:visibility="visible">
+
+                        <RelativeLayout
+                            android:id="@+id/vichle_defect"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/child_Title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="Vehicle Defect Sheet "
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <ImageButton
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentRight="true"
+                                android:backgroundTint="@color/white"
+                                android:src="@drawable/frame__2_" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/vichel_pictures"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/vichle_defect"
+                            android:layout_marginTop="15dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="Vehicle Pictures "
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <ImageView
+                                android:id="@+id/vehiclePicturesIB"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentRight="true"
+                                android:backgroundTint="@color/white"
+                                android:src="@drawable/frame__2_" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/clocked_in"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/vichel_pictures"
+                            android:layout_marginTop="15dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="Clocked In"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tv_ClockedIN"
+                                android:layout_width="wrap_content"
+                                android:layout_height="25dp"
+                                android:layout_alignParentRight="true"
+                                android:backgroundTint="@color/white"
+                                android:text="- - - -"
+                                android:textColor="#6DA95E"
+                                android:textSize="15sp" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/clocked_in"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="Clocked Out"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/clocked_outTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="25dp"
+                                android:layout_alignParentRight="true"
+                                android:backgroundTint="@color/white"
+                                android:text="- - - -"
+                                android:textColor="#6DA95E"
+                                android:textSize="15sp" />
+
+                        </RelativeLayout>
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/rlcomtwo_Clock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/shape_expand_main"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:id="@+id/parent_Titles"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/poppins_bold"
+                        android:letterSpacing="0.02"
+                        android:text="Clock In"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/tv_time"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/finalclockout" />
+
+                    <ImageButton
+                        android:id="@+id/down_ivs"
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:backgroundTint="@color/white"
+                        android:src="@drawable/vector__1_"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/onRoadView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/shape_expand_main">
+
+                    <LinearLayout
+                        android:id="@+id/rlcomtwo_road"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:padding="18dp">
+
+                        <TextView
+                            android:id="@+id/parent_road"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:fontFamily="@font/poppins_bold"
+                            android:layout_weight="1"
+                            android:letterSpacing="0.02"
+                            android:text="On Road Hours"
+                            android:textColor="@color/text_color"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:textColor="@color/orange" />
+
+                        <ImageView
+                            android:id="@+id/down_ivs_road"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerHorizontal="true"
+                            android:backgroundTint="@color/white"
+                            android:src="@drawable/grey_right_arrow" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/linerlcomtwo"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_below="@+id/rlcomtwo_road"
+                        android:layout_marginHorizontal="3dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="#4A4A4A"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/route_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/rlcomtwo_road"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <RelativeLayout
+                            android:id="@+id/filled_routes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="15dp"
+                            android:layout_marginBottom="24dp"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/route_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="18dp"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="@string/route_name"
+                                android:textColor="#4A4A4A"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/route_name_two"
+                                android:layout_width="wrap_content"
+                                android:layout_height="18dp"
+                                android:layout_below="@id/route_name"
+                                android:layout_marginTop="24dp"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="@string/route_name"
+                                android:textColor="#4A4A4A"
+                                android:textSize="13sp" />
+
+                            <ImageView
+                                android:id="@+id/edt_ic"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_alignTop="@+id/route_name_two"
+                                android:layout_marginStart="100dp"
+                                android:layout_toEndOf="@id/route_name_two"
+                                android:src="@drawable/edit_orange" />
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_alignTop="@+id/route_name_two"
+
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/delete_ic_red" />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/routeNameTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/filled_routes"
+                            android:layout_marginHorizontal="16dp"
+                            android:orientation="vertical"
+                            android:padding="10dp"
+                            android:visibility="gone">
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_bold"
+                                android:text="Route Name"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="16dp"
+                                android:background="#4A4A4A" />
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/getDriverRouteId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/routeNameTV"
+                            android:layout_marginHorizontal="20dp" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/questionare_rv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/Add_route"
+                            android:layout_marginHorizontal="16dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginBottom="10dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <RelativeLayout
+                                android:id="@+id/Add_route"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/getDriverRouteId"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_edittext_mileage"
+                                android:orientation="horizontal"
+                                android:paddingStart="14dp"
+                                android:paddingEnd="14dp">
+
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    android:src="@drawable/add_ic_grey"
+                                    app:tint="@color/orange" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:fontFamily="@font/poppins_semibold"
+                                    android:letterSpacing="0.02"
+                                    android:padding="14dp"
+                                    android:text="New route"
+                                    android:textColor="#4A4A4A"
+                                    android:textSize="11sp" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/ride_along"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/questionare_rv"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_edittext_mileage"
+                                android:orientation="horizontal"
+                                android:paddingStart="14dp"
+                                android:paddingEnd="14dp">
+
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    android:src="@drawable/add_ic_grey"
+                                    app:tint="@color/orange" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:fontFamily="@font/poppins_semibold"
+                                    android:letterSpacing="0.02"
+                                    android:padding="14dp"
+                                    android:text="Ride along"
+                                    android:textColor="#4A4A4A"
+                                    android:textSize="11sp" />
+
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/rlcomtwo_break"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/shape_expand_main"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:id="@+id/parent_break"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/poppins_bold"
+                        android:letterSpacing="0.02"
+                        android:text="Break Time"
+                        android:textColor="@color/text_color"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textColor="@color/orange" />
+
+                    <ImageButton
+                        android:id="@+id/down_ivs_break"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:backgroundTint="@color/white"
+                        android:src="@drawable/grey_fill" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/BreakTimeTable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/shape_expand_main"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <LinearLayout
+                        android:id="@+id/h1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_bold"
+                            android:text="Break Information"
+                            android:textColor="@color/text_color"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/badgeArrow"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/grey_right_arrow"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/breakH2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/shape_edittext_onroad"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="3dp"
+                        android:visibility="gone">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/BreakTimeRV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/addBreakIV"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/add_ic"
+                                app:tint="@color/orange" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlcomtwo_ClockOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/shape_expand_main"
+                    android:padding="18dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/clockOutTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="Clock Out"
+                        android:textColor="@color/text_color"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/clock_out_mark"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerHorizontal="true"
+                        android:backgroundTint="@color/white"
+                        android:src="@drawable/finalclockout"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/upload_layouts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+
+                    <RelativeLayout
+                        android:id="@+id/rl_second"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/rl_first">
+
+                        <LinearLayout
+                            android:id="@+id/uploadll1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/clVehicleDashboard"
+                                android:layout_width="160dp"
+                                android:layout_height="154dp"
+                                android:layout_marginEnd="7dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_uploads">
+
+
+                                <ImageButton
+                                    android:id="@+id/imageButtonss"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:src="@drawable/delete_ic"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <ImageButton
+                                    android:id="@+id/ivVehicleDashboard"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:backgroundTint="@color/white"
+                                    android:src="@drawable/imgvehciledash"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/inter"
+                                    android:letterSpacing="0.02"
+                                    android:text="Vehicle Dashboard"
+                                    android:textColor="#4A4A4A"
+                                    android:textSize="13sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/ivVehicleDashboard" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/clFront"
+                                android:layout_width="160dp"
+                                android:layout_height="154dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_uploads">
+
+                                <ImageButton
+                                    android:id="@+id/imageButton4"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:src="@drawable/delete_ic"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <ImageButton
+                                    android:id="@+id/ivFront"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:backgroundTint="@color/white"
+                                    android:src="@drawable/camera"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/inter"
+                                    android:letterSpacing="0.02"
+                                    android:text="Front"
+
+                                    android:textColor="#4A4A4A"
+                                    android:textSize="13sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/ivFront" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_first"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginEnd="20dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/clNearSide"
+                                android:layout_width="160dp"
+                                android:layout_height="154dp"
+                                android:layout_marginEnd="7dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_uploads">
+
+
+                                <ImageButton
+                                    android:id="@+id/imageButton"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:src="@drawable/delete_ic"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <ImageButton
+                                    android:id="@+id/ivNearSide"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:backgroundTint="@color/white"
+                                    android:src="@drawable/camera"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/inter"
+                                    android:letterSpacing="0.02"
+                                    android:text="Near Side"
+                                    android:textColor="#4A4A4A"
+                                    android:textSize="13sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/ivNearSide" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/clRearImgUp"
+                                android:layout_width="160dp"
+                                android:layout_height="154dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_uploads">
+
+                                <ImageButton
+                                    android:id="@+id/imageButtons"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:src="@drawable/delete_ic"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <ImageButton
+                                    android:id="@+id/ivRearImgUp"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:backgroundTint="@color/white"
+                                    android:src="@drawable/imgvehciledash"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/inter"
+                                    android:letterSpacing="0.02"
+                                    android:text="Rear"
+                                    android:textColor="#4A4A4A"
+                                    android:textSize="13sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/ivRearImgUp" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:visibility="visible">
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:fontFamily="@font/poppins_bold"
+                            android:gravity="center"
+                            android:letterSpacing="0.01"
+                            android:text="Start Inspection"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:visibility="gone" />
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/startinspection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FD9B7D"
+                            app:cardCornerRadius="20dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/poppins_bold"
+                                android:letterSpacing="0.05"
+                                android:paddingHorizontal="20dp"
+                                android:paddingVertical="8dp"
+                                android:text="Start Inspection"
+                                android:textColor="@color/white"
+                                android:textSize="14sp" />
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_third"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="20dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/view">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/clOffSideImgUp"
+                                android:layout_width="180dp"
+                                android:layout_height="154dp"
+                                android:layout_marginEnd="7dp"
+                                android:background="@drawable/shape_uploads"
+
+                                android:visibility="gone">
+
+
+                                <ImageButton
+                                    android:id="@+id/imageButtonsix"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:src="@drawable/delete_ic"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <ImageButton
+                                    android:id="@+id/ivOffSideImgUp"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:backgroundTint="@color/white"
+                                    android:src="@drawable/camera"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/inter"
+                                    android:letterSpacing="0.02"
+                                    android:text="Off Side"
+                                    android:textColor="#4A4A4A"
+                                    android:textSize="13sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/ivOffSideImgUp" />
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/imageUploadView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginVertical="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/txt_upload"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:fontFamily="@font/poppins_semibold"
+                                android:letterSpacing="0.02"
+                                android:lineHeight="27sp"
+                                android:text="Take a Selfie with the Badge"
+                                android:textAllCaps="true"
+                                android:textColor="#4A4A4A"
+                                android:textSize="15sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/task_details" />
+
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/medal" />
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/view"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="20dp"
+                            android:background="#4A4A4A"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toBottomOf="@+id/txt_upload" />
+
+                        <!--               <include
+                                           android:id="@+id/progressContainer"
+                                           layout="@layout/custom_progress" />-->
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clFaceMask"
+                            android:layout_width="match_parent"
+                            android:layout_height="154dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginHorizontal="16dp"
+                            android:background="@drawable/shape_uploads">
+
+                            <ImageView
+                                android:id="@+id/ivFaceMask"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:backgroundTint="@color/white"
+                                android:src="@drawable/camera_ivs"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter"
+                                android:letterSpacing="0.02"
+                                android:text="selfie with Badge"
+                                android:textColor="#4A4A4A"
+                                android:textSize="13sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/ivFaceMask" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clAddBlueImg"
+                            android:layout_width="match_parent"
+                            android:layout_height="154dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginHorizontal="16dp"
+                            android:background="@drawable/shape_uploads"
+                            android:visibility="gone">
+
+                            <ImageButton
+                                android:id="@+id/ivAddBlueImg"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:backgroundTint="@color/white"
+                                android:src="@drawable/camera_ivs"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter"
+                                android:letterSpacing="0.02"
+                                android:text="Add Blue"
+                                android:textColor="#4A4A4A"
+                                android:textSize="13sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/ivAddBlueImg" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clOilLevel"
+                            android:layout_width="match_parent"
+                            android:layout_height="154dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginHorizontal="16dp"
+                            android:background="@drawable/shape_uploads"
+                            android:visibility="gone">
+
+                            <ImageButton
+                                android:id="@+id/ivOilLevel"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:backgroundTint="@color/white"
+                                android:src="@drawable/camera_ivs"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter"
+                                android:letterSpacing="0.02"
+                                android:text="Oil Level"
+                                android:textColor="#4A4A4A"
+                                android:textSize="13sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/ivOilLevel" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/rl_six"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginBottom="30dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toBottomOf="@id/view">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+
+                                android:weightSum="2">
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/clAddBlueImgOld"
+                                    android:layout_width="180dp"
+                                    android:layout_height="154dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/shape_uploads">
+
+
+                                    <!--                                <ImageButton-->
+                                    <!--                                    android:id="@+id/imageButtoneleven"-->
+                                    <!--                                    android:layout_width="28dp"-->
+                                    <!--                                    android:layout_height="28dp"-->
+                                    <!--                                    android:src="@drawable/delete_ic"-->
+                                    <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+                                    <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
+
+                                    <ImageButton
+                                        android:id="@+id/ivAddBlueImgOld"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:backgroundTint="@color/white"
+                                        android:src="@drawable/camera"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/inter"
+                                        android:letterSpacing="0.02"
+                                        android:text="Add Blue"
+                                        android:textColor="#4A4A4A"
+                                        android:textSize="13sp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/ivAddBlueImgOld" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/clFaceMaskOld"
+                                    android:layout_width="180dp"
+                                    android:layout_height="154dp"
+                                    android:layout_marginStart="6dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/shape_uploads">
+
+
+                                    <!--                                <ImageButton-->
+                                    <!--                                    android:layout_width="28dp"-->
+                                    <!--                                    android:layout_height="28dp"-->
+                                    <!--                                    android:src="@drawable/delete_ic"-->
+                                    <!--                                    app:layout_constraintEnd_toEndOf="parent"-->
+                                    <!--                                    app:layout_constraintTop_toTopOf="parent" />-->
+
+                                    <ImageButton
+                                        android:id="@+id/ivFaceMaskOld"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:backgroundTint="@color/white"
+                                        android:src="@drawable/camera"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/inter"
+                                        android:letterSpacing="0.02"
+                                        android:text="Face Mask"
+                                        android:textColor="#4A4A4A"
+                                        android:textSize="13sp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/ivFaceMaskOld" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_next"
+                    style="@style/ctaStyle1"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:enabled="false"
+                    android:fontFamily="@font/inter"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="Save &amp; Next"
+                    android:textAllCaps="false"
+                    android:textColor="#F36C2E"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </LinearLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/searchLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/searchinglayout" />
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

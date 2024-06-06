@@ -437,7 +437,7 @@ class Userprofile : Fragment() {
             ColorDrawable(
                 ContextCompat.getColor(
                     requireContext(),
-                 R.color.transparent
+                    R.color.transparent
                 )
             )
         );

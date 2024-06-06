@@ -273,7 +273,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
                     var osData = (activity as HomeActivity).osData
                     osData.isDefectSheetFilled = true
                     (activity as HomeActivity).oSyncViewModel.insertData(osData)
-                    navigateTo(R.id.completeTaskFragment)
+                    navigateTo(R.id.newCompleteTaskFragment)
                 } else {
                     showErrorDialog(fragmentManager, "SPW-01", "Failed to Save")
                 }

@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical"
-        tools:context=".ui.AddInspection">
+        tools:context=".ui.AddInspectionActivity2">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,11 +59,11 @@
                 android:id="@+id/inspectionPreviewView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-<View
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#74000000"
-    />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#74000000"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -72,7 +72,6 @@
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="10dp"
                 android:visibility="visible">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -91,169 +90,23 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/steeringcontrol"
-                        android:textColor="@color/text_color" />
+                        android:src="@drawable/adbluelevel" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/poppins_semibold"
-                        android:text="Dashboard Image"
+                        android:text="Full Vehicle Inspection"
                         android:textColor="@color/white" />
 
                     <ImageView
-                        android:id="@+id/dashboardStatusIV"
+                        android:id="@+id/fullvehicleInspection"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginHorizontal="10dp"
                         android:src="@drawable/fileins" />
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:text="2. "
-                        android:textColor="@color/white" />
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/bodydamagefront" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Front Image"
-                        android:textColor="@color/white" />
-
-                    <ImageView
-                        android:id="@+id/frontStatusIV"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/fileins" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:text="3. "
-                        android:textColor="@color/white" />
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/bodydamagenearside" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Near Side Image"
-                        android:textColor="@color/white" />
-
-                    <ImageView
-                        android:id="@+id/nearSideStatusIV"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/fileins" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:text="4. "
-                        android:textColor="@color/white" />
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/bodydamagerear" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Rear Side Image"
-                        android:textColor="@color/white" />
-
-                    <ImageView
-                        android:id="@+id/rearSideStatusIV"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/fileins" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:text="5. "
-                        android:textColor="@color/white" />
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/bodydamageoffside" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Offside Image"
-                        android:textColor="@color/white" />
-
-                    <ImageView
-                        android:id="@+id/offsideStatusIV"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/fileins" />
-                </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/addbluell"
                     android:layout_width="match_parent"
@@ -266,7 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins"
-                        android:text="6. "
+                        android:text="2. "
                         android:textColor="@color/white" />
 
                     <ImageView
@@ -303,7 +156,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins"
-                        android:text="7. "
+                        android:text="3. "
                         android:textColor="@color/white" />
 
                     <ImageView
@@ -433,7 +286,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="(0/7)"
+                    android:text="(0/3)"
                     android:textColor="@color/orange" />
             </LinearLayout>
         </LinearLayout>
@@ -482,7 +335,7 @@
                         android:fontFamily="@font/poppins_bold"
                         android:gravity="center"
                         android:id="@+id/uploadBtnText"
-                        android:text="Upload Dashboard Image"
+                        android:text="Start Inspection"
                         android:textColor="@color/white" />
 
 

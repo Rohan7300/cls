@@ -117,8 +117,8 @@ class UpdateOnRoadHoursFragment : Fragment() {
 //        }
 
         binding.cancel.setOnClickListener {
-            findNavController().navigate(R.id.completeTaskFragment)
-            findNavController().clearBackStack(R.id.completeTaskFragment)
+            findNavController().navigate(R.id.newCompleteTaskFragment)
+            findNavController().clearBackStack(R.id.newCompleteTaskFragment)
         }
 
 //        binding.pbbMinus.setOnClickListener {
@@ -212,10 +212,10 @@ class UpdateOnRoadHoursFragment : Fragment() {
             loadingDialog.cancel()
             if (it != null) {
                 showToast("Updated Successfully", requireContext())
-                findNavController().navigate(R.id.completeTaskFragment)
+                findNavController().navigate(R.id.newCompleteTaskFragment)
             } else {
                 showToast("Failed to Update", requireContext())
-                findNavController().navigate(R.id.completeTaskFragment)
+                findNavController().navigate(R.id.newCompleteTaskFragment)
             }
         }
 

@@ -240,4 +240,8 @@
         android:name="com.clebs.celerity.fragments.AdvancePaymentAgreementFragment"
         android:label="fragment_advance_payment_agreement"
         tools:layout="@layout/fragment_advance_payment_agreement" />
+    <fragment
+        android:id="@+id/newCompleteTaskFragment"
+        android:name="com.clebs.celerity.fragments.NewCompleteTaskFragment"
+        android:label="NewCompleteTaskFragment" />
 </navigation>

@@ -710,7 +710,10 @@ fun getLocID(prefs: Prefs): Int {
 }
 
 fun checkIfInspectionFailed(osData: OfflineSyncEntity): Boolean {
-    return osData.isdashboardUploadedFailed || osData.isfrontImageFailed || osData.isnearSideFailed || osData.isoffSideFailed || osData.isrearSideFailed || osData.isoillevelImageFailed || osData.isaddblueImageFailed
+    return  osData.isoillevelImageFailed || osData.isaddblueImageFailed
+}
+fun checkIfInspectionFailed2(osData: OfflineSyncEntity): Boolean {
+    return osData.isoillevelImageFailed || osData.isaddblueImageFailed
 }
 
 fun logOSEntity(base: String, osData: OfflineSyncEntity) {

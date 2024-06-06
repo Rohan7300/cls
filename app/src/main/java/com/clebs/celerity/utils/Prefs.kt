@@ -53,6 +53,13 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putString("vmRegNo", value).apply()
         }
 
+    var Isfirst: Boolean?
+        get() {
+            return sharedPreferences.getBoolean("Isfirst", true)
+        }
+        set(value) {
+            sharedPreferences.edit().putBoolean("Isfirst", value?:false).apply()
+        }
     var vmId: Int
         get() = sharedPreferences.getInt("vmIdx", 0)
         set(value) = sharedPreferences.edit().putInt("vmIdx", value).apply()

@@ -31,13 +31,13 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 
 
-class   LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
     lateinit var ActivityLoginBinding: ActivityLoginBinding
     lateinit var mainViewModel: MainViewModel
     lateinit var loadingDialog: LoadingDialog
     lateinit var fragmentManager: FragmentManager
     lateinit var dialog: NoInternetDialog
-    private var isNetworkActive:Boolean = true
+    private var isNetworkActive: Boolean = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,18 +48,18 @@ class   LoginActivity : AppCompatActivity() {
         dialog = NoInternetDialog()
         val networkManager = NetworkManager(this)
 
-        networkManager.observe(this){
-            if(it){
+        networkManager.observe(this) {
+            if (it) {
                 isNetworkActive = true
                 dialog.hideDialog()
-            }else{
+            } else {
                 isNetworkActive = false
                 dialog.showDialog(fragmentManager)
             }
         }
 
         loadingDialog = LoadingDialog(this)
-        mainViewModel =DependencyProvider.getMainVM(this)
+        mainViewModel = DependencyProvider.getMainVM(this)
 
         ActivityLoginBinding.btLogin.setOnClickListener {
             if (ActivityLoginBinding.edtUser.text!!.isEmpty()) {
@@ -80,10 +80,12 @@ class   LoginActivity : AppCompatActivity() {
         ActivityLoginBinding.passIcon.setOnClickListener {
             val cursorPosition = ActivityLoginBinding.edtPass.selectionEnd
             if (!isPasswordVisible) {
-                ActivityLoginBinding.edtPass.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                ActivityLoginBinding.edtPass.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
                 ActivityLoginBinding.passIcon.setImageDrawable(getDrawable(R.drawable.visible2))
             } else {
-                ActivityLoginBinding.edtPass.transformationMethod = PasswordTransformationMethod.getInstance()
+                ActivityLoginBinding.edtPass.transformationMethod =
+                    PasswordTransformationMethod.getInstance()
                 ActivityLoginBinding.passIcon.setImageDrawable(getDrawable(R.drawable.hidden2))
             }
             ActivityLoginBinding.edtPass.setSelection(cursorPosition)
@@ -109,37 +111,59 @@ class   LoginActivity : AppCompatActivity() {
                 if (it != null) {
 
                     if (it.message.equals("Success")) {
+                        if (!it.UserRole.isNullOrBlank()) {
+                            if (it.UserRole.equals("C")) {
+                                FirebaseMessaging.getInstance().token.addOnCompleteListener(
+                                    OnCompleteListener { task ->
+                                        if (!task.isSuccessful) {
+                                            Log.w(
+                                                "LoginActivity",
+                                                "Fetching FCM registration token failed",
+                                                task.exception
+                                            )
+                                            return@OnCompleteListener
+                                        }
 
-                        FirebaseMessaging.getInstance().token.addOnCompleteListener(
-                            OnCompleteListener { task ->
-                                if (!task.isSuccessful) {
-                                    Log.w(
-                                        "LoginActivity",
-                                        "Fetching FCM registration token failed",
-                                        task.exception
-                                    )
-                                    return@OnCompleteListener
-                                }
+                                        val token = task.result
+                                        mainViewModel.SaveDeviceInformation(
+                                            SaveDeviceInformationRequest(
+                                                FcmToken = token,
+                                                UsrId = Prefs.getInstance(this).clebUserId.toInt(),
+                                                UsrDeviceId = getDeviceID(),
+                                                UsrDeviceType = "Android"
+                                            )
+                                        )
+                                        Log.d("LoginActivity", "FCM Token $token")
+                                    })
 
-                                val token = task.result
-                                mainViewModel.SaveDeviceInformation(
-                                    SaveDeviceInformationRequest(
-                                        FcmToken = token,
-                                        UsrId = Prefs.getInstance(this).clebUserId.toInt(),
-                                        UsrDeviceId = getDeviceID(),
-                                        UsrDeviceType = "Android"
-                                    )
+                                Prefs.getInstance(applicationContext).accessToken = it.token
+                                Prefs.getInstance(applicationContext).clebUserId =
+                                    it.userID.toString()
+                                ActivityLoginBinding.progressbar.visibility = View.GONE
+                                Log.e("response", "onCreate: " + it.token)
+                                GetDriverSignatureInformation()
+                                setLoggedIn(true)
+
+                            } else {
+                                ActivityLoginBinding.progressbar.visibility = View.GONE
+                                showErrorDialog(
+                                    fragmentManager,
+                                    "LS-05",
+                                    "Please check your email and password and try again."
                                 )
-                                Log.d("LoginActivity", "FCM Token $token")
-                            })
-
-                        Prefs.getInstance(applicationContext).accessToken = it.token
-                        Prefs.getInstance(applicationContext).clebUserId = it.userID.toString()
-                        ActivityLoginBinding.progressbar.visibility = View.GONE
-                        Log.e("response", "onCreate: " + it.token)
-                        GetDriverSignatureInformation()
-                        setLoggedIn(true)
-
+                                setLoggedIn(false)
+                                loadingDialog.dismiss()
+                            }
+                        } else {
+                            ActivityLoginBinding.progressbar.visibility = View.GONE
+                            showErrorDialog(
+                                fragmentManager,
+                                "LS-05",
+                                "Please check your email and password and try again."
+                            )
+                            setLoggedIn(false)
+                            loadingDialog.dismiss()
+                        }
 
                     } else {
                         ActivityLoginBinding.progressbar.visibility = View.GONE
