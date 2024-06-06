@@ -437,7 +437,7 @@ class Userprofile : Fragment() {
             ColorDrawable(
                 ContextCompat.getColor(
                     requireContext(),
-                    io.clearquote.assessment.cq_sdk.R.color.transparent
+                 R.color.transparent
                 )
             )
         );

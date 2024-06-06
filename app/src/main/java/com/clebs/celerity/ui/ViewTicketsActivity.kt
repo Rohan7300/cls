@@ -85,6 +85,8 @@ class ViewTicketsActivity : AppCompatActivity() {
         }
 
 
+
+
         val attachmentAdapter = AttachmentAdapter(this@ViewTicketsActivity, ArrayList())
         binding.attachmentRV.adapter = attachmentAdapter
         binding.attachmentRV.layoutManager = LinearLayoutManager(this)

@@ -128,6 +128,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         var checked: String? = ""
         var Boolean: Boolean = false
+        var isdone: Boolean? = null
+        var istarted: Boolean? = null
         var lmId: Int = 0
     }
 
@@ -536,6 +538,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 Log.d("hdhsdshdsdjshhsds", "200 $message")
                 prefs.saveBoolean("Inspection", true)
                 prefs.updateInspectionStatus(true)
+                isdone=true
+                istarted=true
+                Prefs.getInstance(this).isdone=true
+                Prefs.getInstance(this).isstarted=true
                 //inspectionstarted = true
 
                 val currentDate =

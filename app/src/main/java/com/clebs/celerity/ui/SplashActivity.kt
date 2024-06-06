@@ -88,7 +88,7 @@ class SplashActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 )
-        window.statusBarColor = resources.getColor(io.clearquote.assessment.cq_sdk.R.color.transparent, null)
+        window.statusBarColor = resources.getColor(R.color.transparent, null)
         window.requestFeature(Window.FEATURE_NO_TITLE);
 
         super.onCreate(savedInstanceState)

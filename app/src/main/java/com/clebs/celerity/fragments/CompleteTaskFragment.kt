@@ -56,6 +56,7 @@ import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.ui.AddInspectionTwoActivity
 import com.clebs.celerity.ui.FaceScanActivity
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.currentUri
@@ -80,8 +81,8 @@ import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
 import io.clearquote.assessment.cq_sdk.models.CustomerDetails
 import io.clearquote.assessment.cq_sdk.models.InputDetails
+import io.clearquote.assessment.cq_sdk.models.UserFlowParams
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
-import io.ktor.util.reflect.instanceOf
 import okhttp3.MultipartBody
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -96,10 +97,13 @@ import java.util.UUID
 
 class CompleteTaskFragment : Fragment() {
     lateinit var mbinding: FragmentCompleteTaskBinding
+    private var startonetime: Boolean? = false
+    private var isfirst: Boolean? = false
     private var isclicked: Boolean = true
     private var isclickedtwo: Boolean = true
     private lateinit var viewModel: MainViewModel
     private lateinit var imageView: ImageView
+    var isdone :Boolean?=null
     private var clebUserID: Int = 0
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
@@ -125,6 +129,8 @@ class CompleteTaskFragment : Fragment() {
     private var b2 = false
     var breakTimeSent = false
     var clockedinTime = String()
+    var addblue = String()
+    var oillevel = String()
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var fragmentManager: FragmentManager
     private lateinit var oSyncViewModel: OSyncViewModel
@@ -166,7 +172,10 @@ class CompleteTaskFragment : Fragment() {
             SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(
                 Date()
             )
+        startonetime = isfirst!!
+        Prefs.getInstance(requireContext()).isFirst = true
 
+        isfirst = Prefs.getInstance(requireContext()).isFirst
         val animFadein: Animation =
             AnimationUtils.loadAnimation(context, R.anim.left2right)
         mbinding.mainCompleteTask.animation = animFadein
@@ -288,7 +297,8 @@ class CompleteTaskFragment : Fragment() {
         }
         mbinding.startinspection.setOnClickListener {
             //startInspection()
-            val intent = Intent(requireContext(), AddInspection::class.java)
+            startInspection()
+            val intent = Intent(requireContext(), AddInspectionTwoActivity::class.java)
             startActivity(intent)
         }
         mbinding.ivOilLevel.setOnClickListener {
@@ -629,6 +639,11 @@ class CompleteTaskFragment : Fragment() {
             if (it != null) {
                 showImageUploadLayout = false
                 imagesUploaded = true
+
+
+                isdone=it.IsAdBlueRequired
+                addblue=it.DaVehicleAddBlueImage.toString()
+                oillevel=it.DaVehImgOilLevelFileName.toString()
 
                 if (it.DaVehImgFaceMaskFileName != null &&
                     it.DaVehicleAddBlueImage != null &&
@@ -1158,7 +1173,7 @@ class CompleteTaskFragment : Fragment() {
             Log.e("sdkskdkdkskdkskd", "onCreateView: ")
 
             try {
-                cqSDKInitializer.startInspection(activityContext = requireActivity(),
+                cqSDKInitializer.startInspection(activity = requireActivity(),
                     clientAttrs = ClientAttrs(
                         userName = " ",
                         dealer = " ",
@@ -1183,6 +1198,13 @@ class CompleteTaskFragment : Fragment() {
                             phoneNumber = "", //if sent, user can't edit
                         )
                     ),
+
+                            userFlowParams = UserFlowParams(
+                            isOffline = startonetime, // true, Offline quote will be created | false, online quote will be created | null, online
+
+                    skipInputPage = true, // true, Inspection will be started with camera page | false, Inspection will be started
+
+                ),
                     result = { isStarted, msg, code ->
                         Log.e("inspectionIDsssssssss", "startInspection: " + inspectionID)
                         Log.e("messsagesss", "startInspection: " + msg + code)
@@ -1322,8 +1344,15 @@ class CompleteTaskFragment : Fragment() {
 
     private fun setVisibiltyLevel() {
         visibilityLevel = 0
-        inspectionstarted = osData.isInspectionDoneToday
-        imagesUploaded = osData.isImagesUploadedToday
+        if (Prefs.getInstance(App.instance).isdone!=null){
+            inspectionstarted = Prefs.getInstance(App.instance).isdone!!
+        }
+        if ( Prefs.getInstance(App.instance).isstarted!=null)
+        {
+            imagesUploaded= Prefs.getInstance(App.instance).isstarted!!
+        }
+
+//        imagesUploaded = osData.isImagesUploadedToday
         isClockedIn = osData.isClockedInToday
 
         print("OSData ISImage $imagesUploaded\n")
@@ -1362,33 +1391,33 @@ class CompleteTaskFragment : Fragment() {
         oSyncViewModel.insertData(osData)
     }
 
-    /*    private fun setProgress() {
-            val progressBar = mbinding.progressContainer.progressBarStep1
-            mbinding.clAddBlueImg.visibility = View.GONE
-            mbinding.clFaceMask.visibility = View.GONE
-            mbinding.clOilLevel.visibility = View.GONE
-            when (imageUploadLevel) {
-                0 -> {
-                    progressBar.setProgress(13, true)
-                }
-
-                1 -> {
-                    progressBar.setProgress(45, true)
-                    mbinding.clAddBlueImg.visibility = View.VISIBLE
-
-                }
-
-                2 -> {
-                    progressBar.setProgress(70, true)
-                    mbinding.clOilLevel.visibility = View.VISIBLE
-                }
-
-                else -> {
-                    progressBar.setProgress(100, true)
-                    progressBar.setBackgroundColor(Color.GREEN)
-                }
-            }
-        }*/
+//        private fun setProgress() {
+//            val progressBar = mbinding.progressContainer.progressBarStep1
+//            mbinding.clAddBlueImg.visibility = View.GONE
+//            mbinding.clFaceMask.visibility = View.GONE
+//            mbinding.clOilLevel.visibility = View.GONE
+//            when (imageUploadLevel) {
+//                0 -> {
+//                    progressBar.setProgress(13, true)
+//                }
+//
+//                1 -> {
+//                    progressBar.setProgress(45, true)
+//                    mbinding.clAddBlueImg.visibility = View.VISIBLE
+//
+//                }
+//
+//                2 -> {
+//                    progressBar.setProgress(70, true)
+//                    mbinding.clOilLevel.visibility = View.VISIBLE
+//                }
+//
+//                else -> {
+//                    progressBar.setProgress(100, true)
+//                    progressBar.setBackgroundColor(Color.GREEN)
+//                }
+//            }
+//        }
 
 
     private fun checkInspection() {
@@ -1398,8 +1427,26 @@ class CompleteTaskFragment : Fragment() {
                     cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
                         //Log.e("hdhsdshdsdjshhsds", "run========: $isSyncCompletedForAllQuotes")
                         inspectionOfflineImagesCHeck = isSyncCompletedForAllQuotes
-                        /*    if (isSyncCompletedForAllQuotes)
-                                //setProgress()*/
+                        if (isSyncCompletedForAllQuotes) {
+//                               if (isdone!=null){
+//                                   if (isdone==true && addblue==null){
+//                                       mbinding.clAddBlueImg.visibility = View.VISIBLE
+//                                   }
+//                                   else{
+//                                       mbinding.clAddBlueImg.visibility = View.GONE
+//                                   }
+//                               }
+
+
+//          mbinding.clFaceMask.visibility = View.VISIBLE
+//                        if (oillevel==null){
+//                            mbinding.clOilLevel.visibility = View.VISIBLE
+//                        }
+//                        else{
+//                            mbinding.clOilLevel.visibility = View.GONE
+//                        }
+
+                        }
                     }
                 }
             }, 0, 1000)

@@ -98,6 +98,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.firebase:firebase-messaging:23.4.1")
     implementation("com.google.firebase:firebase-crashlytics:18.6.4")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     //implementation("com.google.firebase:firebase-messaging:23.4.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
     implementation("com.google.android.gms:play-services-vision:20.1.3")
@@ -130,7 +131,7 @@ dependencies {
 
     // CQ SDK
     /*implementation ("com.github.clearquotetech:cq-android-sdk:2.0.9-test")*/
-    implementation("com.github.clearquotetech:cq-android-sdk:2.1.3-test")
+    implementation("com.github.clearquotetech:cq-android-sdk:2.2.0")
 
 
     //viewModel
