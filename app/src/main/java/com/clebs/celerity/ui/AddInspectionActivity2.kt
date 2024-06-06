@@ -288,11 +288,12 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                         showToast("Inspection Completed", this)
                         onSaveClick()
                     }
-                } else {
+                }
+                else {
 
                     prefs.addBlueRequired = it.IsAdBlueRequired == true && it.DaVehicleAddBlueImage==null && prefs.addBlueUri==null
 
-                    prefs.oilLevelRequired = it.DaVehImgOilLevelFileName == null
+                    prefs.oilLevelRequired = it.DaVehImgOilLevelFileName == null && prefs.oilLevelUri==null
                     uploadStatus()
                 }
             }
