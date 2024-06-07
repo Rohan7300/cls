@@ -361,31 +361,42 @@ class Userprofile : Fragment() {
 //            } else {
 
             if (Prefs.getInstance(App.instance).days.equals("1")) {
-                if (mbinding.emailtext.text.isEmpty()){
-                    Toast.makeText(requireContext(), "Please enter email address", Toast.LENGTH_SHORT).show()
-                }
-                else if (!mbinding.emailtext.text.trim().toString().isEmailValid()){
-                    Toast.makeText(requireContext(), "Please enter valid email", Toast.LENGTH_SHORT).show()
-                }
-                else if (mbinding.phonetext.text.isEmpty()){
-                    Toast.makeText(requireContext(), "Please enter phone number", Toast.LENGTH_SHORT).show()
-                }
-                else{
+                if (mbinding.emailtext.text.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter email address",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (!mbinding.emailtext.text.trim().toString().isEmailValid()) {
+                    Toast.makeText(requireContext(), "Please enter valid email", Toast.LENGTH_SHORT)
+                        .show()
+                } else if (mbinding.phonetext.text.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter phone number",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
                     updateProfile90dys()
                 }
 
             } else {
-                if (mbinding.emailtext.text.isEmpty()){
-                    Toast.makeText(requireContext(), "Please enter email address", Toast.LENGTH_SHORT).show()
-                }
-                else if (!mbinding.emailtext.text.trim().toString().isEmailValid()){
-                    Toast.makeText(requireContext(), "Please enter valid email", Toast.LENGTH_SHORT).show()
-                }
-                else if (mbinding.phonetext.text.isEmpty()){
-                    Toast.makeText(requireContext(), "Please enter phone number", Toast.LENGTH_SHORT).show()
-                }
-
-                else{
+                if (mbinding.emailtext.text.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter email address",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (!mbinding.emailtext.text.trim().toString().isEmailValid()) {
+                    Toast.makeText(requireContext(), "Please enter valid email", Toast.LENGTH_SHORT)
+                        .show()
+                } else if (mbinding.phonetext.text.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Please enter phone number",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
                     updateprofileregular()
                 }
 
@@ -411,8 +422,10 @@ class Userprofile : Fragment() {
         val textview_no: TextView = view.findViewById<TextView>(R.id.tv_next)
         deleteDialog.setView(view)
         textview_yes.setOnClickListener {
-
-            UseEmailAsUSername()
+            if (!mbinding.emailtext.text.isNullOrBlank())
+                UseEmailAsUSername()
+            else
+                showToast("Email cannot be blank!!", requireContext())
             deleteDialog.dismiss()
 
         }
@@ -606,9 +619,10 @@ class Userprofile : Fragment() {
         ).observe(requireActivity(), Observer {
             Log.e("dkfjdkfjdfkj", "UseEmailAsUSername: ")
             if (it?.Status!!.equals(200)) {
-                mbinding.usertext.setText(mbinding.emailtext.text.toString())
-
-                showToast("Email has been used as username", requireContext())
+                if (!mbinding.emailtext.text.isNullOrBlank()) {
+                    mbinding.usertext.setText(mbinding.emailtext.text.toString())
+                    showToast("Email has been used as username", requireContext())
+                }
 
                 Log.e("dlkfdlkfl", "UseEmailAsUSernamesuccess: " + it.Status + it.message)
             }
@@ -758,6 +772,7 @@ class Userprofile : Fragment() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
     }
+
     fun setEnable(): Boolean {
         mbinding.apply {
             return if (emailtext.text.trim().toString().isEmailValid()) {

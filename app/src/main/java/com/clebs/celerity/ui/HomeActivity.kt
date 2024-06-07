@@ -56,6 +56,7 @@ import com.clebs.celerity.utils.InspectionIncompleteListener
 import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
+import com.clebs.celerity.utils.SaveVehicleInspection
 import com.clebs.celerity.utils.checkIfInspectionFailed
 import com.clebs.celerity.utils.dailyRota
 import com.clebs.celerity.utils.dbLog
@@ -144,6 +145,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         internetDialog = NoInternetDialog()
         networkManager = NetworkManager(this)
 
+
+
         networkManager.observe(this) {
             isNetworkActive = if (it) {
                 true
@@ -164,7 +167,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         val todayDate = dateFormat.format(Date())
-        this.osData = DependencyProvider.osData
+        try {
+            this.osData = DependencyProvider.osData
+        }catch (_:Exception){
+
+        }
+
         val osRepo = offlineSyncRepo(this)
         oSyncViewModel = ViewModelProvider(
             this,
@@ -843,9 +851,15 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     Prefs.getInstance(applicationContext).days = "0"
                 }
 
-                prefs.updateInspectionStatus(it.IsVehicleInspectionDone)
+                if(!it.IsVehicleInspectionDone){
+                    if(prefs.isInspectionDoneToday())
+                        SaveVehicleInspection(viewModel)
+                }else{
+                    prefs.updateInspectionStatus(true)
+                }
             }
         })
+
     }
 
     fun showAlertChangePasword90dys() {

@@ -216,7 +216,7 @@ class NewCompleteTaskFragment : Fragment() {
                 showDialog()
                 viewModel.GetVehicleImageUploadInfo(
                     Prefs.getInstance(requireContext()).clebUserId.toInt(),
-                    Prefs.getInstance(requireContext()).baseVmID.toInt(),
+                    Prefs.getInstance(requireContext()).vmId.toInt(),
                     getCurrentDateTime()
                 )
                 showDialog()
@@ -237,6 +237,7 @@ class NewCompleteTaskFragment : Fragment() {
                     Prefs.getInstance(App.instance).clebUserId.toInt(),
                     currentDate
                 )
+
                 observers()
             }
         }
@@ -511,6 +512,7 @@ class NewCompleteTaskFragment : Fragment() {
 
                 } else {
                     isClockedIn = false
+                    osData.isClockedInToday = false
                 }
 
                 if (it.ClockedOutTime != null) {
@@ -544,11 +546,11 @@ class NewCompleteTaskFragment : Fragment() {
             if (it != null) {
                 osData.isClockedInToday = true
             } else {
-                if (uploadInProgress) {
+    /*            if (uploadInProgress) {
                     showToast("Syncing!! Pls wait", requireContext())
-                } else {
-                    showToast("Pls Retry!!", requireContext())
-                }
+                } else {*/
+                    showToast("Please Retry!!", requireContext())
+                //}
             }
             setVisibiltyLevel()
         }
@@ -652,6 +654,9 @@ class NewCompleteTaskFragment : Fragment() {
                     if (prefs.faceMaskUri == null ||
                         prefs.oilLevelUri == null
                     ) {
+                        var bSyncoil = false
+                        var bSyncaddBlue = false
+
                         mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
 
                         if (it.DaVehImgOilLevelFileName != null) {
@@ -660,6 +665,7 @@ class NewCompleteTaskFragment : Fragment() {
                             prefs.oilLevelRequired = true
                         }else{
                             prefs.oilLevelRequired = false
+                            bSyncoil = true
                         }
 
                         if (it.IsAdBlueRequired == true) {
@@ -667,6 +673,8 @@ class NewCompleteTaskFragment : Fragment() {
                                 prefs.addBlueRequired = false
                             else {
                                 prefs.addBlueRequired = prefs.addBlueUri == null
+                                if(prefs.addBlueUri!=null)
+                                    bSyncaddBlue = true
                             }
                         } else
                             prefs.addBlueRequired = false
@@ -676,6 +684,9 @@ class NewCompleteTaskFragment : Fragment() {
                         } else {
                             prefs.updateFaceMaskStatus(false)
                         }
+
+                        if(bSyncoil||bSyncaddBlue)
+                            backgroundImageSync()
                     } else {
                         backgroundImageSync()
                     }
@@ -1194,6 +1205,7 @@ class NewCompleteTaskFragment : Fragment() {
         if (isClockedIn) {
             visibilityLevel = 2
         }
+
         if (isBreakTimeAdded && isOnRoadHours && isClockedIn) {
             visibilityLevel = 5
             visibiltyControlls()

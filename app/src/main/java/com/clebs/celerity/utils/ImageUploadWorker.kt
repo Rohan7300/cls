@@ -207,7 +207,7 @@ class ImageUploadWorker(
                     }
 
                     2 -> {
-                        vmId = Prefs.getInstance(appContext).baseVmID.toInt()
+                        vmId = Prefs.getInstance(appContext).vmId
                         lmId = Prefs.getInstance(appContext).getLocationID().toInt()
                         val todayDate = dateFormat.format(Date())
                         val imageEntity = imagesRepo.getImagesbyUser(todayDate)

@@ -39,6 +39,7 @@ import androidx.core.view.KeyEventDispatcher.dispatchKeyEvent
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.work.Constraints
 import androidx.work.Data
@@ -46,11 +47,14 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.clebs.celerity.R
+import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.dialogs.ErrorDialog
 import com.clebs.celerity.dialogs.ScanErrorDialog
 import com.clebs.celerity.fragments.DailyWorkFragment
+import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
+import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.DependencyProvider.brkEnd
 import com.clebs.celerity.utils.DependencyProvider.brkStart
 import java.io.*
@@ -784,6 +788,30 @@ fun startUploadWithWorkManager(
         .build()
 
     WorkManager.getInstance(context).enqueue(uploadWorkRequest)
+}
+
+fun SaveVehicleInspection(viewModel:MainViewModel){
+    val currentDate =
+        SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
+            Date()
+        )
+
+    val currentloction = Prefs.getInstance(App.instance).currLocationId
+    val workinglocation = Prefs.getInstance(App.instance).workLocationId
+    val locationID: Int = if (workinglocation != 0) {
+        workinglocation
+    } else {
+        currentloction
+    }
+    viewModel.SaveVehicleInspectionInfo(
+        SaveVehicleInspectionInfo(
+            Prefs.getInstance(App.instance).clebUserId.toInt(),
+            currentDate,
+            Prefs.getInstance(App.instance).inspectionID,
+            locationID,
+            Prefs.getInstance(App.instance).vmId
+        )
+    )
 }
 
 

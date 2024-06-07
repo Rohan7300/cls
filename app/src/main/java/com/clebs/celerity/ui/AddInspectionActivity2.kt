@@ -47,6 +47,7 @@ import com.clebs.celerity.utils.DependencyProvider.insLevel
 import com.clebs.celerity.utils.DependencyProvider.isComingBackFromCLSCapture
 import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.SaveVehicleInspection
 import com.clebs.celerity.utils.checkIfInspectionFailed
 import com.clebs.celerity.utils.checkIfInspectionFailed2
 import com.clebs.celerity.utils.getCurrentDateTime
@@ -78,7 +79,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     private var b64ImageList = mutableListOf<String>()
     var i = 0
     lateinit var fragmentManager: FragmentManager
-    private var isfirst: Boolean? = false
     private var startonetime: Boolean? = true
     private var allImagesUploaded: Boolean = false
     lateinit var viewModel: MainViewModel
@@ -140,35 +140,30 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             osData = it
             i = 0
             b64ImageList.clear()
-            Log.d("OSData ", "$osData")
-            if (!osData.isIni) {
-                osData.clebID = prefs.clebUserId.toInt()
-                osData.dawDate = todayDate
-                osData.vehicleID = prefs.scannedVmRegNo
-                osData.isIni = true
+            try{
+                Log.d("OSData ", "$osData")
+                if (!osData.isIni) {
+                    osData.clebID = prefs.clebUserId.toInt()
+                    osData.dawDate = todayDate
+                    osData.vehicleID = prefs.scannedVmRegNo
+                    osData.isIni = true
 
-            }
-            if (checkIfInspectionFailed(osData)) {
-                Log.d("OSDataFailed1 ", "$osData")
-                i = 0
-            } else {
-                if (osData.addblueImage != null)
-                    b64ImageList.add(osData.addblueImage!!)
-                if (osData.oillevelImage != null)
-                    b64ImageList.add(osData.oillevelImage!!)
-                if (osData.addblueImage != null &&
-                    osData.oillevelImage != null
-                ) {
-
-                  //  showToast("Inspection Completed", this)
-                    //onSaveClick()
                 }
+                if (checkIfInspectionFailed(osData)) {
+                    Log.d("OSDataFailed1 ", "$osData")
+                    i = 0
+                } else {
 
-                i = b64ImageList.size
+
+                    i = b64ImageList.size
 
 
-                Log.d("OSData I= ", "$i")
+                    Log.d("OSData I= ", "$i")
+                }
+            }catch (_:Exception){
+
             }
+
          //  uploadStatus()
         }
 
@@ -176,7 +171,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
         viewModel.GetVehicleImageUploadInfo(
             prefs.clebUserId.toInt(),
-            prefs.baseVmID.toInt(),
+            prefs.vmId,
             currentDateTime
         )
         loadingDialog.show()
@@ -278,15 +273,20 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                         if (it.DaVehicleAddBlueImage != null) {
                             generateInspectionID()
                             allImagesUploaded = true
-                            showToast("Inspection Completed", this)
-                            onSaveClick()
+                            if(prefs.isInspectionDoneToday()){
+                                onSaveClick()
+                                showToast("Inspection Completed", this)
+                            }
+
                         }
                         prefs.addBlueRequired = it.DaVehicleAddBlueImage == null
                     } else {
                         generateInspectionID()
                         allImagesUploaded = true
-                        showToast("Inspection Completed", this)
-                        onSaveClick()
+                        if(prefs.isInspectionDoneToday()){
+                            onSaveClick()
+
+                        }
                     }
                 }
                 else {
@@ -450,31 +450,10 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         if (tempCode == 200) {
             Log.d("hdhsdshdsdjshhsds", "200 $message")
             prefs.saveBoolean("Inspection", true)
-            prefs.updateInspectionStatus(true)
             prefs.Isfirst = false
             generateInspectionID()
             prefs.updateInspectionStatus(true)
-            val currentDate =
-                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
-                    Date()
-                )
-
-            val currentloction = Prefs.getInstance(App.instance).currLocationId
-            val workinglocation = Prefs.getInstance(App.instance).workLocationId
-            val locationID: Int = if (workinglocation != 0) {
-                workinglocation
-            } else {
-                currentloction
-            }
-            viewModel.SaveVehicleInspectionInfo(
-                SaveVehicleInspectionInfo(
-                    Prefs.getInstance(App.instance).clebUserId.toInt(),
-                    currentDate,
-                    Prefs.getInstance(App.instance).inspectionID,
-                    locationID,
-                    Prefs.getInstance(App.instance).baseVmID.toInt()
-                )
-            )
+            SaveVehicleInspection(viewModel)
 
             uploadStatus()
             showToast("Vehicle Inspection is successfully completed ", this)
@@ -510,6 +489,10 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
             try {
                 Log.e("sdkskdkdkskdkskd", "onCreateView: startone $startonetime ")
+                if(!startonetime!!)
+                showToast("Offline Mode",this)
+                else
+                    showToast("Online Mode",this)
                 cqSDKInitializer.startInspection(activity = this,
                     clientAttrs = ClientAttrs(
                         userName = " ",
@@ -533,9 +516,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     ),
                     userFlowParams = UserFlowParams(
                         isOffline = !startonetime!!,
-
-                        skipInputPage = true, // true, Inspection will be started with camera page | false, Inspection will be started
-
+                        skipInputPage = true,
                     ),
 
                     result = { isStarted, msg, code ->
