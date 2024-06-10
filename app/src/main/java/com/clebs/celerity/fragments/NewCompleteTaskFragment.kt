@@ -517,7 +517,6 @@ class NewCompleteTaskFragment : Fragment() {
                         showToast("Please retry",requireContext())
                         clockedInClicked = false
                     }
-
                 }
 
                 if (it.ClockedOutTime != null) {
