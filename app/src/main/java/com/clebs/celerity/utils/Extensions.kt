@@ -406,6 +406,10 @@ fun showToast(msg: String, context: Context) {
     }
 }
 
+fun showSnackBar(msg:String,context: Context){
+
+}
+
 fun Bitmap.toRequestBody(): okhttp3.RequestBody {
     val byteArrayOutputStream = ByteArrayOutputStream()
     compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
@@ -932,7 +936,7 @@ fun getCameraURI(context: Context): Uri? {
         object : ImageCapture.OnImageSavedCallback {
             override fun onError(exc: ImageCaptureException) {
                 Log.d(ContentValues.TAG, "Photo capture failed")
-                println("Photo capture failed")
+                println("Photo capture failed ext ex: $exc")
             }
 
             override fun onImageSaved(output: ImageCapture.OutputFileResults) {

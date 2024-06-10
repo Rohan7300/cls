@@ -171,7 +171,7 @@ class ClsCaptureTwo : AppCompatActivity() {
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
                     Log.d(ContentValues.TAG, "Photo capture failed")
-                    println("Photo capture failed")
+                    println("Photo capture failed clscap2 exc: $exc \n ${exc.localizedMessage}")
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {

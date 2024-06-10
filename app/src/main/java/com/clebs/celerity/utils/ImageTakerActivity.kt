@@ -103,7 +103,7 @@ class ImageTakerActivity : AppCompatActivity() {
                 override fun onError(exc: ImageCaptureException) {
                     loadingDialog.dismiss()
                     Log.d(ContentValues.TAG, "Photo capture failed")
-                    println("Photo capture failed")
+                    println("Photo capture failed ita ex: $exc")
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {

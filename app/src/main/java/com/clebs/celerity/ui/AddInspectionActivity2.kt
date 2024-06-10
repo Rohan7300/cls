@@ -458,7 +458,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             uploadStatus()
             showToast("Vehicle Inspection is successfully completed ", this)
         } else {
-            //   showToast("Vehicle Inspection Failed!! ", this)
+            showToast("Vehicle Inspection Failed!! ", this)
+            Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
         }
     }
 

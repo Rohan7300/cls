@@ -187,7 +187,7 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onError(exc: ImageCaptureException) {
                         Log.d(ContentValues.TAG, "Photo capture failed")
-                        println("Photo capture failed")
+                        println("Photo capture failed ex: {exc}")
                     }
 
                     override fun onImageSaved(output: ImageCapture.OutputFileResults) {

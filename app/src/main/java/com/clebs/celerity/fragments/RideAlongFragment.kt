@@ -169,12 +169,13 @@ class RideAlongFragment : Fragment() {
         }
 
         viewModel.livedataGetRideAlongDriversList.observe(viewLifecycleOwner) {
-            hideDialog()
+
             if (it != null) {
                 val driverId = it.map { drivers -> drivers.Id }
                 val driverName = it.map { drivers -> drivers.Name }
 
                 if (driverId.isNotEmpty() && driverName.isNotEmpty()) {
+                    hideDialog()
                     /*       binding.SpinnerRouteType.setText("")
                            selectedRouteId = null
                            binding.SpinnerRouteType.setAdapter(null)
@@ -182,7 +183,11 @@ class RideAlongFragment : Fragment() {
                     setSpinnerNew(
                         binding.spinnerSelectDriver, driverName, driverId, "Select Driver"
                     )
+                }else{
+                    hideDialog()
                 }
+            }else{
+                hideDialog()
             }
         }
 
