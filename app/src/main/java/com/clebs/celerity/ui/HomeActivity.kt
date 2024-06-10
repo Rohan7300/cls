@@ -306,7 +306,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     } catch (_: Exception) {
                     }
                     if (doubleBackToExitPressedOnce) {
-                        moveTaskToBack(true);
+                        //moveTaskToBack(true);
+                        finish()
                     }
 
                    doubleBackToExitPressedOnce = true

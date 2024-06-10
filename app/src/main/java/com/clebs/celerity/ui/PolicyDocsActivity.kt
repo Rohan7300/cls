@@ -777,7 +777,7 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
     private fun viewGoneAnimator(view: View) {
         view.animate()
             .alpha(0f)
-            .setDuration(1000)
+            .setDuration(500)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     view.visibility = View.GONE

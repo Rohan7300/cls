@@ -107,6 +107,7 @@ class NewCompleteTaskFragment : Fragment() {
     private var clockedouttime = String()
     private var isInspectionDoneToday: Boolean = false
     lateinit var ivX: ImageView
+    var clockedInClicked = false
     private var codeX = 0
     private var uploadInProgress = false
     private var requestCode: Int = 0
@@ -260,6 +261,7 @@ class NewCompleteTaskFragment : Fragment() {
 
         mbinding.rlcomtwoClock.setOnClickListener {
             showDialog()
+            clockedInClicked = true
             viewModel.UpdateClockInTime(clebUserID)
         }
 
@@ -277,8 +279,6 @@ class NewCompleteTaskFragment : Fragment() {
         mbinding.headerTop.icpnUser.setOnClickListener {
             findNavController().navigate(R.id.profileFragment)
         }
-
-
 
         if (checked.equals("0")) {
             navigateTo(R.id.vechileMileageFragment, requireContext(), findNavController())
@@ -441,7 +441,7 @@ class NewCompleteTaskFragment : Fragment() {
             if (it != null) {
                 scannedvrn = it.vmRegNo
                 Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
-                if (Prefs.getInstance(App.instance).vmId==0&&it.vmId!=null) {
+                if (Prefs.getInstance(App.instance).vmId == 0 && it.vmId != null) {
                     Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()
                 }
             }
@@ -513,6 +513,11 @@ class NewCompleteTaskFragment : Fragment() {
                 } else {
                     isClockedIn = false
                     osData.isClockedInToday = false
+                    if(clockedInClicked){
+                        showToast("Please retry",requireContext())
+                        clockedInClicked = false
+                    }
+
                 }
 
                 if (it.ClockedOutTime != null) {
@@ -524,7 +529,10 @@ class NewCompleteTaskFragment : Fragment() {
                     clockedouttime = it.ClockedOutTime.toString()
                 }
             } else {
-
+                if(clockedInClicked){
+                    showToast("Please retry",requireContext())
+                    clockedInClicked = false
+                }
             }
             setVisibiltyLevel()
         }
@@ -546,10 +554,10 @@ class NewCompleteTaskFragment : Fragment() {
             if (it != null) {
                 osData.isClockedInToday = true
             } else {
-    /*            if (uploadInProgress) {
-                    showToast("Syncing!! Pls wait", requireContext())
-                } else {*/
-                    showToast("Please Retry!!", requireContext())
+                /*            if (uploadInProgress) {
+                                showToast("Syncing!! Pls wait", requireContext())
+                            } else {*/
+                showToast("Please Retry!!", requireContext())
                 //}
             }
             setVisibiltyLevel()
@@ -632,7 +640,6 @@ class NewCompleteTaskFragment : Fragment() {
                 if (it.DaVehImgFaceMaskFileName != null &&
                     it.DaVehImgOilLevelFileName != null
                 ) {
-
                     prefs.addBlueRequired = false
                     prefs.oilLevelRequired = false
                     prefs.faceMaskRequired = false
@@ -663,7 +670,7 @@ class NewCompleteTaskFragment : Fragment() {
                             prefs.oilLevelRequired = false
                         } else if (prefs.oilLevelUri == null) {
                             prefs.oilLevelRequired = true
-                        }else{
+                        } else {
                             prefs.oilLevelRequired = false
                             bSyncoil = true
                         }
@@ -673,7 +680,7 @@ class NewCompleteTaskFragment : Fragment() {
                                 prefs.addBlueRequired = false
                             else {
                                 prefs.addBlueRequired = prefs.addBlueUri == null
-                                if(prefs.addBlueUri!=null)
+                                if (prefs.addBlueUri != null)
                                     bSyncaddBlue = true
                             }
                         } else
@@ -685,7 +692,7 @@ class NewCompleteTaskFragment : Fragment() {
                             prefs.updateFaceMaskStatus(false)
                         }
 
-                        if(bSyncoil||bSyncaddBlue)
+                        if (bSyncoil || bSyncaddBlue)
                             backgroundImageSync()
                     } else {
                         backgroundImageSync()

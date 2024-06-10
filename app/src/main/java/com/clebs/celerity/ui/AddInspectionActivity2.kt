@@ -52,6 +52,7 @@ import com.clebs.celerity.utils.checkIfInspectionFailed
 import com.clebs.celerity.utils.checkIfInspectionFailed2
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.showErrorDialog
+import com.clebs.celerity.utils.showSnackBar
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.toast
@@ -458,7 +459,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             uploadStatus()
             showToast("Vehicle Inspection is successfully completed ", this)
         } else {
-            showToast("Vehicle Inspection Failed!! ", this)
+            //showToast("Vehicle Inspection Failed!! ", this)
+            //showSnackBar("Vehicle Inspection Failed. Please Retry!!",binding.tvNext)
             Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
         }
     }

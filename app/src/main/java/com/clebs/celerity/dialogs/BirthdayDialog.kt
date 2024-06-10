@@ -36,7 +36,7 @@ class BirthdayDialog(val prefs: Prefs) : DialogFragment() {
             dialog.dismiss()
         }
         dialog.findViewById<TextView>(R.id.birthdaytvMain).text =
-            "Happy Birthday :${prefs.userName}"
+            "${prefs.userName}"
         return dialog
     }
 

@@ -57,6 +57,7 @@ import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.DependencyProvider.brkEnd
 import com.clebs.celerity.utils.DependencyProvider.brkStart
+import com.google.android.material.snackbar.Snackbar
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -406,8 +407,8 @@ fun showToast(msg: String, context: Context) {
     }
 }
 
-fun showSnackBar(msg:String,context: Context){
-
+fun showSnackBar(msg:String,view: View){
+    Snackbar.make(view,msg, Snackbar.LENGTH_SHORT).show()
 }
 
 fun Bitmap.toRequestBody(): okhttp3.RequestBody {
