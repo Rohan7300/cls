@@ -81,9 +81,12 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
         viewModel.liveDataGetDriverInvoiceList.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
-                if (it.Invoices.size > 0) {
+                if (it.Invoices.isNotEmpty()) {
                     binding.clsInvoices.visibility = View.VISIBLE
                     binding.noinvoices.visibility = View.GONE
+                }else{
+                    binding.clsInvoices.visibility = View.GONE
+                    binding.noinvoices.visibility = View.VISIBLE
                 }
                 adapter.data.clear()
                 adapter.data.addAll(it.Invoices.reversed())
@@ -210,11 +213,10 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
         binding.selectYearET.setOnItemClickListener { parent, view, position, id ->
             run {
                 parent?.let { nonNullParent ->
-                    if (position != 0) {
                         selectedYear = nonNullParent.getItemAtPosition(position) as Int
                         showDialog()
-                        viewModel.DownloadInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
-                    }
+                      //  viewModel.DownloadInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
+                        viewModel.GetDriverInvoiceList(prefs.clebUserId.toInt(), selectedYear,0)
                 }
             }
         }

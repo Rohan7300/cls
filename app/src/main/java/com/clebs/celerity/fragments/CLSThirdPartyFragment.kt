@@ -182,7 +182,9 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
                     selectedYear = year
                     binding.dateTV.text = year.toString()
                     showDialog()
-                    viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
+                    //viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
+                    viewModel.GetThirdPartyInvoiceList(prefs.clebUserId.toInt(), selectedYear, 0)
+                    //viewModel.DownloadThirdPartyInvoicePDF(prefs.clebUserId.toInt(), selectedYear)
                 }
             },
             currentYear,
@@ -206,14 +208,16 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
         binding.selectYearET.setOnItemClickListener { parent, view, position, id ->
             run {
                 parent?.let { nonNullParent ->
-                    if (position != 0) {
-                        selectedYear = nonNullParent.getItemAtPosition(position) as Int
-                        showDialog()
-                        viewModel.DownloadThirdPartyInvoicePDF(
-                            prefs.clebUserId.toInt(),
-                            selectedYear
-                        )
-                    }
+                    //if (position != 0) {
+                    selectedYear = nonNullParent.getItemAtPosition(position) as Int
+                    showDialog()
+                    /*                        viewModel.DownloadThirdPartyInvoicePDF(
+                                                prefs.clebUserId.toInt(),
+                                                selectedYear
+                                            )*/
+                    viewModel.GetThirdPartyInvoiceList(prefs.clebUserId.toInt(), selectedYear, 0)
+
+                    //   }
                 }
             }
         }
@@ -221,25 +225,25 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
 
     private fun downloadPDFData(fileName: String, fileContent: String) {
         try {
-        val currentDate = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
-            Date()
-        )
-        val uniqueId = UUID.randomUUID().toString()
-        val uniqueFileName = "$fileName-$currentDate-$uniqueId.pdf"
-        val storageDir =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        if (!storageDir.exists()) {
-            storageDir.mkdirs()
-        }
-        val file = File(
-            storageDir,
-            uniqueFileName
-        )
-        val fos = FileOutputStream(file)
-        fos.write(Base64.decode(fileContent, Base64.DEFAULT))
-        fos.close()
-        showToast("PDF Downloaded!", requireContext())
-        openPDF(file)
+            val currentDate = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
+                Date()
+            )
+            val uniqueId = UUID.randomUUID().toString()
+            val uniqueFileName = "$fileName-$currentDate-$uniqueId.pdf"
+            val storageDir =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            if (!storageDir.exists()) {
+                storageDir.mkdirs()
+            }
+            val file = File(
+                storageDir,
+                uniqueFileName
+            )
+            val fos = FileOutputStream(file)
+            fos.write(Base64.decode(fileContent, Base64.DEFAULT))
+            fos.close()
+            showToast("PDF Downloaded!", requireContext())
+            openPDF(file)
 
         } catch (e: Exception) {
             e.printStackTrace()

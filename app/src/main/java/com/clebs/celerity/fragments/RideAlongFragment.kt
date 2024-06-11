@@ -171,18 +171,22 @@ class RideAlongFragment : Fragment() {
         viewModel.livedataGetRideAlongDriversList.observe(viewLifecycleOwner) {
 
             if (it != null) {
-                val driverId = it.map { drivers -> drivers.Id }
-                val driverName = it.map { drivers -> drivers.Name }
+                val driversList = it.map { driver -> driver.Name to driver.Id }
 
-                if (driverId.isNotEmpty() && driverName.isNotEmpty()) {
+                // Sort the list by driver name
+                val sortedDriversList = driversList.sortedBy { pair -> pair.first }
+
+                // Separate the sorted pairs into individual lists
+                val sortedDriverNames = sortedDriversList.map { pair -> pair.first }
+                val sortedDriverIds = sortedDriversList.map { pair -> pair.second }
+
+                if (sortedDriverIds.isNotEmpty() && sortedDriverNames.isNotEmpty()) {
                     hideDialog()
                     /*       binding.SpinnerRouteType.setText("")
                            selectedRouteId = null
                            binding.SpinnerRouteType.setAdapter(null)
                            selectedLocId = null*/
-                    setSpinnerNew(
-                        binding.spinnerSelectDriver, driverName, driverId, "Select Driver"
-                    )
+                    setSpinnerNew(binding.spinnerSelectDriver, sortedDriverNames, sortedDriverIds, "Select Driver")
                 }else{
                     hideDialog()
                 }

@@ -640,11 +640,13 @@ fun showDatePickerDialog(context: Context, tv1: TextView, tv2: TextView, tvNext:
 
 
 fun isEndDateGreaterThanStartDate(startDate: String, endDate: String): Boolean {
-    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
     try {
         val startDateObj = sdf.parse(startDate)
         val endDateObj = sdf.parse(endDate)
-        return !endDateObj.before(startDateObj)
+        if (endDateObj != null) {
+            return !endDateObj.before(startDateObj)
+        }
     } catch (e: ParseException) {
         e.printStackTrace()
     }

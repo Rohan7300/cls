@@ -321,7 +321,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
             })
 
-
             imageViewModel.images.observe(this) { imageEntity ->
                 dbLog(imageEntity)
             }
@@ -465,7 +464,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         actionToPerform == "Invoice Ready to Review" ||
                         actionToPerform == "InvoiceReadyToReview"
                     ) {
-                        invoiceReadyToView(parseToInt(notificationID), supportFragmentManager)
+                        invoiceReadyToView(parseToInt(notificationID), supportFragmentManager,"Your CLS Invoice is available for review.")
                     } else if (actionToPerform == "Weekly Location Rota" ||
                         actionToPerform == "Weekly Rota Approval" ||
                         actionToPerform == "WeeklyRotaApproval"

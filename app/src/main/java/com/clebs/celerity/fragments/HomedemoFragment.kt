@@ -263,7 +263,7 @@ class HomedemoFragment : Fragment() {
             val weekprev = week - 2
             val w = week - 3
             mbinding.pieChart.setCenterText("Cash flow week :" + weekprev);
-            mbinding.txtLastWeek.text = "Week " + weekprev
+            mbinding.txtLastWeek.text = "Week : " + weekprev
             mbinding.viewfullschedule.text = "Full schedule for week " + week
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week
@@ -290,7 +290,7 @@ class HomedemoFragment : Fragment() {
                 showDialog()
 
                 val weekprev = week - 2
-                mbinding.txtLastWeek.text = "Week $weekprev"
+                mbinding.txtLastWeek.text = "Week : $weekprev"
                 mbinding.viewfullschedule.text = "Full schedule for week $week"
                 mbinding.pieChart.setCenterText("Cash flow week :" + weekprev);
 

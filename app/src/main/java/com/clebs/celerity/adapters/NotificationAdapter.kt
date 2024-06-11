@@ -200,7 +200,7 @@ class NotificationAdapter(
                     || item.ActionToPerform.equals("Invoice Ready to Review") ||
                     item.ActionToPerform.equals("InvoiceReadyToReview")
                 ) {
-                    invoiceReadyToView(item.NotificationId, fragmentManager)
+                    invoiceReadyToView(item.NotificationId, fragmentManager,item.NotificationBody)
                     /*            val dialog = InvoiceReadytoViewDialog.newInstance(
                                     getCurrentWeek().toString(),
                                     getCurrentYear().toString(),

@@ -193,12 +193,10 @@ class UserTicketsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         if(!comingFromViewTickets){
             loadingDialog.show()
             viewModel.GetUserTickets(prefs.clebUserId.toInt())
             comingFromViewTickets = false
         }
-
     }
 }
