@@ -217,6 +217,23 @@ class HomedemoFragment : Fragment() {
             }
             isclicked = !isclicked
         }
+        mbinding.viewfullschedule.setOnClickListener {
+            if (isclicked) {
+//                mbinding.vieww.visibility=View.VISIBLE
+                mbinding.consttwo.visibility = View.GONE
+                mbinding.const1.visibility = View.GONE
+                mbinding.ss.fullScroll(ScrollView.FOCUS_UP);
+                mbinding.viewfulldatalayout.visibility = View.VISIBLE
+                mbinding.fullscheduleIV.visibility = View.GONE
+            } else {
+                mbinding.consttwo.visibility = View.VISIBLE
+                mbinding.const1.visibility = View.VISIBLE
+                mbinding.viewfulldatalayout.visibility = View.GONE
+//                mbinding.vieww.visibility=View.GONE
+                mbinding.fullscheduleIV.visibility = View.VISIBLE
+            }
+            isclicked = !isclicked
+        }
         mbinding.collapseArrow.setOnClickListener {
             mbinding.fullscheduleIV.visibility = View.VISIBLE
             mbinding.consttwo.visibility = View.VISIBLE
@@ -289,7 +306,7 @@ class HomedemoFragment : Fragment() {
             val weekprev = week - 2
             val w = week - 3
             mbinding.pieChart.setCenterText("Cash flow week :" + weekprev);
-            mbinding.txtLastWeek.text = "Week " + weekprev
+            mbinding.txtLastWeek.text = "Week : " + weekprev
             mbinding.viewfullschedule.text = "Full schedule for week " + week
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week
@@ -317,7 +334,7 @@ class HomedemoFragment : Fragment() {
 
                 val weekprev = week - 3
                 val weekprevsecond = week - 4
-                mbinding.txtLastWeek.text = "Week $weekprev"
+                mbinding.txtLastWeek.text = "Week : $weekprev"
                 mbinding.viewfullschedule.text = "Full schedule for week $week"
                 mbinding.pieChart.setCenterText("Cash flow week :" + weekprev);
 
@@ -332,8 +349,8 @@ class HomedemoFragment : Fragment() {
                 viewModel.GetLastWeekSCore(
                     Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 2, year
                 )
-                mbinding.btPrev.text = "Load Previous Week Data"
-                mbinding.btPrevSecond.text = "Load more previous Week Data"
+                mbinding.btPrev.text = "Previous Week Data"
+                mbinding.btPrevSecond.text = "More previous Week Data"
             }
         }
 

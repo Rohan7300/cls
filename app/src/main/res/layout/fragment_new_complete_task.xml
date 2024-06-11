@@ -5,8 +5,8 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <include
             android:id="@+id/headerTop"
             layout="@layout/fragment_headers" />
@@ -48,9 +48,9 @@
                     <LinearLayout
                         android:id="@+id/rlcom"
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:orientation="horizontal"
                         android:padding="18dp">
 
                         <TextView
@@ -58,8 +58,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:fontFamily="@font/poppins_bold"
                             android:layout_weight="1"
+                            android:fontFamily="@font/poppins_bold"
                             android:text="Completed Tasks"
                             android:textColor="@color/text_color"
                             android:textSize="16sp" />
@@ -252,8 +252,8 @@
                         android:id="@+id/rlcomtwo_road"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:gravity="center"
+                        android:orientation="horizontal"
                         android:padding="18dp">
 
                         <TextView
@@ -261,8 +261,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:fontFamily="@font/poppins_bold"
                             android:layout_weight="1"
+                            android:fontFamily="@font/poppins_bold"
                             android:letterSpacing="0.02"
                             android:text="On Road Hours"
                             android:textColor="@color/text_color"
@@ -544,8 +544,7 @@
                             android:id="@+id/badgeArrow"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/grey_right_arrow"
-                            />
+                            android:src="@drawable/grey_right_arrow" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -611,6 +610,18 @@
                         android:src="@drawable/finalclockout"
                         android:visibility="visible" />
 
+                    <TextView
+                        android:id="@+id/clockOutTimeTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="50dp"
+                        android:layout_toStartOf="@+id/clock_out_mark"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="23:45"
+                        android:textColor="#3F9842"
+                        android:visibility="gone" />
                 </RelativeLayout>
 
                 <LinearLayout

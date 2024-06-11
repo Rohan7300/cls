@@ -43,7 +43,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
     private lateinit var viewModel: MainViewModel
     lateinit var prefs: Prefs
     lateinit var adapter: CLSThirdPartyInvoiceAdapter
-    lateinit var homeActivity: HomeActivity
+    private lateinit var homeActivity: HomeActivity
     private var selectedYear = 2024
     var isClicked = false
     val showDialog: () -> Unit = {
@@ -75,6 +75,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
         binding = FragmentCLSThirdPartyBinding.inflate(layoutInflater)
         prefs = Prefs.getInstance(requireContext())
         homeActivity = (activity as HomeActivity)
+        (activity as HomeActivity).ActivityHomeBinding.title.text = "Invoices"
         viewModel = homeActivity.viewModel
         /*
                 binding.dateTV.text = selectedYear.toString()

@@ -79,7 +79,8 @@ class FeedbackFragment : Fragment() {
         dialog.setSignatureListener(object : SignatureListener {
             override fun onSignatureSaved(bitmap: Bitmap) {
                 val selectedOptions = questions.map { it.selectedOption }
-                val bse64 = "data:image/png;base64," + bitmapToBase64(bitmap)
+                val resizedBitmap = resizeBitmapMaintainingAspectRatio(bitmap, 350, 200)
+                val bse64 = "data:image/png;base64," + bitmapToBase64(resizedBitmap)
                 saveFeedbackQuestions(selectedOptions, bse64)
             }
         })
@@ -100,6 +101,20 @@ class FeedbackFragment : Fragment() {
 
         return binding.root
     }
+
+    fun resizeBitmapMaintainingAspectRatio(bitmap: Bitmap, targetWidth: Int, targetHeight: Int): Bitmap {
+        val aspectRatio = bitmap.width.toFloat() / bitmap.height.toFloat()
+        var width = targetWidth
+        var height = targetHeight
+
+        if (bitmap.width > bitmap.height) {
+            height = (targetWidth / aspectRatio).toInt()
+        } else {
+            width = (targetHeight * aspectRatio).toInt()
+        }
+        return Bitmap.createScaledBitmap(bitmap, width, height, true)
+    }
+
 
     private fun saveFeedbackQuestions(selectedOptions: List<String>, bse64: String) {
         pref.submittedFeedback = true

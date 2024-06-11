@@ -513,23 +513,28 @@ class NewCompleteTaskFragment : Fragment() {
                 } else {
                     isClockedIn = false
                     osData.isClockedInToday = false
-                    if(clockedInClicked){
-                        showToast("Please retry",requireContext())
+                    if (clockedInClicked) {
+                        showToast("Please retry", requireContext())
                         clockedInClicked = false
                     }
                 }
 
                 if (it.ClockedOutTime != null) {
-                    mbinding.clockOutMark.setImageResource(R.drawable.finalclockout)
+                    val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.finalclockout)
+                    drawable?.setTint(Color.parseColor("#3F9842"))
+                    mbinding.clockOutMark.setImageDrawable(drawable)
+                    //mbinding.clockOutMark.visibility = View.GONE
                     mbinding.rlcomtwoClockOut.isEnabled = false
                     mbinding.clockOutTV.text = "Clocked Out"
                     mbinding.rlcomtwoClockOut.isClickable = false
                     mbinding.clockedOutTime.text = it.ClockedOutTime.toString()
                     clockedouttime = it.ClockedOutTime.toString()
+                    mbinding.clockOutTimeTV.text = clockedouttime
+                    mbinding.clockOutTimeTV.visibility = View.VISIBLE
                 }
             } else {
-                if(clockedInClicked){
-                    showToast("Please retry",requireContext())
+                if (clockedInClicked) {
+                    showToast("Please retry", requireContext())
                     clockedInClicked = false
                 }
             }
@@ -1172,14 +1177,14 @@ class NewCompleteTaskFragment : Fragment() {
             5 -> {
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.frame__2_)
                 mbinding.rlcomtwoClockOut.visibility = View.VISIBLE
+                mbinding.clockOutTimeTV.text = clockedouttime
+                mbinding.clockOutTimeTV.visibility = View.VISIBLE
                 mbinding.onRoadView.visibility = View.VISIBLE
                 mbinding.downIv.setImageResource(R.drawable.grey_right_arrow)
                 mbinding.BreakTimeTable.visibility = View.VISIBLE
-                mbinding.complete.setBackground(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.background_complete_task_done
-                    )
+                mbinding.complete.background = ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.background_complete_task_done
                 );
             }
 

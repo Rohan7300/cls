@@ -61,6 +61,7 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
         binding = FragmentCLSInvoicesBinding.inflate(layoutInflater)
         prefs = Prefs.getInstance(requireContext())
         homeActivity = (activity as HomeActivity)
+        (activity as HomeActivity).ActivityHomeBinding.title.text = "Invoices"
         viewModel = homeActivity.viewModel
         showDialog()
         selectedYear = Year.now().value
