@@ -169,7 +169,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val todayDate = dateFormat.format(Date())
         try {
             this.osData = DependencyProvider.osData
-        }catch (_:Exception){
+        } catch (_: Exception) {
 
         }
 
@@ -273,7 +273,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 if (it != null) {
                     prefs.saveExpiredDocuments(it)
                     //
-                     expiredDocDialog.showDialog(supportFragmentManager)
+                    expiredDocDialog.showDialog(supportFragmentManager)
                     expiredDocDialog.isCancelable = false
                 }
             }
@@ -306,11 +306,16 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     } catch (_: Exception) {
                     }
                     if (doubleBackToExitPressedOnce) {
-                        moveTaskToBack(true);
+//                        moveTaskToBack(true);
+                        finish()
                     }
 
-                   doubleBackToExitPressedOnce = true
-                    Snackbar.make(ActivityHomeBinding.bottomNavigatinView, "Please click BACK again to exit", Snackbar.LENGTH_SHORT)
+                    doubleBackToExitPressedOnce = true
+                    Snackbar.make(
+                        ActivityHomeBinding.bottomNavigatinView,
+                        "Please press BACK again to exit the app.",
+                        Snackbar.LENGTH_SHORT
+                    )
                         .setAction("Action", null).show()
 //                    Toast.makeText(applicationContext, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
 
@@ -822,7 +827,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 isLeadDriver = it.IsLeadDriver
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
                 isApiResponseTrue = it.IsUsrProfileUpdateReqin90days
-                Log.d("BirthdayDialog"," ${showBirthdayCard(it.UsrDOB, prefs)}")
+                Log.d("BirthdayDialog", " ${showBirthdayCard(it.UsrDOB, prefs)}")
                 if (showBirthdayCard(it.UsrDOB, prefs)) {
                     val firstrun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean(
                         "firstrun",
@@ -851,10 +856,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     Prefs.getInstance(applicationContext).days = "0"
                 }
 
-                if(!it.IsVehicleInspectionDone){
-                    if(prefs.isInspectionDoneToday())
+                if (!it.IsVehicleInspectionDone) {
+                    if (prefs.isInspectionDoneToday())
                         SaveVehicleInspection(viewModel)
-                }else{
+                } else {
                     prefs.updateInspectionStatus(true)
                 }
             }
@@ -928,7 +933,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (it != null) {
 
                 Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
-                if (Prefs.getInstance(App.instance).vmId==0) {
+                if (Prefs.getInstance(App.instance).vmId == 0) {
                     Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()
                 }
             }

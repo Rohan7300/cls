@@ -32,6 +32,7 @@ import com.clebs.celerity.ViewModel.OSyncViewModel
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.ActivityAddInspection2Binding
 import com.clebs.celerity.databinding.ActivityAddInspectionBinding
+import com.clebs.celerity.databinding.ActivityHomeBinding
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
@@ -55,7 +56,10 @@ import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.toast
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport.Session.User
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
+import io.clearquote.assessment.cq_sdk.CQSDKInitializer.Companion.userFlowParams
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
 import io.clearquote.assessment.cq_sdk.models.CustomerDetails
 import io.clearquote.assessment.cq_sdk.models.InputDetails
@@ -114,7 +118,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         backgroundUploadDialog.setListener(this)
         cqSDKInitializer = CQSDKInitializer(this)
         cqSDKInitializer.triggerOfflineSync()
+
         initPreviewView()
+
         startonetime = prefs.Isfirst!!
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -140,7 +146,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             osData = it
             i = 0
             b64ImageList.clear()
-            try{
+            try {
                 Log.d("OSData ", "$osData")
                 if (!osData.isIni) {
                     osData.clebID = prefs.clebUserId.toInt()
@@ -160,11 +166,11 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
                     Log.d("OSData I= ", "$i")
                 }
-            }catch (_:Exception){
+            } catch (_: Exception) {
 
             }
 
-         //  uploadStatus()
+            //  uploadStatus()
         }
 
         observers()
@@ -273,7 +279,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                         if (it.DaVehicleAddBlueImage != null) {
                             generateInspectionID()
                             allImagesUploaded = true
-                            if(prefs.isInspectionDoneToday()){
+                            if (prefs.isInspectionDoneToday()) {
                                 onSaveClick()
                                 showToast("Inspection Completed", this)
                             }
@@ -283,17 +289,18 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     } else {
                         generateInspectionID()
                         allImagesUploaded = true
-                        if(prefs.isInspectionDoneToday()){
+                        if (prefs.isInspectionDoneToday()) {
                             onSaveClick()
 
                         }
                     }
-                }
-                else {
+                } else {
 
-                    prefs.addBlueRequired = it.IsAdBlueRequired == true && it.DaVehicleAddBlueImage==null && prefs.addBlueUri==null
+                    prefs.addBlueRequired =
+                        it.IsAdBlueRequired == true && it.DaVehicleAddBlueImage == null && prefs.addBlueUri == null
 
-                    prefs.oilLevelRequired = it.DaVehImgOilLevelFileName == null && prefs.oilLevelUri==null
+                    prefs.oilLevelRequired =
+                        it.DaVehImgOilLevelFileName == null && prefs.oilLevelUri == null
                     uploadStatus()
                 }
             }
@@ -440,7 +447,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             isComingBackFromCLSCapture = false
         }
 
-
+        startonetime = prefs.Isfirst
         val message =
             intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
                 ?: "Could not identify status message"
@@ -458,6 +465,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             uploadStatus()
             showToast("Vehicle Inspection is successfully completed ", this)
         } else {
+
             showToast("Vehicle Inspection Failed!! ", this)
             Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
         }
@@ -466,6 +474,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     private fun openClsCapture() {
         if (!prefs.isInspectionDoneToday()) {
             loadingDialog.show()
+
+
             startInspection()
         } else if (prefs.addBlueUri == null && prefs.addBlueRequired) {
             val intent = Intent(this, ClsCaptureTwo::class.java)
@@ -484,70 +494,125 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         }
     }
 
+
     private fun startInspection() {
+        loadingDialog.show()
+
         if (cqSDKInitializer.isCQSDKInitialized()) {
             Log.e("sdkskdkdkskdkskd", "onCreateView: ")
 
             try {
-                Log.e("sdkskdkdkskdkskd", "onCreateView: startone $startonetime ")
-                if(!startonetime!!)
-                showToast("Offline Mode",this)
-                else
-                    showToast("Online Mode",this)
-                cqSDKInitializer.startInspection(activity = this,
-                    clientAttrs = ClientAttrs(
-                        userName = " ",
-                        dealer = " ",
-                        dealerIdentifier = " ",
-                        client_unique_id = inspectionID
-                    ),
-                    inputDetails = InputDetails(
-                        vehicleDetails = VehicleDetails(
-                            regNumber = prefs.scannedVmRegNo.replace(" ", ""),
-                            make = "Van", //if sent, user can't edit
-                            model = "Any Model", //if sent, user can't edit
-                            bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
-                        ),
-                        customerDetails = CustomerDetails(
-                            name = "", //if sent, user can't edit
-                            email = "", //if sent, user can't edit
-                            dialCode = "", //if sent, user can't edit
-                            phoneNumber = "", //if sent, user can't edit
-                        )
-                    ),
-                    userFlowParams = UserFlowParams(
-                        isOffline = !startonetime!!,
-                        skipInputPage = true,
-                    ),
+                startInspectionMain()
 
-                    result = { isStarted, msg, code ->
-                        loadingDialog.dismiss()
-                        Log.e("messsagesss", "startInspection: $msg$code")
-                        Log.e("CQSDKXX", "regNo: ${prefs.scannedVmRegNo}")
-                        if (isStarted) {
-                            Log.d("CQSDKXX", "isStarted ")
-                        } else {
-                            Log.d("CQSDKXX", "Not isStarted")
-                        }
-                        if (msg == "Success") {
-                            Log.d("CQSDKXX", "Success")
-                        } else {
-                            Log.d("CQSDKXX", "Not Success")
-                        }
-                        if (!isStarted) {
-                            Log.e("startedinspection", "onCreateView: $msg$isStarted")
-                        }
-                    })
-                prefs.Isfirst = false
-                Log.d("Start OFfflne", "$startonetime")
+//                if (!startonetime!!)
+//                    showToast("Offline Mode", this)
+//                else
+//                    showToast("Online Mode", this)
+
+//                cqSDKInitializer.checkUserFlowBasedQuoteCreationFeasibility(
+//                    userFlowParams,
+//                    result = { isStarted, msg ->
+//                        if (isStarted) {
+////                            if (msg.equals("Online quote can not be created without internet")){
+////                                showToast("Please Turn on the internet",this)
+////                                prefs.Isfirst =true
+////                            }
+//                            startInspectionMain()
+//                            Log.d("CQSDKXX", "isStarted " + msg)
+//                        } else {
+//
+//
+//                            Log.d("CQSDKXX", "Not isStarted" + msg)
+//                        }
+//
+//                        if (!isStarted) {
+//                            Log.e("startedinspection", "onCreateView: $msg$isStarted")
+//                        }
+//
+//                    })
+
+
             } catch (e: Exception) {
                 Log.d("CQSDKXX", "exc::  ${e.localizedMessage}   \n${e.message}")
                 loadingDialog.dismiss()
             }
-        }else{
+        } else {
             Log.d("CQSDKXX", "Not initialized")
         }
 
+    }
+
+    private fun startInspectionMain() {
+        cqSDKInitializer.startInspection(activity = this,
+            clientAttrs = ClientAttrs(
+                userName = " ",
+                dealer = " ",
+                dealerIdentifier = " ",
+                client_unique_id = inspectionID
+            ),
+            inputDetails = InputDetails(
+                vehicleDetails = VehicleDetails(
+                    regNumber = prefs.scannedVmRegNo.replace(" ", ""),
+                    make = "Van", //if sent, user can't edit
+                    model = "Any Model", //if sent, user can't edit
+                    bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
+                ),
+                customerDetails = CustomerDetails(
+                    name = "", //if sent, user can't edit
+                    email = "", //if sent, user can't edit
+                    dialCode = "", //if sent, user can't edit
+                    phoneNumber = "", //if sent, user can't edit
+                )
+            ),
+            userFlowParams = UserFlowParams(
+                isOffline = !startonetime!!,
+                skipInputPage = true,
+            ),
+
+
+            result = { isStarted, msg, code ->
+                loadingDialog.dismiss()
+                Log.e("sdkskdkdkskdkskdsssss", "onCreateView: startone $startonetime ")
+                Log.e("messsagesss", "startInspection: $msg$code")
+                Log.e("CQSDKXX", "regNo: ${prefs.scannedVmRegNo}")
+                if (isStarted) {
+                    prefs.Isfirst = false
+                    startonetime = prefs.Isfirst
+                    Log.d("CQSDKXX", "isStarted " + msg)
+                } else {
+                    prefs.Isfirst = true
+                    startonetime = prefs.Isfirst
+                    if (msg.equals("Online quote can not be created without internet")) {
+                        showToast("Please Turn on the internet", this)
+
+                    } else if (msg.equals("Sufficient data not available to create an offline quote")) {
+                        showToast("Please Turn on the internet resources are downloading", this)
+
+                    }
+
+                    Log.d("CQSDKXX", "Not isStarted" + msg)
+                }
+                if (msg == "Success") {
+                    Log.d("CQSDKXX", "Success" + msg)
+                } else {
+//                    prefs.Isfirst =true
+//                    if (msg.equals("Online quote can not be created without internet")){
+//                        showToast("Please Turn on the internet",this)
+//                    }
+//                    prefs.Isfirst =true
+                    Log.d("CQSDKXX", "Not Success" + msg)
+                }
+                if (!isStarted) {
+                    Log.e("startedinspection", "onCreateView: $msg$isStarted")
+                }
+            })
+//                cqSDKInitializer.checkUserFlowBasedQuoteCreationFeasibility(
+//                    UserFlowParams(isOffline = !startonetime!!,
+//                        skipInputPage = true), result = {Boolean,String} )
+
+
+//        prefs.Isfirst = false
+        Log.d("Start OFfflne", "$startonetime")
     }
 
     private fun setUploadLabel() {
