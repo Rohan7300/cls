@@ -478,6 +478,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
+                            android:id="@+id/constsunday"
                             android:background="@drawable/shape_expand_main"
 
                             android:padding="13dp">
@@ -510,6 +511,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
+                            android:id="@+id/constmonday"
                             android:background="@drawable/shape_expand_main"
                             android:padding="13dp">
 
@@ -540,7 +542,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-
+                            android:id="@+id/consttuesday"
                             android:background="@drawable/shape_expand_main"
                             android:padding="13dp">
 
@@ -571,7 +573,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-
+                            android:id="@+id/constwed"
                             android:background="@drawable/shape_expand_main"
                             android:padding="13dp">
 
@@ -602,7 +604,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-
+                            android:id="@+id/constthu"
                             android:background="@drawable/shape_expand_main"
                             android:padding="13dp">
 
@@ -633,7 +635,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-
+                            android:id="@+id/constfri"
                             android:background="@drawable/shape_expand_main"
 
                             android:padding="13dp">
@@ -664,7 +666,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-
+                            android:id="@+id/constsat"
                             android:background="@drawable/shape_expand_main"
                             android:padding="13dp">
 
@@ -750,6 +752,18 @@
                             android:textColor="@color/white"
                             android:textSize="12sp"
                             android:visibility="visible" />
+                        <TextView
+                            android:id="@+id/bt_prev_second"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/medium_orange"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="Load Previous Week data"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
                     </androidx.cardview.widget.CardView>
 
                     <View

@@ -68,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:id="@+id/llscan"
                 android:orientation="vertical"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="10dp"
@@ -303,6 +304,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
+            android:id="@+id/llsm"
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView

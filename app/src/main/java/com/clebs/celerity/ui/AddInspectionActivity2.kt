@@ -56,6 +56,9 @@ import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.toast
+import com.elconfidencial.bubbleshowcase.BubbleShowCase
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.internal.model.CrashlyticsReport.Session.User
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
@@ -140,7 +143,51 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
 
         clientUniqueID()
+        BubbleShowCaseBuilder(this)//Activity instance
+            .title("Vehicle Inspection") //Any title for the bubble view
+            .description("Please make sure you have stable internet connection when you trying to do vehicle inspection for the very first time") //More detailed description
+            .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
 
+            //You can force the position of the arrow to change the location of the bubble.
+            .backgroundColor((this.getColor(R.color.very_light_orange)))
+            //Bubble background color
+            .textColor(this.getColor(R.color.black)) //Bubble Text color
+            .titleTextSize(16) //Title text size in SP (default value 16sp)
+            .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
+            .image(ContextCompat.getDrawable(this, R.drawable.scan2)!!) //Bubble main image
+            .closeActionImage(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.cross
+                )!!
+            ) //Custom close action image
+
+            .listener(
+                (object : BubbleShowCaseListener { //Listener for user actions
+                    override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
+                        //Called when the user clicks the target
+                        bubbleShowCase.dismiss()
+                    }
+
+                    override fun onCloseActionImageClick(bubbleShowCase: BubbleShowCase) {
+                        //Called when the user clicks the close button
+                        bubbleShowCase.dismiss()
+                    }
+
+                    override fun onBubbleClick(bubbleShowCase: BubbleShowCase) {
+                        //Called when the user clicks on the bubble
+                        bubbleShowCase.dismiss()
+                    }
+
+                    override fun onBackgroundDimClick(bubbleShowCase: BubbleShowCase) {
+                        bubbleShowCase.dismiss()
+                        //Called when the user clicks on the background dim
+                    }
+                })
+            ).targetView(binding.llscan).showOnce("20")
+            .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE)
+            .backgroundColor(resources.getColor(R.color.very_light_orange)) //View to point out
+            .show().finishSequence()
 
         oSyncViewModel.osData.observe(this) {
             osData = it
@@ -328,7 +375,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             }
         }
     }
-
     private fun uploadStatus() {
         val uploadStatus = "($i/3)"
         binding.uploadStatus.text = uploadStatus

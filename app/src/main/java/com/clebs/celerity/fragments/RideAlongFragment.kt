@@ -15,6 +15,9 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.Spinner
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
@@ -176,6 +179,7 @@ class RideAlongFragment : Fragment() {
 
                 if (driverId.isNotEmpty() && driverName.isNotEmpty()) {
                     hideDialog()
+
                     /*       binding.SpinnerRouteType.setText("")
                            selectedRouteId = null
                            binding.SpinnerRouteType.setAdapter(null)
@@ -183,6 +187,8 @@ class RideAlongFragment : Fragment() {
                     setSpinnerNew(
                         binding.spinnerSelectDriver, driverName, driverId, "Select Driver"
                     )
+
+
                 }else{
                     hideDialog()
                 }
@@ -446,6 +452,7 @@ class RideAlongFragment : Fragment() {
             }
         }
     }
+
 
 
 }
