@@ -233,6 +233,7 @@ class HomedemoFragment : Fragment() {
         mbinding.btPrev.setOnClickListener {
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
+            mbinding.btPrevSecond.visibility=View.VISIBLE
             mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility = View.VISIBLE
             val weekprev = week - 3
@@ -253,17 +254,42 @@ class HomedemoFragment : Fragment() {
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 3, year
             )
         }
-
+        mbinding.btPrevSecond.setOnClickListener {
+            mbinding.viewfulldatalayout.visibility = View.GONE
+            mbinding.btPrev.visibility = View.VISIBLE
+            mbinding.btPrevSecond.visibility=View.GONE
+            mbinding.const1.visibility = View.VISIBLE
+            mbinding.btThisWeek.visibility = View.VISIBLE
+            val weekprev = week - 4
+            mbinding.txtLastWeek.text = "Week : " + weekprev
+            val weekschedule = week - 2
+            mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
+            showDialog()
+            val w = week - 4
+            mbinding.pieChart.setCenterText("Cash flow week :" + w);
+            viewModel.GetViewFullScheduleInfo(
+                Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 2
+            )
+            showDialog()
+            viewModel.GetcashFlowWeek(
+                Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 4
+            )
+            viewModel.GetLastWeekSCore(
+                Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 4, year
+            )
+        }
         mbinding.btThisWeek.setOnClickListener {
             mbinding.const1.visibility = View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btThisWeek.visibility = View.GONE
+
             mbinding.btPrev.visibility = View.VISIBLE
+            mbinding.btPrevSecond.visibility=View.GONE
             showDialog()
             val weekprev = week - 2
             val w = week - 3
             mbinding.pieChart.setCenterText("Cash flow week :" + weekprev);
-            mbinding.txtLastWeek.text = "Week : " + weekprev
+            mbinding.txtLastWeek.text = "Week " + weekprev
             mbinding.viewfullschedule.text = "Full schedule for week " + week
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week
@@ -289,8 +315,9 @@ class HomedemoFragment : Fragment() {
                 year = it.year
                 showDialog()
 
-                val weekprev = week - 2
-                mbinding.txtLastWeek.text = "Week : $weekprev"
+                val weekprev = week - 3
+                val weekprevsecond = week - 4
+                mbinding.txtLastWeek.text = "Week $weekprev"
                 mbinding.viewfullschedule.text = "Full schedule for week $week"
                 mbinding.pieChart.setCenterText("Cash flow week :" + weekprev);
 
@@ -306,6 +333,7 @@ class HomedemoFragment : Fragment() {
                     Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 2, year
                 )
                 mbinding.btPrev.text = "Load Previous Week Data"
+                mbinding.btPrevSecond.text = "Load more previous Week Data"
             }
         }
 
@@ -564,6 +592,7 @@ class HomedemoFragment : Fragment() {
 
 
 
+
                     mbinding.tvIsWorkingShowSunday.text = it.sundayLocation
                     mbinding.tvIsWorkingShowTuesday.text = it.tuesdayLocation
                     mbinding.tvIsWorkingShowWed.text = it.wednesdayLocation
@@ -571,6 +600,51 @@ class HomedemoFragment : Fragment() {
                     mbinding.tvIsWorkingShowFri.text = it.fridayLocation
                     mbinding.tvIsWorkingShowMonday.text = it.mondayLocation
                     mbinding.tvIsWorkingShowSat.text = it.saturdayLocation
+
+                    if (it.sundayLocation.equals("OFF")){
+                        mbinding.constsunday.alpha=0.4f
+                    }
+                    else{
+                        mbinding.constsunday.alpha=1f
+                    }
+                    if (it.mondayLocation.equals("OFF")){
+                        mbinding.constmonday.alpha=0.4f
+                    }
+                    else{
+                        mbinding.constmonday.alpha=1f
+                    }
+                    if (it.tuesdayLocation.equals("OFF")){
+                        mbinding.consttuesday.alpha=0.4f
+                    }
+                    else{
+                        mbinding.consttuesday.alpha=1f
+                    }
+                    if (it.wednesdayLocation.equals("OFF")){
+                        mbinding.constwed.alpha=0.4f
+                    }
+                    else{
+                        mbinding.constwed.alpha=1f
+                    }
+                    if (it.thursdayLocation.equals("OFF")){
+                        mbinding.constthu.alpha=0.4f
+                    }
+                    else{
+                        mbinding.constthu.alpha=1f
+                    }
+                    if (it.fridayLocation.equals("OFF")){
+                        mbinding.constfri.alpha=0.4f
+                    }
+                    else{
+                        mbinding.constfri.alpha=1f
+                    }
+                    if (it.saturdayLocation.equals("OFF")){
+                        mbinding.constsat.alpha=0.4f
+                    }
+                    else{
+                        mbinding.constsat.alpha=1f
+                    }
+
+
 
                 }
             } else {
