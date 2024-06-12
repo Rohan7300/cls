@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlinfo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/very_light_orange"
+    android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+
+    <com.google.android.material.appbar.CollapsingToolbarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:layout_marginTop="24dp"
+                android:tint="#BE1E2D"
+                android:src="@drawable/cls_final_logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+              />
+
+
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="119dp"
+                android:layout_height="114dp"
+                android:tint="@color/red"
+                android:src="@drawable/ellipse1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="102dp"
+                android:layout_height="101dp"
+
+                android:rotation="180"
+android:tint="@color/red"
+                android:src="@drawable/ellipse1"
+                app:layout_constraintBottom_toBottomOf="@+id/logo"
+                app:layout_constraintStart_toStartOf="parent"
+              />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
+</com.google.android.material.appbar.AppBarLayout>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.home.HomeFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:alpha="0.5"
+            android:lineBreakStyle="strict"
+            android:padding="10dp"
+            android:text="WHO AND WHAT ARE WE LOOKING FOR? \n
+Celerity The Home of Delivery Jobs:\n\n
+
+If you are looking for permanent work and have a wiliness to relocate then Celerity have an opportunity for you to join us at our various locations across the UK for longtime delivery driver positions. Our specialist relocation team have years of experience to support you in relocating, offering help to find the right accommodation, with supplied references and help with deposits if required. The minimum period we require is three months, or you can choose to make this a permanent move for you and your family, please read the job advert below for more details or contact us with any questions you may have. We also operate a “Refer a Friend” payment incentive scheme which could earn you £100.00 per person, contact us for details.
+
+Vehicle driver owners and driver hirers can also join Celerity LS Ltd and become a self-employed high-earning professional delivery driver if you prefer this option; fully paid training is supplied before you start delivering. We operate 7 days per week and offer between 5 to 6 days work per week to our drivers, routes are Scheduled for 9 hours.
+
+Join the fastest growing and most stable industry to be in right now!
+
+You will be the friendly face of our business - the helpful driver who delivers the unique blend of quality and outstanding service right to our customers' door.
+
+You will be an essential worker. This is an important 'front line' role. You represent us with every single customer you meet, and their impression is down to you. So, as well as having a flexible approach and the ability to use your initiative to deal with unexpected situations, you should be passionate about providing the very highest levels of customer service.
+\n \n
+THE GREAT STUFF WE OFFER:
+OUTER LONDON \n \n
+Two full training days given to you and paid at £86.00 per day = £172.00
+Performance Incentive Payment available up to £27.00 per day
+Working fuel mileage paid extra on top of the daily rate
+Weekly pay
+Guaranteed day rate £130.00 per day for driver owners and £125.80 for driver hirers on standard route (Vehicle Type Ford Transit or similar)
+Guaranteed day rate £150.00 per day for driver owners and £136.80 for driver hirers on LWB route (Vehicle type Ford Transit High Top or similar)
+Training and Support will be provided to make it as easy as possible to achieve the weekly performance incentives
+Routes will be prepared in the morning for you - just arrive, load, and go! Once you have completed your route in full you do not always need to return to the depot!
+INNER LONDON
+Two Full training days given to you and paid £95.00 per day = £190
+Performance Incentive Payment available
+Working fuel mileage paid
+Weekly pay
+Guaranteed day rate £132
+Large route (large van owner) drivers or £148
+Incentive payments
+Training and Support will be provided to make it as easy as possible to achieve the weekly performance incentives
+Routes will be prepared in the morning for you - just arrive, load, and go! once you have completed your route in full you do not always need to return to the depot!
+WHAT DO WE EXPECT?
+Exceptional customer service
+Dedication and commitment
+Attention to details to ensure deliveries are completed as per the correct process
+Problem-solving attitude and ability to work in a high-paced environment
+Team player with can-do attitude
+Loading your van where required and do regular checks to make sure it’s roadworthy
+Good communication skills
+Drive safely on the UK road
+REQUIREMENTS
+Minimum of 2 years driving experience required
+Full UK or Euro Driving licence and a maximum of 6 points with no active IN, DR, TT, DD, CD codes, related endorsements are not allowed.
+Right to work in the UK
+Ability to pass a Criminal Background Check and Drugs Alcohol Test
+Enthusiastic team player
+Willingness to engage with us on self-employed basis.
+Contact us through your Indeed account with any questions you may have concerning these exciting opportunities and one of our team will respond.
+
+Celerity is a company proudly championing and passionately resourcing equal opportunities, diversity, and mutual respect. We make recruiting decisions based on your experience and skills. We are proud to support the NHS Workers.
+
+Job Types: Full-time, Contract, Permanent
+
+COVID-19 considerations:
+We operate a strict covid free environment with all hand sanitiser and masks supplied free of any charge to you.
+WHAT NOW?
+Sound good so far? View the opportunities available to see if we have opportunities in your area, click on ‘Contact Us’ and send over your online form. You will be contacted shortly by a member of our recruitment team and if you meet all applicable requirements, a meeting will be arranged. For compatibility with our clients, selfemployed contractors may encounter security checks including bank verifications, a Drugs  Alcohol Test, Disclosure and Barring Service checks and DVLA requests."
+            android:textColor="@color/red"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="500dp"
+            android:alpha="0.3"
+            android:src="@drawable/cls_final_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:alpha="0.3"
+            app:layout_constraintTop_toBottomOf="@id/imageView5"
+            android:src="@drawable/cls_final_logo"
+
+            />
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:alpha="0.3"
+            app:layout_constraintTop_toBottomOf="@id/imageView6"
+            android:src="@drawable/cls_final_logo"
+
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
