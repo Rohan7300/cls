@@ -41,7 +41,7 @@
             android:fontFamily="@font/poppins_semibold"
             android:gravity="top"
             android:lineHeight="30sp"
-            android:text="Oil / coolant level"
+            android:text="Oil / Coolant Level"
             android:textColor="#4A4A4A"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"

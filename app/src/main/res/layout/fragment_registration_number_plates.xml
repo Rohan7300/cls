@@ -42,7 +42,7 @@
             android:fontFamily="@font/poppins_semibold"
             android:gravity="top"
             android:lineHeight="30sp"
-            android:text="Registration number Plates"
+            android:text="Registration Number Plates"
             android:textColor="#4A4A4A"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"

@@ -41,7 +41,7 @@
             android:fontFamily="@font/poppins_semibold"
             android:gravity="top"
             android:lineHeight="30sp"
-            android:text="Warning/Service lights"
+            android:text="Warning/Service Lights"
             android:textColor="#4A4A4A"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"

@@ -332,7 +332,7 @@ class HomedemoFragment : Fragment() {
                 year = it.year
                 showDialog()
 
-                val weekprev = week - 3
+                val weekprev = week - 2
                 val weekprevsecond = week - 4
                 mbinding.txtLastWeek.text = "Week : $weekprev"
                 mbinding.viewfullschedule.text = "Full schedule for week $week"

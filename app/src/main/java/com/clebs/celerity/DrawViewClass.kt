@@ -48,7 +48,7 @@ class DrawViewClass : View {
         brush.isAntiAlias = true
         brush.color = currentBrush
         brush.style = Paint.Style.STROKE
-        brush.strokeWidth = 1f
+        brush.strokeWidth = 2f
 
         params = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,

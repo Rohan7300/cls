@@ -371,11 +371,20 @@ class RideAlongFragment : Fragment() {
         ids: List<Int>, dummyItem: String,
     ) {
         val itemsList = mutableListOf<String>()
+        val itemIdMap = mutableMapOf<String, Int>()
         if (items.isEmpty() && ids.isEmpty()) {
             itemsList.add(dummyItem)
         } else {
-            itemsList.addAll(items) // Add items to the list
+            itemsList.addAll(items)
+            for (i in items.indices) {
+                itemIdMap[items[i]] = ids[i]
+            }
         }
+/*        if (items.isEmpty() && ids.isEmpty()) {
+            itemsList.add(dummyItem)
+        } else {
+            itemsList.addAll(items) // Add items to the list
+        }*/
 
         val adapter = ArrayAdapter(
             requireContext(),
@@ -392,10 +401,10 @@ class RideAlongFragment : Fragment() {
                 parent?.let { nonNullParent ->
                     val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
                     selectedItem.let { nonNullSelectedItem ->
+                        val selectedId = itemIdMap[nonNullSelectedItem]
                         when (spinner) {
                             binding.spinnerSelectDriver -> {
-                                selectedDriverId =
-                                    ids[position]
+                                selectedDriverId = selectedId ?: -1
                                 selectedDriverName = nonNullSelectedItem
                                 Log.d("Exec", "SelectedDriverID $selectedDriverId")
                             }

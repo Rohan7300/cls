@@ -8,7 +8,6 @@
         android:layout_height="match_parent"
 
         tools:context=".fragments.VechileMileageFragment">
-
         <include
             android:id="@+id/headerTop"
             layout="@layout/fragment_headers" />
@@ -43,7 +42,7 @@
             android:gravity="top"
 
             android:lineHeight="30sp"
-            android:text="Wipers / washers"
+            android:text="Wipers / Washers"
             android:textColor="#4A4A4A"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"

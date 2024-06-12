@@ -137,6 +137,7 @@
                                 android:importantForAutofill="no"
                                 android:id="@+id/spinnerSelectDriver"
                                 android:padding="12dp"
+
                                 android:textColorHint="@color/hintColor"
                                 android:textSize="13sp" />
 
