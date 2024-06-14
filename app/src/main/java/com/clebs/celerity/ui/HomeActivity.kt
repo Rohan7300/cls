@@ -960,7 +960,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     override fun onButtonClick() {
-        val intent = Intent(this, AddInspection::class.java)
+        val intent = Intent(this, AddInspectionActivity2::class.java)
         startActivity(intent)
     }
 

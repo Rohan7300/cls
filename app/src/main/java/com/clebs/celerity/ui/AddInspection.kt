@@ -399,7 +399,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         val currentDate = LocalDateTime.now()
         val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
         var regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
-        prefs.inspectionID = regexPattern.toString()
+//        prefs.inspectionID = regexPattern.toString()
         return regexPattern.toString()
     }
 

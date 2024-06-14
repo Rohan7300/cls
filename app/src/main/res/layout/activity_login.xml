@@ -5,6 +5,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <include
             android:id="@+id/headerTop"
             layout="@layout/loginlayout" />
@@ -200,16 +201,31 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/text_error_two" />
-
-                <ImageView
-                    android:id="@+id/bt_login"
-                    android:layout_width="match_parent"
-                    android:layout_height="47dp"
-                    android:layout_marginTop="80dp"
-                    android:layout_marginBottom="80dp"
-                    android:src="@drawable/button"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_error_two" />
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="@color/white"
+    android:textSize="15sp"
+    android:id="@+id/bt_login"
+    android:textAllCaps="true"
+    android:backgroundTint="@color/orange"
+    android:layout_margin="60dp"
+    android:padding="10dp"
+    android:background="@drawable/shape_expand"
+    android:text="@string/LOGIN"
+    android:gravity="center_horizontal"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/text_error_two"
+    android:fontFamily="@font/inter_bold"/>
+<!--                <ImageView-->
+<!--                    android:id="@+id/bt_login"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="47dp"-->
+<!--                    android:layout_marginTop="80dp"-->
+<!--                    android:layout_marginBottom="80dp"-->
+<!--                    android:src="@drawable/button"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/text_error_two" />-->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
