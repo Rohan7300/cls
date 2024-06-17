@@ -26,7 +26,6 @@ data class OfflineSyncEntity(
     var dawDate: String? = null,
 
 
-
     @ColumnInfo("dashboardImage")
     var dashboardImage: String? = null,
 

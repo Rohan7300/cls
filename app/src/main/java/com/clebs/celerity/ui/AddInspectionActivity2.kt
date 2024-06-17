@@ -95,6 +95,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
+    private var inspectionTAG = "INSPECTION"
 
     companion object {
 
@@ -129,7 +130,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         val todayDate = dateFormat.format(Date())
-        var currentDateTime = getCurrentDateTime()
+        val currentDateTime = getCurrentDateTime()
 
         val osRepo = offlineSyncRepo(this)
         oSyncViewModel = ViewModelProvider(
@@ -545,7 +546,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         loadingDialog.show()
 
         if (cqSDKInitializer.isCQSDKInitialized()) {
-            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
+            Log.e(inspectionTAG, "onCreateView: CQ SDK Initialized")
 
             try {
                 startInspectionMain()
@@ -579,11 +580,11 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
 
             } catch (e: Exception) {
-                Log.d("CQSDKXX", "exc::  ${e.localizedMessage}   \n${e.message}")
+                Log.d(inspectionTAG, "exc::  ${e.localizedMessage}   \n${e.message}")
                 loadingDialog.dismiss()
             }
         } else {
-            Log.d("CQSDKXX", "Not initialized")
+            Log.d(inspectionTAG, "Not initialized")
         }
 
     }
@@ -618,38 +619,37 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
             result = { isStarted, msg, code ->
                 loadingDialog.dismiss()
-                Log.e("sdkskdkdkskdkskdsssss", "onCreateView: startone $startonetime ")
-                Log.e("messsagesss", "startInspection: $msg$code")
-                Log.e("CQSDKXX", "regNo: ${prefs.scannedVmRegNo}")
+                Log.e(inspectionTAG, "onCreateView: startone $startonetime ")
+                Log.e(inspectionTAG, "startInspection: $msg$code")
+                Log.e(inspectionTAG, "regNo: ${prefs.scannedVmRegNo}")
                 if (isStarted) {
                     prefs.Isfirst = false
                     startonetime = prefs.Isfirst
-                    Log.d("CQSDKXX", "isStarted " + msg)
+                    Log.d(inspectionTAG, "isStarted " + msg)
                 } else {
                     prefs.Isfirst = true
                     startonetime = prefs.Isfirst
-                    if (msg.equals("Online quote can not be created without internet")) {
+                    if (msg == "Online quote can not be created without internet") {
                         showToast("Please Turn on the internet", this)
 
-                    } else if (msg.equals("Sufficient data not available to create an offline quote")) {
+                    } else if (msg == "Sufficient data not available to create an offline quote") {
                         showToast("Please Turn on the internet resources are downloading", this)
-
                     }
 
-                    Log.d("CQSDKXX", "Not isStarted" + msg)
+                    Log.d(inspectionTAG, "Not isStarted $msg")
                 }
                 if (msg == "Success") {
-                    Log.d("CQSDKXX", "Success" + msg)
+                    Log.d(inspectionTAG, "Success $msg")
                 } else {
 //                    prefs.Isfirst =true
 //                    if (msg.equals("Online quote can not be created without internet")){
 //                        showToast("Please Turn on the internet",this)
 //                    }
 //                    prefs.Isfirst =true
-                    Log.d("CQSDKXX", "Not Success" + msg)
+                    Log.d(inspectionTAG, "Not Success" + msg)
                 }
                 if (!isStarted) {
-                    Log.e("startedinspection", "onCreateView: $msg$isStarted")
+                    Log.e(inspectionTAG, "MSG: $msg\n IsStarted: $isStarted")
                 }
             })
 //                cqSDKInitializer.checkUserFlowBasedQuoteCreationFeasibility(
@@ -658,7 +658,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
 
 //        prefs.Isfirst = false
-        Log.d("Start OFfflne", "$startonetime")
+        Log.d(inspectionTAG, "StartOneTime $startonetime")
     }
 
     private fun setUploadLabel() {

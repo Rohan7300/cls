@@ -229,7 +229,7 @@ class HomedemoFragment : Fragment() {
                 mbinding.consttwo.visibility = View.VISIBLE
                 mbinding.const1.visibility = View.VISIBLE
                 mbinding.viewfulldatalayout.visibility = View.GONE
-//                mbinding.vieww.visibility=View.GONE
+               //mbinding.vieww.visibility=View.GONE
                 mbinding.fullscheduleIV.visibility = View.VISIBLE
             }
             isclicked = !isclicked
