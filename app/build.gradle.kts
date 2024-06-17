@@ -78,9 +78,10 @@ android {
 
 dependencies {
 //    implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    implementation(files("libs/android-support-v4.jar"))
+
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.12.0")
+
     implementation("org.tensorflow:tensorflow-lite-task-vision:0.4.0")
     // Import the GPU delegate plugin Library for GPU inference
     implementation("org.tensorflow:tensorflow-lite-gpu-delegate-plugin:0.4.0")
@@ -128,7 +129,7 @@ dependencies {
 //    implementation("com.github.AnyChart:AnyChart-Android:1.1.5")
 
     implementation("com.google.code.gson:gson:2.10.1")
-
+implementation("androidx.biometric:biometric:1.2.0-alpha05")
 
     // CQ SDK
     /*implementation ("com.github.clearquotetech:cq-android-sdk:2.0.9-test")*/
@@ -144,6 +145,7 @@ dependencies {
 
     implementation("ru.superjob:kotlin-permissions:1.0.3")
     implementation("org.jetbrains.anko:anko-commons:0.10.4")
+
 
     implementation("com.github.tapadoo:alerter:7.2.4")
     implementation("com.github.AppIntro:AppIntro:6.3.1")

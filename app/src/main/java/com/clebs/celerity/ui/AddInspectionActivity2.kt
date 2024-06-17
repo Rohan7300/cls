@@ -95,7 +95,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
-    private var inspectionTAG = "INSPECTION"
 
     companion object {
 
@@ -130,7 +129,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         val todayDate = dateFormat.format(Date())
-        val currentDateTime = getCurrentDateTime()
+        var currentDateTime = getCurrentDateTime()
 
         val osRepo = offlineSyncRepo(this)
         oSyncViewModel = ViewModelProvider(
@@ -143,7 +142,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         val mainRepo = MainRepo(apiService)
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
 
-        clientUniqueID()
+
         BubbleShowCaseBuilder(this)//Activity instance
             .title("Vehicle Inspection") //Any title for the bubble view
             .description("Please make sure you have stable internet connection when you trying to do vehicle inspection for the very first time") //More detailed description
@@ -427,7 +426,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         var regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
         prefs.inspectionID = regexPattern.toString()
         inspectionID = regexPattern.toString()
+        Log.e("kjfdjkfhdjfjdhfdjclientuniqueidfunction", "clientUniqueID: "+inspectionID+"------"+prefs.inspectionID )
         return regexPattern.toString()
+
     }
 
     override fun onSaveClick() {
@@ -546,7 +547,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         loadingDialog.show()
 
         if (cqSDKInitializer.isCQSDKInitialized()) {
-            Log.e(inspectionTAG, "onCreateView: CQ SDK Initialized")
+            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
 
             try {
                 startInspectionMain()
@@ -580,22 +581,24 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
 
             } catch (e: Exception) {
-                Log.d(inspectionTAG, "exc::  ${e.localizedMessage}   \n${e.message}")
+                Log.d("CQSDKXX", "exc::  ${e.localizedMessage}   \n${e.message}")
                 loadingDialog.dismiss()
             }
         } else {
-            Log.d(inspectionTAG, "Not initialized")
+            Log.d("CQSDKXX", "Not initialized")
         }
 
     }
 
     private fun startInspectionMain() {
+        clientUniqueID()
         cqSDKInitializer.startInspection(activity = this,
             clientAttrs = ClientAttrs(
                 userName = " ",
                 dealer = " ",
                 dealerIdentifier = " ",
                 client_unique_id = inspectionID
+
             ),
             inputDetails = InputDetails(
                 vehicleDetails = VehicleDetails(
@@ -619,37 +622,38 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
             result = { isStarted, msg, code ->
                 loadingDialog.dismiss()
-                Log.e(inspectionTAG, "onCreateView: startone $startonetime ")
-                Log.e(inspectionTAG, "startInspection: $msg$code")
-                Log.e(inspectionTAG, "regNo: ${prefs.scannedVmRegNo}")
+                Log.e("startinspecctionID", "onCreateView: startone $inspectionID ")
+                Log.e("messsagesss", "startInspection: $msg$code")
+                Log.e("CQSDKXX", "regNo: ${prefs.scannedVmRegNo}")
                 if (isStarted) {
                     prefs.Isfirst = false
                     startonetime = prefs.Isfirst
-                    Log.d(inspectionTAG, "isStarted " + msg)
+                    Log.d("CQSDKXX", "isStarted " + msg)
                 } else {
                     prefs.Isfirst = true
                     startonetime = prefs.Isfirst
-                    if (msg == "Online quote can not be created without internet") {
+                    if (msg.equals("Online quote can not be created without internet")) {
                         showToast("Please Turn on the internet", this)
 
-                    } else if (msg == "Sufficient data not available to create an offline quote") {
+                    } else if (msg.equals("Sufficient data not available to create an offline quote")) {
                         showToast("Please Turn on the internet resources are downloading", this)
+
                     }
 
-                    Log.d(inspectionTAG, "Not isStarted $msg")
+                    Log.d("CQSDKXX", "Not isStarted" + msg)
                 }
                 if (msg == "Success") {
-                    Log.d(inspectionTAG, "Success $msg")
+                    Log.d("CQSDKXX", "Success" + msg)
                 } else {
 //                    prefs.Isfirst =true
 //                    if (msg.equals("Online quote can not be created without internet")){
 //                        showToast("Please Turn on the internet",this)
 //                    }
 //                    prefs.Isfirst =true
-                    Log.d(inspectionTAG, "Not Success" + msg)
+                    Log.d("CQSDKXX", "Not Success" + msg)
                 }
                 if (!isStarted) {
-                    Log.e(inspectionTAG, "MSG: $msg\n IsStarted: $isStarted")
+                    Log.e("startedinspection", "onCreateView: $msg$isStarted")
                 }
             })
 //                cqSDKInitializer.checkUserFlowBasedQuoteCreationFeasibility(
@@ -658,7 +662,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
 
 //        prefs.Isfirst = false
-        Log.d(inspectionTAG, "StartOneTime $startonetime")
+        Log.d("Start OFfflne", "$startonetime")
     }
 
     private fun setUploadLabel() {

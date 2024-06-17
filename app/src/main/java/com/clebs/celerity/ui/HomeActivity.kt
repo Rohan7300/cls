@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
@@ -95,6 +96,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private lateinit var navController: NavController
     lateinit var viewModel: MainViewModel
     private lateinit var navGraph: NavGraph
+
     private var completeTaskScreen: Boolean = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
     lateinit var fragmentManager: FragmentManager
@@ -200,6 +202,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         }
 
+        // create menu items;
+
+        // create menu items;
+
 
         cqSDKInitializer()
         clebuserID = prefs.clebUserId.toInt()
@@ -218,6 +224,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         Log.e("kjkcjkvckvck", "onCreate: " + deviceID)
 
 
+
+
+
+
         try {
             val apiService = RetrofitService.getInstance().create(ApiService::class.java)
             val mainRepo = MainRepo(apiService)
@@ -232,6 +242,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (ninetydaysBoolean?.equals(true) == true) {
                 showAlertChangePasword90dys()
             }
+
+
+
+
 
             viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
                 Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
@@ -330,7 +344,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
             ActivityHomeBinding.imgDrawer.setOnClickListener {
+
                 navController.navigate(R.id.profileFragment)
+
             }
 
             ActivityHomeBinding.imgNotification.setOnClickListener {
@@ -944,7 +960,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     override fun onButtonClick() {
-        val intent = Intent(this, AddInspection::class.java)
+        val intent = Intent(this, AddInspectionActivity2::class.java)
         startActivity(intent)
     }
 
@@ -955,6 +971,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             navController.navigate(R.id.newCompleteTaskFragment)
         }
     }
+
+
 
 
 }

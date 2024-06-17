@@ -1,24 +1,38 @@
 package com.clebs.celerity.ui
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
+import androidx.biometric.BiometricPrompt
 
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -36,12 +50,17 @@ import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.showToast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import java.util.concurrent.Executor
 
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var ActivitySplashBinding: ActivitySplashBinding
     val TAG = "SPLASHACTIVIITY"
     var isNetworkActive: Boolean = true
+    lateinit var deleteDialog: AlertDialog
+    private lateinit var executor: Executor
+    private lateinit var biometricPrompt: BiometricPrompt
+    private lateinit var promptInfo: BiometricPrompt.PromptInfo
     lateinit var dialog: NoInternetDialog
     lateinit var fragmentManager: FragmentManager
     private lateinit var mainViewModel: MainViewModel
@@ -52,10 +71,20 @@ class SplashActivity : AppCompatActivity() {
     ) { isGranted: Boolean ->
         if (isGranted) {
             //showToast("Notification Permission denied",this)
-            next()
+            if (isLoggedIn()) {
+                useBiometric()
+            } else {
+                next()
+            }
+
         } else {
             showToast("Notification Permission is required!!", this)
-            next()
+            if (isLoggedIn()) {
+                useBiometric()
+            } else {
+                next()
+            }
+
         }
     }
 
@@ -65,10 +94,19 @@ class SplashActivity : AppCompatActivity() {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
                 PackageManager.PERMISSION_GRANTED
             ) {
-                next()
+                if (isLoggedIn()) {
+                    useBiometric()
+                } else {
+                    next()
+                }
+
                 return
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                next()
+                if (isLoggedIn()) {
+                    useBiometric()
+                } else {
+                    next()
+                }
             } else {
 
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -92,9 +130,11 @@ class SplashActivity : AppCompatActivity() {
         window.requestFeature(Window.FEATURE_NO_TITLE);
 
         super.onCreate(savedInstanceState)
+        deleteDialog =
+            AlertDialog.Builder(this).create()
 
-
-        ActivitySplashBinding = DataBindingUtil.setContentView(this@SplashActivity, R.layout.activity_splash)
+        ActivitySplashBinding =
+            DataBindingUtil.setContentView(this@SplashActivity, R.layout.activity_splash)
 
         ActivitySplashBinding.appVersionTv.text = getCurrentAppVersion(this)
         val rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.anam_two)
@@ -115,7 +155,11 @@ class SplashActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             askNotificationPermission()
         } else {
-            next()
+            if (isLoggedIn()) {
+                useBiometric()
+            } else {
+                next()
+            }
         }
 
 
@@ -253,6 +297,105 @@ class SplashActivity : AppCompatActivity() {
 
     }
 
+    fun useBiometric() {
+        executor = ContextCompat.getMainExecutor(this)
+        biometricPrompt = BiometricPrompt(this, executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationError(
+                    errorCode: Int,
+                    errString: CharSequence
+                ) {
+
+                    super.onAuthenticationError(errorCode, errString)
+
+                    Log.e(TAG, "onAuthenticationError: " + errString)
+                    if (errString.contains("Fingerprint operation cancelled by user.") || errString.contains(
+                            "close"
+                        )
+                    ) {
+                        BiometricDialog()
+
+                    } else if (errString.contains("Too many attempts. Use screen lock instead.")) {
+                        showToast("Too many attempts.", this@SplashActivity)
+//
+
+                    } else if (errString.contains("Authentication cancelled")) {
+                        BiometricDialog()
+                    } else {
+                        next()
+                    }
+
+                }
+
+                override fun onAuthenticationSucceeded(
+                    result: BiometricPrompt.AuthenticationResult
+                ) {
+                    deleteDialog.dismiss()
+                    super.onAuthenticationSucceeded(result)
+                    Toast.makeText(
+                        applicationContext,
+                        "Authentication succeeded!", Toast.LENGTH_SHORT
+                    )
+
+                        .show()
+                    next()
+                }
+
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                    Log.e(TAG, "onAuthenticationFailed: ")
+//                    Toast.makeText(
+//                        applicationContext, "Authentication failed",
+//                        Toast.LENGTH_SHORT
+//                    )
+//                        .show()
+//                    next()
+
+                }
+            })
+
+        promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Verify your Identity")
+            .setSubtitle("Use your fingerprint or PIN")
+            .setAllowedAuthenticators(
+                BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL or BIOMETRIC_WEAK
+            )
+            .build()
+
+
+
+        biometricPrompt.authenticate(promptInfo)
+
+    }
+
+    fun BiometricDialog() {
+        val factory = LayoutInflater.from(this)
+        val view: View = factory.inflate(R.layout.login_dialog, null)
+
+        deleteDialog.setView(view)
+        val biometric: TextView = view.findViewById(R.id.saveBio)
+
+        biometric.setOnClickListener {
+            useBiometric()
+        }
+
+
+        deleteDialog.setOnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                true
+            } else {
+                false
+            }
+        }
+
+
+        deleteDialog.setCancelable(false)
+        deleteDialog.setCanceledOnTouchOutside(false);
+        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+
+        deleteDialog.show();
+
+    }
 }
 
 

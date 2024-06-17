@@ -819,6 +819,7 @@ fun SaveVehicleInspection(viewModel:MainViewModel){
             Prefs.getInstance(App.instance).vmId
         )
     )
+    Log.e("sdkskffjdapiisnpection", "SaveVehicleInspection: "+Prefs.getInstance(App.instance).inspectionID )
 }
 
 

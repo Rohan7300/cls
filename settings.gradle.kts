@@ -21,6 +21,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Celerity"
-include(":app")
+include(":app","library")
 
  
