@@ -639,6 +639,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                         showToast("Please Turn on the internet resources are downloading", this)
 
                     }
+                    else if (msg.equals("Unable to download setting updates, Please check internet")){
+                        showToast("Please Turn on the internet",this)
+                    }
 
                     Log.d("CQSDKXX", "Not isStarted" + msg)
                 }

@@ -28,12 +28,14 @@ import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentUserprofileBinding
 import com.clebs.celerity.databinding.ThirdPartyAcessChangeDialogBinding
+import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
 import com.clebs.celerity.utils.isEmailValid
@@ -64,7 +66,9 @@ class Userprofile : Fragment() {
     var edtnew: String? = null
     var firstname: String? = null
     var lastname: String? = null
+    lateinit var dialog: NoInternetDialog
     var isthirdpartyAccess: Boolean? = null
+    private var isNetworkActive: Boolean = true
     var isthirdpartyAccessRequested: Boolean? = null
     var isthirdpartyAccessRemoved: Boolean? = null
     private lateinit var fragmentManager: FragmentManager
@@ -80,7 +84,7 @@ class Userprofile : Fragment() {
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentUserprofileBinding.inflate(inflater, container, false)
         }
-
+        dialog = NoInternetDialog()
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         fragmentManager = (activity as HomeActivity).fragmentManager
@@ -90,7 +94,18 @@ class Userprofile : Fragment() {
 
         GetDriversBasicInformation()
         (activity as HomeActivity).ActivityHomeBinding.title.setText("")
+        val networkManager = NetworkManager(requireContext())
+        networkManager.observe(requireActivity()) {
+            if (it) {
+                isNetworkActive = true
+                dialog.hideDialog()
 
+            } else {
+                isNetworkActive = false
+                dialog.showDialog(fragmentManager)
+                hideDialog()
+            }
+        }
 //        mbinding.logout.setOnClickListener {
 //            (activity as HomeActivity).showAlertLogout()
 //        }

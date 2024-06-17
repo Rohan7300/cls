@@ -57,7 +57,10 @@ class LoginActivity : AppCompatActivity() {
                 dialog.showDialog(fragmentManager)
             }
         }
+        if (intent.hasExtra("downloadCQ")) {
 
+            Prefs.getInstance(App.instance).Isfirst = intent.getBooleanExtra("downloadCQ", false)
+        }
         loadingDialog = LoadingDialog(this)
         mainViewModel = DependencyProvider.getMainVM(this)
 

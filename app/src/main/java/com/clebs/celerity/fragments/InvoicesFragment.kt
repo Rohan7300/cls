@@ -43,14 +43,14 @@ class InvoicesFragment : Fragment() {
             findNavController().navigate(R.id.CLSThirdPartyFragment)
         }
         binding.otherinvoices.visibility = View.GONE
-
+showDialog()
         GetDriversBasicInformation()
         return binding.root
     }
 
     private fun GetDriversBasicInformation() {
-        showDialog()
-        showDialog()
+
+       hideDialog()
         viewModel.GetDriversBasicInformation(
             Prefs.getInstance(App.instance).clebUserId.toDouble()
         ).observe(viewLifecycleOwner) {

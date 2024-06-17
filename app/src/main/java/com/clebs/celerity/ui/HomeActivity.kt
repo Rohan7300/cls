@@ -727,8 +727,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         bttwo.setOnClickListener {
+
             val intent = Intent(this, LoginActivity::class.java)
             intent.putExtra("logout", "0")
+            intent.putExtra("downloadCQ",Prefs.getInstance(App.instance).isFirst)
             Prefs.getInstance(applicationContext).clearPreferences()
             finish()
             startActivity(intent)
