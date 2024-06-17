@@ -37,6 +37,7 @@ class RideAlongFragment : Fragment() {
     var selectedDriverName = ""
     var selectedVehicleId: Int? = null
     var selectedVehicleName = ""
+    var selectedDriver = ""
     var selectedRouteId: Int? = null
     private lateinit var pref: Prefs
     val showDialog: () -> Unit = {
@@ -87,7 +88,10 @@ class RideAlongFragment : Fragment() {
         showDialog()
         viewModel.GetRideAlongRouteTypeInfo(leadDriverID!!)
 
-
+        binding.spinnerSelectDriver.setOnClickListener {
+            binding.spinnerSelectDriver.isFocusable = true
+            binding.spinnerSelectDriver.isFocusableInTouchMode = true
+        }
         binding.SpinnerRouteType.setText("")
         binding.SpinnerRouteType.setAdapter(null)
         binding.spinnerRouteLocation.setAdapter(null)
@@ -284,8 +288,10 @@ class RideAlongFragment : Fragment() {
             findNavController().clearBackStack(R.id.newCompleteTaskFragment)
         }
         binding.saveBT.setOnClickListener {
-            if (chkNull() == 1)
+            if (chkNull() == 1&&!binding.spinnerSelectDriver.text.isNullOrBlank()&&(selectedDriver == binding.spinnerSelectDriver.text.toString()))
                 rideAlongApi()
+        else
+            showToast("Please complete form correctly!!.",requireContext())
         }
 
         binding.rbReTraining.setOnClickListener(::onRadioButtonClicked)
@@ -359,7 +365,6 @@ class RideAlongFragment : Fragment() {
                     binding.edtRouteComment -> routeComment = value
                 }
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
     }
@@ -406,6 +411,9 @@ class RideAlongFragment : Fragment() {
                             binding.spinnerSelectDriver -> {
                                 selectedDriverId = selectedId ?: -1
                                 selectedDriverName = nonNullSelectedItem
+                                binding.spinnerSelectDriver.isFocusable = false
+                                binding.spinnerSelectDriver.isFocusableInTouchMode = false
+                                selectedDriver = nonNullSelectedItem
                                 Log.d("Exec", "SelectedDriverID $selectedDriverId")
                             }
 

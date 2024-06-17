@@ -375,6 +375,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             }
         }
     }
+
     private fun uploadStatus() {
         val uploadStatus = "($i/3)"
         binding.uploadStatus.text = uploadStatus
@@ -423,12 +424,14 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
         val currentDate = LocalDateTime.now()
         val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
-        var regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
+        val regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
         prefs.inspectionID = regexPattern.toString()
         inspectionID = regexPattern.toString()
-        Log.e("kjfdjkfhdjfjdhfdjclientuniqueidfunction", "clientUniqueID: "+inspectionID+"------"+prefs.inspectionID )
+        Log.e(
+            "kjfdjkfhdjfjdhfdjclientuniqueidfunction",
+            "clientUniqueID: " + inspectionID + "------" + prefs.inspectionID
+        )
         return regexPattern.toString()
-
     }
 
     override fun onSaveClick() {
@@ -509,7 +512,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             generateInspectionID()
             prefs.updateInspectionStatus(true)
             SaveVehicleInspection(viewModel)
-
             uploadStatus()
             showToast("Vehicle Inspection is successfully completed ", this)
         } else {
@@ -598,7 +600,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                 dealer = " ",
                 dealerIdentifier = " ",
                 client_unique_id = inspectionID
-
             ),
             inputDetails = InputDetails(
                 vehicleDetails = VehicleDetails(
@@ -645,11 +646,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                 if (msg == "Success") {
                     Log.d("CQSDKXX", "Success" + msg)
                 } else {
-//                    prefs.Isfirst =true
-//                    if (msg.equals("Online quote can not be created without internet")){
-//                        showToast("Please Turn on the internet",this)
-//                    }
-//                    prefs.Isfirst =true
+
                     Log.d("CQSDKXX", "Not Success" + msg)
                 }
                 if (!isStarted) {
@@ -692,7 +689,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                 "You can save and exit while images are being uploaded."
             /*
          if(osData!=null){
-
              osData.isdashboardUploadedFailed = false
              osData.isfrontImageFailed = false
              osData.isnearSideFailed = false
@@ -701,7 +697,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
              osData.isaddblueImageFailed = false
              osData.isoillevelImageFailed = false
             }
-
              */
 
             startUploadWithWorkManager(0, prefs, this)

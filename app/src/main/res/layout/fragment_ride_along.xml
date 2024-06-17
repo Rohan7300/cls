@@ -172,7 +172,7 @@
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
-
+                            android:id="@+id/spinnerSelectVehicleParent"
                             android:layout_height="match_parent"
                             android:hint="Select Vehicle*">
 
