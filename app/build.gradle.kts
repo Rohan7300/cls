@@ -133,7 +133,7 @@ implementation("androidx.biometric:biometric:1.2.0-alpha05")
 
     // CQ SDK
     /*implementation ("com.github.clearquotetech:cq-android-sdk:2.0.9-test")*/
-    implementation("com.github.clearquotetech:cq-android-sdk:2.2.0")
+    implementation("com.github.clearquotetech:cq-android-sdk:2.2.1")
 
 
     //viewModel
@@ -148,7 +148,6 @@ implementation("androidx.biometric:biometric:1.2.0-alpha05")
 
 implementation("com.github.skydoves:balloon:1.6.5")
     implementation("com.github.tapadoo:alerter:7.2.4")
-    implementation("com.github.AppIntro:AppIntro:6.3.1")
     val room_version = "2.6.1"
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:$room_version")
