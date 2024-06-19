@@ -44,6 +44,7 @@
                     android:id="@+id/icpnUser"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
+                    android:visibility="gone"
                     android:layout_margin="4dp"
                     android:src="@drawable/user_profile_icon" />
 
@@ -54,7 +55,7 @@
                     android:fontFamily="@font/poppins_bold"
                     android:gravity="center_horizontal|top"
                     android:letterSpacing="0.04"
-                    android:layout_marginEnd="6dp"
+
                     android:elevation="30dp"
                     android:lineSpacingExtra="0.02dp"
                     android:text="@string/ana_carolin"
