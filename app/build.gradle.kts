@@ -133,7 +133,7 @@ implementation("androidx.biometric:biometric:1.2.0-alpha05")
 
     // CQ SDK
     /*implementation ("com.github.clearquotetech:cq-android-sdk:2.0.9-test")*/
-    implementation("com.github.clearquotetech:cq-android-sdk:2.2.0")
+    implementation("com.github.clearquotetech:cq-android-sdk:2.2.1")
 
 
     //viewModel

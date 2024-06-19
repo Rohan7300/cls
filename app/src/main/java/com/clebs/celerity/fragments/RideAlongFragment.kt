@@ -190,11 +190,16 @@ class RideAlongFragment : Fragment() {
                            selectedRouteId = null
                            binding.SpinnerRouteType.setAdapter(null)
                            selectedLocId = null*/
-                    setSpinnerNew(binding.spinnerSelectDriver, sortedDriverNames, sortedDriverIds, "Select Driver")
-                }else{
+                    setSpinnerNew(
+                        binding.spinnerSelectDriver,
+                        sortedDriverNames,
+                        sortedDriverIds,
+                        "Select Driver"
+                    )
+                } else {
                     hideDialog()
                 }
-            }else{
+            } else {
                 hideDialog()
             }
         }
@@ -288,10 +293,13 @@ class RideAlongFragment : Fragment() {
             findNavController().clearBackStack(R.id.newCompleteTaskFragment)
         }
         binding.saveBT.setOnClickListener {
-            if (chkNull() == 1&&!binding.spinnerSelectDriver.text.isNullOrBlank()&&(selectedDriver == binding.spinnerSelectDriver.text.toString()))
+            if (chkNull() == 1 && !binding.spinnerSelectDriver.text.isNullOrBlank() && (selectedDriver == binding.spinnerSelectDriver.text.toString()))
                 rideAlongApi()
-        else
-            showToast("Please complete form correctly!!.",requireContext())
+            else {
+                if (selectedDriver != binding.spinnerSelectDriver.text.toString())
+                    showToast("Please complete form correctly!!.", requireContext())
+            }
+
         }
 
         binding.rbReTraining.setOnClickListener(::onRadioButtonClicked)
@@ -337,18 +345,18 @@ class RideAlongFragment : Fragment() {
                 rtNoParcelsbroughtback
             ).any { it == null }
         ) {
-            if(selectedDriverId == null)
-                showToast("Please select driver.",requireContext())
-            else if(selectedRouteId == null)
-                showToast("Please select route type",requireContext())
-            else if(selectedLocId == null)
-                showToast("Please select route location",requireContext())
-            else if(routeName.isNullOrBlank())
-                showToast("Please add route name",requireContext())
-            else if(retraining==null&&training==null)
-                showToast("Select trainee type",requireContext())
+            if (selectedDriverId == null)
+                showToast("Please select driver.", requireContext())
+            else if (selectedRouteId == null)
+                showToast("Please select route type", requireContext())
+            else if (selectedLocId == null)
+                showToast("Please select route location", requireContext())
+            else if (routeName.isNullOrBlank())
+                showToast("Please add route name", requireContext())
+            else if (retraining == null && training == null)
+                showToast("Select trainee type", requireContext())
             else
-                showToast("Please fill all the fields",requireContext())
+                showToast("Please fill all the fields", requireContext())
             return -1
         }
         return 1
@@ -365,6 +373,7 @@ class RideAlongFragment : Fragment() {
                     binding.edtRouteComment -> routeComment = value
                 }
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
     }
@@ -385,11 +394,11 @@ class RideAlongFragment : Fragment() {
                 itemIdMap[items[i]] = ids[i]
             }
         }
-/*        if (items.isEmpty() && ids.isEmpty()) {
-            itemsList.add(dummyItem)
-        } else {
-            itemsList.addAll(items) // Add items to the list
-        }*/
+        /*        if (items.isEmpty() && ids.isEmpty()) {
+                    itemsList.add(dummyItem)
+                } else {
+                    itemsList.addAll(items) // Add items to the list
+                }*/
 
         val adapter = ArrayAdapter(
             requireContext(),
