@@ -56,11 +56,13 @@ import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.ui.AddInspectionActivity2
 import com.clebs.celerity.ui.FaceScanActivity
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.currentUri
 import com.clebs.celerity.utils.DependencyProvider.osData
+import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.addLeadingZeroIfNeeded
 import com.clebs.celerity.utils.bitmapToBase64
@@ -122,6 +124,7 @@ class CompleteTaskFragment : Fragment() {
     var breakEndTime: String = ""
     var scannedvrn: String = ""
     private lateinit var loadingDialog: LoadingDialog
+    private var isNetworkActive: Boolean = true
     private var b1 = false
     private var b2 = false
     var breakTimeSent = false
@@ -135,6 +138,7 @@ class CompleteTaskFragment : Fragment() {
     val hideDialog: () -> Unit = {
         (activity as HomeActivity).hideDialog()
     }
+    lateinit var dialog: NoInternetDialog
     var inspectionOfflineImagesCHeck: Boolean? = null
     private var inspectionstarted: Boolean = false
 
@@ -159,6 +163,19 @@ class CompleteTaskFragment : Fragment() {
     ): View {
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentCompleteTaskBinding.inflate(inflater, container, false)
+        }
+        dialog= NoInternetDialog()
+        val networkManager = NetworkManager(requireContext())
+        networkManager.observe(requireActivity()) {
+            if (it) {
+                isNetworkActive = true
+                dialog.hideDialog()
+
+            } else {
+                isNetworkActive = false
+                dialog.showDialog(fragmentManager)
+                hideDialog()
+            }
         }
         val clickListener = View.OnClickListener {
             showAlert()

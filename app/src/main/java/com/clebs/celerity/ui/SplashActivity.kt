@@ -321,7 +321,11 @@ class SplashActivity : AppCompatActivity() {
 
                     } else if (errString.contains("Authentication cancelled")) {
                         BiometricDialog()
-                    } else {
+                    }
+                    else if (errString.contains("Authentication canceled by user")){
+                        BiometricDialog()
+                    }
+                    else {
                         next()
                     }
 
@@ -330,8 +334,9 @@ class SplashActivity : AppCompatActivity() {
                 override fun onAuthenticationSucceeded(
                     result: BiometricPrompt.AuthenticationResult
                 ) {
-                    deleteDialog.dismiss()
+
                     super.onAuthenticationSucceeded(result)
+                    deleteDialog.dismiss()
                     Toast.makeText(
                         applicationContext,
                         "Authentication succeeded!", Toast.LENGTH_SHORT
@@ -343,6 +348,9 @@ class SplashActivity : AppCompatActivity() {
 
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
+                    next()
+
+
                     Log.e(TAG, "onAuthenticationFailed: ")
 //                    Toast.makeText(
 //                        applicationContext, "Authentication failed",

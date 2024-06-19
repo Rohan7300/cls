@@ -622,6 +622,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                         showToast("Please Turn on the internet resources are downloading", this)
 
                     }
+                    else if (msg.equals("Unable to download setting updates, Please check internet")){
+                        showToast("Please Turn on the internet",this)
+                    }
 
                     Log.d("CQSDKXX", "Not isStarted" + msg)
                 }
@@ -709,6 +712,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             Pair(null to !prefs.isInspectionDoneToday(), binding.fullvehicleInspection),
             Pair(prefs.addBlueUri to prefs.addBlueRequired, binding.addBlueIV),
             Pair(prefs.oilLevelUri to prefs.oilLevelRequired, binding.oilLevelIV)
+
         )
 
         val drawable = ContextCompat.getDrawable(this, R.drawable.ic_yes2)

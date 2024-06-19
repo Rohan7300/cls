@@ -146,13 +146,13 @@ implementation("androidx.biometric:biometric:1.2.0-alpha05")
     implementation("ru.superjob:kotlin-permissions:1.0.3")
     implementation("org.jetbrains.anko:anko-commons:0.10.4")
 
-
+implementation("com.github.skydoves:balloon:1.6.5")
     implementation("com.github.tapadoo:alerter:7.2.4")
-    implementation("com.github.AppIntro:AppIntro:6.3.1")
     val room_version = "2.6.1"
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
+
 //    implementation("org.mozilla.geckoview:geckoview-nightly:100.0.20220308100756")
 
     kapt("androidx.room:room-compiler:2.6.1")
