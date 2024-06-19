@@ -8,26 +8,34 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentHomedemoBinding
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertDateFormat
-import com.github.mikephil.charting.animation.Easing
+import com.elconfidencial.bubbleshowcase.BubbleShowCase
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
+import com.skydoves.balloon.ArrowPositionRules
+import com.skydoves.balloon.Balloon
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
+
 import java.text.SimpleDateFormat
-import java.util.Arrays
 import java.util.Calendar
 import java.util.Locale
 
@@ -183,6 +191,13 @@ class HomedemoFragment : Fragment() {
         mbinding.pieChart.setEntryLabelTypeface(font)
         mbinding.pieChart.setEntryLabelTextSize(12f);
 
+        mbinding.fab1.setOnClickListener {
+      showtooltip(it,"Hey driver!.\uD83D\uDD90 \n This Area will show Total Average score until now.")
+        }
+        mbinding.fab2.setOnClickListener {
+          showtooltip(it,"Hey driver!.\uD83D\uDD90 \n This Area will show Total week score until now.")
+        }
+
 //        mbinding.viewfullschedule.setOnClickListener {
 //            if (isclicked) {
 ////                mbinding.vieww.visibility=View.VISIBLE
@@ -250,7 +265,7 @@ class HomedemoFragment : Fragment() {
         mbinding.btPrev.setOnClickListener {
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
-            mbinding.btPrevSecond.visibility=View.VISIBLE
+            mbinding.btPrevSecond.visibility = View.VISIBLE
             mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility = View.VISIBLE
             val weekprev = week - 3
@@ -270,11 +285,13 @@ class HomedemoFragment : Fragment() {
             viewModel.GetLastWeekSCore(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 3, year
             )
+
+
         }
         mbinding.btPrevSecond.setOnClickListener {
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.VISIBLE
-            mbinding.btPrevSecond.visibility=View.GONE
+            mbinding.btPrevSecond.visibility = View.GONE
             mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility = View.VISIBLE
             val weekprev = week - 4
@@ -301,7 +318,7 @@ class HomedemoFragment : Fragment() {
             mbinding.btThisWeek.visibility = View.GONE
 
             mbinding.btPrev.visibility = View.VISIBLE
-            mbinding.btPrevSecond.visibility=View.GONE
+            mbinding.btPrevSecond.visibility = View.GONE
             showDialog()
             val weekprev = week - 2
             val w = week - 3
@@ -349,8 +366,9 @@ class HomedemoFragment : Fragment() {
                 viewModel.GetLastWeekSCore(
                     Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 2, year
                 )
-                mbinding.btPrev.text = "Previous Week Data"
-                mbinding.btPrevSecond.text = "More previous Week Data"
+                mbinding.btPrev.text = "Previous Week"
+                mbinding.btPrevSecond.text = "Previous Week"
+
             }
         }
 
@@ -618,49 +636,41 @@ class HomedemoFragment : Fragment() {
                     mbinding.tvIsWorkingShowMonday.text = it.mondayLocation
                     mbinding.tvIsWorkingShowSat.text = it.saturdayLocation
 
-                    if (it.sundayLocation.equals("OFF")){
-                        mbinding.constsunday.alpha=0.4f
+                    if (it.sundayLocation.equals("OFF")) {
+                        mbinding.constsunday.alpha = 0.4f
+                    } else {
+                        mbinding.constsunday.alpha = 1f
                     }
-                    else{
-                        mbinding.constsunday.alpha=1f
+                    if (it.mondayLocation.equals("OFF")) {
+                        mbinding.constmonday.alpha = 0.4f
+                    } else {
+                        mbinding.constmonday.alpha = 1f
                     }
-                    if (it.mondayLocation.equals("OFF")){
-                        mbinding.constmonday.alpha=0.4f
+                    if (it.tuesdayLocation.equals("OFF")) {
+                        mbinding.consttuesday.alpha = 0.4f
+                    } else {
+                        mbinding.consttuesday.alpha = 1f
                     }
-                    else{
-                        mbinding.constmonday.alpha=1f
+                    if (it.wednesdayLocation.equals("OFF")) {
+                        mbinding.constwed.alpha = 0.4f
+                    } else {
+                        mbinding.constwed.alpha = 1f
                     }
-                    if (it.tuesdayLocation.equals("OFF")){
-                        mbinding.consttuesday.alpha=0.4f
+                    if (it.thursdayLocation.equals("OFF")) {
+                        mbinding.constthu.alpha = 0.4f
+                    } else {
+                        mbinding.constthu.alpha = 1f
                     }
-                    else{
-                        mbinding.consttuesday.alpha=1f
+                    if (it.fridayLocation.equals("OFF")) {
+                        mbinding.constfri.alpha = 0.4f
+                    } else {
+                        mbinding.constfri.alpha = 1f
                     }
-                    if (it.wednesdayLocation.equals("OFF")){
-                        mbinding.constwed.alpha=0.4f
+                    if (it.saturdayLocation.equals("OFF")) {
+                        mbinding.constsat.alpha = 0.4f
+                    } else {
+                        mbinding.constsat.alpha = 1f
                     }
-                    else{
-                        mbinding.constwed.alpha=1f
-                    }
-                    if (it.thursdayLocation.equals("OFF")){
-                        mbinding.constthu.alpha=0.4f
-                    }
-                    else{
-                        mbinding.constthu.alpha=1f
-                    }
-                    if (it.fridayLocation.equals("OFF")){
-                        mbinding.constfri.alpha=0.4f
-                    }
-                    else{
-                        mbinding.constfri.alpha=1f
-                    }
-                    if (it.saturdayLocation.equals("OFF")){
-                        mbinding.constsat.alpha=0.4f
-                    }
-                    else{
-                        mbinding.constsat.alpha=1f
-                    }
-
 
 
                 }
@@ -730,4 +740,28 @@ class HomedemoFragment : Fragment() {
             })
     }
 
+
+    fun showtooltip(view: View,text:String){
+
+        val balloon = Balloon.Builder(requireContext())
+            .setHeight(BalloonSizeSpec.WRAP)
+            .setWidth(BalloonSizeSpec.WRAP)
+            .setText(text)
+            .setTextGravity(Gravity.START)
+            .setTextColorResource(R.color.black)
+            .setTextSize(12f)
+            .setAutoDismissDuration(4000)
+            .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
+            .setArrowSize(15)
+            .setArrowColor(ContextCompat.getColor(requireContext(),R.color.very_light_orange))
+            .setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.very_light_orange))
+            .setArrowPosition(0.5f)
+            .setPadding(12)
+            .setCornerRadius(8f)
+            .setBackgroundColorResource(R.color.white)
+            .setBalloonAnimation(BalloonAnimation.ELASTIC)
+            .setLifecycleOwner(viewLifecycleOwner)
+            .build()
+        balloon.showAsDropDown(view, 20, 20)
+    }
 }

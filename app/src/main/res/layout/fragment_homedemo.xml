@@ -72,6 +72,24 @@
                             android:layout_marginEnd="2dp"
                             android:layout_weight="1">
 
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:id="@+id/fab1"
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentEnd="true"
+                                android:backgroundTint="@color/white"
+                                android:cropToPadding="true"
+                                android:padding="20dp"
+                                android:tint="@color/white"
+                                app:fabCustomSize="30dp"
+                                app:fabSize="mini"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:shapeAppearanceOverlay="@style/fab_3_rounded"
+                                app:srcCompat="@drawable/baseline_info_outline_24" />
+
                             <RelativeLayout
                                 android:id="@+id/rl"
                                 android:layout_width="match_parent"
@@ -126,6 +144,23 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
                             android:layout_weight="1">
+
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:id="@+id/fab2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentEnd="true"
+                                android:backgroundTint="@color/white"
+                                android:cropToPadding="true"
+                                android:padding="20dp"
+                                android:tint="@color/white"
+                                app:fabCustomSize="30dp"
+                                app:fabSize="mini"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:shapeAppearanceOverlay="@style/fab_3_rounded"
+                                app:srcCompat="@drawable/baseline_info_outline_24" />
 
                             <RelativeLayout
                                 android:id="@+id/rltwo"
@@ -475,10 +510,10 @@
                         </RelativeLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constsunday"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:id="@+id/constsunday"
                             android:background="@drawable/shape_expand_main"
 
                             android:padding="13dp">
@@ -508,10 +543,10 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constmonday"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-                            android:id="@+id/constmonday"
                             android:background="@drawable/shape_expand_main"
                             android:padding="13dp">
 
@@ -539,10 +574,10 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/consttuesday"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-                            android:id="@+id/consttuesday"
                             android:background="@drawable/shape_expand_main"
                             android:padding="13dp">
 
@@ -570,10 +605,10 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constwed"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-                            android:id="@+id/constwed"
                             android:background="@drawable/shape_expand_main"
                             android:padding="13dp">
 
@@ -601,10 +636,10 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constthu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-                            android:id="@+id/constthu"
                             android:background="@drawable/shape_expand_main"
                             android:padding="13dp">
 
@@ -632,10 +667,10 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constfri"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-                            android:id="@+id/constfri"
                             android:background="@drawable/shape_expand_main"
 
                             android:padding="13dp">
@@ -663,10 +698,10 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constsat"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-                            android:id="@+id/constsat"
                             android:background="@drawable/shape_expand_main"
                             android:padding="13dp">
 
@@ -705,11 +740,11 @@
                             android:id="@+id/collapseArrow"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:padding="16dp"
-                            android:layout_marginBottom="10dp"
                             android:layout_marginVertical="5dp"
-                            android:gravity="right">
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="right"
+                            android:padding="16dp">
 
                             <ImageView
                                 android:layout_width="20dp"
@@ -747,12 +782,13 @@
                             android:background="@color/medium_orange"
                             android:fontFamily="@font/poppins_semibold"
                             android:gravity="center"
-                            android:paddingVertical="6dp"
                             android:paddingHorizontal="4dp"
-                            android:text="Previous Week data"
+                            android:paddingVertical="6dp"
+                            android:text="Previous Week"
                             android:textColor="@color/white"
                             android:textSize="11sp"
                             android:visibility="visible" />
+
                         <TextView
                             android:id="@+id/bt_prev_second"
                             android:layout_width="wrap_content"
@@ -760,9 +796,9 @@
                             android:background="@color/medium_orange"
                             android:fontFamily="@font/poppins_semibold"
                             android:gravity="center"
-                            android:paddingVertical="6dp"
                             android:paddingHorizontal="4dp"
-                            android:text="Previous Week data"
+                            android:paddingVertical="6dp"
+                            android:text="Previous Week"
                             android:textColor="@color/white"
                             android:textSize="11sp"
                             android:visibility="gone" />
@@ -776,10 +812,10 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="16dp"
-                        android:layout_alignParentEnd="true"
                         android:layout_marginBottom="10dp"
                         app:cardCornerRadius="8dp">
 
