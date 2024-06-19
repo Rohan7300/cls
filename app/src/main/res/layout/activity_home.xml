@@ -14,7 +14,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-
             android:background="@color/very_light_orange"
             android:elevation="30dp"
             android:visibility="visible"
@@ -37,7 +36,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:src="@drawable/status_list"
+                android:src="@drawable/user_profile_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

@@ -74,21 +74,23 @@
 
                             <com.google.android.material.floatingactionbutton.FloatingActionButton
                                 android:id="@+id/fab1"
-
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentTop="true"
                                 android:layout_alignParentEnd="true"
+                                android:layout_marginBottom="38dp"
                                 android:backgroundTint="@color/white"
                                 android:cropToPadding="true"
                                 android:padding="20dp"
+                                app:maxImageSize="20dp"
                                 android:tint="@color/white"
                                 app:fabCustomSize="30dp"
                                 app:fabSize="mini"
+                                app:layout_constraintBottom_toBottomOf="@+id/rl"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:shapeAppearanceOverlay="@style/fab_3_rounded"
-                                app:srcCompat="@drawable/baseline_info_outline_24" />
+                                app:srcCompat="@drawable/ic_info" />
 
                             <RelativeLayout
                                 android:id="@+id/rl"
@@ -118,6 +120,7 @@
                                     android:layout_marginTop="8dp"
                                     android:elevation="30dp"
                                     android:indeterminate="false"
+                                    android:progressBackgroundTint="#A0FFE890"
                                     android:progressDrawable="@drawable/pb_style"
                                     android:progressTint="@color/peek_orange" />
 
@@ -154,13 +157,16 @@
                                 android:backgroundTint="@color/white"
                                 android:cropToPadding="true"
                                 android:padding="20dp"
+                                android:layout_marginBottom="38dp"
                                 android:tint="@color/white"
                                 app:fabCustomSize="30dp"
                                 app:fabSize="mini"
+                                app:maxImageSize="20dp"
+                                app:layout_constraintBottom_toBottomOf="@+id/rltwo"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:shapeAppearanceOverlay="@style/fab_3_rounded"
-                                app:srcCompat="@drawable/baseline_info_outline_24" />
+                                app:srcCompat="@drawable/ic_info" />
 
                             <RelativeLayout
                                 android:id="@+id/rltwo"
@@ -190,8 +196,9 @@
                                     android:layout_marginTop="8dp"
                                     android:elevation="30dp"
                                     android:indeterminate="false"
-                                    android:progressDrawable="@drawable/pb_style"
-                                    android:progressTint="@color/peek_orange" />
+                                    android:progressBackgroundTint="#D9FDFB"
+                                    android:progressDrawable="@drawable/pb_style_two"
+                                    android:progressTint="@color/blue_hex" />
 
                             </RelativeLayout>
 

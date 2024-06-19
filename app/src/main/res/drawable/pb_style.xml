@@ -3,8 +3,7 @@
     <item android:id="@android:id/background">
         <shape>
             <corners android:radius="5dip" />
-            <stroke android:color="@color/text_color"
-                android:width="0.3dp"/>
+
          <solid android:color="@color/white"/>
         </shape>
     </item>
@@ -17,7 +16,7 @@
                     android:startColor="#80ffd300"
                     android:centerColor="#80ffb600"
                     android:centerY="0.75"
-                    android:endColor="#a0ffcb00"
+                    android:endColor="#A0FFE890"
                     android:angle="90"
                     />
             </shape>
