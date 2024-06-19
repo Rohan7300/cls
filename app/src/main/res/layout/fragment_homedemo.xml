@@ -84,13 +84,13 @@
                                 android:padding="20dp"
                                 app:maxImageSize="20dp"
                                 android:tint="@color/white"
-                                app:fabCustomSize="30dp"
+                                app:fabCustomSize="20dp"
                                 app:fabSize="mini"
                                 app:layout_constraintBottom_toBottomOf="@+id/rl"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:shapeAppearanceOverlay="@style/fab_3_rounded"
-                                app:srcCompat="@drawable/ic_info" />
+                                app:srcCompat="@drawable/baseline_info_outline_24" />
 
                             <RelativeLayout
                                 android:id="@+id/rl"
@@ -159,14 +159,14 @@
                                 android:padding="20dp"
                                 android:layout_marginBottom="38dp"
                                 android:tint="@color/white"
-                                app:fabCustomSize="30dp"
+                                app:fabCustomSize="20dp"
                                 app:fabSize="mini"
                                 app:maxImageSize="20dp"
                                 app:layout_constraintBottom_toBottomOf="@+id/rltwo"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:shapeAppearanceOverlay="@style/fab_3_rounded"
-                                app:srcCompat="@drawable/ic_info" />
+                                app:srcCompat="@drawable/baseline_info_outline_24" />
 
                             <RelativeLayout
                                 android:id="@+id/rltwo"
