@@ -4,7 +4,7 @@
         <shape>
             <corners android:radius="5dip" />
 
-         <solid android:color="@color/white"/>
+            <solid android:color="@color/white"/>
         </shape>
     </item>
 
@@ -13,10 +13,10 @@
             <shape>
                 <corners android:radius="5dip" />
                 <gradient
-                    android:startColor="#80ffd300"
-                    android:centerColor="#80ffb600"
+                    android:startColor="#77dfd8"
+                    android:centerColor="@color/next_working_day_blue"
                     android:centerY="0.75"
-                    android:endColor="#A0FFE890"
+                    android:endColor="#A3FBF6"
                     android:angle="90"
                     />
             </shape>

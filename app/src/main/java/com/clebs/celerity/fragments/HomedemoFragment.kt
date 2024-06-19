@@ -192,10 +192,10 @@ class HomedemoFragment : Fragment() {
         mbinding.pieChart.setEntryLabelTextSize(12f);
 
         mbinding.fab1.setOnClickListener {
-      showtooltip(it,"Hey driver!.\uD83D\uDD90 \n This Area will show Total Average score until now.")
+      showtooltip(it,"The Average total is the sum of all your scores divided by the number of scorecards you have received.")
         }
         mbinding.fab2.setOnClickListener {
-          showtooltip(it,"Hey driver!.\uD83D\uDD90 \n This Area will show Total week score until now.")
+          showtooltip(it,"This is the score you achieved on the weekly scorecard for the week displayed.")
         }
 
 //        mbinding.viewfullschedule.setOnClickListener {
@@ -274,7 +274,7 @@ class HomedemoFragment : Fragment() {
             mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
             showDialog()
             val w = week - 3
-            mbinding.pieChart.setCenterText("Cash flow week :" + w);
+            mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"Income :("+"$"+totalearning+")");
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 1
             )
@@ -300,7 +300,7 @@ class HomedemoFragment : Fragment() {
             mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
             showDialog()
             val w = week - 4
-            mbinding.pieChart.setCenterText("Cash flow week :" + w);
+            mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"Income :("+"$"+totalearning+")");
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 2
             )
@@ -322,7 +322,7 @@ class HomedemoFragment : Fragment() {
             showDialog()
             val weekprev = week - 2
             val w = week - 3
-            mbinding.pieChart.setCenterText("Cash flow week :" + weekprev);
+            mbinding.pieChart.setCenterText("Cash flow \n week :" + weekprev+"\n"+"Income :("+"$"+totalearning+")");
             mbinding.txtLastWeek.text = "Week : " + weekprev
             mbinding.viewfullschedule.text = "Full schedule for week " + week
             viewModel.GetViewFullScheduleInfo(
@@ -353,7 +353,7 @@ class HomedemoFragment : Fragment() {
                 val weekprevsecond = week - 4
                 mbinding.txtLastWeek.text = "Week : $weekprev"
                 mbinding.viewfullschedule.text = "Full schedule for week $week"
-                mbinding.pieChart.setCenterText("Cash flow week :" + weekprev);
+
 
                 viewModel.GetcashFlowWeek(
                     Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 2
@@ -428,11 +428,15 @@ class HomedemoFragment : Fragment() {
                     thirdparty = it.ThirdPartyDeduction.toDouble().toString()
 
                     avprofit = (it.totalEarning / average).toFloat()
+
+
+                    val w=week-2
+                    mbinding.pieChart.setCenterText("Cash flow \n week :" + w +"\n"+"Income :("+"$"+totalearning+")");
                     avdeductions = if (it.totalDeduction > 0)
                         it.totalDeduction / average.toFloat()
                     else
                         0f
-                    Log.e("djhfdfhhdhjfdjearning", "Observers: " + it.totalEarning)
+                    Log.e("djhfdfhhdhjfdjearning", "Observers: " + avprofit)
                     thirdpartydeductions = if (it.ThirdPartyDeduction > 0) {
                         it.ThirdPartyDeduction.toInt() / average.toFloat()
                     } else {
@@ -753,9 +757,9 @@ class HomedemoFragment : Fragment() {
             .setTextSize(12f)
             .setAutoDismissDuration(4000)
             .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
-            .setArrowSize(15)
+            .setArrowSize(10)
             .setArrowColor(ContextCompat.getColor(requireContext(),R.color.medium_orange))
-            .setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.medium_orange))
+            .setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.white))
             .setArrowPosition(0.5f)
             .setPadding(12)
             .setCornerRadius(8f)
