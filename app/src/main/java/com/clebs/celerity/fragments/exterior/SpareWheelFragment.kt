@@ -254,7 +254,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
                         if(isDefected){
                             startUploadWithWorkManager(2,prefs,requireContext(),VdhLmId,VdhVmId)
                         }
-
+                        (activity as HomeActivity).
                         viewModel.SaveVehDefectSheet(request)
                     }
                 } else {

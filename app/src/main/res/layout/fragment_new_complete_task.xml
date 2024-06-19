@@ -227,7 +227,7 @@
                         android:layout_height="25dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
-                        android:src="@drawable/finalclockout" />
+                        android:src="@drawable/timeinnew" />
 
                     <ImageButton
                         android:id="@+id/down_ivs"
@@ -607,7 +607,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
                         android:backgroundTint="@color/white"
-                        android:src="@drawable/finalclockout"
+                        android:src="@drawable/timeoutnew"
                         android:visibility="visible" />
 
                     <TextView

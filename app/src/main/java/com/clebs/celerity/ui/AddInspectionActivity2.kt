@@ -129,7 +129,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         val todayDate = dateFormat.format(Date())
-        var currentDateTime = getCurrentDateTime()
+        val currentDateTime = getCurrentDateTime()
 
         val osRepo = offlineSyncRepo(this)
         oSyncViewModel = ViewModelProvider(
@@ -273,7 +273,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             startActivity(intent)
         }
         binding.tvNext.setOnClickListener {
-            generateInspectionID()
             onSaveClick()
 
         }
@@ -324,7 +323,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     osData.isFrontImageRequired = false
                     if (it.IsAdBlueRequired == true) {
                         if (it.DaVehicleAddBlueImage != null) {
-                            generateInspectionID()
                             allImagesUploaded = true
                             if (prefs.isInspectionDoneToday()) {
                                 onSaveClick()
@@ -334,11 +332,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                         }
                         prefs.addBlueRequired = it.DaVehicleAddBlueImage == null
                     } else {
-                        generateInspectionID()
                         allImagesUploaded = true
                         if (prefs.isInspectionDoneToday()) {
                             onSaveClick()
-
                         }
                     }
                 } else {
@@ -447,20 +443,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         startActivity(intent)
     }
 
-    private fun generateInspectionID() {
-        val currentDate =
-            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
-                Date()
-            )
 
-        val currentLocation = Prefs.getInstance(App.instance).currLocationId
-        val workingLocation = Prefs.getInstance(App.instance).workLocationId
-        val locationID: Int = if (workingLocation != 0) {
-            workingLocation
-        } else {
-            currentLocation
-        }
-    }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
@@ -509,7 +492,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             Log.d("hdhsdshdsdjshhsds", "200 $message")
             prefs.saveBoolean("Inspection", true)
             prefs.Isfirst = false
-            generateInspectionID()
             prefs.updateInspectionStatus(true)
             SaveVehicleInspection(viewModel)
             uploadStatus()

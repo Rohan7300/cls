@@ -520,8 +520,8 @@ class NewCompleteTaskFragment : Fragment() {
                 }
 
                 if (it.ClockedOutTime != null) {
-                    val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.finalclockout)
-                    drawable?.setTint(Color.parseColor("#3F9842"))
+                    val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.timedout)
+                    //drawable?.setTint(Color.parseColor("#3F9842"))
                     mbinding.clockOutMark.setImageDrawable(drawable)
                     //mbinding.clockOutMark.visibility = View.GONE
                     mbinding.rlcomtwoClockOut.isEnabled = false
