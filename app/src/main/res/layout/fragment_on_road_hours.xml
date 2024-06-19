@@ -188,7 +188,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="Select route type"
+                            android:hint="Select Route Type"
                             android:textColorHint="@color/hintColor">
 
                             <AutoCompleteTextView
@@ -282,7 +282,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="Number of parcels delivered">
+                            android:hint="Number of Parcels Delivered">
 
                             <EditText
                                 android:id="@+id/edt_parcels"
@@ -401,7 +401,7 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="Total mileage"
+                            android:hint="Total Mileage"
                             app:expandedHintEnabled="false"
                             tools:layout_editor_absoluteX="12dp"
                             tools:layout_editor_absoluteY="12dp">
@@ -453,7 +453,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
 
-                            android:hint="Route comment">
+                            android:hint="Route Comment">
 
                             <EditText
                                 android:id="@+id/edt_route_comment"

@@ -617,22 +617,23 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     startonetime = prefs.Isfirst
                     if (msg.equals("Online quote can not be created without internet")) {
                         showToast("Please Turn on the internet", this)
-
+                        Log.d("CQSDKXX", "Not isStarted1  " + msg)
                     } else if (msg.equals("Sufficient data not available to create an offline quote")) {
                         showToast("Please Turn on the internet resources are downloading", this)
-
+                        Log.d("CQSDKXX", "Not isStarted2  " + msg)
                     }
                     else if (msg.equals("Unable to download setting updates, Please check internet")){
                         showToast("Please Turn on the internet",this)
+                        Log.d("CQSDKXX", "Not isStarted3  " + msg)
                     }
 
-                    Log.d("CQSDKXX", "Not isStarted" + msg)
+                    Log.d("CQSDKXX", "Not isStarted4  " + msg)
                 }
                 if (msg == "Success") {
-                    Log.d("CQSDKXX", "Success" + msg)
+                    Log.d("CQSDKXX", "Success " + msg)
                 } else {
 
-                    Log.d("CQSDKXX", "Not Success" + msg)
+                    Log.d("CQSDKXX", "Not Success " + msg)
                 }
                 if (!isStarted) {
                     Log.e("startedinspection", "onCreateView: $msg$isStarted")

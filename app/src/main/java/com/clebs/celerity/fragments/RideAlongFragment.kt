@@ -293,13 +293,8 @@ class RideAlongFragment : Fragment() {
             findNavController().clearBackStack(R.id.newCompleteTaskFragment)
         }
         binding.saveBT.setOnClickListener {
-            if (chkNull() == 1 && !binding.spinnerSelectDriver.text.isNullOrBlank() && (selectedDriver == binding.spinnerSelectDriver.text.toString()))
+            if (chkNull() == 1)
                 rideAlongApi()
-            else {
-                if (selectedDriver != binding.spinnerSelectDriver.text.toString())
-                    showToast("Please complete form correctly!!.", requireContext())
-            }
-
         }
 
         binding.rbReTraining.setOnClickListener(::onRadioButtonClicked)
@@ -343,20 +338,25 @@ class RideAlongFragment : Fragment() {
                 rtFinishMileage,
                 rtNoOfParcelsDelivered,
                 rtNoParcelsbroughtback
-            ).any { it == null }
+            ).any { it == null } || binding.spinnerSelectDriver.text.isNullOrBlank() || (selectedDriver != binding.spinnerSelectDriver.text.toString())
         ) {
-            if (selectedDriverId == null)
-                showToast("Please select driver.", requireContext())
+            var msg = ""
+            if (selectedDriverId == null || binding.spinnerSelectDriver.text.isNullOrBlank())
+                msg = "Please select driver."
             else if (selectedRouteId == null)
-                showToast("Please select route type", requireContext())
+                msg = "Please select route type"
             else if (selectedLocId == null)
-                showToast("Please select route location", requireContext())
+                msg = "Please select route location"
             else if (routeName.isNullOrBlank())
-                showToast("Please add route name", requireContext())
+                msg = "Please add route name"
             else if (retraining == null && training == null)
-                showToast("Select trainee type", requireContext())
+                msg = "Select trainee type"
+            else if (selectedDriver != binding.spinnerSelectDriver.text.toString())
+                msg = "Please fill the driver name correctly"
             else
-                showToast("Please fill all the fields", requireContext())
+                msg = "Please fill all the fields"
+
+            showToast(msg, requireContext())
             return -1
         }
         return 1
