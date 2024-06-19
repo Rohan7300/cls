@@ -744,6 +744,7 @@ class HomedemoFragment : Fragment() {
     fun showtooltip(view: View,text:String){
 
         val balloon = Balloon.Builder(requireContext())
+            .setWidthRatio(0.5f)
             .setHeight(BalloonSizeSpec.WRAP)
             .setWidth(BalloonSizeSpec.WRAP)
             .setText(text)
@@ -753,8 +754,8 @@ class HomedemoFragment : Fragment() {
             .setAutoDismissDuration(4000)
             .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
             .setArrowSize(15)
-            .setArrowColor(ContextCompat.getColor(requireContext(),R.color.very_light_orange))
-            .setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.very_light_orange))
+            .setArrowColor(ContextCompat.getColor(requireContext(),R.color.medium_orange))
+            .setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.medium_orange))
             .setArrowPosition(0.5f)
             .setPadding(12)
             .setCornerRadius(8f)
