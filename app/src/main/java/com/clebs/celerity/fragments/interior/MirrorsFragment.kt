@@ -25,8 +25,9 @@ class MirrorsFragment : BaseInteriorFragment() {
         loadingDialog = (activity as HomeActivity).loadingDialog
         loadingDialog.dismiss()
         clickListeners()
-        setDefault(mBinding.mirrorsScreenIV,mBinding.edtDefect)
+        setDefault(mBinding.mirrorsScreenIV, mBinding.edtDefect)
     }
+
     override fun clickListeners() {
         mBinding.run {
             edtMil.setOnClickListener {
@@ -39,7 +40,7 @@ class MirrorsFragment : BaseInteriorFragment() {
                     mBinding.imageRadio
                 )
             }
-                        imageRadio.setOnClickListener {
+            imageRadio.setOnClickListener {
                 editMil1Visibilty(
                     mBinding.tvNext,
                     mBinding.rlUploadDefect,
@@ -51,14 +52,14 @@ class MirrorsFragment : BaseInteriorFragment() {
             }
 
             edtMilTwo.setOnClickListener {
-             /*                editMil2Visibilty(
-                    mBinding.tvNext,
-                    mBinding.rlUploadDefect,
-                    mBinding.edtMil,
-                    mBinding.edtMilTwo,
-                    mBinding.imageRadioTwo,
-                    mBinding.imageRadio
-                )*/
+                /*                editMil2Visibilty(
+                       mBinding.tvNext,
+                       mBinding.rlUploadDefect,
+                       mBinding.edtMil,
+                       mBinding.edtMilTwo,
+                       mBinding.imageRadioTwo,
+                       mBinding.imageRadio
+                   )*/
                 editMil2VisibilityNew(
                     mBinding.rlUploadDefect,
                     mBinding.edtMil,
@@ -87,7 +88,7 @@ class MirrorsFragment : BaseInteriorFragment() {
                 pictureDialogBase64(mirrorsScreenIV)
             }
             edtDefect.doAfterTextChanged {
-                doAfterTextChanged(mBinding.tvNext,mBinding.edtDefect)
+                doAfterTextChanged(mBinding.tvNext, mBinding.edtDefect)
             }
             tvNext.setOnClickListener {
                 saveNnext()
@@ -97,11 +98,11 @@ class MirrorsFragment : BaseInteriorFragment() {
 
     }
 
-    fun setDefault(defaultIv: ImageView, edtDefect: EditText){
+    fun setDefault(defaultIv: ImageView, edtDefect: EditText) {
         imageViewModel.images.value.let {
-            if(it!=null){
+            if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.inMirrors.toString(),requireContext())
+                setImageView(defaultIv, it.inMirrors.toString(), requireContext())
                 if (it.dfNameMirrors!!.isNotEmpty() && it.dfNameMirrors != "f") {
                     edtDefect.setText(it.dfNameMirrors.toString())
                 }
@@ -110,16 +111,16 @@ class MirrorsFragment : BaseInteriorFragment() {
     }
 
     override fun saveNnext() {
-        if(defectView) {
+        if (defectView) {
             if (base64 != null) {
                 imageEntity.inMirrors = base64
                 imageViewModel.insertImage(imageEntity)
             }
-            if(defectName!!.toString().isNotEmpty()){
+            if (defectName!!.toString().isNotEmpty()) {
                 imageEntity.dfNameMirrors = defectName!!.toString()
                 imageViewModel.insertDefectName(imageEntity)
             }
-        }else if(functionalView){
+        } else if (functionalView) {
             imageEntity.inMirrors = "empty"
             imageViewModel.insertImage(imageEntity)
             imageEntity.dfNameMirrors = "f"
@@ -138,7 +139,6 @@ class MirrorsFragment : BaseInteriorFragment() {
             FragmentMirrorsBinding.inflate(inflater, container, false)
         return mBinding.root
     }
-
 
 
 }

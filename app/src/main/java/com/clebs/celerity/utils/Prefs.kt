@@ -622,7 +622,7 @@ class Prefs(context: Context) {
     }
 
     var tokenExpiredOn: String
-        get() = sharedPreferences.getString("TokenExpiredOn", "") ?: ""
+        get() = sharedPreferences.getString("TokenExpiredOn", "2024-06-19T06:49:38Z") ?: "2024-06-19T06:49:38Z"
         set(value) = sharedPreferences.edit().putString("TokenExpiredOn", value).apply()
 
 

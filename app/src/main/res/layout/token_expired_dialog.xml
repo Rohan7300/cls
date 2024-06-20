@@ -17,8 +17,8 @@
 
 
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_gravity="center"
             android:layout_marginBottom="16dp"
             android:src="@drawable/timeexpired" />
@@ -33,7 +33,7 @@
             android:fontFamily="@font/poppins_bold"
             android:text="Session Expired"
             android:textColor="@color/red"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,13 +43,13 @@
             android:fontFamily="@font/poppins_bold"
             android:text="Your session has expired. Please log in again."
             android:textColor="@color/gray"
-            android:textSize="20sp" />
+            android:textSize="13sp" />
         <androidx.cardview.widget.CardView
             android:id="@+id/logoutbtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:backgroundTint="#FBA27A"
+            android:backgroundTint="@color/medium_orange"
             android:layout_marginTop="20dp"
             app:cardCornerRadius="20dp" >
 
