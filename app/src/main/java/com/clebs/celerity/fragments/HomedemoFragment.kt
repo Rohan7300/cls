@@ -293,8 +293,23 @@ class HomedemoFragment : Fragment() {
 //                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
 //            )
 
-            mbinding.pieChart.setCenterText( "Cash flow \n week :"+w+"\n"+ "£"+totalearning)
+            val baseText = "Cash flow \n week :" + w+"\n"+" £"+totalearning
 
+            val lastWordStart =
+                baseText.lastIndexOf(' ') + 1 // Start index of the last word
+
+            val lastWord = baseText.substring(lastWordStart) // The last word
+
+            val spannableString = SpannableString(baseText)
+
+            spannableString.setSpan(
+                RelativeSizeSpan(1.5f),  // Change this value to make the text size larger
+                lastWordStart,
+                baseText.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            mbinding.pieChart.centerText = spannableString
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 1
             )
@@ -322,7 +337,24 @@ class HomedemoFragment : Fragment() {
             mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
             showDialog()
             val w = week - 4
-            mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
+      //      mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
+            val baseText = "Cash flow \n week :" + w+"\n"+" £"+totalearning
+
+            val lastWordStart =
+                baseText.lastIndexOf(' ') + 1 // Start index of the last word
+
+            val lastWord = baseText.substring(lastWordStart) // The last word
+
+            val spannableString = SpannableString(baseText)
+
+            spannableString.setSpan(
+                RelativeSizeSpan(1.5f),  // Change this value to make the text size larger
+                lastWordStart,
+                baseText.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            mbinding.pieChart.centerText = spannableString
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 2
             )
@@ -350,7 +382,23 @@ class HomedemoFragment : Fragment() {
             mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
             showDialog()
             val w = week - 3
-            mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
+            val baseText = "Cash flow \n week :" + w+"\n"+" £"+totalearning
+
+            val lastWordStart =
+                baseText.lastIndexOf(' ') + 1 // Start index of the last word
+
+            val lastWord = baseText.substring(lastWordStart) // The last word
+
+            val spannableString = SpannableString(baseText)
+
+            spannableString.setSpan(
+                RelativeSizeSpan(1.5f),  // Change this value to make the text size larger
+                lastWordStart,
+                baseText.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            mbinding.pieChart.centerText = spannableString
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 1
             )
@@ -374,7 +422,23 @@ class HomedemoFragment : Fragment() {
             showDialog()
             val weekprev = week - 2
             val w = week - 3
-            mbinding.pieChart.setCenterText("Cash flow \n week :" + weekprev+"\n"+"£"+totalearning);
+            val baseText = "Cash flow \n week :" + w+"\n"+" £"+totalearning
+
+            val lastWordStart =
+                baseText.lastIndexOf(' ') + 1 // Start index of the last word
+
+            val lastWord = baseText.substring(lastWordStart) // The last word
+
+            val spannableString = SpannableString(baseText)
+
+            spannableString.setSpan(
+                RelativeSizeSpan(1.5f),  // Change this value to make the text size larger
+                lastWordStart,
+                baseText.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            mbinding.pieChart.centerText = spannableString
             mbinding.txtLastWeek.text = "Week : " + weekprev
             mbinding.viewfullschedule.text = "Full schedule for week " + week
             viewModel.GetViewFullScheduleInfo(
@@ -483,7 +547,23 @@ class HomedemoFragment : Fragment() {
 
 
                     val w=week-2
-                    mbinding.pieChart.setCenterText("Cash flow \n week :" + w +"\n"+"£"+totalearning);
+                    val baseText = "Cash flow \n week :" + w+"\n"+" £"+totalearning
+
+                    val lastWordStart =
+                        baseText.lastIndexOf(' ') + 1 // Start index of the last word
+
+                    val lastWord = baseText.substring(lastWordStart) // The last word
+
+                    val spannableString = SpannableString(baseText)
+
+                    spannableString.setSpan(
+                        RelativeSizeSpan(1.5f),  // Change this value to make the text size larger
+                        lastWordStart,
+                        baseText.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+
+                    mbinding.pieChart.centerText = spannableString
                     avdeductions = if (it.totalDeduction > 0)
                         it.totalDeduction / average.toFloat()
                     else
