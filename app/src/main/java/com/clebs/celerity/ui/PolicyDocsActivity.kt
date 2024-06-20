@@ -46,6 +46,7 @@ import com.clebs.celerity.utils.NotificationBroadcastReciever
 import com.clebs.celerity.utils.OpenMode
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
+import com.clebs.celerity.utils.checkTokenExpirationAndLogout
 import com.clebs.celerity.utils.showToast
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -134,7 +135,7 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
         viewModel.GetDriverOtherCompaniesPolicy(clebuserId)
         observers()
         clickListeners()
-
+        checkTokenExpirationAndLogout(this, Prefs.getInstance(this))
         mbinding.amazonHeader.setOnClickListener {
             if (isImage1) {
                 mbinding.views1.visibility = View.GONE

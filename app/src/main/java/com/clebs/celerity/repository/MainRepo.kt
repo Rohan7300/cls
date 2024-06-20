@@ -1441,7 +1441,7 @@ class MainRepo(private val ApiService: ApiService) {
                 }
 
                 DBImages.WINDOW_GLASS -> {
-                    ApiService.UploadVehicleWindscreenDefect(
+                    ApiService.UploadVehicleWindowsOrGlassVisibilityDefect(
                         userID,
                         vmId,
                         lmid,

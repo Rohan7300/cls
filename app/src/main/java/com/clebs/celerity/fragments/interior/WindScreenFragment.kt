@@ -36,6 +36,7 @@ import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.showToast
+import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.elconfidencial.bubbleshowcase.BubbleShowCase
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
@@ -223,6 +224,7 @@ class WindScreenFragment : Fragment() {
                 if (isupload) {
                     if (!base64.isNullOrEmpty()) {
                         imageEntity.inWindScreen = base64
+
                         imageViewModel.insertImage(imageEntity)
                     }
                     if (defectName!!.toString().isNotEmpty()) {

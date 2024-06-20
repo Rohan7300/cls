@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.clebs.celerity.utils.dateToday
 
 @Dao
 interface ImageDao {
@@ -17,5 +18,16 @@ interface ImageDao {
     suspend fun insertUserName(name: ImageEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertVal(image: ImageEntity)
+    suspend fun insertVal(image: ImageEntity){
+        val dawDate = dateToday()
+        deleteByDawDate(dawDate)
+        insert(image)
+    }
+
+    @Query("DELETE FROM Images WHERE DaWDate = :dawDate")
+    suspend fun deleteByDawDate(dawDate: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(image: ImageEntity)
+
 }

@@ -3,6 +3,10 @@ package com.clebs.celerity.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.clebs.celerity.utils.dateToday
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Entity(
     tableName = "Images"
@@ -11,6 +15,9 @@ data class ImageEntity(
 
     @PrimaryKey(autoGenerate = true)
     var localId: Int = 0,
+
+    @ColumnInfo("DaWDate")
+    var dawDate: String = dateToday(),
 
     @ColumnInfo(defaultValue = "empty")
     var vehicleDashboard: String? = "empty",
@@ -54,8 +61,7 @@ data class ImageEntity(
     var inSteeringControl: String? = "empty",
     @ColumnInfo(defaultValue = "empty")
     var inBrakedEbsAbs: String? = "empty",
-    @ColumnInfo("DaWDate")
-    var dawDate: String? = null,
+
 
 
     //Internal defect Names

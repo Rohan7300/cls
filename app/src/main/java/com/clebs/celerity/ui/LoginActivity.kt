@@ -116,6 +116,7 @@ class LoginActivity : AppCompatActivity() {
                     if (it.message.equals("Success")) {
                         if (!it.UserRole.isNullOrBlank()) {
                             if (it.UserRole.equals("C")) {
+                                Prefs.getInstance(this).tokenExpiredOn = it.tokenExpiredOn
                                 FirebaseMessaging.getInstance().token.addOnCompleteListener(
                                     OnCompleteListener { task ->
                                         if (!task.isSuccessful) {

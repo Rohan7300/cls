@@ -59,6 +59,7 @@ import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
 import com.clebs.celerity.utils.SaveVehicleInspection
 import com.clebs.celerity.utils.checkIfInspectionFailed
+import com.clebs.celerity.utils.checkTokenExpirationAndLogout
 import com.clebs.celerity.utils.dailyRota
 import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.deductions
@@ -96,7 +97,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private lateinit var navController: NavController
     lateinit var viewModel: MainViewModel
     private lateinit var navGraph: NavGraph
-
+    lateinit var mainRepo: MainRepo
     private var completeTaskScreen: Boolean = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
     lateinit var fragmentManager: FragmentManager
@@ -160,6 +161,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         prefs = Prefs.getInstance(this)
+        checkTokenExpirationAndLogout(this,prefs)
         loadingDialog = LoadingDialog(this)
         sdkkey = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -230,7 +232,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         try {
             val apiService = RetrofitService.getInstance().create(ApiService::class.java)
-            val mainRepo = MainRepo(apiService)
+            mainRepo = MainRepo(apiService)
             val imagesRepo =
                 ImagesRepo(ImageDatabase.invoke(this), Prefs.getInstance(applicationContext))
 
@@ -730,7 +732,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
             val intent = Intent(this, LoginActivity::class.java)
             intent.putExtra("logout", "0")
-            intent.putExtra("downloadCQ",Prefs.getInstance(App.instance).isFirst)
+            intent.putExtra("downloadCQ", Prefs.getInstance(App.instance).isFirst)
             Prefs.getInstance(applicationContext).clearPreferences()
             finish()
             startActivity(intent)
@@ -888,6 +890,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     }
 
+
     fun showAlertChangePasword90dys() {
         val factory = LayoutInflater.from(this)
         val view: View = factory.inflate(R.layout.change_passwordninetydays, null)
@@ -966,6 +969,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         startActivity(intent)
     }
 
+
+
     override fun onResume() {
         super.onResume()
         oSyncViewModel.getData()
@@ -973,8 +978,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             navController.navigate(R.id.newCompleteTaskFragment)
         }
     }
-
-
 
 
 }

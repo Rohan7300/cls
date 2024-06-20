@@ -621,4 +621,9 @@ class Prefs(context: Context) {
         }
     }
 
+    var tokenExpiredOn: String
+        get() = sharedPreferences.getString("TokenExpiredOn", "") ?: ""
+        set(value) = sharedPreferences.edit().putString("TokenExpiredOn", value).apply()
+
+
 }

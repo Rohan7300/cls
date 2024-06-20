@@ -211,12 +211,14 @@ class ImageUploadWorker(
                         lmId = Prefs.getInstance(appContext).getLocationID().toInt()
                         val todayDate = dateFormat.format(Date())
                         val imageEntity = imagesRepo.getImagesbyUser(todayDate)
+                        Log.d("IMWorker","2 ")
                         if (imageEntity != null) {
                             if (checkNullorEmpty(imageEntity.front)) {
                                 val partBody = createMultipartPart(
                                     imageEntity.front!!, "uploadVehicleFrontDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 FRONT")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -231,6 +233,7 @@ class ImageUploadWorker(
                                     imageEntity.inWindScreen!!, "uploadWindscreenDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 WindScreen")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -246,6 +249,7 @@ class ImageUploadWorker(
                                     "uploadWindowsOrGlassVisibilityDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 WindowGlass")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -261,6 +265,7 @@ class ImageUploadWorker(
                                     "uploadVehicleWipersOrWashersDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 WIPERS_WASHERS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -275,6 +280,7 @@ class ImageUploadWorker(
                                     imageEntity.inMirrors!!, "uploadMirrorDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 MIRRORS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -290,6 +296,7 @@ class ImageUploadWorker(
                                     "uploadVehicleCabSecurityOrInteriorDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 CAB_SECURITY_INTERIOR")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -301,9 +308,10 @@ class ImageUploadWorker(
                             }
                             if (checkNullorEmpty(imageEntity.inSeatBelt)) {
                                 val partBody = createMultipartPart(
-                                    imageEntity.inSeatBelt!!, "uploadVehicleSeatBeltDefect",
+                                    imageEntity.inSeatBelt!!, "SEAT_BELT",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 CAB_SECURITY_INTERIOR")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -319,6 +327,7 @@ class ImageUploadWorker(
                                     "uploadVehicleWarningOrServiceLightDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 WARNING_SERVICE_LIGHTS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -334,6 +343,7 @@ class ImageUploadWorker(
                                     "uploadVehicleFuelOrAdBlueLevelDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 ADD_BLUE")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -349,6 +359,7 @@ class ImageUploadWorker(
                                     "uploadVehicleOilOrCoolantLeaksDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 OIL_COOLANT_LEVEL")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -363,6 +374,7 @@ class ImageUploadWorker(
                                     imageEntity.inFogLights!!, "uploadVehicleLightsDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 FOG_LIGHTS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -378,6 +390,7 @@ class ImageUploadWorker(
                                     "uploadVehicleIndicatorsOrSideRepeatersDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 INDICATORS_SIDE_REPEATERS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -393,6 +406,7 @@ class ImageUploadWorker(
                                     "uploadVehicleHornOrReverseBeeperDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 HORN_REVERSE_BEEPER")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -407,6 +421,7 @@ class ImageUploadWorker(
                                     imageEntity.inSteeringControl!!, "uploadVehicleSteeringDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 STEERING_CONTROL")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -421,6 +436,7 @@ class ImageUploadWorker(
                                     imageEntity.inBrakedEbsAbs!!, "uploadVehicleBrakesDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 BRAKED_EBS_ABS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -436,6 +452,7 @@ class ImageUploadWorker(
                                     "uploadVehicleLockingSystemDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 VEHICLE_LOCKING_SYSTEM")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -450,6 +467,7 @@ class ImageUploadWorker(
                                     imageEntity.nearSide!!, "uploadVehicleNearSideDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 NEAR_SIDE")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -464,6 +482,7 @@ class ImageUploadWorker(
                                     imageEntity.rear!!, "uploadVehicleRearDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 REAR")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -478,6 +497,7 @@ class ImageUploadWorker(
                                     imageEntity.exBodyDamageOffside!!, "uploadVehicleOffSideDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 OFF_SIDE")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -493,6 +513,7 @@ class ImageUploadWorker(
                                     "uploadVehicleRegistrationNumberPlateDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 REGISTRATION_NUMBER_PLATES")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -508,6 +529,7 @@ class ImageUploadWorker(
                                     "uploadVehicleReflectorOrMarkerDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 REFLECTORS_MARKERS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -523,6 +545,7 @@ class ImageUploadWorker(
                                     "uploadVehicleWheelsOrWheelFixingDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 WHEEL_FIXINGS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -538,6 +561,7 @@ class ImageUploadWorker(
                                     "uploadVehicleTyresDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 TYRE_CONDITION_THREAD_DEPTH")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -553,6 +577,7 @@ class ImageUploadWorker(
                                     "uploadVehicleOilOrFuelOrCoolantLeaksDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 OIL_FUEL_COOLANT_LEAKS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -568,6 +593,7 @@ class ImageUploadWorker(
                                     "uploadVehExcessiveEngineExhaustSmokeDef",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 EXCESSIVE_ENG_EXHAUST_SMOKE")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -582,6 +608,7 @@ class ImageUploadWorker(
                                     imageEntity.exSpareWheel!!, "uploadSpareWheelDefect",
                                     appContext
                                 )
+                                Log.d("IMWorker","2 SPARE_WHEEL")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,

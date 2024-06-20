@@ -7,10 +7,13 @@ import android.app.TimePickerDialog
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -27,9 +30,11 @@ import android.util.Base64OutputStream
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.core.content.ContextCompat
@@ -50,11 +55,14 @@ import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.database.OfflineSyncEntity
+import com.clebs.celerity.databinding.DialogvehicleadvancepaymentBinding
+import com.clebs.celerity.databinding.TokenExpiredDialogBinding
 import com.clebs.celerity.dialogs.ErrorDialog
 import com.clebs.celerity.dialogs.ScanErrorDialog
 import com.clebs.celerity.fragments.DailyWorkFragment
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.ui.App
+import com.clebs.celerity.ui.LoginActivity
 import com.clebs.celerity.utils.DependencyProvider.brkEnd
 import com.clebs.celerity.utils.DependencyProvider.brkStart
 import com.google.android.material.snackbar.Snackbar
@@ -844,6 +852,10 @@ fun convertDateFormat(inputDate: String): String {
     }
 }
 
+private fun checkNullorEmpty(value: String?): Boolean {
+    return !(value.isNullOrEmpty() || value == "empty")
+}
+
 fun getMimeType(uri: Uri): String? {
     val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
     return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
@@ -988,5 +1000,43 @@ fun showBirthdayCard(dateString: String, prefs: Prefs): Boolean {
     } catch (e: DateTimeParseException) {
         e.printStackTrace()
         false
+    }
+}
+
+fun isTokenExpired(prefs: Prefs): Boolean {
+
+    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+    sdf.timeZone = TimeZone.getTimeZone("UTC")
+
+    val expirationDateTime = sdf.parse(prefs.tokenExpiredOn)
+    val currentDateTime = Date()
+
+    return currentDateTime >= expirationDateTime
+}
+
+fun dateToday():String{
+    return SimpleDateFormat("yyyy-MM-dd").format(Date())
+}
+
+fun checkTokenExpirationAndLogout(context: Activity,prefs: Prefs) {
+    if (isTokenExpired(prefs)) {
+        val tokenExpiredDialog = AlertDialog.Builder(context).create()
+        val tokenExpiredDialogBinding =
+            TokenExpiredDialogBinding.inflate(LayoutInflater.from(context))
+        tokenExpiredDialog.setView(tokenExpiredDialogBinding.root)
+        tokenExpiredDialog.setCanceledOnTouchOutside(false)
+        tokenExpiredDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        tokenExpiredDialogBinding.logoutbtn.setOnClickListener {
+            val intent = Intent(context, LoginActivity::class.java)
+            intent.putExtra("logout", "0")
+            intent.putExtra("downloadCQ", Prefs.getInstance(App.instance).isFirst)
+            Prefs.getInstance(context).clearPreferences()
+            context.finish()
+            context.startActivity(intent)
+            prefs.saveBoolean("isLoggedIn", false)
+        }
+        tokenExpiredDialog.show()
+
     }
 }
