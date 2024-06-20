@@ -1,12 +1,17 @@
 package com.clebs.celerity.ui
 
 
+
+import android.R.attr.end
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -21,9 +26,6 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentHomedemoBinding
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertDateFormat
-import com.elconfidencial.bubbleshowcase.BubbleShowCase
-import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
-import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.data.PieData
@@ -34,7 +36,6 @@ import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
-
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -266,15 +267,17 @@ class HomedemoFragment : Fragment() {
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.VISIBLE
+            mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_keyboard_double_arrow_left_24, 0, 0, 0);
             mbinding.const1.visibility = View.VISIBLE
-            mbinding.btThisWeek.visibility = View.VISIBLE
+            mbinding.btThisWeek.visibility=View.VISIBLE
+
             val weekprev = week - 3
             mbinding.txtLastWeek.text = "Week : " + weekprev
             val weekschedule = week - 1
             mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
             showDialog()
             val w = week - 3
-            mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"Income :("+"$"+totalearning+")");
+            mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 1
             )
@@ -290,17 +293,19 @@ class HomedemoFragment : Fragment() {
         }
         mbinding.btPrevSecond.setOnClickListener {
             mbinding.viewfulldatalayout.visibility = View.GONE
-            mbinding.btPrev.visibility = View.VISIBLE
+            mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.GONE
             mbinding.const1.visibility = View.VISIBLE
-            mbinding.btThisWeek.visibility = View.VISIBLE
+            mbinding.btThisWeek.visibility = View.GONE
+            mbinding.btNext.visibility=View.VISIBLE
+            mbinding.btPrev.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.baseline_keyboard_arrow_right_24,0 );
             val weekprev = week - 4
             mbinding.txtLastWeek.text = "Week : " + weekprev
             val weekschedule = week - 2
             mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
             showDialog()
             val w = week - 4
-            mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"Income :("+"$"+totalearning+")");
+            mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 2
             )
@@ -312,17 +317,47 @@ class HomedemoFragment : Fragment() {
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 4, year
             )
         }
+
+        mbinding.btNext.setOnClickListener{
+            mbinding.viewfulldatalayout.visibility = View.GONE
+            mbinding.btPrev.visibility = View.GONE
+            mbinding.btPrevSecond.visibility = View.VISIBLE
+
+            mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_keyboard_double_arrow_left_24, 0, 0, 0);
+            mbinding.const1.visibility = View.VISIBLE
+            mbinding.btThisWeek.visibility = View.VISIBLE
+            mbinding.btNext.visibility=View.GONE
+            val weekprev = week - 3
+            mbinding.txtLastWeek.text = "Week : " + weekprev
+            val weekschedule = week - 1
+            mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
+            showDialog()
+            val w = week - 3
+            mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
+            viewModel.GetViewFullScheduleInfo(
+                Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 1
+            )
+            showDialog()
+            viewModel.GetcashFlowWeek(
+                Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 3
+            )
+            viewModel.GetLastWeekSCore(
+                Prefs.getInstance(requireContext()).clebUserId.toInt(), week - 3, year
+            )
+
+        }
         mbinding.btThisWeek.setOnClickListener {
             mbinding.const1.visibility = View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btThisWeek.visibility = View.GONE
-
+            mbinding.btPrev.setCompoundDrawablesWithIntrinsicBounds( R.drawable.baseline_keyboard_arrow_left_24, 0,0,0 );
             mbinding.btPrev.visibility = View.VISIBLE
+            mbinding.btPrev.setText("Previous Week")
             mbinding.btPrevSecond.visibility = View.GONE
             showDialog()
             val weekprev = week - 2
             val w = week - 3
-            mbinding.pieChart.setCenterText("Cash flow \n week :" + weekprev+"\n"+"Income :("+"$"+totalearning+")");
+            mbinding.pieChart.setCenterText("Cash flow \n week :" + weekprev+"\n"+"£"+totalearning);
             mbinding.txtLastWeek.text = "Week : " + weekprev
             mbinding.viewfullschedule.text = "Full schedule for week " + week
             viewModel.GetViewFullScheduleInfo(
@@ -431,7 +466,7 @@ class HomedemoFragment : Fragment() {
 
 
                     val w=week-2
-                    mbinding.pieChart.setCenterText("Cash flow \n week :" + w +"\n"+"Income :("+"$"+totalearning+")");
+                    mbinding.pieChart.setCenterText("Cash flow \n week :" + w +"\n"+"£"+totalearning);
                     avdeductions = if (it.totalDeduction > 0)
                         it.totalDeduction / average.toFloat()
                     else
@@ -498,7 +533,7 @@ class HomedemoFragment : Fragment() {
                 l.yEntrySpace = 7f
                 l.yOffset = 7f
                 val legendEntryA = LegendEntry()
-                legendEntryA.label = "Profits"
+                legendEntryA.label = "Income"
                 legendEntryA.formColor = resources.getColor(R.color.blue_hex)
 
                 val legendEntryb = LegendEntry()

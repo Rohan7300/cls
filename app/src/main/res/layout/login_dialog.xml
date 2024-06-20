@@ -26,16 +26,20 @@
                 android:layout_marginTop="20dp"
 
                 android:id="@+id/textview_acknowledgement">
+
                 <TextView
+                    android:id="@+id/headings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                  android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:drawableLeft="@drawable/baseline_key_24"
                     android:fontFamily="@font/inter_bold"
-                    android:textColor="#000000"
-                    android:id="@+id/headings"
+                    android:gravity="center_horizontal|center_vertical"
                     android:letterSpacing="0.1"
-                    android:gravity="center"
-                    android:text="Use Biometric to continue"
-                    android:textSize="18sp"/>
+                    android:text="APP IS LOCKED"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
 
 
 
@@ -88,19 +92,20 @@
                     android:layout_width="wrap_content"
                     android:padding="10dp"
                     android:gravity="center_horizontal|center_vertical"
-                android:paddingStart="20dp"
-
-                    android:paddingEnd="20dp"
-                    android:drawablePadding="10dp"
+                android:paddingStart="24dp"
+                    android:drawableTint="@color/white"
+                    android:drawablePadding="20dp"
+                    android:paddingEnd="24dp"
                     android:textAllCaps="true"
                   android:textColor="@color/white"
                     android:letterSpacing="0.02"
                     android:fontFamily="@font/poppins_bold"
                     android:layout_height="wrap_content"
-                    android:text="Biometric login"
+                    android:text="USE BIOMETRIC TO CONTINUE"
                     android:textSize="12sp"
                     android:id="@+id/saveBio"
-                    android:src="@drawable/acknowledgement"/>
+                    android:src="@drawable/acknowledgement"
+                    app:drawableRightCompat="@drawable/baseline_keyboard_double_arrow_right_24" />
 
             </LinearLayout>
         </RelativeLayout>
