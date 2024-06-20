@@ -789,6 +789,8 @@
                             android:background="@color/medium_orange"
                             android:fontFamily="@font/poppins_semibold"
                             android:gravity="center"
+                            android:drawableTint="@color/white"
+                            android:drawableLeft="@drawable/baseline_keyboard_arrow_left_24"
                             android:paddingHorizontal="4dp"
                             android:paddingVertical="6dp"
                             android:text="Previous Week"
@@ -803,6 +805,8 @@
                             android:background="@color/medium_orange"
                             android:fontFamily="@font/poppins_semibold"
                             android:gravity="center"
+                            android:drawableTint="@color/white"
+                            android:drawableLeft="@drawable/baseline_keyboard_double_arrow_left_24"
                             android:paddingHorizontal="4dp"
                             android:paddingVertical="6dp"
                             android:text="Previous Week"
@@ -827,6 +831,26 @@
                         app:cardCornerRadius="8dp">
 
                         <TextView
+                            android:id="@+id/bt_next"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/home_button_shape"
+                            android:backgroundTint="@color/medium_orange"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:padding="6dp"
+                            android:gravity="center_vertical"
+                            android:layout_gravity="center_vertical"
+                            android:text="Next Week"
+                            android:drawableTint="@color/white"
+                            android:drawablePadding="4dp"
+                            android:drawableEnd="@drawable/baseline_keyboard_arrow_right_24"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:visibility="gone"
+                           />
+
+
+                        <TextView
                             android:id="@+id/bt_this_week"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -834,10 +858,17 @@
                             android:backgroundTint="@color/medium_orange"
                             android:fontFamily="@font/poppins_semibold"
                             android:padding="6dp"
-                            android:text="Load This week data"
+                            android:gravity="center_vertical"
+                            android:layout_gravity="center_vertical"
+                            android:text="Next Week"
+                            android:drawablePadding="4dp"
+                            android:drawableTint="@color/white"
+                            android:drawableEnd="@drawable/baseline_keyboard_double_arrow_right_24"
                             android:textColor="@color/white"
                             android:textSize="12sp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            />
+
                     </androidx.cardview.widget.CardView>
                 </RelativeLayout>
 
