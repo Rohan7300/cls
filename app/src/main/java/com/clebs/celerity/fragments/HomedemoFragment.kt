@@ -2,15 +2,14 @@ package com.clebs.celerity.ui
 
 
 
-import android.R.attr.end
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.text.Spannable
 import android.text.SpannableString
+import android.text.Spanned
 import android.text.style.RelativeSizeSpan
 import android.util.Log
 import android.view.Gravity
@@ -36,6 +35,7 @@ import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
+import org.checkerframework.checker.units.qual.s
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -277,7 +277,24 @@ class HomedemoFragment : Fragment() {
             mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
             showDialog()
             val w = week - 3
-            mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
+//            val baseText = "Cash flow \n week :"+w+"\n"+ "£"+totalearning
+//
+//            val lastWordStart =
+//                baseText.lastIndexOf(' ') + 1 // Start index of the last word
+//
+//            val lastWord = baseText.substring(lastWordStart) // The last word
+//
+//            val spannableString = SpannableString(baseText)
+//
+//            spannableString.setSpan(
+//                RelativeSizeSpan(1.5f),  // Change this value to make the text size larger
+//                lastWordStart,
+//                baseText.length,
+//                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+//            )
+
+            mbinding.pieChart.setCenterText( "Cash flow \n week :"+w+"\n"+ "£"+totalearning)
+
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week - 1
             )
