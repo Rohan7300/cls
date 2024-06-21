@@ -3,6 +3,8 @@ package com.clebs.celerity.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.clebs.celerity.Factory.MyViewModelFactory
@@ -29,6 +31,9 @@ object DependencyProvider {
     var osData: OfflineSyncEntity = OfflineSyncEntity()
     var brkStart:String = ""
     var brkEnd:String = ""
+    var notify:MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply {
+        postValue(false)
+    }
     var comingFromViewTickets:Boolean = false
     fun getMainVM(owner: ViewModelStoreOwner): MainViewModel {
 

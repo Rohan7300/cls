@@ -109,6 +109,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/inter"
+                        android:layout_marginStart="2dp"
                         android:letterSpacing="0.03"
                         android:text=""
                         android:textColor="#231F20"
@@ -153,6 +154,7 @@
                         android:layout_height="match_parent"
                         android:fontFamily="@font/inter"
                         android:gravity="center"
+                        android:layout_marginStart="2dp"
                         android:letterSpacing="0.03"
                         android:text=""
                         android:textColor="#231F20"
@@ -200,6 +202,7 @@
                         android:gravity="center"
                         android:letterSpacing="0.03"
                         android:text=""
+                        android:layout_marginStart="2dp"
                         android:textColor="#231F20"
                         android:textSize="12sp" />
 

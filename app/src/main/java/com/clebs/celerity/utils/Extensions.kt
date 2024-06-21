@@ -1040,3 +1040,15 @@ fun checkTokenExpirationAndLogout(context: Activity,prefs: Prefs) {
 
     }
 }
+
+fun roundOffValues(value: String): String {
+    var roundOffValue = "0"
+    try {
+        val number = value.toDoubleOrNull() ?: 0.0
+        val roundedNumber = kotlin.math.round(number).toInt()
+        roundOffValue = String.format("%.2f", number)
+    }catch (_:Exception){
+        return value
+    }
+    return roundOffValue
+}
