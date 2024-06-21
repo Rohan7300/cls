@@ -267,7 +267,7 @@ class HomedemoFragment : Fragment() {
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.VISIBLE
-            mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_keyboard_double_arrow_left_24, 0, 0, 0);
+            mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_keyboard_arrow_left_24, 0, 0, 0);
             mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility=View.VISIBLE
 
@@ -372,7 +372,7 @@ class HomedemoFragment : Fragment() {
             mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.VISIBLE
 
-            mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_keyboard_double_arrow_left_24, 0, 0, 0);
+            mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_keyboard_arrow_left_24, 0, 0, 0);
             mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility = View.VISIBLE
             mbinding.btNext.visibility=View.GONE
@@ -415,7 +415,7 @@ class HomedemoFragment : Fragment() {
             mbinding.const1.visibility = View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btThisWeek.visibility = View.GONE
-            mbinding.btPrev.setCompoundDrawablesWithIntrinsicBounds( R.drawable.baseline_keyboard_arrow_left_24, 0,0,0 );
+            mbinding.btPrev.setCompoundDrawablesWithIntrinsicBounds( R.drawable.baseline_keyboard_double_arrow_left_24, 0,0,0 );
             mbinding.btPrev.visibility = View.VISIBLE
             mbinding.btPrev.setText("Previous Week")
             mbinding.btPrevSecond.visibility = View.GONE

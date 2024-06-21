@@ -416,17 +416,18 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
     private fun clientUniqueID(): String {
         val x = Prefs.getInstance(App.instance).clebUserId.toString()
-        val y = Prefs.getInstance(App.instance).scannedVmRegNo
+        val y = Prefs.getInstance(App.instance).scannedVmRegNo.replace(" ","")
 
         val currentDate = LocalDateTime.now()
         val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
         val regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
-        prefs.inspectionID = regexPattern.toString()
-        inspectionID = regexPattern.toString()
+        prefs.inspectionID = regexPattern.toString().replace(" ","")
+        inspectionID = regexPattern.toString().replace(" ","")
         Log.e(
             "kjfdjkfhdjfjdhfdjclientuniqueidfunction",
             "clientUniqueID: " + inspectionID + "------" + prefs.inspectionID
         )
+
         return regexPattern.toString()
     }
 
@@ -591,7 +592,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
                 ),
                 customerDetails = CustomerDetails(
-                    name = "CLS"+Prefs.getInstance(applicationContext).clebUserId, //if sent, user can't edit
+                    name = "CLS"+Prefs.getInstance(applicationContext).clebUserId, //if sent, user can't edit CLS-userid
                     email = "", //if sent, user can't edit
                     dialCode = "", //if sent, user can't edit
                     phoneNumber = "", //if sent, user can't edit

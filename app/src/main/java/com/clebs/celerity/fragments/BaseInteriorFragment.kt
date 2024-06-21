@@ -122,6 +122,8 @@ abstract class BaseInteriorFragment : Fragment() {
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             dxLoc.text = it?.locationName ?: ""
             dxReg.text = it?.vmRegNo ?: ""
+
+
             if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
                 dxLoc.text =
                     Prefs.getInstance(requireContext()).currLocationName ?: ""
