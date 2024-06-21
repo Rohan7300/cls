@@ -631,8 +631,8 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getString("VinNumber",null)
         set(value) = sharedPreferences.edit().putString("VinNumber",value).apply()
 
-    var VehicleMake:String?
-        get() = sharedPreferences.getString("VehicleMake",null)
+    var VehicleMake:String
+        get() = sharedPreferences.getString("VehicleMake","Van")?:"Van"
         set(value) = sharedPreferences.edit().putString("VehicleMake",value).apply()
 
     var VehicleBodyStyle:String

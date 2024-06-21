@@ -25,6 +25,7 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentHomedemoBinding
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertDateFormat
+import com.clebs.celerity.utils.roundOffValues
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.data.PieData
@@ -293,7 +294,7 @@ class HomedemoFragment : Fragment() {
 //                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
 //            )
 
-            val baseText = "Cash flow \n week :" + w+"\n"+" £"+totalearning
+            val baseText = "Cash flow \n week :" + w+"\n"+" £"+roundOffValues(totalearning)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -338,7 +339,7 @@ class HomedemoFragment : Fragment() {
             showDialog()
             val w = week - 4
       //      mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
-            val baseText = "Cash flow \n week :" + w+"\n"+" £"+totalearning
+            val baseText = "Cash flow \n week :" + w+"\n"+" £"+roundOffValues(totalearning)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -382,7 +383,7 @@ class HomedemoFragment : Fragment() {
             mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
             showDialog()
             val w = week - 3
-            val baseText = "Cash flow \n week :" + w+"\n"+" £"+totalearning
+            val baseText = "Cash flow \n week :" + w+"\n"+" £"+roundOffValues(totalearning)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word

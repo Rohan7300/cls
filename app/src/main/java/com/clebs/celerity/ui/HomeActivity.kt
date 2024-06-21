@@ -150,7 +150,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
 
 
-        networkManager.observe(this) {
+/*        networkManager.observe(this) {
             isNetworkActive = if (it) {
                 true
                 //  internetDialog.hideDialog()
@@ -158,7 +158,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 false
                 //    internetDialog.showDialog(fragmentManager)
             }
-        }
+        }*/
 
         prefs = Prefs.getInstance(this)
         checkTokenExpirationAndLogout(this,prefs)
@@ -440,7 +440,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         viewModel.vechileInformationLiveData.observe(this) {
             if(it!=null){
                 prefs.VinNumber = it.VinNumber
-                prefs.VehicleMake = it.VehicleMake
+                prefs.VehicleMake = it.VehicleMake?:"Van"
                 prefs.VehicleBodyStyle = it.VehicleBodyStyle?:"Van"
                 prefs.VehicleModel = it.VehicleModel?:"Any Model"
                 prefs.VmCreatedDate = it.VmCreatedDate

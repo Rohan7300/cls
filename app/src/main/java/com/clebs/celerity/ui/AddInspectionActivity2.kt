@@ -592,9 +592,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             inputDetails = InputDetails(
                 vehicleDetails = VehicleDetails(
                     regNumber = prefs.scannedVmRegNo.replace(" ", ""),
-                    make = "Van", //if sent, user can't edit
+                    make = prefs.VehicleMake, //if sent, user can't edit
                     model = prefs.VehicleModel, //if sent, user can't edit
-                    bodyStyle = prefs.VehicleBodyStyle  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
+                    bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
                 ),
                 customerDetails = CustomerDetails(
                     name = "CLS"+Prefs.getInstance(applicationContext).clebUserId, //if sent, user can't edit CLS-userid

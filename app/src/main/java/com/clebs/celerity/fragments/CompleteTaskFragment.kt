@@ -165,7 +165,7 @@ class CompleteTaskFragment : Fragment() {
             mbinding = FragmentCompleteTaskBinding.inflate(inflater, container, false)
         }
         dialog= NoInternetDialog()
-        val networkManager = NetworkManager(requireContext())
+/*        val networkManager = NetworkManager(requireContext())
         networkManager.observe(requireActivity()) {
             if (it) {
                 isNetworkActive = true
@@ -176,7 +176,7 @@ class CompleteTaskFragment : Fragment() {
                 dialog.showDialog(fragmentManager)
                 hideDialog()
             }
-        }
+        }*/
         val clickListener = View.OnClickListener {
             showAlert()
         }
