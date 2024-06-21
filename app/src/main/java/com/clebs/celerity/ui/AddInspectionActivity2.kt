@@ -576,7 +576,12 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     }
 
     private fun startInspectionMain() {
+        var model =
         clientUniqueID()
+        Log.d("CLSInspection","Name : CLS"+Prefs.getInstance(applicationContext).clebUserId)
+        Log.d("CLSInspection", "VehicleModel: ${prefs.VehicleModel}")
+        Log.d("CLSInspection","VehicleBodyStyle ${prefs.VehicleBodyStyle}")
+        Log.d("CLSInspection","InspectionID: $inspectionID")
         cqSDKInitializer.startInspection(activity = this,
             clientAttrs = ClientAttrs(
                 userName = " ",
@@ -588,8 +593,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                 vehicleDetails = VehicleDetails(
                     regNumber = prefs.scannedVmRegNo.replace(" ", ""),
                     make = "Van", //if sent, user can't edit
-                    model = "Any Model", //if sent, user can't edit
-                    bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
+                    model = prefs.VehicleModel, //if sent, user can't edit
+                    bodyStyle = prefs.VehicleBodyStyle  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
                 ),
                 customerDetails = CustomerDetails(
                     name = "CLS"+Prefs.getInstance(applicationContext).clebUserId, //if sent, user can't edit CLS-userid

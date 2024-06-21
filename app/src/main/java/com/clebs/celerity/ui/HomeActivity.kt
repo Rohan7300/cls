@@ -220,6 +220,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
 
+
         getDeviceID()
         val deviceID =
             Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()
@@ -238,7 +239,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
             viewModel =
                 ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
-
+            observers()
             GetDriversBasicInformation()
             getscannednumbervehicleinfo()
             if (ninetydaysBoolean?.equals(true) == true) {
@@ -432,6 +433,18 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             navController.navigate(R.id.newCompleteTaskFragment)
         } else if (destinationFragment == "ThirdPartyAcess") {
             navController.navigate(R.id.profileFragment)
+        }
+    }
+
+    private fun observers() {
+        viewModel.vechileInformationLiveData.observe(this) {
+            if(it!=null){
+                prefs.VinNumber = it.VinNumber
+                prefs.VehicleMake = it.VehicleMake
+                prefs.VehicleBodyStyle = it.VehicleBodyStyle?:"Van"
+                prefs.VehicleModel = it.VehicleModel?:"Any Model"
+                prefs.VmCreatedDate = it.VmCreatedDate
+            }
         }
     }
 
