@@ -21,7 +21,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
@@ -637,10 +639,24 @@ class ImageUploadWorker(
         partName: String,
         context: Context
     ): MultipartBody.Part {
+
+/*
         val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
         var bs64ImageString = getImageBitmapFromUri(context, image.toUri())
         val requestBody = bs64ImageString!!.toRequestBody()
         return MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
+*/
+
+        return try {
+            val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
+            var bs64ImageString = getImageBitmapFromUri(context, image.toUri())
+            val requestBody = bs64ImageString!!.toRequestBody()
+            MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            val defaultRequestBody = "".toRequestBody("text/plain".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData(partName, "default.jpg", defaultRequestBody)
+        }
     }
 
     private fun checkNullorEmpty(value: String?): Boolean {
