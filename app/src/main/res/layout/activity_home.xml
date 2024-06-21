@@ -72,14 +72,17 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/img_logout_main"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/baseline_logout_24"
-                android:backgroundTint="@color/orange"
+                android:id="@+id/newnotify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+
+                android:background="@drawable/baseline_fiber_smart_record_24"
                 android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@+id/img_notification"
+                app:layout_constraintEnd_toEndOf="@+id/img_notification"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/img_notification" />
 
             <ImageView
                 android:id="@+id/logout"

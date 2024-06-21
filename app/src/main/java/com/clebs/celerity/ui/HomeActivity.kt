@@ -460,6 +460,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (destinationFragment != null) {
                 Log.d("HomeActivityX", destinationFragment!!)
                 if (destinationFragment == "NotificationsFragment") {
+
                     if (actionToPerform == "Deductions" ||
                         actionToPerform == "Driver Deduction with Agreement" ||
                         actionToPerform == "DriverDeductionWithAgreement"

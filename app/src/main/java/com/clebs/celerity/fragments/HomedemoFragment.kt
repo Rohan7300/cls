@@ -65,6 +65,7 @@ class HomedemoFragment : Fragment() {
     var totalearning: String = ""
     var totaldedecutions: String = ""
     var thirdparty: String = ""
+    var centerprofittext:String=""
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
     }
@@ -545,9 +546,13 @@ class HomedemoFragment : Fragment() {
 
                     avprofit = (it.totalEarning / average).toFloat()
 
+centerprofittext= (it.totalEarning-it.totalDeduction-it.ThirdPartyDeduction).toString()
+
+                   // Net Profit = Income - Deductions - Third Party
+
 
                     val w=week-2
-                    val baseText = "Cash flow \n week :" + w+"\n"+" £"+totalearning
+                    val baseText = "Cash flow \n week :" + w+"\n"+" £"+centerprofittext
 
                     val lastWordStart =
                         baseText.lastIndexOf(' ') + 1 // Start index of the last word
