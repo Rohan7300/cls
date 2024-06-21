@@ -1,7 +1,6 @@
 package com.clebs.celerity.ui
 
 
-
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.graphics.Color
@@ -66,6 +65,7 @@ class HomedemoFragment : Fragment() {
     var totalearning: String = ""
     var totaldedecutions: String = ""
     var thirdparty: String = ""
+    var centerprofittext: String = ""
     val showDialog: () -> Unit = {
         (activity as HomeActivity).showDialog()
     }
@@ -194,10 +194,16 @@ class HomedemoFragment : Fragment() {
         mbinding.pieChart.setEntryLabelTextSize(12f);
 
         mbinding.fab1.setOnClickListener {
-      showtooltip(it,"The Average total is the sum of all your scores divided by the number of scorecards you have received.")
+            showtooltip(
+                it,
+                "The Average total is the sum of all your scores divided by the number of scorecards you have received."
+            )
         }
         mbinding.fab2.setOnClickListener {
-          showtooltip(it,"This is the score you achieved on the weekly scorecard for the week displayed.")
+            showtooltip(
+                it,
+                "This is the score you achieved on the weekly scorecard for the week displayed."
+            )
         }
 
 //        mbinding.viewfullschedule.setOnClickListener {
@@ -268,9 +274,14 @@ class HomedemoFragment : Fragment() {
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.VISIBLE
-            mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_keyboard_arrow_left_24, 0, 0, 0);
+            mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.baseline_keyboard_arrow_left_24,
+                0,
+                0,
+                0
+            );
             mbinding.const1.visibility = View.VISIBLE
-            mbinding.btThisWeek.visibility=View.VISIBLE
+            mbinding.btThisWeek.visibility = View.VISIBLE
 
             val weekprev = week - 3
             mbinding.txtLastWeek.text = "Week : " + weekprev
@@ -294,7 +305,8 @@ class HomedemoFragment : Fragment() {
 //                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
 //            )
 
-            val baseText = "Cash flow \n week :" + w+"\n"+" £"+roundOffValues(totalearning)
+            val baseText =
+                "Cash flow \n week :" + w + "\n" + " £" + roundOffValues(centerprofittext)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -330,16 +342,22 @@ class HomedemoFragment : Fragment() {
             mbinding.btPrevSecond.visibility = View.GONE
             mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility = View.GONE
-            mbinding.btNext.visibility=View.VISIBLE
-            mbinding.btPrev.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.baseline_keyboard_arrow_right_24,0 );
+            mbinding.btNext.visibility = View.VISIBLE
+            mbinding.btPrev.setCompoundDrawablesWithIntrinsicBounds(
+                0,
+                0,
+                R.drawable.baseline_keyboard_arrow_right_24,
+                0
+            );
             val weekprev = week - 4
             mbinding.txtLastWeek.text = "Week : " + weekprev
             val weekschedule = week - 2
             mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
             showDialog()
             val w = week - 4
-      //      mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
-            val baseText = "Cash flow \n week :" + w+"\n"+" £"+roundOffValues(totalearning)
+            //      mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
+            val baseText =
+                "Cash flow \n week :" + w + "\n" + " £" + roundOffValues(centerprofittext)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -368,22 +386,28 @@ class HomedemoFragment : Fragment() {
             )
         }
 
-        mbinding.btNext.setOnClickListener{
+        mbinding.btNext.setOnClickListener {
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.VISIBLE
 
-            mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_keyboard_arrow_left_24, 0, 0, 0);
+            mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.baseline_keyboard_arrow_left_24,
+                0,
+                0,
+                0
+            );
             mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility = View.VISIBLE
-            mbinding.btNext.visibility=View.GONE
+            mbinding.btNext.visibility = View.GONE
             val weekprev = week - 3
             mbinding.txtLastWeek.text = "Week : " + weekprev
             val weekschedule = week - 1
             mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
             showDialog()
             val w = week - 3
-            val baseText = "Cash flow \n week :" + w+"\n"+" £"+roundOffValues(totalearning)
+            val baseText =
+                "Cash flow \n week :" + w + "\n" + " £" + roundOffValues(centerprofittext)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -416,14 +440,20 @@ class HomedemoFragment : Fragment() {
             mbinding.const1.visibility = View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btThisWeek.visibility = View.GONE
-            mbinding.btPrev.setCompoundDrawablesWithIntrinsicBounds( R.drawable.baseline_keyboard_double_arrow_left_24, 0,0,0 );
+            mbinding.btPrev.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.baseline_keyboard_double_arrow_left_24,
+                0,
+                0,
+                0
+            );
             mbinding.btPrev.visibility = View.VISIBLE
             mbinding.btPrev.setText("Previous Week")
             mbinding.btPrevSecond.visibility = View.GONE
             showDialog()
             val weekprev = week - 2
             val w = week - 3
-            val baseText = "Cash flow \n week :" + w+"\n"+" £"+totalearning
+            val baseText =
+                "Cash flow \n week :" + w + "\n" + " £" + roundOffValues(centerprofittext)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -547,8 +577,19 @@ class HomedemoFragment : Fragment() {
                     avprofit = (it.totalEarning / average).toFloat()
 
 
-                    val w=week-2
-                    val baseText = "Cash flow \n week :" + w+"\n"+" £"+totalearning
+                    val income = formatDecimal(it.totalEarning.toInt().toDouble())
+                    Log.e("incomessssss", "Observers: " + income)
+                    centerprofittext =
+                        (it.totalEarning - it.totalDeduction - it.ThirdPartyDeduction).toString()
+
+                    // Net Profit = Income - Deductions - Third Party
+
+
+                    val w = week - 2
+                    val incomes = roundOffValues(centerprofittext)
+                    Log.e("Dskjfdjgffjhdhincomes", "Observers: " + incomes)
+                    val baseText =
+                        "Cash flow \n week :" + w + "\n" + " £" + roundOffValues(centerprofittext)
 
                     val lastWordStart =
                         baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -582,9 +623,17 @@ class HomedemoFragment : Fragment() {
                 mbinding.pieChart.clear();
 
 
-                entries.add(PieEntry(avprofit, totalearning))
-                entries.add(PieEntry(avdeductions, totaldedecutions))
-                entries.add(PieEntry(thirdpartydeductions, thirdparty))
+                val ttincome = roundOffValues(totalearning)
+                val ttdeductions = roundOffValues(totaldedecutions)
+                val ttthirddeductions = roundOffValues(thirdparty)
+                Log.e(
+                    "Totallincimesssdssdsf",
+                    "Observers: " + ttincome + ttdeductions + ttthirddeductions
+                )
+
+                entries.add(PieEntry(avprofit, ttincome))
+                entries.add(PieEntry(avdeductions, ttdeductions))
+                entries.add(PieEntry(thirdpartydeductions, ttthirddeductions))
                 val dataSet = PieDataSet(entries, "")
 
                 val colors = ArrayList<Int>()
@@ -878,7 +927,7 @@ class HomedemoFragment : Fragment() {
     }
 
 
-    fun showtooltip(view: View,text:String){
+    fun showtooltip(view: View, text: String) {
 
         val balloon = Balloon.Builder(requireContext())
             .setWidthRatio(0.5f)
@@ -891,8 +940,8 @@ class HomedemoFragment : Fragment() {
             .setAutoDismissDuration(4000)
             .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
             .setArrowSize(10)
-            .setArrowColor(ContextCompat.getColor(requireContext(),R.color.medium_orange))
-            .setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.white))
+            .setArrowColor(ContextCompat.getColor(requireContext(), R.color.medium_orange))
+            .setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
             .setArrowPosition(0.5f)
             .setPadding(12)
             .setCornerRadius(8f)
@@ -901,5 +950,20 @@ class HomedemoFragment : Fragment() {
             .setLifecycleOwner(viewLifecycleOwner)
             .build()
         balloon.showAsDropDown(view, 20, 20)
+    }
+
+    fun formatDecimal(num: Any?): String {
+        return when (num) {
+            is Double -> {
+                if (num.toString().split(".").getOrNull(1)?.length ?: 0 > 2) {
+                    "%.2f".format(num)
+                } else {
+                    num.toString()
+                }
+            }
+
+            is Int -> num.toString()
+            else -> "Input must be a number."
+        }
     }
 }

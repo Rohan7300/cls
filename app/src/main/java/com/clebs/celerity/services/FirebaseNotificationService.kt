@@ -14,6 +14,7 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.DependencyProvider.notify
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.parseToInt
@@ -36,6 +37,7 @@ class FirebaseNotificationService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
+        notify.postValue(true)
         Log.d(TAG, "FCMMessage Data1 ${message.messageId}")
         Log.d(TAG, "FCMMessage Data2 ${message.data} ")
         Log.d(TAG, "FCMMessage Data3 ${message.messageType} ")

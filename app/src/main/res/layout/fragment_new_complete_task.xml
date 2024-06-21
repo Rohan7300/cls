@@ -207,7 +207,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:background="@drawable/shape_expand_main"
+
+                    android:background="@drawable/complete_shadow"
                     android:padding="18dp">
 
                     <TextView
@@ -246,7 +247,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:background="@drawable/shape_expand_main">
+                    android:background="@drawable/complete_shadow">
 
                     <LinearLayout
                         android:id="@+id/rlcomtwo_road"
@@ -483,7 +484,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:background="@drawable/shape_expand_main"
+                    android:background="@drawable/complete_shadow"
                     android:padding="18dp">
 
                     <TextView
@@ -519,7 +520,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:background="@drawable/shape_expand_main"
+                    android:background="@drawable/complete_shadow"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="18dp">
@@ -585,7 +586,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:background="@drawable/shape_expand_main"
+                    android:background="@drawable/complete_shadow"
                     android:padding="18dp"
                     android:visibility="gone">
 
