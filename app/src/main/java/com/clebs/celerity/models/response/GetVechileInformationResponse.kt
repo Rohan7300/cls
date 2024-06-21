@@ -25,5 +25,17 @@ data class GetVechileInformationResponse(
     @SerializedName("VmType")
     val vmType: String,
     @SerializedName("LocationName")
-    val locationName: String
+    val locationName: String,
+    @SerializedName("VinNumber")
+    val VinNumber:String? = null,
+    @SerializedName("VehicleMake")
+    val VehicleMake:String? = null,
+    @SerializedName("VehicleBodyStyle")
+    val VehicleBodyStyle:String? = null,
+    @SerializedName("VehicleModel")
+    val VehicleModel:String? = null,
+    @SerializedName("VmCreatedDate")
+    val VmCreatedDate:String? = null,
+    @SerializedName("VmStatus")
+    val VmStatus:String?= null
 ) : Parcelable

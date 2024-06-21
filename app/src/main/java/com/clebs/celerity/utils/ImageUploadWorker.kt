@@ -213,9 +213,9 @@ class ImageUploadWorker(
                         val imageEntity = imagesRepo.getImagesbyUser(todayDate)
                         Log.d("IMWorker","2 ")
                         if (imageEntity != null) {
-                            if (checkNullorEmpty(imageEntity.front)) {
+                            if (checkNullorEmpty(imageEntity.exBodyDamageFront)) {
                                 val partBody = createMultipartPart(
-                                    imageEntity.front!!, "uploadVehicleFrontDefect",
+                                    imageEntity.exBodyDamageFront!!, "uploadVehicleFrontDefect",
                                     appContext
                                 )
                                 Log.d("IMWorker","2 FRONT")

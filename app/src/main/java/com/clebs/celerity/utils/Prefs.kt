@@ -58,7 +58,7 @@ class Prefs(context: Context) {
             return sharedPreferences.getBoolean("Isfirst", true)
         }
         set(value) {
-            sharedPreferences.edit().putBoolean("Isfirst", value?:false).apply()
+            sharedPreferences.edit().putBoolean("Isfirst", value ?: false).apply()
         }
     var vmId: Int
         get() = sharedPreferences.getInt("vmIdx", 0)
@@ -76,7 +76,7 @@ class Prefs(context: Context) {
             return sharedPreferences.getBoolean("isFirst", false)
         }
         set(value) {
-            sharedPreferences.edit().putBoolean("isFirst", value?:false).apply()
+            sharedPreferences.edit().putBoolean("isFirst", value ?: false).apply()
         }
     var inspectionID: String
         get() {
@@ -185,7 +185,7 @@ class Prefs(context: Context) {
             return sharedPreferences.getBoolean("isBirthdayCardShown", false)
         }
         set(value) {
-            sharedPreferences.edit().putBoolean("isBirthdayCardShown", value?:false).apply()
+            sharedPreferences.edit().putBoolean("isBirthdayCardShown", value ?: false).apply()
         }
 
     var isdone: Boolean?
@@ -193,7 +193,7 @@ class Prefs(context: Context) {
             return sharedPreferences.getBoolean("isdone", false)
         }
         set(value) {
-            sharedPreferences.edit().putBoolean("isdone", value?:false).apply()
+            sharedPreferences.edit().putBoolean("isdone", value ?: false).apply()
         }
 
     var isstarted: Boolean?
@@ -201,7 +201,7 @@ class Prefs(context: Context) {
             return sharedPreferences.getBoolean("isstarted", false)
         }
         set(value) {
-            sharedPreferences.edit().putBoolean("isstarted", value?:false).apply()
+            sharedPreferences.edit().putBoolean("isstarted", value ?: false).apply()
         }
     var quesID: Int
         get() = sharedPreferences.getInt("quesID", 0)
@@ -263,7 +263,6 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putString("90days", value).apply()
         }
-
 
 
     var userName: String
@@ -470,7 +469,7 @@ class Prefs(context: Context) {
         }
     }
 
-    fun isFaceMaskAddedToday():Boolean{
+    fun isFaceMaskAddedToday(): Boolean {
         val isFaceMaskAddedToday = sharedPreferences.getBoolean("isFaceMaskAddedToday", false)
         if (isFaceMaskAddedToday) {
             val lastInspectionDateTimeString =
@@ -483,7 +482,8 @@ class Prefs(context: Context) {
             return false
         }
     }
-    fun updateFaceMaskStatus(isFaceMaskAdded:Boolean){
+
+    fun updateFaceMaskStatus(isFaceMaskAdded: Boolean) {
         val editor = sharedPreferences.edit()
 
         val lastInspectionDateTime = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
@@ -612,18 +612,43 @@ class Prefs(context: Context) {
             editor.putString("oilLevelRequired_date", currentDate)
             editor.apply()
         }
+
     fun isToday(dateString: String?): Boolean {
-        if(dateString != null){
+        if (dateString != null) {
             val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             return dateString == currentDate
-        }else{
+        } else {
             return false
         }
     }
 
     var tokenExpiredOn: String
-        get() = sharedPreferences.getString("TokenExpiredOn", "2024-06-19T06:49:38Z") ?: "2024-06-19T06:49:38Z"
+        get() = sharedPreferences.getString("TokenExpiredOn", "2024-06-19T06:49:38Z")
+            ?: "2024-06-19T06:49:38Z"
         set(value) = sharedPreferences.edit().putString("TokenExpiredOn", value).apply()
+
+    var VinNumber:String?
+        get() = sharedPreferences.getString("VinNumber",null)
+        set(value) = sharedPreferences.edit().putString("VinNumber",value).apply()
+
+    var VehicleMake:String?
+        get() = sharedPreferences.getString("VehicleMake",null)
+        set(value) = sharedPreferences.edit().putString("VehicleMake",value).apply()
+
+    var VehicleBodyStyle:String
+        get() = sharedPreferences.getString("VehicleBodyStyle","Van")?:"Van"
+        set(value) = sharedPreferences.edit().putString("VehicleBodyStyle",value).apply()
+
+    var VehicleModel:String
+        get() = sharedPreferences.getString("VehicleModel","Any Model")?:"Any Model"
+        set(value) = sharedPreferences.edit().putString("VehicleModel",value).apply()
+
+    var VmCreatedDate:String?
+        get() = sharedPreferences.getString("VmCreatedDate",null)
+        set(value) = sharedPreferences.edit().putString("VmCreatedDate",value).apply()
+
+
+
 
 
 }
