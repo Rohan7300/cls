@@ -17,11 +17,10 @@ import android.view.View.AUTOFILL_TYPE_NONE
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
@@ -77,6 +76,7 @@ import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.vehicleExpiringDocuments
 import com.clebs.celerity.utils.weeklyLocationRota
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
@@ -92,7 +92,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     SaveChangesCallback, InspectionIncompleteListener {
     private var saveChangesCallback: SaveChangesCallback? = null
     private var doubleBackToExitPressedOnce = false
-    private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var bottomNavigationView: NavigationView
     lateinit var imageViewModel: ImageViewModel
     private var screenid: Int = 0
     private lateinit var navController: NavController
@@ -144,7 +144,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ActivityHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
-        bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
+        //bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
+        bottomNavigationView = ActivityHomeBinding.navView
+
         fragmentManager = this.supportFragmentManager
         internetDialog = NoInternetDialog()
         networkManager = NetworkManager(this)
@@ -217,7 +219,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
         navController.addOnDestinationChangedListener(this)
         fragmentManager = this.supportFragmentManager
-        bottomNavigationView.selectedItemId = R.id.home
+        //bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
 
 
@@ -246,10 +248,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (ninetydaysBoolean?.equals(true) == true) {
                 showAlertChangePasword90dys()
             }
-
-
-
-
 
             viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
                 Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
@@ -346,7 +344,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
             ActivityHomeBinding.imgDrawer.setOnClickListener {
 
-                navController.navigate(R.id.profileFragment)
+                //navController.navigate(R.id.profileFragment)
+                ActivityHomeBinding.drawerLayout.openDrawer(GravityCompat.START)
 
             }
 
@@ -358,9 +357,61 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
 
-            bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+        /*    bottomNavigationView.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
 
+                    R.id.home -> {
+                        ActivityHomeBinding.title.text = ""
+                        ActivityHomeBinding.logout.visibility = View.GONE
+                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                        navController.navigate(R.id.homedemoFragment)
+                        true
+                    }
+
+                    R.id.daily -> {*//*     navController.navigate(R.id.homeFragment)
+                             navController.currentDestination!!.id = R.id.homeFragment
+         *//*
+                        if (isNetworkActive) {
+
+                            ActivityHomeBinding.logout.visibility = View.GONE
+                            ActivityHomeBinding.title.text = ""
+                            ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                            viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
+                            showDialog()
+                        } else {
+                            if (osData.isDefectSheetFilled) navController.navigate(R.id.newCompleteTaskFragment)
+                            else {
+                                navController.navigate(R.id.homeFragment)
+                                navController.currentDestination!!.id = R.id.homeFragment
+                            }
+                        }
+                        true
+                    }
+
+                    R.id.invoices -> {
+                        ActivityHomeBinding.title.text = "Invoices"
+                        ActivityHomeBinding.logout.visibility = View.GONE
+                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                        navController.navigate(R.id.invoicesFragment)
+                        true
+                    }
+
+                    R.id.tickets -> {
+                        ActivityHomeBinding.logout.visibility = View.GONE
+                        ActivityHomeBinding.title.text = "User Tickets"
+                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                        navController.navigate(R.id.userTicketsFragment)
+
+                        true
+
+                    }
+
+                    else -> false
+                }
+            }*/
+
+            ActivityHomeBinding.navView.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener { item ->
+                when (item.itemId) {
                     R.id.home -> {
                         ActivityHomeBinding.title.text = ""
                         ActivityHomeBinding.logout.visibility = View.GONE
@@ -406,11 +457,17 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         true
 
                     }
+                    R.id.profileBtn->{
+                        navController.navigate(R.id.profileFragment)
+                        true
+                    }
 
-                    else -> false
+                    else -> return@OnNavigationItemSelectedListener false
                 }
-
-            }
+                ActivityHomeBinding.drawerLayout.closeDrawer(GravityCompat.START)
+                true
+            })
+            
             ActivityHomeBinding.logout.setOnClickListener {
                 showAlertLogout()
             }
@@ -635,32 +692,42 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onBackPressed() {
 
         //super.onBackPressed()
-        screenid = viewModel.getLastVisitedScreenId(this)
-        if (Prefs.getInstance(App.instance).get("90days")
-                .equals("1") && navController.currentDestination?.id == R.id.profileFragment
-        ) {
-            showToast("Please do profile changes first", this)
-        }
-        Log.d("NavCurrScreenID", "screenid ${screenid}")
-        try {
-            val prefs = Prefs.getInstance(applicationContext)
-            val fragmentStack = prefs.getNavigationHistory()
-            Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
-            if (navController.currentDestination?.id == R.id.newCompleteTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
-                prefs.clearNavigationHistory()
-            } else if (fragmentStack.size > 1) {
-                fragmentStack.pop()
-                val previousFragment = fragmentStack.peek()
-                if (previousFragment != R.id.dailyWorkFragment) {
-                    navController.navigate(previousFragment)
-                    prefs.saveNavigationHistory(fragmentStack)
-                }
-            } else {
-
-                super.onBackPressed()
+        if(ActivityHomeBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            ActivityHomeBinding.drawerLayout.closeDrawer(GravityCompat.START)
+        }else{
+            screenid = viewModel.getLastVisitedScreenId(this)
+            if (Prefs.getInstance(App.instance).get("90days")
+                    .equals("1") && navController.currentDestination?.id == R.id.profileFragment
+            ) {
+                showToast("Please do profile changes first", this)
             }
-        } catch (_: Exception) {
+            Log.d("NavCurrScreenID", "screenid ${screenid}")
+            try {
+                val prefs = Prefs.getInstance(applicationContext)
+                val fragmentStack = prefs.getNavigationHistory()
+                Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
+                if (navController.currentDestination?.id == R.id.newCompleteTaskFragment
+                    || navController.currentDestination?.id == R.id.dailyWorkFragment ||
+                    navController.currentDestination?.id == R.id.homeFragment||
+                    navController.currentDestination?.id == R.id.invoicesFragment||
+                    navController.currentDestination?.id == R.id.userTicketsFragment||
+                    navController.currentDestination?.id == R.id.profileFragment) {
+                    navController.navigate(R.id.homedemoFragment)
+                    prefs.clearNavigationHistory()
+                } else if (fragmentStack.size > 1) {
+                    fragmentStack.pop()
+                    val previousFragment = fragmentStack.peek()
+                    if (previousFragment != R.id.dailyWorkFragment) {
+                        navController.navigate(previousFragment)
+                        prefs.saveNavigationHistory(fragmentStack)
+                    }
+                } else {
 
+                    super.onBackPressed()
+                }
+            } catch (_: Exception) {
+
+            }
         }
     }
 

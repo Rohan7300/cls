@@ -750,8 +750,9 @@ interface ApiService {
     ): Response<SimpleStatusMsgResponse>
 
     @Multipart
-    @POST("/api/Vehicle/UploadVehicleOilOrCoolantLeaksDefect")
-    suspend fun UploadVehicleOilOrCoolantLeaksDefect(
+    //@POST("/api/Vehicle/UploadVehicleOilOrCoolantLeaksDefect")
+    @POST("/api/Vehicle/UploadVehicleOilOrCoolantLevel")
+    suspend fun UploadVehicleOilOrCoolantLevel(
         @Query("userId") userId: Int,
         @Query("vmId") vmId: Int,
         @Query("lmId") lmID: Int,

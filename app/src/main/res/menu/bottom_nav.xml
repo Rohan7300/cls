@@ -22,4 +22,8 @@
         android:id="@+id/tickets"
         android:icon="@drawable/tickets_ic"
         android:title="Tickets" />
+    <item
+        android:id="@+id/profileBtn"
+        android:icon="@drawable/user_profile_icon"
+        android:title="Profile" />
 </menu>

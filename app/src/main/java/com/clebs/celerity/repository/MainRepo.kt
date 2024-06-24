@@ -1511,7 +1511,16 @@ class MainRepo(private val ApiService: ApiService) {
                 }
 
                 DBImages.OIL_FUEL_COOLANT_LEAKS -> {
-                    ApiService.UploadVehicleOilOrCoolantLeaksDefect(
+                    ApiService.UploadVehicleOilOrFuelOrCoolantLeaksDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date,
+                        multipartBody
+                    )
+                }
+                DBImages.OIL_COOLANT_LEVEL -> {
+                    ApiService.UploadVehicleOilOrCoolantLevel(
                         userID,
                         vmId,
                         lmid,
