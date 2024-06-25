@@ -75,7 +75,6 @@ import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.vehicleExpiringDocuments
 import com.clebs.celerity.utils.weeklyLocationRota
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
@@ -306,12 +305,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                 .equals("1") && navController.currentDestination?.id == R.id.profileFragment
                         ) {
                             showToast("Please do profile changes first", this@HomeActivity)
-                        }
-                        else if (navController.currentDestination?.id == R.id.newCompleteTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
+                        } else if (navController.currentDestination?.id == R.id.newCompleteTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
                             prefs.clearNavigationHistory()
-                        }
-
-                        else if (fragmentStack.size > 1) {
+                        } else if (fragmentStack.size > 1) {
                             fragmentStack.pop()
                             val previousFragment = fragmentStack.peek()
                             if (previousFragment != R.id.dailyWorkFragment) {
@@ -461,6 +457,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     R.id.profileBtn -> {
                         navController.navigate(R.id.profileFragment)
                         true
+                    }
+
+                    R.id.emergencyBtn -> {
+                        showToast("Under Development!!", this@HomeActivity)
                     }
 
                     else -> return@OnNavigationItemSelectedListener false
@@ -709,7 +709,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
                 if (navController.currentDestination?.id == R.id.newCompleteTaskFragment
                     || navController.currentDestination?.id == R.id.dailyWorkFragment ||
-                    navController.currentDestination?.id == R.id.homeFragment) {
+                    navController.currentDestination?.id == R.id.homeFragment
+                ) {
                     navController.navigate(R.id.homedemoFragment)
                     prefs.clearNavigationHistory()
                 } else if (navController.currentDestination?.id == R.id.invoicesFragment ||
@@ -914,6 +915,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 firstName = it.firstName
                 lastName = it.lastName
                 prefs.userName = "$firstName $lastName"
+                val headerView: View = ActivityHomeBinding.navView.getHeaderView(0)
+                val navHeaderName = headerView.findViewById<TextView>(com.clebs.celerity.R.id.navHeaderName)
+                navHeaderName.text = "Celerity - " + prefs.userName
                 isLeadDriver = it.IsLeadDriver
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
                 isApiResponseTrue = it.IsUsrProfileUpdateReqin90days
