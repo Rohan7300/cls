@@ -33,11 +33,12 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_marginTop="24dp"
-        android:layout_gravity="end|bottom"
-        android:textColor="@color/white"
+        android:id="@+id/textViewweb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nav_header_subtitle" />
+        android:layout_gravity="end|bottom"
+
+        android:layout_marginTop="24dp"
+        android:text="@string/nav_header_subtitle"
+        android:textColor="@color/white" />
 </LinearLayout>

@@ -12,9 +12,9 @@
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/baseline_next_week_24"
             android:title="Weekly Defect checks" />
-        <item
-            android:id="@+id/nav_weblogin"
-            android:icon="@drawable/baseline_network_cell_24"
-            android:title="Web Login" />
+<!--        <item-->
+<!--            android:id="@+id/nav_weblogin"-->
+<!--            android:icon="@drawable/baseline_network_cell_24"-->
+<!--            android:title="Web Login" />-->
     </group>
 </menu>

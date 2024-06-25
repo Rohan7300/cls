@@ -20,6 +20,7 @@ import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.toast
 import com.clebs.celerity_admin.viewModels.MainViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 
 class LoginActivity : AppCompatActivity() {
@@ -80,6 +81,8 @@ class LoginActivity : AppCompatActivity() {
 
             ActivityLoginBinding.textError.visibility=View.GONE
             ActivityLoginBinding.textErrorTwo.visibility=View.GONE
+            ActivityLoginBinding.pb.visibility=View.VISIBLE
+            ActivityLoginBinding.btLogin.visibility=View.GONE
             mainViewModel.loginUser(
                 LoginRequest(
                     ActivityLoginBinding.edtUser.text.toString(),
@@ -88,8 +91,16 @@ class LoginActivity : AppCompatActivity() {
             ).observe(this, Observer {
 
                 if (it != null) {
+                    if (it.message.equals("UnAuthorized")){
+                        Toast.makeText(LoginActivity@this, "Error in Login details", Toast.LENGTH_SHORT).show()
+
+                    }
+                    else
                     if (it.UserRole == "S") {
+                        ActivityLoginBinding.pb.visibility=View.GONE
+                        ActivityLoginBinding.btLogin.visibility=View.VISIBLE
                         setLoggedIn(true)
+                        Toast.makeText(LoginActivity@this, "Login successfully", Toast.LENGTH_SHORT).show()
                         Prefs.getInstance(applicationContext).accessToken = it.token
                         Prefs.getInstance(applicationContext).clebUserId = it.userID.toString()
                         val i = Intent(
@@ -99,11 +110,16 @@ class LoginActivity : AppCompatActivity() {
 
                         startActivity(i)
                     } else {
+                        ActivityLoginBinding.pb.visibility=View.GONE
+                        ActivityLoginBinding.btLogin.visibility=View.VISIBLE
                         setLoggedIn(false)
-                        toast("Invalid Login")
+                        Toast.makeText(LoginActivity@this, "Invalid Login", Toast.LENGTH_SHORT).show()
                     }
                 }
                 else{
+                    Toast.makeText(LoginActivity@this, "Error in Login", Toast.LENGTH_SHORT).show()
+                    ActivityLoginBinding.pb.visibility=View.GONE
+                    ActivityLoginBinding.btLogin.visibility=View.VISIBLE
                     setLoggedIn(false)
                 }
 

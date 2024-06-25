@@ -3,22 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/constmain"
-    android:background="@color/new_light_orange"
+    android:background="@color/very_very_light"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ProgressBar
-        android:id="@+id/pb2"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:indeterminateTint="@color/maroon"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.578" />
 
     <TextView
         android:id="@+id/title"
@@ -53,7 +40,7 @@
         android:id="@+id/ll1"
 
         android:weightSum="3"
-        app:layout_constraintTop_toBottomOf="@id/des"
+app:layout_constraintTop_toBottomOf="@id/des"
         android:orientation="horizontal">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -91,7 +78,7 @@
                 android:layout_marginTop="4dp"
                 android:text="Vehicle Options"
                 android:textColor="@color/black"
-                android:textSize="11sp"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView3" />
@@ -135,7 +122,7 @@
                 android:layout_marginTop="4dp"
                 android:text="Vehicle Information"
                 android:textColor="@color/black"
-                android:textSize="11sp"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView4" />
@@ -179,9 +166,7 @@
                 android:layout_marginTop="4dp"
                 android:text="Upload Vehicle images"
                 android:textColor="@color/black"
-                android:textSize="11sp"
-                android:maxLines="1"
-                android:singleLine="true"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView5" />
@@ -192,18 +177,16 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/ll1">
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_weight="1"
 
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/textView6"
@@ -218,28 +201,28 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/iv_edit_11"
-                android:layout_width="21dp"
-                android:layout_height="21dp"
+            android:id="@+id/iv_edit_11"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
 
-                android:src="@drawable/baseline_directions_bus_24"
-                app:layout_constraintBottom_toBottomOf="@+id/textView6"
-                app:layout_constraintEnd_toEndOf="@+id/textView6"
-                app:layout_constraintStart_toStartOf="@+id/textView6"
-                app:layout_constraintTop_toTopOf="@id/textView6" />
+            android:src="@drawable/baseline_directions_bus_24"
+            app:layout_constraintBottom_toBottomOf="@+id/textView6"
+            app:layout_constraintEnd_toEndOf="@+id/textView6"
+            app:layout_constraintStart_toStartOf="@+id/textView6"
+            app:layout_constraintTop_toTopOf="@id/textView6" />
 
-            <TextView
+        <TextView
 
-                android:id="@+id/msdesdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="van Hire"
-                android:textColor="@color/black"
-                android:textSize="11sp"
-                app:layout_constraintEnd_toEndOf="@+id/textView6"
-                app:layout_constraintStart_toStartOf="@+id/textView6"
-                app:layout_constraintTop_toBottomOf="@id/textView6" />
+            android:id="@+id/msdesdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="van Hire"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/textView6"
+            app:layout_constraintStart_toStartOf="@+id/textView6"
+            app:layout_constraintTop_toBottomOf="@id/textView6" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>

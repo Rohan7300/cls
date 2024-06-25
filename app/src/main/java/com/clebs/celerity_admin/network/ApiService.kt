@@ -2,8 +2,10 @@ package com.clebs.celerity_admin.network
 
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DriverListResponseModel
+import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
+import com.clebs.celerity_admin.models.VehicleReturnModelList
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -19,4 +21,11 @@ interface ApiService {
 
     @GET("/api/VehAllocHistories/GetActiveDriversList")
     suspend fun GetDriverList(): Response<DriverListResponseModel>
+
+    @GET("/api/VehAllocHistories/GetVehicleList")
+    suspend fun GetvehicleList():Response<VehicleReturnModelList>
+
+    @GET("/api/VehAllocHistories/GetLocationList")
+    suspend fun GetVehicleLocationList():Response<GetVehicleLocation>
+
 }

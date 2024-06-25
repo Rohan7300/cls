@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -26,6 +27,7 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.CLSloction.ChangeVehicleFragment
+import com.clebs.celerity_admin.utils.FabClick
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
@@ -34,22 +36,24 @@ class MainActivityTwo : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainTwoBinding
+    private var activityViewClickListener: FabClick? = null
     private lateinit var cqSDKInitializer: CQSDKInitializer
-
-
+    lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainTwoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
+        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+        val mainRepo = MainRepo(apiService)
+        mainViewModel =
+            ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         setSupportActionBar(binding.appBarMainActivityTwo.toolbar)
-
         binding.appBarMainActivityTwo.fab.setOnClickListener { view ->
             Snackbar.make(view, "Refreshing...", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+            activityViewClickListener?.onActivityViewClicked(view)
         }
 //        if (myFragment!=null){
 //            myFragment= supportFragmentManager.findFragmentById(R.id.nav_gallery) as ChangeVehicleFragment
@@ -61,9 +65,10 @@ class MainActivityTwo : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main_activity_two)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_gallery, R.id.nav_slideshow,R.id.nav_weblogin
+                R.id.nav_gallery, R.id.nav_slideshow
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

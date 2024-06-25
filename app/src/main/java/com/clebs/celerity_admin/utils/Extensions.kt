@@ -260,6 +260,21 @@ fun setupFullHeight(bottomSheetDialog: BottomSheetDialog, context: Context) {
     }
     bottomSheet.layoutParams = layoutParams
     behavior.state = BottomSheetBehavior.STATE_EXPANDED
+    behavior.isDraggable=false
+}
+fun setupHalfHeight(bottomSheetDialog: BottomSheetDialog, context: Context) {
+    val bottomSheet =
+        bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+    val behavior = BottomSheetBehavior.from(bottomSheet as View)
+    val layoutParams = bottomSheet.layoutParams
+
+    val windowHeight: Int = getWindowHeight(context)
+    if (layoutParams != null) {
+        layoutParams.height = windowHeight
+    }
+    bottomSheet.layoutParams = layoutParams
+    behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+    behavior.isDraggable=true
 }
 
 fun getWindowHeight(context: Context): Int {

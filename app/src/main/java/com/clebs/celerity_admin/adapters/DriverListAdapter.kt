@@ -13,7 +13,7 @@ import com.clebs.celerity_admin.utils.OnclickDriver
 
 class DriverListAdapter(var data: ArrayList<DriverListResponseModelItem>, var callback: OnclickDriver) :
     RecyclerView.Adapter<DriverListAdapter.Companylistviewholder>() {
-
+    private var originalData: ArrayList<DriverListResponseModelItem> = ArrayList(data)
     inner class Companylistviewholder(val binding: CompanyAdapterBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -40,4 +40,6 @@ class DriverListAdapter(var data: ArrayList<DriverListResponseModelItem>, var ca
         holder.bindView(item)
 
     }
+
+
 }
