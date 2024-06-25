@@ -43,14 +43,14 @@ class InvoicesFragment : Fragment() {
             findNavController().navigate(R.id.CLSThirdPartyFragment)
         }
         binding.otherinvoices.visibility = View.GONE
-showDialog()
+        showDialog()
         GetDriversBasicInformation()
         return binding.root
     }
 
     private fun GetDriversBasicInformation() {
 
-       hideDialog()
+        hideDialog()
         viewModel.GetDriversBasicInformation(
             Prefs.getInstance(App.instance).clebUserId.toDouble()
         ).observe(viewLifecycleOwner) {
@@ -67,29 +67,31 @@ showDialog()
                     }
 
                     showDialog()
-                    viewModel.GetVehicleInformation(Prefs.getInstance(requireContext()).clebUserId.toInt(),
+                    viewModel.GetVehicleInformation(
+                        Prefs.getInstance(requireContext()).clebUserId.toInt(),
                         getVRegNo(prefs)
                     )
                 }
-                if(it.workinglocation!=null){
+                if (it.workinglocation != null) {
                     prefs.workLocationName = it.workinglocation
                 }
-                if(it.currentlocation!=null){
+                if (it.currentlocation != null) {
                     prefs.currLocationName = it.currentlocation
                 }
 
 
                 binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
-                binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
+                binding.headerTop.dxReg.text =
+                    getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
 
 
-                if(binding.headerTop.dxReg.text.isEmpty())
+                if (binding.headerTop.dxReg.text.isEmpty())
                     binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
                 else
                     binding.headerTop.strikedxRegNo.visibility = View.GONE
 
-                if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text=="")
+                if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "")
                     binding.headerTop.strikedxLoc.visibility = View.VISIBLE
                 else
                     binding.headerTop.strikedxLoc.visibility = View.GONE
@@ -104,12 +106,12 @@ showDialog()
         }
         binding.headerTop.dxm5.text = (activity as HomeActivity).date
 
-        if(binding.headerTop.dxReg.text.isEmpty())
-           binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        if (binding.headerTop.dxReg.text.isEmpty())
+            binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
             binding.headerTop.strikedxRegNo.visibility = View.GONE
 
-        if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text=="")
+        if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "")
             binding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
             binding.headerTop.strikedxLoc.visibility = View.GONE
@@ -121,17 +123,17 @@ showDialog()
                 binding.headerTop.dxLoc.text = prefs.currLocationName ?: ""
             } else if (prefs.workLocationName.isNotEmpty()) {
                 binding.headerTop.dxLoc.text =
-                   prefs.workLocationName ?: ""
+                    prefs.workLocationName ?: ""
             } else {
                 if (it != null) {
                     binding.headerTop.dxLoc.text = it.locationName ?: ""
                 }
             }
-            if(binding.headerTop.dxReg.text.isEmpty())
+            if (binding.headerTop.dxReg.text.isEmpty())
                 binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
             else
                 binding.headerTop.strikedxRegNo.visibility = View.GONE
-            if(binding.headerTop.dxLoc.text.isEmpty()||binding.headerTop.dxLoc.text=="")
+            if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "")
                 binding.headerTop.strikedxLoc.visibility = View.VISIBLE
             else
                 binding.headerTop.strikedxLoc.visibility = View.GONE

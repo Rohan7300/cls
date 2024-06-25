@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -63,6 +64,7 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
         homeActivity = (activity as HomeActivity)
         (activity as HomeActivity).ActivityHomeBinding.title.text = "Invoices"
         viewModel = homeActivity.viewModel
+        findNavController().currentDestination!!.id = R.id.clsinvoices
         showDialog()
         selectedYear = Year.now().value
         binding.selectYearET.setText(selectedYear.toString())

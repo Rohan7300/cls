@@ -307,9 +307,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         ) {
                             showToast("Please do profile changes first", this@HomeActivity)
                         }
-                        if (navController.currentDestination?.id == R.id.newCompleteTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
+                        else if (navController.currentDestination?.id == R.id.newCompleteTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
                             prefs.clearNavigationHistory()
-                        } else if (fragmentStack.size > 1) {
+                        }
+
+                        else if (fragmentStack.size > 1) {
                             fragmentStack.pop()
                             val previousFragment = fragmentStack.peek()
                             if (previousFragment != R.id.dailyWorkFragment) {
@@ -320,7 +322,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     } catch (_: Exception) {
                     }
                     if (doubleBackToExitPressedOnce) {
-                        //moveTaskToBack(true);
                         finish()
                     }
 
@@ -330,7 +331,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         "Please click BACK again to exit",
                         Snackbar.LENGTH_SHORT
                     ).setAction("Action", null).show()
-//                    Toast.makeText(applicationContext, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
 
                     Handler(Looper.getMainLooper()).postDelayed({
                         doubleBackToExitPressedOnce = false
@@ -357,18 +357,18 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
 
-        /*    bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-                when (item.itemId) {
+            /*    bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+                    when (item.itemId) {
 
-                    R.id.home -> {
-                        ActivityHomeBinding.title.text = ""
-                        ActivityHomeBinding.logout.visibility = View.GONE
-                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                        navController.navigate(R.id.homedemoFragment)
-                        true
-                    }
+                        R.id.home -> {
+                            ActivityHomeBinding.title.text = ""
+                            ActivityHomeBinding.logout.visibility = View.GONE
+                            ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                            navController.navigate(R.id.homedemoFragment)
+                            true
+                        }
 
-                    R.id.daily -> {*//*     navController.navigate(R.id.homeFragment)
+                        R.id.daily -> {*//*     navController.navigate(R.id.homeFragment)
                              navController.currentDestination!!.id = R.id.homeFragment
          *//*
                         if (isNetworkActive) {
@@ -457,7 +457,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         true
 
                     }
-                    R.id.profileBtn->{
+
+                    R.id.profileBtn -> {
                         navController.navigate(R.id.profileFragment)
                         true
                     }
@@ -467,7 +468,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 ActivityHomeBinding.drawerLayout.closeDrawer(GravityCompat.START)
                 true
             })
-            
+
             ActivityHomeBinding.logout.setOnClickListener {
                 showAlertLogout()
             }
@@ -692,9 +693,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onBackPressed() {
 
         //super.onBackPressed()
-        if(ActivityHomeBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (ActivityHomeBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             ActivityHomeBinding.drawerLayout.closeDrawer(GravityCompat.START)
-        }else{
+        } else {
             screenid = viewModel.getLastVisitedScreenId(this)
             if (Prefs.getInstance(App.instance).get("90days")
                     .equals("1") && navController.currentDestination?.id == R.id.profileFragment
@@ -708,12 +709,26 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
                 if (navController.currentDestination?.id == R.id.newCompleteTaskFragment
                     || navController.currentDestination?.id == R.id.dailyWorkFragment ||
-                    navController.currentDestination?.id == R.id.homeFragment||
-                    navController.currentDestination?.id == R.id.invoicesFragment||
-                    navController.currentDestination?.id == R.id.userTicketsFragment||
-                    navController.currentDestination?.id == R.id.profileFragment) {
+                    navController.currentDestination?.id == R.id.homeFragment) {
                     navController.navigate(R.id.homedemoFragment)
                     prefs.clearNavigationHistory()
+                } else if (navController.currentDestination?.id == R.id.invoicesFragment ||
+                    navController.currentDestination?.id == R.id.userTicketsFragment ||
+                    navController.currentDestination?.id == R.id.profileFragment
+                ) {
+                    navController.navigate(R.id.homedemoFragment)
+                } else if (navController.currentDestination?.id == R.id.onRoadHoursFragment ||
+                    navController.currentDestination?.id == R.id.rideAlongFragment ||
+                    navController.currentDestination?.id == R.id.updateOnRoadHoursFragment
+                    || navController.currentDestination?.id == R.id.questinareFragment ||
+                    navController.currentDestination?.id == R.id.feedbackFragment
+                ) {
+                    navController.navigate(R.id.newCompleteTaskFragment)
+                    prefs.clearNavigationHistory()
+                } else if (navController.currentDestination?.id == R.id.clsinvoices ||
+                    navController.currentDestination?.id == R.id.cls_invoices_third_party
+                ) {
+                    navController.navigate(R.id.invoicesFragment)
                 } else if (fragmentStack.size > 1) {
                     fragmentStack.pop()
                     val previousFragment = fragmentStack.peek()
@@ -729,7 +744,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         }
     }
-
 
     override fun onDestinationChanged(
         controller: NavController, destination: NavDestination, arguments: Bundle?

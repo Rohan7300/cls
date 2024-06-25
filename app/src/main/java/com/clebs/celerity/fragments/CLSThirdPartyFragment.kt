@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -82,7 +83,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
             binding.dateUpdater.setOnClickListener {
                     showYearPicker()
                 }*/
-
+        findNavController().currentDestination!!.id = R.id.cls_invoices_third_party
         selectedYear = Year.now().value
         binding.selectYearET.setText(selectedYear.toString())
         showYearPickerNew()
