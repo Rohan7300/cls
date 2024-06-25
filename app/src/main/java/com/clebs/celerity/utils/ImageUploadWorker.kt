@@ -226,7 +226,7 @@ class ImageUploadWorker(
                                     lmId,
                                     vmId,
                                     currentDateTime,
-                                    DBImages.FRONT,
+                                    DBImages.BODY_DAMAGE_FRONT,
                                     partBody
                                 )
                             }
@@ -351,7 +351,7 @@ class ImageUploadWorker(
                                     lmId,
                                     vmId,
                                     currentDateTime,
-                                    DBImages.ADD_BLUE,
+                                    DBImages.FUEL_ADBLUE_LEVEL,
                                     partBody
                                 )
                             }
