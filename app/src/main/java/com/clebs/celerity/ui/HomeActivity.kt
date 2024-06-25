@@ -722,7 +722,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         prefs.saveNavigationHistory(fragmentStack)
                     }
                 } else {
-
                     super.onBackPressed()
                 }
             } catch (_: Exception) {
