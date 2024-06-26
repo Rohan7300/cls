@@ -120,7 +120,6 @@
                 android:id="@+id/bottom_navigatin_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:background="@color/medium_orange"
                 android:paddingVertical="4dp"
                 app:itemBackground="@drawable/bg_selected_item"
@@ -128,16 +127,15 @@
                 app:itemIconTint="@color/selectedcolor"
                 app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"
                 app:itemTextColor="@color/selectedcolor"
-
                 app:labelVisibilityMode="labeled"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-
+                app:menu="@menu/bottom_nav"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/nav_fragment"
                 />
-                <!--app:menu="@menu/bottom_nav"-->
+
         </androidx.constraintlayout.widget.ConstraintLayout>
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"
@@ -145,7 +143,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             app:headerLayout="@layout/nav_header"
-            app:menu="@menu/bottom_nav"  />
+            app:menu="@menu/drawer_nav"  />
 
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

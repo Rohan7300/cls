@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_orange2"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/header"
+            android:visibility="visible"
+            android:gravity="center"
+            android:weightSum="3">
+
+            <TextView
+                android:layout_width="64dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins"
+                android:padding="10dp"
+                android:gravity="center"
+                android:text="Date"
+
+                android:textColor="@color/text_color"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins"
+                android:padding="10dp"
+                android:text="DA Name"
+                android:gravity="center"
+                android:textColor="@color/text_color"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins"
+                android:text="View"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                app:tint="@color/black" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_edittext_onroad"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="3">
+
+            <TextView
+                android:layout_width="64dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins"
+                android:id="@+id/date"
+                android:padding="10dp"
+                android:gravity="center"
+                android:text="Birth certificate"
+                android:textColor="@color/text_color"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:id="@+id/driverName"
+                android:fontFamily="@font/poppins"
+                android:padding="10dp"
+                android:gravity="center"
+                android:text="DA Name"
+                android:textColor="@color/text_color"
+                android:textSize="11sp" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="25dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins"
+                android:src="@drawable/eye"
+                android:textColor="@color/text_color"
+                android:textSize="12sp"
+                app:tint="@color/black" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

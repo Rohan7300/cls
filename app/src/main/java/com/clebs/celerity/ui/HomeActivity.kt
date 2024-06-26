@@ -75,6 +75,7 @@ import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.vehicleExpiringDocuments
 import com.clebs.celerity.utils.weeklyLocationRota
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
@@ -91,7 +92,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     SaveChangesCallback, InspectionIncompleteListener {
     private var saveChangesCallback: SaveChangesCallback? = null
     private var doubleBackToExitPressedOnce = false
-    private lateinit var bottomNavigationView: NavigationView
+    private lateinit var bottomNavigationView: BottomNavigationView
     lateinit var imageViewModel: ImageViewModel
     private var screenid: Int = 0
     private lateinit var navController: NavController
@@ -111,7 +112,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(
         Date()
     )
-    var ninetydaysBoolean: Boolean? = null
+    private var ninetydaysBoolean: Boolean? = null
     var lastName = ""
     var isLeadDriver = false
     lateinit var oSyncViewModel: OSyncViewModel
@@ -144,7 +145,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         super.onCreate(savedInstanceState)
         ActivityHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         //bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
-        bottomNavigationView = ActivityHomeBinding.navView
+        bottomNavigationView = ActivityHomeBinding.bottomNavigatinView
 
         fragmentManager = this.supportFragmentManager
         internetDialog = NoInternetDialog()
@@ -353,20 +354,21 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
 
-            /*    bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-                    when (item.itemId) {
+            bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+                when (item.itemId) {
 
-                        R.id.home -> {
-                            ActivityHomeBinding.title.text = ""
-                            ActivityHomeBinding.logout.visibility = View.GONE
-                            ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                            navController.navigate(R.id.homedemoFragment)
-                            true
-                        }
+                    R.id.home -> {
+                        ActivityHomeBinding.title.text = ""
+                        ActivityHomeBinding.logout.visibility = View.GONE
+                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                        navController.navigate(R.id.homedemoFragment)
+                        true
+                    }
 
-                        R.id.daily -> {*//*     navController.navigate(R.id.homeFragment)
-                             navController.currentDestination!!.id = R.id.homeFragment
-         *//*
+                    R.id.daily -> {
+                        navController.navigate(R.id.homeFragment)
+                        navController.currentDestination!!.id = R.id.homeFragment
+
                         if (isNetworkActive) {
 
                             ActivityHomeBinding.logout.visibility = View.GONE
@@ -404,7 +406,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                     else -> false
                 }
-            }*/
+            }
 
             ActivityHomeBinding.navView.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
@@ -460,7 +462,28 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     }
 
                     R.id.emergencyBtn -> {
-                        showToast("Under Development!!", this@HomeActivity)
+                        startActivity(
+                            Intent(
+                                this@HomeActivity,
+                                EmergencyContactActivity::class.java
+                            )
+                        )
+                        //showToast("Under Development!!", this@HomeActivity)
+                    }
+
+                    R.id.signedDocs -> {
+                        startActivity(Intent(this@HomeActivity, SignedDocActivity::class.java))
+
+                    }
+
+                    R.id.deductionAgreements -> {
+                        startActivity(
+                            Intent(
+                                this@HomeActivity,
+                                DeductionAgreementActivity::class.java
+                            )
+                        )
+
                     }
 
                     else -> return@OnNavigationItemSelectedListener false
@@ -916,7 +939,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 lastName = it.lastName
                 prefs.userName = "$firstName $lastName"
                 val headerView: View = ActivityHomeBinding.navView.getHeaderView(0)
-                val navHeaderName = headerView.findViewById<TextView>(com.clebs.celerity.R.id.navHeaderName)
+                val navHeaderName =
+                    headerView.findViewById<TextView>(com.clebs.celerity.R.id.navHeaderName)
                 navHeaderName.text = "Celerity - " + prefs.userName
                 isLeadDriver = it.IsLeadDriver
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days

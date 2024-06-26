@@ -43,6 +43,7 @@ import com.clebs.celerity.models.response.DownloadInvoicePDFResponseX
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
 import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
+import com.clebs.celerity.models.response.GetCompanySignedDocumentListResponse
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverInvoiceListResponse
@@ -1717,6 +1718,22 @@ class MainRepo(private val ApiService: ApiService) {
                 userID,
                 filepart
             )
+        }
+    }
+
+    suspend fun GetDAEmergencyContact(
+        userID: Int
+    ):SimpleNetworkResponse<String>{
+        return safeApiCall {
+            ApiService.GetDAEmergencyContact(userID)
+        }
+    }
+
+    suspend fun GetCompanySignedDocumentList(
+        userID: Int
+    ):SimpleNetworkResponse<GetCompanySignedDocumentListResponse>{
+        return safeApiCall {
+            ApiService.GetCompanySignedDocumentList(userID)
         }
     }
 }

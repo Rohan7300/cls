@@ -14,20 +14,29 @@
         android:id="@+id/invoices"
         android:icon="@drawable/invoices"
         android:title="Invoices" />
-<!--    <item-->
-<!--        android:id="@+id/passwords"-->
-<!--        android:icon="@drawable/passwords"-->
-<!--        android:title="Alerts" />-->
+    <!--    <item-->
+    <!--        android:id="@+id/passwords"-->
+    <!--        android:icon="@drawable/passwords"-->
+    <!--        android:title="Alerts" />-->
     <item
         android:id="@+id/tickets"
         android:icon="@drawable/tickets_ic"
         android:title="Tickets" />
-<!--    <item
+    <item
         android:id="@+id/profileBtn"
         android:icon="@drawable/user_profile_icon"
         android:title="Profile" />
     <item
+        android:id="@+id/signedDocs"
+        android:icon="@drawable/signeddocument"
+        android:title="Signed Documents"/>
+    <item
+        android:id="@+id/deductionAgreements"
+        android:icon="@drawable/deduction"
+        android:title="Deduction Agreement"
+        />
+    <item
         android:id="@+id/emergencyBtn"
         android:icon="@drawable/emergencycontact"
-        android:title="Emergency Contact" />-->
+        android:title="Emergency Contact" />
 </menu>
