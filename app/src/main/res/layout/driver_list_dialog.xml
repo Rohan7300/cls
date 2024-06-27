@@ -56,12 +56,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/headings"
-android:backgroundTint="@color/very_very_light"
-                    android:background="@drawable/searchbackground"
                     android:layout_marginTop="20dp"
-                 app:backgroundTint="@color/very_very_light"
+
                     android:layout_marginBottom="20dp"
-                    app:queryBackground="@drawable/searchbackground" />
+
+                    android:background="@drawable/searchbackground" />
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -69,8 +68,8 @@ android:backgroundTint="@color/very_very_light"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/IDsv"
-
                     android:layout_marginBottom="20dp"
+                    android:overScrollMode="never"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/company_adapter" />
 

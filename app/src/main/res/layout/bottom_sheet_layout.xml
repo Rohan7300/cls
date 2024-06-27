@@ -24,8 +24,8 @@
                 android:id="@+id/blueRactIV"
                 android:layout_width="match_parent"
                 android:layout_height="71dp"
-                android:backgroundTint="@color/new_light_orange"
                 android:background="@drawable/ic_rectangle_blue"
+                android:backgroundTint="@color/red_light"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -67,7 +67,7 @@
             android:layout_height="match_parent"
 
 
->
+            >
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -81,9 +81,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
-                    app:hintAnimationEnabled="true"
-                    app:expandedHintEnabled="false"
                     android:hint="Select company *"
+                    app:expandedHintEnabled="false"
+                    app:hintAnimationEnabled="true"
                     app:hintTextColor="@color/black">
 
                     <EditText
@@ -109,13 +109,15 @@
                     android:visibility="visible"
 
                     app:layout_constraintBottom_toBottomOf="@+id/edt_layout"
-                   app:layout_constraintStart_toStartOf="@+id/edt_layout"
+                    app:layout_constraintStart_toStartOf="@+id/edt_layout"
                     app:layout_constraintTop_toTopOf="@+id/edt_layout" />
+
                 <LinearLayout
                     android:id="@+id/llm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:background="@drawable/shaperadio"
                     android:orientation="horizontal"
                     android:visibility="gone"
                     android:weightSum="2"
@@ -144,12 +146,12 @@
                         <RadioButton
                             android:id="@+id/rbReTraining"
                             android:layout_width="wrap_content"
-                            android:layout_height="25dp"
+                            android:layout_height="wrap_content"
 
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_toEndOf="@id/edt_traing"
-                            android:background="@color/white"
+                            android:background="#FBC8C8"
                             android:gravity="center" />
 
                     </RelativeLayout>
@@ -176,13 +178,13 @@
 
                         <RadioButton
                             android:id="@+id/rbTraining"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="5dp"
                             android:layout_toRightOf="@id/edt_traingtwo"
-                            android:background="@color/white" />
+                            android:background="#FBC8C8" />
 
                     </RelativeLayout>
 
@@ -196,6 +198,7 @@
                     android:layout_marginTop="8dp"
                     android:hint="Select vehicle to return *"
                     android:visibility="gone"
+                    app:hintAnimationEnabled="false"
                     app:hintTextColor="@color/black"
                     app:layout_constraintTop_toBottomOf="@+id/edt_layout_two">
 
@@ -220,6 +223,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="8dp"
                     android:hint="Select DA *"
+                    app:hintAnimationEnabled="false"
                     android:visibility="gone"
                     app:hintTextColor="@color/black"
                     app:layout_constraintTop_toBottomOf="@id/llm">
@@ -253,20 +257,20 @@ Vehicle Location : Birmingham - DBI2"
                     android:id="@+id/llmtwo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:layout_marginTop="20dp"
+                    android:background="@drawable/shaperadio"
                     android:orientation="horizontal"
                     android:visibility="gone"
                     android:weightSum="2"
                     app:layout_constraintTop_toBottomOf="@+id/txt_info">
 
                     <RelativeLayout
+                        android:id="@+id/depopreturn"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+
                         android:layout_marginEnd="10dp"
-
                         android:layout_weight="1"
-
 
                         android:orientation="horizontal">
 
@@ -284,14 +288,14 @@ Vehicle Location : Birmingham - DBI2"
 
                         <RadioButton
                             android:id="@+id/depo"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
 
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="5dp"
                             android:layout_toEndOf="@id/returndepo"
-                            android:background="@color/white"
+                            android:background="#FBC8C8"
                             android:gravity="center" />
 
                     </RelativeLayout>
@@ -302,6 +306,7 @@ Vehicle Location : Birmingham - DBI2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:background="@drawable/shaperadio"
                     android:orientation="horizontal"
                     android:visibility="gone"
                     android:weightSum="2"
@@ -329,14 +334,14 @@ Vehicle Location : Birmingham - DBI2"
 
                         <RadioButton
                             android:id="@+id/roadworthy"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
 
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="5dp"
                             android:layout_toEndOf="@id/txtroadworthy"
-                            android:background="@color/white"
+                            android:background="#FBC8C8"
                             android:gravity="center" />
 
                     </RelativeLayout>
@@ -363,13 +368,13 @@ Vehicle Location : Birmingham - DBI2"
 
                         <RadioButton
                             android:id="@+id/notworthys"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="5dp"
                             android:layout_toRightOf="@id/notworthy"
-                            android:background="@color/white" />
+                            android:background="#FBC8C8" />
 
                     </RelativeLayout>
 
@@ -380,9 +385,10 @@ Vehicle Location : Birmingham - DBI2"
                     style="@style/LoginTextInputLayoutStyle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
                     android:layout_marginTop="8dp"
                     android:hint="Select request type *"
+                    android:visibility="gone"
+                    app:hintAnimationEnabled="false"
                     app:hintTextColor="@color/black"
                     app:layout_constraintTop_toBottomOf="@id/llmthree">
 
@@ -404,9 +410,9 @@ Vehicle Location : Birmingham - DBI2"
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_select_type"
                     android:layout_width="match_parent"
-                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/edt_layout_three" />
 
                 <TextView
@@ -417,7 +423,7 @@ Vehicle Location : Birmingham - DBI2"
                     android:layout_marginTop="60dp"
                     android:layout_marginEnd="60dp"
                     android:background="@drawable/shape_edittext"
-                    android:backgroundTint="#9c27b0"
+                    android:backgroundTint="@color/maroon"
                     android:gravity="center"
                     android:paddingStart="26dp"
                     android:paddingTop="12dp"

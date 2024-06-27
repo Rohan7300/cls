@@ -13,7 +13,16 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity_admin.databinding.FragmentWebBinding
+import com.clebs.celerity_admin.factory.MyViewModelFactory
+import com.clebs.celerity_admin.network.ApiService
+import com.clebs.celerity_admin.network.RetrofitService
+import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.ui.App
+import com.clebs.celerity_admin.utils.Prefs
+import com.clebs.celerity_admin.viewModels.MainViewModel
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,7 +37,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class WebFragment : Fragment() {
     lateinit var binding: FragmentWebBinding
-
+    lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +54,21 @@ class WebFragment : Fragment() {
         binding.web.settings.javaScriptEnabled = true
         binding.web.settings.loadWithOverviewMode = true
         binding.web.webViewClient = WebViewClient()
+        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+        val mainRepo = MainRepo(apiService)
 
 
+        mainViewModel =
+            ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
+        mainViewModel.GetemergencyContact(
+            Prefs.getInstance(App.instance).clebUserId.toString().toInt()
+        ).observe(viewLifecycleOwner, Observer {
+            if (it!=null){
+                binding.web.loadData(it, "text/html", "UTF-8")
+            }
+
+
+        })
         // Set the user agent to Firefox
 
         binding.web.loadUrl("https://www.celerity-ls.com/")

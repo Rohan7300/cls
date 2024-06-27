@@ -81,7 +81,6 @@
                     android:backgroundTint="@color/very_light_orange"
                     android:gravity="center_horizontal"
                     android:paddingTop="8dp"
-                    android:fontFamily="casual"
                     android:paddingBottom="8dp"
                     android:text="OSM portal"
                     android:textColor="@color/maroon"

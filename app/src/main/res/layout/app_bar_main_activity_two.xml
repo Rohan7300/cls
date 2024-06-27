@@ -4,11 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/very_light_orange"
+    android:backgroundTint="@color/very_light_orange"
     tools:context=".MainActivityTwo">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/very_light_orange"
         android:theme="@style/Theme.Celerity_admin.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -18,25 +21,85 @@
             android:background="#BE1E2D"
             app:popupTheme="@style/Theme.Celerity_admin.PopupOverlay" />
 
+
+
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_main_activity_two" />
+
     <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
         android:id="@+id/pbnew"
-        android:indeterminateTint="@color/red_light"
-        android:layout_gravity="center_vertical|center"/>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:backgroundTint="@color/maroon"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="16dp"
-        app:srcCompat="@drawable/baseline_replay_circle_filled_24" />
+        android:layout_gravity="center_vertical|center"
+        android:indeterminateTint="@color/red_light"
+        android:visibility="gone" />
 
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/fab"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="bottom|end"-->
+<!--        android:layout_marginEnd="@dimen/fab_margin"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:backgroundTint="@color/maroon"-->
+<!--        app:srcCompat="@drawable/baseline_replay_circle_filled_24" />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/shape_edittext"
+        android:layout_gravity="bottom|end"
+        android:backgroundTint="@color/new_light_orange"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardone"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+
+            android:elevation="10dp"
+            android:padding="4dp"
+            app:cardBackgroundColor="@color/maroon"
+            app:cardElevation="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:gravity="center_vertical|center_horizontal"
+                android:src="@drawable/baseline_change_circle_24"
+                android:textColor="@color/white" />
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardtwo"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="2dp"
+            android:layout_weight="1"
+            android:elevation="10dp"
+
+            android:padding="4dp"
+            app:cardBackgroundColor="@color/light_grey"
+            app:cardElevation="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+
+                android:gravity="center_vertical|center_horizontal"
+                android:src="@drawable/baseline_car_crash_24"
+               />
+
+
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

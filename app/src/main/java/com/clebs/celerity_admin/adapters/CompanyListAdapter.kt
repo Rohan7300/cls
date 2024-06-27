@@ -5,16 +5,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.databinding.CompanyAdapterBinding
+import com.clebs.celerity_admin.databinding.RecylerviewAdapterBinding
 import com.clebs.celerity_admin.models.CompanyListResponseItem
+import com.clebs.celerity_admin.models.GetVehicleRequestType
+import com.clebs.celerity_admin.models.GetVehicleRequestTypeItem
 import com.clebs.celerity_admin.utils.Onclick
 
-class CompanyListAdapter(var data: ArrayList<CompanyListResponseItem>,var callback:Onclick) :
+class CompanyListAdapter(var data: ArrayList<GetVehicleRequestTypeItem>, var callback: Onclick) :
     RecyclerView.Adapter<CompanyListAdapter.Companylistviewholder>() {
 
-    inner class Companylistviewholder(val binding: CompanyAdapterBinding) :
+    inner class Companylistviewholder(val binding: RecylerviewAdapterBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bindView(item: CompanyListResponseItem) {
+        fun bindView(item: GetVehicleRequestTypeItem) {
 
             binding.tvcompany.setText(item.name)
             Log.e("djkfdjfhdfdj", "bindView: " + item.name)
@@ -23,7 +26,7 @@ class CompanyListAdapter(var data: ArrayList<CompanyListResponseItem>,var callba
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Companylistviewholder {
-        val binding = CompanyAdapterBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = RecylerviewAdapterBinding.inflate(LayoutInflater.from(parent.context))
         return Companylistviewholder(binding)
 
     }

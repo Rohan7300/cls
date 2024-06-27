@@ -11,18 +11,17 @@
     <include
         android:id="@+id/app_bar_main_activity_two"
         layout="@layout/app_bar_main_activity_two"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="320dp"
+        android:layout_width="260dp"
         android:layout_height="match_parent"
         app:drawerLayoutCornerSize="10dp"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
         app:itemIconPadding="12dp"
-        app:itemVerticalPadding="20dp"
         app:itemBackground="@color/very_very_light"
         android:layout_gravity="start"
         android:theme="@style/NavigationTheme"

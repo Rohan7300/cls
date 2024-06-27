@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/very_light_orange"
     android:layout_height="match_parent"
     tools:context=".ui.ClSReports.WeeklyDefectsFragment">
     <LinearLayout
@@ -13,11 +14,18 @@
         android:layout_height="wrap_content"
         android:weightSum="3"
         android:orientation="horizontal">
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        </androidx.cardview.widget.CardView>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:textSize="16sp"
+
             android:textStyle="bold"
             android:id="@+id/tv_veh_reg"
             android:padding="8dp"

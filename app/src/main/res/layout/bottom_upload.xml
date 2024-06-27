@@ -23,7 +23,7 @@
                 android:id="@+id/blueRactIV"
                 android:layout_width="match_parent"
                 android:layout_height="71dp"
-                android:backgroundTint="@color/new_light_orange"
+                android:backgroundTint="@color/red_light"
                 android:background="@drawable/ic_rectangle_blue"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

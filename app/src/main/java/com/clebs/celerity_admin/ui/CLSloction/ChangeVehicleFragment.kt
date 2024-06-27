@@ -1,6 +1,7 @@
 package com.clebs.celerity_admin.ui.CLSloction
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -18,6 +19,7 @@ import android.widget.ProgressBar
 import android.widget.RadioButton
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -25,22 +27,29 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.MainActivityTwo
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.adapters.CompanyListAdapter
 import com.clebs.celerity_admin.adapters.DriverListAdapter
+import com.clebs.celerity_admin.adapters.FuelLevelAdapter
 import com.clebs.celerity_admin.adapters.ReturnVehicleAdapter
 import com.clebs.celerity_admin.adapters.SelectVehicleLocationAdapter
+import com.clebs.celerity_admin.adapters.VehicleOilLevelAdapter
+import com.clebs.celerity_admin.database.User
+import com.clebs.celerity_admin.database.VehicleInformation
 import com.clebs.celerity_admin.databinding.FragmentGalleryBinding
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.models.CompanyListResponseItem
 import com.clebs.celerity_admin.models.DriverListResponseModelItem
+import com.clebs.celerity_admin.models.GetVehicleRequestTypeItem
 import com.clebs.celerity_admin.models.VehicleReturnModelListItem
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
-import com.clebs.celerity_admin.utils.FabClick
+import com.clebs.celerity_admin.ui.App
+import com.clebs.celerity_admin.utils.OnButtonClickListener
 import com.clebs.celerity_admin.utils.OnItemClickRecyclerView
 import com.clebs.celerity_admin.utils.OnReturnVehicle
 import com.clebs.celerity_admin.utils.Onclick
@@ -58,24 +67,40 @@ import io.clearquote.assessment.cq_sdk.models.CustomerDetails
 import io.clearquote.assessment.cq_sdk.models.InputDetails
 import io.clearquote.assessment.cq_sdk.models.UserFlowParams
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Locale
 
 
-class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnReturnVehicle,
+class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicle,
     OnItemClickRecyclerView {
 
     private var _binding: FragmentGalleryBinding? = null
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var inspectionID: String
+    var time = String()
+
     private lateinit var regexPattern: Regex
-   var companynames: String?=null
+    var companynames: String? = null
     private var datextinputlayout: TextInputLayout? = null
     private var returntextinputlayout: TextInputLayout? = null
-    private var edt_layout:TextInputLayout?=null
+    private var textinput: EditText? = null
+    private var textinputtwo: EditText? = null
+    private var textinputthree: EditText? = null
+    private var textinputfour: EditText? = null
+    private var edt_layout: TextInputLayout? = null
     private var requesttype: TextInputLayout? = null
+    private var requesttypetext: EditText? = null
+    private var DA_id = String()
+    var spinnerposition: Int? = -1
+    private var returbDA_wmID = String()
     lateinit var deleteDialog: AlertDialog
     lateinit var deleteDialogtwo: AlertDialog
+    lateinit var request_type: AlertDialog
     lateinit var deleteDialogthree: AlertDialog
     lateinit var DriverListAdapter: DriverListAdapter
     lateinit var ReturnVehicleAdapter: ReturnVehicleAdapter
@@ -92,14 +117,29 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
     lateinit var llmtwo: LinearLayout
     lateinit var llmthree: LinearLayout
     private var list = ArrayList<CompanyListResponseItem>()
+    private var listnew = ArrayList<GetVehicleRequestTypeItem>()
+
+    lateinit var FuellevelAdapter: FuelLevelAdapter
+    lateinit var OillevelAdapter: VehicleOilLevelAdapter
     lateinit var textView: TextView
+    lateinit var returndepo: TextView
     private var radioButtonDA: RadioButton? = null
     private var radioButtonreturn: RadioButton? = null
     private var radioButtonworthy: RadioButton? = null
     private var radioButtonnotworthy: RadioButton? = null
     private var daname: EditText? = null
     private var edt: EditText? = null
+    private var edttwo: EditText? = null
+    private var edtthree: EditText? = null
+    private var edtcurrentmileage: EditText? = null
+    private var edtmilegae: EditText? = null
+    private var edtaddblue: EditText? = null
+
+
     private var rv_locatio: RecyclerView? = null
+    private var rv_fuel: RecyclerView? = null
+    private var rv_oil: RecyclerView? = null
+
     private var returnname: EditText? = null
     private val items = ArrayList<DriverListResponseModelItem>()
     private val itemstwo = ArrayList<VehicleReturnModelListItem>()
@@ -111,9 +151,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
 
@@ -133,13 +171,64 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
         ReturnVehicleAdapter = ReturnVehicleAdapter(ArrayList(), this)
         selectVehcilelocationadapter = SelectVehicleLocationAdapter(ArrayList(), this)
 
+
+        FuellevelAdapter = FuelLevelAdapter(ArrayList(), this)
+        OillevelAdapter = VehicleOilLevelAdapter(ArrayList(), this)
+
+
+
         isfirst = Prefs.getInstance(requireContext()).Isfirst
 
 
         binding.pb2.visibility = View.VISIBLE
         binding.constmain.alpha = 0.5f
         Observers()
+        Thread {
+            GlobalScope.launch {
+                if (!App.offlineSyncDB!!.isUserTableEmpty()) {
+                    binding.checkone.visibility = View.VISIBLE
+                    binding.textView4.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(), R.drawable.img_round
+                        )
+                    )
+                    binding.consttwo.alpha = 1f
+                    EditableTrue(binding.textView4)
 
+                } else {
+                    binding.checkone.visibility = View.GONE
+                    EditableFalse(binding.textView4)
+                    binding.textView4.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(), R.drawable.img_round_1
+                        )
+                    )
+                    binding.consttwo.alpha = 0.5f
+                }
+                if (!App.offlineSyncDB!!.isUserTableEmptyInformation()) {
+
+                    binding.checktwo.visibility = View.VISIBLE
+                    binding.textView6.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(), R.drawable.img_round
+                        )
+                    )
+                    binding.constthree.alpha = 1f
+                    EditableTrue(binding.textView6)
+                } else {
+                    binding.checktwo.visibility = View.GONE
+                    binding.constthree.alpha = 0.5f
+                    binding.textView6.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(), R.drawable.img_round_1
+                        )
+                    )
+                }
+                EditableFalse(binding.textView6)
+            }
+
+
+        }.start()
 
 
 
@@ -147,11 +236,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
 
         cqSDKInitializer.checkOfflineQuoteSyncCompleteStatus() { isSyncCompletedForAllQuotes ->
             if (isSyncCompletedForAllQuotes) {
-//                Toast.makeText(
-//                    requireContext(),
-//                    "Vehicle pictures are uploaded",
-//                    Toast.LENGTH_SHORT
-//                ).show()
+
             }
         }
 
@@ -160,16 +245,20 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
         binding.textView4.setOnClickListener {
             selectVehicleInformation()
 
+
         }
-        binding.textView5.setOnClickListener {
+        binding.textView6.setOnClickListener {
 
             uploadVehiclePicture()
         }
-        binding.textView6.setOnClickListener {
+        binding.textView5.setOnClickListener {
             bottom_sheetVanHire()
         }
         textView3.setOnClickListener {
-            selectVehicleOptions()
+            lifecycleScope.launch {
+                selectVehicleOptions()
+            }
+
         }
 
 
@@ -183,8 +272,8 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
             if (it != null) {
                 binding.pb2.visibility = View.GONE
                 binding.constmain.alpha = 1f
-                attachmentAdapter.data.addAll(it)
-
+//                attachmentAdapter.data.addAll(it)
+                list.clear()
                 list.addAll(it)
 
                 attachmentAdapter.notifyDataSetChanged()
@@ -232,7 +321,100 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
                 binding.constmain.alpha = 1f
             }
         })
+        mainViewModel.GetVehiclefuelListing().observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                binding.pb2.visibility = View.GONE
+                FuellevelAdapter.data.addAll(it)
+                FuellevelAdapter.notifyDataSetChanged()
+                binding.constmain.alpha = 1f
 
+            } else {
+                binding.pb2.visibility = View.GONE
+                binding.constmain.alpha = 1f
+            }
+
+        })
+        mainViewModel.GetVehicleOilListing().observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                binding.pb2.visibility = View.GONE
+                OillevelAdapter.data.addAll(it)
+                OillevelAdapter.notifyDataSetChanged()
+                binding.constmain.alpha = 1f
+
+            } else {
+                binding.pb2.visibility = View.GONE
+                binding.constmain.alpha = 1f
+            }
+
+        })
+        getvehcileRequestTypeList()
+
+    }
+
+    fun getDDAMandate() {
+
+        mainViewModel.GetDDAmandate(DA_id).observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                textView.setText("Allocated Vehicle: " + it.vehicleInfo.currentVehicleRegNo + "\n" + "Vehicle location: " + it.vehicleInfo.vehicleLocation)
+
+
+            }
+
+        })
+    }
+
+    fun getDDAreturnALlocation() {
+        mainViewModel.GetDDAmandateReturn(returbDA_wmID).observe(viewLifecycleOwner, Observer {
+            binding.pb2.visibility = View.GONE
+            if (it != null) {
+                textView.setText("Allocated DA: " + it.vehicleInfo.daName)
+                binding.pb2.visibility = View.VISIBLE
+                getRepoInfoModel()
+            }
+        })
+
+    }
+
+    fun getRepoInfoModel() {
+        mainViewModel.GetRepoInfoModel(returbDA_wmID).observe(viewLifecycleOwner, Observer {
+            binding.pb2.visibility = View.GONE
+            if (it != null) {
+                if (it.vehicleInfo.showDepo) {
+                    llmthree.visibility = View.VISIBLE
+                    returndepo.setText("Return to depo?")
+
+
+                } else if (it.vehicleInfo.showSupplier) {
+                    llmthree.visibility = View.GONE
+                    returndepo.setText("Return To supplier")
+                }
+
+            }
+
+
+        })
+
+    }
+
+    fun getvehcileRequestTypeList() {
+        mainViewModel.GetVehicleRequestTypeList().observe(viewLifecycleOwner, Observer {
+
+            if (it != null) {
+
+                binding.pb2.visibility = View.GONE
+                binding.constmain.alpha = 1f
+                attachmentAdapter.data.addAll(it)
+                listnew.clear()
+                listnew.addAll(it)
+
+                attachmentAdapter.notifyDataSetChanged()
+            } else {
+                binding.pb2.visibility = View.GONE
+                binding.constmain.alpha = 1f
+
+
+            }
+        })
     }
 
     override fun onDestroyView() {
@@ -240,15 +422,13 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
         _binding = null
     }
 
-    private fun selectVehicleOptions() {
+    private suspend fun selectVehicleOptions() {
 
-        val bottomSheetDialog =
-            BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
-        val showSheet = LayoutInflater.from(requireContext())
-            .inflate(
-                R.layout.bottom_sheet_layout,
-                requireActivity().findViewById<View>(R.id.bottomSheetRealCL) as ConstraintLayout?
-            )
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
+        val showSheet = LayoutInflater.from(requireContext()).inflate(
+            R.layout.bottom_sheet_layout,
+            requireActivity().findViewById<View>(R.id.bottomSheetRealCL) as ConstraintLayout?
+        )
         companyname = showSheet.findViewById(R.id.edt_company)
         daname = showSheet.findViewById(R.id.edt_change_da)
 
@@ -259,6 +439,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
         llmthree = showSheet.findViewById(R.id.llmthree)
 
         textView = showSheet.findViewById(R.id.txt_info)
+        returndepo = showSheet.findViewById(R.id.returndepo)
         returnvehiclename = showSheet.findViewById(R.id.edt_return_da)
         radioButtonDA = showSheet.findViewById(R.id.rbReTraining)
         radioButtonreturn = showSheet.findViewById(R.id.rbTraining)
@@ -267,14 +448,17 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
 
 
         datextinputlayout = showSheet.findViewById(R.id.edt_layout_two)
-        edt_layout=showSheet.findViewById(R.id.edt_layout)
+        edt_layout = showSheet.findViewById(R.id.edt_layout)
         returntextinputlayout = showSheet.findViewById(R.id.edt_layout_return)
         requesttype = showSheet.findViewById(R.id.edt_layout_three)
         rv_select_type = showSheet.findViewById(R.id.rv_select_type)
+        requesttypetext = showSheet.findViewById(R.id.edt)
+        EditableFalse(requesttypetext!!)
 
+        requesttypetext!!.setOnClickListener {
+            showcompanylistdialog()
 
-
-
+        }
 
         radioButtonDA?.setOnClickListener(::onRadioButtonClicked)
         radioButtonreturn?.setOnClickListener(::onRadioButtonClicked)
@@ -297,46 +481,41 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
         daname?.isClickable = true
         daname?.isFocusable = false
         daname?.isFocusableInTouchMode = false
-        val adapter = ArrayAdapter(requireContext(),
-            android.R.layout.simple_spinner_dropdown_item, list.map {
 
-                it.name })
+
+        val adapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, list.map {
+
+                it.name
+            })
         spinner?.adapter = adapter
-
+        updates()
         companyname?.setOnClickListener {
 //            showcompanylistdialog()
 
 
-        spinner?.performClick()
-
+            spinner?.performClick()
 
 
         }
 
-        spinner?.onItemSelectedListener=object :AdapterView.OnItemSelectedListener
-        {
+        spinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-
+                val text = parent!!.getItemAtPosition(position).toString()
 //                companyname?.setText(parent?.selectedItem.toString())
-
-                companynames=parent?.selectedItem.toString()
-                spinner?.visibility=View.VISIBLE
+                spinnerposition = position
+                companynames = parent?.selectedItem.toString()
+                spinner?.visibility = View.VISIBLE
                 llms.visibility = View.VISIBLE
-                Log.e("slevhdsd", "onItemSelected: "+companynames )
+                Log.e("slevhdsd", "onItemSelected: " + companynames)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                spinner?.visibility=View.GONE
+                spinner?.visibility = View.GONE
             }
         }
-
-//        val spinnerPosition = adapter.getPosition(spinner?.selectedItem.toString())
-//        companyname?.setText(list[spinnerPosition].name)
 
 
 
@@ -349,19 +528,167 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
         val imageView: ImageView = showSheet.findViewById(R.id.cancleIV)
         val textView: TextView = showSheet.findViewById(R.id.bt_change)
         textView.setOnClickListener {
-            bottomSheetDialog.dismiss()
-            binding.textView3.setBackgroundDrawable(
-                ContextCompat.getDrawable(
+
+//            bottomSheetDialog.dismiss()
+            if (radioButtonDA?.isChecked == false && radioButtonreturn?.isChecked == false) {
+                Toast.makeText(
                     requireContext(),
-                    R.drawable.shape_green
+                    "Please select from options change DA / return Vehicle",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else if (radioButtonDA!!.isChecked && daname?.text!!.isEmpty()) {
+                Toast.makeText(requireContext(), "Please select DA name", Toast.LENGTH_SHORT).show()
+            } else if (radioButtonreturn!!.isChecked && returnvehiclename?.text!!.isEmpty()) {
+                Toast.makeText(
+                    requireContext(), "Please select Vehicle to return", Toast.LENGTH_SHORT
+                ).show()
+            } else if (radioButtonreturn!!.isChecked && radioButtonnotworthy?.isChecked == false && radioButtonworthy?.isChecked == false) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please select from options worthy / not worthy",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+
+
+                GlobalScope.launch {
+                    Log.e("sdffncmnxmv", "selectVehicleOptions: ")
+                    if (App.offlineSyncDB!!.isUserTableEmpty()) {
+                        // The users table is empty, you can perform some initial setup here
+                        if (radioButtonDA!!.isChecked && daname?.text!!.isNotEmpty()) {
+                            lifecycleScope.launch {
+                                App.offlineSyncDB!!.insert(
+                                    User(
+                                        0,
+                                        companynames!!.toString(),
+                                        changeDAvechile = true,
+                                        returnDAvehicle = false,
+                                        selectDA = daname!!.text.toString(),
+                                        selectVehicleReturn = "",
+                                        worthy = false,
+                                        notworthy = false,
+                                        reuquestType = "",
+                                        spinnerposition!!
+                                    )
+                                )
+                            }
+
+                        } else if (radioButtonreturn!!.isChecked && radioButtonworthy!!.isChecked) {
+                            lifecycleScope.launch {
+                                App.offlineSyncDB!!.insert(
+                                    User(
+                                        1,
+                                        companynames!!.toString(),
+                                        false,
+                                        true,
+                                        "",
+                                        returnvehiclename!!.text.toString(),
+                                        true,
+                                        false,
+                                        "",
+                                        spinnerposition!!
+                                    )
+                                )
+                            }
+
+                        } else if (radioButtonreturn!!.isChecked && radioButtonnotworthy!!.isChecked) {
+                            lifecycleScope.launch {
+                                App.offlineSyncDB!!.insert(
+                                    User(
+                                        2,
+                                        companynames!!.toString(),
+                                        false,
+                                        true,
+                                        "",
+                                        returnvehiclename!!.text.toString(),
+                                        false,
+                                        true,
+                                        requesttypetext!!.text.toString(),
+                                        spinnerposition!!
+                                    )
+                                )
+                            }
+
+                        }
+
+                    } else {
+
+                        Log.e("djfdfhdjhfdjh", "selectVehicleOptions: ")
+                        App.offlineSyncDB!!.clearAllTables()
+                        if (radioButtonDA!!.isChecked && daname?.text!!.isNotEmpty()) {
+                            lifecycleScope.launch {
+                                App.offlineSyncDB!!.insert(
+                                    User(
+                                        0,
+                                        companynames!!.toString(),
+                                        changeDAvechile = true,
+                                        returnDAvehicle = false,
+                                        selectDA = daname!!.text.toString(),
+                                        selectVehicleReturn = "",
+                                        worthy = false,
+                                        notworthy = false,
+                                        reuquestType = "",
+                                        spinnerposition!!
+                                    )
+                                )
+                            }
+
+                        } else if (radioButtonreturn!!.isChecked && radioButtonworthy!!.isChecked) {
+                            lifecycleScope.launch {
+                                App.offlineSyncDB!!.insert(
+                                    User(
+                                        1,
+                                        companynames!!.toString(),
+                                        false,
+                                        true,
+                                        "",
+                                        returnvehiclename!!.text.toString(),
+                                        true,
+                                        false,
+                                        "",
+                                        spinnerposition!!
+                                    )
+                                )
+                            }
+
+                        } else if (radioButtonreturn!!.isChecked && radioButtonnotworthy!!.isChecked) {
+                            lifecycleScope.launch {
+                                App.offlineSyncDB!!.insert(
+                                    User(
+                                        2,
+                                        companynames!!.toString(),
+                                        false,
+                                        true,
+                                        "",
+                                        returnvehiclename!!.text.toString(),
+                                        false,
+                                        true,
+                                        requesttypetext!!.text.toString(),
+                                        spinnerposition!!
+                                    )
+                                )
+                            }
+                        }
+
+
+                    }
+
+                }
+
+//                updateUI()
+                bottomSheetDialog.dismiss()
+                selectVehicleInformation()
+                binding.checkone.visibility = View.VISIBLE
+                binding.textView4.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(), R.drawable.img_round
+                    )
                 )
-            )
-//            binding.down.setImageDrawable(
-//                ContextCompat.getDrawable(
-//                    requireContext(),
-//                    R.drawable.baseline_check_24
-//                )
-//            )
+                binding.consttwo.alpha = 1f
+                EditableTrue(binding.textView4)
+            }
+
+
         }
         imageView.setOnClickListener {
             bottomSheetDialog.dismiss()
@@ -374,13 +701,11 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
     }
 
     private fun selectVehicleInformation() {
-        val bottomSheetDialog =
-            BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
-        val showSheet = LayoutInflater.from(requireContext())
-            .inflate(
-                R.layout.bottom_sheet_vehicle_info,
-                requireActivity().findViewById<View>(R.id.bottomSheetRealCL) as CoordinatorLayout?
-            )
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
+        val showSheet = LayoutInflater.from(requireContext()).inflate(
+            R.layout.bottom_sheet_vehicle_info,
+            requireActivity().findViewById<View>(R.id.bottomSheetRealCL) as CoordinatorLayout?
+        )
 
 //        showSheet?.let {
 //            val behavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(showSheet)
@@ -390,18 +715,56 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
 //            behavior.isDraggable = false
 //        }
         val imageView: ImageView = showSheet.findViewById(R.id.cancleIV)
+        val bt_change: TextView = showSheet.findViewById(R.id.bt_change)
         edt = showSheet.findViewById(R.id.edt_company)
-
+        edttwo = showSheet.findViewById(R.id.edt_fuel)
+        edtthree = showSheet.findViewById(R.id.edt_oil)
+        edtcurrentmileage = showSheet.findViewById(R.id.edt_mileage)
+        edtaddblue = showSheet.findViewById(R.id.edt_blue)
         rv_locatio = showSheet.findViewById(R.id.rv_vehicle_location)
+        rv_fuel = showSheet.findViewById(R.id.rv_vehicle_fuellevel)
+        rv_oil = showSheet.findViewById(R.id.rv_vehicle_oillevel)
+
+
+        rv_fuel?.adapter = FuellevelAdapter
+        rv_oil?.adapter = OillevelAdapter
         rv_locatio?.adapter = selectVehcilelocationadapter
+
+
         edt?.isEnabled = true
         edt?.isClickable = true
         edt?.isFocusable = false
         edt?.isFocusableInTouchMode = false
+        edttwo?.isEnabled = true
+        edttwo?.isClickable = true
+        edttwo?.isFocusable = false
+        edttwo?.isFocusableInTouchMode = false
+        edtthree?.isEnabled = true
+        edtthree?.isClickable = true
+        edtthree?.isFocusable = false
+        edtthree?.isFocusableInTouchMode = false
+
+
+        updateUI()
+
+        edttwo?.setOnClickListener {
+
+            rv_fuel?.visibility = View.VISIBLE
+            rv_locatio?.visibility = View.GONE
+            rv_oil?.visibility = View.GONE
+
+        }
+        edtthree?.setOnClickListener {
+            rv_oil?.visibility = View.VISIBLE
+            rv_fuel?.visibility = View.GONE
+            rv_locatio?.visibility = View.GONE
+        }
 
         edt?.setOnClickListener {
 
             rv_locatio?.visibility = View.VISIBLE
+            rv_fuel?.visibility = View.GONE
+            rv_oil?.visibility = View.GONE
         }
 
 
@@ -410,21 +773,98 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
 
             bottomSheetDialog.dismiss()
         }
+        bt_change.setOnClickListener {
+            if (edt?.text.toString().isEmpty()) {
+                Toast.makeText(
+                    requireContext(), "Please enter vehicle location", Toast.LENGTH_SHORT
+                ).show()
+            } else if (edtmilegae?.text.toString().isEmpty()) {
+                Toast.makeText(requireContext(), "Please enter vehicle Mileage", Toast.LENGTH_SHORT)
+                    .show()
+
+            } else if (edtaddblue?.text.toString().isEmpty()) {
+                Toast.makeText(requireContext(), "Please enter vehicle addblue", Toast.LENGTH_SHORT)
+                    .show()
+            } else if (edttwo?.text.toString().isEmpty()) {
+
+                Toast.makeText(
+                    requireContext(), "Please select vehicle fuel level", Toast.LENGTH_SHORT
+                ).show()
+            } else if (edtthree?.text.toString().isEmpty()) {
+                Toast.makeText(
+                    requireContext(), "Please select vehicle oil level", Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                GlobalScope.launch {
+                    Log.e("sdffncmnxmv", "selectVehicleOptions: ")
+                    if (App.offlineSyncDB!!.isUserTableEmptyInformation()) {
+                        // The users table is empty, you can perform some initial setup here
+
+                        lifecycleScope.launch {
+                            App.offlineSyncDB!!.insertinfo(
+                                VehicleInformation(
+                                    0,
+                                    edt?.text.toString(),
+                                    edtcurrentmileage?.text.toString(),
+                                    edtaddblue?.text.toString(),
+                                    edttwo?.text.toString(),
+                                    edtthree?.text.toString()
+                                )
+                            )
+
+                        }
+
+
+                    } else {
+
+                        Log.e("djfdfhdjhfdjh", "selectVehicleOptions: ")
+                        App.offlineSyncDB!!.clearAllTables()
+
+                        lifecycleScope.launch {
+                            App.offlineSyncDB!!.insertinfo(
+                                VehicleInformation(
+                                    1,
+                                    edt?.text.toString(),
+                                    edtcurrentmileage?.text.toString(),
+                                    edtaddblue?.text.toString(),
+                                    edttwo?.text.toString(),
+                                    edtthree?.text.toString()
+                                )
+                            )
+
+                        }
+
+                    }
+
+                }
+
+
+            }
+            bottomSheetDialog.dismiss()
+            binding.checktwo.visibility = View.VISIBLE
+            binding.textView6.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(), R.drawable.img_round
+                )
+            )
+            binding.constthree.alpha = 1f
+            EditableTrue(binding.textView6)
+
+            uploadVehiclePicture()
+
+        }
         bottomSheetDialog.setContentView(showSheet)
         setupFullHeight(bottomSheetDialog, requireContext())
 //        setupFullHeight(bottomSheetDialog, requireContext())
         bottomSheetDialog.show()
-
     }
 
     private fun uploadVehiclePicture() {
-        val bottomSheetDialog =
-            BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
-        val showSheet = LayoutInflater.from(requireContext())
-            .inflate(
-                R.layout.bottom_upload,
-                requireActivity().findViewById<View>(R.id.bottomSheetRealCL) as ConstraintLayout?
-            )
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
+        val showSheet = LayoutInflater.from(requireContext()).inflate(
+            R.layout.bottom_upload,
+            requireActivity().findViewById<View>(R.id.bottomSheetRealCL) as ConstraintLayout?
+        )
         val imageView: ImageView = showSheet.findViewById(R.id.cancleIV)
         imageView.setOnClickListener {
             bottomSheetDialog.dismiss()
@@ -453,16 +893,39 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
     }
 
     private fun bottom_sheetVanHire() {
-        val bottomSheetDialog =
-            BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
-        val showSheet = LayoutInflater.from(requireContext())
-            .inflate(
-                R.layout.bottom_sheet_van_hire,
-                requireActivity().findViewById<View>(R.id.bottomSheetRealCL) as ConstraintLayout?
-            )
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
+        val showSheet = LayoutInflater.from(requireContext()).inflate(
+            R.layout.bottom_sheet_van_hire,
+            requireActivity().findViewById<View>(R.id.bottomSheetRealCL) as ConstraintLayout?
+        )
         val imageView: ImageView = showSheet.findViewById(R.id.cancleIV)
         imageView.setOnClickListener {
             bottomSheetDialog.dismiss()
+        }
+        textinput = showSheet.findViewById(R.id.edt_company)
+        textinputtwo = showSheet.findViewById(R.id.edt_mileage)
+        textinputthree = showSheet.findViewById(R.id.edt_blue)
+        textinputfour = showSheet.findViewById(R.id.edt_fuel)
+
+        EditableFalse(textinput!!)
+        EditableFalse(textinputtwo!!)
+        EditableFalse(textinputthree!!)
+        EditableFalse(textinputfour!!)
+
+        textinput?.setOnClickListener {
+            calview(0)
+
+
+        }
+
+        textinputtwo?.setOnClickListener {
+            calview(1)
+        }
+        textinputthree?.setOnClickListener {
+            calview(2)
+        }
+        textinputfour?.setOnClickListener {
+            calview(3)
         }
 //        val imageView: ImageView = showSheet.findViewById(R.id.cancleIV)
 //        imageView.setOnClickListener {
@@ -511,8 +974,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
                             make = "Van", //if sent, user can't edit
                             model = "Any Model", //if sent, user can't edit
                             bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
-                        ),
-                        customerDetails = CustomerDetails(
+                        ), customerDetails = CustomerDetails(
                             name = "", //if sent, user can't edit
                             email = "", //if sent, user can't edit
                             dialCode = "", //if sent, user can't edit
@@ -575,8 +1037,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
     fun showcompanylistdialog() {
         val factory = LayoutInflater.from(requireContext())
         val view: View = factory.inflate(R.layout.change_passwordninetydays, null)
-        deleteDialog =
-            AlertDialog.Builder(requireContext()).create()
+        deleteDialog = AlertDialog.Builder(requireContext()).create()
         deleteDialog.setView(view)
         val list: RecyclerView = view.findViewById(R.id.rv_comapny)
         val close: ImageView = view.findViewById(R.id.iv_close)
@@ -608,8 +1069,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
     fun ShowDriverListDialog() {
         val factory = LayoutInflater.from(requireContext())
         val view: View = factory.inflate(R.layout.driver_list_dialog, null)
-        deleteDialogtwo =
-            AlertDialog.Builder(requireContext()).create()
+        deleteDialogtwo = AlertDialog.Builder(requireContext()).create()
         deleteDialogtwo.setView(view)
         val list: RecyclerView = view.findViewById(R.id.rv_driver)
         val close: ImageView = view.findViewById(R.id.iv_close)
@@ -651,16 +1111,21 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
 
     }
 
-    override fun onItemClick(item: CompanyListResponseItem) {
-        Log.e("dskmdsjfjd", "onItemClick: ")
-        companyname?.setText(item.name)
-        llms.visibility = View.VISIBLE
-        deleteDialog.dismiss()
-    }
+//    override fun onItemClick(item: CompanyListResponseItem) {
+//        Log.e("dskmdsjfjd", "onItemClick: " + item.id)
+//        companyname?.setText(item.name)
+//
+//        llms.visibility = View.VISIBLE
+//        deleteDialog.dismiss()
+//    }
 
     override fun onItemClick(item: DriverListResponseModelItem) {
         daname?.setText(item.name)
+
+        DA_id = item.id.toString()
+        getDDAMandate()
         textView.visibility = View.VISIBLE
+
         deleteDialogtwo.dismiss()
     }
 
@@ -675,8 +1140,9 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
                     textView.visibility = View.GONE
                     llmtwo.visibility = View.GONE
                     llmthree.visibility = View.GONE
-
-                    requesttype?.visibility=View.GONE
+                    radioButtonworthy?.isChecked = false
+                    radioButtonnotworthy?.isChecked = false
+                    requesttype?.visibility = View.GONE
 
                     returnvehiclename?.setText("")
                     returntextinputlayout?.visibility = View.GONE
@@ -687,6 +1153,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
             R.id.rbTraining -> {
                 if (checked) {
                     daname?.setText("")
+                    textView.visibility = View.GONE
                     radioButtonDA?.isChecked = false
                     datextinputlayout?.visibility = View.GONE
                     returntextinputlayout?.visibility = View.VISIBLE
@@ -715,8 +1182,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
     fun ShowReturnVehicleList() {
         val factory = LayoutInflater.from(requireContext())
         val view: View = factory.inflate(R.layout.vehicle_list_dialog, null)
-        deleteDialogthree =
-            AlertDialog.Builder(requireContext()).create()
+        deleteDialogthree = AlertDialog.Builder(requireContext()).create()
         deleteDialogthree.setView(view)
         val list: RecyclerView = view.findViewById(R.id.rv_driver)
         val headings: TextView = view.findViewById(R.id.headings)
@@ -767,11 +1233,11 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
 
             items.filter {
                 it.name.contains(
-                    query,
-                    ignoreCase = true
+                    query, ignoreCase = true
                 )
             } // Replace 'name' with the appropriate property of your item
         }.toMutableList()
+
 
 
         DriverListAdapter.data = filteredItems as ArrayList<DriverListResponseModelItem>
@@ -783,9 +1249,8 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
             itemstwo.toMutableList()
         } else {
             itemstwo.filter { item ->
-                item.vehicleName?.contains(
-                    query,
-                    ignoreCase = true
+                item.vehicleRegNo?.contains(
+                    query, ignoreCase = true
                 ) ?: false
             }.toMutableList()
         }
@@ -799,27 +1264,36 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
 
 
     override fun onItemClick(item: VehicleReturnModelListItem) {
-        returnvehiclename?.setText(item.vehicleName)
+        returnvehiclename?.setText(item.vehicleRegNo)
+        returbDA_wmID = item.vehicleId.toString()
+        binding.pb2.visibility = View.VISIBLE
+        getDDAreturnALlocation()
         textView.visibility = View.VISIBLE
         llmtwo.visibility = View.VISIBLE
-        llmthree.visibility = View.VISIBLE
+//        llmthree.visibility = View.VISIBLE
         deleteDialogthree.dismiss()
     }
 
-    override fun onActivityViewClicked(view: View) {
-
-    }
 
     override fun OnItemClickRecyclerViewClicks(
-        recyclerViewId: Int,
-        position: Int,
-        selecteditemclicked: String
+        recyclerViewId: Int, position: Int, selecteditemclicked: String
     ) {
         when (recyclerViewId) {
             R.id.rv_vehicle_location -> {
                 edt?.setText(selecteditemclicked)
-                rv_locatio?.visibility=View.GONE
+                rv_locatio?.visibility = View.GONE
                 // Handle item click event for RecyclerView1
+            }
+
+            R.id.rv_vehicle_fuellevel -> {
+
+                edttwo?.setText(selecteditemclicked)
+                rv_fuel?.visibility = View.GONE
+            }
+
+            R.id.rv_vehicle_oillevel -> {
+                edtthree?.setText(selecteditemclicked)
+                rv_oil?.visibility = View.GONE
             }
 //                 R.id.recyclerView2 -> {
 //                     // Handle item click event for RecyclerView2
@@ -827,6 +1301,195 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, FabClick, OnRe
 //                 // Add more conditions for additional RecyclerViews
         }
     }
+
+    fun calview(id: Int) {
+        val myFormat = "dd MMM yyyy"
+
+        var cal = Calendar.getInstance()
+        var sdf = SimpleDateFormat(myFormat, Locale.US)
+        val dateSetListener =
+            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                cal.set(Calendar.YEAR, year)
+                cal.set(Calendar.MONTH, monthOfYear)
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                time = sdf.format(cal.time)
+                if (id == 0) {
+                    textinput?.setText(time)
+                } else if (id == 1) {
+                    textinputtwo?.setText(time)
+                } else if (id == 2) {
+                    textinputthree?.setText(time)
+
+                } else if (id == 3) {
+                    textinputfour?.setText(time)
+                }
+                // mention the format you need
+            }
+
+        DatePickerDialog(
+            requireContext(),
+            dateSetListener,
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
+        ).show()
+
+
+    }
+
+    fun EditableFalse(view: View) {
+
+        view.isEnabled = true
+        view.isClickable = false
+        view.isFocusable = false
+        view.isFocusableInTouchMode = false
+    }
+
+    fun EditableTrue(view: View) {
+        view.isEnabled = true
+        view.isClickable = true
+        view.isFocusable = true
+        view.isFocusableInTouchMode = true
+    }
+
+    override fun onItemClick(item: GetVehicleRequestTypeItem) {
+        requesttypetext?.setText(item.name)
+        deleteDialog.dismiss()
+    }
+
+    fun updates() {
+        Thread {
+            GlobalScope.launch {
+                if (!App.offlineSyncDB!!.isUserTableEmpty()) {
+
+                    Thread {
+                        val user = App.offlineSyncDB!!.getAllUsers()
+                        if (user[0].changeDAvechile) {
+                            spinner?.setSelection(user.get(0).spinnerposition)
+                            radioButtonDA!!.isChecked = user.get(0).changeDAvechile
+                            daname?.visibility = View.VISIBLE
+                            datextinputlayout?.visibility = View.VISIBLE
+                            daname!!.setText(user.get(0).selectDA)
+                        } else if (user[0].returnDAvehicle && user[0].worthy && !user[0].notworthy) {
+                            spinner?.setSelection(user.get(0).spinnerposition)
+                            radioButtonreturn!!.isChecked = user.get(0).returnDAvehicle
+                            returnvehiclename!!.setText(user.get(0).selectVehicleReturn)
+                            radioButtonworthy!!.isChecked = user.get(0).worthy
+                            radioButtonnotworthy!!.isChecked = user.get(0).notworthy
+                            returntextinputlayout!!.visibility = View.VISIBLE
+                            llmtwo.visibility = View.VISIBLE
+                            llmthree.visibility = View.VISIBLE
+
+
+                        } else if (user[0].returnDAvehicle && !user[0].worthy && user[0].notworthy) {
+                            spinner?.setSelection(user.get(0).spinnerposition)
+                            radioButtonreturn!!.isChecked = user.get(0).returnDAvehicle
+                            returnvehiclename!!.setText(user.get(0).selectVehicleReturn)
+                            returntextinputlayout!!.visibility = View.VISIBLE
+                            radioButtonworthy!!.isChecked = user.get(0).worthy
+                            radioButtonnotworthy!!.isChecked = user.get(0).notworthy
+                            llmtwo.visibility = View.VISIBLE
+                            llmthree.visibility = View.VISIBLE
+                            requesttype?.visibility = View.VISIBLE
+                            requesttypetext!!.setText(user.get(0).reuquestType)
+
+                        }
+
+
+
+                        Log.e(
+                            "dkjjdkfjkdjkfjkd", "onCreateView: " + App.offlineSyncDB!!.getAllUsers()
+                        )
+                        //Do your database´s operations here
+                    }.start()
+                }
+            }
+
+
+        }.start()
+
+    }
+
+    fun updateUI() {
+        Thread {
+            GlobalScope.launch {
+                if (!App.offlineSyncDB!!.isUserTableEmptyInformation()) {
+
+                    Thread {
+                        val user = App.offlineSyncDB!!.getAllUsersinfo()
+                        edt?.setText(user.get(0).vehiclelocation)
+                        edtaddblue?.setText(user.get(0).blueleve)
+                        edtcurrentmileage?.setText(user.get(0).currentVehicleMileage)
+                        edttwo?.setText(user.get(0).fuelelevel)
+                        edtthree?.setText(user.get(0).oillevel)
+
+
+
+                        Log.e(
+                            "dkjjdkfjkdjkfjkd", "onCreateView: " + App.offlineSyncDB!!.getAllUsers()
+                        )
+                        //Do your database´s operations here
+                    }.start()
+                }
+            }
+
+
+        }.start()
+    }
+
+    fun updatemainUI() {
+
+
+        Thread {
+            GlobalScope.launch {
+                if (!App.offlineSyncDB!!.isUserTableEmpty()) {
+                    binding.checkone.visibility = View.VISIBLE
+                    binding.textView4.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(), R.drawable.img_round
+                        )
+                    )
+                    binding.consttwo.alpha = 1f
+                    EditableTrue(binding.textView4)
+
+                } else {
+                    binding.checkone.visibility = View.GONE
+
+                    binding.textView4.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(), R.drawable.img_round_1
+                        )
+                    )
+                    binding.consttwo.alpha = 0.5f
+                    EditableFalse(binding.textView4)
+                }
+                if (!App.offlineSyncDB!!.isUserTableEmptyInformation()) {
+
+                    binding.checktwo.visibility = View.VISIBLE
+                    binding.textView6.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(), R.drawable.img_round
+                        )
+                    )
+                    binding.constthree.alpha = 1f
+                    EditableTrue(binding.textView6)
+                } else {
+                    binding.checktwo.visibility = View.GONE
+                    binding.constthree.alpha = 0.5f
+                    binding.textView6.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(), R.drawable.img_round_1
+                        )
+                    )
+                    EditableFalse(binding.textView6)
+                }
+            }
+
+
+        }.start()
+    }
+
+
 
 
 }

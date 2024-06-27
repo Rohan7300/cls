@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="71dp"
             android:background="@drawable/ic_rectangle_blue"
-            android:backgroundTint="@color/new_light_orange"
+            android:backgroundTint="@color/red_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -73,6 +73,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
+
+                app:hintAnimationEnabled="false"
                 android:hint="Select Vehicle location *"
                 app:hintTextColor="@color/black">
 
@@ -90,8 +92,8 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-app:cardElevation="30dp"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:cardElevation="30dp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_vehicle_location"
@@ -121,6 +123,7 @@ app:cardElevation="30dp"
                 style="@style/LoginTextInputLayoutStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:hintAnimationEnabled="false"
                 android:layout_marginTop="4dp"
                 android:hint="Enter Vehicle current mileage *"
                 app:hintTextColor="@color/black"
@@ -145,6 +148,7 @@ app:cardElevation="30dp"
                 style="@style/LoginTextInputLayoutStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:hintAnimationEnabled="false"
                 android:layout_marginTop="16dp"
                 android:hint="Enter Add Blue mileage *"
                 app:hintTextColor="@color/black"
@@ -169,6 +173,7 @@ app:cardElevation="30dp"
                 style="@style/LoginTextInputLayoutStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:hintAnimationEnabled="false"
                 android:layout_marginTop="16dp"
                 android:hint="Select vehicle fuel level*"
                 app:hintTextColor="@color/black"
@@ -190,8 +195,10 @@ app:cardElevation="30dp"
                     android:id="@+id/rv_vehicle_fuellevel"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
+                    android:overScrollMode="never"
                     android:layout_marginTop="4dp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -200,6 +207,7 @@ app:cardElevation="30dp"
                 style="@style/LoginTextInputLayoutStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:hintAnimationEnabled="false"
                 android:layout_marginTop="16dp"
                 android:hint="Select vehicle oil level*"
                 app:hintTextColor="@color/black"
@@ -221,8 +229,10 @@ app:cardElevation="30dp"
                     android:id="@+id/rv_vehicle_oillevel"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
+                    android:overScrollMode="never"
                     android:layout_marginTop="4dp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -232,7 +242,7 @@ app:cardElevation="30dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/shape_edittext"
-                android:backgroundTint="#9c27b0"
+                android:backgroundTint="@color/maroon"
                 android:paddingStart="26dp"
                 android:paddingTop="12dp"
                 android:paddingEnd="26dp"

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.databinding.CompanyAdapterBinding
+import com.clebs.celerity_admin.databinding.RecylerviewAdapterBinding
 import com.clebs.celerity_admin.models.CompanyListResponseItem
 import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.DriverListResponseModelItem
@@ -14,7 +15,7 @@ import com.clebs.celerity_admin.utils.OnclickDriver
 class DriverListAdapter(var data: ArrayList<DriverListResponseModelItem>, var callback: OnclickDriver) :
     RecyclerView.Adapter<DriverListAdapter.Companylistviewholder>() {
     private var originalData: ArrayList<DriverListResponseModelItem> = ArrayList(data)
-    inner class Companylistviewholder(val binding: CompanyAdapterBinding) :
+    inner class Companylistviewholder(val binding: RecylerviewAdapterBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(item: DriverListResponseModelItem) {
@@ -26,7 +27,7 @@ class DriverListAdapter(var data: ArrayList<DriverListResponseModelItem>, var ca
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Companylistviewholder {
-        val binding = CompanyAdapterBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = RecylerviewAdapterBinding.inflate(LayoutInflater.from(parent.context))
         return Companylistviewholder(binding)
 
     }
