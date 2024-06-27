@@ -1,10 +1,9 @@
 package com.clebs.celerity_admin.viewModels
 
-import android.view.View
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.clebs.celerity_admin.database.User
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
@@ -13,10 +12,13 @@ import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
 import com.clebs.celerity_admin.models.GetvehicleOilLevelList
+import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
 import com.clebs.celerity_admin.models.VehicleReturnModelList
+import com.clebs.celerity_admin.models.WeekYearModel
+import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
 import com.clebs.celerity_admin.repo.MainRepo
 import kotlinx.coroutines.launch
 
@@ -159,6 +161,7 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         }
         return responseLiveData
     }
+
     fun GetDDAmandateReturn(ddaid: String): MutableLiveData<GetReturnVmID?> {
         val responseLiveData = MutableLiveData<GetReturnVmID?>()
 
@@ -175,6 +178,7 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         }
         return responseLiveData
     }
+
     fun GetRepoInfoModel(ddaid: String): MutableLiveData<RepoInfoModel?> {
         val responseLiveData = MutableLiveData<RepoInfoModel?>()
 
@@ -208,11 +212,69 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         }
         return responseLiveData
     }
-    fun GetemergencyContact(userid:Int): MutableLiveData<String?> {
+
+    fun GetemergencyContact(userid: Int): MutableLiveData<String?> {
         val responseLiveData = MutableLiveData<String?>()
 
         viewModelScope.launch {
             val response = repo.GetDAEmergencyContact(userid)
+            if (response.failed) {
+                responseLiveData.postValue(null)
+            }
+            if (!response.isSuccessful) {
+                responseLiveData.postValue(null)
+            } else {
+                responseLiveData.postValue(response.body)
+            }
+        }
+        return responseLiveData
+    }
+
+    fun GetlastMileageInfo(vmID: String): MutableLiveData<LastMileageInfo?> {
+        val responseLiveData = MutableLiveData<LastMileageInfo?>()
+
+        viewModelScope.launch {
+            val response = repo.GetLastMileageInfo(vmID)
+            if (response.failed) {
+                responseLiveData.postValue(null)
+            }
+            if (!response.isSuccessful) {
+                responseLiveData.postValue(null)
+            } else {
+                responseLiveData.postValue(response.body)
+            }
+        }
+        return responseLiveData
+    }
+
+    fun GetCurrentWeekYear(): MutableLiveData<WeekYearModel?> {
+        val responseLiveData = MutableLiveData<WeekYearModel?>()
+
+        viewModelScope.launch {
+            val response = repo.GetCurrentWeakAndYear()
+            if (response.failed) {
+                responseLiveData.postValue(null)
+            }
+            if (!response.isSuccessful) {
+                responseLiveData.postValue(null)
+            } else {
+                responseLiveData.postValue(response.body)
+            }
+        }
+        return responseLiveData
+    }
+
+    fun GetWeeklyDefectChecks(
+        weekno: Double,
+        year: Double,
+        driverid: Double,
+        lmid: Double,
+        showdefects: Boolean
+    ): MutableLiveData<WeeklyDefectChecksModel?> {
+        val responseLiveData = MutableLiveData<WeeklyDefectChecksModel?>()
+
+        viewModelScope.launch {
+            val response = repo.GetWeeklyDefectCheckList(weekno, year, driverid, lmid, showdefects)
             if (response.failed) {
                 responseLiveData.postValue(null)
             }

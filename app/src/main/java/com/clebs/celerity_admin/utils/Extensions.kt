@@ -272,9 +272,69 @@ fun setupHalfHeight(bottomSheetDialog: BottomSheetDialog, context: Context) {
     if (layoutParams != null) {
         layoutParams.height = windowHeight
     }
+    behavior.peekHeight = 500 // Set the desired maximum height in pixels
+
+// Set the bottom sheet to be expanded by default
+    behavior.state = BottomSheetBehavior.STATE_EXPANDED
     bottomSheet.layoutParams = layoutParams
-    behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+
     behavior.isDraggable=true
+    behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            when (newState) {
+                BottomSheetBehavior.STATE_EXPANDED -> {
+                    // Bottom sheet is expanded, adjust the height as needed
+                    behavior.peekHeight = 800 // Set the desired maximum height in pixels
+                }
+                BottomSheetBehavior.STATE_COLLAPSED -> {
+                    // Bottom sheet is collapsed, adjust the height as needed
+                    behavior.peekHeight = 400 // Set the desired minimum height in pixels
+                }
+                // Handle other state changes as needed
+            }
+        }
+
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            // Handle bottom sheet sliding
+        }
+    })
+}
+fun setupHalfHeightForlisting(bottomSheetDialog: BottomSheetDialog, context: Context) {
+    val bottomSheet =
+        bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+    val behavior = BottomSheetBehavior.from(bottomSheet as View)
+    val layoutParams = bottomSheet.layoutParams
+
+    val windowHeight: Int = getWindowHeight(context)
+    if (layoutParams != null) {
+        layoutParams.height = windowHeight
+    }
+    behavior.peekHeight = 500 // Set the desired maximum height in pixels
+
+// Set the bottom sheet to be expanded by default
+    behavior.state = BottomSheetBehavior.STATE_EXPANDED
+    bottomSheet.layoutParams = layoutParams
+
+    behavior.isDraggable=false
+    behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            when (newState) {
+                BottomSheetBehavior.STATE_EXPANDED -> {
+                    // Bottom sheet is expanded, adjust the height as needed
+                    behavior.peekHeight = 800 // Set the desired maximum height in pixels
+                }
+                BottomSheetBehavior.STATE_COLLAPSED -> {
+                    // Bottom sheet is collapsed, adjust the height as needed
+                    behavior.peekHeight = 400 // Set the desired minimum height in pixels
+                }
+                // Handle other state changes as needed
+            }
+        }
+
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            // Handle bottom sheet sliding
+        }
+    })
 }
 
 fun getWindowHeight(context: Context): Int {

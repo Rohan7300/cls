@@ -7,6 +7,7 @@
     <color name="teal_700">#F36C2E</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
     <color name="orange">#F36C2E</color>
     <color name="light_orange">#E15F24</color>
     <color name="very_light_orange">#FEF0EA</color>
@@ -18,6 +19,7 @@
     <color name="pink">#03A9F4</color>
     <color name="red_light">#f76f6f</color>
     <color name="maroon">#BE1E2D</color>
+    <color name="very_very_light_red">#FBC8C8</color>
     <color name="red">#ff0000</color>
     <color name="peek_orange">#fdb64e</color>
     <color name="blue_hex">#77dfd8</color>
@@ -35,6 +37,7 @@
     <color name="semi_transparent_color">#80000000</color>
     <color name="defaultOutlineAmbientShadowColor">#0A000000</color> <color name="defaultOutlineSpotShadowColor">#30000000</color>
     <color name="overlay">#BF000000</color>
+
     <color name="green">#6CFD62</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#ff0000</color>
     <color name="transparent">#00000000</color>

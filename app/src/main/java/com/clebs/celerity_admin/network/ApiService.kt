@@ -13,11 +13,14 @@ import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
 import com.clebs.celerity_admin.models.VehicleReturnModelList
+import com.clebs.celerity_admin.models.WeekYearModel
+import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -60,4 +63,11 @@ interface ApiService {
 
     @GET("/api/VehAllocHistories/GetVehicleLastMileageInfo/{vmId}")
     suspend fun GetVehicleLastMileage(@Path("userId") vmID: String): Response<LastMileageInfo>
+
+    @GET("/api/VehAllocHistories/GetISO8601WeekandYear")
+    suspend fun getCurrentWeekAndYear():Response<WeekYearModel>
+
+    @GET("/api/VehAllocHistories/GetWeeklyDefectSheetCheckList")
+    suspend fun getWeeklyDefectCHeckList(@Query("weekNo") weekno:Double,@Query("year") year:Double,@Query("driverId") driverId:Double,@Query("LmId") LmId:Double,@Query("showDefectedOnly") showDefectedOnly:Boolean):Response<WeeklyDefectChecksModel>
+
 }

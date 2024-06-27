@@ -21,7 +21,7 @@ class CompanyListAdapter(var data: ArrayList<GetVehicleRequestTypeItem>, var cal
 
             binding.tvcompany.setText(item.name)
             Log.e("djkfdjfhdfdj", "bindView: " + item.name)
-            binding.tvcompany.setOnClickListener { callback.onItemClick(item) }
+          itemView.setOnClickListener { callback.onItemClick(item) }
         }
     }
 

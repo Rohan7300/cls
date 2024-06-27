@@ -12,42 +12,44 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import com.clebs.celerity_admin.database.CheckInspection
 import com.clebs.celerity_admin.databinding.ActivityMainTwoBinding
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.App
-import com.clebs.celerity_admin.ui.CLSloction.ChangeVehicleFragment
-import com.clebs.celerity_admin.utils.FabClick
-import com.clebs.celerity_admin.utils.OnButtonClickListener
 import com.clebs.celerity_admin.viewModels.MainViewModel
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
 import kotlinx.coroutines.launch
 
-class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener{
+class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainTwoBinding
-    private var activityViewClickListener: FabClick? = null
+
+    private var saveClickCounter = 0
     lateinit var resumedialog: AlertDialog
-    private lateinit var myFragment: ChangeVehicleFragment
+
     private lateinit var cqSDKInitializer: CQSDKInitializer
     lateinit var mainViewModel: MainViewModel
+    lateinit var navController: NavController
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +61,6 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener{
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         setSupportActionBar(binding.appBarMainActivityTwo.toolbar)
-        myFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main_activity_two) as ChangeVehicleFragment
 
 
 //        binding.appBarMainActivityTwo.fab.setOnClickListener { view ->
@@ -74,7 +75,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener{
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_main_activity_two)
+        navController = findNavController(R.id.nav_host_fragment_content_main_activity_two)
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -94,13 +95,15 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener{
             if (!App.offlineSyncDB!!.isUserTableEmpty()) {
 
                 resumeDialog()
+
             }
         }
 
         cqSDKInitializer = CQSDKInitializer(this)
         if (!cqSDKInitializer.isCQSDKInitialized()) {
+            Log.e("dsjhjfhdfdjfcqkintialization", "onCreate: ", )
             cqSDKInitializer.initSDK(
-                sdkKey = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu",
+                sdkKey ="ab8c0110-9529-4e2c-a1d4-d810636bccf3.eu",
                 result = { isInitialized, code, message ->
                     if (code == PublicConstants.sdkInitializationSuccessCode) {
                         Log.e("sucesss", "onCreateView: ")
@@ -119,12 +122,14 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener{
                     R.color.maroon
                 )
             )
+            binding.appBarMainActivityTwo.cardone.alpha=1f
             binding.appBarMainActivityTwo.cardtwo.setCardBackgroundColor(
                 ContextCompat.getColor(
                     applicationContext,
-                    R.color.light_grey
+                    R.color.darkcommentbg
                 )
             )
+            binding.appBarMainActivityTwo.cardtwo.alpha=0.4f
         }
         binding.appBarMainActivityTwo.cardtwo.setOnClickListener {
             navController.navigate(R.id.nav_slideshow)
@@ -134,18 +139,50 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener{
                     R.color.maroon
                 )
             )
+            binding.appBarMainActivityTwo.cardtwo.alpha=1f
             binding.appBarMainActivityTwo.cardone.setCardBackgroundColor(
                 ContextCompat.getColor(
                     applicationContext,
-                    R.color.light_grey
+                    R.color.darkcommentbg
                 )
             )
+            binding.appBarMainActivityTwo.cardone.alpha=0.4f
         }
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        val message =
+            intent?.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
+                ?: "Could not identify status message"
+        val tempCode =
+            intent?.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
 
+        if (tempCode == 200) {
+            Log.d("hdhsdshdsdjshhsds", "200 $message")
+//            prefs.saveBoolean("Inspection", true)
+//            prefs.Isfirst = false
+//            prefs.updateInspectionStatus(true)
+//            SaveVehicleInspection(viewModel)
+            lifecycleScope.launch {
+                App.offlineSyncDB?.insertInfoUpload(
+                    CheckInspection(
+                        0,
+                        true,
+                    )
+                )
+            }
+            navController.navigate(R.id.nav_gallery)
+
+//            uploadStatus()
+            Toast.makeText(this, "Vehicle Inspection is successfully completed", Toast.LENGTH_SHORT)
+                .show()
+
+        } else {
+
+            //showToast("Vehicle Inspection Failed!! ", this)
+            Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
+        }
         //inspectionstarted = true
     }
 
@@ -233,12 +270,12 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener{
 
         bt.setOnClickListener {
             resumedialog.dismiss()
-
+            navController.navigate(R.id.nav_gallery)
 
         }
         bt2.setOnClickListener {
             App.offlineSyncDB!!.clearAllTables()
-
+            navController.navigate(R.id.nav_gallery)
             resumedialog.dismiss()
 
 

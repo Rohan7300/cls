@@ -17,7 +17,7 @@ class Prefs(context: Context) {
     private lateinit var sharedPreferences: SharedPreferences
 
     companion object {
-        private const val USER_ACCESS_TOKEN = "celerity_shared_prefs"
+        private const val USER_ACCESS_TOKEN = "celerity_admin_shared_prefs"
         private const val USER_ACCESS_TOKEN_TWO = "celerity_shared_prefs"
         private var instance: Prefs? = null
 
@@ -51,13 +51,19 @@ class Prefs(context: Context) {
     var vmId: Int
         get() = sharedPreferences.getInt("vmIdx", 0)
         set(value) = sharedPreferences.edit().putInt("vmIdx", value).apply()
-
     var scannedVmRegNo: String
         get() {
             return sharedPreferences.getString("scannedVmRegNo", "") ?: ""
         }
         set(value) {
             sharedPreferences.edit().putString("scannedVmRegNo", value).apply()
+        }
+    var vmIdReturnveh: String
+        get() {
+            return sharedPreferences.getString("vmIdS", "") ?: ""
+        }
+        set(value) {
+            sharedPreferences.edit().putString("vmIdS", value).apply()
         }
 
     var inspectionID: String

@@ -5,7 +5,7 @@
     android:id="@+id/constmain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/new_light_orange">
+    android:background="@color/very_light_orange">
 
     <ProgressBar
         android:id="@+id/pb2"
@@ -68,6 +68,8 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/textView3"
                 android:layout_width="130dp"
+                app:civ_border_width="1dp"
+
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/img_round"
@@ -129,6 +131,7 @@
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                app:civ_border_width="1dp"
                 android:src="@drawable/img_round_1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -193,6 +196,7 @@ android:id="@+id/constthree"
                 android:layout_width="138dp"
                 android:layout_height="188dp"
                 android:layout_marginTop="12dp"
+                app:civ_border_width="1dp"
                 android:src="@drawable/img_round_1"
                 app:layout_constraintEnd_toEndOf="parent"
 
@@ -247,7 +251,7 @@ android:id="@+id/constfour"
                 android:layout_marginTop="12dp"
                 android:src="@drawable/img_round_1"
                 app:layout_constraintEnd_toEndOf="parent"
-
+                app:civ_border_width="1dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
             <ImageView

@@ -113,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Previous Recorded Mileage"
+                android:text="Previous Recorded Mileage :"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@+id/edt_layout"
                 app:layout_constraintTop_toBottomOf="@id/edt_layout" />
@@ -124,7 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:hintAnimationEnabled="false"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="10dp"
                 android:hint="Enter Vehicle current mileage *"
                 app:hintTextColor="@color/black"
                 app:layout_constraintTop_toBottomOf="@id/tv_milegae">
@@ -134,9 +134,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-
                     android:importantForAutofill="no"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:padding="12dp"
 
                     android:textSize="13sp" />
@@ -240,14 +239,14 @@
                 android:id="@+id/bt_change"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="40dp"
                 android:background="@drawable/shape_edittext"
                 android:backgroundTint="@color/maroon"
                 android:paddingStart="26dp"
                 android:paddingTop="12dp"
                 android:paddingEnd="26dp"
                 android:paddingBottom="12dp"
-                android:text="Save"
+                android:text="NEXT"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"

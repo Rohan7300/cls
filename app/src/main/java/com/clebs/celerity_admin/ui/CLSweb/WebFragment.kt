@@ -60,11 +60,16 @@ class WebFragment : Fragment() {
 
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
+        binding.web.visibility=View.GONE
+        binding.pb.visibility=View.VISIBLE
         mainViewModel.GetemergencyContact(
             Prefs.getInstance(App.instance).clebUserId.toString().toInt()
         ).observe(viewLifecycleOwner, Observer {
             if (it!=null){
+
                 binding.web.loadData(it, "text/html", "UTF-8")
+                binding.web.visibility=View.VISIBLE
+                binding.pb.visibility=View.GONE
             }
 
 

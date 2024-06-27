@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -151,7 +152,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_toEndOf="@id/edt_traing"
-                            android:background="#FBC8C8"
+
                             android:gravity="center" />
 
                     </RelativeLayout>
@@ -184,7 +185,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="5dp"
                             android:layout_toRightOf="@id/edt_traingtwo"
-                            android:background="#FBC8C8" />
+                        />
 
                     </RelativeLayout>
 
@@ -429,7 +430,7 @@ Vehicle Location : Birmingham - DBI2"
                     android:paddingTop="12dp"
                     android:paddingEnd="26dp"
                     android:paddingBottom="12dp"
-                    android:text="Save"
+                    android:text="NEXT"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"

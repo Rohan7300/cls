@@ -3,44 +3,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-<LinearLayout
+
+
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_margin="10dp"
+
     app:layout_constraintStart_toStartOf="parent"
     android:weightSum="3"
     app:layout_constraintTop_toTopOf="parent"
     android:id="@+id/ll">
     <TextView
         android:id="@+id/tv_reg"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Number"
-        android:layout_marginStart="8dp"
+
+
 android:textColor="@color/red_light"
         android:layout_weight="1"
-        android:textSize="14sp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textStyle="bold"
         />
     <TextView
         android:id="@+id/tv_da_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Number"
-        android:layout_marginStart="16dp"
         android:textColor="@color/red_light"
         android:layout_weight="1"
-        android:textSize="14sp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textStyle="bold"
         />
     <TextView
         android:id="@+id/tv_da_locationname"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Number"
-        android:layout_marginStart="8dp"
+
         android:textColor="@color/red_light"
         android:layout_weight="1"
-        android:textSize="14sp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textStyle="bold"
         />
 </LinearLayout>
 

@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RadioButton
+import android.widget.RelativeLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -49,7 +51,6 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.App
-import com.clebs.celerity_admin.utils.OnButtonClickListener
 import com.clebs.celerity_admin.utils.OnItemClickRecyclerView
 import com.clebs.celerity_admin.utils.OnReturnVehicle
 import com.clebs.celerity_admin.utils.Onclick
@@ -57,6 +58,7 @@ import com.clebs.celerity_admin.utils.OnclickDriver
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.setupFullHeight
 import com.clebs.celerity_admin.utils.setupHalfHeight
+import com.clebs.celerity_admin.utils.setupHalfHeightForlisting
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputLayout
@@ -102,10 +104,25 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
     lateinit var deleteDialogtwo: AlertDialog
     lateinit var request_type: AlertDialog
     lateinit var deleteDialogthree: AlertDialog
+    private var RADIOBUTTONWORTHY: RadioButton? = null
+    private var RADIOBUTTONNOTWORTHY: RadioButton? = null
     lateinit var DriverListAdapter: DriverListAdapter
     lateinit var ReturnVehicleAdapter: ReturnVehicleAdapter
     var spinner: Spinner? = null
 
+    private var RETURNTODEOPSUP: TextView? = null
+    private var RBTRAINING: RadioButton? = null
+    private var linearLayout: LinearLayout? = null
+
+
+    private var saveClickCounter = 0
+    private var saveClickCountertwo = 0
+    private var saveClickCounterthree = 0
+    private var saveClickCounterfour = 0
+    private var saveClickCounterfive = 0
+    private var saveClickCountersix = 0
+    private var saveClickCounterseven = 0
+    private var textViewInspection: TextView? = null
     private var isfirst: Boolean? = false
     lateinit var Activity: MainActivityTwo
     private var startonetime: Boolean? = false
@@ -125,6 +142,8 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
     lateinit var returndepo: TextView
     private var radioButtonDA: RadioButton? = null
     private var radioButtonreturn: RadioButton? = null
+    private var relativelayout: RelativeLayout? = null
+
     private var radioButtonworthy: RadioButton? = null
     private var radioButtonnotworthy: RadioButton? = null
     private var daname: EditText? = null
@@ -182,6 +201,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
         binding.pb2.visibility = View.VISIBLE
         binding.constmain.alpha = 0.5f
+        EditableFalse(binding.textView5)
         Observers()
         Thread {
             GlobalScope.launch {
@@ -208,12 +228,15 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                 if (!App.offlineSyncDB!!.isUserTableEmptyInformation()) {
 
                     binding.checktwo.visibility = View.VISIBLE
+
+
                     binding.textView6.setImageDrawable(
                         ContextCompat.getDrawable(
                             requireContext(), R.drawable.img_round
                         )
                     )
                     binding.constthree.alpha = 1f
+
                     EditableTrue(binding.textView6)
                 } else {
                     binding.checktwo.visibility = View.GONE
@@ -223,8 +246,10 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                             requireContext(), R.drawable.img_round_1
                         )
                     )
+                    EditableFalse(binding.textView6)
                 }
-                EditableFalse(binding.textView6)
+
+
             }
 
 
@@ -243,20 +268,60 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
         clientUniqueID()
         val textView3: CircleImageView = binding.textView3
         binding.textView4.setOnClickListener {
-            selectVehicleInformation()
+            if (saveClickCountertwo++ == 0) {
+
+                //Your Dialog Showing Code
+                selectVehicleInformation()
+
+                Handler().postDelayed({
+                    saveClickCountertwo = 0
+                }, 1000)
+            }
+            true
 
 
         }
         binding.textView6.setOnClickListener {
+            if (saveClickCounterthree++ == 0) {
 
-            uploadVehiclePicture()
+                //Your Dialog Showing Code
+                uploadVehiclePicture()
+
+                Handler().postDelayed({
+                    saveClickCounterthree = 0
+                }, 1000)
+            }
+            true
+
+
         }
         binding.textView5.setOnClickListener {
-            bottom_sheetVanHire()
+            if (saveClickCounterfour++ == 0) {
+
+                //Your Dialog Showing Code
+                bottom_sheetVanHire()
+
+                Handler().postDelayed({
+                    saveClickCounterfour = 0
+                }, 1000)
+            }
+            true
+
         }
         textView3.setOnClickListener {
             lifecycleScope.launch {
-                selectVehicleOptions()
+                if (saveClickCounter++ == 0) {
+
+                    //Your Dialog Showing Code
+                    selectVehicleOptions()
+
+                    Handler().postDelayed({
+                        saveClickCounter = 0
+                    }, 1000)
+                }
+                true
+
+
             }
 
         }
@@ -264,6 +329,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
         return root
     }
+
 
     fun Observers() {
 
@@ -325,6 +391,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
             if (it != null) {
                 binding.pb2.visibility = View.GONE
                 FuellevelAdapter.data.addAll(it)
+
                 FuellevelAdapter.notifyDataSetChanged()
                 binding.constmain.alpha = 1f
 
@@ -355,9 +422,11 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
         mainViewModel.GetDDAmandate(DA_id).observe(viewLifecycleOwner, Observer {
             if (it != null) {
+
                 textView.setText("Allocated Vehicle: " + it.vehicleInfo.currentVehicleRegNo + "\n" + "Vehicle location: " + it.vehicleInfo.vehicleLocation)
-
-
+                Prefs.getInstance(App.instance).VmID = it.vehicleInfo.vmRegId.toString()
+                relativelayout?.visibility = View.GONE
+                linearLayout?.visibility = View.GONE
             }
 
         })
@@ -368,31 +437,61 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
             binding.pb2.visibility = View.GONE
             if (it != null) {
                 textView.setText("Allocated DA: " + it.vehicleInfo.daName)
-                binding.pb2.visibility = View.VISIBLE
+                binding.pb2.visibility = View.GONE
+
+
+
                 getRepoInfoModel()
+
             }
         })
 
     }
 
     fun getRepoInfoModel() {
-        mainViewModel.GetRepoInfoModel(returbDA_wmID).observe(viewLifecycleOwner, Observer {
-            binding.pb2.visibility = View.GONE
-            if (it != null) {
-                if (it.vehicleInfo.showDepo) {
-                    llmthree.visibility = View.VISIBLE
-                    returndepo.setText("Return to depo?")
+        mainViewModel.GetRepoInfoModel(Prefs.getInstance(App.instance).vmIdReturnveh.toString())
+            .observe(viewLifecycleOwner, Observer {
+                relativelayout?.visibility = View.VISIBLE
+                linearLayout?.visibility = View.VISIBLE
+                binding.pb2.visibility = View.GONE
+                if (it != null) {
+                    if (it.vehicleInfo.showDepo) {
+                        RETURNTODEOPSUP?.setText("Return to depo?")
+//                        linearLayout?.visibility = View.VISIBLE
+//                        linearLayout?.setBackgroundDrawable(
+//                            ContextCompat.getDrawable(
+//                                requireContext(),
+//                                R.drawable.shape_radio_two
+//                            )
+//                        )
 
 
-                } else if (it.vehicleInfo.showSupplier) {
-                    llmthree.visibility = View.GONE
-                    returndepo.setText("Return To supplier")
+//                    llmthree.visibility = View.VISIBLE
+//                    returndepo.setText("Return to depo?")
+
+
+                    } else if (it.vehicleInfo.showSupplier) {
+                        RETURNTODEOPSUP?.setText("Return to Supplier?")
+//                        linearLayout?.visibility = View.GONE
+//                        linearLayout?.setBackgroundDrawable(
+//                            ContextCompat.getDrawable(
+//                                requireContext(),
+//                                R.drawable.shaperadio
+//                            )
+//                        )
+
+//                    llmthree.visibility = View.GONE
+//                    returndepo.setText("Return To supplier")
+                    } else {
+
+                    }
+
+                } else {
+
                 }
 
-            }
 
-
-        })
+            })
 
     }
 
@@ -456,7 +555,17 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
         EditableFalse(requesttypetext!!)
 
         requesttypetext!!.setOnClickListener {
-            showcompanylistdialog()
+            if (saveClickCounterfive++ == 0) {
+
+                //Your Dialog Showing Code
+                showcompanylistdialog()
+
+                Handler().postDelayed({
+                    saveClickCounterfive = 0
+                }, 1000)
+            }
+            true
+
 
         }
 
@@ -520,10 +629,32 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
 
         daname?.setOnClickListener {
-            ShowDriverListDialog()
+            if (saveClickCountersix++ == 0) {
+
+                //Your Dialog Showing Code
+                ShowDriverListDialog()
+
+                Handler().postDelayed({
+                    saveClickCountersix = 0
+                }, 1000)
+            }
+            true
+
+
         }
         returnvehiclename?.setOnClickListener {
-            ShowReturnVehicleList()
+            if (saveClickCounterseven++ == 0) {
+
+                //Your Dialog Showing Code
+                ShowReturnVehicleList()
+
+                Handler().postDelayed({
+                    saveClickCounterseven = 0
+                }, 1000)
+            }
+            true
+
+
         }
         val imageView: ImageView = showSheet.findViewById(R.id.cancleIV)
         val textView: TextView = showSheet.findViewById(R.id.bt_change)
@@ -542,12 +673,6 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                 Toast.makeText(
                     requireContext(), "Please select Vehicle to return", Toast.LENGTH_SHORT
                 ).show()
-            } else if (radioButtonreturn!!.isChecked && radioButtonnotworthy?.isChecked == false && radioButtonworthy?.isChecked == false) {
-                Toast.makeText(
-                    requireContext(),
-                    "Please select from options worthy / not worthy",
-                    Toast.LENGTH_SHORT
-                ).show()
             } else {
 
 
@@ -565,15 +690,13 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                                         returnDAvehicle = false,
                                         selectDA = daname!!.text.toString(),
                                         selectVehicleReturn = "",
-                                        worthy = false,
-                                        notworthy = false,
-                                        reuquestType = "",
+
                                         spinnerposition!!
                                     )
                                 )
                             }
 
-                        } else if (radioButtonreturn!!.isChecked && radioButtonworthy!!.isChecked) {
+                        } else if (radioButtonreturn!!.isChecked) {
                             lifecycleScope.launch {
                                 App.offlineSyncDB!!.insert(
                                     User(
@@ -583,27 +706,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                                         true,
                                         "",
                                         returnvehiclename!!.text.toString(),
-                                        true,
-                                        false,
-                                        "",
-                                        spinnerposition!!
-                                    )
-                                )
-                            }
 
-                        } else if (radioButtonreturn!!.isChecked && radioButtonnotworthy!!.isChecked) {
-                            lifecycleScope.launch {
-                                App.offlineSyncDB!!.insert(
-                                    User(
-                                        2,
-                                        companynames!!.toString(),
-                                        false,
-                                        true,
-                                        "",
-                                        returnvehiclename!!.text.toString(),
-                                        false,
-                                        true,
-                                        requesttypetext!!.text.toString(),
                                         spinnerposition!!
                                     )
                                 )
@@ -614,7 +717,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                     } else {
 
                         Log.e("djfdfhdjhfdjh", "selectVehicleOptions: ")
-                        App.offlineSyncDB!!.clearAllTables()
+                        App.offlineSyncDB!!.deleteUserTable()
                         if (radioButtonDA!!.isChecked && daname?.text!!.isNotEmpty()) {
                             lifecycleScope.launch {
                                 App.offlineSyncDB!!.insert(
@@ -625,15 +728,12 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                                         returnDAvehicle = false,
                                         selectDA = daname!!.text.toString(),
                                         selectVehicleReturn = "",
-                                        worthy = false,
-                                        notworthy = false,
-                                        reuquestType = "",
                                         spinnerposition!!
                                     )
                                 )
                             }
 
-                        } else if (radioButtonreturn!!.isChecked && radioButtonworthy!!.isChecked) {
+                        } else if (radioButtonreturn!!.isChecked) {
                             lifecycleScope.launch {
                                 App.offlineSyncDB!!.insert(
                                     User(
@@ -643,15 +743,12 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                                         true,
                                         "",
                                         returnvehiclename!!.text.toString(),
-                                        true,
-                                        false,
-                                        "",
                                         spinnerposition!!
                                     )
                                 )
                             }
 
-                        } else if (radioButtonreturn!!.isChecked && radioButtonnotworthy!!.isChecked) {
+                        } else if (radioButtonreturn!!.isChecked) {
                             lifecycleScope.launch {
                                 App.offlineSyncDB!!.insert(
                                     User(
@@ -661,9 +758,6 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                                         true,
                                         "",
                                         returnvehiclename!!.text.toString(),
-                                        false,
-                                        true,
-                                        requesttypetext!!.text.toString(),
                                         spinnerposition!!
                                     )
                                 )
@@ -678,6 +772,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 //                updateUI()
                 bottomSheetDialog.dismiss()
                 selectVehicleInformation()
+
                 binding.checkone.visibility = View.VISIBLE
                 binding.textView4.setImageDrawable(
                     ContextCompat.getDrawable(
@@ -714,6 +809,9 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 //            behavior.state = BottomSheetBehavior.STATE_EXPANDED
 //            behavior.isDraggable = false
 //        }
+        val tv_mileage: TextView = showSheet.findViewById(R.id.tv_milegae)
+
+
         val imageView: ImageView = showSheet.findViewById(R.id.cancleIV)
         val bt_change: TextView = showSheet.findViewById(R.id.bt_change)
         edt = showSheet.findViewById(R.id.edt_company)
@@ -767,7 +865,17 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
             rv_oil?.visibility = View.GONE
         }
 
-
+        mainViewModel.GetlastMileageInfo( Prefs.getInstance(App.instance).vmIdReturnveh)
+            .observe(viewLifecycleOwner, Observer {
+                Log.e("kdkjfjdkffdfkdjfkd", "selectVehicleInformation: " + it)
+                if (it != null) {
+                    Log.e(
+                        "hdjhfhdkfsodpod",
+                        "selectVehicleInformation: " + it.vehicleInfo.vehLastMillage
+                    )
+                    tv_mileage.setText(it.vehicleInfo.vehLastMillage)
+                }
+            })
         imageView.setOnClickListener {
 
 
@@ -818,7 +926,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                     } else {
 
                         Log.e("djfdfhdjhfdjh", "selectVehicleOptions: ")
-                        App.offlineSyncDB!!.clearAllTables()
+                        App.offlineSyncDB!!.deleteTableInfos()
 
                         lifecycleScope.launch {
                             App.offlineSyncDB!!.insertinfo(
@@ -854,7 +962,8 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
         }
         bottomSheetDialog.setContentView(showSheet)
-        setupFullHeight(bottomSheetDialog, requireContext())
+        setupHalfHeightForlisting(bottomSheetDialog, requireContext())
+//        setupFullHeight(bottomSheetDialog, requireContext())
 //        setupFullHeight(bottomSheetDialog, requireContext())
         bottomSheetDialog.show()
     }
@@ -870,14 +979,71 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
             bottomSheetDialog.dismiss()
             binding.pb2.visibility = View.GONE
         }
-        val textView: TextView = showSheet.findViewById(R.id.bt_upload)
+        RETURNTODEOPSUP = showSheet.findViewById(R.id.edt_traingtwo)
+        val bt_change: TextView = showSheet.findViewById(R.id.bt_change)
+
+        textViewInspection = showSheet.findViewById(R.id.bt_startInspection)
+        RBTRAINING = showSheet.findViewById(R.id.rbTraining)
         val progress: ProgressBar = showSheet.findViewById(R.id.pb1)
+        relativelayout = showSheet.findViewById(R.id.rlmain)
+        RADIOBUTTONWORTHY = showSheet.findViewById(R.id.roadworthy)
+        RADIOBUTTONNOTWORTHY = showSheet.findViewById(R.id.notworthys)
+        linearLayout = showSheet.findViewById(R.id.llmthree)
+
+        lifecycleScope.launch {
+            if (!App.offlineSyncDB!!.isUploadPicturesIsEmpty()) {
+
+                if (!App.offlineSyncDB!!.getAllUsers().get(0).changeDAvechile) {
+                    getRepoInfoModel()
+                }
+                setFullAlpha(relativelayout!!)
+                textViewInspection?.setText("Inspection Done")
+                textViewInspection!!.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(), R.color.red_light
+                    )
+                )
+                textViewInspection?.setBackgroundDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(), R.drawable.shaperadio
+                    )
+                )
+                textViewInspection?.setClickable(false);
+                textViewInspection?.setFocusableInTouchMode(false);
+                textViewInspection?.setEnabled(false);
+
+                textViewInspection?.setFocusable(false);
+                binding.pb2.visibility = View.VISIBLE
+//                getRepoInfoModel()
+
+            } else {
+                textViewInspection?.setText("Start inspection")
+            }
+        }
+
+
         progress.visibility = View.GONE
-        textView.setOnClickListener {
+        textViewInspection!!.setOnClickListener {
             progress.visibility = View.VISIBLE
             binding.pb2.visibility = View.VISIBLE
             startInspection()
             bottomSheetDialog.dismiss()
+
+        }
+        bt_change.setOnClickListener {
+            if (textViewInspection?.text.toString().equals("Start inspection")) {
+                Toast.makeText(requireContext(), "Please upload pictures", Toast.LENGTH_SHORT)
+                    .show()
+            } else if (!RBTRAINING!!.isChecked) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please Select return to vehicle / Supplier",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+
+
+            }
 
         }
 
@@ -885,6 +1051,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 //        imageView.setOnClickListener {
 //            bottomSheetDialog.dismiss()
 //        }
+
         bottomSheetDialog.setContentView(showSheet)
 //        setupFullHeight(bottomSheetDialog, requireContext())
 //        setupFullHeight(bottomSheetDialog, requireContext())
@@ -933,7 +1100,8 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 //        }
         bottomSheetDialog.setContentView(showSheet)
 //        setupFullHeight(bottomSheetDialog, requireContext())
-        setupFullHeight(bottomSheetDialog, requireContext())
+//        setupFullHeight(bottomSheetDialog, requireContext())
+        setupHalfHeightForlisting(bottomSheetDialog, requireContext())
         bottomSheetDialog.show()
 
     }
@@ -1265,11 +1433,14 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
     override fun onItemClick(item: VehicleReturnModelListItem) {
         returnvehiclename?.setText(item.vehicleRegNo)
+
+        Prefs.getInstance(App.instance).vmIdReturnveh = item.vehicleId.toString()
+
         returbDA_wmID = item.vehicleId.toString()
         binding.pb2.visibility = View.VISIBLE
         getDDAreturnALlocation()
         textView.visibility = View.VISIBLE
-        llmtwo.visibility = View.VISIBLE
+//        llmtwo.visibility = View.VISIBLE
 //        llmthree.visibility = View.VISIBLE
         deleteDialogthree.dismiss()
     }
@@ -1370,28 +1541,24 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                             daname?.visibility = View.VISIBLE
                             datextinputlayout?.visibility = View.VISIBLE
                             daname!!.setText(user.get(0).selectDA)
-                        } else if (user[0].returnDAvehicle && user[0].worthy && !user[0].notworthy) {
-                            spinner?.setSelection(user.get(0).spinnerposition)
-                            radioButtonreturn!!.isChecked = user.get(0).returnDAvehicle
-                            returnvehiclename!!.setText(user.get(0).selectVehicleReturn)
-                            radioButtonworthy!!.isChecked = user.get(0).worthy
-                            radioButtonnotworthy!!.isChecked = user.get(0).notworthy
-                            returntextinputlayout!!.visibility = View.VISIBLE
-                            llmtwo.visibility = View.VISIBLE
-                            llmthree.visibility = View.VISIBLE
-
-
-                        } else if (user[0].returnDAvehicle && !user[0].worthy && user[0].notworthy) {
+                        } else if (user[0].returnDAvehicle) {
                             spinner?.setSelection(user.get(0).spinnerposition)
                             radioButtonreturn!!.isChecked = user.get(0).returnDAvehicle
                             returnvehiclename!!.setText(user.get(0).selectVehicleReturn)
                             returntextinputlayout!!.visibility = View.VISIBLE
-                            radioButtonworthy!!.isChecked = user.get(0).worthy
-                            radioButtonnotworthy!!.isChecked = user.get(0).notworthy
-                            llmtwo.visibility = View.VISIBLE
-                            llmthree.visibility = View.VISIBLE
-                            requesttype?.visibility = View.VISIBLE
-                            requesttypetext!!.setText(user.get(0).reuquestType)
+//                            llmtwo.visibility = View.VISIBLE
+//                            llmthree.visibility = View.VISIBLE
+
+
+                        } else if (user[0].returnDAvehicle) {
+                            spinner?.setSelection(user.get(0).spinnerposition)
+                            radioButtonreturn!!.isChecked = user.get(0).returnDAvehicle
+                            returnvehiclename!!.setText(user.get(0).selectVehicleReturn)
+                            returntextinputlayout!!.visibility = View.VISIBLE
+
+//                            llmtwo.visibility = View.VISIBLE
+//                            llmthree.visibility = View.VISIBLE
+//                            requesttype?.visibility = View.VISIBLE
 
                         }
 
@@ -1489,7 +1656,8 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
         }.start()
     }
 
-
-
+    fun setFullAlpha(view: View) {
+        view.alpha = 1f
+    }
 
 }

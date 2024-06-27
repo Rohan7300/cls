@@ -18,7 +18,7 @@ class ReturnVehicleAdapter(var data:ArrayList<VehicleReturnModelListItem>, var c
 
             binding.tvcompany.setText(item.vehicleRegNo)
 
-            binding.tvcompany.setOnClickListener { callback.onItemClick(item) }
+           itemView.setOnClickListener { callback.onItemClick(item) }
         }
     }
 

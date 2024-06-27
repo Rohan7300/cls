@@ -7,7 +7,12 @@
         android:layout_height="match_parent"
 
         tools:context=".ui.CLSweb.WebFragment">
-
+<ProgressBar
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:layout_gravity="center"
+    android:indeterminateTint="@color/maroon"
+    android:id="@+id/pb"/>
         <WebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

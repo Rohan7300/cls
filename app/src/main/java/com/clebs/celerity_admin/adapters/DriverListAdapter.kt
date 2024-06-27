@@ -22,7 +22,7 @@ class DriverListAdapter(var data: ArrayList<DriverListResponseModelItem>, var ca
 
             binding.tvcompany.setText(item.name)
             Log.e("djkfdjfhdfdj", "bindView: " + item.name)
-            binding.tvcompany.setOnClickListener { callback.onItemClick(item) }
+            itemView.setOnClickListener { callback.onItemClick(item) }
         }
     }
 

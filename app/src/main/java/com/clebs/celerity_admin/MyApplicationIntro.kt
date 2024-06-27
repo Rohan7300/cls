@@ -28,8 +28,8 @@ class MyApplicationIntro :  AppIntro() {
         addSlide(
             AppIntroFragment.createInstance(
                 title = "THE GREAT STUFF WE OFFER",
-                description = "Two full training days given to you and paid at £86.00 per day = £172.00\n" +
-                        "Performance Incentive Payment available up to £27.00 per day)",
+                description = "1. PALLET SERVICE \n 2. 2-MAN DELIVERY\n 3. 3-FIRST MILE/MIDDLE MILE/LAST MILE \n 4. SAME DAY & EXPRESS DELIVERY \n 5. WAREHOUSING \n 6. CUSTOMISED SOLUTIONS"
+,
                 imageDrawable = R.drawable.we,
                 backgroundDrawable = R.drawable.back_three,
                 titleColorRes = R.color.black,
