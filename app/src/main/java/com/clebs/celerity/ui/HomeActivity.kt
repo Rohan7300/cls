@@ -480,7 +480,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         startActivity(
                             Intent(
                                 this@HomeActivity,
-                                DeductionAgreementActivity::class.java
+                                OutstandingDeductionActivity::class.java
                             )
                         )
 

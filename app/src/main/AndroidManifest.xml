@@ -54,9 +54,12 @@
         android:theme="@style/Theme.Celerity"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup"
-        tools:targetApi="tiramisu" >
+        tools:targetApi="tiramisu">
         <activity
-            android:name=".ui.DownloadDeductionsActivity"
+            android:name=".ui.ListSignedDocsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.OutstandingDeductionActivity"
             android:exported="false" />
         <activity
             android:name=".ui.SignedDocActivity"

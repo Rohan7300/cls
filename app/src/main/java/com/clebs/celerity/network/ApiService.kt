@@ -47,10 +47,12 @@ import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
 import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetCompanySignedDocumentListResponse
+import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponse
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverDeductionHistoryResponse
 import com.clebs.celerity.models.response.GetDriverInvoiceListResponse
 import com.clebs.celerity.models.response.GetDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
@@ -929,6 +931,12 @@ interface ApiService {
 
     @GET("/api/HtmlToPDF/GetCompanySignedDocumentList/{userId}")
     suspend fun GetCompanySignedDocumentList(@Path("userId") userId: Int):Response<GetCompanySignedDocumentListResponse>
+
+    @GET("/api/Drivers/GetDAOutStandingDeductionList/{userId}")
+    suspend fun GetDAOutStandingDeductionList(@Path("userId") userId: Int):Response<GetDAOutStandingDeductionListResponse>
+
+    @GET("/api/Drivers/GetDriverDeductionHistory/{userId}")
+    suspend fun GetDriverDeductionHistory(@Path("userId") userId: Int):Response<GetDriverDeductionHistoryResponse>
 
 }
 

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="10dp"
+        tools:context=".ui.ListSignedDocsActivity">
+
+        <LinearLayout
+            android:id="@+id/lls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_expand_main"
+            android:backgroundTint="@color/very_light_orange"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/signeddocument" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Signed Documents"
+                    android:textAlignment="center"
+                    android:textColor="@color/orange"
+                    android:textSize="16sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_amazon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="visible">
+
+
+                    <LinearLayout
+                        android:id="@+id/llones"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@id/views1">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/txtSla"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="SLA"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/imgSLA1"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadSLA1"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txtSla"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadSLA1"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/download_icon" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llPP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/llones">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/txtprivacy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="Privacy Policy"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/imgPrivacyPolicy1"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadPrivacyPolicy1"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txtprivacy"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadPrivacyPolicy1"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/download_icon" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/lltwos">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/txtgdpr"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="GDPR Policy"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/imgGDPR1"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadGDPR1"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txtgdpr"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadGDPR1"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/download_icon" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/ll3">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/txtDA"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="DA Engagement Policy"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/imgDAEngagement1"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadDAEngagement1"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txtDA"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadDAEngagement1"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/download_icon" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llsix"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/ll4">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_corners"
+                            android:orientation="horizontal"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/txtDAhand"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins"
+                                android:letterSpacing="0.02"
+                                android:text="DA Hand Book Policy"
+                                android:textColor="@color/text_color" />
+
+                            <ImageView
+                                android:id="@+id/imgHandBookPolicy1"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignStart="@id/downloadHandBookPolicy1"
+                                android:layout_marginStart="-55dp"
+                                android:layout_toEndOf="@id/txtDAhand"
+                                android:src="@drawable/baseline_remove_red_eye_24" />
+
+
+                            <ImageView
+                                android:id="@+id/downloadHandBookPolicy1"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/download_icon" />
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>
+
+

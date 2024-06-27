@@ -1,5 +1,7 @@
 package com.clebs.celerity.adapters
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,18 +9,28 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.databinding.AdapterCompanyDocsBinding
+import com.clebs.celerity.dialogs.ListSignedDocDialog
 import com.clebs.celerity.models.response.GetCompanySignedDocumentListResponse
 import com.clebs.celerity.models.response.GetCompanySignedDocumentListResponseItem
+import com.clebs.celerity.ui.ListSignedDocsActivity
+import com.clebs.celerity.ui.SignedDocActivity
+import com.clebs.celerity.utils.DependencyProvider.getCompanySignedDocs
+import com.clebs.celerity.utils.convertDateFormat
 
-class SignedDocsListAdapter :
+class SignedDocsListAdapter(var context:Context) :
     RecyclerView.Adapter<SignedDocsListAdapter.SignedDocsListViewHolder>() {
     lateinit var binding: AdapterCompanyDocsBinding
 
     inner class SignedDocsListViewHolder(var binding: AdapterCompanyDocsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: GetCompanySignedDocumentListResponseItem) {
-            binding.date.text = item.HBReadDate
+            binding.date.text = convertDateFormat(item.HBReadDate)
             binding.driverName.text = item.DriverName
+            val dialog = ListSignedDocDialog()
+            binding.viewDocs.setOnClickListener {
+                getCompanySignedDocs = item
+                dialog.showDialog((context as SignedDocActivity).supportFragmentManager)
+            }
         }
     }
 
@@ -62,7 +74,7 @@ class SignedDocsListAdapter :
             }
         }
 
-    var asyncListDiffer = AsyncListDiffer(this, diffUtil)
+    private var asyncListDiffer = AsyncListDiffer(this, diffUtil)
     fun submitList(data: GetCompanySignedDocumentListResponse) {
         asyncListDiffer.submitList(data)
     }

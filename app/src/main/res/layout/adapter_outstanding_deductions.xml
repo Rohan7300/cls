@@ -33,7 +33,7 @@
                 android:fontFamily="@font/poppins_bold"
                 android:padding="10dp"
                 android:gravity="center"
-                android:text="Date"
+                android:text="OutStanding Amount"
                 android:textColor="@color/text_color"
                 android:textSize="11sp" />
 
@@ -92,10 +92,10 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins"
-                android:id="@+id/date"
+                android:id="@+id/deductionAmount"
                 android:padding="10dp"
                 android:gravity="center"
-                android:text="Birth certificate"
+                android:text="- --- -"
                 android:textColor="@color/text_color"
                 android:textSize="11sp" />
 

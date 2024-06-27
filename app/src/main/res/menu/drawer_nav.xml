@@ -33,7 +33,7 @@
     <item
         android:id="@+id/deductionAgreements"
         android:icon="@drawable/deduction"
-        android:title="Deduction Agreement"
+        android:title="Outstanding Deductions"
         />
     <item
         android:id="@+id/emergencyBtn"
