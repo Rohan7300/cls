@@ -219,7 +219,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
         navController.addOnDestinationChangedListener(this)
         fragmentManager = this.supportFragmentManager
-        //bottomNavigationView.selectedItemId = R.id.home
+        bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
 
 
@@ -306,18 +306,48 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                 .equals("1") && navController.currentDestination?.id == R.id.profileFragment
                         ) {
                             showToast("Please do profile changes first", this@HomeActivity)
-                        } else if (navController.currentDestination?.id == R.id.newCompleteTaskFragment || navController.currentDestination?.id == R.id.dailyWorkFragment || navController.currentDestination?.id == R.id.homeFragment) {
-                            prefs.clearNavigationHistory()
-                        } else if (fragmentStack.size > 1) {
-                            fragmentStack.pop()
-                            val previousFragment = fragmentStack.peek()
-                            if (previousFragment != R.id.dailyWorkFragment) {
-                                navController.navigate(previousFragment)
-                                prefs.saveNavigationHistory(fragmentStack)
+                        }else{
+                            val prefs = Prefs.getInstance(applicationContext)
+                            val fragmentStack = prefs.getNavigationHistory()
+                            Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
+                            if (navController.currentDestination?.id == R.id.newCompleteTaskFragment
+                                || navController.currentDestination?.id == R.id.dailyWorkFragment ||
+                                navController.currentDestination?.id == R.id.homeFragment
+                            ) {
+                                //navController.navigate(R.id.homedemoFragment)
+                                bottomNavigationView.selectedItemId = R.id.home
+
+                                prefs.clearNavigationHistory()
+                            } else if (navController.currentDestination?.id == R.id.invoicesFragment ||
+                                navController.currentDestination?.id == R.id.userTicketsFragment ||
+                                navController.currentDestination?.id == R.id.profileFragment||
+                                navController.currentDestination?.id == R.id.notifficationsFragment
+                            ) {
+                                bottomNavigationView.selectedItemId = R.id.home
+                            } else if (navController.currentDestination?.id == R.id.onRoadHoursFragment ||
+                                navController.currentDestination?.id == R.id.rideAlongFragment ||
+                                navController.currentDestination?.id == R.id.updateOnRoadHoursFragment
+                                || navController.currentDestination?.id == R.id.questinareFragment ||
+                                navController.currentDestination?.id == R.id.feedbackFragment
+                            ) {
+                                bottomNavigationView.selectedItemId = R.id.daily
+                                prefs.clearNavigationHistory()
+                            } else if (navController.currentDestination?.id == R.id.clsinvoices ||
+                                navController.currentDestination?.id == R.id.cls_invoices_third_party
+                            ) {
+                                bottomNavigationView.selectedItemId = R.id.invoices
+                            } else if (fragmentStack.size > 1) {
+                                fragmentStack.pop()
+                                val previousFragment = fragmentStack.peek()
+                                if (previousFragment != R.id.dailyWorkFragment) {
+                                    navController.navigate(previousFragment)
+                                    prefs.saveNavigationHistory(fragmentStack)
+                                }
                             }
                         }
                     } catch (_: Exception) {
                     }
+
                     if (doubleBackToExitPressedOnce) {
                         finish()
                     }
@@ -366,8 +396,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     }
 
                     R.id.daily -> {
-                        navController.navigate(R.id.homeFragment)
-                        navController.currentDestination!!.id = R.id.homeFragment
+                        /*navController.navigate(R.id.homeFragment)
+                        navController.currentDestination!!.id = R.id.homeFragment*/
 
                         if (isNetworkActive) {
 
@@ -377,7 +407,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
                             showDialog()
                         } else {
-                            if (osData.isDefectSheetFilled) navController.navigate(R.id.newCompleteTaskFragment)
+                            if (osData.isDefectSheetFilled)
+                                navController.navigate(R.id.newCompleteTaskFragment)
                             else {
                                 navController.navigate(R.id.homeFragment)
                                 navController.currentDestination!!.id = R.id.homeFragment
@@ -414,14 +445,16 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         ActivityHomeBinding.title.text = ""
                         ActivityHomeBinding.logout.visibility = View.GONE
                         ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                        navController.navigate(R.id.homedemoFragment)
+                        bottomNavigationView.selectedItemId = R.id.home
+                   //     navController.navigate(R.id.homedemoFragment)
                         true
                     }
 
                     R.id.daily -> {/*     navController.navigate(R.id.homeFragment)
                              navController.currentDestination!!.id = R.id.homeFragment
          */
-                        if (isNetworkActive) {
+                        bottomNavigationView.selectedItemId = R.id.daily
+/*                        if (isNetworkActive) {
 
                             ActivityHomeBinding.logout.visibility = View.GONE
                             ActivityHomeBinding.title.text = ""
@@ -431,26 +464,29 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         } else {
                             if (osData.isDefectSheetFilled) navController.navigate(R.id.newCompleteTaskFragment)
                             else {
-                                navController.navigate(R.id.homeFragment)
+                                //navController.navigate(R.id.homeFragment)
+                                bottomNavigationView.selectedItemId = R.id.home
                                 navController.currentDestination!!.id = R.id.homeFragment
                             }
-                        }
+                        }*/
                         true
                     }
 
                     R.id.invoices -> {
-                        ActivityHomeBinding.title.text = "Invoices"
+                        bottomNavigationView.selectedItemId = R.id.invoices
+/*                        ActivityHomeBinding.title.text = "Invoices"
                         ActivityHomeBinding.logout.visibility = View.GONE
                         ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                        navController.navigate(R.id.invoicesFragment)
+                        navController.navigate(R.id.invoicesFragment)*/
                         true
                     }
 
                     R.id.tickets -> {
-                        ActivityHomeBinding.logout.visibility = View.GONE
+                        bottomNavigationView.selectedItemId = R.id.tickets
+         /*               ActivityHomeBinding.logout.visibility = View.GONE
                         ActivityHomeBinding.title.text = "User Tickets"
                         ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                        navController.navigate(R.id.userTicketsFragment)
+                        navController.navigate(R.id.userTicketsFragment)*/
 
                         true
 
@@ -473,7 +509,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                     R.id.signedDocs -> {
                         startActivity(Intent(this@HomeActivity, SignedDocActivity::class.java))
-
                     }
 
                     R.id.deductionAgreements -> {
@@ -483,7 +518,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                 OutstandingDeductionActivity::class.java
                             )
                         )
-
+                    }
+                    R.id.logoutNav->{
+                        showAlertLogout()
                     }
 
                     else -> return@OnNavigationItemSelectedListener false
@@ -724,48 +761,53 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     .equals("1") && navController.currentDestination?.id == R.id.profileFragment
             ) {
                 showToast("Please do profile changes first", this)
-            }
-            Log.d("NavCurrScreenID", "screenid ${screenid}")
-            try {
-                val prefs = Prefs.getInstance(applicationContext)
-                val fragmentStack = prefs.getNavigationHistory()
-                Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
-                if (navController.currentDestination?.id == R.id.newCompleteTaskFragment
-                    || navController.currentDestination?.id == R.id.dailyWorkFragment ||
-                    navController.currentDestination?.id == R.id.homeFragment
-                ) {
-                    navController.navigate(R.id.homedemoFragment)
-                    prefs.clearNavigationHistory()
-                } else if (navController.currentDestination?.id == R.id.invoicesFragment ||
-                    navController.currentDestination?.id == R.id.userTicketsFragment ||
-                    navController.currentDestination?.id == R.id.profileFragment
-                ) {
-                    navController.navigate(R.id.homedemoFragment)
-                } else if (navController.currentDestination?.id == R.id.onRoadHoursFragment ||
-                    navController.currentDestination?.id == R.id.rideAlongFragment ||
-                    navController.currentDestination?.id == R.id.updateOnRoadHoursFragment
-                    || navController.currentDestination?.id == R.id.questinareFragment ||
-                    navController.currentDestination?.id == R.id.feedbackFragment
-                ) {
-                    navController.navigate(R.id.newCompleteTaskFragment)
-                    prefs.clearNavigationHistory()
-                } else if (navController.currentDestination?.id == R.id.clsinvoices ||
-                    navController.currentDestination?.id == R.id.cls_invoices_third_party
-                ) {
-                    navController.navigate(R.id.invoicesFragment)
-                } else if (fragmentStack.size > 1) {
-                    fragmentStack.pop()
-                    val previousFragment = fragmentStack.peek()
-                    if (previousFragment != R.id.dailyWorkFragment) {
-                        navController.navigate(previousFragment)
-                        prefs.saveNavigationHistory(fragmentStack)
-                    }
-                } else {
-                    super.onBackPressed()
-                }
-            } catch (_: Exception) {
+            }else{
+                Log.d("NavCurrScreenID", "screenid ${screenid}")
+                try {
+                    val prefs = Prefs.getInstance(applicationContext)
+                    val fragmentStack = prefs.getNavigationHistory()
+                    Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
+                    if (navController.currentDestination?.id == R.id.newCompleteTaskFragment
+                        || navController.currentDestination?.id == R.id.dailyWorkFragment ||
+                        navController.currentDestination?.id == R.id.homeFragment
+                    ) {
+                        //navController.navigate(R.id.homedemoFragment)
+                        bottomNavigationView.selectedItemId = R.id.home
 
+                        prefs.clearNavigationHistory()
+                    } else if (navController.currentDestination?.id == R.id.invoicesFragment ||
+                        navController.currentDestination?.id == R.id.userTicketsFragment ||
+                        navController.currentDestination?.id == R.id.profileFragment||
+                        navController.currentDestination?.id == R.id.notifficationsFragment
+                    ) {
+                        bottomNavigationView.selectedItemId = R.id.home
+                    } else if (navController.currentDestination?.id == R.id.onRoadHoursFragment ||
+                        navController.currentDestination?.id == R.id.rideAlongFragment ||
+                        navController.currentDestination?.id == R.id.updateOnRoadHoursFragment
+                        || navController.currentDestination?.id == R.id.questinareFragment ||
+                        navController.currentDestination?.id == R.id.feedbackFragment
+                    ) {
+                        bottomNavigationView.selectedItemId = R.id.daily
+                        prefs.clearNavigationHistory()
+                    } else if (navController.currentDestination?.id == R.id.clsinvoices ||
+                        navController.currentDestination?.id == R.id.cls_invoices_third_party
+                    ) {
+                        bottomNavigationView.selectedItemId = R.id.invoices
+                    } else if (fragmentStack.size > 1) {
+                        fragmentStack.pop()
+                        val previousFragment = fragmentStack.peek()
+                        if (previousFragment != R.id.dailyWorkFragment) {
+                            navController.navigate(previousFragment)
+                            prefs.saveNavigationHistory(fragmentStack)
+                        }
+                    } else {
+                        super.onBackPressed()
+                    }
+                } catch (_: Exception) {
+
+                }
             }
+
         }
     }
 

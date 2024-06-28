@@ -29,6 +29,9 @@ class SignedDocActivity : AppCompatActivity() {
         loadingDialog.show()
         val adapter = SignedDocsListAdapter(this)
         binding.policyGridRV.adapter = adapter
+        binding.backIcon.setOnClickListener {
+            finish()
+        }
         binding.policyGridRV.layoutManager = LinearLayoutManager(this)
         vm.GetCompanySignedDocumentList(prefs.clebUserId.toInt())
         vm.liveDataGetCompanySignedDocumentList.observe(this){

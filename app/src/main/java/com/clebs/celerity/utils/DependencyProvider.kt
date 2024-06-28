@@ -13,6 +13,7 @@ import com.clebs.celerity.database.OSyncRepo
 import com.clebs.celerity.database.OfflineSyncDB
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.models.response.GetCompanySignedDocumentListResponseItem
+import com.clebs.celerity.models.response.GetDriverDeductionHistoryResponse
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
@@ -31,6 +32,8 @@ object DependencyProvider {
     var policyDocPDFURI:Uri? = null
     var osData: OfflineSyncEntity = OfflineSyncEntity()
     var getCompanySignedDocs:GetCompanySignedDocumentListResponseItem? = null
+    var getCompanySignedDocsClicked:Boolean = false
+    var currentDeductionHistory: GetDriverDeductionHistoryResponse? = null
     var brkStart:String = ""
     var brkEnd:String = ""
     var notify:MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply {

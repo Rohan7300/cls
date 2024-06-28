@@ -74,7 +74,8 @@ class ListSignedDocsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mbinding = DataBindingUtil.setContentView(this, R.layout.activity_list_signed_docs)
+        mbinding = ActivityListSignedDocsBinding.inflate(layoutInflater)
+        setContentView(mbinding.root)
         loadingDialog = LoadingDialog(this)
         downloadingDialog = DownloadingDialog(this)
 

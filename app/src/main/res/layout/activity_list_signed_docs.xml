@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <com.google.android.material.card.MaterialCardView
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-    <androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -15,13 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_expand_main"
-            android:backgroundTint="@color/very_light_orange"
+            android:backgroundTint="@color/white"
             android:nestedScrollingEnabled="false"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:padding="10dp"
+                android:background="@color/very_light_orange"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -57,6 +59,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginBottom="10dp"
+                    android:padding="10dp"
                     android:visibility="visible">
 
 
@@ -82,6 +85,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
                                 android:letterSpacing="0.02"
+                                android:textSize="12sp"
                                 android:text="SLA"
                                 android:textColor="@color/text_color" />
 
@@ -128,6 +132,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
                                 android:letterSpacing="0.02"
+                                android:textSize="12sp"
                                 android:text="Privacy Policy"
                                 android:textColor="@color/text_color" />
 
@@ -174,6 +179,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
                                 android:letterSpacing="0.02"
+                                android:textSize="12sp"
                                 android:text="GDPR Policy"
                                 android:textColor="@color/text_color" />
 
@@ -220,6 +226,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
                                 android:letterSpacing="0.02"
+                                android:textSize="12sp"
                                 android:text="DA Engagement Policy"
                                 android:textColor="@color/text_color" />
 
@@ -265,6 +272,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins"
+                                android:textSize="12sp"
                                 android:letterSpacing="0.02"
                                 android:text="DA Hand Book Policy"
                                 android:textColor="@color/text_color" />
@@ -295,8 +303,7 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-</layout>
 
 

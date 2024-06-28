@@ -25,7 +25,6 @@ class SignedDocsListAdapter(var context:Context) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: GetCompanySignedDocumentListResponseItem) {
             binding.date.text = convertDateFormat(item.HBReadDate)
-            binding.driverName.text = item.DriverName
             val dialog = ListSignedDocDialog()
             binding.viewDocs.setOnClickListener {
                 getCompanySignedDocs = item

@@ -16,7 +16,11 @@ class DADeductionHistoryAdapter :
     inner class DADeductionHistoryAdapterViewHolder(val binding: AdapterDadeductionHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: GetDriverDeductionHistoryResponseItem) {
-
+            binding.ddAmount.text = item.DeductionAmount.toString()
+            binding.ddid.text = item.DeductionId.toString()
+            binding.ddWeek.text = item.WeekNo.toString()
+            binding.ddtype.text = item.DeductionTypeName
+            binding.ddyear.text = item.YearNo.toString()
         }
     }
 

@@ -106,7 +106,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
                                     android:fontFamily="@font/inter_bold"
-                                    android:text="Avg Total:"
+                                    android:text="Avg Total : "
                                     android:textColor="@color/black"
                                     android:textSize="14sp"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -478,7 +478,7 @@
                             android:layout_marginTop="5dp"
                             android:drawableEnd="@drawable/baseline_error_24"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="No schedule data found !"
+                            android:text="No schedule data found"
                             android:textColor="@color/text_color"
                             android:textSize="13sp" />
 
@@ -793,8 +793,7 @@
                             android:drawableTint="@color/white"
                             android:fontFamily="@font/poppins_semibold"
                             android:gravity="center"
-                            android:paddingHorizontal="4dp"
-                            android:paddingVertical="6dp"
+                        android:padding="6dp"
                             android:text="Previous Week"
                             android:textColor="@color/white"
                             android:textSize="11sp"
@@ -808,8 +807,7 @@
                             android:drawableTint="@color/white"
                             android:fontFamily="@font/poppins_semibold"
                             android:gravity="center"
-                            android:paddingHorizontal="4dp"
-                            android:paddingVertical="6dp"
+                       android:padding="6dp"
                             android:text="Previous Week"
                             android:textColor="@color/white"
                             android:textSize="11sp"
@@ -846,7 +844,7 @@
                             android:padding="6dp"
                             android:text="Next Week"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             android:visibility="gone" />
 
 
@@ -865,7 +863,7 @@
                             android:padding="6dp"
                             android:text="Next Week"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             android:visibility="gone" />
 
                     </androidx.cardview.widget.CardView>

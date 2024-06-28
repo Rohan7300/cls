@@ -51,7 +51,7 @@ class HomedemoFragment : Fragment() {
     var week: Int = 0
     var entries = ArrayList<PieEntry>()
     var year: Int = 0
-
+    var weekprev  =0
     protected val months = arrayOf(
         "Jan", "Feb", "Mar"
     )
@@ -283,10 +283,10 @@ class HomedemoFragment : Fragment() {
             mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility = View.VISIBLE
 
-            val weekprev = week - 3
+            weekprev = week - 3
             mbinding.txtLastWeek.text = "Week : " + weekprev
             val weekschedule = week - 1
-            mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
+            mbinding.viewfullschedule.text = "Full schedule for week $weekprev"
             showDialog()
             val w = week - 3
 //            val baseText = "Cash flow \n week :"+w+"\n"+ "£"+totalearning
@@ -306,7 +306,7 @@ class HomedemoFragment : Fragment() {
 //            )
 
             val baseText =
-                "Cash flow \n week :" + w + "\n" + " £" + roundOffValues(centerprofittext)
+                "Cash flow \n week :" + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -349,15 +349,15 @@ class HomedemoFragment : Fragment() {
                 R.drawable.baseline_keyboard_arrow_right_24,
                 0
             );
-            val weekprev = week - 4
+            weekprev = week - 4
             mbinding.txtLastWeek.text = "Week : " + weekprev
             val weekschedule = week - 2
-            mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
+            mbinding.viewfullschedule.text = "Full schedule for week $weekprev"
             showDialog()
             val w = week - 4
             //      mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
             val baseText =
-                "Cash flow \n week :" + w + "\n" + " £" + roundOffValues(centerprofittext)
+                "Cash flow \n week :" + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -400,14 +400,15 @@ class HomedemoFragment : Fragment() {
             mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility = View.VISIBLE
             mbinding.btNext.visibility = View.GONE
-            val weekprev = week - 3
+            weekprev = week - 3
             mbinding.txtLastWeek.text = "Week : " + weekprev
             val weekschedule = week - 1
-            mbinding.viewfullschedule.text = "Full schedule for week $weekschedule"
+            mbinding.viewfullschedule.text = "Full schedule for week $weekprev"
+
             showDialog()
             val w = week - 3
             val baseText =
-                "Cash flow \n week :" + w + "\n" + " £" + roundOffValues(centerprofittext)
+                "Cash flow \n week :" + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -450,10 +451,10 @@ class HomedemoFragment : Fragment() {
             mbinding.btPrev.setText("Previous Week")
             mbinding.btPrevSecond.visibility = View.GONE
             showDialog()
-            val weekprev = week - 2
+            weekprev = week - 2
             val w = week - 3
             val baseText =
-                "Cash flow \n week :" + w + "\n" + " £" + roundOffValues(centerprofittext)
+                "Cash flow \n week :" + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -471,7 +472,7 @@ class HomedemoFragment : Fragment() {
 
             mbinding.pieChart.centerText = spannableString
             mbinding.txtLastWeek.text = "Week : " + weekprev
-            mbinding.viewfullschedule.text = "Full schedule for week " + week
+            mbinding.viewfullschedule.text = "Full schedule for week " + weekprev
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week
             )
@@ -496,7 +497,7 @@ class HomedemoFragment : Fragment() {
                 year = it.year
                 showDialog()
 
-                val weekprev = week - 2
+                weekprev = week - 2
                 val weekprevsecond = week - 4
                 mbinding.txtLastWeek.text = "Week : $weekprev"
                 mbinding.viewfullschedule.text = "Full schedule for week $week"
@@ -589,7 +590,7 @@ class HomedemoFragment : Fragment() {
                     val incomes = roundOffValues(centerprofittext)
                     Log.e("Dskjfdjgffjhdhincomes", "Observers: " + incomes)
                     val baseText =
-                        "Cash flow \n week :" + w + "\n" + " £" + roundOffValues(centerprofittext)
+                        "Cash flow \n week :" + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
 
                     val lastWordStart =
                         baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -869,6 +870,7 @@ class HomedemoFragment : Fragment() {
                 mbinding.llnodata.visibility = View.VISIBLE
                 mbinding.rlicons.visibility = View.GONE
                 mbinding.textView5.text = "Not allocated"
+                mbinding.yourNext.text = "Your next working day"
 
             }
 

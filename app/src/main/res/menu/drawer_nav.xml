@@ -38,5 +38,10 @@
     <item
         android:id="@+id/emergencyBtn"
         android:icon="@drawable/emergencycontact"
-        android:title="Emergency Contact" />
+        android:title="Emergency Contacts" />
+    <item
+        android:id="@+id/logoutNav"
+        android:icon="@drawable/logoutnew"
+        android:title="Logout"
+        />
 </menu>
