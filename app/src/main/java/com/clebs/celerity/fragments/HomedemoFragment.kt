@@ -51,7 +51,7 @@ class HomedemoFragment : Fragment() {
     var week: Int = 0
     var entries = ArrayList<PieEntry>()
     var year: Int = 0
-    var weekprev  =0
+    var weekprev = 0
     protected val months = arrayOf(
         "Jan", "Feb", "Mar"
     )
@@ -306,7 +306,7 @@ class HomedemoFragment : Fragment() {
 //            )
 
             val baseText =
-                "Cash flow \n week :" + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
+                "Cash flow \n week : " + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -357,7 +357,7 @@ class HomedemoFragment : Fragment() {
             val w = week - 4
             //      mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
             val baseText =
-                "Cash flow \n week :" + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
+                "Cash flow \n week : " + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -408,7 +408,7 @@ class HomedemoFragment : Fragment() {
             showDialog()
             val w = week - 3
             val baseText =
-                "Cash flow \n week :" + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
+                "Cash flow \n week : " + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -454,7 +454,7 @@ class HomedemoFragment : Fragment() {
             weekprev = week - 2
             val w = week - 3
             val baseText =
-                "Cash flow \n week :" + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
+                "Cash flow \n week : " + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
 
             val lastWordStart =
                 baseText.lastIndexOf(' ') + 1 // Start index of the last word
@@ -590,7 +590,9 @@ class HomedemoFragment : Fragment() {
                     val incomes = roundOffValues(centerprofittext)
                     Log.e("Dskjfdjgffjhdhincomes", "Observers: " + incomes)
                     val baseText =
-                        "Cash flow \n week :" + weekprev + "\n" + " £" + roundOffValues(centerprofittext)
+                        "Cash flow \n week : " + weekprev + "\n" + " £" + roundOffValues(
+                            centerprofittext
+                        )
 
                     val lastWordStart =
                         baseText.lastIndexOf(' ') + 1 // Start index of the last word

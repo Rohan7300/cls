@@ -48,6 +48,7 @@ import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetCompanySignedDocumentListResponse
 import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponse
+import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponseItem
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
@@ -930,13 +931,19 @@ interface ApiService {
     suspend fun GetDAEmergencyContact(@Path("userId") userId: Int): Response<String>
 
     @GET("/api/HtmlToPDF/GetCompanySignedDocumentList/{userId}")
-    suspend fun GetCompanySignedDocumentList(@Path("userId") userId: Int):Response<GetCompanySignedDocumentListResponse>
+    suspend fun GetCompanySignedDocumentList(@Path("userId") userId: Int): Response<GetCompanySignedDocumentListResponse>
 
     @GET("/api/Drivers/GetDAOutStandingDeductionList/{userId}")
-    suspend fun GetDAOutStandingDeductionList(@Path("userId") userId: Int):Response<GetDAOutStandingDeductionListResponse>
+    suspend fun GetDAOutStandingDeductionList(
+        @Path("userId") userId: Int,
+        @Query("parentCompanyId") parentCompanyId: Int
+    ): Response<GetDAOutStandingDeductionListResponseItem>
 
     @GET("/api/Drivers/GetDriverDeductionHistory/{userId}")
-    suspend fun GetDriverDeductionHistory(@Path("userId") userId: Int):Response<GetDriverDeductionHistoryResponse>
+    suspend fun GetDriverDeductionHistory(
+        @Path("userId") userId: Int,
+        @Query("parentCompanyId") parentCompanyId: Int
+    ): Response<GetDriverDeductionHistoryResponse>
 
 }
 

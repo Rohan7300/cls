@@ -9,19 +9,26 @@ import com.clebs.celerity.databinding.AdapterOutstandingDeductionsBinding
 import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponse
 import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponseItem
 
-interface DeductionListListener{
-    fun onClick()
+interface DeductionListListener {
+    fun onClick(i: Int)
 }
-class OutstandingDeductionAdapter(var listener:DeductionListListener) :
+
+class OutstandingDeductionAdapter(var listener: DeductionListListener, var type: Int) :
     RecyclerView.Adapter<OutstandingDeductionAdapter.OutstandingDeductionViewHolder>() {
     lateinit var binding: AdapterOutstandingDeductionsBinding
 
     inner class OutstandingDeductionViewHolder(val binding: AdapterOutstandingDeductionsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: GetDAOutStandingDeductionListResponseItem) {
-            binding.deductionAmount.text = item.TotalDeductionAmount
+            if (type == 1)
+                binding.deductionAmount.text = item.CLSTotalDeductionAmount
+            else
+                binding.deductionAmount.text = item.CHTotalDeductionAmount
             binding.viewDocs.setOnClickListener {
-                listener.onClick()
+                if (type == 1)
+                    listener.onClick(1)
+                else
+                    listener.onClick(2)
             }
         }
     }

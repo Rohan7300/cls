@@ -3,36 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
-    android:layout_height="wrap_content">
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:background="@color/light_orange2"
         android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="5dp"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/header"
-            android:visibility="visible"
             android:gravity="center"
-            >
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins_bold"
-                android:padding="10dp"
                 android:gravity="center"
+                android:padding="10dp"
                 android:text="Outstanding Amount"
                 android:textColor="@color/text_color"
                 android:textSize="12sp" />
@@ -40,16 +40,16 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/text_color"
-                android:layout_marginVertical="4dp"/>
+                android:layout_marginVertical="4dp"
+                android:background="@color/text_color" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins_bold"
-                android:text="View"
                 android:gravity="center"
+                android:text="View"
                 android:textColor="@color/text_color"
                 android:textSize="12sp"
                 app:tint="@color/black" />
@@ -58,9 +58,11 @@
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
         android:background="@drawable/shape_edittext_onroad"
         android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,54 +73,55 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center"
-            >
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:padding="10dp"
-    android:layout_weight="1"
-    >
-    <ImageView
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_marginHorizontal="3dp"
-        android:src="@drawable/sterling"
-        app:tint="@color/text_color" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:id="@+id/deductionAmount"
-                android:text="- --- -"
-                android:textColor="@color/text_color"
-                android:textSize="11sp" />
-</LinearLayout>
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="#7C4A4A4A"
-                android:layout_marginVertical="4dp"/>
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                >
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="25dp"
-                android:layout_weight="1"
-                android:id="@+id/viewDocs"
-                android:fontFamily="@font/poppins"
-                android:src="@drawable/eye"
-                android:textColor="@color/text_color"
-                android:textSize="12sp"
-                app:tint="@color/black" />
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginHorizontal="3dp"
+                    android:src="@drawable/sterling"
+                    app:tint="@color/text_color" />
+
+                <TextView
+                    android:id="@+id/deductionAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="- --- -"
+                    android:textColor="@color/text_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="4dp"
+                android:background="#7C4A4A4A" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/viewDocs"
+                    android:layout_width="30dp"
+                    android:layout_height="25dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins"
+                    android:src="@drawable/eye"
+                    android:textColor="@color/text_color"
+                    android:textSize="12sp"
+                    app:tint="@color/black" />
             </LinearLayout>
         </LinearLayout>
 

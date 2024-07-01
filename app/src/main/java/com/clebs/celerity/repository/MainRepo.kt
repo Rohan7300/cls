@@ -45,6 +45,7 @@ import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
 import com.clebs.celerity.models.response.GetCompanySignedDocumentListResponse
 import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponse
+import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponseItem
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverDeductionHistoryResponse
@@ -1740,18 +1741,19 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun GetDAOutStandingDeductionList(
-        userID: Int
-    ):SimpleNetworkResponse<GetDAOutStandingDeductionListResponse>{
+        userID: Int,
+        companyId:Int
+    ):SimpleNetworkResponse<GetDAOutStandingDeductionListResponseItem>{
         return safeApiCall {
-            ApiService.GetDAOutStandingDeductionList(userID)
+            ApiService.GetDAOutStandingDeductionList(userID,companyId)
         }
     }
 
     suspend fun GetDriverDeductionHistory(
-        userID: Int
+        userID: Int,companyId:Int
     ):SimpleNetworkResponse<GetDriverDeductionHistoryResponse>{
         return safeApiCall {
-            ApiService.GetDriverDeductionHistory(userID)
+            ApiService.GetDriverDeductionHistory(userID,companyId)
         }
     }
 }

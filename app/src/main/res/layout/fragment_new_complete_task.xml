@@ -432,7 +432,7 @@
                                     android:fontFamily="@font/poppins_semibold"
                                     android:letterSpacing="0.02"
                                     android:padding="14dp"
-                                    android:text="New route"
+                                    android:text="New Route"
                                     android:textColor="#4A4A4A"
                                     android:textSize="11sp" />
 
@@ -468,7 +468,7 @@
                                     android:fontFamily="@font/poppins_semibold"
                                     android:letterSpacing="0.02"
                                     android:padding="14dp"
-                                    android:text="Ride along"
+                                    android:text="Ride Along"
                                     android:textColor="#4A4A4A"
                                     android:textSize="11sp" />
 

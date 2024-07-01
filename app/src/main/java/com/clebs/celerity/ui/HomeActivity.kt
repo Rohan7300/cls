@@ -43,6 +43,7 @@ import com.clebs.celerity.databinding.ActivityHomeBinding
 import com.clebs.celerity.dialogs.BirthdayDialog
 import com.clebs.celerity.dialogs.ExpiredDocDialog
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.dialogs.NoInternetBottomSheetDialog
 import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
@@ -152,14 +153,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         networkManager = NetworkManager(this)
 
 
-
         networkManager.observe(this) {
             isNetworkActive = if (it) {
+                ActivityHomeBinding.nointernetLL.visibility = View.GONE
                 true
-                //  internetDialog.hideDialog()
             } else {
+                ActivityHomeBinding.nointernetLL.visibility = View.VISIBLE
                 false
-                //    internetDialog.showDialog(fragmentManager)
             }
         }
 
@@ -306,7 +306,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                 .equals("1") && navController.currentDestination?.id == R.id.profileFragment
                         ) {
                             showToast("Please do profile changes first", this@HomeActivity)
-                        }else{
+                        } else {
                             val prefs = Prefs.getInstance(applicationContext)
                             val fragmentStack = prefs.getNavigationHistory()
                             Log.d("NavCurrScreenID", "${navController.currentDestination?.id}")
@@ -320,7 +320,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                 prefs.clearNavigationHistory()
                             } else if (navController.currentDestination?.id == R.id.invoicesFragment ||
                                 navController.currentDestination?.id == R.id.userTicketsFragment ||
-                                navController.currentDestination?.id == R.id.profileFragment||
+                                navController.currentDestination?.id == R.id.profileFragment ||
                                 navController.currentDestination?.id == R.id.notifficationsFragment
                             ) {
                                 bottomNavigationView.selectedItemId = R.id.home
@@ -446,7 +446,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         ActivityHomeBinding.logout.visibility = View.GONE
                         ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
                         bottomNavigationView.selectedItemId = R.id.home
-                   //     navController.navigate(R.id.homedemoFragment)
+                        //     navController.navigate(R.id.homedemoFragment)
                         true
                     }
 
@@ -454,39 +454,39 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                              navController.currentDestination!!.id = R.id.homeFragment
          */
                         bottomNavigationView.selectedItemId = R.id.daily
-/*                        if (isNetworkActive) {
+                        /*                        if (isNetworkActive) {
 
-                            ActivityHomeBinding.logout.visibility = View.GONE
-                            ActivityHomeBinding.title.text = ""
-                            ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                            viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
-                            showDialog()
-                        } else {
-                            if (osData.isDefectSheetFilled) navController.navigate(R.id.newCompleteTaskFragment)
-                            else {
-                                //navController.navigate(R.id.homeFragment)
-                                bottomNavigationView.selectedItemId = R.id.home
-                                navController.currentDestination!!.id = R.id.homeFragment
-                            }
-                        }*/
+                                                    ActivityHomeBinding.logout.visibility = View.GONE
+                                                    ActivityHomeBinding.title.text = ""
+                                                    ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                                                    viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
+                                                    showDialog()
+                                                } else {
+                                                    if (osData.isDefectSheetFilled) navController.navigate(R.id.newCompleteTaskFragment)
+                                                    else {
+                                                        //navController.navigate(R.id.homeFragment)
+                                                        bottomNavigationView.selectedItemId = R.id.home
+                                                        navController.currentDestination!!.id = R.id.homeFragment
+                                                    }
+                                                }*/
                         true
                     }
 
                     R.id.invoices -> {
                         bottomNavigationView.selectedItemId = R.id.invoices
-/*                        ActivityHomeBinding.title.text = "Invoices"
-                        ActivityHomeBinding.logout.visibility = View.GONE
-                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                        navController.navigate(R.id.invoicesFragment)*/
+                        /*                        ActivityHomeBinding.title.text = "Invoices"
+                                                ActivityHomeBinding.logout.visibility = View.GONE
+                                                ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                                                navController.navigate(R.id.invoicesFragment)*/
                         true
                     }
 
                     R.id.tickets -> {
                         bottomNavigationView.selectedItemId = R.id.tickets
-         /*               ActivityHomeBinding.logout.visibility = View.GONE
-                        ActivityHomeBinding.title.text = "User Tickets"
-                        ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                        navController.navigate(R.id.userTicketsFragment)*/
+                        /*               ActivityHomeBinding.logout.visibility = View.GONE
+                                       ActivityHomeBinding.title.text = "User Tickets"
+                                       ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
+                                       navController.navigate(R.id.userTicketsFragment)*/
 
                         true
 
@@ -519,7 +519,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             )
                         )
                     }
-                    R.id.logoutNav->{
+
+                    R.id.logoutNav -> {
                         showAlertLogout()
                     }
 
@@ -761,7 +762,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     .equals("1") && navController.currentDestination?.id == R.id.profileFragment
             ) {
                 showToast("Please do profile changes first", this)
-            }else{
+            } else {
                 Log.d("NavCurrScreenID", "screenid ${screenid}")
                 try {
                     val prefs = Prefs.getInstance(applicationContext)
@@ -777,7 +778,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         prefs.clearNavigationHistory()
                     } else if (navController.currentDestination?.id == R.id.invoicesFragment ||
                         navController.currentDestination?.id == R.id.userTicketsFragment ||
-                        navController.currentDestination?.id == R.id.profileFragment||
+                        navController.currentDestination?.id == R.id.profileFragment ||
                         navController.currentDestination?.id == R.id.notifficationsFragment
                     ) {
                         bottomNavigationView.selectedItemId = R.id.home

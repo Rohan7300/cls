@@ -23,6 +23,9 @@ class EmergencyContactActivity : AppCompatActivity() {
         var mainVM =getMainVM(this)
         var prefs = Prefs.getInstance(this)
         mainVM.GetDAEmergencyContact(prefs.clebUserId.toInt())
+        binding.backIcon.setOnClickListener {
+            finish()
+        }
         loadingDialog.show()
         mainVM.liveDataGetDAEmergencyContact.observe(this){
             loadingDialog.dismiss()
