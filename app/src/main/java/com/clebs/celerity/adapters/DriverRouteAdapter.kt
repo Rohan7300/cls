@@ -82,7 +82,7 @@ class DriverRouteAdapter(
 
     }
     val asyncListDiffer = AsyncListDiffer(this, diffUtil)
-    fun saveData(data: GetDriverRouteInfoByDateResponse){
+    fun saveData(data: GetDriverRouteInfoByDateResponse) {
         asyncListDiffer.submitList(data)
     }
 

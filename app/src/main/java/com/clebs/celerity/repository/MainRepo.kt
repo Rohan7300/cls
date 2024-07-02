@@ -43,8 +43,12 @@ import com.clebs.celerity.models.response.DownloadInvoicePDFResponseX
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
 import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
+import com.clebs.celerity.models.response.GetCompanySignedDocumentListResponse
+import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponse
+import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponseItem
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverDeductionHistoryResponse
 import com.clebs.celerity.models.response.GetDriverInvoiceListResponse
 import com.clebs.celerity.models.response.GetDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
@@ -1511,7 +1515,16 @@ class MainRepo(private val ApiService: ApiService) {
                 }
 
                 DBImages.OIL_FUEL_COOLANT_LEAKS -> {
-                    ApiService.UploadVehicleOilOrCoolantLeaksDefect(
+                    ApiService.UploadVehicleOilOrFuelOrCoolantLeaksDefect(
+                        userID,
+                        vmId,
+                        lmid,
+                        date,
+                        multipartBody
+                    )
+                }
+                DBImages.OIL_COOLANT_LEVEL -> {
+                    ApiService.UploadVehicleOilOrCoolantLevel(
                         userID,
                         vmId,
                         lmid,
@@ -1708,6 +1721,39 @@ class MainRepo(private val ApiService: ApiService) {
                 userID,
                 filepart
             )
+        }
+    }
+
+    suspend fun GetDAEmergencyContact(
+        userID: Int
+    ):SimpleNetworkResponse<String>{
+        return safeApiCall {
+            ApiService.GetDAEmergencyContact(userID)
+        }
+    }
+
+    suspend fun GetCompanySignedDocumentList(
+        userID: Int
+    ):SimpleNetworkResponse<GetCompanySignedDocumentListResponse>{
+        return safeApiCall {
+            ApiService.GetCompanySignedDocumentList(userID)
+        }
+    }
+
+    suspend fun GetDAOutStandingDeductionList(
+        userID: Int,
+        companyId:Int
+    ):SimpleNetworkResponse<GetDAOutStandingDeductionListResponseItem>{
+        return safeApiCall {
+            ApiService.GetDAOutStandingDeductionList(userID,companyId)
+        }
+    }
+
+    suspend fun GetDriverDeductionHistory(
+        userID: Int,companyId:Int
+    ):SimpleNetworkResponse<GetDriverDeductionHistoryResponse>{
+        return safeApiCall {
+            ApiService.GetDriverDeductionHistory(userID,companyId)
         }
     }
 }

@@ -48,8 +48,12 @@ import com.clebs.celerity.models.response.DownloadInvoicePDFResponseX
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
 import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
+import com.clebs.celerity.models.response.GetCompanySignedDocumentListResponse
+import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponse
+import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponseItem
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverDeductionHistoryResponse
 import com.clebs.celerity.models.response.GetDriverInvoiceListResponse
 import com.clebs.celerity.models.response.GetDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
@@ -194,8 +198,11 @@ class MainViewModel(
         MutableLiveData<GetDriverOtherCompaniesPolicyResponse?>()
     val liveDataDownloadDriverOtherCompaniesPolicy =
         MutableLiveData<DownloadDriverOtherCompaniesPolicyResponse?>()
-
+    val liveDataGetDAEmergencyContact = MutableLiveData<String?>()
     val liveDataUploadVehicleDefectImages = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataGetCompanySignedDocumentList = MutableLiveData<GetCompanySignedDocumentListResponse?>()
+    val liveDataGetDAOutStandingDeductionList = MutableLiveData<GetDAOutStandingDeductionListResponseItem?>()
+    val liveDataGetDriverDeductionHistory = MutableLiveData<GetDriverDeductionHistoryResponse?>()
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
@@ -410,9 +417,9 @@ class MainViewModel(
         }
     }
 
-    fun GetVehicleImageUploadInfo(userID: Int,vmId:Int, date: String) {
+    fun GetVehicleImageUploadInfo(userID: Int, vmId: Int, date: String) {
         viewModelScope.launch {
-            val response = repo.GetVehicleImageUploadInfo(userID,vmId, date)
+            val response = repo.GetVehicleImageUploadInfo(userID, vmId, date)
             if (response.failed)
                 vehicleImageUploadInfoLiveData.postValue(null)
             if (!response.isSuccessful)
@@ -1910,7 +1917,8 @@ class MainViewModel(
         docTypeID: Int,
         expiredDocID: Int,
         userID: Int,
-        filepart:MultipartBody.Part) {
+        filepart: MultipartBody.Part
+    ) {
         viewModelScope.launch {
             val response =
                 repo.UploadVehDocumentFileByDriver(
@@ -1918,11 +1926,56 @@ class MainViewModel(
                     docTypeID,
                     expiredDocID,
                     userID,
-                    filepart)
+                    filepart
+                )
             if (response.failed || !response.isSuccessful)
                 liveDataUploadVehDocumentFileByDriverResponse.postValue(null)
             else
                 liveDataUploadVehDocumentFileByDriverResponse.postValue(response.body)
+        }
+    }
+
+    fun GetDAEmergencyContact(
+        userID: Int
+    ) {
+        viewModelScope.launch {
+            val response = repo.GetDAEmergencyContact(userID)
+            if (response.failed || !response.isSuccessful)
+                liveDataGetDAEmergencyContact.postValue(null)
+            else
+                liveDataGetDAEmergencyContact.postValue(response.body)
+        }
+
+    }
+
+    fun GetCompanySignedDocumentList(userID: Int){
+        viewModelScope.launch {
+            val response = repo.GetCompanySignedDocumentList(userID)
+            if(response.failed || !response.isSuccessful)
+                liveDataGetCompanySignedDocumentList.postValue(null)
+            else
+                liveDataGetCompanySignedDocumentList.postValue(response.body)
+        }
+    }
+
+    fun GetDAOutStandingDeductionList(userID: Int,companyId: Int){
+        viewModelScope.launch {
+            val response = repo.GetDAOutStandingDeductionList(userID,companyId)
+            if(response.failed || !response.isSuccessful)
+                liveDataGetDAOutStandingDeductionList.postValue(null)
+            else
+                liveDataGetDAOutStandingDeductionList.postValue(response.body)
+        }
+    }
+
+    fun GetDriverDeductionHistory(userID: Int,companyId: Int){
+        viewModelScope.launch {
+            val response = repo.GetDriverDeductionHistory(userID,companyId)
+            if(response.failed|| !response.isSuccessful)
+                liveDataGetDriverDeductionHistory.postValue(null)
+            else{
+                liveDataGetDriverDeductionHistory.postValue(response.body)
+            }
         }
     }
 

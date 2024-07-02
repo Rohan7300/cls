@@ -21,7 +21,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
@@ -224,7 +226,7 @@ class ImageUploadWorker(
                                     lmId,
                                     vmId,
                                     currentDateTime,
-                                    DBImages.FRONT,
+                                    DBImages.BODY_DAMAGE_FRONT,
                                     partBody
                                 )
                             }
@@ -308,7 +310,7 @@ class ImageUploadWorker(
                             }
                             if (checkNullorEmpty(imageEntity.inSeatBelt)) {
                                 val partBody = createMultipartPart(
-                                    imageEntity.inSeatBelt!!, "SEAT_BELT",
+                                    imageEntity.inSeatBelt!!, "uploadVehicleSeatBeltDefect",
                                     appContext
                                 )
                                 Log.d("IMWorker","2 CAB_SECURITY_INTERIOR")
@@ -349,14 +351,14 @@ class ImageUploadWorker(
                                     lmId,
                                     vmId,
                                     currentDateTime,
-                                    DBImages.ADD_BLUE,
+                                    DBImages.FUEL_ADBLUE_LEVEL,
                                     partBody
                                 )
                             }
                             if (checkNullorEmpty(imageEntity.inOilCoolantLevel)) {
                                 val partBody = createMultipartPart(
                                     imageEntity.inOilCoolantLevel!!,
-                                    "uploadVehicleOilOrCoolantLeaksDefect",
+                                    "uploadVehicleOilOrCoolantLevel",
                                     appContext
                                 )
                                 Log.d("IMWorker","2 OIL_COOLANT_LEVEL")
@@ -464,7 +466,7 @@ class ImageUploadWorker(
                             }
                             if (checkNullorEmpty(imageEntity.exBodyDamageNearSide)) {
                                 val partBody = createMultipartPart(
-                                    imageEntity.nearSide!!, "uploadVehicleNearSideDefect",
+                                    imageEntity.exBodyDamageNearSide!!, "uploadVehicleNearSideDefect",
                                     appContext
                                 )
                                 Log.d("IMWorker","2 NEAR_SIDE")
@@ -479,7 +481,7 @@ class ImageUploadWorker(
                             }
                             if (checkNullorEmpty(imageEntity.exBodyDamageRear)) {
                                 val partBody = createMultipartPart(
-                                    imageEntity.rear!!, "uploadVehicleRearDefect",
+                                    imageEntity.exBodyDamageRear!!, "uploadVehicleRearDefect",
                                     appContext
                                 )
                                 Log.d("IMWorker","2 REAR")
@@ -637,10 +639,20 @@ class ImageUploadWorker(
         partName: String,
         context: Context
     ): MultipartBody.Part {
-        val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
+/*        val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
         var bs64ImageString = getImageBitmapFromUri(context, image.toUri())
         val requestBody = bs64ImageString!!.toRequestBody()
-        return MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
+        return MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)*/
+        return try {
+            val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
+            val bs64ImageString = getImageBitmapFromUri(context, image.toUri())
+            val requestBody = bs64ImageString!!.toRequestBody()
+            MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            val defaultRequestBody = "".toRequestBody("text/plain".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData(partName, "default.jpg", defaultRequestBody)
+        }
     }
 
     private fun checkNullorEmpty(value: String?): Boolean {

@@ -18,7 +18,7 @@ android {
         minSdk = 27
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "0.2.2"
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -152,6 +152,8 @@ dependencies {
     val room_version = "2.6.1"
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:$room_version")
+    implementation ("com.squareup.retrofit2:converter-scalars:2.9.0")
+
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
 //    implementation("org.mozilla.geckoview:geckoview-nightly:100.0.20220308100756")

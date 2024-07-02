@@ -664,7 +664,8 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
         }
         DependencyProvider.isComingFromPolicyNotification = true
         DependencyProvider.policyDocPDFURI = uri
-
+        val closeIntent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
+        applicationContext.sendBroadcast(closeIntent)
         val intent = Intent(Intent.ACTION_VIEW)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.setDataAndType(uri, "application/pdf")

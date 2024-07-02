@@ -101,12 +101,15 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         tokenUrl: String,
         notificationID: String
     ) {
+        val closeIntent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
+        applicationContext.sendBroadcast(closeIntent)
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.putExtra("destinationFragment", "NotificationsFragment")
         intent.putExtra("actionToperform", actionToPerform)
         intent.putExtra("actionID", actionID)
         intent.putExtra("tokenUrl", tokenUrl)
+
         intent.putExtra("notificationId", notificationID)
         val channel_id = "notification_channel"
         val notificationId = try {

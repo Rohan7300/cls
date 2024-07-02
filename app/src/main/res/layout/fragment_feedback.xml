@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semibold"
                 android:layout_weight="1"
-                android:text=" Feedback questionnaire "
+                android:text=" Feedback Questionnaire "
                 android:textColor="@color/black"
                 android:textSize="18sp" />
     <ImageView

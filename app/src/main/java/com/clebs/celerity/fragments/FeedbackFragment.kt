@@ -51,8 +51,8 @@ class FeedbackFragment : Fragment() {
             QuestionWithOption("Can they perform a few safety checks or identify different parts of the vehicle.?*"),
             QuestionWithOption("Are they able to change gear,brake and steer, and park safely?*"),
             QuestionWithOption("Did they observe local traffic regulations?*"),
-            QuestionWithOption("Did they react safely and appropriately to road hazards?"),
-            QuestionWithOption("Do you feel they could adapt to unexpected circumstances and conditions?"),
+            QuestionWithOption("Did they react safely and appropriately to road hazards?*"),
+            QuestionWithOption("Do you feel they could adapt to unexpected circumstances and conditions?*"),
         )
         pref = Prefs.getInstance(requireContext())
         viewModel = (activity as HomeActivity).viewModel

@@ -14,6 +14,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -25,10 +26,10 @@ import javax.net.ssl.X509TrustManager
 object RetrofitService {
     //private const val BASE_URL = "http://182.64.1.105:8119/"
     //private const val BASE_URL = "http://122.176.42.96:8119/"
-    private const val BASE_URL = "http://122.186.85.26:8119/"
-//private const val BASE_URL = "http://192.168.0.150:8119/"
-//    private const val BASE_URL = "https://api.clsdasystem.com/"
-//    private const val BASE_URL = "https://api.clsdasystem.com/"
+    //private const val BASE_URL = "http://122.186.85.26:8119/"
+    private const val BASE_URL = "http://192.168.0.150:8119/"
+    //private const val BASE_URL = "https://api.clsdasystem.com/"
+    //private const val BASE_URL = "https://api.clsdasystem.com/"
 
     fun getInstance(): Retrofit {
         val builder = OkHttpClient.Builder()
@@ -48,7 +49,9 @@ object RetrofitService {
                     provideHttpLoggingInterceptor()
                 )
             )
-            .addConverterFactory(GsonConverterFactory.create()).build()
+            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
     }
 
     fun getUnSecureOkHttpClient(

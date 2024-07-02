@@ -44,6 +44,7 @@ import androidx.core.view.KeyEventDispatcher.dispatchKeyEvent
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.work.Constraints
@@ -690,7 +691,7 @@ fun showScanErrorDialog(
 
 fun getCurrentDateTime(): String {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-//    dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+   // dateFormat.timeZone = TimeZone.getTimeZone("UTC")
     return dateFormat.format(Date())
 }
 
@@ -1051,4 +1052,15 @@ fun roundOffValues(value: String): String {
         return value
     }
     return roundOffValue
+}
+
+fun noInternetCheck(context: Context,ll:LinearLayout,viewLifecycleOwner: LifecycleOwner){
+    val networkManager = NetworkManager(context)
+    networkManager.observe(viewLifecycleOwner) {
+        if (it) {
+            ll.visibility = View.GONE
+        } else {
+            ll.visibility = View.VISIBLE
+        }
+    }
 }

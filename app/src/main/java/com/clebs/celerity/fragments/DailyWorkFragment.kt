@@ -567,7 +567,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                                 this@DailyWorkFragment,
                                 fragmentManager,
                                 "DWF-03",
-                                " This Vehicle ${if (vrn.isNotEmpty()) (vrn) else ""} doesn't exists. Please scan again or contact your supervisor."
+                                " This Vehicle ${if (vrn.isNotEmpty()) (vrn) else ""} doesn't exist. Please scan again or contact your supervisor."
                             )
 //                        if (loadingDialog.isShowing){
 //                            loadingDialog.dismiss()
@@ -636,7 +636,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                     this,
                     fragmentManager,
                     "",
-                    "This Vehicle ${if (vrn.isNotEmpty()) "[$vrn]" else ""} Doesn't exists. Please scan again or contact your supervisor."
+                    "This Vehicle ${if (vrn.isNotEmpty()) "[$vrn]" else ""} doesn't exist. Please scan again or contact your supervisor."
                 )
                 /*     showToast(
                          "Vehicle doesn't exists. Please scan again or contact your supervisor.",

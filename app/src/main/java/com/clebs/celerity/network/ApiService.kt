@@ -46,10 +46,14 @@ import com.clebs.celerity.models.response.DownloadInvoicePDFResponseX
 import com.clebs.celerity.models.response.DownloadThirdPartyInvoicePDFResponse
 import com.clebs.celerity.models.response.ExpiringDocumentsResponse
 import com.clebs.celerity.models.response.GetAvgScoreResponse
+import com.clebs.celerity.models.response.GetCompanySignedDocumentListResponse
+import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponse
+import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponseItem
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.models.response.GetDailyWorkDetailsResponse
 import com.clebs.celerity.models.response.GetDefectSheetBasicInfoResponse
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
+import com.clebs.celerity.models.response.GetDriverDeductionHistoryResponse
 import com.clebs.celerity.models.response.GetDriverInvoiceListResponse
 import com.clebs.celerity.models.response.GetDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
@@ -130,8 +134,7 @@ interface ApiService {
 
     @PUT("/api/Drivers/UpdateUsernameFromEmail")
     suspend fun UseEmailAsUsername(
-        @Query("userId") userId: Double,
-        @Query("emailAddress") emailAddress: String
+        @Query("userId") userId: Double, @Query("emailAddress") emailAddress: String
     ): Response<BaseResponseTwo>
 
     @PUT("/api/Drivers/UpdateDAProfileIn90Days")
@@ -162,15 +165,12 @@ interface ApiService {
 
     @GET("/api/Vehicle/GetVehicleInformation")
     suspend fun GetVehicleInformation(
-        @Query("userId") userId: Int,
-        @Query("vehRegNo") vehRegNo: String = ""
+        @Query("userId") userId: Int, @Query("vehRegNo") vehRegNo: String = ""
     ): Response<GetVechileInformationResponse>
 
     @GET("/api/DailyWorks/GetVehicleImageUploadedInfo/{userId}")
     suspend fun GetVehicleImageUploadInfo(
-        @Path("userId") userId: Int,
-        @Query("vmId") vmId:Int,
-        @Query("date") date: String
+        @Path("userId") userId: Int, @Query("vmId") vmId: Int, @Query("date") date: String
     ): Response<GetVehicleImageUploadInfoResponse>
 
     @Multipart
@@ -288,13 +288,11 @@ interface ApiService {
     suspend fun GetRouteInfoById(@Path("routeId") routeId: Int): Response<GetRouteInfoByIdRes>
 
     @POST("/api/RouteUpdate/AddOnRideAlongRouteInfo")
-    suspend fun AddOnRideAlongRouteInfo(@Body addOnRideAlongRouteInfoRequest: AddOnRideAlongRouteInfoRequest)
-            : Response<SimpleStatusMsgResponse>
+    suspend fun AddOnRideAlongRouteInfo(@Body addOnRideAlongRouteInfoRequest: AddOnRideAlongRouteInfoRequest): Response<SimpleStatusMsgResponse>
 
     @GET("/api/RouteUpdate/GetRideAlongRouteInfoById")
     suspend fun GetRideAlongRouteInfoById(
-        @Query("routeId") routeId: Int,
-        @Query("LeadDriverId") LeadDriverId: Int
+        @Query("routeId") routeId: Int, @Query("LeadDriverId") LeadDriverId: Int
     ): Response<GetRideAlongRouteInfoByIdRes>
 
     @PUT("/api/Drivers/UpdatePassword")
@@ -401,29 +399,24 @@ interface ApiService {
 
     @GET("/api/Dashboard/GetAverageTotalScorebyId")
     suspend fun GetAvgScore(
-        @Query("userId") userId: Int,
-        @Query("LmId") lmID: Int
+        @Query("userId") userId: Int, @Query("LmId") lmID: Int
     ): Response<GetAvgScoreResponse>
 
 
     suspend fun GetLastWeekScore(
-        @Query("userId") userId: Int,
-        @Query("LmId") lmID: Int
+        @Query("userId") userId: Int, @Query("LmId") lmID: Int
     ): Response<GetLastWeekScore>
 
     @GET("/api/Dashboard/GetLastWeekScorebyId")
     suspend fun GetLastWeekScore(
-        @Query("userId") userId: Int,
-        @Query("WeekNo") WeekNo: Int,
-        @Query("Year") Year: Int
+        @Query("userId") userId: Int, @Query("WeekNo") WeekNo: Int, @Query("Year") Year: Int
     ): Response<GetLastWeekScore>
 
     @GET("/api/Dashboard/GetDriverWeeklyInvoice")
     suspend fun CashFLowData(
         @Query("userId") userId: Int,
         //@Query("companyFilter") companyFilter: Int,
-        @Query("selYear") selYear: Int,
-        @Query("selWeek") selWeek: Int
+        @Query("selYear") selYear: Int, @Query("selWeek") selWeek: Int
     ): Response<CashFlowPieChartResponse>
 
     @GET("/api/Dashboard/GetISO8601WeekandYear")
@@ -440,8 +433,7 @@ interface ApiService {
 
     @GET("/api/Ticket/GetTicketCommentList")
     suspend fun GetTicketCommentList(
-        @Query("userId") userId: Int,
-        @Query("ticketId") ticketId: Int
+        @Query("userId") userId: Int, @Query("ticketId") ticketId: Int
     ): Response<GetTicketCommentListNewResponse>
 
     @Multipart
@@ -469,8 +461,7 @@ interface ApiService {
 
     @GET("/api/Ticket/GetUserTicketDocuments")
     suspend fun GetUserTicketDocuments(
-        @Query("userId") userId: Int,
-        @Query("ticketId") ticketId: Int
+        @Query("userId") userId: Int, @Query("ticketId") ticketId: Int
     ): Response<GetUserTicketDocumentsResponse>
 
     @PUT("/api/Dashboard/CreateThirdPartyAccess")
@@ -529,14 +520,15 @@ interface ApiService {
     ): Response<SimpleStatusMsgResponse>
 
     @GET("/api/Drivers/GetVehicleInfobyDriverId")
-    suspend fun GetVehicleInfobyDriverId(@Query("userId") userId: Int, @Query("date") date: String)
-            : Response<GetvehicleInfoByDriverId>
+    suspend fun GetVehicleInfobyDriverId(
+        @Query("userId") userId: Int,
+        @Query("date") date: String
+    ): Response<GetvehicleInfoByDriverId>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehicleImages")
     suspend fun uploadVehicleImages(
-        @Query("userId") userId: Int,
-        @Part image: List<MultipartBody.Part>
+        @Query("userId") userId: Int, @Part image: List<MultipartBody.Part>
     ): Response<SimpleStatusMsgResponse>
 
     @GET("/api/Drivers/GetVehicleAdvancePaymentAgreement/{userId}")
@@ -546,8 +538,7 @@ interface ApiService {
 
     @GET("/api/Drivers/GetDadeductionSignAgreement")
     suspend fun GetDeductionAgreement(
-        @Query("userId") userId: Int,
-        @Query("aggrId") aggrId: Int
+        @Query("userId") userId: Int, @Query("aggrId") aggrId: Int
     ): Response<DeductionAgreementResponse>
 
     @POST("/api/Drivers/UpdateDadeductionSignAgreement")
@@ -567,8 +558,7 @@ interface ApiService {
 
     @PUT("/api/Drivers/ApproveWeeklyRotabyDA")
     suspend fun ApproveWeeklyRotabyDA(
-        @Query("userId") userId: Int,
-        @Query("lrnId") lrnID: Int
+        @Query("userId") userId: Int, @Query("lrnId") lrnID: Int
     ): Response<SimpleStatusMsgResponse>
 
 
@@ -582,8 +572,7 @@ interface ApiService {
 
     @PUT("/api/Drivers/ApproveVehicleAdvancePaymentAgreement")
     suspend fun ApproveVehicleAdvancePaymentAgreement(
-        @Query("userId") userId: Int,
-        @Query("isApproved") isApproved: Boolean
+        @Query("userId") userId: Int, @Query("isApproved") isApproved: Boolean
     ): Response<SimpleStatusMsgResponse>
 
     @GET("/api/Drivers/WeeklyRotaExistForDAApproval/{userId}")
@@ -603,8 +592,7 @@ interface ApiService {
 
     @GET("/api/Drivers/GetDaDailyLocationRota")
     suspend fun GetDaDailyLocationRota(
-        @Query("userId") userId: Int,
-        @Query("token") token: String
+        @Query("userId") userId: Int, @Query("token") token: String
     ): Response<DaDailyLocationRotaResponse>
 
     @POST("/api/Drivers/ApproveDailyRotabyDA")
@@ -633,28 +621,22 @@ interface ApiService {
 
     @GET("/api/HtmlToPDF/GetDriverInvoiceList")
     suspend fun GetDriverInvoiceList(
-        @Query("UserId") UserId: Int,
-        @Query("selYear") selYear: Int,
-        @Query("selWeek") selWeek: Int
+        @Query("UserId") UserId: Int, @Query("selYear") selYear: Int, @Query("selWeek") selWeek: Int
     ): Response<GetDriverInvoiceListResponse>
 
     @GET("/api/HtmlToPDF/GetThirdPartyInvoiceList")
     suspend fun GetThirdPartyInvoiceList(
-        @Query("UserId") UserId: Int,
-        @Query("selYear") setYear: Int,
-        @Query("selWeek") selWeek: Int
+        @Query("UserId") UserId: Int, @Query("selYear") setYear: Int, @Query("selWeek") selWeek: Int
     ): Response<GetDriverInvoiceListResponse>
 
     @GET("/api/HtmlToPDF/DownloadInvoicePDF")
     suspend fun DownloadInvoicePDF(
-        @Query("UserId") userId: Int,
-        @Query("InvoiceId") invoiceId: Int
+        @Query("UserId") userId: Int, @Query("InvoiceId") invoiceId: Int
     ): Response<DownloadInvoicePDFResponseX>
 
     @GET("/api/HtmlToPDF/DownloadThirdPartyInvoicePDF")
     suspend fun DownloadThirdPartyInvoicePDF(
-        @Query("UserId") userId: Int,
-        @Query("InvoiceId") invoiceId: Int
+        @Query("UserId") userId: Int, @Query("InvoiceId") invoiceId: Int
     ): Response<DownloadInvoicePDFResponseX>
 
     @GET("/api/HtmlToPDF/GetDriverOtherCompaniesPolicy/{userId}")
@@ -750,8 +732,9 @@ interface ApiService {
     ): Response<SimpleStatusMsgResponse>
 
     @Multipart
-    @POST("/api/Vehicle/UploadVehicleOilOrCoolantLeaksDefect")
-    suspend fun UploadVehicleOilOrCoolantLeaksDefect(
+    //@POST("/api/Vehicle/UploadVehicleOilOrCoolantLeaksDefect")
+    @POST("/api/Vehicle/UploadVehicleOilOrCoolantLevel")
+    suspend fun UploadVehicleOilOrCoolantLevel(
         @Query("userId") userId: Int,
         @Query("vmId") vmId: Int,
         @Query("lmId") lmID: Int,
@@ -940,10 +923,27 @@ interface ApiService {
         @Query("VehId") VehId: Int,
         @Query("docTypeId") docTypeId: Int,
         @Query("expiredDocId") expiredDocId: Int,
-        @Query("userId") userId: Int,
-        /*@Query("uploadedByUser") uploadedByUser:Int,*/
+        @Query("userId") userId: Int,/*@Query("uploadedByUser") uploadedByUser:Int,*/
         @Part multipartBody: MultipartBody.Part
     ): Response<SimpleStatusMsgResponse>
+
+    @GET("/api/Drivers/GetDAEmergencyContact/{userId}")
+    suspend fun GetDAEmergencyContact(@Path("userId") userId: Int): Response<String>
+
+    @GET("/api/HtmlToPDF/GetCompanySignedDocumentList/{userId}")
+    suspend fun GetCompanySignedDocumentList(@Path("userId") userId: Int): Response<GetCompanySignedDocumentListResponse>
+
+    @GET("/api/Drivers/GetDAOutStandingDeductionList/{userId}")
+    suspend fun GetDAOutStandingDeductionList(
+        @Path("userId") userId: Int,
+        @Query("parentCompanyId") parentCompanyId: Int
+    ): Response<GetDAOutStandingDeductionListResponseItem>
+
+    @GET("/api/Drivers/GetDriverDeductionHistory/{userId}")
+    suspend fun GetDriverDeductionHistory(
+        @Path("userId") userId: Int,
+        @Query("parentCompanyId") parentCompanyId: Int
+    ): Response<GetDriverDeductionHistoryResponse>
 
 }
 

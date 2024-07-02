@@ -478,7 +478,7 @@
                             android:layout_marginTop="5dp"
                             android:drawableEnd="@drawable/baseline_error_24"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="No schedule data found !"
+                            android:text="No schedule data found"
                             android:textColor="@color/text_color"
                             android:textSize="13sp" />
 
@@ -793,8 +793,9 @@
                             android:drawableTint="@color/white"
                             android:fontFamily="@font/poppins_semibold"
                             android:gravity="center"
-                            android:paddingHorizontal="4dp"
                             android:paddingVertical="6dp"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="9dp"
                             android:text="Previous Week"
                             android:textColor="@color/white"
                             android:textSize="11sp"
@@ -808,8 +809,9 @@
                             android:drawableTint="@color/white"
                             android:fontFamily="@font/poppins_semibold"
                             android:gravity="center"
-                            android:paddingHorizontal="4dp"
                             android:paddingVertical="6dp"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="9dp"
                             android:text="Previous Week"
                             android:textColor="@color/white"
                             android:textSize="11sp"
@@ -839,14 +841,15 @@
                             android:background="@drawable/home_button_shape"
                             android:backgroundTint="@color/medium_orange"
                             android:drawableEnd="@drawable/baseline_keyboard_double_arrow_right_24"
-                            android:drawablePadding="4dp"
                             android:drawableTint="@color/white"
                             android:fontFamily="@font/poppins_semibold"
                             android:gravity="center_vertical"
-                            android:padding="6dp"
+                            android:paddingVertical="6dp"
+                            android:paddingEnd="5dp"
+                            android:paddingStart="9dp"
                             android:text="Next Week"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             android:visibility="gone" />
 
 
@@ -858,14 +861,15 @@
                             android:background="@drawable/home_button_shape"
                             android:backgroundTint="@color/medium_orange"
                             android:drawableEnd="@drawable/baseline_keyboard_arrow_right_24"
-                            android:drawablePadding="4dp"
                             android:drawableTint="@color/white"
                             android:fontFamily="@font/poppins_semibold"
                             android:gravity="center_vertical"
-                            android:padding="6dp"
+                            android:paddingVertical="6dp"
+                            android:paddingStart="9dp"
+                            android:paddingEnd="5dp"
                             android:text="Next Week"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             android:visibility="gone" />
 
                     </androidx.cardview.widget.CardView>
