@@ -420,9 +420,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
         val currentDate = LocalDateTime.now()
         val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
-        val regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
+        val regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}").toString().replace("","")
         prefs.inspectionID = regexPattern.toString().replace(" ","")
-        inspectionID = regexPattern.toString().replace(" ","")
+//        inspectionID = regexPattern.toString().replace(" ","")
         Log.e(
             "kjfdjkfhdjfjdhfdjclientuniqueidfunction",
             "clientUniqueID: " + inspectionID + "------" + prefs.inspectionID
@@ -582,6 +582,11 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         Log.d("CLSInspection", "VehicleModel: ${prefs.VehicleModel}")
         Log.d("CLSInspection","VehicleBodyStyle ${prefs.VehicleBodyStyle}")
         Log.d("CLSInspection","InspectionID: $inspectionID")
+
+        if (prefs.inspectionID.isNotEmpty() ){
+            inspectionID=prefs.inspectionID
+        }
+
         cqSDKInitializer.startInspection(activity = this,
             clientAttrs = ClientAttrs(
                 userName = " ",

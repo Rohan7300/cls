@@ -1041,6 +1041,8 @@ class NewCompleteTaskFragment : Fragment() {
         osData.isImagesUploadedToday = true
         oSyncViewModel.insertData(osData)
         imagesUploaded = true
+
+
         print("OSData ISImage1 ${osData.isImagesUploadedToday}\n")
         print("OSData ISInspection1 ${osData.isInspectionDoneToday}\n")
         visibilityLevel = 1

@@ -905,9 +905,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         deleteDialog.setCancelable(false)
         deleteDialog.setCanceledOnTouchOutside(false);
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-        (deleteDialog as? android.app.AlertDialog)?.apply {
-            saveChangesCallback = this@HomeActivity
-        }
+     deleteDialog.apply {
+         saveChangesCallback=this@HomeActivity
+     }
         deleteDialog.show();
 
     }
