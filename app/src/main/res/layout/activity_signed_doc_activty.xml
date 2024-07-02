@@ -62,5 +62,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/nodataLayout"
+            >
+            <include
+                layout="@layout/no_data_layout"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/nointernetLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:paddingVertical="7dp"
+            android:paddingHorizontal="10dp"
+            android:visibility="gone"
+            android:orientation="horizontal" >
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/nowifi"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poor Internet Connection!!"
+                android:textColor="@color/medium_orange"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins"/>
+        </LinearLayout>
     </LinearLayout>
 </layout>

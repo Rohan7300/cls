@@ -823,7 +823,7 @@ fun SaveVehicleInspection(viewModel:MainViewModel){
         SaveVehicleInspectionInfo(
             Prefs.getInstance(App.instance).clebUserId.toInt(),
             currentDate,
-            Prefs.getInstance(App.instance).inspectionID,
+            Prefs.getInstance(App.instance).inspectionID.replace(" ",""),
             locationID,
             Prefs.getInstance(App.instance).vmId
         )

@@ -91,6 +91,9 @@ class DeliveryProcedures : Fragment() {
                     val selectedOptions = questions.map { it.selectedOption }
                     saveDeliveryProcedureApi(selectedOptions, comment)
                 } else {
+                    if(binding.etDeliveryComment.text.isNullOrEmpty())
+                    showToast("Please add comment before submitting.", requireContext())
+                    else
                     showToast("Please select answer to all questions.", requireContext())
                 }
             }

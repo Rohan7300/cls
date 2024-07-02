@@ -26,18 +26,20 @@ class QuestinareFragment : Fragment() {
     lateinit var adapter: ViewAdaptor
     lateinit var viewModel: MainViewModel
     private var firsttime: Boolean = true
-    companion object{
+
+    companion object {
         @SuppressLint("StaticFieldLeak")
         lateinit var binding: FragmentQuestinareBinding
 
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-            binding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_questinare, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_questinare, container, false)
 
         binding.tablay.getTabAt(0)?.select()
         return binding.root
@@ -94,7 +96,7 @@ class QuestinareFragment : Fragment() {
         )
         binding.viewPager.adapter = adapter
         binding.viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.tablay))
-binding.viewPager.offscreenPageLimit = 6
+        binding.viewPager.offscreenPageLimit = 6
         binding.tablay.getTabAt(0)?.select()
 
         for (i in headingList.indices) {
@@ -116,11 +118,11 @@ binding.viewPager.offscreenPageLimit = 6
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-/*        if (this::adapter.isInitialized && this::viewModel.isInitialized) {
-            binding.viewPager.currentItem = 0
-            binding.viewPager.setCurrentItem(0, true)
-            viewModel.currentViewPage.postValue(0)
-        }*/
+        /*        if (this::adapter.isInitialized && this::viewModel.isInitialized) {
+                    binding.viewPager.currentItem = 0
+                    binding.viewPager.setCurrentItem(0, true)
+                    viewModel.currentViewPage.postValue(0)
+                }*/
 
         viewModel.currentViewPage.observe(viewLifecycleOwner) {
             if (firsttime) {
@@ -136,11 +138,11 @@ binding.viewPager.offscreenPageLimit = 6
 
     override fun onResume() {
         super.onResume()
-/*        if (this::adapter.isInitialized && this::viewModel.isInitialized) {
-            binding.viewPager.currentItem = 0
-            firsttime = true
-            viewModel.currentViewPage.postValue(0)
-        }*/
+        /*        if (this::adapter.isInitialized && this::viewModel.isInitialized) {
+                    binding.viewPager.currentItem = 0
+                    firsttime = true
+                    viewModel.currentViewPage.postValue(0)
+                }*/
     }
 
 }

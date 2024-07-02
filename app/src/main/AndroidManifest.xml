@@ -5,6 +5,8 @@
     <uses-feature android:name="android.hardware.camera.any" />
 
     <uses-permission android:name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS" />
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" /> <!-- <permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" android:protectionLevel="signature" -->
     <!-- tools:ignore="ReservedSystemPermission" /> -->

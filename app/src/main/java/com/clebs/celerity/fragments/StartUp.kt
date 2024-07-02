@@ -48,13 +48,13 @@ class StartUp : Fragment() {
         loadingDialog = (activity as HomeActivity).loadingDialog
         pref.submittedStartUp = false
 
-        val adapter = QuestionAdapter(questions,requireContext())
+        val adapter = QuestionAdapter(questions, requireContext())
         binding.startUpRv.adapter = adapter
         binding.startUpRv.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.liveDataQuestionaireStartup.observe(viewLifecycleOwner) {
             loadingDialog.cancel()
-            if(pref.submittedStartUp){
+            if (pref.submittedStartUp) {
                 if (it != null) {
                     viewModel.currentViewPage.postValue(2)
                     pref.quesID = it.QuestionId
@@ -68,19 +68,22 @@ class StartUp : Fragment() {
         }
 
         binding.saveBTNStartup.setOnClickListener {
-            if(pref.qStage<1||pref.quesID==0){
+            if (pref.qStage < 1 || pref.quesID == 0) {
                 showToast("Please complete previous assessment first", requireContext())
-            }else{
+            } else {
                 val allQuestionsSelected = adapter.areAllQuestionsSelected()
                 val comment =
                     if (binding.startupComment.text.isNullOrEmpty()) " " else binding.startupComment.text
-                if (allQuestionsSelected&&!binding.startupComment.text.isNullOrEmpty()) {
+                if (allQuestionsSelected && !binding.startupComment.text.isNullOrEmpty()) {
                     val selectedOptions = questions.map { it.selectedOption }
                     if (comment != null) {
                         saveStartupApi(selectedOptions, comment)
                     }
                 } else {
-                    showToast("Please select answer to all questions.", requireContext())
+                    if (binding.startupComment.text.isNullOrEmpty())
+                        showToast("Please add comment before submitting", requireContext())
+                    else
+                        showToast("Please select answer to all questions.", requireContext())
                 }
             }
         }

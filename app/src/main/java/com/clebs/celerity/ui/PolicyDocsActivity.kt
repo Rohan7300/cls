@@ -47,6 +47,7 @@ import com.clebs.celerity.utils.OpenMode
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.checkTokenExpirationAndLogout
+import com.clebs.celerity.utils.noInternetCheck
 import com.clebs.celerity.utils.showToast
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -107,6 +108,7 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
                 val mainRepo = MainRepo(apiService)
                 viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]*/
 
+        noInternetCheck(this,mbinding.nointernetLL,this)
         viewModel = DependencyProvider.getMainVM(this)
         clebuserId = Prefs.getInstance(this).clebUserId.toInt()
         handbookID = Prefs.getInstance(this).handbookId

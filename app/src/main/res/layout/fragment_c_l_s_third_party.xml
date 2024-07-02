@@ -53,10 +53,10 @@
                 android:id="@+id/selectYearET"
                 android:inputType="none"
                 android:hint=""
-                android:paddingVertical="8dp"
+                android:paddingVertical="6dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:textColorHint="@color/hintColor"
-                android:textSize="13sp" />
+                android:textSize="11sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

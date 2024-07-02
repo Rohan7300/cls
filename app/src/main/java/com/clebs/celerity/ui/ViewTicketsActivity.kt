@@ -21,6 +21,7 @@ import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.comingFromViewTickets
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.noInternetCheck
 
 class ViewTicketsActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
@@ -63,6 +64,7 @@ class ViewTicketsActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+        noInternetCheck(this,binding.nointernetLL,this)
 
         if (ticketData != null) {
             binding.ticketID.text = "CLS : " + ticketData!!.UserTicketID.toString()

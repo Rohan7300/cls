@@ -78,6 +78,9 @@ class ReturnToStation : Fragment() {
                     saveReturnQuesApi(selectedOptions, comment)
 
                 } else {
+                    if(binding.etReturnComment.text.isNullOrEmpty())
+                    showToast("Please add comment before submitting", requireContext())
+                    else
                     showToast("Please select answer to all questions.", requireContext())
                 }
             }

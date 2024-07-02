@@ -9,6 +9,7 @@ import com.clebs.celerity.databinding.ActivityEmergencyContactBinding
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.DependencyProvider.getMainVM
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.noInternetCheck
 
 class EmergencyContactActivity : AppCompatActivity() {
     lateinit var binding: ActivityEmergencyContactBinding
@@ -27,6 +28,8 @@ class EmergencyContactActivity : AppCompatActivity() {
             finish()
         }
         loadingDialog.show()
+        noInternetCheck(this,binding.nointernetLL,this)
+
         mainVM.liveDataGetDAEmergencyContact.observe(this){
             loadingDialog.dismiss()
             if(it!=null){

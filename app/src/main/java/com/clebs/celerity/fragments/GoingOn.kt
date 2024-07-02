@@ -83,7 +83,6 @@ pref.submittedGoingOn = false
                 if (allQuestionsSelected) {
                     val selectedOptions = questions.map { it.selectedOption }
                     saveGoingonApi(selectedOptions, comment)
-
                 } else {
                     showToast("Please select answer to all questions.", requireContext())
                 }

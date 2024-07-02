@@ -32,6 +32,7 @@ import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getMimeType
+import com.clebs.celerity.utils.noInternetCheck
 import com.clebs.celerity.utils.showToast
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -78,6 +79,7 @@ class VehicleExpiringDocuments : AppCompatActivity(), VehicleExpiringUploadListe
         binding.expringDocRV.layoutManager = LinearLayoutManager(this)
         loadingDialog.show()
         viewmodel.GetDAVehicleExpiringDocuments(pref.clebUserId.toInt())
+        noInternetCheck(this,binding.nointernetLL,this)
 
         viewmodel.liveDataVehicleExpiringDocumentsResponse.observe(this) {
             loadingDialog.dismiss()

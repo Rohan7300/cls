@@ -115,5 +115,6 @@
                     android:src="@drawable/capture" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 </layout>

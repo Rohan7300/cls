@@ -18,6 +18,7 @@ import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertDateFormat
 import com.clebs.celerity.utils.getCurrentWeek
 import com.clebs.celerity.utils.getCurrentYear
+import com.clebs.celerity.utils.noInternetCheck
 import com.clebs.celerity.utils.showToast
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -46,7 +47,7 @@ class WeeklyRotaApprovalActivity : AppCompatActivity() {
 
         binding.mainLayout.visibility = View.GONE
         binding.nodataLayout.visibility = View.VISIBLE
-
+        noInternetCheck(this,binding.nointernetLL,this)
 
         /*        viewmodel.GetViewFullScheduleInfo(
                     pref.clebUserId.toInt(),

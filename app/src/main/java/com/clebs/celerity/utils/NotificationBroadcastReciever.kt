@@ -4,15 +4,31 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.view.accessibility.AccessibilityManager
 import com.clebs.celerity.utils.DependencyProvider.isComingFromPolicyNotification
 import com.clebs.celerity.utils.DependencyProvider.policyDocPDFURI
 
+
 class NotificationBroadcastReciever : BroadcastReceiver() {
+    lateinit var notificationManager:NotificationManager
     override fun onReceive(context: Context?, intent: Intent?) {
         context?.let {
-            if(isComingFromPolicyNotification&&policyDocPDFURI!=null){
+            if (isComingFromPolicyNotification && policyDocPDFURI != null) {
                 isComingFromPolicyNotification = false
+            notificationManager   =
+                    it.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val notificationId = intent?.getIntExtra("notification_id", -1)
+
+                notificationId?.let { id ->
+                    if (id != -1) {
+                        notificationManager.cancel(id)
+                    }
+                }
+                //it.startActivity(Intent(context,HomeActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.setDataAndType(policyDocPDFURI, "application/pdf")
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -24,14 +40,18 @@ class NotificationBroadcastReciever : BroadcastReceiver() {
                     showToast("No PDF viewer found", it)
                 }
             }
-            val notificationManager = it.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val notificationId = intent?.getIntExtra("notification_id", -1)
-
-            notificationId?.let { id ->
-                if (id != -1) {
-                    notificationManager.cancel(id)
-                }
+/*            Handler(Looper.getMainLooper()).postDelayed({
+                val closeIntent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
+                closeIntent.setPackage("com.android.systemui")
+                context.sendBroadcast(closeIntent)
+            }, 100)*/
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                val closeIntent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
+                context.sendBroadcast(closeIntent)
+            } else {
+               notificationManager.cancelAll()
             }
+
         }
     }
 }

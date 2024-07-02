@@ -15,6 +15,7 @@ import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.noInternetCheck
 
 class CommentDetailActivity : AppCompatActivity() {
     lateinit var binding: ActivityCommentDetailBinding
@@ -42,7 +43,7 @@ class CommentDetailActivity : AppCompatActivity() {
         }
         binding.tktID.text = ticketID.toString()
         binding.tktSub.text = ticketSub?:""
-
+        noInternetCheck(this,binding.nointernetLL,this)
         binding.commentDetailRV.adapter = commentAdapter
         binding.commentDetailRV.layoutManager = LinearLayoutManager(this)
         viewModel.liveDataGetTicketCommentList.observe(this) {

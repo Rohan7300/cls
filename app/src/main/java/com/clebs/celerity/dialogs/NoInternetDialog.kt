@@ -2,6 +2,7 @@ package com.clebs.celerity.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.DialogFragment
@@ -17,10 +18,10 @@ class NoInternetDialog() : DialogFragment() {
             val builder = AlertDialog.Builder(it,R.style.CustomDialog)
             val inflater = requireActivity().layoutInflater
             val view = inflater.inflate(R.layout.dialog_no_internet, null)
-            val tryAgain = view.findViewById<CardView>(R.id.noIntTryAgain)
-    /*        tryAgain.setOnClickListener {
+            val cross = view.findViewById<ImageView>(R.id.cross)
+            cross.setOnClickListener {
                 dismiss()
-            }*/
+            }
             isCancelable = true
             builder.setView(view).create()
         } ?: throw IllegalStateException("Activity cannot be null")

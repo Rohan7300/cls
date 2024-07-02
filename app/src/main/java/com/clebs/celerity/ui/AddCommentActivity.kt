@@ -27,6 +27,7 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.noInternetCheck
 import com.clebs.celerity.utils.showToast
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -55,6 +56,8 @@ class AddCommentActivity : AppCompatActivity() {
         prefs = Prefs.getInstance(this)
         ticketID = intent.getIntExtra("ticketID", -1)
         loadingDialog = LoadingDialog(this)
+        noInternetCheck(this,binding.nointernetLL,this)
+
         observer()
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

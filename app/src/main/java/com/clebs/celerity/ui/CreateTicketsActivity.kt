@@ -38,6 +38,7 @@ import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentDateTime
+import com.clebs.celerity.utils.noInternetCheck
 import com.clebs.celerity.utils.showToast
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -92,6 +93,7 @@ class CreateTicketsActivity : AppCompatActivity() {
         showDialog()
         setInputListener(mbinding.edtTitle)
         setInputListener(mbinding.edtDes)
+        noInternetCheck(this,mbinding.nointernetLL,this)
 
         mbinding.saveTickets.setOnClickListener {
             if(chkNull()==1){
