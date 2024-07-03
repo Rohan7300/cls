@@ -15,7 +15,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -34,12 +33,10 @@ import com.clebs.celerity.utils.NotificationBroadcastReciever
 import com.clebs.celerity.utils.OpenMode
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
-import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.text.SimpleDateFormat
-import java.util.Base64
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
@@ -374,8 +371,7 @@ class ListSignedDocDialog:DialogFragment() {
         }
         DependencyProvider.isComingFromPolicyNotification = true
         DependencyProvider.policyDocPDFURI = uri
-        val closeIntent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-        context.applicationContext.sendBroadcast(closeIntent)
+
         val intent = Intent(Intent.ACTION_VIEW)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.setDataAndType(uri, "application/pdf")
@@ -398,9 +394,12 @@ class ListSignedDocDialog:DialogFragment() {
         val toastIntent = Intent(context, NotificationBroadcastReciever::class.java).apply {
             putExtra("notification_id", notificationID)
         }
+
+
         val toastPendingIntent = PendingIntent.getBroadcast(
             context, 0, toastIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+
         )
 
         val notificationBuilder = NotificationCompat.Builder(context, "Download Complete")
@@ -419,6 +418,7 @@ class ListSignedDocDialog:DialogFragment() {
             ) {
                 return
             }
+
             notify(notificationID, notificationBuilder.build())
             notificationID += 1
         }

@@ -155,6 +155,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-scalars:2.9.0")
 
     annotationProcessor("androidx.room:room-compiler:$room_version")
+    implementation ("com.squareup.retrofit2:converter-scalars:2.9.0")
 
 //    implementation("org.mozilla.geckoview:geckoview-nightly:100.0.20220308100756")
 
