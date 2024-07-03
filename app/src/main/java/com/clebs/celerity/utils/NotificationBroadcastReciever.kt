@@ -45,12 +45,7 @@ class NotificationBroadcastReciever : BroadcastReceiver() {
                 closeIntent.setPackage("com.android.systemui")
                 context.sendBroadcast(closeIntent)
             }, 100)*/
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-                val closeIntent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-                context.sendBroadcast(closeIntent)
-            } else {
-               notificationManager.cancelAll()
-            }
+
 
         }
     }

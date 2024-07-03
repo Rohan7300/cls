@@ -403,40 +403,51 @@ class ListSignedDocDialog : DialogFragment() {
     }
 
     private fun showNotification(title: String, content: String, uri: Uri) {
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                "Download Complete",
+                "DownloadComplete",
                 "PDF Download Channel",
                 NotificationManager.IMPORTANCE_DEFAULT
-            )
+            ).apply {
+                description = "Channel for PDF download notifications"
+            }
             notificationManager.createNotificationChannel(channel)
         }
 
         DependencyProvider.isComingFromPolicyNotification = true
         DependencyProvider.policyDocPDFURI = uri
 
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.setDataAndType(uri, "application/pdf")
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "application/pdf")
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
 
-        val viewPendingIntent = PendingIntent.getActivity(
-            context, 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        var pendingIntent: PendingIntent? = null
+        pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(
+                context.applicationContext,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        } else {
+            PendingIntent.getActivity(
+                context.applicationContext,
+                0,
+                intent,
+                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            )
+        }
 
-        val notificationBuilder = NotificationCompat.Builder(context, "Download Complete")
+        val notificationBuilder = NotificationCompat.Builder(context, "DownloadComplete")
             .setSmallIcon(R.drawable.logo_new)
             .setContentTitle(title)
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(viewPendingIntent) // Set the pending intent for when notification is clicked
+            .setContentIntent(pendingIntent)
             .setAutoCancel(true)
-            .setCategory(Notification.CATEGORY_PROGRESS)
 
         with(NotificationManagerCompat.from(context)) {
             if (ActivityCompat.checkSelfPermission(
@@ -444,7 +455,7 @@ class ListSignedDocDialog : DialogFragment() {
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-
+                // Request the necessary permissions if not granted
                 return
             }
             notify(notificationID, notificationBuilder.build())
@@ -454,10 +465,11 @@ class ListSignedDocDialog : DialogFragment() {
 
 
 
+
     private fun checkForStoragePermission(): Boolean {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
             if (ContextCompat.checkSelfPermission(
-                    context,
+                    context.applicationContext,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) != PackageManager.PERMISSION_GRANTED
             ) {

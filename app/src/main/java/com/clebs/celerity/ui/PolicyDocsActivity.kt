@@ -666,14 +666,11 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
         }
         DependencyProvider.isComingFromPolicyNotification = true
         DependencyProvider.policyDocPDFURI = uri
-        val closeIntent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-        applicationContext.sendBroadcast(closeIntent)
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.setDataAndType(uri, "application/pdf")
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "application/pdf")
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
 
         val viewPendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getActivity(
@@ -701,7 +698,8 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(viewPendingIntent)
-            .addAction(R.drawable.ic_launcher_foreground, "View PDF", toastPendingIntent)
+            .setAutoCancel(true)
+
 
         with(NotificationManagerCompat.from(this)) {
             if (ActivityCompat.checkSelfPermission(
