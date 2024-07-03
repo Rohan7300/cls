@@ -45,6 +45,12 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putString(USER_ACCESS_TOKEN, value).apply()
         }
 
+    var thridPartyAcess:Boolean
+        get(){
+            return sharedPreferences.getBoolean("thirdPartyAccess",false)
+        }
+        set(value) = sharedPreferences.edit().putBoolean("thirdPartyAccess",value).apply()
+
     var vmRegNo: String
         get() {
             return sharedPreferences.getString("vmRegNo", "") ?: ""
@@ -649,6 +655,22 @@ class Prefs(context: Context) {
 
 
 
+    var destinationFragment:String?
+        get() = sharedPreferences.getString("destinationFragment","HomeFragment")
+        set(value) = sharedPreferences.edit().putString("destinationFragment",value).apply()
+    var actionToperform:String?
+        get() = sharedPreferences.getString("actionToperform","undef")
+        set(value) = sharedPreferences.edit().putString("actionToperform",value).apply()
+    var actionID:String?
+        get() = sharedPreferences.getString("actionID","0")
+        set(value) = sharedPreferences.edit().putString("actionID",value).apply()
+    var tokenUrl:String?
+        get() = sharedPreferences.getString("tokenUrl","undef")
+        set(value) = sharedPreferences.edit().putString("tokenUrl",value).apply()
+
+    var notificationId:String?
+        get() = sharedPreferences.getString("notificationId","0")
+        set(value) = sharedPreferences.edit().putString("notificationId",value).apply()
 
 
 }

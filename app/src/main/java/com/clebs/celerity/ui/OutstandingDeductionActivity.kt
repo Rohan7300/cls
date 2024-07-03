@@ -17,6 +17,7 @@ import com.clebs.celerity.utils.DependencyProvider.currentDeductionHistory
 import com.clebs.celerity.utils.DependencyProvider.getMainVM
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.noInternetCheck
+import com.clebs.celerity.utils.showToast
 
 class OutstandingDeductionActivity : AppCompatActivity(), DeductionListListener {
     lateinit var binding: ActivityDownloadDeductionsBinding
@@ -40,6 +41,15 @@ class OutstandingDeductionActivity : AppCompatActivity(), DeductionListListener 
         noInternetCheck(this,binding.nointernetLL,this)
         binding.backIcon.setOnClickListener {
             finish()
+        }
+        if(prefs.thridPartyAcess){
+            binding.thridPartyTv.visibility = View.VISIBLE
+            binding.deductionsthirdPartyRV.visibility = View.VISIBLE
+            binding.divider.visibility = View.VISIBLE
+        }else{
+            binding.thridPartyTv.visibility = View.GONE
+            binding.deductionsthirdPartyRV.visibility = View.GONE
+            binding.divider.visibility = View.GONE
         }
         loadingDialog.show()
         vm.GetDAOutStandingDeductionList(prefs.clebUserId.toInt(), 0)
@@ -67,6 +77,8 @@ class OutstandingDeductionActivity : AppCompatActivity(), DeductionListListener 
                         DeductionHistoryActivity::class.java
                     )
                 )
+            }else{
+                showToast("No Data found",this)
             }
         }
     }

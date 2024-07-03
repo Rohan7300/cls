@@ -261,6 +261,7 @@ class Userprofile : Fragment() {
         mainViewModel.livedataremovethirdpartyaccess.observe(viewLifecycleOwner) {
             if (it != null) {
                 if (it.Status.equals("200")) {
+                    Prefs.getInstance(requireContext()).thridPartyAcess = false
 //                    Prefs.getInstance(App.instance).save("removethirdparty", "1")
 ////                    mbinding.Tvthirdparty.text = "Third Party Access Is Requested to remove."
                     Alerter.create(requireActivity())
@@ -483,8 +484,6 @@ class Userprofile : Fragment() {
                 updateProfilePassword()
                 deleteDialog.dismiss()
             }
-
-
         }
         deleteDialog.setCancelable(true)
         deleteDialog.setCanceledOnTouchOutside(true);

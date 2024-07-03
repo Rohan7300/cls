@@ -133,7 +133,7 @@ dependencies {
 
     // CQ SDK
     /*implementation ("com.github.clearquotetech:cq-android-sdk:2.0.9-test")*/
-    implementation("com.github.clearquotetech:cq-android-sdk:2.2.1")
+    implementation("com.github.clearquotetech:cq-android-sdk:2.2.2")
 
 
     //viewModel

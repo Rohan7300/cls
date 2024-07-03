@@ -51,6 +51,7 @@ class HomedemoFragment : Fragment() {
     var week: Int = 0
     var entries = ArrayList<PieEntry>()
     var year: Int = 0
+    var currWeek:Int = 0
     var weekprev = 0
     protected val months = arrayOf(
         "Jan", "Feb", "Mar"
@@ -289,7 +290,8 @@ class HomedemoFragment : Fragment() {
             else
                 mbinding.txtLastWeek.text = "Week : "
             val weekschedule = week - 1
-            mbinding.viewfullschedule.text = "Full schedule for week $weekprev"
+
+            mbinding.viewfullschedule.text = "Full schedule for week ${currWeek-1}"
             showDialog()
             val w = week - 3
 //            val baseText = "Cash flow \n week :"+w+"\n"+ "£"+totalearning
@@ -340,6 +342,7 @@ class HomedemoFragment : Fragment() {
 
         }
         mbinding.btPrevSecond.setOnClickListener {
+            currWeek
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.GONE
@@ -358,7 +361,7 @@ class HomedemoFragment : Fragment() {
             else
                 mbinding.txtLastWeek.text = "Week : "
             val weekschedule = week - 2
-            mbinding.viewfullschedule.text = "Full schedule for week $weekprev"
+            mbinding.viewfullschedule.text = "Full schedule for week ${currWeek-2}"
             showDialog()
             val w = week - 4
             //      mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
@@ -412,7 +415,7 @@ class HomedemoFragment : Fragment() {
             else
                 mbinding.txtLastWeek.text = "Week : "
             val weekschedule = week - 1
-            mbinding.viewfullschedule.text = "Full schedule for week $weekprev"
+            mbinding.viewfullschedule.text = "Full schedule for week ${currWeek-1}"
 
             showDialog()
             val w = week - 3
@@ -484,7 +487,7 @@ class HomedemoFragment : Fragment() {
                 mbinding.txtLastWeek.text = "Week : " + weekprev
             else
                 mbinding.txtLastWeek.text = "Week : "
-            mbinding.viewfullschedule.text = "Full schedule for week " + weekprev
+            mbinding.viewfullschedule.text = "Full schedule for week $currWeek"
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week
             )
@@ -510,9 +513,9 @@ class HomedemoFragment : Fragment() {
                 showDialog()
 
                 weekprev = week - 2
-                val weekprevsecond = week - 4
+                currWeek = week
                 mbinding.txtLastWeek.text = "Week : $weekprev"
-                mbinding.viewfullschedule.text = "Full schedule for week $week"
+                mbinding.viewfullschedule.text = "Full schedule for week $currWeek"
 
 
                 viewModel.GetcashFlowWeek(
