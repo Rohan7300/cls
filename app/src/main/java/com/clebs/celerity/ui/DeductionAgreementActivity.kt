@@ -22,6 +22,7 @@ import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.convertDateFormat
 import com.clebs.celerity.utils.getCurrentDateTime
+import com.clebs.celerity.utils.noInternetCheck
 import com.clebs.celerity.utils.showToast
 
 class DeductionAgreementActivity : AppCompatActivity() {
@@ -52,6 +53,8 @@ class DeductionAgreementActivity : AppCompatActivity() {
             ViewModelProvider(this, MyViewModelFactory(repo))[MainViewModel::class.java]
         loadingDialog = LoadingDialog(this)
         loadingDialog.show()
+        noInternetCheck(this,binding.nointernetLL,this)
+
         viewmodel.liveDataDeductionAgreement.observe(this) {
             loadingDialog.dismiss()
             if (it != null) {

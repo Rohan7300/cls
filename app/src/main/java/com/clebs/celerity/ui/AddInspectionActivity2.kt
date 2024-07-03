@@ -52,6 +52,7 @@ import com.clebs.celerity.utils.SaveVehicleInspection
 import com.clebs.celerity.utils.checkIfInspectionFailed
 import com.clebs.celerity.utils.checkIfInspectionFailed2
 import com.clebs.celerity.utils.getCurrentDateTime
+import com.clebs.celerity.utils.noInternetCheck
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.startUploadWithWorkManager
@@ -123,6 +124,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         cqSDKInitializer.triggerOfflineSync()
 
         initPreviewView()
+        noInternetCheck(this,binding.nointernetLL,this)
 
         startonetime = prefs.Isfirst!!
 
@@ -420,12 +422,12 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
         val currentDate = LocalDateTime.now()
         val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
-        val regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}").toString().replace("","")
+        val regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
         prefs.inspectionID = regexPattern.toString().replace(" ","")
-//        inspectionID = regexPattern.toString().replace(" ","")
+        //inspectionID = regexPattern.toString().replace(" ","")
         Log.e(
             "kjfdjkfhdjfjdhfdjclientuniqueidfunction",
-            "clientUniqueID: " + inspectionID + "------" + prefs.inspectionID
+            "clientUniqueID: ------" + prefs.inspectionID.replace(" ","")
         )
 
         return regexPattern.toString()
@@ -581,18 +583,13 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         Log.d("CLSInspection","Name : CLS"+Prefs.getInstance(applicationContext).clebUserId)
         Log.d("CLSInspection", "VehicleModel: ${prefs.VehicleModel}")
         Log.d("CLSInspection","VehicleBodyStyle ${prefs.VehicleBodyStyle}")
-        Log.d("CLSInspection","InspectionID: $inspectionID")
-
-        if (prefs.inspectionID.isNotEmpty() ){
-            inspectionID=prefs.inspectionID
-        }
-
+        Log.d("CLSInspection","InspectionID: ${prefs.inspectionID.replace(" ","")}")
         cqSDKInitializer.startInspection(activity = this,
             clientAttrs = ClientAttrs(
                 userName = " ",
                 dealer = " ",
                 dealerIdentifier = " ",
-                client_unique_id = inspectionID
+                client_unique_id = prefs.inspectionID.replace(" ","")
             ),
             inputDetails = InputDetails(
                 vehicleDetails = VehicleDetails(
@@ -616,7 +613,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
             result = { isStarted, msg, code ->
                 loadingDialog.dismiss()
-                Log.e("startinspecctionID", "onCreateView: startone $inspectionID ")
+                Log.e("startinspecctionID", "onCreateView: startone ${prefs.inspectionID.replace(" ","")} ")
                 Log.e("messsagesss", "startInspection: $msg$code")
                 Log.e("CQSDKXX", "regNo: ${prefs.scannedVmRegNo}")
                 if (isStarted) {
@@ -630,7 +627,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                         showToast("Please Turn on the internet", this)
                         Log.d("CQSDKXX", "Not isStarted1  " + msg)
                     } else if (msg.equals("Sufficient data not available to create an offline quote")) {
-                        showToast("Please Turn on the internet resources are downloading", this)
+                        showToast("Please Retry!!", this)
                         Log.d("CQSDKXX", "Not isStarted2  " + msg)
                     }
                     else if (msg.equals("Unable to download setting updates, Please check internet")){

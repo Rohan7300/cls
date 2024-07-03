@@ -284,7 +284,10 @@ class HomedemoFragment : Fragment() {
             mbinding.btThisWeek.visibility = View.VISIBLE
 
             weekprev = week - 3
-            mbinding.txtLastWeek.text = "Week : " + weekprev
+            if (weekprev > 0)
+                mbinding.txtLastWeek.text = "Week : " + weekprev
+            else
+                mbinding.txtLastWeek.text = "Week : "
             val weekschedule = week - 1
             mbinding.viewfullschedule.text = "Full schedule for week $weekprev"
             showDialog()
@@ -350,7 +353,10 @@ class HomedemoFragment : Fragment() {
                 0
             );
             weekprev = week - 4
-            mbinding.txtLastWeek.text = "Week : " + weekprev
+            if (weekprev > 0)
+                mbinding.txtLastWeek.text = "Week : " + weekprev
+            else
+                mbinding.txtLastWeek.text = "Week : "
             val weekschedule = week - 2
             mbinding.viewfullschedule.text = "Full schedule for week $weekprev"
             showDialog()
@@ -401,7 +407,10 @@ class HomedemoFragment : Fragment() {
             mbinding.btThisWeek.visibility = View.VISIBLE
             mbinding.btNext.visibility = View.GONE
             weekprev = week - 3
-            mbinding.txtLastWeek.text = "Week : " + weekprev
+            if (weekprev > 0)
+                mbinding.txtLastWeek.text = "Week : " + weekprev
+            else
+                mbinding.txtLastWeek.text = "Week : "
             val weekschedule = week - 1
             mbinding.viewfullschedule.text = "Full schedule for week $weekprev"
 
@@ -471,7 +480,10 @@ class HomedemoFragment : Fragment() {
             )
 
             mbinding.pieChart.centerText = spannableString
-            mbinding.txtLastWeek.text = "Week : " + weekprev
+            if (weekprev > 0)
+                mbinding.txtLastWeek.text = "Week : " + weekprev
+            else
+                mbinding.txtLastWeek.text = "Week : "
             mbinding.viewfullschedule.text = "Full schedule for week " + weekprev
             viewModel.GetViewFullScheduleInfo(
                 Prefs.getInstance(requireContext()).clebUserId.toInt(), 0, year, week

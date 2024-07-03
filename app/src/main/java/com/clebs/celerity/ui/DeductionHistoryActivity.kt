@@ -13,6 +13,7 @@ import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.currentDeductionHistory
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.noInternetCheck
 import com.clebs.celerity.utils.showToast
 
 class DeductionHistoryActivity : AppCompatActivity() {
@@ -31,6 +32,8 @@ class DeductionHistoryActivity : AppCompatActivity() {
         binding.backIcon.setOnClickListener {
             finish()
         }
+        noInternetCheck(this,binding.nointernetLL,this)
+
         binding.deductionsHistoryRV.layoutManager = LinearLayoutManager(this)
         if (currentDeductionHistory != null)
             adapter.submitList(currentDeductionHistory!!)

@@ -2,6 +2,7 @@ package com.clebs.celerity.dialogs
 
 import android.Manifest
 import android.app.Dialog
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -15,6 +16,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -33,17 +35,19 @@ import com.clebs.celerity.utils.NotificationBroadcastReciever
 import com.clebs.celerity.utils.OpenMode
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
+import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.text.SimpleDateFormat
+import java.util.Base64
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
-class ListSignedDocDialog:DialogFragment() {
-    lateinit var viewModel:MainViewModel
-    lateinit var mbinding:ActivityListSignedDocsBinding
+class ListSignedDocDialog : DialogFragment() {
+    lateinit var viewModel: MainViewModel
+    lateinit var mbinding: ActivityListSignedDocsBinding
     private var driverSignatureInfo: GetDriverSignatureInformationResponse? = null
     private var clebuserId = 0
     var notificationID: Int = 1
@@ -60,18 +64,19 @@ class ListSignedDocDialog:DialogFragment() {
     lateinit var currentfileName: String
     lateinit var currentFileContent: InputStream
     lateinit var currentMode: OpenMode
-    lateinit var context:SignedDocActivity
+    lateinit var context: SignedDocActivity
+
     companion object {
         var path = Path()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = Dialog(context,R.style.CustomDialog)
+        val dialog = Dialog(context, R.style.CustomDialog)
         mbinding = ActivityListSignedDocsBinding.inflate(LayoutInflater.from(context))
         viewModel = context.vm
         dialog.setContentView(mbinding.root)
         dialog.window?.apply {
-         //   setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            //   setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             setBackgroundDrawableResource(R.color.transparent)
         }
         init()
@@ -82,22 +87,23 @@ class ListSignedDocDialog:DialogFragment() {
         super.onAttach(context)
         this.context = (context as SignedDocActivity)
     }
-    fun init(){
+
+    fun init() {
         loadingDialog = LoadingDialog(context)
         downloadingDialog = DownloadingDialog(context)
         clebuserId = Prefs.getInstance(context).clebUserId.toInt()
         handbookID = DependencyProvider.getCompanySignedDocs?.HandBookId ?: 0
 
-        if(DependencyProvider.getCompanySignedDocs !=null){
-            if (DependencyProvider.getCompanySignedDocs!!.HBSLAFileName!=null|| DependencyProvider.getCompanySignedDocs!!.HBSLAFileName!="null")
+        if (DependencyProvider.getCompanySignedDocs != null) {
+            if (DependencyProvider.getCompanySignedDocs!!.HBSLAFileName != null || DependencyProvider.getCompanySignedDocs!!.HBSLAFileName != "null")
                 mbinding.llones.visibility = View.VISIBLE
-            if (DependencyProvider.getCompanySignedDocs!!.HBGDRPFileName!=null|| DependencyProvider.getCompanySignedDocs!!.HBGDRPFileName!="null")
+            if (DependencyProvider.getCompanySignedDocs!!.HBGDRPFileName != null || DependencyProvider.getCompanySignedDocs!!.HBGDRPFileName != "null")
                 mbinding.ll3.visibility = View.VISIBLE
-            if (DependencyProvider.getCompanySignedDocs!!.HBSLAFileName!=null|| DependencyProvider.getCompanySignedDocs!!.HBSLAFileName!="null")
+            if (DependencyProvider.getCompanySignedDocs!!.HBSLAFileName != null || DependencyProvider.getCompanySignedDocs!!.HBSLAFileName != "null")
                 mbinding.llPP.visibility = View.VISIBLE
-            if (DependencyProvider.getCompanySignedDocs!!.HBEngagementFileName!=null|| DependencyProvider.getCompanySignedDocs!!.HBEngagementFileName!="null")
+            if (DependencyProvider.getCompanySignedDocs!!.HBEngagementFileName != null || DependencyProvider.getCompanySignedDocs!!.HBEngagementFileName != "null")
                 mbinding.ll4.visibility = View.VISIBLE
-            if (DependencyProvider.getCompanySignedDocs!!.HBSignFileName!=null|| DependencyProvider.getCompanySignedDocs!!.HBSignFileName!="null")
+            if (DependencyProvider.getCompanySignedDocs!!.HBSignFileName != null || DependencyProvider.getCompanySignedDocs!!.HBSignFileName != "null")
                 mbinding.llsix.visibility = View.VISIBLE
         }
 
@@ -106,50 +112,50 @@ class ListSignedDocDialog:DialogFragment() {
     }
 
     private fun observers() {
-/*        viewModel.liveDataGetDriverSignatureInformation.observe(context) {
-            if (it != null) {
-                driverSignatureInfo = it
-                Prefs.getInstance(context)
-                    .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
-                Prefs.getInstance(context)
-                    .saveBoolean("isother", it.IsOtherCompanySignatureReq)
-            }
-        }
-
-        viewModel.getDriverSignatureInfo(clebuserId.toDouble()).observe(context) {
-            if (it != null) {
-                handbookID = it.handbookId
-                Prefs.getInstance(context).handbookId = handbookID
-                loadingDialog.dismiss()
-
-            } else {
-                handbookID = Prefs.getInstance(context).handbookId
-            }
-        }*/
-
-/*
-        viewModel.liveDataDownloadDriverOtherCompaniesPolicy.observe(context) {
-            downloadingDialog.dismiss()
-            if (it != null) {
-                if(getCompanySignedDocsClicked){
-                    downloadPDF(
-                        it.CompanyDocuments[0].FileName,
-                        ByteArrayInputStream(
-                            Base64.getDecoder().decode(it.CompanyDocuments[0].FileContent)
-                        ),
-                        currentMode
-                    )
-                    getCompanySignedDocsClicked = false
+        /*        viewModel.liveDataGetDriverSignatureInformation.observe(context) {
+                    if (it != null) {
+                        driverSignatureInfo = it
+                        Prefs.getInstance(context)
+                            .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
+                        Prefs.getInstance(context)
+                            .saveBoolean("isother", it.IsOtherCompanySignatureReq)
+                    }
                 }
 
-            }
-        }
-*/
+                viewModel.getDriverSignatureInfo(clebuserId.toDouble()).observe(context) {
+                    if (it != null) {
+                        handbookID = it.handbookId
+                        Prefs.getInstance(context).handbookId = handbookID
+                        loadingDialog.dismiss()
+
+                    } else {
+                        handbookID = Prefs.getInstance(context).handbookId
+                    }
+                }*/
+
+        /*
+                viewModel.liveDataDownloadDriverOtherCompaniesPolicy.observe(context) {
+                    downloadingDialog.dismiss()
+                    if (it != null) {
+                        if(getCompanySignedDocsClicked){
+                            downloadPDF(
+                                it.CompanyDocuments[0].FileName,
+                                ByteArrayInputStream(
+                                    Base64.getDecoder().decode(it.CompanyDocuments[0].FileContent)
+                                ),
+                                currentMode
+                            )
+                            getCompanySignedDocsClicked = false
+                        }
+
+                    }
+                }
+        */
 
         viewModel.liveDataDownloadSignedServiceLevelAgreement.observe(context) {
             downloadingDialog.dismiss()
             if (it != null) {
-                if(getCompanySignedDocsClicked){
+                if (getCompanySignedDocsClicked) {
                     downloadPDF(
                         "SignedServiceLevelAgreement",
                         it.byteStream(),
@@ -164,7 +170,7 @@ class ListSignedDocDialog:DialogFragment() {
         viewModel.liveDataDownloadSignedDAHandbook.observe(context) {
             downloadingDialog.dismiss()
             if (it != null) {
-                if(getCompanySignedDocsClicked){
+                if (getCompanySignedDocsClicked) {
                     downloadPDF("DAHandbook", it.byteStream(), openModeDAHandBook)
 
                     getCompanySignedDocsClicked = false
@@ -175,7 +181,7 @@ class ListSignedDocDialog:DialogFragment() {
         viewModel.liveDataDownloadSignedGDPRPOLICY.observe(context) {
             downloadingDialog.dismiss()
             if (it != null) {
-                if(getCompanySignedDocsClicked){
+                if (getCompanySignedDocsClicked) {
                     downloadPDF("GDPRPOLICY", it.byteStream(), openModeSignedGDPRPOLICY)
                     getCompanySignedDocsClicked = false
                 }
@@ -186,7 +192,7 @@ class ListSignedDocDialog:DialogFragment() {
         viewModel.liveDataDownloadSignedPrivacyPolicy.observe(context) {
             downloadingDialog.dismiss()
             if (it != null) {
-                if(getCompanySignedDocsClicked){
+                if (getCompanySignedDocsClicked) {
                     downloadPDF("SignedPrivacyPolicy", it.byteStream(), openModeSignedPrivacyPolicy)
                     getCompanySignedDocsClicked = false
                 }
@@ -197,7 +203,7 @@ class ListSignedDocDialog:DialogFragment() {
         viewModel.liveDataDownloadSignedDAEngagement.observe(context) {
             downloadingDialog.dismiss()
             if (it != null) {
-                if(getCompanySignedDocsClicked){
+                if (getCompanySignedDocsClicked) {
                     downloadPDF("DAEngagementPolicy", it.byteStream(), openModeSignedDAEngagement)
                     getCompanySignedDocsClicked = false
                 }
@@ -205,101 +211,140 @@ class ListSignedDocDialog:DialogFragment() {
             }
         }
 
-/*        viewModel.liveDataDownloadTrucksServiceLevelAgreementPolicy.observe(context) {
-            downloadingDialog.dismiss()
-            if (it != null) {
-                if(getCompanySignedDocsClicked){
-                    downloadPDF(
-                        "TruckSLAPolicy",
-                        it.byteStream(),
-                        openModeTrucksServiceLevelAgreementPolicy
-                    )
-                    getCompanySignedDocsClicked = false
-                }
+        /*        viewModel.liveDataDownloadTrucksServiceLevelAgreementPolicy.observe(context) {
+                    downloadingDialog.dismiss()
+                    if (it != null) {
+                        if(getCompanySignedDocsClicked){
+                            downloadPDF(
+                                "TruckSLAPolicy",
+                                it.byteStream(),
+                                openModeTrucksServiceLevelAgreementPolicy
+                            )
+                            getCompanySignedDocsClicked = false
+                        }
 
-            }
-        }*/
+                    }
+                }*/
     }
 
     private fun clickListeners() {
 
         mbinding.downloadHandBookPolicy1.setOnClickListener {
-            getCompanySignedDocsClicked = true
-            downloadingDialog.show()
-            openModeDAHandBook = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedDAHandbook(handbookID)
+            if (checkForStoragePermission()) {
+                getCompanySignedDocsClicked = true
+                downloadingDialog.show()
+                openModeDAHandBook = OpenMode.DOWNLOAD
+                viewModel.DownloadSignedDAHandbook(handbookID)
+            } else {
+                showToast("Storage Permission Required", context)
+            }
             //viewModel.DownloadDAHandbookPolicy()
         }
         mbinding.imgHandBookPolicy1.setOnClickListener {
-            getCompanySignedDocsClicked = true
-            downloadingDialog.show()
-            openModeDAHandBook = OpenMode.VIEW
-            viewModel.DownloadSignedDAHandbook(handbookID)
+            if (checkForStoragePermission()) {
+                getCompanySignedDocsClicked = true
+                downloadingDialog.show()
+                openModeDAHandBook = OpenMode.VIEW
+                viewModel.DownloadSignedDAHandbook(handbookID)
+            } else {
+                showToast("Storage Permission Required", context)
+            }
             //viewModel.DownloadDAHandbookPolicy()
         }
 
         mbinding.downloadSLA1.setOnClickListener {
-            getCompanySignedDocsClicked = true
-            downloadingDialog.show()
-            openModeSignedServiceLevelAgreement = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+            if (checkForStoragePermission()) {
+                getCompanySignedDocsClicked = true
+                downloadingDialog.show()
+                openModeSignedServiceLevelAgreement = OpenMode.DOWNLOAD
+                viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+            } else {
+                showToast("Storage Permission Required", context)
+            }
             //viewModel.DownloadServiceLevelAgreementPolicy()
         }
         mbinding.imgSLA1.setOnClickListener {
-            getCompanySignedDocsClicked = true
-            downloadingDialog.show()
-            openModeSignedServiceLevelAgreement = OpenMode.VIEW
-            viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+            if (checkForStoragePermission()) {
+                getCompanySignedDocsClicked = true
+                downloadingDialog.show()
+                openModeSignedServiceLevelAgreement = OpenMode.VIEW
+                viewModel.DownloadSignedServiceLevelAgreement(handbookID)
+            } else {
+                showToast("Storage Permission Required", context)
+            }
             //viewModel.DownloadServiceLevelAgreementPolicy()
         }
 
         mbinding.downloadPrivacyPolicy1.setOnClickListener {
-            getCompanySignedDocsClicked = true
-            downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedPrivacyPolicy(handbookID)
+            if (checkForStoragePermission()) {
+                getCompanySignedDocsClicked = true
+                downloadingDialog.show()
+                openModeSignedPrivacyPolicy = OpenMode.DOWNLOAD
+                viewModel.DownloadSignedPrivacyPolicy(handbookID)
+            } else {
+                showToast("Storage Permission Required", context)
+            }
             //viewModel.DownloadPrivacyPolicy()
         }
         mbinding.imgPrivacyPolicy1.setOnClickListener {
-            getCompanySignedDocsClicked = true
-            downloadingDialog.show()
-            openModeSignedPrivacyPolicy = OpenMode.VIEW
-            viewModel.DownloadSignedPrivacyPolicy(handbookID)
+            if (checkForStoragePermission()) {
+                getCompanySignedDocsClicked = true
+                downloadingDialog.show()
+                openModeSignedPrivacyPolicy = OpenMode.VIEW
+                viewModel.DownloadSignedPrivacyPolicy(handbookID)
+            } else {
+                showToast("Storage Permission Required", context)
+            }
             //viewModel.DownloadPrivacyPolicy()
         }
 
         mbinding.downloadDAEngagement1.setOnClickListener {
-            getCompanySignedDocsClicked = true
-            downloadingDialog.show()
-            openModeSignedDAEngagement = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedDAEngagement(handbookID)
+            if (checkForStoragePermission()) {
+                getCompanySignedDocsClicked = true
+                downloadingDialog.show()
+                openModeSignedDAEngagement = OpenMode.DOWNLOAD
+                viewModel.DownloadSignedDAEngagement(handbookID)
+            } else {
+                showToast("Storage Permission Required", context)
+            }
             //viewModel.DownloadDAEngagementPolicy()
         }
         mbinding.imgDAEngagement1.setOnClickListener {
-            getCompanySignedDocsClicked = true
-            downloadingDialog.show()
-            openModeSignedDAEngagement = OpenMode.VIEW
-            viewModel.DownloadSignedDAEngagement(handbookID)
+            if (checkForStoragePermission()) {
+                getCompanySignedDocsClicked = true
+                downloadingDialog.show()
+                openModeSignedDAEngagement = OpenMode.VIEW
+                viewModel.DownloadSignedDAEngagement(handbookID)
+            } else {
+                showToast("Storage Permission Required", context)
+            }
             //viewModel.DownloadDAEngagementPolicy()
         }
 
         mbinding.downloadGDPR1.setOnClickListener {
-            getCompanySignedDocsClicked = true
-            downloadingDialog.show()
-            openModeSignedGDPRPOLICY = OpenMode.DOWNLOAD
-            viewModel.DownloadSignedGDPRPOLICY(handbookID)
+            if (checkForStoragePermission()) {
+                getCompanySignedDocsClicked = true
+                downloadingDialog.show()
+                openModeSignedGDPRPOLICY = OpenMode.DOWNLOAD
+                viewModel.DownloadSignedGDPRPOLICY(handbookID)
+            } else {
+                showToast("Storage Permission Required", context)
+            }
             //viewModel.DownloadGDPRPolicy()
         }
         mbinding.imgGDPR1.setOnClickListener {
-            getCompanySignedDocsClicked = true
-            downloadingDialog.show()
-            openModeSignedGDPRPOLICY = OpenMode.VIEW
-            viewModel.DownloadSignedGDPRPOLICY(handbookID)
+            if (checkForStoragePermission()) {
+                getCompanySignedDocsClicked = true
+                downloadingDialog.show()
+                openModeSignedGDPRPOLICY = OpenMode.VIEW
+                viewModel.DownloadSignedGDPRPOLICY(handbookID)
+            } else {
+                showToast("Storage Permission Required", context)
+            }
             //viewModel.DownloadGDPRPolicy()
         }
 
     }
-
 
 
     private fun downloadPDF(fileName: String, fileContent: InputStream, mode: OpenMode) {
@@ -358,57 +403,51 @@ class ListSignedDocDialog:DialogFragment() {
     }
 
     private fun showNotification(title: String, content: String, uri: Uri) {
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                "Download Complete",
+                "DownloadComplete",
                 "PDF Download Channel",
                 NotificationManager.IMPORTANCE_DEFAULT
-            )
+            ).apply {
+                description = "Channel for PDF download notifications"
+            }
             notificationManager.createNotificationChannel(channel)
         }
+
         DependencyProvider.isComingFromPolicyNotification = true
         DependencyProvider.policyDocPDFURI = uri
 
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.setDataAndType(uri, "application/pdf")
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "application/pdf")
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
 
-        val viewPendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        var pendingIntent: PendingIntent? = null
+        pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getActivity(
-                context, 0, intent,
-                PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+                context.applicationContext,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         } else {
             PendingIntent.getActivity(
-                context, 0, intent,
+                context.applicationContext,
+                0,
+                intent,
                 PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
             )
         }
 
-        val toastIntent = Intent(context, NotificationBroadcastReciever::class.java).apply {
-            putExtra("notification_id", notificationID)
-        }
-
-
-        val toastPendingIntent = PendingIntent.getBroadcast(
-            context, 0, toastIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-
-        )
-
-        val notificationBuilder = NotificationCompat.Builder(context, "Download Complete")
+        val notificationBuilder = NotificationCompat.Builder(context, "DownloadComplete")
             .setSmallIcon(R.drawable.logo_new)
             .setContentTitle(title)
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(viewPendingIntent)
-            .addAction(R.drawable.ic_launcher_foreground, "View PDF", toastPendingIntent)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(context)) {
             if (ActivityCompat.checkSelfPermission(
@@ -416,19 +455,21 @@ class ListSignedDocDialog:DialogFragment() {
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
+                // Request the necessary permissions if not granted
                 return
             }
-
             notify(notificationID, notificationBuilder.build())
             notificationID += 1
         }
     }
 
 
+
+
     private fun checkForStoragePermission(): Boolean {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
             if (ContextCompat.checkSelfPermission(
-                    context,
+                    context.applicationContext,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
@@ -485,9 +526,10 @@ class ListSignedDocDialog:DialogFragment() {
             }
         }
     }
+
     fun showDialog(fragmentManager: FragmentManager) {
         val fragment = fragmentManager.findFragmentByTag(ExpiredDocDialog.TAG)
-        if (!isVisible && fragment == null){
+        if (!isVisible && fragment == null) {
             show(fragmentManager, ExpiredDocDialog.TAG)
         }
     }
@@ -497,7 +539,6 @@ class ListSignedDocDialog:DialogFragment() {
             if (dialog!!.isShowing)
                 dismiss()
     }
-    
 
 
 }

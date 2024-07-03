@@ -16,6 +16,7 @@ import com.clebs.celerity.models.response.GetDAOutStandingDeductionListResponse
 import com.clebs.celerity.utils.DependencyProvider.currentDeductionHistory
 import com.clebs.celerity.utils.DependencyProvider.getMainVM
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.noInternetCheck
 
 class OutstandingDeductionActivity : AppCompatActivity(), DeductionListListener {
     lateinit var binding: ActivityDownloadDeductionsBinding
@@ -36,14 +37,15 @@ class OutstandingDeductionActivity : AppCompatActivity(), DeductionListListener 
         binding.deductionsthirdPartyRV.adapter = adapter2
         binding.deductionsRV.layoutManager = LinearLayoutManager(this)
         binding.deductionsthirdPartyRV.layoutManager = LinearLayoutManager(this)
-
+        noInternetCheck(this,binding.nointernetLL,this)
         binding.backIcon.setOnClickListener {
             finish()
         }
+        loadingDialog.show()
         vm.GetDAOutStandingDeductionList(prefs.clebUserId.toInt(), 0)
         vm.liveDataGetDAOutStandingDeductionList.observe(this) {
+            loadingDialog.dismiss()
             if (it != null) {
-                binding.nodata1.visibility = View.GONE
                 binding.nodata2.visibility = View.GONE
                 dedList.clear()
                 dedList.add(it)
@@ -52,11 +54,11 @@ class OutstandingDeductionActivity : AppCompatActivity(), DeductionListListener 
                 dedList2.add(it)
                 adapter2.submitList(dedList)
             } else {
-                binding.nodata1.visibility = View.VISIBLE
                 binding.nodata2.visibility = View.VISIBLE
             }
         }
         vm.liveDataGetDriverDeductionHistory.observe(this) {
+            loadingDialog.dismiss()
             if (it != null) {
                 currentDeductionHistory = it
                 startActivity(
@@ -70,6 +72,7 @@ class OutstandingDeductionActivity : AppCompatActivity(), DeductionListListener 
     }
 
     override fun onClick(i: Int) {
+        loadingDialog.show()
         vm.GetDriverDeductionHistory(prefs.clebUserId.toInt(), i)
     }
 }

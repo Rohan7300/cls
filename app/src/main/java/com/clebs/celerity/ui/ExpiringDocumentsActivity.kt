@@ -33,6 +33,7 @@ import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getMimeType
+import com.clebs.celerity.utils.noInternetCheck
 import com.clebs.celerity.utils.showToast
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -78,7 +79,7 @@ class ExpiringDocumentsActivity : AppCompatActivity(), ExpiringDocUploadListener
         binding.expringDocRV.adapter = adapter
         binding.expringDocRV.layoutManager = LinearLayoutManager(this)
         loadingDialog.show()
-
+        noInternetCheck(this,binding.nointernetLL,this)
         viewmodel.GetDAExpiringDocuments(pref.clebUserId.toInt())
         viewmodel.liveDataGetDAExpiringDocuments.observe(this) {
             loadingDialog.dismiss()

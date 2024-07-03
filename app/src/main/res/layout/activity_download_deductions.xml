@@ -61,7 +61,7 @@
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="CLS First Party Deductions"
+    android:text="CLS Deductions"
     android:padding="10dp"
     android:textColor="@color/black"
     android:fontFamily="@font/poppins_bold"
@@ -72,40 +72,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:id="@+id/nodata1"
-            android:visibility="gone"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:alpha="0.5"
-                android:src="@drawable/nocontent" />
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="25dp"
-                android:layout_marginVertical="10dp"
-                android:fontFamily="@font/poppins_bold"
-                android:text="No data found.\n Please check again later."
-                android:textAlignment="center"
-                android:textSize="15dp" />
-        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/black"
+            android:layout_marginTop="15dp"
             />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CLS Third Party Deductions"
+            android:text="Third Party Deductions"
             android:padding="10dp"
             android:textColor="@color/black"
             android:fontFamily="@font/poppins_bold"
@@ -141,6 +117,34 @@
                 android:text="No data found.\n Please check again later."
                 android:textAlignment="center"
                 android:textSize="15dp" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+        <LinearLayout
+            android:id="@+id/nointernetLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:paddingVertical="7dp"
+            android:paddingHorizontal="10dp"
+            android:visibility="gone"
+            android:orientation="horizontal" >
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/nowifi"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poor Internet Connection!!"
+                android:textColor="@color/medium_orange"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins"/>
         </LinearLayout>
     </LinearLayout>
 </layout>

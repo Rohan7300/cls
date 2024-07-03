@@ -359,6 +359,7 @@ class ListSignedDocsActivity : AppCompatActivity() {
             .setSmallIcon(R.drawable.logo_new)
             .setContentTitle(title)
             .setContentText(content)
+            .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(viewPendingIntent)
             .addAction(R.drawable.ic_launcher_foreground, "View PDF", toastPendingIntent)
