@@ -129,6 +129,13 @@ class WindScreenFragment : Fragment() {
                 if (it.dfNameWindScreen!!.isNotEmpty() && it.dfNameWindScreen != "f") {
                     setImageView(mbinding.windScreenIV, it.inWindScreen.toString(),requireContext())
                     mbinding.edtDefect.setText(it.dfNameWindScreen.toString())
+                    mbinding.tvNext.isEnabled = (mbinding.edtDefect.text?.length!! > 0)
+                    if (mbinding.edtDefect.text?.length!! > 0) defectName = mbinding.edtDefect.text?.toString()
+                    if (mbinding.tvNext.isEnabled) {
+                        mbinding.tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    } else {
+                        mbinding.tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))
+                    }
                 }
             }
         }

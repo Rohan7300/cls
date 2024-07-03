@@ -1,5 +1,6 @@
 package com.clebs.celerity.ViewModel
 
+import android.text.format.DateFormat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.database.ImagesRepo

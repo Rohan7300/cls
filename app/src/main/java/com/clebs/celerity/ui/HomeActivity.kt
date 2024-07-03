@@ -22,6 +22,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -586,95 +587,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     ?: "Could not identify status message"
             Log.d("hdhsdshdsdjshhsds", "main $message")
 
-            val destinationFragment = intent.getStringExtra("destinationFragment")
-            val actionToPerform = intent.getStringExtra("actionToperform") ?: "undef"
-            val tokenUrl = intent.getStringExtra("tokenUrl") ?: "undef"
-            val actionID = intent.getStringExtra("actionID") ?: "0"
-            val notificationID = intent.getStringExtra("notificationId") ?: "0"
-            Log.d(
-                "NotExtras",
-                " $destinationFragment $actionToPerform $tokenUrl $actionID $notificationID"
-            )
-            if (destinationFragment != null) {
-                Log.d("HomeActivityX", destinationFragment!!)
-                if (destinationFragment == "NotificationsFragment") {
-
-                    if (actionToPerform == "Deductions" || actionToPerform == "Driver Deduction with Agreement" || actionToPerform == "DriverDeductionWithAgreement") {
-                        deductions(this, parseToInt(actionID), parseToInt(notificationID))
-                    } else if (actionToPerform == "Daily Location Rota" || actionToPerform == "Daily Rota Approval" || actionToPerform == "DailyRotaApproval") {
-                        if (getMainVM(this) != null) dailyRota(
-                            getMainVM(this), tokenUrl, this, this, parseToInt(notificationID)
-                        )
-                        else {
-                            ActivityHomeBinding.title.text = "Notifications"
-                            navController.navigate(R.id.notifficationsFragment)
-                            return
-                        }
-                    } else if (actionToPerform == "Invoice Ready To Review" || actionToPerform == "Invoice Ready to Review" || actionToPerform == "InvoiceReadyToReview") {
-                        invoiceReadyToView(
-                            parseToInt(notificationID),
-                            supportFragmentManager,
-                            "Your CLS Invoice is available for review."
-                        )
-                    } else if (actionToPerform == "Weekly Location Rota" || actionToPerform == "Weekly Rota Approval" || actionToPerform == "WeeklyRotaApproval") {
-                        weeklyLocationRota(
-                            this, parseToInt(notificationID), parseToInt(actionID)
-                        )
-                    } else if (actionToPerform == "Expired Document" || actionToPerform == "ExpiredDocuments") {
-                        expiredDocuments(
-                            getMainVM(this),
-                            this,
-                            this,
-                            supportFragmentManager,
-                            parseToInt(notificationID)
-                        )
-                    } else if (actionToPerform.equals("Vehicle Advance Payment Aggrement") || actionToPerform.equals(
-                            "Vehicle Advance Payment Agreement"
-                        )
-                    ) {
-                        vehicleAdvancePaymentAgreement(
-                            this, parseToInt(notificationID), getMainVM(this), this
-                        )
-                    } else if (actionToPerform.equals("Expiring Document") || actionToPerform.equals(
-                            "ExpiringDocuments"
-                        ) || actionToPerform.equals("UserExpiringDocuments")
-                    ) {
-                        expiringDocument(
-                            this, parseToInt(notificationID)
-                        )
-                    } else if (actionToPerform == "VehicleExpiringDocuments") {
-                        vehicleExpiringDocuments(this, parseToInt(notificationID))
-                    } else if (actionToPerform == "ThirdPartyAccessRequestNotification") {
-                        navController.navigate(R.id.profileFragment)
-                    } else {
-                        ActivityHomeBinding.title.text = "Notifications"
-                        navController.navigate(R.id.notifficationsFragment)
-                        return
-                    }/*              }
-                                  catch (_: Exception) {
-                                      ActivityHomeBinding.title.text = "Notifications"
-                                      navController.navigate(R.id.notifficationsFragment)
-                                      return
-                                  }*/
-
-                    /*                    ActivityHomeBinding.title.text = "Notifications"
-                                        navController.navigate(R.id.notifficationsFragment)
-                                        return*/
-                    return
-                } else if (destinationFragment == "CompleteTask") {
-                    navController.navigate(R.id.newCompleteTaskFragment)
-                } else if (destinationFragment == "ThirdPartyAcess") {
-                    try {
-                        viewModel.MarkNotificationAsRead(parseToInt(notificationID))
-                    } catch (_: Exception) {
-
-                    }
-
-                    navController.navigate(R.id.profileFragment)
-                } else {
-                    navController.navigate(R.id.newCompleteTaskFragment)
-                }
-            }
+            handleNotifications(intent)
 
             val tempCode =
                 intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
@@ -718,11 +631,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         showToast("Vehicle Inspection info saved", this)
                     }
                 })
-                navController.navigate(R.id.newCompleteTaskFragment)
+              //  navController.navigate(R.id.newCompleteTaskFragment)
                 showToast("Vehicle Inspection is successfully completed ", this)
             } else {
                 Log.d("hdhsdshdsdjshhsds", "else $message")
-                navController.navigate(R.id.newCompleteTaskFragment)
+            //    navController.navigate(R.id.newCompleteTaskFragment)
             }
             if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
                 // Get code
@@ -736,6 +649,99 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
         }
         Log.d("hdhsdshdsdjshhsds", "No Intent")
+    }
+
+    private fun handleNotifications(intent: Intent) {
+        val destinationFragment = intent.getStringExtra("destinationFragment")
+        val actionToPerform = intent.getStringExtra("actionToperform") ?: "undef"
+        val tokenUrl = intent.getStringExtra("tokenUrl") ?: "undef"
+        val actionID = intent.getStringExtra("actionID") ?: "0"
+        val notificationID = intent.getStringExtra("notificationId") ?: "0"
+        Log.d(
+            "NotExtras",
+            " $destinationFragment $actionToPerform $tokenUrl $actionID $notificationID"
+        )
+        if (destinationFragment != null) {
+            Log.d("HomeActivityX", destinationFragment!!)
+            if (destinationFragment == "NotificationsFragment") {
+
+                if (actionToPerform == "Deductions" || actionToPerform == "Driver Deduction with Agreement" || actionToPerform == "DriverDeductionWithAgreement") {
+                    deductions(this, parseToInt(actionID), parseToInt(notificationID))
+                } else if (actionToPerform == "Daily Location Rota" || actionToPerform == "Daily Rota Approval" || actionToPerform == "DailyRotaApproval") {
+                    if (getMainVM(this) != null) dailyRota(
+                        getMainVM(this), tokenUrl, this, this, parseToInt(notificationID)
+                    )
+                    else {
+                        ActivityHomeBinding.title.text = "Notifications"
+                        navController.navigate(R.id.notifficationsFragment)
+                        return
+                    }
+                } else if (actionToPerform == "Invoice Ready To Review" || actionToPerform == "Invoice Ready to Review" || actionToPerform == "InvoiceReadyToReview") {
+                    invoiceReadyToView(
+                        parseToInt(notificationID),
+                        supportFragmentManager,
+                        "Your CLS Invoice is available for review."
+                    )
+                } else if (actionToPerform == "Weekly Location Rota" || actionToPerform == "Weekly Rota Approval" || actionToPerform == "WeeklyRotaApproval") {
+                    weeklyLocationRota(
+                        this, parseToInt(notificationID), parseToInt(actionID)
+                    )
+                } else if (actionToPerform == "Expired Document" || actionToPerform == "ExpiredDocuments") {
+                    expiredDocuments(
+                        getMainVM(this),
+                        this,
+                        this,
+                        supportFragmentManager,
+                        parseToInt(notificationID)
+                    )
+                } else if (actionToPerform.equals("Vehicle Advance Payment Aggrement") || actionToPerform.equals(
+                        "Vehicle Advance Payment Agreement"
+                    )
+                ) {
+                    vehicleAdvancePaymentAgreement(
+                        this, parseToInt(notificationID), getMainVM(this), this
+                    )
+                } else if (actionToPerform.equals("Expiring Document") || actionToPerform.equals(
+                        "ExpiringDocuments"
+                    ) || actionToPerform.equals("UserExpiringDocuments")
+                ) {
+                    expiringDocument(
+                        this, parseToInt(notificationID)
+                    )
+                } else if (actionToPerform == "VehicleExpiringDocuments") {
+                    vehicleExpiringDocuments(this, parseToInt(notificationID))
+                } else if (actionToPerform == "ThirdPartyAccessRequestNotification") {
+                    navController.navigate(R.id.profileFragment)
+                } else {
+                    ActivityHomeBinding.title.text = "Notifications"
+                    navController.navigate(R.id.notifficationsFragment)
+                    return
+                }/*              }
+                                  catch (_: Exception) {
+                                      ActivityHomeBinding.title.text = "Notifications"
+                                      navController.navigate(R.id.notifficationsFragment)
+                                      return
+                                  }*/
+
+                /*                    ActivityHomeBinding.title.text = "Notifications"
+                                    navController.navigate(R.id.notifficationsFragment)
+                                    return*/
+                return
+            } else if (destinationFragment == "CompleteTask") {
+                navController.navigate(R.id.newCompleteTaskFragment)
+            } else if (destinationFragment == "ThirdPartyAcess") {
+                try {
+                    viewModel.MarkNotificationAsRead(parseToInt(notificationID))
+                } catch (_: Exception) {
+
+                }
+
+                navController.navigate(R.id.profileFragment)
+            } else {
+                navController.navigate(R.id.newCompleteTaskFragment)
+            }
+        }
+
     }
 
     private fun logout() {
@@ -977,6 +983,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 } catch (e: Exception) {
                     Log.d("sds", e.toString())
                 }
+                prefs.thridPartyAcess = it.IsThirdPartyChargeAccessAllowed
                 prefs.UsrCreatedOn = it.UsrCreatedOn
                 firstName = it.firstName
                 lastName = it.lastName
@@ -1065,6 +1072,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     fun disableBottomNavigationView() {
         bottomNavigationView.visibility = View.GONE
+        ActivityHomeBinding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        ActivityHomeBinding.imgDrawer.visibility = View.GONE
 //        ActivityHomeBinding.imgNotification.visibility = View.GONE
 //        bottomNavigationView. = false
 //        bottomNavigationView.isClickable=false
@@ -1072,6 +1081,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     fun enableBottomNavigationView() {
         bottomNavigationView.visibility = View.VISIBLE
+        ActivityHomeBinding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        ActivityHomeBinding.imgDrawer.visibility = View.VISIBLE
 //        ActivityHomeBinding.imgNotification.visibility = View.GONE
 //        bottomNavigationView.isEnabled = true
 //        bottomNavigationView.isClickable=true

@@ -58,7 +58,7 @@ class InvoicesFragment : Fragment() {
             if (it != null) {
                 it.vmRegNo?.let { it1 ->
                     prefs.vmRegNo = it.vmRegNo
-
+                    prefs.thridPartyAcess = it.IsThirdPartyChargeAccessAllowed
                     if (it.IsThirdPartyChargeAccessAllowed) {
                         binding.otherinvoices.visibility = View.VISIBLE
 

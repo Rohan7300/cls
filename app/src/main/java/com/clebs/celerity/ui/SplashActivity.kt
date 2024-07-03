@@ -64,7 +64,11 @@ class SplashActivity : AppCompatActivity() {
     lateinit var dialog: NoInternetDialog
     lateinit var fragmentManager: FragmentManager
     private lateinit var mainViewModel: MainViewModel
-
+    var destinationFragment = "HomeFragment"
+    var actionToPerform = "undef"
+    var tokenUrl = "undef"
+    var actionID = "0"
+    var notificationID = "0"
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
@@ -250,11 +254,11 @@ class SplashActivity : AppCompatActivity() {
                 this@SplashActivity,
                 HomeActivity::class.java
             )
-            intent.putExtra("destinationFragment", "HomeFragment")
-            intent.putExtra("actionToperform", "undef")
-            intent.putExtra("actionID", "0")
-            intent.putExtra("tokenUrl", "undef")
-            intent.putExtra("notificationId", "0")
+            intent.putExtra("destinationFragment", destinationFragment)
+            intent.putExtra("actionToperform", actionToPerform)
+            intent.putExtra("actionID", actionID)
+            intent.putExtra("tokenUrl", tokenUrl)
+            intent.putExtra("notificationId", notificationID)
             startActivity(i)
         }
     }
@@ -283,11 +287,11 @@ class SplashActivity : AppCompatActivity() {
                         finish()
                     } else {
                         val intent = Intent(this, HomeActivity::class.java)
-                        intent.putExtra("destinationFragment", "HomeFragment")
-                        intent.putExtra("actionToperform", "undef")
-                        intent.putExtra("actionID", "0")
-                        intent.putExtra("tokenUrl", "undef")
-                        intent.putExtra("notificationId", "0")
+                        intent.putExtra("destinationFragment", destinationFragment)
+                        intent.putExtra("actionToperform", actionToPerform)
+                        intent.putExtra("actionID", actionID)
+                        intent.putExtra("tokenUrl", tokenUrl)
+                        intent.putExtra("notificationId", notificationID)
                         startActivity(intent)
                         finish()
                     }
@@ -295,6 +299,15 @@ class SplashActivity : AppCompatActivity() {
             })
         }
 
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        destinationFragment = intent?.getStringExtra("destinationFragment") ?:""
+        actionToPerform = intent?.getStringExtra("actionToperform") ?: "undef"
+        tokenUrl = intent?.getStringExtra("tokenUrl") ?: "undef"
+        actionID = intent?.getStringExtra("actionID") ?: "0"
+        notificationID = intent?.getStringExtra("notificationId") ?: "0"
     }
 
     fun useBiometric() {

@@ -14,6 +14,7 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.ui.SplashActivity
 import com.clebs.celerity.utils.DependencyProvider.notify
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getDeviceID
@@ -34,6 +35,8 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         mainRepo = MainRepo(apiService)
     }
+
+
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
@@ -101,14 +104,20 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         tokenUrl: String,
         notificationID: String
     ) {
-        val intent = Intent(this, HomeActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        intent.putExtra("destinationFragment", "NotificationsFragment")
-        intent.putExtra("actionToperform", actionToPerform)
-        intent.putExtra("actionID", actionID)
-        intent.putExtra("tokenUrl", tokenUrl)
+        var intent:Intent?= null
 
-        intent.putExtra("notificationId", notificationID)
+        if(Prefs.getInstance(applicationContext).getBoolean("isLoggedIn", false)){
+            intent = Intent(this, HomeActivity::class.java)
+            intent.putExtra("destinationFragment", "NotificationsFragment")
+            intent.putExtra("actionToperform", actionToPerform)
+            intent.putExtra("actionID", actionID)
+            intent.putExtra("tokenUrl", tokenUrl)
+            intent.putExtra("notificationId", notificationID)
+        }else{
+            intent = Intent(this, SplashActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+
         val channel_id = "notification_channel"
         val notificationId = try {
             parseToInt(actionID) ?: 0
