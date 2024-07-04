@@ -24,6 +24,8 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentHomedemoBinding
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertDateFormat
+import com.clebs.celerity.utils.convertToDate
+import com.clebs.celerity.utils.convertToTime
 import com.clebs.celerity.utils.roundOffValues
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
@@ -814,19 +816,27 @@ class HomedemoFragment : Fragment() {
 
 
                         if (it.NextWorkingDayWaveTime != null) {
-                            mbinding.textView5.text =
-                                "${convertDateFormat(date)} ${time.split(":")[0]} : ${time.split(":")[1]} - ${nextLoc}"
+                            mbinding.textViewDate.text = "${convertToDate(date)}"
+                            mbinding.textViewTime.text ="${convertToTime(it.NextWorkingDayWaveTime)}"
+                            mbinding.textViewLocation.text ="${nextLoc}"
                         } else {
-                            mbinding.textView5.text =
-                                "${convertDateFormat(date)} ${time} : ${time} - ${nextLoc}"
+                            mbinding.textViewDate.text = "${convertToDate(date)}"
+                            mbinding.textViewTime.text ="-- : --"
+                            mbinding.textViewLocation.text ="${nextLoc}"
                         }
                         if (it.NextWorkingDay.isNullOrEmpty() || it.NextWorkingDay.isNullOrEmpty()) {
-                            mbinding.textView5.text = "Not allocated"
+                            mbinding.textViewDate.text = ""
+                            mbinding.textViewLocation.text =""
+                            mbinding.textViewTime.text ="Not allocated"
                         }
 
 
-                    } catch (_: Exception) {
-                        mbinding.textView5.text = "Not allocated"
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Log.d("ExceptionHomeDemo",e.printStackTrace().toString())
+                        mbinding.textViewDate.text = ""
+                        mbinding.textViewLocation.text =""
+                        mbinding.textViewTime.text ="Not allocated"
                     }
 
 
@@ -878,7 +888,8 @@ class HomedemoFragment : Fragment() {
 
 
                 }
-            } else {
+            }
+            else {
                 mbinding.viewfullschedule.isClickable = false
                 mbinding.fullscheduleIV.visibility = View.GONE
                 mbinding.viewfullschedule.isEnabled = false
@@ -886,7 +897,9 @@ class HomedemoFragment : Fragment() {
                 mbinding.viewfullschedule.visibility = View.GONE
                 mbinding.llnodata.visibility = View.VISIBLE
                 mbinding.rlicons.visibility = View.GONE
-                mbinding.textView5.text = "Not allocated"
+                mbinding.textViewDate.text = ""
+                mbinding.textViewLocation.text =""
+                mbinding.textViewTime.text ="Not allocated"
                 mbinding.yourNext.text = "Your next working day"
 
             }
