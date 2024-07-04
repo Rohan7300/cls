@@ -816,10 +816,14 @@ class HomedemoFragment : Fragment() {
 
 
                         if (it.NextWorkingDayWaveTime != null) {
+                            mbinding.textViewDate.visibility = View.VISIBLE
+                            mbinding.textViewLocation.visibility = View.VISIBLE
                             mbinding.textViewDate.text = "${convertToDate(date)}"
                             mbinding.textViewTime.text ="${convertToTime(it.NextWorkingDayWaveTime)}"
                             mbinding.textViewLocation.text ="${nextLoc}"
                         } else {
+                            mbinding.textViewDate.visibility = View.VISIBLE
+                            mbinding.textViewLocation.visibility = View.VISIBLE
                             mbinding.textViewDate.text = "${convertToDate(date)}"
                             mbinding.textViewTime.text ="-- : --"
                             mbinding.textViewLocation.text ="${nextLoc}"
@@ -827,6 +831,8 @@ class HomedemoFragment : Fragment() {
                         if (it.NextWorkingDay.isNullOrEmpty() || it.NextWorkingDay.isNullOrEmpty()) {
                             mbinding.textViewDate.text = ""
                             mbinding.textViewLocation.text =""
+                            mbinding.textViewDate.visibility = View.GONE
+                            mbinding.textViewLocation.visibility = View.GONE
                             mbinding.textViewTime.text ="Not allocated"
                         }
 
@@ -834,8 +840,8 @@ class HomedemoFragment : Fragment() {
                     } catch (e: Exception) {
                         e.printStackTrace()
                         Log.d("ExceptionHomeDemo",e.printStackTrace().toString())
-                        mbinding.textViewDate.text = ""
-                        mbinding.textViewLocation.text =""
+                        mbinding.textViewDate.visibility = View.GONE
+                        mbinding.textViewLocation.visibility = View.GONE
                         mbinding.textViewTime.text ="Not allocated"
                     }
 
@@ -897,6 +903,8 @@ class HomedemoFragment : Fragment() {
                 mbinding.viewfullschedule.visibility = View.GONE
                 mbinding.llnodata.visibility = View.VISIBLE
                 mbinding.rlicons.visibility = View.GONE
+                mbinding.textViewDate.visibility = View.GONE
+                mbinding.textViewLocation.visibility = View.GONE
                 mbinding.textViewDate.text = ""
                 mbinding.textViewLocation.text =""
                 mbinding.textViewTime.text ="Not allocated"
