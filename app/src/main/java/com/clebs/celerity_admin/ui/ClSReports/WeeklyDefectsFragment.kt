@@ -21,8 +21,8 @@ class WeeklyDefectsFragment : Fragment() {
 
     private var _binding: FragmentSlideshowBinding? = null
     lateinit var mainViewModel: MainViewModel
-    var week : Int?=null
-    var year : Int?=null
+    var week: Int? = null
+    var year: Int? = null
     private lateinit var WeeklyDefectAdapter: WeeklyDefectAdapter
 
     // This property is only valid between onCreateView and
@@ -45,7 +45,7 @@ class WeeklyDefectsFragment : Fragment() {
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         WeeklyDefectAdapter = WeeklyDefectAdapter(ArrayList())
-binding.rvList.adapter=WeeklyDefectAdapter
+        binding.rvList.adapter = WeeklyDefectAdapter
 
         Observers()
 
@@ -59,17 +59,18 @@ binding.rvList.adapter=WeeklyDefectAdapter
                 week = it.weekNO
                 year = it.year
             }
-            mainViewModel.GetWeeklyDefectChecks(24.00,year!!.toDouble(),0.0,0.0,true).observe(viewLifecycleOwner,
-                Observer {
-                    if (it != null) {
-                        Log.e("dataass", "Observers: "+it )
-                        WeeklyDefectAdapter.data.addAll(it)
-                        WeeklyDefectAdapter.notifyDataSetChanged()
+            mainViewModel.GetWeeklyDefectChecks(24.00, year!!.toDouble(), 0.0, 0.0, true)
+                .observe(viewLifecycleOwner,
+                    Observer {
+                        if (it != null) {
+                            Log.e("dataass", "Observers: " + it)
+                            WeeklyDefectAdapter.data.addAll(it)
+                            WeeklyDefectAdapter.notifyDataSetChanged()
 
-                    }
+                        }
 
 
-                })
+                    })
 
         })
 

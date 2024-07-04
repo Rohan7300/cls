@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/very_light_orange"
     android:backgroundTint="@color/very_light_orange"
     tools:context=".MainActivityTwo">
@@ -22,90 +23,98 @@
             app:popupTheme="@style/Theme.Celerity_admin.PopupOverlay" />
 
 
-
-
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_main_activity_two" />
 
-    <ProgressBar
-        android:id="@+id/pbnew"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center"
-        android:indeterminateTint="@color/red_light"
-        android:visibility="gone" />
-
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/fab"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom|end"-->
-<!--        android:layout_marginEnd="@dimen/fab_margin"-->
-<!--        android:layout_marginBottom="16dp"-->
-<!--        android:backgroundTint="@color/maroon"-->
-<!--        app:srcCompat="@drawable/baseline_replay_circle_filled_24" />-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_editext_main"
-        android:layout_gravity="bottom"
-        android:backgroundTint="@color/new_light_orange"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardone"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="20dp"
-android:background="@drawable/shape_bottom_nav"
-            app:cardBackgroundColor="@color/maroon"
-            android:elevation="10dp"
-            android:padding="4dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            app:cardElevation="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                >
+            <include layout="@layout/content_main_activity_two" />
+            </LinearLayout>
+            <ProgressBar
+                android:id="@+id/pbnew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center"
+                android:indeterminateTint="@color/red_light"
+                android:visibility="gone" />
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:gravity="center_vertical|center_horizontal"
-                android:src="@drawable/baseline_change_circle_24"
-                android:textColor="@color/white" />
+            <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+            <!--        android:id="@+id/fab"-->
+            <!--        android:layout_width="wrap_content"-->
+            <!--        android:layout_height="wrap_content"-->
+            <!--        android:layout_gravity="bottom|end"-->
+            <!--        android:layout_marginEnd="@dimen/fab_margin"-->
+            <!--        android:layout_marginBottom="16dp"-->
+            <!--        android:backgroundTint="@color/maroon"-->
+            <!--        app:srcCompat="@drawable/baseline_replay_circle_filled_24" />-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@drawable/shape_editext_main"
+                android:backgroundTint="@color/new_light_orange"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardone"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_bottom_nav"
+                    android:elevation="10dp"
+                    android:padding="4dp"
+                    app:cardBackgroundColor="@color/maroon"
+                    app:cardCornerRadius="20dp"
+
+                    app:cardElevation="10dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:src="@drawable/baseline_change_circle_24"
+                        android:textColor="@color/white" />
 
 
-        </androidx.cardview.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardtwo"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="2dp"
-            android:layout_weight="1"
-            app:cardCornerRadius="20dp"
-            android:alpha="0.4"
-            android:elevation="10dp"
-android:background="@drawable/shape_bottom_nav"
-            app:cardBackgroundColor="@color/darkcommentbg"
-            android:padding="4dp"
-            android:layout_margin="8dp"
-            app:cardElevation="10dp">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardtwo"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_margin="8dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_weight="1"
+                    android:alpha="0.4"
+                    android:background="@drawable/shape_bottom_nav"
+                    android:elevation="10dp"
+                    android:padding="4dp"
+                    app:cardBackgroundColor="@color/darkcommentbg"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="10dp">
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-
-                android:gravity="center_vertical|center_horizontal"
-                android:src="@drawable/baseline_car_crash_24"
-               />
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:src="@drawable/baseline_car_crash_24" />
 
 
-        </androidx.cardview.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
 
-    </LinearLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </LinearLayout>
+        </LinearLayout>
+</LinearLayout>
