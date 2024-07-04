@@ -14,6 +14,8 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -403,6 +405,14 @@ class NewCompleteTaskFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        (activity as HomeActivity).showDialogtwo()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            (activity as HomeActivity).hidedialogtwo()
+            mbinding.mainCompleteTask.visibility = View.VISIBLE
+            mbinding.searchLayout.visibility = View.GONE
+        }, 5000)
+
 
         inspectionstarted = Prefs.getInstance(requireContext()).isInspectionDoneToday()
         Log.d("hdhsdshdsdjshhsds", "Ins $inspectionstarted")
@@ -541,15 +551,15 @@ class NewCompleteTaskFragment : Fragment() {
             setVisibiltyLevel()
         }
 
-        viewModel.ldcompleteTaskLayoutObserver.observe(viewLifecycleOwner) {
-            if (it == -1) {
-                mbinding.mainCompleteTask.visibility = View.VISIBLE
-                mbinding.searchLayout.visibility = View.GONE
-            } else {
-                mbinding.mainCompleteTask.visibility = View.GONE
-                mbinding.searchLayout.visibility = View.VISIBLE
-            }
-        }
+//        viewModel.ldcompleteTaskLayoutObserver.observe(viewLifecycleOwner) {
+//            if (it == -1) {
+//                mbinding.mainCompleteTask.visibility = View.VISIBLE
+//                mbinding.searchLayout.visibility = View.GONE
+//            } else {
+//                mbinding.mainCompleteTask.visibility = View.GONE
+//                mbinding.searchLayout.visibility = View.VISIBLE
+//            }
+//        }
 
         viewModel.livedataClockInTime.observe(viewLifecycleOwner) {
             hideDialog()
@@ -1041,6 +1051,8 @@ class NewCompleteTaskFragment : Fragment() {
         osData.isImagesUploadedToday = true
         oSyncViewModel.insertData(osData)
         imagesUploaded = true
+
+
         print("OSData ISImage1 ${osData.isImagesUploadedToday}\n")
         print("OSData ISInspection1 ${osData.isInspectionDoneToday}\n")
         visibilityLevel = 1

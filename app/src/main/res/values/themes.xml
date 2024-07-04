@@ -3,7 +3,7 @@
 
     <style name="Theme.Celerity" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/light_orange</item>
-        <item name="android:statusBarColor">@color/medium_orange</item>
+        <item name="android:statusBarColor">#F1550D</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="colorPrimary">@color/light_orange</item>
         <!--        <item name="android:windowTranslucentStatus">true</item>-->
@@ -44,7 +44,7 @@
 
     <style name="BottomNavigationViewTextStyle">
         <item name="text_color">@color/white</item>
-        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:fontFamily">@font/poppins</item>
         <item name="android:textSize">11sp</item>
 
     </style>

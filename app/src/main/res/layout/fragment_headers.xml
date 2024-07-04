@@ -25,7 +25,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+
 
             app:layout_collapseMode="parallax">
 
@@ -35,7 +35,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginVertical="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="3dp"
+
                 android:gravity="center"
 
                 android:orientation="horizontal">
@@ -52,7 +54,7 @@
                     android:id="@+id/ana_carolin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_bold"
+                    android:fontFamily="@font/inter_semibold"
                     android:gravity="center_horizontal|top"
                     android:letterSpacing="0.04"
 
@@ -86,8 +88,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
                         <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="18dp"
+                            android:layout_width="23dp"
+                            android:layout_height="23dp"
                             android:src="@drawable/pin_alt_light_two" />
                         <LinearLayout
                             android:id="@+id/strikedxLoc"
@@ -112,7 +114,8 @@
                         android:layout_marginStart="2dp"
                         android:letterSpacing="0.03"
                         android:text=""
-                        android:textColor="#231F20"
+                        android:gravity="center"
+                        android:textColor="@color/black"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -129,8 +132,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
                         <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="18dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             android:src="@drawable/trucknew"
                             app:tint="@color/orange" />
                         <LinearLayout
@@ -157,7 +160,7 @@
                         android:layout_marginStart="2dp"
                         android:letterSpacing="0.03"
                         android:text=""
-                        android:textColor="#231F20"
+                        android:textColor="@color/black"
                         android:textSize="12sp" />
 
 
@@ -175,8 +178,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
                         <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="18dp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
                             android:src="@drawable/calendarnew"
                             app:tint="@color/orange" />
                         <LinearLayout
@@ -203,7 +206,7 @@
                         android:letterSpacing="0.03"
                         android:text=""
                         android:layout_marginStart="2dp"
-                        android:textColor="#231F20"
+                        android:textColor="@color/black"
                         android:textSize="12sp" />
 
                 </LinearLayout>

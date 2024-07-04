@@ -121,6 +121,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     lateinit var prefs: Prefs
     var date = ""
     lateinit var loadingDialog: LoadingDialog
+    lateinit var loadingDialogtwo: LoadingDialog
     lateinit var networkManager: NetworkManager
 
     private var isApiResponseTrue = false
@@ -153,7 +154,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         internetDialog = NoInternetDialog()
         networkManager = NetworkManager(this)
 
-
+        loadingDialogtwo = LoadingDialog(this@HomeActivity)
         networkManager.observe(this) {
             isNetworkActive = if (it) {
                 ActivityHomeBinding.nointernetLL.visibility = View.GONE
@@ -398,14 +399,20 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         /*navController.navigate(R.id.homeFragment)
                         navController.currentDestination!!.id = R.id.homeFragment*/
 
+                        ActivityHomeBinding.searchLayout.visibility=View.VISIBLE
+                        showDialogtwo()
                         if (isNetworkActive) {
 
                             ActivityHomeBinding.logout.visibility = View.GONE
                             ActivityHomeBinding.title.text = ""
                             ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
                             viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
-                            showDialog()
+//                            showDialog()
+                            hidedialogtwo()
+                            ActivityHomeBinding.searchLayout.visibility=View.GONE
                         } else {
+                            hidedialogtwo()
+                            ActivityHomeBinding.searchLayout.visibility=View.GONE
                             if (osData.isDefectSheetFilled)
                                 navController.navigate(R.id.newCompleteTaskFragment)
                             else {
@@ -629,11 +636,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         showToast("Vehicle Inspection info saved", this)
                     }
                 })
-              //  navController.navigate(R.id.newCompleteTaskFragment)
+                //  navController.navigate(R.id.newCompleteTaskFragment)
                 showToast("Vehicle Inspection is successfully completed ", this)
             } else {
                 Log.d("hdhsdshdsdjshhsds", "else $message")
-            //    navController.navigate(R.id.newCompleteTaskFragment)
+                //    navController.navigate(R.id.newCompleteTaskFragment)
             }
             if (identifier == PublicConstants.quoteCreationFlowStatusIdentifier) {
                 // Get code
@@ -948,6 +955,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         apiCount++
     }
 
+    public fun showDialogtwo() {
+        loadingDialogtwo.show()
+    }
+
+    fun hidedialogtwo() {
+        loadingDialogtwo.dismiss()
+    }
+
     fun GetDriversBasicInformation() {
 
         val today = LocalDate.now()
@@ -1061,7 +1076,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         deleteDialog.setCancelable(false)
         deleteDialog.setCanceledOnTouchOutside(false);
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-        (deleteDialog as? android.app.AlertDialog)?.apply {
+        deleteDialog.apply {
             saveChangesCallback = this@HomeActivity
         }
         deleteDialog.show();
