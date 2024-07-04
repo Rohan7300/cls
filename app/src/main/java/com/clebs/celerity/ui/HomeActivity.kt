@@ -372,10 +372,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
             ActivityHomeBinding.imgDrawer.setOnClickListener {
-
                 //navController.navigate(R.id.profileFragment)
                 ActivityHomeBinding.drawerLayout.openDrawer(GravityCompat.START)
-
             }
 
             ActivityHomeBinding.imgNotification.setOnClickListener {

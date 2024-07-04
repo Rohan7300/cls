@@ -853,6 +853,28 @@ fun convertDateFormat(inputDate: String): String {
     }
 }
 
+fun convertToDate(inputDate: String): String {
+    return try {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd MMM", Locale.getDefault())
+        val date = inputFormat.parse(inputDate)
+        outputFormat.format(date!!)
+    } catch (_: Exception) {
+        " "
+    }
+}
+
+fun convertToTime(inputDate: String): String {
+    return try {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("hh:mm", Locale.getDefault())
+        val date = inputFormat.parse(inputDate)
+        outputFormat.format(date!!)
+    } catch (_: Exception) {
+        " -- : -- "
+    }
+}
+
 private fun checkNullorEmpty(value: String?): Boolean {
     return !(value.isNullOrEmpty() || value == "empty")
 }
