@@ -8,161 +8,167 @@
         android:id="@+id/drawerLayout"
         android:layout_height="match_parent"
         tools:context=".ui.HomeActivity">
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:backgroundTint="@color/home_blue">
+
+
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consts"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:backgroundTint="@color/home_blue">
+            android:layout_height="wrap_content"
+            android:background="#F1550D"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/img_drawer"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
 
-            <View
-                android:id="@+id/view8"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/very_light_orange"
-                android:elevation="30dp"
-                android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@id/consts" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/consts"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/medium_orange"
-                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/group_1625"
+                android:tint="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/img_drawer"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
 
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/menu"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:letterSpacing="0.02"
-                    android:textColor="@color/text_color"
-
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/img_notification"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="16dp"
-
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/baseline_notifications_none_24"
-                    app:layout_constraintEnd_toEndOf="@+id/logout"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/newnotify"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-
-                    android:background="@drawable/baseline_fiber_smart_record_24"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/img_notification"
-                    app:layout_constraintEnd_toEndOf="@+id/img_notification"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="@+id/img_notification" />
-
-                <ImageView
-                    android:id="@+id/logout"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/logoutnew"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/nav_fragment"
-                android:name="androidx.navigation.fragment.NavHostFragment"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="4dp"
-                app:defaultNavHost="true"
-                app:layout_constraintBottom_toTopOf="@id/bottom_navigatin_view"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/consts"
-                app:navGraph="@navigation/nav_graph" />
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_navigatin_view"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/medium_orange"
-                android:paddingVertical="4dp"
-                app:itemBackground="@drawable/bg_selected_item"
-                app:itemIconSize="22dp"
-                app:itemIconTint="@color/selectedcolor"
-                app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"
-                app:itemTextColor="@color/selectedcolor"
-                app:labelVisibilityMode="labeled"
-                app:layout_constraintBottom_toTopOf="@+id/nointernetLL"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nav_fragment"
-                app:menu="@menu/bottom_nav" />
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:letterSpacing="0.02"
+                android:textColor="@color/text_color"
 
-            <LinearLayout
-                android:id="@+id/nointernetLL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:paddingVertical="7dp"
-                android:paddingHorizontal="10dp"
-                android:visibility="gone"
-                android:orientation="horizontal"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent" >
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:src="@drawable/nowifi"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Poor Internet Connection!!"
-                    android:textColor="@color/medium_orange"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/poppins"/>
-            </LinearLayout>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_notification"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+android:tint="@color/white"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/baseline_notifications_none_24"
+                app:layout_constraintEnd_toEndOf="@+id/logout"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/newnotify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+
+                android:background="@drawable/baseline_fiber_smart_record_24"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/img_notification"
+                app:layout_constraintEnd_toEndOf="@+id/img_notification"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/img_notification" />
+
+            <ImageView
+                android:id="@+id/logout"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/logoutnew"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toTopOf="@id/bottom_navigatin_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/consts"
+            app:navGraph="@navigation/nav_graph" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigatin_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F1550D"
+            android:paddingVertical="4dp"
+            app:itemBackground="@drawable/bg_selected_item"
+            app:itemIconSize="22dp"
+            app:itemIconTint="@color/selectedcolor"
+            app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"
+            app:itemTextColor="@color/selectedcolor"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toTopOf="@+id/nointernetLL"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nav_fragment"
+            app:menu="@menu/bottom_nav" />
+
+        <LinearLayout
+            android:id="@+id/nointernetLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:paddingVertical="7dp"
+            android:paddingHorizontal="10dp"
+            android:visibility="gone"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" >
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/nowifi"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poor Internet Connection!!"
+                android:textColor="@color/medium_orange"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
+        <FrameLayout
+            android:id="@+id/searchLayout"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/searchinglayout" />
+        </FrameLayout>
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"

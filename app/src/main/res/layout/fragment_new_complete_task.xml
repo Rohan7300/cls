@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -1227,12 +1227,12 @@
 
         </androidx.core.widget.NestedScrollView>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/searchLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <include layout="@layout/searchinglayout" />
-        </LinearLayout>
+        </FrameLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
