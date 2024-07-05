@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val repo: MainRepo) : ViewModel() {
 
+    val lDGetWeeklyDefectChecks:MutableLiveData<WeeklyDefectChecksModel?> = MutableLiveData()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -270,20 +271,17 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         driverid: Double,
         lmid: Double,
         showdefects: Boolean
-    ): MutableLiveData<WeeklyDefectChecksModel?> {
-        val responseLiveData = MutableLiveData<WeeklyDefectChecksModel?>()
-
+    ){
         viewModelScope.launch {
             val response = repo.GetWeeklyDefectCheckList(weekno, year, driverid, lmid, showdefects)
             if (response.failed) {
-                responseLiveData.postValue(null)
+                lDGetWeeklyDefectChecks.postValue(null)
             }
             if (!response.isSuccessful) {
-                responseLiveData.postValue(null)
+                lDGetWeeklyDefectChecks.postValue(null)
             } else {
-                responseLiveData.postValue(response.body)
+                lDGetWeeklyDefectChecks.postValue(response.body)
             }
         }
-        return responseLiveData
     }
 }

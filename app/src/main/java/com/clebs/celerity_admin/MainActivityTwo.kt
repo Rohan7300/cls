@@ -26,6 +26,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.clebs.celerity_admin.database.CheckInspection
 import com.clebs.celerity_admin.databinding.ActivityMainTwoBinding
+import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
@@ -41,8 +42,8 @@ import kotlinx.coroutines.launch
 class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainTwoBinding
-
+    lateinit var binding: ActivityMainTwoBinding
+    lateinit var loadingDialog: LoadingDialog
     private var saveClickCounter = 0
     lateinit var resumedialog: AlertDialog
 
@@ -58,6 +59,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         setContentView(binding.root)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
+        loadingDialog = LoadingDialog(this)
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         setSupportActionBar(binding.appBarMainActivityTwo.toolbar)
@@ -201,6 +203,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         val navController = findNavController(R.id.nav_host_fragment_content_main_activity_two)
         when (item.itemId) {
             R.id.nav_gallery -> {
+                binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
                 navController.navigate(R.id.nav_gallery)
                 binding.appBarMainActivityTwo.cardone.setCardBackgroundColor(
@@ -218,6 +221,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
             }
 
             R.id.nav_slideshow -> {
+                binding.appBarMainActivityTwo.bottomBar.visibility = View.GONE
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
                 navController.navigate(R.id.nav_slideshow)
 
@@ -236,6 +240,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
             }
 
             R.id.nav_weblogin -> {
+                binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
                 navController.navigate(R.id.nav_weblogin)
 
@@ -286,5 +291,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         resumedialog.show()
     }
 
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
 }

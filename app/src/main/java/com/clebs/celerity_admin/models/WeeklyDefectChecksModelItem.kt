@@ -23,5 +23,9 @@ data class WeeklyDefectChecksModelItem(
     @SerializedName("VehRegNo")
     val vehRegNo: String,
     @SerializedName("VehWkCheckWeek")
-    val vehWkCheckWeek: Int
+    val vehWkCheckWeek: Int,
+    @SerializedName("VdhCheckIsApproved")
+    val VdhCheckIsApproved:Boolean = false,
+    @SerializedName("OsmName")
+    val OsmName:String = "- - - -"
 )

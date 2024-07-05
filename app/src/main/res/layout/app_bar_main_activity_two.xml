@@ -59,6 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:id="@+id/bottomBar"
                 android:background="@drawable/shape_editext_main"
                 android:backgroundTint="@color/new_light_orange"
                 android:orientation="horizontal"

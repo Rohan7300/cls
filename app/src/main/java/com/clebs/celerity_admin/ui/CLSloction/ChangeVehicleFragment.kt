@@ -198,7 +198,6 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
         isfirst = Prefs.getInstance(requireContext()).Isfirst
 
-
         binding.pb2.visibility = View.VISIBLE
         binding.constmain.alpha = 0.5f
         EditableFalse(binding.textView5)
