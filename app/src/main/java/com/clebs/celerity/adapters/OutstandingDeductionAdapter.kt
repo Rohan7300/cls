@@ -20,10 +20,15 @@ class OutstandingDeductionAdapter(var listener: DeductionListListener, var type:
     inner class OutstandingDeductionViewHolder(val binding: AdapterOutstandingDeductionsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: GetDAOutStandingDeductionListResponseItem) {
-            if (type == 1)
+            if (type == 1){
                 binding.deductionAmount.text = item.CLSTotalDeductionAmount
-            else
+
+            }
+
+            else{
                 binding.deductionAmount.text = item.CHTotalDeductionAmount
+            }
+
             binding.viewDocs.setOnClickListener {
                 if (type == 1)
                     listener.onClick(1)

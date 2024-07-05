@@ -31,7 +31,7 @@
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="32dp"
 
-                android:src="@drawable/camerahome"
+                android:src="@drawable/usersss"
                 app:civ_border_color="#FF000000" />
 
             <TextView
@@ -314,7 +314,7 @@ Marian Ionut Malasincu"
                     app:area_margin="1dp"
                     app:bounce_on_start="true"
                     app:icon_margin="24dp"
-                    app:inner_color="#FD844D"
+                    app:inner_color="#F1550D"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:outer_color="@color/white"

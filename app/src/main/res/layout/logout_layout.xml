@@ -20,14 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/ic_cross_orange"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/orange_cross"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_txt"
@@ -39,9 +31,10 @@
             android:textColor="@color/text_color"
 
             android:textSize="17sp"
-            app:layout_constraintEnd_toEndOf="@+id/ic_cross_orange"
+
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ic_cross_orange" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/des"

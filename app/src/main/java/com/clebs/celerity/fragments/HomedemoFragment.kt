@@ -93,7 +93,7 @@ class HomedemoFragment : Fragment() {
         viewModel = (activity as HomeActivity).viewModel
 
 //        pieChart.isAnimationEnabled=true
-        (activity as HomeActivity).ActivityHomeBinding.title.text = ""
+        (activity as HomeActivity).ActivityHomeBinding.title.text = "Home"
         showDialog()
 //            mbinding.constmains.visibility=View.GONE
 
@@ -776,28 +776,28 @@ class HomedemoFragment : Fragment() {
                 it.map {
 
 
-                    val formattedDate = convertDateFormat(it.sundayDate)
-                    mbinding.tvDateShow1.text = "SUN $formattedDate"
-                    val formattedDate2 = convertDateFormat(it.mondayDate)
-                    mbinding.tvDateShow2.text = "MON $formattedDate2"
+                    val formattedDate = convertToDate(it.sundayDate)
+                    mbinding.tvDateShow1.text = "SUN   $formattedDate"
+                    val formattedDate2 = convertToDate(it.mondayDate)
+                    mbinding.tvDateShow2.text = "MON   $formattedDate2"
 
-                    val formattedDate3 = convertDateFormat(it.tuesdayDate)
-                    mbinding.tvDateShow3.text = "TUE " + formattedDate3
+                    val formattedDate3 = convertToDate(it.tuesdayDate)
+                    mbinding.tvDateShow3.text = "TUE   " + formattedDate3
 
 
-                    val formattedDate4 = convertDateFormat(it.wednesdayDate)
-                    mbinding.tvDateShow4.text = "WED " + formattedDate4
+                    val formattedDate4 = convertToDate(it.wednesdayDate)
+                    mbinding.tvDateShow4.text = "WED  " + formattedDate4
 
-                    val formattedDate5 = convertDateFormat(it.thursdayDate)
+                    val formattedDate5 = convertToDate(it.thursdayDate)
 
-                    mbinding.tvDateShow5.text = "THU " + formattedDate5
+                    mbinding.tvDateShow5.text = "THU   " + formattedDate5
 
-                    val formattedDate6 = convertDateFormat(it.fridayDate)
+                    val formattedDate6 = convertToDate(it.fridayDate)
 
-                    mbinding.tvDateShow6.text = "FRI " + formattedDate6
+                    mbinding.tvDateShow6.text = "FRI   " + formattedDate6
 
-                    val formattedDate7 = convertDateFormat(it.saturdayDate)
-                    mbinding.tvDateShow7.text = "SAT " + formattedDate7
+                    val formattedDate7 = convertToDate(it.saturdayDate)
+                    mbinding.tvDateShow7.text = "SAT   " + formattedDate7
 
 
 //                    if (newformatteddate.equals(formattedDate) && !it.sundayLocation.equals("OFF")) {
