@@ -11,21 +11,19 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.HandlerThread
 import android.os.Looper
-import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextWatcher
+import android.os.Process.THREAD_PRIORITY_BACKGROUND
+import android.os.Process.THREAD_PRIORITY_MORE_FAVORABLE
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -45,29 +43,23 @@ import com.clebs.celerity.ViewModel.OSyncViewModel
 import com.clebs.celerity.adapters.BreakTimeAdapter
 import com.clebs.celerity.adapters.DriverRouteAdapter
 import com.clebs.celerity.adapters.RideAlongAdapter
-import com.clebs.celerity.database.OfflineSyncEntity
-import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
 import com.clebs.celerity.databinding.FragmentNewCompleteTaskBinding
 import com.clebs.celerity.databinding.TimePickerDialogBinding
+import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
-import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
-import com.clebs.celerity.ui.AddInspection
+import com.clebs.celerity.ui.AddInspectionActivity2
 import com.clebs.celerity.ui.App
+import com.clebs.celerity.ui.FaceScanActivity
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
-import com.clebs.celerity.dialogs.LoadingDialog
-import com.clebs.celerity.ui.AddInspectionActivity2
-import com.clebs.celerity.ui.FaceScanActivity
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.currentUri
 import com.clebs.celerity.utils.DependencyProvider.osData
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.addLeadingZeroIfNeeded
 import com.clebs.celerity.utils.bitmapToBase64
-import com.clebs.celerity.utils.getCameraURI
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
@@ -81,10 +73,6 @@ import com.clebs.celerity.utils.toRequestBody
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.tapadoo.alerter.Alerter
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
-import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
-import io.clearquote.assessment.cq_sdk.models.CustomerDetails
-import io.clearquote.assessment.cq_sdk.models.InputDetails
-import io.clearquote.assessment.cq_sdk.models.VehicleDetails
 import okhttp3.MultipartBody
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -420,7 +408,13 @@ class NewCompleteTaskFragment : Fragment() {
         if (inspectionstarted?.equals(true) == true) {
             setVisibiltyLevel()
         } else {
-            mbinding.startinspection.visibility = View.VISIBLE
+            if (prefs.isClientIDUplaoded!=true){
+                mbinding.startinspection.visibility = View.VISIBLE
+            }
+            else{
+                mbinding.startinspection.visibility = View.GONE
+            }
+
         }
     }
 
@@ -1094,7 +1088,6 @@ class NewCompleteTaskFragment : Fragment() {
         with(mbinding) {
             listOf(
                 uploadLayouts,
-                startinspection,
                 rlcomtwoBreak,
                 onRoadView,
                 rlcomtwoBreak,
@@ -1104,13 +1097,30 @@ class NewCompleteTaskFragment : Fragment() {
                 taskDetails,
                 view2
             ).forEach { thisView -> thisView.visibility = View.GONE }
+            if ( Prefs.getInstance(App.instance).isClientIDUplaoded!=true) {
+                mbinding.startinspection.visibility = View.VISIBLE
+                mbinding.imageUploadView.visibility = View.GONE
+            }
+            else{
+                mbinding.startinspection.visibility = View.GONE
+                mbinding.imageUploadView.visibility = View.VISIBLE
+            }
         }
         when (visibilityLevel) {
             -1 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
-                mbinding.startinspection.visibility = View.VISIBLE
+
                 mbinding.imageUploadView.visibility = View.GONE
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
+
+                if ( Prefs.getInstance(App.instance).isClientIDUplaoded!=true) {
+                    mbinding.startinspection.visibility = View.VISIBLE
+                    mbinding.imageUploadView.visibility = View.GONE
+                }
+                else{
+                    mbinding.startinspection.visibility = View.GONE
+                    mbinding.imageUploadView.visibility = View.VISIBLE
+                }
                 /*mbinding.clFaceMask.visibility = View.GONE
                 mbinding.clOilLevel.visibility = View.GONE*/
                 /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
@@ -1123,7 +1133,14 @@ class NewCompleteTaskFragment : Fragment() {
             0 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
 //                mbinding.taskDetails.visibility = View.VISIBLE
-                mbinding.imageUploadView.visibility = View.VISIBLE
+                if ( Prefs.getInstance(App.instance).isClientIDUplaoded!=true) {
+                    mbinding.startinspection.visibility = View.VISIBLE
+                    mbinding.imageUploadView.visibility = View.GONE
+                }
+                else{
+                    mbinding.startinspection.visibility = View.GONE
+                    mbinding.imageUploadView.visibility = View.VISIBLE
+                }
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.not_uploaded)
                 mbinding.complete.setBackground(
                     ContextCompat.getDrawable(
@@ -1201,6 +1218,7 @@ class NewCompleteTaskFragment : Fragment() {
             }
 
         }
+
     }
 
     private fun setVisibiltyLevel() {
@@ -1259,10 +1277,21 @@ class NewCompleteTaskFragment : Fragment() {
                     }
                 }
             }, 0, 1000)
-            mbinding.startinspection.visibility = View.GONE
+            if (prefs.isClientIDUplaoded!=true){
+                mbinding.startinspection.visibility = View.VISIBLE
+            }
+            else{
+                mbinding.startinspection.visibility = View.GONE
+            }
+
 
         } else {
-            mbinding.startinspection.visibility = View.VISIBLE
+            if (prefs.isClientIDUplaoded!=true){
+                mbinding.startinspection.visibility = View.VISIBLE
+            }
+            else{
+                mbinding.startinspection.visibility = View.GONE
+            }
         }
     }
 

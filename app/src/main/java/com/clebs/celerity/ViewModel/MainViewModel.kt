@@ -200,8 +200,10 @@ class MainViewModel(
         MutableLiveData<DownloadDriverOtherCompaniesPolicyResponse?>()
     val liveDataGetDAEmergencyContact = MutableLiveData<String?>()
     val liveDataUploadVehicleDefectImages = MutableLiveData<SimpleStatusMsgResponse?>()
-    val liveDataGetCompanySignedDocumentList = MutableLiveData<GetCompanySignedDocumentListResponse?>()
-    val liveDataGetDAOutStandingDeductionList = MutableLiveData<GetDAOutStandingDeductionListResponseItem?>()
+    val liveDataGetCompanySignedDocumentList =
+        MutableLiveData<GetCompanySignedDocumentListResponse?>()
+    val liveDataGetDAOutStandingDeductionList =
+        MutableLiveData<GetDAOutStandingDeductionListResponseItem?>()
     val liveDataGetDriverDeductionHistory = MutableLiveData<GetDriverDeductionHistoryResponse?>()
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
@@ -1578,12 +1580,16 @@ class MainViewModel(
     fun SaveVehicleInspectionInfo(body: SaveVehicleInspectionInfo) {
         viewModelScope.launch {
             val response = repo.SaveVehicleInspectionInfo(body)
-            if (response.failed)
+            if (response.failed) {
                 livedataSavevehicleinspectioninfo.postValue(null)
-            if (!response.isSuccessful)
+                Prefs.getInstance(App.instance).isClientIDUplaoded = false
+            } else if (!response.isSuccessful) {
                 livedataSavevehicleinspectioninfo.postValue(null)
-            else
+                Prefs.getInstance(App.instance).isClientIDUplaoded = false
+            } else {
+                Prefs.getInstance(App.instance).isClientIDUplaoded = true
                 livedataSavevehicleinspectioninfo.postValue(response.body)
+            }
 
 
             /*            val result = runCatching {
@@ -1948,32 +1954,32 @@ class MainViewModel(
 
     }
 
-    fun GetCompanySignedDocumentList(userID: Int){
+    fun GetCompanySignedDocumentList(userID: Int) {
         viewModelScope.launch {
             val response = repo.GetCompanySignedDocumentList(userID)
-            if(response.failed || !response.isSuccessful)
+            if (response.failed || !response.isSuccessful)
                 liveDataGetCompanySignedDocumentList.postValue(null)
             else
                 liveDataGetCompanySignedDocumentList.postValue(response.body)
         }
     }
 
-    fun GetDAOutStandingDeductionList(userID: Int,companyId: Int){
+    fun GetDAOutStandingDeductionList(userID: Int, companyId: Int) {
         viewModelScope.launch {
-            val response = repo.GetDAOutStandingDeductionList(userID,companyId)
-            if(response.failed || !response.isSuccessful)
+            val response = repo.GetDAOutStandingDeductionList(userID, companyId)
+            if (response.failed || !response.isSuccessful)
                 liveDataGetDAOutStandingDeductionList.postValue(null)
             else
                 liveDataGetDAOutStandingDeductionList.postValue(response.body)
         }
     }
 
-    fun GetDriverDeductionHistory(userID: Int,companyId: Int){
+    fun GetDriverDeductionHistory(userID: Int, companyId: Int) {
         viewModelScope.launch {
-            val response = repo.GetDriverDeductionHistory(userID,companyId)
-            if(response.failed|| !response.isSuccessful)
+            val response = repo.GetDriverDeductionHistory(userID, companyId)
+            if (response.failed || !response.isSuccessful)
                 liveDataGetDriverDeductionHistory.postValue(null)
-            else{
+            else {
                 liveDataGetDriverDeductionHistory.postValue(response.body)
             }
         }

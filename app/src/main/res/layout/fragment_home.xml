@@ -70,7 +70,7 @@ Marian Ionut Malasincu"
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+android:id="@+id/llmainHome"
                     android:orientation="horizontal">
 
                     <RelativeLayout
@@ -110,7 +110,7 @@ Marian Ionut Malasincu"
                             android:layout_margin="4dp"
                             android:layout_toEndOf="@+id/ic_location"
                             android:fontFamily="@font/poppins"
-                            android:text="@string/location"
+                            android:text="____"
                             android:textColor="#231F20"
                             android:textSize="13sp" />
                         </LinearLayout>
@@ -156,7 +156,7 @@ Marian Ionut Malasincu"
                                 android:layout_margin="4dp"
                                 android:fontFamily="@font/poppins"
                                 android:layout_weight="1"
-                                android:text="sdfgsdfgsdfgsdfg"
+                                android:text="____"
                                 android:textColor="#231F20"
                                 android:textSize="13sp" />
                         </LinearLayout>
@@ -198,7 +198,7 @@ Marian Ionut Malasincu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins"
-                            android:text="@string/away"
+                            android:text="____"
                             android:layout_weight="1"
                             android:layout_margin="4dp"
                             android:textColor="#231F20"
@@ -250,7 +250,7 @@ Marian Ionut Malasincu"
                                 android:fontFamily="@font/poppins"
                                 android:layout_margin="4dp"
                                 android:layout_weight="1"
-                                android:text="121343445"
+                                android:text="____"
                                 android:textColor="#231F20"
                                 android:textSize="13sp" />
                         </LinearLayout>

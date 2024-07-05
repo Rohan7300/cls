@@ -29,7 +29,9 @@ class OutstandingDeductionAdapter(var listener: DeductionListListener, var conte
                 try {
                     if (item.CLSTotalDeductionAmount == "0.00" || parseToInt(item.CLSTotalDeductionAmount) == 0) {
                         binding.viewDocs.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.invisible))
+                        binding.llm.background = ContextCompat.getDrawable(context, R.drawable.shape_no_outstanding)
                     }else{
+                        binding.llm.background = ContextCompat.getDrawable(context, R.drawable.shape_edittext_onroad)
                         binding.viewDocs.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.eye))
                         binding.viewDocs.setOnClickListener {
                             if (type == 1)
@@ -47,7 +49,10 @@ class OutstandingDeductionAdapter(var listener: DeductionListListener, var conte
                 try {
                     if (item.CHTotalDeductionAmount == "0.00" || parseToInt(item.CHTotalDeductionAmount) == 0) {
                         binding.viewDocs.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.invisible))
+                        binding.llm.background = ContextCompat.getDrawable(context, R.drawable.shape_no_outstanding)
+
                     }else{
+                        binding.llm.background = ContextCompat.getDrawable(context, R.drawable.shape_edittext_onroad)
                         binding.viewDocs.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.eye))
                         binding.viewDocs.setOnClickListener {
                             if (type == 1)

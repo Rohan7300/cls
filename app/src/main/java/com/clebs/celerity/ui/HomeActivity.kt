@@ -23,6 +23,8 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -167,6 +169,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 false
             }
         }
+        isBioMetricEnable()
+
+
         deleteDialogtwo = android.app.AlertDialog.Builder(this).create()
         prefs = Prefs.getInstance(this)
         checkTokenExpirationAndLogout(this, prefs)
@@ -227,13 +232,26 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
         val menu: MenuItem = ActivityHomeBinding.navView.menu.findItem(R.id.EnableDisableBio)
-        if (isLoggedInBio()) {
-            Log.e("kdjfjkfdk", "onCreate: ")
-            menu.setTitle("Disable Biometric")
+        if (!isBioMetricEnable()) {
+            menu.setTitle("Biometric not available")
+            menu.setEnabled(false)
+            menu.setIcon(ContextCompat.getDrawable(this,R.drawable.baseline_fingerprint_24_red))
+
         } else {
-            Log.e("kdjfjkfdktwo", "onCreate: ")
-            menu.setTitle("Enable Biometric")
+            if (isLoggedInBio()) {
+                Log.e("kdjfjkfdk", "onCreate: ")
+                menu.setTitle("Disable Biometric")
+                menu.setEnabled(true)
+                menu.setIcon(ContextCompat.getDrawable(this,R.drawable.baseline_fingerprint_24_black))
+            } else {
+                Log.e("kdjfjkfdktwo", "onCreate: ")
+                menu.setTitle("Enable Biometric")
+                menu.setEnabled(true)
+                menu.setIcon(ContextCompat.getDrawable(this,R.drawable.baseline_fingerprint_24_black))
+            }
         }
+
+
         getDeviceID()
         val deviceID =
             Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()
@@ -263,6 +281,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
                 Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
                 hideDialog()
+                hidedialogtwo()
+                ActivityHomeBinding.searchLayout.visibility = View.GONE
                 if (it != null) {
                     completeTaskScreen = it.IsSubmited
                     if (!completeTaskScreen) {
@@ -417,8 +437,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
                             viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
 //                            showDialog()
-                            hidedialogtwo()
-                            ActivityHomeBinding.searchLayout.visibility = View.GONE
+
                         } else {
                             hidedialogtwo()
                             ActivityHomeBinding.searchLayout.visibility = View.GONE
@@ -934,10 +953,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val factory = LayoutInflater.from(this)
         val view: View = factory.inflate(R.layout.logout_layout, null)
         val deleteDialog: AlertDialog = AlertDialog.Builder(this).create()
-        val imageView: ImageView = view.findViewById(R.id.ic_cross_orange)
-        imageView.setOnClickListener {
-            deleteDialog.dismiss()
-        }
+
+
         val btone: Button = view.findViewById(R.id.bt_no)
         val bttwo: Button = view.findViewById(R.id.bt_yes)
 
@@ -1198,6 +1215,33 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
     }
 
+    fun isBioMetricEnable(): Boolean {
+        var canAuth = true
+        val biometricManager = BiometricManager.from(this)
+        when (biometricManager.canAuthenticate()) {
 
+            BiometricManager.BIOMETRIC_SUCCESS -> {
+                canAuth = true
+
+            }
+
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
+                canAuth = false
+
+            }
+
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
+                canAuth = false
+
+            }
+
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
+                canAuth = false
+
+            }
+
+        }
+        return canAuth
+    }
 
 }

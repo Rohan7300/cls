@@ -2,11 +2,13 @@ package com.clebs.celerity.network
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import androidx.fragment.app.FragmentManager
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showErrorDialog
+import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -28,10 +30,17 @@ object RetrofitService {
     //private const val BASE_URL = "http://122.176.42.96:8119/"
   private const val BASE_URL = "http://122.186.85.26:8119/"
     //private const val BASE_URL = "http://192.168.0.150:8119/"
-   //private const val BASE_URL = "https://api.clsdasystem.com/"
+//   private const val BASE_URL = "https://api.clsdasystem.com/"
+//
+//    private const val BASE_URL = "https://api.clsdasystem.com/"
+    private lateinit var cache: Cache
 
-    //private const val BASE_URL = "https://api.clsdasystem.com/"
-
+    fun initialize(context: Context) {
+        cache = Cache(
+            context.cacheDir,
+            10 * 1024 * 1024 // 10 MB
+        )
+    }
 
     fun getInstance(): Retrofit {
         val builder = OkHttpClient.Builder()
@@ -109,6 +118,7 @@ object RetrofitService {
             .writeTimeout(5, TimeUnit.MINUTES)
             .connectTimeout(5, TimeUnit.MINUTES)
             .addInterceptor(loggingInterceptor)
+            .cache(cache)
             .addInterceptor(headerInterceptor)
             .build()
     }

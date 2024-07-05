@@ -18,10 +18,7 @@
     <!--        android:id="@+id/passwords"-->
     <!--        android:icon="@drawable/passwords"-->
     <!--        android:title="Alerts" />-->
-    <item
-        android:id="@+id/tickets"
-        android:icon="@drawable/tickets_ic"
-        android:title="Tickets" />
+
     <item
         android:id="@+id/signedDocs"
         android:icon="@drawable/signeddocument"
@@ -36,9 +33,12 @@
         android:icon="@drawable/emergencycontact"
         android:title="Emergency Contacts" />
     <item
+        android:id="@+id/tickets"
+        android:icon="@drawable/tickets_ic"
+        android:title="Tickets" />
+    <item
         android:id="@+id/EnableDisableBio"
-        android:iconTint="@color/black"
-        android:icon="@drawable/baseline_fingerprint_24"
+        android:icon="@drawable/baseline_fingerprint_24_black"
         android:title=" " />
     <item
         android:id="@+id/profileBtn"

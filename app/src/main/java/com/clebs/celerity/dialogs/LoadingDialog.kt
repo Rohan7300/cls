@@ -17,11 +17,13 @@ class LoadingDialog(context: Context) : Dialog(context) {
         setContentView(R.layout.custom_progress_dialog)
         val imageView: ImageView = findViewById<ImageView>(R.id.img_anim)
 
-        Glide.with(context).load(R.raw.celerity_loader).into(imageView)
+        Glide.with(context).load(R.raw.loader).into(imageView)
         window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         window?.statusBarColor = ContextCompat.getColor(context, R.color.medium_orange)
         setCancelable(false)
+
+
         setOnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
                 // Handle back press

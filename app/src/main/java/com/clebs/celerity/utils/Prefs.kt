@@ -84,6 +84,14 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putBoolean("isFirst", value ?: false).apply()
         }
+
+    var isClientIDUplaoded: Boolean?
+        get() {
+            return sharedPreferences.getBoolean("isClientIDUplaoded", false)
+        }
+        set(value) {
+            sharedPreferences.edit().putBoolean("isClientIDUplaoded", value ?: false).apply()
+        }
     var inspectionID: String
         get() {
             return sharedPreferences.getString("inspectionID", "") ?: ""
