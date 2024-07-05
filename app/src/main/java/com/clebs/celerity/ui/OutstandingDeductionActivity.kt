@@ -30,8 +30,8 @@ class OutstandingDeductionActivity : AppCompatActivity(), DeductionListListener 
         vm = getMainVM(this)
         prefs = Prefs.getInstance(this)
         loadingDialog = LoadingDialog(this)
-        val adapter = OutstandingDeductionAdapter(this, 1)
-        val adapter2 = OutstandingDeductionAdapter(this, 2)
+        val adapter = OutstandingDeductionAdapter(this,this, 1)
+        val adapter2 = OutstandingDeductionAdapter(this,this, 2)
         var dedList = GetDAOutStandingDeductionListResponse()
         var dedList2 = GetDAOutStandingDeductionListResponse()
         binding.deductionsRV.adapter = adapter
