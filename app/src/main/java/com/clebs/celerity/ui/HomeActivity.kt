@@ -1,6 +1,5 @@
 package com.clebs.celerity.ui
 
-import android.R.layout
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
@@ -19,7 +18,6 @@ import android.view.View.AUTOFILL_TYPE_NONE
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity

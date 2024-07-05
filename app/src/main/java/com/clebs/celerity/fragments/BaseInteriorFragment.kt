@@ -4,12 +4,9 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -21,11 +18,8 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
@@ -36,19 +30,13 @@ import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.ImageTakerActivity
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.convertBitmapToBase64
-import com.clebs.celerity.utils.getFileUri
 import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
-import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.showToast
 import com.elconfidencial.bubbleshowcase.BubbleShowCase
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import java.util.Stack
 
 abstract class BaseInteriorFragment : Fragment() {

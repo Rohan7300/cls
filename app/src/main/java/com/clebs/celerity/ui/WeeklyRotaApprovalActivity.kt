@@ -2,7 +2,6 @@ package com.clebs.celerity.ui
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -16,8 +15,6 @@ import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertDateFormat
-import com.clebs.celerity.utils.getCurrentWeek
-import com.clebs.celerity.utils.getCurrentYear
 import com.clebs.celerity.utils.noInternetCheck
 import com.clebs.celerity.utils.showToast
 import java.text.SimpleDateFormat

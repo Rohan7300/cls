@@ -6,9 +6,7 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import com.clebs.celerity.DrawViewClass
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.DeducationAgreementBinding
@@ -19,7 +17,6 @@ import com.clebs.celerity.models.requests.UpdateDeductioRequest
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
-import com.clebs.celerity.services.FirebaseNotificationService
 import com.clebs.celerity.utils.DeductionSignatureListener
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
