@@ -1,5 +1,7 @@
 package com.clebs.celerity.ui
 
+import android.app.NotificationManager
+import android.content.Context
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,12 +19,14 @@ import com.clebs.celerity.models.requests.UpdateDeductioRequest
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.services.FirebaseNotificationService
 import com.clebs.celerity.utils.DeductionSignatureListener
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.convertDateFormat
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.noInternetCheck
+import com.clebs.celerity.utils.parseToInt
 import com.clebs.celerity.utils.showToast
 
 class DeductionAgreementActivity : AppCompatActivity() {
@@ -76,6 +80,21 @@ class DeductionAgreementActivity : AppCompatActivity() {
             }
         }
         viewmodel.GetDeductionAgreement(pref.clebUserId.toInt(), actionID!!.toInt())
+//        try {
+            Log.d("NOTIFICATIONID","$actionID  $notificationID")
+        val notificationIdX = try {
+            parseToInt(actionID.toString()) ?: 0
+        } catch (_: Exception) {
+            notificationID
+        }
+        try{
+
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancel(notificationIdX)
+            notificationManager.cancel(notificationID)
+        }catch (_:Exception){
+
+        }
 
 
         binding.rbAcceptClose.setOnClickListener {
@@ -200,10 +219,10 @@ class DeductionAgreementActivity : AppCompatActivity() {
 
             viewmodel.liveDataUpdateDeducton.observe(this) {
                 viewmodel.MarkNotificationAsRead(notificationID)
+
                 loadingDialog.dismiss()
                 finish()
                 if (it != null) {
-
                     //onBackPressed()
                 }else{
                     showToast("Something went wrong!!",this)
