@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:id="@+id/card"
+
+        android:backgroundTint="@color/very_light_orange"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+
+                android:id="@+id/textview_acknowledgement">
+
+                <TextView
+                    android:id="@+id/headings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:letterSpacing="0.1"
+                    android:text=""
+                    android:textColor="#000000"
+                    android:textSize="13sp" />
+
+
+
+
+
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/check"
+                android:visibility="gone"
+                android:layout_marginTop="26dp"
+                android:orientation="horizontal"
+                android:layout_below="@+id/textview_acknowledgement">
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="2dp"
+                    android:button="@null"
+                    android:id="@+id/checkbox"
+                    android:background="@drawable/checbox_selector"
+                    android:layout_marginStart="20dp"/>
+
+                <TextView
+                    android:id="@+id/tick_to_ack"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:fontFamily="@font/inter"
+                    android:gravity="start"
+
+                    android:text="Do you really want to change your password?"
+                    android:textColor="#2C2728"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:weightSum="2"
+
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@+id/textview_acknowledgement">
+
+                <TextView
+                    style="@style/ctaStyle1"
+                    android:layout_width="match_parent"
+                    android:padding="8dp"
+                    android:layout_margin="10dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:drawableTint="@color/white"
+                    android:textAllCaps="true"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:letterSpacing="0.02"
+                    android:fontFamily="@font/poppins_bold"
+                    android:layout_height="wrap_content"
+                    android:text="Yes"
+                    android:textSize="12sp"
+                    android:id="@+id/saveBio"
+                    android:src="@drawable/acknowledgement"
+                    app:drawableRightCompat="@drawable/baseline_fingerprint_24" />
+                <TextView
+                    style="@style/ctaStyle1"
+                    android:layout_width="match_parent"
+                    android:padding="8dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_weight="1"
+                    android:drawableTint="@color/white"
+                    android:layout_margin="10dp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:letterSpacing="0.02"
+                    android:fontFamily="@font/poppins_bold"
+                    android:layout_height="wrap_content"
+                    android:text="No"
+                    android:textSize="12sp"
+                    android:id="@+id/saveBiono"
+                    android:src="@drawable/acknowledgement"
+                    app:drawableRightCompat="@drawable/baseline_keyboard_double_arrow_right_24" />
+            </LinearLayout>
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

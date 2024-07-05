@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/very_light_orange"
+        android:background="#FFD8C7"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="6dp">
@@ -82,6 +82,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_weight="1"
+        android:background="@color/home_blue"
         android:orientation="vertical"
         android:id="@+id/noinvoices"
         app:layout_constraintBottom_toBottomOf="parent"

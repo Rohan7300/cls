@@ -32,6 +32,7 @@ object RetrofitService {
 
     //private const val BASE_URL = "https://api.clsdasystem.com/"
 
+
     fun getInstance(): Retrofit {
         val builder = OkHttpClient.Builder()
 

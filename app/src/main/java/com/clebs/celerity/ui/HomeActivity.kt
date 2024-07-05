@@ -1,5 +1,6 @@
 package com.clebs.celerity.ui
 
+import android.R.layout
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
@@ -12,11 +13,13 @@ import android.provider.Settings
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.View.AUTOFILL_TYPE_NONE
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -44,7 +47,6 @@ import com.clebs.celerity.databinding.ActivityHomeBinding
 import com.clebs.celerity.dialogs.BirthdayDialog
 import com.clebs.celerity.dialogs.ExpiredDocDialog
 import com.clebs.celerity.dialogs.LoadingDialog
-import com.clebs.celerity.dialogs.NoInternetBottomSheetDialog
 import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
@@ -101,6 +103,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     lateinit var viewModel: MainViewModel
     private lateinit var navGraph: NavGraph
     lateinit var mainRepo: MainRepo
+    lateinit var deleteDialogtwo: android.app.AlertDialog
     private var completeTaskScreen: Boolean = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
     lateinit var fragmentManager: FragmentManager
@@ -164,7 +167,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 false
             }
         }
-
+        deleteDialogtwo = android.app.AlertDialog.Builder(this).create()
         prefs = Prefs.getInstance(this)
         checkTokenExpirationAndLogout(this, prefs)
         loadingDialog = LoadingDialog(this)
@@ -223,8 +226,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         fragmentManager = this.supportFragmentManager
         bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
-
-
+        val menu: MenuItem = ActivityHomeBinding.navView.menu.findItem(R.id.EnableDisableBio)
+        if (isLoggedInBio()) {
+            Log.e("kdjfjkfdk", "onCreate: ")
+            menu.setTitle("Disable Biometric")
+        } else {
+            Log.e("kdjfjkfdktwo", "onCreate: ")
+            menu.setTitle("Enable Biometric")
+        }
         getDeviceID()
         val deviceID =
             Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()
@@ -388,7 +397,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 when (item.itemId) {
 
                     R.id.home -> {
-                        ActivityHomeBinding.title.text = ""
+                        ActivityHomeBinding.title.text = "Home"
                         ActivityHomeBinding.logout.visibility = View.GONE
                         ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
                         navController.navigate(R.id.homedemoFragment)
@@ -399,20 +408,20 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         /*navController.navigate(R.id.homeFragment)
                         navController.currentDestination!!.id = R.id.homeFragment*/
 
-                        ActivityHomeBinding.searchLayout.visibility=View.VISIBLE
+                        ActivityHomeBinding.searchLayout.visibility = View.VISIBLE
                         showDialogtwo()
                         if (isNetworkActive) {
 
                             ActivityHomeBinding.logout.visibility = View.GONE
-                            ActivityHomeBinding.title.text = ""
+                            ActivityHomeBinding.title.text = "Routes"
                             ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
                             viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
 //                            showDialog()
                             hidedialogtwo()
-                            ActivityHomeBinding.searchLayout.visibility=View.GONE
+                            ActivityHomeBinding.searchLayout.visibility = View.GONE
                         } else {
                             hidedialogtwo()
-                            ActivityHomeBinding.searchLayout.visibility=View.GONE
+                            ActivityHomeBinding.searchLayout.visibility = View.GONE
                             if (osData.isDefectSheetFilled)
                                 navController.navigate(R.id.newCompleteTaskFragment)
                             else {
@@ -433,7 +442,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                     R.id.tickets -> {
                         ActivityHomeBinding.logout.visibility = View.GONE
-                        ActivityHomeBinding.title.text = "User Tickets"
+                        ActivityHomeBinding.title.text = "Tickets"
                         ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
                         navController.navigate(R.id.userTicketsFragment)
 
@@ -448,7 +457,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             ActivityHomeBinding.navView.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.home -> {
-                        ActivityHomeBinding.title.text = ""
+                        ActivityHomeBinding.title.text = "Home"
                         ActivityHomeBinding.logout.visibility = View.GONE
                         ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
                         bottomNavigationView.selectedItemId = R.id.home
@@ -528,6 +537,52 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                     R.id.logoutNav -> {
                         showAlertLogout()
+                    }
+
+                    R.id.EnableDisableBio -> {
+                        if (isLoggedInBio()) {
+                            val snackbar = Snackbar
+                                .make(
+                                    ActivityHomeBinding.drawerLayout,
+                                    "Biometric Auth is disabled",
+                                    Snackbar.LENGTH_LONG
+                                )
+                                .setAction(
+                                    "Ok"
+                                )  // If the Undo button
+// is pressed, show
+// the message using Toast
+                                {
+
+                                }
+
+                            snackbar.show()
+                            setLoggedInBio(false)
+                            menu.setTitle("Enable Biometric")
+
+                        } else {
+                            val snackbar = Snackbar
+                                .make(
+                                    ActivityHomeBinding.drawerLayout,
+                                    "Biometric Auth is Enabled",
+                                    Snackbar.LENGTH_LONG
+                                )
+                                .setAction(
+                                    "Ok"
+                                )  // If the Undo button
+// is pressed, show
+// the message using Toast
+                                {
+
+                                }
+
+                            snackbar.show()
+                            setLoggedInBio(true)
+                            menu.setTitle("Disable Biometric")
+
+                        }
+
+//                        showAlertLogout()
                     }
 
                     else -> return@OnNavigationItemSelectedListener false
@@ -834,6 +889,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         Prefs.getInstance(applicationContext).saveBoolean("isLoggedIn", isLoggedIn)
     }
 
+    private fun isLoggedInBio(): Boolean {
+        return Prefs.getInstance(applicationContext).getBoolean("isLoggedInBio", false)
+    }
+
+    private fun setLoggedInBio(isLoggedIn: Boolean) {
+        Prefs.getInstance(applicationContext).saveBoolean("isLoggedInBio", isLoggedIn)
+    }
+
     fun checkIftodayCheckIsDone() {
         viewModel.CheckIFTodayCheckIsDone().observe(this@HomeActivity, Observer {
             if (it != null) {
@@ -1134,6 +1197,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             navController.navigate(R.id.newCompleteTaskFragment)
         }
     }
+
 
 
 }

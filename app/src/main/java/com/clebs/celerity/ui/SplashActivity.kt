@@ -48,8 +48,10 @@ import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentAppVersion
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.showToast
+import com.clebs.celerity.utils.toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import org.jetbrains.anko.find
 import java.util.concurrent.Executor
 
 
@@ -58,6 +60,7 @@ class SplashActivity : AppCompatActivity() {
     val TAG = "SPLASHACTIVIITY"
     var isNetworkActive: Boolean = true
     lateinit var deleteDialog: AlertDialog
+    lateinit var deleteDialogtwo: AlertDialog
     private lateinit var executor: Executor
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
@@ -76,7 +79,14 @@ class SplashActivity : AppCompatActivity() {
         if (isGranted) {
             //showToast("Notification Permission denied",this)
             if (isLoggedIn()) {
-                useBiometric()
+                if (isBioMetricEnable()) {
+                    if (!isLoggedInBio()) {
+                        BiometricEnableDisableDialog()
+                    } else {
+                        useBiometric()
+                    }
+                }
+//                useBiometric()
             } else {
                 next()
             }
@@ -84,7 +94,14 @@ class SplashActivity : AppCompatActivity() {
         } else {
             showToast("Notification Permission is required!!", this)
             if (isLoggedIn()) {
-                useBiometric()
+                if (isBioMetricEnable()) {
+                    if (!isLoggedInBio()) {
+                        BiometricEnableDisableDialog()
+                    } else {
+                        useBiometric()
+                    }
+                }
+//                useBiometric()
             } else {
                 next()
             }
@@ -99,7 +116,14 @@ class SplashActivity : AppCompatActivity() {
                 PackageManager.PERMISSION_GRANTED
             ) {
                 if (isLoggedIn()) {
-                    useBiometric()
+                    if (isBioMetricEnable()) {
+                        if (!isLoggedInBio()) {
+                            BiometricEnableDisableDialog()
+                        } else {
+                            useBiometric()
+                        }
+                    }
+//                useBiometric()
                 } else {
                     next()
                 }
@@ -107,7 +131,14 @@ class SplashActivity : AppCompatActivity() {
                 return
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
                 if (isLoggedIn()) {
-                    useBiometric()
+                    if (isBioMetricEnable()) {
+                        if (!isLoggedInBio()) {
+                            BiometricEnableDisableDialog()
+                        } else {
+                            useBiometric()
+                        }
+                    }
+//                useBiometric()
                 } else {
                     next()
                 }
@@ -132,11 +163,11 @@ class SplashActivity : AppCompatActivity() {
                 )
         window.statusBarColor = resources.getColor(R.color.transparent, null)
         window.requestFeature(Window.FEATURE_NO_TITLE);
-
+        isBioMetricEnable()
         super.onCreate(savedInstanceState)
         deleteDialog =
             AlertDialog.Builder(this).create()
-
+        deleteDialogtwo = AlertDialog.Builder(this).create()
         ActivitySplashBinding =
             DataBindingUtil.setContentView(this@SplashActivity, R.layout.activity_splash)
 
@@ -160,7 +191,14 @@ class SplashActivity : AppCompatActivity() {
             askNotificationPermission()
         } else {
             if (isLoggedIn()) {
-                useBiometric()
+                if (isBioMetricEnable()) {
+                    if (!isLoggedInBio()) {
+                        BiometricEnableDisableDialog()
+                    } else {
+                        useBiometric()
+                    }
+                }
+//                useBiometric()
             } else {
                 next()
             }
@@ -204,6 +242,14 @@ class SplashActivity : AppCompatActivity() {
 
     private fun isLoggedIn(): Boolean {
         return Prefs.getInstance(applicationContext).getBoolean("isLoggedIn", false)
+    }
+
+    private fun isLoggedInBio(): Boolean {
+        return Prefs.getInstance(applicationContext).getBoolean("isLoggedInBio", false)
+    }
+
+    private fun setLoggedInBio(isLoggedIn: Boolean) {
+        Prefs.getInstance(applicationContext).saveBoolean("isLoggedInBio", isLoggedIn)
     }
 
     private fun retrieveAndSaveFCMToken() {
@@ -303,7 +349,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        destinationFragment = intent?.getStringExtra("destinationFragment") ?:""
+        destinationFragment = intent?.getStringExtra("destinationFragment") ?: ""
         actionToPerform = intent?.getStringExtra("actionToperform") ?: "undef"
         tokenUrl = intent?.getStringExtra("tokenUrl") ?: "undef"
         actionID = intent?.getStringExtra("actionID") ?: "0"
@@ -311,6 +357,8 @@ class SplashActivity : AppCompatActivity() {
     }
 
     fun useBiometric() {
+
+        setLoggedInBio(true)
         executor = ContextCompat.getMainExecutor(this)
         biometricPrompt = BiometricPrompt(this, executor,
             object : BiometricPrompt.AuthenticationCallback() {
@@ -334,11 +382,9 @@ class SplashActivity : AppCompatActivity() {
 
                     } else if (errString.contains("Authentication cancelled")) {
                         BiometricDialog()
-                    }
-                    else if (errString.contains("Authentication canceled by user")){
+                    } else if (errString.contains("Authentication canceled by user")) {
                         BiometricDialog()
-                    }
-                    else {
+                    } else {
                         next()
                     }
 
@@ -416,6 +462,73 @@ class SplashActivity : AppCompatActivity() {
 
         deleteDialog.show();
 
+    }
+
+    fun BiometricEnableDisableDialog() {
+        val factory = LayoutInflater.from(this)
+        val view: View = factory.inflate(R.layout.enablebiometric, null)
+
+        deleteDialogtwo.setView(view)
+        val biometric: TextView = view.findViewById(R.id.saveBio)
+        val biometeric: TextView = view.findViewById(R.id.saveBiono)
+
+        biometeric.setOnClickListener {
+            next()
+            deleteDialogtwo.dismiss()
+        }
+
+        biometric.setOnClickListener {
+            Toast.makeText(this, "Biometric Auth Enabled", Toast.LENGTH_SHORT).show()
+            useBiometric()
+            deleteDialogtwo.dismiss()
+
+        }
+
+
+        deleteDialogtwo.setOnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                true
+            } else {
+                false
+            }
+        }
+
+
+        deleteDialogtwo.setCancelable(false)
+        deleteDialogtwo.setCanceledOnTouchOutside(false);
+        deleteDialogtwo.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+
+        deleteDialogtwo.show();
+
+    }
+
+    fun isBioMetricEnable(): Boolean {
+        var canAuth = true
+        val biometricManager = BiometricManager.from(this)
+        when (biometricManager.canAuthenticate()) {
+
+            BiometricManager.BIOMETRIC_SUCCESS -> {
+                canAuth = true
+                Log.e(TAG, "useBiometric: ")
+            }
+
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
+                canAuth = false
+                Log.e(TAG, "useBiometric: ")
+            }
+
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
+                canAuth = false
+                Log.e(TAG, "useBiometric: ")
+            }
+
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
+                canAuth = false
+                Log.e(TAG, "useBiometric: ")
+            }
+
+        }
+        return canAuth
     }
 }
 

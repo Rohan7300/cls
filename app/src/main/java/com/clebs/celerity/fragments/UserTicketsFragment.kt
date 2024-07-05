@@ -53,7 +53,7 @@ class UserTicketsFragment : Fragment() {
         comingFromViewTickets = false
         homeActivity.showDialog()
         viewModel.GetUserTickets(prefs.clebUserId.toInt())
-        homeActivity.ActivityHomeBinding.title.text = "User Tickets"
+
         deleteDialog = AlertDialog.Builder(requireContext()).create()
 
         deleteDailogBinding =
