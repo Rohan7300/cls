@@ -9,16 +9,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity_admin.MainActivityTwo
+import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.adapters.WeeklyDefectAdapter
 import com.clebs.celerity_admin.databinding.FragmentSlideshowBinding
 import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
+import com.clebs.celerity_admin.models.WeeklyDefectChecksModelItem
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.viewModels.MainViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import org.checkerframework.common.subtyping.qual.Bottom
 
-class WeeklyDefectsFragment : Fragment() {
+class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClickListener {
 
     private var _binding: FragmentSlideshowBinding? = null
     lateinit var mainViewModel: MainViewModel
@@ -115,11 +119,18 @@ class WeeklyDefectsFragment : Fragment() {
             if (it != null) {
                 Log.e("dataass", "Observers: " + it)
                 WeeklyDefectAdapter.data.clear()
-                WeeklyDefectAdapter.data.addAll(it)
-                WeeklyDefectAdapter.notifyDataSetChanged()
-
+                if(it.size>0){
+                    binding.nodataLayout.visibility = View.GONE
+                    binding.rvList.visibility = View.VISIBLE
+                    WeeklyDefectAdapter.data.addAll(it)
+                    WeeklyDefectAdapter.notifyDataSetChanged()
+                }else{
+                    binding.nodataLayout.visibility = View.VISIBLE
+                    binding.rvList.visibility = View.GONE
+                }
             } else {
-
+                binding.nodataLayout.visibility = View.VISIBLE
+                binding.rvList.visibility = View.GONE
             }
         }
 
@@ -153,5 +164,14 @@ class WeeklyDefectsFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         (activity as MainActivityTwo).binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
+    }
+
+    override fun docClickAction(item: WeeklyDefectChecksModelItem) {
+
+    }
+
+    fun showWeeklyDefectBottomSheet(){
+        val bottomSheetDialog = BottomSheetDialog(requireContext(),R.style.BottomSheetDialogTheme)
+
     }
 }

@@ -14,6 +14,9 @@ class WeeklyDefectAdapter(var context: Context, var data: ArrayList<WeeklyDefect
     RecyclerView.Adapter<WeeklyDefectAdapter.WeeklyDefectViewHolder>() {
     lateinit var binding: WeeklyDefectAdapterBinding
 
+    interface WeeklyDefectsClickListener{
+        fun docClickAction(item:WeeklyDefectChecksModelItem)
+    }
     inner class WeeklyDefectViewHolder(var binding: WeeklyDefectAdapterBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bindView(item: WeeklyDefectChecksModelItem) {
