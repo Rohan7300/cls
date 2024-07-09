@@ -22,8 +22,9 @@
 
             <ImageView
                 android:layout_width="30dp"
+                app:tint="@color/white"
                 android:layout_height="30dp"
-                android:src="@drawable/information" />
+                android:src="@drawable/back1" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -31,7 +32,7 @@
                 android:layout_marginHorizontal="5dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:gravity="center"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:text="Vehicle Defect Sheet Weekly Check Action"
                 android:textColor="@color/white" />
         </LinearLayout>
@@ -39,7 +40,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/very_very_light_red"
+            android:background="@color/maroon"
             android:orientation="horizontal"
             android:paddingVertical="10dp">
 
@@ -53,14 +54,16 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    app:tint="@color/white"
                     android:src="@drawable/user" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginStart="8dp"
                     android:fontFamily="@font/poppins_medium"
                     android:text="DA Name"
+                    android:textColor="@color/white"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -74,12 +77,14 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    app:tint="@color/white"
                     android:src="@drawable/deliverytruck" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/white"
                     android:fontFamily="@font/poppins_medium"
                     android:text="DA Name"
                     android:textSize="12sp" />
@@ -95,12 +100,14 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    app:tint="@color/white"
                     android:src="@drawable/target" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/white"
                     android:fontFamily="@font/poppins_medium"
                     android:text="DA Name"
                     android:textSize="12sp" />
