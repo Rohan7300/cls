@@ -12,7 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/commentbg"
+        android:background="@color/very_very_light"
         android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
@@ -26,13 +26,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:background="@color/very_very_light_red"
                 android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -43,8 +46,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
+                            android:fontFamily="@font/cq_sdk_poppins_bold"
                             android:letterSpacing="0.06"
+                            android:textStyle="bold"
                             android:text="DA : "
                             android:textColor="@color/text_color"
                             android:textSize="11sp" />
@@ -53,9 +57,9 @@
                             android:id="@+id/tvDaName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_semibold"
+                            android:fontFamily="@font/poppins_medium"
                             android:text="- - - - -"
-                            android:textColor="@color/red_light"
+                            android:textColor="@color/maroon"
                             android:textSize="13sp" />
 
                         <View
@@ -74,9 +78,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
+                            android:fontFamily="@font/cq_sdk_poppins_bold"
                             android:letterSpacing="0.06"
                             android:text="OSM : "
+                            android:textStyle="bold"
                             android:textColor="@color/text_color"
                             android:textSize="11sp" />
 
@@ -84,9 +89,9 @@
                             android:id="@+id/osmName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_semibold"
+                            android:fontFamily="@font/poppins_medium"
                             android:text="- - - - -"
-                            android:textColor="@color/red_light"
+                            android:textColor="@color/maroon"
                             android:textSize="13sp" />
 
                         <View
@@ -100,9 +105,10 @@
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/file"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/upload"
                     android:id="@+id/viewfiles"
-                    app:tint="@color/black" />
+                  />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -128,19 +134,20 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_medium"
+                        android:fontFamily="@font/cq_sdk_poppins_bold"
                         android:letterSpacing="0.05"
                         android:text="RegNo. "
+                        android:textStyle="bold"
                         android:textColor="@color/text_color"
-                        android:textSize="11sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tvReg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_semibold"
+                        android:fontFamily="@font/poppins_medium"
                         android:text="- - - - -"
-                        android:textColor="@color/red_light"
+                        android:textColor="@color/maroon"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -160,20 +167,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/cq_sdk_poppins_bold"
                     android:letterSpacing="0.05"
                     android:text="Location"
+                    android:textStyle="bold"
                     android:textColor="@color/text_color"
-                    android:textSize="11sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tvDaLocationname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semibold"
+                    android:fontFamily="@font/poppins_medium"
                     android:text="- - - - -"
-                    android:textColor="@color/red_light"
-                    android:textSize="14sp" />
+                    android:textColor="@color/maroon"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -183,7 +191,7 @@
             android:layout_marginTop="5dp"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="5dp">
+            android:padding="2dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -195,7 +203,7 @@
                 android:letterSpacing="0.03"
                 android:text="Checks completed by OSM?"
                 android:textColor="@color/text_color"
-                android:textSize="12sp" />
+                android:textSize="11sp" />
 
             <ImageView
                 android:id="@+id/osmCheck"

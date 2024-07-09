@@ -24,7 +24,7 @@ class WeeklyDefectAdapter(var context: Context, var data: ArrayList<WeeklyDefect
             binding.tvDaName.setText(item.dAName)
             binding.tvDaLocationname.setText(item.locationName)
             if(item.VdhCheckIsApproved){
-                binding.osmCheck.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.accept))
+                binding.osmCheck.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.baseline_check_circle_outline_24))
                 binding.osmName.text = item.OsmName
             }else{
                 binding.osmCheck.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.cancel))
