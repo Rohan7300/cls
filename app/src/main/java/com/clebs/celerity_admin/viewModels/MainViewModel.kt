@@ -11,6 +11,7 @@ import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
+import com.clebs.celerity_admin.models.GetWeeklyDefectCheckImagesResponse
 import com.clebs.celerity_admin.models.GetvehicleOilLevelList
 import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(private val repo: MainRepo) : ViewModel() {
 
     val lDGetWeeklyDefectChecks:MutableLiveData<WeeklyDefectChecksModel?> = MutableLiveData()
+    val lDGetWeeklyDefectCheckImages:MutableLiveData<GetWeeklyDefectCheckImagesResponse?> = MutableLiveData()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -274,13 +276,21 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
     ){
         viewModelScope.launch {
             val response = repo.GetWeeklyDefectCheckList(weekno, year, driverid, lmid, showdefects)
-            if (response.failed) {
+            if (response.failed||!response.isSuccessful) {
                 lDGetWeeklyDefectChecks.postValue(null)
-            }
-            if (!response.isSuccessful) {
-                lDGetWeeklyDefectChecks.postValue(null)
-            } else {
+            }else {
                 lDGetWeeklyDefectChecks.postValue(response.body)
+            }
+        }
+    }
+
+    fun GetWeeklyDefectCheckImages(vdhCheckId:Int){
+        viewModelScope.launch {
+            val response = repo.GetWeeklyDefectCheckImages(vdhCheckId)
+            if(response.failed||!response.isSuccessful){
+                lDGetWeeklyDefectCheckImages.postValue(null)
+            }else{
+                lDGetWeeklyDefectCheckImages.postValue(response.body)
             }
         }
     }

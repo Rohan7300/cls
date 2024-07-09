@@ -1,5 +1,6 @@
 package com.clebs.celerity_admin.network
 
+import androidx.camera.core.processing.SurfaceProcessorNode.In
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
@@ -7,6 +8,7 @@ import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
+import com.clebs.celerity_admin.models.GetWeeklyDefectCheckImagesResponse
 import com.clebs.celerity_admin.models.GetvehicleOilLevelList
 import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
@@ -70,4 +72,6 @@ interface ApiService {
     @GET("/api/WeeklyDefectSheet/GetWeeklyDefectSheetCheckList")
     suspend fun getWeeklyDefectCHeckList(@Query("weekNo") weekno:Double,@Query("year") year:Double,@Query("driverId") driverId:Double,@Query("LmId") LmId:Double,@Query("showDefectedOnly") showDefectedOnly:Boolean):Response<WeeklyDefectChecksModel>
 
+    @GET("/api/WeeklyDefectSheet/GetWeeklyDefectCheckImages/{vdhCheckId}")
+    suspend fun GetWeeklyDefectCheckImages(@Path("vdhCheckId") vdhCheckId:Int):Response<GetWeeklyDefectCheckImagesResponse>
 }
