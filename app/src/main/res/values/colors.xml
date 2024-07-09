@@ -34,11 +34,11 @@
     <color name="next_working_day_blue">#00c1bc</color>
     <color name="new_blue">#5CFAF6</color>
     <color name="semi_transparent_color">#80000000</color>
-    <color name="defaultOutlineAmbientShadowColor">#0A000000</color> <color name="defaultOutlineSpotShadowColor">#30000000</color>
+    <color name="defaultOutlineAmbientShadowColor">#0A000000</color>
+    <color name="defaultOutlineSpotShadowColor">#30000000</color>
     <color name="overlay">#BF000000</color>
     <color name="green">#6CFD62</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#ff0000</color>
     <color name="transparent">#00000000</color>
     <color name="darktransparent">#9F000000</color>
-
 </resources>

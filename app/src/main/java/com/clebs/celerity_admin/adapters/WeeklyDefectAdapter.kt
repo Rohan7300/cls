@@ -10,7 +10,7 @@ import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.databinding.WeeklyDefectAdapterBinding
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModelItem
 
-class WeeklyDefectAdapter(var context: Context, var data: ArrayList<WeeklyDefectChecksModelItem>) :
+class WeeklyDefectAdapter(var context: Context, var data: ArrayList<WeeklyDefectChecksModelItem>,var listener:WeeklyDefectsClickListener) :
     RecyclerView.Adapter<WeeklyDefectAdapter.WeeklyDefectViewHolder>() {
     lateinit var binding: WeeklyDefectAdapterBinding
 
@@ -30,6 +30,10 @@ class WeeklyDefectAdapter(var context: Context, var data: ArrayList<WeeklyDefect
                 binding.osmCheck.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.cancel))
                 binding.osmName.text= " ----- "
             }
+            binding.viewfiles.setOnClickListener {
+                listener.docClickAction(item)
+            }
+
         }
 
 

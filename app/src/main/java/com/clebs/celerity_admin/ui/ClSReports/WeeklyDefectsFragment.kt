@@ -1,5 +1,6 @@
 package com.clebs.celerity_admin.ui.ClSReports
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity_admin.MainActivityTwo
 import com.clebs.celerity_admin.R
+import com.clebs.celerity_admin.SubmitWeeklyDefectActivity
 import com.clebs.celerity_admin.adapters.WeeklyDefectAdapter
 import com.clebs.celerity_admin.databinding.FragmentSlideshowBinding
 import com.clebs.celerity_admin.dialogs.LoadingDialog
@@ -48,7 +50,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
 
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
-        WeeklyDefectAdapter = WeeklyDefectAdapter(requireContext(), ArrayList())
+        WeeklyDefectAdapter = WeeklyDefectAdapter(requireContext(), ArrayList(),this)
         binding.rvList.adapter = WeeklyDefectAdapter
         loadingDialog = (activity as MainActivityTwo).loadingDialog
         setPrevNextButton()
@@ -119,12 +121,12 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
             if (it != null) {
                 Log.e("dataass", "Observers: " + it)
                 WeeklyDefectAdapter.data.clear()
-                if(it.size>0){
+                if (it.size > 0) {
                     binding.nodataLayout.visibility = View.GONE
                     binding.rvList.visibility = View.VISIBLE
                     WeeklyDefectAdapter.data.addAll(it)
                     WeeklyDefectAdapter.notifyDataSetChanged()
-                }else{
+                } else {
                     binding.nodataLayout.visibility = View.VISIBLE
                     binding.rvList.visibility = View.GONE
                 }
@@ -158,20 +160,21 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        (activity as MainActivityTwo).binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
+        (activity as MainActivityTwo).binding.appBarMainActivityTwo.bottomBar.visibility =
+            View.VISIBLE
     }
 
     override fun onPause() {
         super.onPause()
-        (activity as MainActivityTwo).binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
+        (activity as MainActivityTwo).binding.appBarMainActivityTwo.bottomBar.visibility =
+            View.VISIBLE
     }
 
     override fun docClickAction(item: WeeklyDefectChecksModelItem) {
-
+        val intent = Intent(requireContext(), SubmitWeeklyDefectActivity::class.java)
+        startActivity(intent)
     }
 
-    fun showWeeklyDefectBottomSheet(){
-        val bottomSheetDialog = BottomSheetDialog(requireContext(),R.style.BottomSheetDialogTheme)
 
-    }
+
 }
