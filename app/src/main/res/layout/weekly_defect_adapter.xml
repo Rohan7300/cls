@@ -19,23 +19,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
-            app:cardCornerRadius="12dp"
-            >
+            app:cardCornerRadius="12dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:background="@color/very_very_light_red"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -48,10 +47,10 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/cq_sdk_poppins_bold"
                             android:letterSpacing="0.06"
-                            android:textStyle="bold"
                             android:text="DA : "
                             android:textColor="@color/text_color"
-                            android:textSize="11sp" />
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/tvDaName"
@@ -81,9 +80,9 @@
                             android:fontFamily="@font/cq_sdk_poppins_bold"
                             android:letterSpacing="0.06"
                             android:text="OSM : "
-                            android:textStyle="bold"
                             android:textColor="@color/text_color"
-                            android:textSize="11sp" />
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/osmName"
@@ -102,13 +101,19 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <ImageView
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/viewfiles"
                     android:layout_width="40dp"
+
                     android:layout_height="40dp"
                     android:layout_marginEnd="16dp"
+                    android:backgroundTint="@color/white"
                     android:src="@drawable/upload"
-                    android:id="@+id/viewfiles"
-                  />
+                    app:fabSize="mini"
+                    app:maxImageSize="30dp"
+                    app:rippleColor="@color/maroon" />
+
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -137,9 +142,9 @@
                         android:fontFamily="@font/cq_sdk_poppins_bold"
                         android:letterSpacing="0.05"
                         android:text="RegNo. "
-                        android:textStyle="bold"
                         android:textColor="@color/text_color"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvReg"
@@ -170,9 +175,9 @@
                     android:fontFamily="@font/cq_sdk_poppins_bold"
                     android:letterSpacing="0.05"
                     android:text="Location"
-                    android:textStyle="bold"
                     android:textColor="@color/text_color"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvDaLocationname"
