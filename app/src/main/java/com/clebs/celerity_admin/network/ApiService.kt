@@ -67,7 +67,7 @@ interface ApiService {
     @GET("/api/VehAllocHistories/GetISO8601WeekandYear")
     suspend fun getCurrentWeekAndYear():Response<WeekYearModel>
 
-    @GET("/api/VehAllocHistories/GetWeeklyDefectSheetCheckList")
+    @GET("/api/WeeklyDefectSheet/GetWeeklyDefectSheetCheckList")
     suspend fun getWeeklyDefectCHeckList(@Query("weekNo") weekno:Double,@Query("year") year:Double,@Query("driverId") driverId:Double,@Query("LmId") LmId:Double,@Query("showDefectedOnly") showDefectedOnly:Boolean):Response<WeeklyDefectChecksModel>
 
 }

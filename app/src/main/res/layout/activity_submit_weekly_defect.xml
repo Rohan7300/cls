@@ -21,18 +21,19 @@
             android:padding="15dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:tint="@color/white"
-                android:src="@drawable/baseline_info_24" />
+                android:layout_width="25dp"
+                app:tint="@color/white"
+                android:layout_height="25dp"
+                android:src="@drawable/back1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
                 android:fontFamily="@font/poppins_semibold"
                 android:gravity="center"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:text="Vehicle Defect Sheet Weekly Check Action"
                 android:textColor="@color/white" />
         </LinearLayout>
@@ -54,16 +55,16 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:tint="@color/white"
+                    app:tint="@color/white"
                     android:src="@drawable/user" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:textColor="@color/white"
+                    android:layout_marginStart="8dp"
                     android:fontFamily="@font/poppins_medium"
                     android:text="DA Name"
+                    android:textColor="@color/white"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -77,14 +78,14 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:tint="@color/white"
+                    app:tint="@color/white"
                     android:src="@drawable/deliverytruck" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-            android:textColor="@color/white"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/white"
                     android:fontFamily="@font/poppins_medium"
                     android:text="DA Name"
                     android:textSize="12sp" />
@@ -100,16 +101,16 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:tint="@color/white"
+                    app:tint="@color/white"
                     android:src="@drawable/target" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/white"
                     android:fontFamily="@font/poppins_medium"
                     android:text="DA Name"
-                    android:textColor="@color/white"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
@@ -118,8 +119,50 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
+            app:strokeWidth="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Start OSM Inspection *"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/red_light"
+                        android:text="START INSPECTION"
+                        android:padding="15dp"
+                        android:drawableEnd="@drawable/inspection"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout
@@ -168,8 +211,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout
@@ -222,8 +264,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout
@@ -272,8 +313,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout
@@ -326,8 +366,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout
@@ -376,8 +415,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout
@@ -430,8 +468,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout
@@ -480,8 +517,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout
@@ -534,8 +570,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout
@@ -711,8 +746,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout
@@ -761,8 +795,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout
@@ -811,8 +844,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout
@@ -861,8 +893,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout
@@ -912,8 +943,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardCornerRadius="6dp"
-            app:strokeColor="@color/maroon"
+            app:strokeColor="@color/very_very_light_red"
             app:strokeWidth="2dp">
 
             <LinearLayout

@@ -60,8 +60,8 @@
 
         <ImageView
             android:id="@+id/prev"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:src="@drawable/back"
             app:tint="@color/white" />
 
@@ -78,8 +78,8 @@
 
         <ImageView
             android:id="@+id/next"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
             android:src="@drawable/next"
             app:tint="@color/white" />
 
