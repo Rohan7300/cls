@@ -150,6 +150,8 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/red_light"
                         android:text="START INSPECTION"
+                        android:padding="15dp"
+                        android:drawableEnd="@drawable/inspection"
                         android:fontFamily="@font/poppins_semibold"
                         android:textSize="12sp" />
 
