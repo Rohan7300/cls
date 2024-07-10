@@ -408,6 +408,7 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/tyreDepthRearOSImageUploadBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/red_light"
@@ -415,6 +416,7 @@
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/tyreDepthRearOSFileNameTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="5dp"
@@ -462,6 +464,7 @@
                             android:orientation="horizontal">
 
                             <RadioButton
+                                android:id="@+id/tyrePressureRearOSFULLRB"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="10dp"
@@ -470,6 +473,7 @@
                                 android:textSize="11sp" />
 
                             <RadioButton
+                                android:id="@+id/tyrePressureRearOSBelowRB"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_medium"
@@ -510,6 +514,7 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/tyreDepthFrontOSImageUploadBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/red_light"
@@ -517,6 +522,7 @@
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/tyreDepthFrontOSImageFilenameTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="5dp"
@@ -564,6 +570,7 @@
                             android:orientation="horizontal">
 
                             <RadioButton
+                                android:id="@+id/tyrePressureFrontOSFullRB"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="10dp"
@@ -572,6 +579,7 @@
                                 android:textSize="11sp" />
 
                             <RadioButton
+                                android:id="@+id/tyrePressureFrontOSBelowRB"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_medium"
@@ -602,7 +610,7 @@
                         android:layout_marginVertical="5dp"
                         android:layout_marginStart="4dp"
                         android:fontFamily="@font/poppins_semibold"
-                        android:text="Tyre thread depth O/S Front Image Uploaded :"
+                        android:text="Engine oil level Image Uploaded :"
                         android:textSize="12sp" />
 
                     <LinearLayout
@@ -612,6 +620,7 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/engineOilImageUploadBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/red_light"
@@ -619,6 +628,7 @@
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/engineOilImageUploadFileName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="5dp"
@@ -649,6 +659,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
+                        android:id="@+id/spinnerOilLevel"
                         android:importantForAutofill="no"
                         android:inputType="none"
                         android:padding="12dp"
@@ -672,6 +683,7 @@
                         android:layout_marginTop="4dp"
                         android:importantForAutofill="no"
                         android:inputType="none"
+                        android:id="@+id/spinnerEngineCoolant"
                         android:padding="12dp"
                         android:textColorHint="@color/hintColor"
                         android:textSize="14sp" />
@@ -685,7 +697,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
-                android:hint="Engine Coolant"
+                android:hint="Brake Fluid"
                 android:textColorHint="@color/hintColor">
 
                 <AutoCompleteTextView
@@ -693,6 +705,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:importantForAutofill="no"
+                    android:id="@+id/spinnerBrakeFluid"
                     android:inputType="none"
                     android:padding="12dp"
                     android:textColorHint="@color/hintColor"
@@ -725,6 +738,7 @@
                     app:expandedHintEnabled="true">
 
                     <AutoCompleteTextView
+                        android:id="@+id/spinnerWindscreenWashingLiquid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -746,6 +760,7 @@
                     android:textColorHint="@color/hintColor">
 
                     <AutoCompleteTextView
+                        android:id="@+id/spinnerWindScreenCondition"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -788,13 +803,15 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/addBlueLevelUploadBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/red_light"
-                            android:text="UPLOAD AGAIN"
+                            android:text="Upload"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/addBlueLevelUploadFileName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="5dp"
@@ -837,13 +854,15 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/nsWingMirrorUploadBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/red_light"
-                            android:text="UPLOAD AGAIN"
+                            android:text="Upload"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/nsWingMirrorUploadFileName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="5dp"
@@ -874,6 +893,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="5dp"
+
                         android:layout_marginStart="4dp"
                         android:fontFamily="@font/poppins_semibold"
                         android:text="O/S wing mirror :"
@@ -886,13 +906,15 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/osWingMirrorUploadBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/red_light"
-                            android:text="UPLOAD AGAIN"
+                            android:text="Upload"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/osWingMirrorUploadFileName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="5dp"
@@ -936,20 +958,22 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/Three60VideoUploadBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/red_light"
-                            android:text="UPLOAD AGAIN"
+                            android:text="Upload"
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/Three60VideoFileNameTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="4dp"
                             android:layout_weight="1"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="SaveVehicleInspec_-_Notepad_2024-03-04_18-51-34.mp4"
+                            android:text="video_name.mp4"
                             android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -1036,6 +1060,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:id="@+id/actionCommentET"
                     android:fontFamily="@font/poppins_medium"
                     android:importantForAutofill="no"
                     android:inputType="textCapWords"

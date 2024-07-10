@@ -8,6 +8,8 @@ import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.GetReturnVmID
+import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
+import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
@@ -25,8 +27,12 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val repo: MainRepo) : ViewModel() {
 
-    val lDGetWeeklyDefectChecks:MutableLiveData<WeeklyDefectChecksModel?> = MutableLiveData()
-    val lDGetWeeklyDefectCheckImages:MutableLiveData<GetWeeklyDefectCheckImagesResponse?> = MutableLiveData()
+    val lDGetWeeklyDefectChecks: MutableLiveData<WeeklyDefectChecksModel?> = MutableLiveData()
+    val lDGetWeeklyDefectCheckImages: MutableLiveData<GetWeeklyDefectCheckImagesResponse?> =
+        MutableLiveData()
+    val lDGetVehOilLevelList: MutableLiveData<GetVehOilLevelListResponse?> = MutableLiveData()
+    val lDGetVehWindScreenConditionStatus: MutableLiveData<GetVehWindScreenConditionStatusResponse?> =
+        MutableLiveData()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -273,25 +279,45 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         driverid: Double,
         lmid: Double,
         showdefects: Boolean
-    ){
+    ) {
         viewModelScope.launch {
             val response = repo.GetWeeklyDefectCheckList(weekno, year, driverid, lmid, showdefects)
-            if (response.failed||!response.isSuccessful) {
+            if (response.failed || !response.isSuccessful) {
                 lDGetWeeklyDefectChecks.postValue(null)
-            }else {
+            } else {
                 lDGetWeeklyDefectChecks.postValue(response.body)
             }
         }
     }
 
-    fun GetWeeklyDefectCheckImages(vdhCheckId:Int){
+    fun GetWeeklyDefectCheckImages(vdhCheckId: Int) {
         viewModelScope.launch {
             val response = repo.GetWeeklyDefectCheckImages(vdhCheckId)
-            if(response.failed||!response.isSuccessful){
+            if (response.failed || !response.isSuccessful) {
                 lDGetWeeklyDefectCheckImages.postValue(null)
-            }else{
+            } else {
                 lDGetWeeklyDefectCheckImages.postValue(response.body)
             }
+        }
+    }
+
+    fun GetVehOilLevelList() {
+        viewModelScope.launch {
+            val response = repo.GetVehOilLevelList()
+            if (response.failed || !response.isSuccessful)
+                lDGetVehOilLevelList.postValue(null)
+            else
+                lDGetVehOilLevelList.postValue(response.body)
+        }
+    }
+
+    fun GetVehWindScreenConditionStatus() {
+        viewModelScope.launch {
+            val response = repo.GetVehWindScreenConditionStatus()
+            if (response.failed || !response.isSuccessful)
+                lDGetVehWindScreenConditionStatus.postValue(null)
+            else
+                lDGetVehWindScreenConditionStatus.postValue(response.body)
         }
     }
 }

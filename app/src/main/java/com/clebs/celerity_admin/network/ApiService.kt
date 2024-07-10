@@ -5,6 +5,8 @@ import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.GetReturnVmID
+import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
+import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
@@ -67,11 +69,23 @@ interface ApiService {
     suspend fun GetVehicleLastMileage(@Path("userId") vmID: String): Response<LastMileageInfo>
 
     @GET("/api/VehAllocHistories/GetISO8601WeekandYear")
-    suspend fun getCurrentWeekAndYear():Response<WeekYearModel>
+    suspend fun getCurrentWeekAndYear(): Response<WeekYearModel>
 
     @GET("/api/WeeklyDefectSheet/GetWeeklyDefectSheetCheckList")
-    suspend fun getWeeklyDefectCHeckList(@Query("weekNo") weekno:Double,@Query("year") year:Double,@Query("driverId") driverId:Double,@Query("LmId") LmId:Double,@Query("showDefectedOnly") showDefectedOnly:Boolean):Response<WeeklyDefectChecksModel>
+    suspend fun getWeeklyDefectCHeckList(
+        @Query("weekNo") weekno: Double,
+        @Query("year") year: Double,
+        @Query("driverId") driverId: Double,
+        @Query("LmId") LmId: Double,
+        @Query("showDefectedOnly") showDefectedOnly: Boolean
+    ): Response<WeeklyDefectChecksModel>
 
     @GET("/api/WeeklyDefectSheet/GetWeeklyDefectCheckImages/{vdhCheckId}")
-    suspend fun GetWeeklyDefectCheckImages(@Path("vdhCheckId") vdhCheckId:Int):Response<GetWeeklyDefectCheckImagesResponse>
+    suspend fun GetWeeklyDefectCheckImages(@Path("vdhCheckId") vdhCheckId: Int): Response<GetWeeklyDefectCheckImagesResponse>
+
+    @GET("/api/WeeklyDefectSheet/GetVehOilLevelList")
+    suspend fun GetVehOilLevelList(): Response<GetVehOilLevelListResponse>
+
+    @GET("/api/WeeklyDefectSheet/GetVehWindScreenConditionStatus")
+    suspend fun GetVehWindScreenConditionStatus(): Response<GetVehWindScreenConditionStatusResponse>
 }
