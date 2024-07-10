@@ -32,6 +32,7 @@ import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
+import com.clebs.celerity.models.response.AppVersionResponse
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DaDailyLocationRotaResponse
@@ -1754,6 +1755,12 @@ class MainRepo(private val ApiService: ApiService) {
     ):SimpleNetworkResponse<GetDriverDeductionHistoryResponse>{
         return safeApiCall {
             ApiService.GetDriverDeductionHistory(userID,companyId)
+        }
+    }
+
+    suspend fun GetLatestAppVersion():SimpleNetworkResponse<AppVersionResponse>{
+        return safeApiCall {
+            ApiService.GetLatestAppVersion()
         }
     }
 }

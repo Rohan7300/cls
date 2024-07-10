@@ -67,13 +67,16 @@ import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.deductions
 import com.clebs.celerity.utils.expiredDocuments
 import com.clebs.celerity.utils.expiringDocument
+import com.clebs.celerity.utils.getCurrentAppVersion
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.invoiceReadyToView
+import com.clebs.celerity.utils.isVersionNewer
 import com.clebs.celerity.utils.logOSEntity
 import com.clebs.celerity.utils.parseToInt
 import com.clebs.celerity.utils.showBirthdayCard
 import com.clebs.celerity.utils.showToast
+import com.clebs.celerity.utils.showUpdateDialog
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.vehicleExpiringDocuments
 import com.clebs.celerity.utils.weeklyLocationRota
@@ -613,6 +616,20 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     private fun observers() {
+        viewModel.GetLatestAppVersion()
+
+        viewModel.liveDataGetLatestAppVersion.observe(this) {
+            val currentAppVersion = getCurrentAppVersion(this)
+            if (it != null) {
+                if (isVersionNewer(currentAppVersion,it.AndroidAppVersion)) {
+                    val playStoreUrl =
+                        "https://play.google.com/store/apps/details?id=com.clebs.celerity&hl=en"
+                    showUpdateDialog(this, playStoreUrl)
+                }
+            } else
+                showToast("Failed to fetch the latest app version", this@HomeActivity)
+        }
+
         viewModel.vechileInformationLiveData.observe(this) {
             if (it != null) {
                 prefs.VinNumber = it.VinNumber

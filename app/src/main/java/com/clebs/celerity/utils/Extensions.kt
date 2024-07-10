@@ -891,7 +891,7 @@ fun getCurrentAppVersion(context: Context): String {
     } catch (e: PackageManager.NameNotFoundException) {
         Log.e("VersionError", "Package name not found", e)
     }
-    return "Unknown"
+    return "1.0.0"
 }
 
 fun addLeadingZeroIfNeeded(text: Editable): String {
@@ -1085,4 +1085,36 @@ fun noInternetCheck(context: Context,ll:LinearLayout,viewLifecycleOwner: Lifecyc
             ll.visibility = View.VISIBLE
         }
     }
+}
+
+fun showUpdateDialog(context: Context, playStoreUrl: String) {
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle("Update Available")
+    builder.setMessage("A new version of the app is available. Please update to the latest version.")
+    builder.setPositiveButton("Update") { dialog, _ ->
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(playStoreUrl))
+        context.startActivity(intent)
+        dialog.dismiss()
+    }
+    builder.setNegativeButton("Cancel") { dialog, _ ->
+        dialog.dismiss()
+    }
+    builder.setCancelable(false)
+    builder.show()
+}
+fun isVersionNewer(currentVersion: String, latestVersion: String): Boolean {
+    val currentParts = currentVersion.split('.').map { it.toIntOrNull() ?: 0 }
+    val latestParts = latestVersion.split('.').map { it.toIntOrNull() ?: 0 }
+
+    for (i in 0 until maxOf(currentParts.size, latestParts.size)) {
+        val currentPart = currentParts.getOrElse(i) { 0 }
+        val latestPart = latestParts.getOrElse(i) { 0 }
+
+        if (currentPart < latestPart) {
+            return true
+        } else if (currentPart > latestPart) {
+            return false
+        }
+    }
+    return false
 }

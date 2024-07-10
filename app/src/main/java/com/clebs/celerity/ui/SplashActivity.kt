@@ -32,6 +32,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
@@ -47,7 +48,9 @@ import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentAppVersion
 import com.clebs.celerity.utils.getDeviceID
+import com.clebs.celerity.utils.isVersionNewer
 import com.clebs.celerity.utils.showToast
+import com.clebs.celerity.utils.showUpdateDialog
 import com.clebs.celerity.utils.toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -205,6 +208,7 @@ class SplashActivity : AppCompatActivity() {
         }
 
 
+
         ActivitySplashBinding.ls.startAnimation(rotateAnimationtwo)
 //        ActivitySplashBinding.imgCircleLogo.startAnimation(rotateAnimation)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
@@ -216,7 +220,18 @@ class SplashActivity : AppCompatActivity() {
 
         mainViewModel = DependencyProvider.getMainVM(this)
 
+        mainViewModel.GetLatestAppVersion()
 
+        mainViewModel.liveDataGetLatestAppVersion.observe(this) {
+            val currentAppVersion = getCurrentAppVersion(this)
+            if (it != null) {
+                if (isVersionNewer(currentAppVersion,it.AndroidAppVersion)) {
+                    val playStoreUrl =
+                        "https://play.google.com/store/apps/details?id=com.clebs.celerity&hl=en"
+                    showUpdateDialog(this, playStoreUrl)
+                }
+            }
+        }
 
         mainViewModel.liveDataSaveDeviceInformation.observe(this) {
             if (it != null) {

@@ -37,6 +37,7 @@ import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
+import com.clebs.celerity.models.response.AppVersionResponse
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DaDailyLocationRotaResponse
@@ -200,9 +201,12 @@ class MainViewModel(
         MutableLiveData<DownloadDriverOtherCompaniesPolicyResponse?>()
     val liveDataGetDAEmergencyContact = MutableLiveData<String?>()
     val liveDataUploadVehicleDefectImages = MutableLiveData<SimpleStatusMsgResponse?>()
-    val liveDataGetCompanySignedDocumentList = MutableLiveData<GetCompanySignedDocumentListResponse?>()
-    val liveDataGetDAOutStandingDeductionList = MutableLiveData<GetDAOutStandingDeductionListResponseItem?>()
+    val liveDataGetCompanySignedDocumentList =
+        MutableLiveData<GetCompanySignedDocumentListResponse?>()
+    val liveDataGetDAOutStandingDeductionList =
+        MutableLiveData<GetDAOutStandingDeductionListResponseItem?>()
     val liveDataGetDriverDeductionHistory = MutableLiveData<GetDriverDeductionHistoryResponse?>()
+    val liveDataGetLatestAppVersion = MutableLiveData<AppVersionResponse?>()
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
@@ -1948,34 +1952,44 @@ class MainViewModel(
 
     }
 
-    fun GetCompanySignedDocumentList(userID: Int){
+    fun GetCompanySignedDocumentList(userID: Int) {
         viewModelScope.launch {
             val response = repo.GetCompanySignedDocumentList(userID)
-            if(response.failed || !response.isSuccessful)
+            if (response.failed || !response.isSuccessful)
                 liveDataGetCompanySignedDocumentList.postValue(null)
             else
                 liveDataGetCompanySignedDocumentList.postValue(response.body)
         }
     }
 
-    fun GetDAOutStandingDeductionList(userID: Int,companyId: Int){
+    fun GetDAOutStandingDeductionList(userID: Int, companyId: Int) {
         viewModelScope.launch {
-            val response = repo.GetDAOutStandingDeductionList(userID,companyId)
-            if(response.failed || !response.isSuccessful)
+            val response = repo.GetDAOutStandingDeductionList(userID, companyId)
+            if (response.failed || !response.isSuccessful)
                 liveDataGetDAOutStandingDeductionList.postValue(null)
             else
                 liveDataGetDAOutStandingDeductionList.postValue(response.body)
         }
     }
 
-    fun GetDriverDeductionHistory(userID: Int,companyId: Int){
+    fun GetDriverDeductionHistory(userID: Int, companyId: Int) {
         viewModelScope.launch {
-            val response = repo.GetDriverDeductionHistory(userID,companyId)
-            if(response.failed|| !response.isSuccessful)
+            val response = repo.GetDriverDeductionHistory(userID, companyId)
+            if (response.failed || !response.isSuccessful)
                 liveDataGetDriverDeductionHistory.postValue(null)
-            else{
+            else {
                 liveDataGetDriverDeductionHistory.postValue(response.body)
             }
+        }
+    }
+
+    fun GetLatestAppVersion() {
+        viewModelScope.launch {
+            val response = repo.GetLatestAppVersion()
+            if (response.failed || !response.isSuccessful)
+                liveDataGetLatestAppVersion.postValue(null)
+            else
+                liveDataGetLatestAppVersion.postValue(response.body)
         }
     }
 
