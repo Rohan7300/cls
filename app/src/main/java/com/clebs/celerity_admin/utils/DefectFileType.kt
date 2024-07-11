@@ -15,5 +15,6 @@ enum class DefectFileType {
     AddBlueLevel,
     OSWingMirror,
     NSWingMirror,
-    Van360Video
+    Van360Video,
+    OtherPicOfParts
 }

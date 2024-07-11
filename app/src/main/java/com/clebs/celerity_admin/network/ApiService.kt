@@ -16,13 +16,17 @@ import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
+import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -88,4 +92,13 @@ interface ApiService {
 
     @GET("/api/WeeklyDefectSheet/GetVehWindScreenConditionStatus")
     suspend fun GetVehWindScreenConditionStatus(): Response<GetVehWindScreenConditionStatusResponse>
+
+    @POST("/api/Vehicle/UploadVehOSMDefectChkFile")
+    @Multipart
+    suspend fun UploadVehOSMDefectChkFile(
+        @Query("vdhDefectCheckId") vdhDefectCheckId:Int,
+        @Query("fileType") fileType:String,
+        @Query("date") date:String,
+        @Part image:MultipartBody.Part
+    ):Response<SucessStatusMsgResponse>
 }

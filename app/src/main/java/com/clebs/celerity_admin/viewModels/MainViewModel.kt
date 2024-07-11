@@ -19,11 +19,14 @@ import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
+import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
 import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.utils.DefectFileType
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 
 class MainViewModel(private val repo: MainRepo) : ViewModel() {
 
@@ -33,6 +36,7 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
     val lDGetVehOilLevelList: MutableLiveData<GetVehOilLevelListResponse?> = MutableLiveData()
     val lDGetVehWindScreenConditionStatus: MutableLiveData<GetVehWindScreenConditionStatusResponse?> =
         MutableLiveData()
+    val lDUploadVehOSMDefectChkFile: MutableLiveData<SucessStatusMsgResponse?> = MutableLiveData()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -318,6 +322,22 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
                 lDGetVehWindScreenConditionStatus.postValue(null)
             else
                 lDGetVehWindScreenConditionStatus.postValue(response.body)
+        }
+    }
+
+    fun UploadVehOSMDefectChkFile(
+        vdhDefectCheckId: Int,
+        fileType: DefectFileType,
+        date: String,
+        image: MultipartBody.Part
+    ) {
+        viewModelScope.launch {
+            val response =
+                repo.UploadVehOSMDefectChkFile(vdhDefectCheckId, fileType.toString(), date, image)
+            if (response.failed || !response.isSuccessful)
+                lDUploadVehOSMDefectChkFile.postValue(null)
+            else
+                lDUploadVehOSMDefectChkFile.postValue(response.body)
         }
     }
 }

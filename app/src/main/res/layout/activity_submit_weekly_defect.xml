@@ -1012,6 +1012,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/red_light"
+                            android:id="@+id/otherPictureUploadBtn"
                             android:text="UPLOAD"
                             android:textSize="12sp" />
 

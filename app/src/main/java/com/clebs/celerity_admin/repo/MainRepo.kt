@@ -17,13 +17,17 @@ import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
+import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
 import com.clebs.celerity_admin.models.basemodel.SimpleNetworkResponse
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.ui.App
+import okhttp3.MultipartBody
 import retrofit2.Response
+import retrofit2.http.Part
+import retrofit2.http.Query
 import java.time.Year
 
 class MainRepo(private val ApiService: ApiService) {
@@ -152,6 +156,17 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun GetVehWindScreenConditionStatus(): SimpleNetworkResponse<GetVehWindScreenConditionStatusResponse> {
         return safeApiCall {
             ApiService.GetVehWindScreenConditionStatus()
+        }
+    }
+
+    suspend fun UploadVehOSMDefectChkFile(
+        vdhDefectCheckId:Int,
+        fileType:String,
+        date:String,
+        image: MultipartBody.Part
+    ):SimpleNetworkResponse<SucessStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.UploadVehOSMDefectChkFile(vdhDefectCheckId,fileType,date,image)
         }
     }
 }

@@ -1,12 +1,20 @@
 package com.clebs.celerity_admin
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -17,7 +25,12 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
+import com.clebs.celerity_admin.utils.getMimeType
+import com.clebs.celerity_admin.utils.showToast
 import com.clebs.celerity_admin.viewModels.MainViewModel
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 
 class SubmitWeeklyDefectActivity : AppCompatActivity() {
     lateinit var binding: ActivitySubmitWeeklyDefectBinding
@@ -27,8 +40,30 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private var selectedBreakFluidLevelID: Int = -1
     private var selectedWindscreenWashingID: Int = -1
     private var selectedWindScreenConditionID: Int = -1
-    private lateinit var oilListNames:List<String>
-    private lateinit var oilLevelIds:List<Int>
+    private lateinit var oilListNames: List<String>
+    private var selectedFileUri: Uri? = null
+    private lateinit var oilLevelIds: List<Int>
+    lateinit var filePart: MultipartBody.Part
+    var imageMode = -1
+
+    companion object {
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf(
+                Manifest.permission.CAMERA
+            ).apply {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    add(Manifest.permission.READ_MEDIA_IMAGES)
+                }
+            }.toTypedArray()
+    }
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            this, it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +76,64 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             vm.GetWeeklyDefectCheckImages(currentWeeklyDefectItem!!.vdhCheckId)
 
         observers()
+        clickListeners()
+    }
+
+    private fun clickListeners() {
+        binding.tyreDepthFrontImageUploadBtn.setOnClickListener {
+            addImage(0)
+        }
+
+        binding.tyreDepthRearImageUploadBtn.setOnClickListener {
+            addImage(1)
+        }
+
+        binding.tyreDepthRearOSImageUploadBtn.setOnClickListener {
+            addImage(3)
+        }
+
+        binding.tyreDepthRearOSImageUploadBtn.setOnClickListener {
+            addImage(4)
+        }
+
+        binding.tyreDepthFrontOSImageUploadBtn.setOnClickListener {
+            addImage(5)
+        }
+
+        binding.engineOilImageUploadBtn.setOnClickListener {
+            addImage(6)
+        }
+
+        binding.addBlueLevelUploadBtn.setOnClickListener {
+            addImage(7)
+        }
+
+        binding.nsWingMirrorUploadBtn.setOnClickListener {
+            addImage(8)
+        }
+
+        binding.osWingMirrorUploadBtn.setOnClickListener {
+            addImage(9)
+        }
+
+        binding.Three60VideoUploadBtn.setOnClickListener {
+
+        }
+
+        binding.otherPictureUploadBtn.setOnClickListener {
+
+        }
+
+
+    }
+
+    private fun addImage(mode: Int) {
+        imageMode = mode
+        if (allPermissionsGranted()) {
+            upload()
+        } else {
+            requestPermissions()
+        }
     }
 
     private fun observers() {
@@ -142,12 +235,12 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         }
 
 
-        vm.lDGetVehWindScreenConditionStatus.observe(this) {windScreenConditionList->
+        vm.lDGetVehWindScreenConditionStatus.observe(this) { windScreenConditionList ->
             if (windScreenConditionList != null) {
                 val windScreenConditionStatusNameList = windScreenConditionList.map { it.Name }
                 val windScreenConditionStatusNameId = windScreenConditionList.map { it.Id }
 
-                if (selectedWindScreenConditionID != -1) {
+                if (selectedWindScreenConditionID > 0) {
                     binding.spinnerWindScreenCondition.setText(
                         windScreenConditionStatusNameList[windScreenConditionStatusNameId.indexOf(
                             selectedWindScreenConditionID
@@ -169,7 +262,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             }
         }
 
-        vm.lDGetVehOilLevelList.observe(this) {oilLevelList->
+        vm.lDGetVehOilLevelList.observe(this) { oilLevelList ->
             if (oilLevelList != null) {
                 oilListNames = oilLevelList.map { it.VehOilLevelName }
                 oilLevelIds = oilLevelList.map { it.VehOilLevelId }
@@ -181,7 +274,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                             "\n${oilLevelIds.indexOf(selectedWindscreenWashingID)}"
                 )
 
-                if (selectedOilLevelID != -1) {
+                if (selectedOilLevelID > 0) {
                     binding.spinnerOilLevel.setText(
                         oilListNames[oilLevelIds.indexOf(
                             selectedOilLevelID
@@ -191,7 +284,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 }
 
 
-                if (selectedEngineCoolantLevelID != -1) {
+                if (selectedEngineCoolantLevelID > 0) {
                     binding.spinnerEngineCoolant.setText(
                         oilListNames[oilLevelIds.indexOf(
                             selectedEngineCoolantLevelID
@@ -204,7 +297,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     )
                 }
 
-                if (selectedBreakFluidLevelID != -1) {
+                if (selectedBreakFluidLevelID > 0) {
                     binding.spinnerBrakeFluid.setText(
                         oilListNames[oilLevelIds.indexOf(
                             selectedBreakFluidLevelID
@@ -217,7 +310,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     )
                 }
 
-                if (selectedWindscreenWashingID != -1) {
+                if (selectedWindscreenWashingID > 0) {
                     binding.spinnerWindscreenWashingLiquid.setText(
                         oilListNames[oilLevelIds.indexOf(
                             selectedWindscreenWashingID
@@ -284,8 +377,8 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
                     val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
                     selectedItem.let {
-      /*                  when (spinner) {
-                            *//*                     binding.spinnerRouteType -> {
+                        /*                  when (spinner) {
+                                              *//*                     binding.spinnerRouteType -> {
                                                      selectedRouteType = selectedItem
                                                      selectedRouteId = ids[position]
                                                  }*//*
@@ -296,4 +389,111 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun requestPermissions() {
+        activityResultLauncher.launch(REQUIRED_PERMISSIONS)
+    }
+
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        )
+        { permissions ->
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                showToast("Permission denied", this)
+            } else {
+                upload()
+            }
+        }
+
+    fun upload() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        resultLauncher.launch(intent)
+    }
+
+    private val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                data?.data?.let {
+                    selectedFileUri = it
+                    when(imageMode){
+                        0->{
+
+                        }
+
+                        1->{
+
+                        }
+
+                        2->{
+
+                        }
+
+                        3->{
+
+                        }
+
+                        4->{
+
+                        }
+
+                        5->{
+
+                        }
+
+                        6->{
+
+                        }
+
+                        7->{
+
+                        }
+
+                        8->{
+
+                        }
+
+                        9->{
+
+                        }
+                    }
+                    val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
+                    val tmpFile = createTempFile("temp", null, cacheDir).apply {
+                        deleteOnExit()
+                    }
+
+                    val inputStream = contentResolver.openInputStream(selectedFileUri!!)
+                    val outputStream = tmpFile.outputStream()
+
+                    inputStream?.use { input ->
+                        outputStream.use { output ->
+                            input.copyTo(output)
+                        }
+                    }
+
+                    val fileExtension = getMimeType(selectedFileUri!!)?.let { mimeType ->
+                        MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+                    }
+
+                    val requestBody = tmpFile.asRequestBody(mimeType)
+                    filePart = MultipartBody.Part.createFormData(
+                        "UploadTicketDoc",
+                        selectedFileUri!!.lastPathSegment + "." + (fileExtension ?: "jpg"),
+                        requestBody
+                    )
+                    //save()
+                }
+            } else {
+                finish()
+                showToast("Attachment not selected!!", this)
+            }
+        }
+
 }
