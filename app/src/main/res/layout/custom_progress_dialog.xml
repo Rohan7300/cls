@@ -8,8 +8,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_semibold"
+        android:fontFamily="@font/diplomata"
         android:text="Loading"
         android:textColor="@color/red_light"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 </LinearLayout>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Celerity OSM</string>
+    <string name="app_name">CLS OSM</string>
     <string name="enter_password">Enter password\n</string>
     <string name="title_activity_main_two">MainActivityTwo</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

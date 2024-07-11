@@ -178,10 +178,10 @@ class Prefs(context: Context) {
 
     var Isfirst: Boolean?
         get() {
-            return sharedPreferences.getBoolean("Isfirst", false)
+            return sharedPreferences.getBoolean("Isfirsts", false)
         }
         set(value) {
-            sharedPreferences.edit().putBoolean("Isfirst", value?:false).apply()
+            sharedPreferences.edit().putBoolean("Isfirsts", value?:false).apply()
         }
     var quesID: Int
         get() = sharedPreferences.getInt("quesID", 0)
@@ -246,9 +246,13 @@ class Prefs(context: Context) {
 
 
 
-    var userName: String
+    var vehinspection: String
         get() = sharedPreferences.getString("userName", "") ?: ""
         set(value) = sharedPreferences.edit().putString("userName", value).apply()
+
+    var vehinspectionUniqueID: String
+        get() = sharedPreferences.getString("userNameID", "") ?: ""
+        set(value) = sharedPreferences.edit().putString("userNameID", value).apply()
 
     var qStage: Int
         get() = sharedPreferences.getInt("qStage", 0) ?: 0
