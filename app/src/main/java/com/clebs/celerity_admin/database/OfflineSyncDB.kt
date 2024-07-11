@@ -7,7 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [User::class, VehicleInformation::class, CheckInspection::class,IsInspectionDone::class],
+    entities = [User::class, VehicleInformation::class, CheckInspection::class ,IsInspectionDone::class],
     version = 2
 )
 abstract class OfflineSyncDB : RoomDatabase() {
@@ -15,6 +15,10 @@ abstract class OfflineSyncDB : RoomDatabase() {
     abstract fun infoDao(): informationDao
 
     abstract fun UploadImagesInfoDao(): InspectionInfoDao
+
+    abstract fun defectSheetDao():DefectSheetDao
+
+    abstract fun IsInspectionDone():IsInspectionDoneDao
 
     companion object {
         @Volatile
@@ -108,17 +112,6 @@ abstract class OfflineSyncDB : RoomDatabase() {
     fun GetDepoInformation(): List<CheckInspection> {
         return UploadImagesInfoDao().getAllUsers()
     }
-    fun insertinspectionInfo(isInspectionDone: IsInspectionDone) {
-       IsInspectionDone().insert(isInspectionDone)
-    }
-
-    fun getInspectionInfo(): List<IsInspectionDone> {
-        return IsInspectionDone().getAllinspectioninfo()
-    }
-
-     fun isInspectionTableEmpty(): Boolean {
-        return IsInspectionDone().getAllinspectioninfo().isEmpty()
-    }
 
     suspend fun insertOrUpdate(defectSheet: DefectSheet) {
         val existingDefectSheet = defectSheetDao().getDefectSheetById(defectSheet.id)
@@ -131,5 +124,16 @@ abstract class OfflineSyncDB : RoomDatabase() {
 
     fun getDefectSheet(id:Int):DefectSheet?{
         return defectSheetDao().getDefectSheetById(id)
+    }
+    fun insertinspectionInfo(isInspectionDone: IsInspectionDone) {
+       IsInspectionDone().insert(isInspectionDone)
+    }
+
+    fun getInspectionInfo(): List<IsInspectionDone> {
+        return IsInspectionDone().getAllinspectioninfo()
+    }
+
+     fun isInspectionTableEmpty(): Boolean {
+        return IsInspectionDone().getAllinspectioninfo().isEmpty()
     }
 }
