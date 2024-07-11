@@ -39,6 +39,7 @@
     <color name="defaultOutlineSpotShadowColor">#30000000</color>
     <color name="overlay">#BF000000</color>
     <color name="green">#6CFD62</color>
+    <color name="greenBtn">#7CCA98</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#ff0000</color>
     <color name="transparent">#00000000</color>
     <color name="darktransparent">#9F000000</color>

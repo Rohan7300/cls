@@ -20,6 +20,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.annotation.Keep
 
@@ -447,4 +448,17 @@ fun String.contains(
 
 fun isTesting(): Boolean {
     return true
+}
+
+fun showToast(msg: String, context: Context) {
+    try {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+    } catch (e: Exception) {
+        Log.d("ToastException", e.message.toString())
+    }
+}
+
+ fun getMimeType(uri: Uri): String? {
+    val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+    return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
 }

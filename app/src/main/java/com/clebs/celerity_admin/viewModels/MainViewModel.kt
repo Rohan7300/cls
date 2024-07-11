@@ -8,23 +8,35 @@ import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.GetReturnVmID
+import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
+import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
+import com.clebs.celerity_admin.models.GetWeeklyDefectCheckImagesResponse
 import com.clebs.celerity_admin.models.GetvehicleOilLevelList
 import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
+import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
 import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.utils.DefectFileType
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 
 class MainViewModel(private val repo: MainRepo) : ViewModel() {
 
-    val lDGetWeeklyDefectChecks:MutableLiveData<WeeklyDefectChecksModel?> = MutableLiveData()
+    val lDGetWeeklyDefectChecks: MutableLiveData<WeeklyDefectChecksModel?> = MutableLiveData()
+    val lDGetWeeklyDefectCheckImages: MutableLiveData<GetWeeklyDefectCheckImagesResponse?> =
+        MutableLiveData()
+    val lDGetVehOilLevelList: MutableLiveData<GetVehOilLevelListResponse?> = MutableLiveData()
+    val lDGetVehWindScreenConditionStatus: MutableLiveData<GetVehWindScreenConditionStatusResponse?> =
+        MutableLiveData()
+    val lDUploadVehOSMDefectChkFile: MutableLiveData<SucessStatusMsgResponse?> = MutableLiveData()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -271,17 +283,61 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         driverid: Double,
         lmid: Double,
         showdefects: Boolean
-    ){
+    ) {
         viewModelScope.launch {
             val response = repo.GetWeeklyDefectCheckList(weekno, year, driverid, lmid, showdefects)
-            if (response.failed) {
-                lDGetWeeklyDefectChecks.postValue(null)
-            }
-            if (!response.isSuccessful) {
+            if (response.failed || !response.isSuccessful) {
                 lDGetWeeklyDefectChecks.postValue(null)
             } else {
                 lDGetWeeklyDefectChecks.postValue(response.body)
             }
+        }
+    }
+
+    fun GetWeeklyDefectCheckImages(vdhCheckId: Int) {
+        viewModelScope.launch {
+            val response = repo.GetWeeklyDefectCheckImages(vdhCheckId)
+            if (response.failed || !response.isSuccessful) {
+                lDGetWeeklyDefectCheckImages.postValue(null)
+            } else {
+                lDGetWeeklyDefectCheckImages.postValue(response.body)
+            }
+        }
+    }
+
+    fun GetVehOilLevelList() {
+        viewModelScope.launch {
+            val response = repo.GetVehOilLevelList()
+            if (response.failed || !response.isSuccessful)
+                lDGetVehOilLevelList.postValue(null)
+            else
+                lDGetVehOilLevelList.postValue(response.body)
+        }
+    }
+
+    fun GetVehWindScreenConditionStatus() {
+        viewModelScope.launch {
+            val response = repo.GetVehWindScreenConditionStatus()
+            if (response.failed || !response.isSuccessful)
+                lDGetVehWindScreenConditionStatus.postValue(null)
+            else
+                lDGetVehWindScreenConditionStatus.postValue(response.body)
+        }
+    }
+
+    fun UploadVehOSMDefectChkFile(
+        vdhDefectCheckId: Int,
+        fileType: DefectFileType,
+        date: String,
+        image: MultipartBody.Part
+    ) {
+        viewModelScope.launch {
+            val response =
+                repo.UploadVehOSMDefectChkFile(vdhDefectCheckId, fileType.toString(), date, image)
+            if (response.failed || !response.isSuccessful)
+                lDUploadVehOSMDefectChkFile.postValue(null)
+            else
+                lDUploadVehOSMDefectChkFile.postValue(response.body)
         }
     }
 }

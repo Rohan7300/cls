@@ -6,21 +6,28 @@ import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.GetReturnVmID
+import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
+import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
+import com.clebs.celerity_admin.models.GetWeeklyDefectCheckImagesResponse
 import com.clebs.celerity_admin.models.GetvehicleOilLevelList
 import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
+import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
 import com.clebs.celerity_admin.models.basemodel.SimpleNetworkResponse
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.ui.App
+import okhttp3.MultipartBody
 import retrofit2.Response
+import retrofit2.http.Part
+import retrofit2.http.Query
 import java.time.Year
 
 class MainRepo(private val ApiService: ApiService) {
@@ -75,17 +82,20 @@ class MainRepo(private val ApiService: ApiService) {
             ApiService.GetVehicleOilList()
         }
     }
-    suspend fun GetVehicleDDAMandate(ddaid:String): SimpleNetworkResponse<DDAMandateModel> {
+
+    suspend fun GetVehicleDDAMandate(ddaid: String): SimpleNetworkResponse<DDAMandateModel> {
         return safeApiCall {
             ApiService.GetDDAALlocatedVehandLocation(ddaid)
         }
     }
-    suspend fun GetVehicleDDAMandateReturn(ddaid:String): SimpleNetworkResponse<GetReturnVmID> {
+
+    suspend fun GetVehicleDDAMandateReturn(ddaid: String): SimpleNetworkResponse<GetReturnVmID> {
         return safeApiCall {
             ApiService.GetCurrentAllocatedDAforReturnVehicle(ddaid)
         }
     }
-    suspend fun GetRepoInfoModel(ddaid:String): SimpleNetworkResponse<RepoInfoModel> {
+
+    suspend fun GetRepoInfoModel(ddaid: String): SimpleNetworkResponse<RepoInfoModel> {
         return safeApiCall {
             ApiService.GetvehicleRepoInfo(ddaid)
         }
@@ -96,16 +106,18 @@ class MainRepo(private val ApiService: ApiService) {
             ApiService.GetVehicleRequestType()
         }
     }
+
     suspend fun GetDAEmergencyContact(
         userID: Int
-    ):SimpleNetworkResponse<String>{
+    ): SimpleNetworkResponse<String> {
         return safeApiCall {
             ApiService.GetDAEmergencyContact(userID)
         }
     }
+
     suspend fun GetLastMileageInfo(
         vmid: String
-    ):SimpleNetworkResponse<LastMileageInfo>{
+    ): SimpleNetworkResponse<LastMileageInfo> {
         return safeApiCall {
             ApiService.GetVehicleLastMileage(vmid)
         }
@@ -113,18 +125,48 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun GetCurrentWeakAndYear(
 
-    ):SimpleNetworkResponse<WeekYearModel>{
+    ): SimpleNetworkResponse<WeekYearModel> {
         return safeApiCall {
             ApiService.getCurrentWeekAndYear()
         }
     }
 
 
-    suspend fun GetWeeklyDefectCheckList(weekno:Double,year: Double,driverid:Double,lmid:Double,showdefects:Boolean
+    suspend fun GetWeeklyDefectCheckList(
+        weekno: Double, year: Double, driverid: Double, lmid: Double, showdefects: Boolean
 
-    ):SimpleNetworkResponse<WeeklyDefectChecksModel>{
+    ): SimpleNetworkResponse<WeeklyDefectChecksModel> {
         return safeApiCall {
-            ApiService.getWeeklyDefectCHeckList(weekno,year,driverid,lmid,showdefects)
+            ApiService.getWeeklyDefectCHeckList(weekno, year, driverid, lmid, showdefects)
+        }
+    }
+
+    suspend fun GetWeeklyDefectCheckImages(vdhCheckId: Int): SimpleNetworkResponse<GetWeeklyDefectCheckImagesResponse> {
+        return safeApiCall {
+            ApiService.GetWeeklyDefectCheckImages(vdhCheckId)
+        }
+    }
+
+    suspend fun GetVehOilLevelList(): SimpleNetworkResponse<GetVehOilLevelListResponse> {
+        return safeApiCall {
+            ApiService.GetVehOilLevelList()
+        }
+    }
+
+    suspend fun GetVehWindScreenConditionStatus(): SimpleNetworkResponse<GetVehWindScreenConditionStatusResponse> {
+        return safeApiCall {
+            ApiService.GetVehWindScreenConditionStatus()
+        }
+    }
+
+    suspend fun UploadVehOSMDefectChkFile(
+        vdhDefectCheckId:Int,
+        fileType:String,
+        date:String,
+        image: MultipartBody.Part
+    ):SimpleNetworkResponse<SucessStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.UploadVehOSMDefectChkFile(vdhDefectCheckId,fileType,date,image)
         }
     }
 }
