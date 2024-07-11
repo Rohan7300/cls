@@ -33,7 +33,6 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private var startonetime: Boolean? = false
     private var inspectionreg: String? = null
 
-
     private var isfirst: Boolean? = false
     override fun onResume() {
         super.onResume()

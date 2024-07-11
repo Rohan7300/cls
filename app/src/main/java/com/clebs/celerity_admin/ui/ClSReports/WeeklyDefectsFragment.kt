@@ -20,6 +20,7 @@ import com.clebs.celerity_admin.models.WeeklyDefectChecksModelItem
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.checkerframework.common.subtyping.qual.Bottom
