@@ -462,3 +462,11 @@ fun showToast(msg: String, context: Context) {
     val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
     return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
 }
+fun radioButtonState(rbFull: RadioButton, rbBelow: RadioButton): Int {
+    if (rbFull.isChecked)
+        return 1
+    else if (rbBelow.isChecked)
+        return 2
+    else
+        return 0
+}
