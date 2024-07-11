@@ -1,29 +1,36 @@
 package com.clebs.celerity_admin
 
+import android.Manifest
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
-import com.clebs.celerity_admin.database.CheckInspection
-import com.clebs.celerity_admin.database.IsInspectionDone
-import com.clebs.celerity_admin.databinding.ActivityMainTwoBinding
+import android.webkit.MimeTypeMap
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.RadioButton
+import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity_admin.databinding.ActivitySubmitWeeklyDefectBinding
-import com.clebs.celerity_admin.ui.App
-import com.clebs.celerity_admin.utils.Prefs
-import io.clearquote.assessment.cq_sdk.CQSDKInitializer
-import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
-import io.clearquote.assessment.cq_sdk.models.CustomerDetails
-import io.clearquote.assessment.cq_sdk.models.InputDetails
-import io.clearquote.assessment.cq_sdk.models.UserFlowParams
-import io.clearquote.assessment.cq_sdk.models.VehicleDetails
-import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
-import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import com.clebs.celerity_admin.factory.MyViewModelFactory
+import com.clebs.celerity_admin.network.ApiService
+import com.clebs.celerity_admin.network.RetrofitService
+import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
+import com.clebs.celerity_admin.utils.getMimeType
+import com.clebs.celerity_admin.utils.showToast
+import com.clebs.celerity_admin.viewModels.MainViewModel
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 
 class SubmitWeeklyDefectActivity : AppCompatActivity() {
     lateinit var binding: ActivitySubmitWeeklyDefectBinding
@@ -101,15 +108,63 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     binding.llstart.visibility = View.VISIBLE
                 }
 
+    private fun observers() {
+        vm.lDGetWeeklyDefectCheckImages.observe(this) {
+            if (it != null) {
 
-//                Log.e("result2", "onCreate: ")
-//                binding.llmain.visibility = View.VISIBLE
-//                binding.llstart.visibility = View.GONE
-            }
-        }
+                selectedOilLevelID = it.VdhDefChkImgOilLevelId
+                selectedEngineCoolantLevelID = it.EngineCoolantLevelId
+                selectedBreakFluidLevelID = it.BrakeFluidLevelId
+                selectedWindscreenWashingID = it.WindowScreenWashingLiquidId
+                selectedWindScreenConditionID = it.WindScreenConditionId
+                vm.GetVehOilLevelList()
+                vm.GetVehWindScreenConditionStatus()
+                Log.d(
+                    "Selections",
+                    "$selectedOilLevelID \n$selectedEngineCoolantLevelID \n$selectedBreakFluidLevelID \n$selectedWindscreenWashingID \n$selectedWindScreenConditionID"
+                )
+                setUploadCardBtn(
+                    it.VdhDefChkImgTyrethreaddepthFrontNs,
+                    binding.tyreDepthFrontImageUploadBtn,
+                    binding.tyreDepthFrontImageFileName
+                )
+
+                setRadioCard(
+                    it.TyrePressureFrontNS,
+                    binding.tyrePressureFrontFullRB,
+                    binding.tyrePressureFrontBelowRB
+                )
+
+                setUploadCardBtn(
+                    it.VdhDefChkImgTyrethreaddepthRearNs,
+                    binding.tyreDepthRearImageUploadBtn,
+                    binding.tyreDepthRearImageUploadFileName
+                )
+
+                setRadioCard(
+                    it.TyrePressureFrontNS,
+                    binding.tyrePressureRearNSFullRB,
+                    binding.tyrePressureRearNSBelowRB
+                )
+
+                setUploadCardBtn(
+                    it.VdhDefChkImgTyrethreaddepthRearOs,
+                    binding.tyreDepthRearOSImageUploadBtn,
+                    binding.tyreDepthRearOSFileNameTV
+                )
 
 
+                setUploadCardBtn(
+                    it.VdhDefChkImgTyrethreaddepthFrontOs,
+                    binding.tyreDepthFrontOSImageUploadBtn,
+                    binding.tyreDepthFrontOSImageFilenameTV
+                )
 
+                setRadioCard(
+                    it.TyrePressureFrontOS,
+                    binding.tyrePressureFrontOSFullRB,
+                    binding.tyrePressureFrontOSBelowRB
+                )
 
         isfirst = Prefs.getInstance(this).Isfirst
         startonetime = isfirst
@@ -194,7 +249,6 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                             Log.d("CQSDKXX", "Success " + msg)
                         } else {
 
-                            Log.d("CQSDKXX", "Not Success " + msg)
                         }
                         if (!isStarted) {
                             Log.e("startedinspection", "onCreateView: $msg$isStarted")
@@ -218,6 +272,9 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
         regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
 
+                    val fileExtension = getMimeType(selectedFileUri!!)?.let { mimeType ->
+                        MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+                    }
 
         inspectionID = regexPattern.toString()
         Prefs.getInstance(App.instance).vehinspectionUniqueID = inspectionID

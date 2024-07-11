@@ -19,5 +19,10 @@ data class DefectSheet(
     val brakeFluidLevelID:Int = -1,
     val powerSteeringCheck:Boolean = false,
     val windScreenWashingLevelId:Int = -1,
-    val windScreenConditionId:Int = -1
+    val windScreenConditionId:Int = -1,
+    val addBlueLevelImage:String?= null,
+    val nsWingMirrorImage:String? = null,
+    val osWingMirrorImage:String? = null,
+    val threeSixtyVideo:String? = null
+
 )
