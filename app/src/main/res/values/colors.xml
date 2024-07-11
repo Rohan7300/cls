@@ -17,7 +17,8 @@
     <color name="text_color">#4A4A4A</color>
     <color name="pink">#03A9F4</color>
     <color name="red_light">#f76f6f</color>
-    <color name="maroon">#BE1E2D</color>
+    <color name="maroon">#F1550D</color>
+    <color name="orangemaroon">#BE1E2D</color>
     <color name="very_very_light_red">#FBC8C8</color>
     <color name="red">#ff0000</color>
     <color name="peek_orange">#fdb64e</color>

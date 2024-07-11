@@ -16,6 +16,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Celerity_admin"
+rootProject.name = "CLS OSM"
 include(":app")
  

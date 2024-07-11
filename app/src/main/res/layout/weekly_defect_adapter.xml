@@ -3,8 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginTop="10dp"
+    android:id="@+id/cards"
+
     android:orientation="vertical"
+   app:cardBackgroundColor="@color/very_very_light"
     app:cardCornerRadius="12dp"
     app:strokeColor="@color/black"
     app:strokeWidth="0.5dp">
@@ -12,6 +17,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:background="@color/very_very_light"
         android:orientation="vertical">
 
@@ -32,9 +38,10 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="22dp"
                     android:layout_marginEnd="16dp"
                     android:layout_weight="1"
+                    android:paddingTop="2dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -58,8 +65,8 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
                             android:text="- - - - -"
-                            android:textColor="@color/maroon"
-                            android:textSize="13sp" />
+                            android:textColor="@color/black"
+                            android:textSize="11sp" />
 
                         <View
                             android:layout_width="wrap_content"
@@ -90,8 +97,8 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
                             android:text="- - - - -"
-                            android:textColor="@color/maroon"
-                            android:textSize="13sp" />
+                            android:textColor="@color/black"
+                            android:textSize="11sp" />
 
                         <View
                             android:layout_width="wrap_content"
@@ -108,7 +115,7 @@
                     android:layout_height="40dp"
                     android:layout_marginEnd="16dp"
                     android:backgroundTint="@color/white"
-                    android:src="@drawable/upload"
+                    android:src="@drawable/checkss"
                     app:fabSize="mini"
                     app:maxImageSize="30dp"
                     app:rippleColor="@color/maroon" />
@@ -121,7 +128,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="2dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -143,7 +150,7 @@
                         android:letterSpacing="0.05"
                         android:text="RegNo. "
                         android:textColor="@color/text_color"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -153,7 +160,7 @@
                         android:fontFamily="@font/poppins_medium"
                         android:text="- - - - -"
                         android:textColor="@color/maroon"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -176,7 +183,7 @@
                     android:letterSpacing="0.05"
                     android:text="Location"
                     android:textColor="@color/text_color"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -186,14 +193,14 @@
                     android:fontFamily="@font/poppins_medium"
                     android:text="- - - - -"
                     android:textColor="@color/maroon"
-                    android:textSize="12sp" />
+                    android:textSize="11sp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="2dp"
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="2dp">
@@ -203,9 +210,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/poppins_medium"
+android:id="@+id/txtchecks"
                 android:gravity="right"
-                android:letterSpacing="0.03"
+
+                android:letterSpacing="0.02"
                 android:text="Checks completed by OSM?"
                 android:textColor="@color/text_color"
                 android:textSize="11sp" />
@@ -213,6 +221,7 @@
             <ImageView
                 android:id="@+id/osmCheck"
                 android:layout_width="25dp"
+                android:layout_marginEnd="45dp"
                 android:layout_height="25dp"
                 android:src="@drawable/cancel" />
         </LinearLayout>
