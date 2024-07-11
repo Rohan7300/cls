@@ -237,13 +237,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
         getDeviceID()
         val deviceID =
-            Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()
+            Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID)
+                .toString()
         Log.e("kjkcjkvckvck", "onCreate: " + deviceID)
-
-
-
-
-
 
         try {
             val apiService = RetrofitService.getInstance().create(ApiService::class.java)
@@ -326,7 +322,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                 || navController.currentDestination?.id == R.id.dailyWorkFragment ||
                                 navController.currentDestination?.id == R.id.homeFragment
                             ) {
-                                //navController.navigate(R.id.homedemoFragment)
                                 bottomNavigationView.selectedItemId = R.id.home
 
                                 prefs.clearNavigationHistory()
@@ -357,7 +352,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                 }
                             }
                         }
-                    } catch (_: Exception) {
+                    } catch (e: Exception) {
+                        Log.e("HomeActivity", "BackException ${e.printStackTrace()}")
                     }
 
                     if (doubleBackToExitPressedOnce) {
@@ -416,7 +412,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             ActivityHomeBinding.logout.visibility = View.GONE
                             ActivityHomeBinding.title.text = "Routes"
                             ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                            viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
+                            viewModel.GetVehicleDefectSheetInfo(
+                                Prefs.getInstance(
+                                    applicationContext
+                                ).clebUserId.toInt()
+                            )
 //                            showDialog()
                             hidedialogtwo()
                             ActivityHomeBinding.searchLayout.visibility = View.GONE
@@ -621,7 +621,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         viewModel.liveDataGetLatestAppVersion.observe(this) {
             val currentAppVersion = getCurrentAppVersion(this)
             if (it != null) {
-                if (isVersionNewer(currentAppVersion,it.AndroidAppVersion)) {
+                if (isVersionNewer(currentAppVersion, it.AndroidAppVersion)) {
                     val playStoreUrl =
                         "https://play.google.com/store/apps/details?id=com.clebs.celerity&hl=en"
                     showUpdateDialog(this, playStoreUrl)
@@ -886,7 +886,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         super.onBackPressed()
                     }
                 } catch (_: Exception) {
-
+                    bottomNavigationView.selectedItemId = R.id.home
                 }
             }
 
@@ -1207,12 +1207,17 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onResume() {
         super.onResume()
-        oSyncViewModel.getData()
-        if (isComingBackFromFaceScan) {
-            navController.navigate(R.id.newCompleteTaskFragment)
+        try {
+            if (oSyncViewModel != null || this::oSyncViewModel.isInitialized) {
+                oSyncViewModel.getData()
+                if (isComingBackFromFaceScan) {
+                    navController.navigate(R.id.newCompleteTaskFragment)
+                }
+            }
+        } catch (_: Exception) {
+
         }
     }
-
 
 
 }
