@@ -16,6 +16,8 @@ abstract class OfflineSyncDB : RoomDatabase() {
 
     abstract fun UploadImagesInfoDao(): InspectionInfoDao
 
+    abstract fun defectSheetDao():DefectSheetDao
+
     companion object {
         @Volatile
         private var instance: OfflineSyncDB? = null
@@ -107,5 +109,18 @@ abstract class OfflineSyncDB : RoomDatabase() {
 
     fun GetDepoInformation(): List<CheckInspection> {
         return UploadImagesInfoDao().getAllUsers()
+    }
+
+    suspend fun insertOrUpdate(defectSheet: DefectSheet) {
+        val existingDefectSheet = defectSheetDao().getDefectSheetById(defectSheet.id)
+        if (existingDefectSheet == null) {
+            defectSheetDao().insert(defectSheet)
+        } else {
+            defectSheetDao().update(defectSheet)
+        }
+    }
+
+    fun getDefectSheet(id:Int):DefectSheet?{
+        return defectSheetDao().getDefectSheetById(id)
     }
 }

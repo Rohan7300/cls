@@ -19,15 +19,20 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.clebs.celerity_admin.database.CheckInspection
+import com.clebs.celerity_admin.database.DefectSheet
 import com.clebs.celerity_admin.databinding.ActivitySubmitWeeklyDefectBinding
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import com.clebs.celerity_admin.utils.getMimeType
 import com.clebs.celerity_admin.utils.showToast
 import com.clebs.celerity_admin.viewModels.MainViewModel
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -45,6 +50,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private lateinit var oilLevelIds: List<Int>
     lateinit var filePart: MultipartBody.Part
     var imageMode = -1
+    var dbDefectSheet: DefectSheet?=null
 
     companion object {
         private val REQUIRED_PERMISSIONS =
@@ -74,6 +80,23 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
         if (currentWeeklyDefectItem != null)
             vm.GetWeeklyDefectCheckImages(currentWeeklyDefectItem!!.vdhCheckId)
+
+
+        dbDefectSheet = App.offlineSyncDB?.getDefectSheet(
+            currentWeeklyDefectItem!!.vdhCheckId
+        )
+
+
+        if(dbDefectSheet==null){
+            lifecycleScope.launch{
+                App.offlineSyncDB?.insertOrUpdate(
+                    DefectSheet(
+                        id =  currentWeeklyDefectItem!!.vdhCheckId
+                    ))
+
+                dbDefectSheet = App.offlineSyncDB?.getDefectSheet(currentWeeklyDefectItem!!.vdhCheckId)
+            }
+        }
 
         observers()
         clickListeners()
@@ -139,7 +162,6 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private fun observers() {
         vm.lDGetWeeklyDefectCheckImages.observe(this) {
             if (it != null) {
-
                 selectedOilLevelID = it.VdhDefChkImgOilLevelId
                 selectedEngineCoolantLevelID = it.EngineCoolantLevelId
                 selectedBreakFluidLevelID = it.BrakeFluidLevelId
@@ -423,44 +445,44 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 val data: Intent? = result.data
                 data?.data?.let {
                     selectedFileUri = it
-                    when(imageMode){
-                        0->{
+                    when (imageMode) {
+                        0 -> {
+//dbDefectSheet.tyreDepthFrontNSImage
+                        }
+
+                        1 -> {
 
                         }
 
-                        1->{
+                        2 -> {
 
                         }
 
-                        2->{
+                        3 -> {
 
                         }
 
-                        3->{
+                        4 -> {
 
                         }
 
-                        4->{
+                        5 -> {
 
                         }
 
-                        5->{
+                        6 -> {
 
                         }
 
-                        6->{
+                        7 -> {
 
                         }
 
-                        7->{
+                        8 -> {
 
                         }
 
-                        8->{
-
-                        }
-
-                        9->{
+                        9 -> {
 
                         }
                     }
