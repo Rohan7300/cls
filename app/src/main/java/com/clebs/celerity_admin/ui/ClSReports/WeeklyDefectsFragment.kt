@@ -174,14 +174,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
     override fun docClickAction(item: WeeklyDefectChecksModelItem) {
         val intent = Intent(requireContext(), SubmitWeeklyDefectActivity::class.java)
         currentWeeklyDefectItem = item
-        intent.putExtra("regno", item.vehRegNo)
-        intent.putExtra("vdhCheckId", item.vdhCheckId)
-        intent.putExtra("VdhCheckDaId",item.vdhCheckDaId)
-        intent.putExtra("daname", item.dAName)
-        intent.putExtra("VdhCheckVmId",item.vdhCheckVmId)
-        intent.putExtra("VehCheckLmId",item.vehCheckLmId)
-        intent.putExtra("VdhCheckWeekNo",item.vehWkCheckWeek)
-        intent.putExtra("VdhCheckYearNo",item.vdhCheckYear)
+
         startActivity(intent)
     }
 

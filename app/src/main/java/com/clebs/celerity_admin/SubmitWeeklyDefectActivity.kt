@@ -107,7 +107,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_submit_weekly_defect)
         cqCode()
         vm.GetVehWeeklyDefectSheetInspectionInfo(
-            Prefs.getInstance(App.instance).vdhCheckId.toString().toInt()
+           currentWeeklyDefectItem!!.vdhCheckId
         )
         vm.isinspectiondonelivedata.observe(this, Observer {
             if (it != null) {
@@ -575,50 +575,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private fun cqCode() {
         cqSDKInitializer = CQSDKInitializer(this)
 
-        if (intent.hasExtra("vdhCheckId")) {
-            vdhCheckId = intent.getIntExtra("vdhCheckId", 0).toString()
-            Prefs.getInstance(App.instance).vdhCheckId = vdhCheckId
-        }
-        if (intent.hasExtra("VdhCheckDaId")) {
-            VdhCheckDaId = intent.getIntExtra("VdhCheckDaId", 0).toString()
-            Prefs.getInstance(App.instance).VdhCheckDaId = VdhCheckDaId
-        }
-        if (intent.hasExtra("VdhCheckVmId")) {
-            VdhCheckVmId = intent.getIntExtra("VdhCheckVmId", 0).toString()
-            Prefs.getInstance(App.instance).VdhCheckVmId = VdhCheckVmId
-        }
 
-        if (intent.hasExtra("VdhCheckWeekNo")) {
-            VdhCheckWeekNo = intent.getIntExtra("VdhCheckWeekNo", 0).toString()
-            Prefs.getInstance(App.instance).VdhCheckWeekNo = VdhCheckWeekNo
-        }
-        if (intent.hasExtra("VehCheckLmId")) {
-            VehCheckLmId = intent.getIntExtra("VehCheckLmId", 0).toString()
-            Prefs.getInstance(App.instance).VehCheckLmId = VehCheckLmId
-        }
-        if (intent.hasExtra("VdhCheckYearNo")) {
-            VdhCheckYearNo = intent.getIntExtra("VdhCheckYearNo", 0).toString()
-            Prefs.getInstance(App.instance).VdhCheckYearNo = VdhCheckYearNo
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        if (intent.hasExtra("regno")) {
-
-            inspectionreg = intent?.getStringExtra("regno")?.replace(" ", "")
-            Prefs.getInstance(App.instance).vehinspection = inspectionreg.toString()
-        }
 //        val inspectionInfo = App.offlineSyncDB!!.getInspectionInfo()
 //        Log.e("result4", "onCreate: " + inspectionInfo)
 //        if (!App.offlineSyncDB!!.isInspectionTableEmpty()) {
@@ -672,7 +629,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
                 ), inputDetails = InputDetails(
                     vehicleDetails = VehicleDetails(
-                        regNumber = inspectionreg?.replace(" ", ""), //if sent, user can't edit
+                        regNumber = currentWeeklyDefectItem!!.vehRegNo.replace(" ", ""), //if sent, user can't edit
                         make = "Van", //if sent, user can't edit
                         model = "Any Model", //if sent, user can't edit
                         bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
@@ -773,15 +730,10 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
             vm.SaveVehWeeklyDefectSheetInspectionInfo(
                 SaveInspectionRequestBody(
-                    Prefs.getInstance(App.instance).vdhCheckId.toInt(),
-                    Prefs.getInstance(
-                        App.instance
-                    ).vehinspectionUniqueID.replace(" ", ""),
-                    Prefs.getInstance(App.instance).VdhCheckDaId.toInt(),
-                    Prefs.getInstance(App.instance).VdhCheckVmId.toInt(),
-                    Prefs.getInstance(App.instance).VdhCheckWeekNo.toInt(),
-                    Prefs.getInstance(App.instance).VdhCheckYearNo.toInt(),
-                    Prefs.getInstance(App.instance).VehCheckLmId.toInt()
+                   currentWeeklyDefectItem!!.vdhCheckId,   Prefs.getInstance(App.instance).vehinspectionUniqueID,
+                    currentWeeklyDefectItem!!.vdhCheckDaId, currentWeeklyDefectItem!!.vdhCheckVmId,
+                    currentWeeklyDefectItem!!.vehWkCheckWeek, currentWeeklyDefectItem!!.vdhCheckYear,
+                    currentWeeklyDefectItem!!.vehCheckLmId
                 )
             )
 
@@ -789,7 +741,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             vm.saveinspectionlivedata.observe(this, Observer {
                 if (it?.Status == "200") {
                     vm.GetVehWeeklyDefectSheetInspectionInfo(
-                        Prefs.getInstance(App.instance).vdhCheckId.toString().toInt()
+                        currentWeeklyDefectItem!!.vdhCheckId
                     )
                     Toast.makeText(this, "Inspection saved", Toast.LENGTH_SHORT).show()
                     vm.isinspectiondonelivedata.observe(this, Observer {
