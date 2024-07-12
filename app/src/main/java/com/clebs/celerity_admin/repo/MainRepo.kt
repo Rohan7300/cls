@@ -17,6 +17,7 @@ import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
+import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
 import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
@@ -160,13 +161,21 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun UploadVehOSMDefectChkFile(
-        vdhDefectCheckId:Int,
-        fileType:String,
-        date:String,
+        vdhDefectCheckId: Int,
+        fileType: String,
+        date: String,
         image: MultipartBody.Part
-    ):SimpleNetworkResponse<SucessStatusMsgResponse>{
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
-            ApiService.UploadVehOSMDefectChkFile(vdhDefectCheckId,fileType,date,image)
+            ApiService.UploadVehOSMDefectChkFile(vdhDefectCheckId, fileType, date, image)
+        }
+    }
+
+    suspend fun SaveDefectSheetWeeklyOSMCheck(
+        body: SaveDefectSheetWeeklyOSMCheckRequest
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.SaveDefectSheetWeeklyOSMCheck(body)
         }
     }
 }

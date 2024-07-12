@@ -19,6 +19,7 @@ import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
+import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
 import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
@@ -37,6 +38,8 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
     val lDGetVehWindScreenConditionStatus: MutableLiveData<GetVehWindScreenConditionStatusResponse?> =
         MutableLiveData()
     val lDUploadVehOSMDefectChkFile: MutableLiveData<SucessStatusMsgResponse?> = MutableLiveData()
+    val lDSaveDefectSheetWeeklyOSMCheck: MutableLiveData<SucessStatusMsgResponse?> =
+        MutableLiveData()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -338,6 +341,18 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
                 lDUploadVehOSMDefectChkFile.postValue(null)
             else
                 lDUploadVehOSMDefectChkFile.postValue(response.body)
+        }
+    }
+
+    fun SaveDefectSheetWeeklyOSMCheck(
+        body: SaveDefectSheetWeeklyOSMCheckRequest
+    ) {
+        viewModelScope.launch {
+            val response = repo.SaveDefectSheetWeeklyOSMCheck(body)
+            if (!response.isSuccessful || response.failed)
+                lDSaveDefectSheetWeeklyOSMCheck.postValue(null)
+            else
+                lDSaveDefectSheetWeeklyOSMCheck.postValue(response.body)
         }
     }
 }

@@ -16,6 +16,7 @@ import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
+import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
 import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
@@ -100,5 +101,10 @@ interface ApiService {
         @Query("fileType") fileType:String,
         @Query("date") date:String,
         @Part image:MultipartBody.Part
+    ):Response<SucessStatusMsgResponse>
+
+    @POST("/api/WeeklyDefectSheet/SaveDefectSheetWeeklyOSMCheck")
+    suspend fun SaveDefectSheetWeeklyOSMCheck(
+        @Body request: SaveDefectSheetWeeklyOSMCheckRequest
     ):Response<SucessStatusMsgResponse>
 }

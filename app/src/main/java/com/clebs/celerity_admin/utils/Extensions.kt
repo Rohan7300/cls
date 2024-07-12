@@ -261,8 +261,9 @@ fun setupFullHeight(bottomSheetDialog: BottomSheetDialog, context: Context) {
     }
     bottomSheet.layoutParams = layoutParams
     behavior.state = BottomSheetBehavior.STATE_EXPANDED
-    behavior.isDraggable=false
+    behavior.isDraggable = false
 }
+
 fun setupHalfHeight(bottomSheetDialog: BottomSheetDialog, context: Context) {
     val bottomSheet =
         bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
@@ -279,7 +280,7 @@ fun setupHalfHeight(bottomSheetDialog: BottomSheetDialog, context: Context) {
     behavior.state = BottomSheetBehavior.STATE_EXPANDED
     bottomSheet.layoutParams = layoutParams
 
-    behavior.isDraggable=true
+    behavior.isDraggable = true
     behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
         override fun onStateChanged(bottomSheet: View, newState: Int) {
             when (newState) {
@@ -287,6 +288,7 @@ fun setupHalfHeight(bottomSheetDialog: BottomSheetDialog, context: Context) {
                     // Bottom sheet is expanded, adjust the height as needed
                     behavior.peekHeight = 800 // Set the desired maximum height in pixels
                 }
+
                 BottomSheetBehavior.STATE_COLLAPSED -> {
                     // Bottom sheet is collapsed, adjust the height as needed
                     behavior.peekHeight = 400 // Set the desired minimum height in pixels
@@ -300,6 +302,7 @@ fun setupHalfHeight(bottomSheetDialog: BottomSheetDialog, context: Context) {
         }
     })
 }
+
 fun setupHalfHeightForlisting(bottomSheetDialog: BottomSheetDialog, context: Context) {
     val bottomSheet =
         bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
@@ -316,7 +319,7 @@ fun setupHalfHeightForlisting(bottomSheetDialog: BottomSheetDialog, context: Con
     behavior.state = BottomSheetBehavior.STATE_EXPANDED
     bottomSheet.layoutParams = layoutParams
 
-    behavior.isDraggable=false
+    behavior.isDraggable = false
     behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
         override fun onStateChanged(bottomSheet: View, newState: Int) {
             when (newState) {
@@ -324,6 +327,7 @@ fun setupHalfHeightForlisting(bottomSheetDialog: BottomSheetDialog, context: Con
                     // Bottom sheet is expanded, adjust the height as needed
                     behavior.peekHeight = 800 // Set the desired maximum height in pixels
                 }
+
                 BottomSheetBehavior.STATE_COLLAPSED -> {
                     // Bottom sheet is collapsed, adjust the height as needed
                     behavior.peekHeight = 400 // Set the desired minimum height in pixels
@@ -392,8 +396,6 @@ fun selectDate(
 }
 
 
-
-
 fun getUtcTime(date: String): String? {
     val sdf1 = SimpleDateFormat("yyyy-MM-dd")
     sdf1.timeZone = TimeZone.getTimeZone("UTC")
@@ -458,10 +460,11 @@ fun showToast(msg: String, context: Context) {
     }
 }
 
- fun getMimeType(uri: Uri): String? {
+fun getMimeType(uri: Uri): String? {
     val extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
     return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
 }
+
 fun radioButtonState(rbFull: RadioButton, rbBelow: RadioButton): Int {
     if (rbFull.isChecked)
         return 1
@@ -469,4 +472,13 @@ fun radioButtonState(rbFull: RadioButton, rbBelow: RadioButton): Int {
         return 2
     else
         return 0
+}
+
+fun getRadioButtonState(rbState: Int): Boolean {
+    return rbState == 1
+}
+
+
+fun uriToFileName(uriString: String): String {
+    return Uri.parse(uriString).lastPathSegment ?: "Unknown"
 }

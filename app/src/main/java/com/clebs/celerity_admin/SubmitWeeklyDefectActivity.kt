@@ -22,21 +22,29 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.clebs.celerity_admin.database.CheckInspection
 import com.clebs.celerity_admin.database.DefectSheet
 import com.clebs.celerity_admin.database.IsInspectionDone
 import com.clebs.celerity_admin.databinding.ActivitySubmitWeeklyDefectBinding
+import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.App
+import com.clebs.celerity_admin.utils.BackgroundUploadWorker
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.getMimeType
 import com.clebs.celerity_admin.utils.radioButtonState
 import com.clebs.celerity_admin.utils.showToast
+import com.clebs.celerity_admin.utils.uriToFileName
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
@@ -61,18 +69,21 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private var selectedWindscreenWashingID: Int = 0
     private var selectedWindScreenConditionID: Int = 0
     private lateinit var oilListNames: List<String>
+    private lateinit var loadingDialog: LoadingDialog
     private var selectedFileUri: Uri? = null
     private lateinit var oilLevelIds: List<Int>
-    private lateinit var filePart: MultipartBody.Part
     private var imageMode = 0
     private var dbDefectSheet: DefectSheet? = null
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
+    private var currentDefSheetID = 0
     private var startonetime: Boolean? = false
+    private var otherImagesList: MutableList<String> = mutableListOf()
     private var inspectionreg: String? = null
     private var isfirst: Boolean? = false
-    var crrType: Int = 0
+    var defectSheetUserId:Int = 0
+    private var crrType: Int = 0
 
     companion object {
         private val REQUIRED_PERMISSIONS =
@@ -99,11 +110,16 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         val mainRepo = MainRepo(apiService)
         vm = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         binding = DataBindingUtil.setContentView(this, R.layout.activity_submit_weekly_defect)
-
+        loadingDialog = LoadingDialog(this)
         cqCode()
+        currentDefSheetID = currentWeeklyDefectItem!!.vdhCheckId
+        defectSheetUserId = currentWeeklyDefectItem!!.vdhCheckDaId
 
-        if (currentWeeklyDefectItem != null)
+
+        if (currentWeeklyDefectItem != null) {
+            loadingDialog.show()
             vm.GetWeeklyDefectCheckImages(currentWeeklyDefectItem!!.vdhCheckId)
+        }
 
         dbDefectSheet = App.offlineSyncDB?.getDefectSheet(
             currentWeeklyDefectItem!!.vdhCheckId
@@ -116,56 +132,65 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         id = currentWeeklyDefectItem!!.vdhCheckId
                     )
                 )
-
                 dbDefectSheet =
                     App.offlineSyncDB?.getDefectSheet(currentWeeklyDefectItem!!.vdhCheckId)
+
             }
         }
 
-        try {
+        binding.back.setOnClickListener {
+            finish()
+        }
+        binding.cancel.setOnClickListener {
+            finish()
+        }
+
+        if (dbDefectSheet != null) {
+            Log.d("DbDefectSheet", dbDefectSheet.toString())
             selectedOilLevelID = dbDefectSheet?.oilLevelID!!
             selectedEngineCoolantLevelID = dbDefectSheet!!.engineCoolantLevelID
             selectedBreakFluidLevelID = dbDefectSheet!!.brakeFluidLevelID
             selectedWindscreenWashingID = dbDefectSheet!!.windScreenWashingLevelId
             selectedWindScreenConditionID = dbDefectSheet!!.windScreenConditionId
-            setUploadCardBtn(
-                dbDefectSheet!!.tyreDepthFrontNSImage!!,
+
+            setUploadCardBtn2(
+                dbDefectSheet!!.tyreDepthFrontNSImage,
                 binding.tyreDepthFrontImageUploadBtn,
                 binding.tyreDepthFrontImageFileName
             )
 
             setRadioCard(
-                dbDefectSheet!!.tyrePressureRearOSRB==1,
+                dbDefectSheet!!.tyrePressureRearOSRB == 1,
                 binding.tyrePressureFrontFullRB,
                 binding.tyrePressureFrontBelowRB
             )
 
-            setUploadCardBtn(
-                dbDefectSheet!!.tyreDepthRearNSImage!!,
+            setUploadCardBtn2(
+                dbDefectSheet!!.tyreDepthRearNSImage,
                 binding.tyreDepthRearImageUploadBtn,
                 binding.tyreDepthRearImageUploadFileName
             )
 
             setRadioCard(
-                dbDefectSheet!!.tyrePressureRearNSRB==1,
+                dbDefectSheet!!.tyrePressureRearNSRB == 1,
                 binding.tyrePressureRearNSFullRB,
                 binding.tyrePressureRearNSBelowRB
             )
 
-            setUploadCardBtn(
-                dbDefectSheet!!.tyreDepthRearOSImage!!,
+            setUploadCardBtn2(
+                dbDefectSheet!!.tyreDepthRearOSImage,
                 binding.tyreDepthRearOSImageUploadBtn,
                 binding.tyreDepthRearOSFileNameTV
             )
 
             setRadioCard(
-                dbDefectSheet!!.tyrePressureRearOSRB==1!!,
+                dbDefectSheet!!.tyrePressureRearOSRB == 1,
                 binding.tyrePressureRearOSFULLRB,
                 binding.tyrePressureRearOSBelowRB
             )
 
-            setUploadCardBtn(
-                dbDefectSheet!!.tyreDepthFrontOSImage!!,
+            setUploadCardBtn2(
+                dbDefectSheet!!.tyreDepthFrontOSImage,
                 binding.tyreDepthFrontOSImageUploadBtn,
                 binding.tyreDepthFrontOSImageFilenameTV
             )
@@ -176,43 +201,46 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 binding.tyrePressureFrontOSBelowRB
             )
 
-            setUploadCardBtn(
-                dbDefectSheet!!.engineLevelImage!!,
+            setUploadCardBtn2(
+                dbDefectSheet!!.engineLevelImage,
                 binding.engineOilImageUploadBtn,
                 binding.engineOilImageUploadFileName
             )
 
-            setUploadCardBtn(
-                dbDefectSheet!!.addBlueLevelImage!!,
+            setUploadCardBtn2(
+                dbDefectSheet!!.addBlueLevelImage,
                 binding.addBlueLevelUploadBtn,
                 binding.addBlueLevelUploadFileName
             )
 
-            setUploadCardBtn(
-                dbDefectSheet!!.nsWingMirrorImage!!,
+            setUploadCardBtn2(
+                dbDefectSheet!!.nsWingMirrorImage,
                 binding.nsWingMirrorUploadBtn,
                 binding.nsWingMirrorUploadFileName
             )
 
-            setUploadCardBtn(
-                dbDefectSheet!!.osWingMirrorImage!!,
+            setUploadCardBtn2(
+                dbDefectSheet!!.osWingMirrorImage,
                 binding.osWingMirrorUploadBtn,
                 binding.osWingMirrorUploadFileName
             )
-            setUploadCardBtn(
-                dbDefectSheet!!.threeSixtyVideo!!,
+            setUploadCardBtn2(
+                dbDefectSheet!!.threeSixtyVideo,
                 binding.Three60VideoUploadBtn,
                 binding.Three60VideoFileNameTV
             )
 
-            if (dbDefectSheet!!.comment!!.isNotBlank()) {
-                binding.actionCommentET.setText(dbDefectSheet!!.comment!!,)
+            if (dbDefectSheet?.otherImages != null)
+                binding.otherImagesTV.text = dbDefectSheet?.otherImages
+            if (!dbDefectSheet!!.comment.isNullOrBlank()) {
+                binding.actionCommentET.setText(dbDefectSheet!!.comment!!)
             }
-        }catch (_:Exception){
-
+            Toast.makeText(
+                this@SubmitWeeklyDefectActivity,
+                " ${dbDefectSheet!!.comment}",
+                Toast.LENGTH_SHORT
+            ).show()
         }
-
-        Log.d("DbDefectSheet", dbDefectSheet.toString())
 
         observers()
         clickListeners()
@@ -261,7 +289,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         }
 
         binding.otherPictureUploadBtn.setOnClickListener {
-
+            addImage(9)
         }
 
         binding.save.setOnClickListener {
@@ -294,11 +322,14 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             if (binding.actionCommentET.text != null)
                 dbDefectSheet?.comment = binding.actionCommentET.text.toString()
 
+            if (otherImagesList.size > 0)
+                dbDefectSheet?.otherImages = otherImagesList.joinToString(separator = ",")
             lifecycleScope.launch {
                 App.offlineSyncDB?.insertOrUpdate(
                     dbDefectSheet!!
                 )
             }
+            saveWithWorker()
         }
 
     }
@@ -317,6 +348,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
     private fun observers() {
         vm.lDGetWeeklyDefectCheckImages.observe(this) {
+            loadingDialog.dismiss()
             if (it != null) {
                 selectedOilLevelID = it.VdhDefChkImgOilLevelId
                 selectedEngineCoolantLevelID = it.EngineCoolantLevelId
@@ -524,6 +556,20 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         }
     }
 
+    private fun setUploadCardBtn2(
+        vdhDefChkImgTyreThreadDepthFrontNs: String?,
+        tyreDepthFrontImageUploadBtn: AppCompatButton,
+        tyreDepthFrontImageFileName: TextView
+    ) {
+        if (!vdhDefChkImgTyreThreadDepthFrontNs.isNullOrBlank()) {
+            "Upload Again".also { tyreDepthFrontImageUploadBtn.text = it }
+            tyreDepthFrontImageFileName.text = uriToFileName(vdhDefChkImgTyreThreadDepthFrontNs!!)
+            tyreDepthFrontImageFileName.setTextColor(ContextCompat.getColor(this, R.color.blue_hex))
+            tyreDepthFrontImageUploadBtn.backgroundTintList =
+                ContextCompat.getColorStateList(this, R.color.greenBtn)
+        }
+    }
+
     private fun setRadioCard(
         tyrePressureFrontNS: Boolean,
         tyrePressureFrontFullRB: RadioButton,
@@ -628,245 +674,308 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     when (imageMode) {
                         0 -> {
                             dbDefectSheet?.tyreDepthFrontNSImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.tyreDepthFrontNSImage!!,
+                                binding.tyreDepthFrontImageUploadBtn,
+                                binding.tyreDepthFrontImageFileName
+                            )
                         }
 
                         1 -> {
                             dbDefectSheet?.tyreDepthRearNSImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.tyreDepthRearNSImage!!,
+                                binding.tyreDepthRearImageUploadBtn,
+                                binding.tyreDepthRearImageUploadFileName
+                            )
                         }
 
                         2 -> {
                             dbDefectSheet?.tyreDepthRearOSImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.tyreDepthRearOSImage!!,
+                                binding.tyreDepthRearOSImageUploadBtn,
+                                binding.tyreDepthRearOSFileNameTV
+                            )
                         }
 
                         3 -> {
                             dbDefectSheet?.tyreDepthFrontOSImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.tyreDepthFrontOSImage!!,
+                                binding.tyreDepthFrontOSImageUploadBtn,
+                                binding.tyreDepthFrontOSImageFilenameTV
+                            )
                         }
 
                         4 -> {
                             dbDefectSheet?.engineLevelImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.engineLevelImage!!,
+                                binding.engineOilImageUploadBtn,
+                                binding.engineOilImageUploadFileName
+                            )
                         }
 
                         5 -> {
                             dbDefectSheet?.addBlueLevelImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.addBlueLevelImage!!,
+                                binding.addBlueLevelUploadBtn,
+                                binding.addBlueLevelUploadFileName
+                            )
                         }
 
                         6 -> {
                             dbDefectSheet?.nsWingMirrorImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.nsWingMirrorImage!!,
+                                binding.nsWingMirrorUploadBtn,
+                                binding.nsWingMirrorUploadFileName
+                            )
                         }
 
                         7 -> {
                             dbDefectSheet?.osWingMirrorImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.osWingMirrorImage!!,
+                                binding.osWingMirrorUploadBtn,
+                                binding.osWingMirrorUploadFileName
+                            )
                         }
 
                         8 -> {
                             dbDefectSheet?.threeSixtyVideo = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.threeSixtyVideo!!,
+                                binding.Three60VideoUploadBtn,
+                                binding.Three60VideoFileNameTV
+                            )
                         }
 
                         9 -> {
-
+                            otherImagesList.add(selectedFileUri.toString())
                         }
 
                         else -> {
                             showToast("Wrong Selection", this)
                         }
                     }
-/*                  val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
-                  val tmpFile = createTempFile("temp", null, cacheDir).apply {
-                      deleteOnExit()
-                  }
+                    /*                  val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
+                                      val tmpFile = createTempFile("temp", null, cacheDir).apply {
+                                          deleteOnExit()
+                                      }
 
-               val inputStream = contentResolver.openInputStream(selectedFileUri!!)
-                  val outputStream = tmpFile.outputStream()
+                                   val inputStream = contentResolver.openInputStream(selectedFileUri!!)
+                                      val outputStream = tmpFile.outputStream()
 
-                  inputStream?.use { input ->
-                      outputStream.use { output ->
-                          input.copyTo(output)
-                      }
-                  }
+                                      inputStream?.use { input ->
+                                          outputStream.use { output ->
+                                              input.copyTo(output)
+                                          }
+                                      }
 
-                  val fileExtension = getMimeType(selectedFileUri!!)?.let { mimeType ->
-                      MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
-                  }
+                                      val fileExtension = getMimeType(selectedFileUri!!)?.let { mimeType ->
+                                          MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+                                      }
 
-                  val requestBody = tmpFile.asRequestBody(mimeType)
-                  filePart = MultipartBody.Part.createFormData(
-                      "UploadTicketDoc",
-                      selectedFileUri!!.lastPathSegment + "." + (fileExtension ?: "jpg"),
-                      requestBody
-                  )*/
-                  //save()
-              }
-          } else {
-              finish()
-              showToast("Attachment not selected!!", this)
-          }
-      }
+                                      val requestBody = tmpFile.asRequestBody(mimeType)
+                                      filePart = MultipartBody.Part.createFormData(
+                                          "UploadTicketDoc",
+                                          selectedFileUri!!.lastPathSegment + "." + (fileExtension ?: "jpg"),
+                                          requestBody
+                                      )*/
+                    //save()
+                }
+            } else {
+                finish()
+                showToast("Attachment not selected!!", this)
+            }
+        }
 
-  private fun cqCode() {
-      cqSDKInitializer = CQSDKInitializer(this)
+    private fun cqCode() {
+        cqSDKInitializer = CQSDKInitializer(this)
 
-      if (intent.hasExtra("regno")) {
+        if (intent.hasExtra("regno")) {
 
-          inspectionreg = intent?.getStringExtra("regno")?.replace(" ", "")
-          Prefs.getInstance(App.instance).vehinspection = inspectionreg.toString()
-      }
-      val inspectionInfo = App.offlineSyncDB!!.getInspectionInfo()
-      Log.e("result4", "onCreate: " + inspectionInfo)
-      if (!App.offlineSyncDB!!.isInspectionTableEmpty()) {
-
-
-          inspectionInfo.forEach {
-              if (Prefs.getInstance(App.instance).vehinspection == it.InspectionDoneRegNo) {
-                  binding.llmain.visibility = View.VISIBLE
-                  binding.llstart.visibility = View.VISIBLE
-                  binding.tvInspection.setText("OSM Vehicle Inspection Completed")
-                  binding.btStart.visibility = View.GONE
-                  binding.done.visibility = View.VISIBLE
-                  Glide.with(this).load(R.raw.dones).into(binding.done)
-
-              } else {
-                  Log.e("result3", "onCreate: ")
-                  binding.llmain.visibility = View.GONE
-                  binding.btStart.visibility = View.VISIBLE
-                  binding.tvInspection.setText("Start OSM Inspection *")
-                  binding.done.visibility = View.GONE
-                  binding.llstart.visibility = View.VISIBLE
-              }
-          }
-      }
-      isfirst = Prefs.getInstance(this).Isfirst
-      startonetime = isfirst
-
-      Log.e("newinspection", "onCreate: " + Prefs.getInstance(App.instance).vehinspection)
-
-      binding.btStart.setOnClickListener {
-          startInspection()
-      }
-  }
-
-  private fun startInspection() {
-      clientUniqueID()
+            inspectionreg = intent?.getStringExtra("regno")?.replace(" ", "")
+            Prefs.getInstance(App.instance).vehinspection = inspectionreg.toString()
+        }
+        val inspectionInfo = App.offlineSyncDB!!.getInspectionInfo()
+        Log.e("result4", "onCreate: " + inspectionInfo)
+        if (!App.offlineSyncDB!!.isInspectionTableEmpty()) {
 
 
+            inspectionInfo.forEach {
+                if (Prefs.getInstance(App.instance).vehinspection == it.InspectionDoneRegNo) {
+                    binding.llmain.visibility = View.VISIBLE
+                    binding.llstart.visibility = View.VISIBLE
+                    binding.tvInspection.setText("OSM Vehicle Inspection Completed")
+                    binding.btStart.visibility = View.GONE
+                    binding.done.visibility = View.VISIBLE
+                    Glide.with(this).load(R.raw.dones).into(binding.done)
 
-      if (cqSDKInitializer.isCQSDKInitialized()) {
+                } else {
+                    Log.e("result3", "onCreate: ")
+                    binding.llmain.visibility = View.GONE
+                    binding.btStart.visibility = View.VISIBLE
+                    binding.tvInspection.setText("Start OSM Inspection *")
+                    binding.done.visibility = View.GONE
+                    binding.llstart.visibility = View.VISIBLE
+                }
+            }
+        }
+        isfirst = Prefs.getInstance(this).Isfirst
+        startonetime = isfirst
 
-          Log.e("sdkskdkdkskdkskd", "onCreateView " + inspectionreg)
+        Log.e("newinspection", "onCreate: " + Prefs.getInstance(App.instance).vehinspection)
 
-          try {
-              cqSDKInitializer.startInspection(activity = this, clientAttrs = ClientAttrs(
-                  userName = " ",
-                  dealer = " ",
-                  dealerIdentifier = " ",
-                  client_unique_id = inspectionID
+        binding.btStart.setOnClickListener {
+            startInspection()
+        }
+    }
 
-                  //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
-              ), inputDetails = InputDetails(
-                  vehicleDetails = VehicleDetails(
-                      regNumber = inspectionreg?.replace(" ", ""), //if sent, user can't edit
-                      make = "Van", //if sent, user can't edit
-                      model = "Any Model", //if sent, user can't edit
-                      bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
-                  ), customerDetails = CustomerDetails(
-                      name = "", //if sent, user can't edit
-                      email = "", //if sent, user can't edit
-                      dialCode = "", //if sent, user can't edit
-                      phoneNumber = "", //if sent, user can't edit
-                  )
-              ), userFlowParams = UserFlowParams(
-                  isOffline = !startonetime!!, // true, Offline quote will be created | false, online quote will be created | null, online
-
-                  skipInputPage = true, // true, Inspection will be started with camera page | false, Inspection will be started
-
-              ),
-
-                  result = { isStarted, msg, code ->
-
-                      Log.e("messsagesss", "startInspection: " + msg + code)
-                      if (isStarted) {
-                          Prefs.getInstance(App.instance).Isfirst = false
-                          startonetime = Prefs.getInstance(App.instance).Isfirst
-                          Log.d("CQSDKXX", "isStarted " + msg)
-                      } else {
-                          Prefs.getInstance(App.instance).Isfirst = true
-                          startonetime = Prefs.getInstance(App.instance).Isfirst
-                          if (msg.equals("Online quote can not be created without internet")) {
-                              Toast.makeText(
-                                  this, "Please Turn on the internet", Toast.LENGTH_SHORT
-                              ).show()
-                              Log.d("CQSDKXX", "Not isStarted1  " + msg)
-                          } else if (msg.equals("Sufficient data not available to create an offline quote")) {
-                              Toast.makeText(
-                                  this, "Please Turn on the internet", Toast.LENGTH_SHORT
-                              ).show()
-                              Log.d("CQSDKXX", "Not isStarted2  " + msg)
-                          } else if (msg.equals("Unable to download setting updates, Please check internet")) {
-                              Toast.makeText(
-                                  this, "Please Turn on the internet", Toast.LENGTH_SHORT
-                              ).show()
-                              Log.d("CQSDKXX", "Not isStarted3  " + msg)
-                          }
-
-                          Log.d("CQSDKXX", "Not isStarted4  " + msg)
-                      }
-                      if (msg == "Success") {
-                          Log.d("CQSDKXX", "Success " + msg)
-                      } else {
-
-                          Log.d("CQSDKXX", "Not Success " + msg)
-                      }
-                      if (!isStarted) {
-                          Log.e("startedinspection", "onCreateView: $msg$isStarted")
-                      }
-                  })
-          } catch (_: Exception) {
-
-          }
-      }
-  }
-
-  private fun clientUniqueID(): String {
-      val x = "123456"
-      val y = "123456"
-      // example string
-      val currentDate = LocalDateTime.now()
-      val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
-
-      regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
+    private fun startInspection() {
+        clientUniqueID()
 
 
-      inspectionID = regexPattern.toString()
-      Prefs.getInstance(App.instance).vehinspectionUniqueID = inspectionID
-      return regexPattern.toString()
-      Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
-  }
 
-  override fun onResume() {
-      super.onResume()
-      val message = intent?.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
-          ?: "Could not identify status message"
-      val tempCode =
-          intent?.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, 0)
+        if (cqSDKInitializer.isCQSDKInitialized()) {
 
-      Log.e("tempcode", "onNewIntent: " + tempCode)
-      if (tempCode == 200) {
-          App.offlineSyncDB!!.insertinspectionInfo(
-              IsInspectionDone(
-                  InspectionDoneRegNo = Prefs.getInstance(App.instance).vehinspection.replace(
-                      " ",
-                      ""
-                  ),
-                  InspectionClientUniqueID = Prefs.getInstance(App.instance).vehinspectionUniqueID.replace(
-                      " ",
-                      ""
-                  )
-              )
-          )
+            Log.e("sdkskdkdkskdkskd", "onCreateView " + inspectionreg)
 
-      } else {
+            try {
+                cqSDKInitializer.startInspection(activity = this, clientAttrs = ClientAttrs(
+                    userName = " ",
+                    dealer = " ",
+                    dealerIdentifier = " ",
+                    client_unique_id = inspectionID
 
-          Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
-      }
-  }
+                    //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                ), inputDetails = InputDetails(
+                    vehicleDetails = VehicleDetails(
+                        regNumber = inspectionreg?.replace(" ", ""), //if sent, user can't edit
+                        make = "Van", //if sent, user can't edit
+                        model = "Any Model", //if sent, user can't edit
+                        bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
+                    ), customerDetails = CustomerDetails(
+                        name = "", //if sent, user can't edit
+                        email = "", //if sent, user can't edit
+                        dialCode = "", //if sent, user can't edit
+                        phoneNumber = "", //if sent, user can't edit
+                    )
+                ), userFlowParams = UserFlowParams(
+                    isOffline = !startonetime!!, // true, Offline quote will be created | false, online quote will be created | null, online
+
+                    skipInputPage = true, // true, Inspection will be started with camera page | false, Inspection will be started
+
+                ),
+
+                    result = { isStarted, msg, code ->
+
+                        Log.e("messsagesss", "startInspection: " + msg + code)
+                        if (isStarted) {
+                            Prefs.getInstance(App.instance).Isfirst = false
+                            startonetime = Prefs.getInstance(App.instance).Isfirst
+                            Log.d("CQSDKXX", "isStarted " + msg)
+                        } else {
+                            Prefs.getInstance(App.instance).Isfirst = true
+                            startonetime = Prefs.getInstance(App.instance).Isfirst
+                            if (msg.equals("Online quote can not be created without internet")) {
+                                Toast.makeText(
+                                    this, "Please Turn on the internet", Toast.LENGTH_SHORT
+                                ).show()
+                                Log.d("CQSDKXX", "Not isStarted1  " + msg)
+                            } else if (msg.equals("Sufficient data not available to create an offline quote")) {
+                                Toast.makeText(
+                                    this, "Please Turn on the internet", Toast.LENGTH_SHORT
+                                ).show()
+                                Log.d("CQSDKXX", "Not isStarted2  " + msg)
+                            } else if (msg.equals("Unable to download setting updates, Please check internet")) {
+                                Toast.makeText(
+                                    this, "Please Turn on the internet", Toast.LENGTH_SHORT
+                                ).show()
+                                Log.d("CQSDKXX", "Not isStarted3  " + msg)
+                            }
+
+                            Log.d("CQSDKXX", "Not isStarted4  " + msg)
+                        }
+                        if (msg == "Success") {
+                            Log.d("CQSDKXX", "Success " + msg)
+                        } else {
+
+                            Log.d("CQSDKXX", "Not Success " + msg)
+                        }
+                        if (!isStarted) {
+                            Log.e("startedinspection", "onCreateView: $msg$isStarted")
+                        }
+                    })
+            } catch (_: Exception) {
+
+            }
+        }
+    }
+
+    private fun clientUniqueID(): String {
+        val x = "123456"
+        val y = "123456"
+        // example string
+        val currentDate = LocalDateTime.now()
+        val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
+
+        regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
+
+
+        inspectionID = regexPattern.toString()
+        Prefs.getInstance(App.instance).vehinspectionUniqueID = inspectionID
+        return regexPattern.toString()
+        Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val message = intent?.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
+            ?: "Could not identify status message"
+        val tempCode =
+            intent?.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, 0)
+
+        Log.e("tempcode", "onNewIntent: " + tempCode)
+        if (tempCode == 200) {
+            App.offlineSyncDB!!.insertinspectionInfo(
+                IsInspectionDone(
+                    InspectionDoneRegNo = Prefs.getInstance(App.instance).vehinspection.replace(
+                        " ",
+                        ""
+                    ),
+                    InspectionClientUniqueID = Prefs.getInstance(App.instance).vehinspectionUniqueID.replace(
+                        " ",
+                        ""
+                    )
+                )
+            )
+
+        } else {
+            Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
+        }
+    }
+
+    private fun saveWithWorker(){
+        val inputData = Data.Builder()
+            .putInt("defectSheetID", currentDefSheetID)
+            .putInt("defectSheetUserId", defectSheetUserId)
+            .build()
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val uploadWorkRequest = OneTimeWorkRequestBuilder<BackgroundUploadWorker>()
+            .setInputData(inputData)
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(this).enqueue(uploadWorkRequest)
+        finish()
+    }
 
 }
