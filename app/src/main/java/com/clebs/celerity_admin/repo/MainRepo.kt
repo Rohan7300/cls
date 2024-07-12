@@ -18,6 +18,8 @@ import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
 import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
+import com.clebs.celerity_admin.models.ResponseInspectionDone
+import com.clebs.celerity_admin.models.SaveInspectionRequestBody
 import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
@@ -161,13 +163,13 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun UploadVehOSMDefectChkFile(
-        vdhDefectCheckId: Int,
-        fileType: String,
-        date: String,
+        vdhDefectCheckId:Int,
+        fileType:String,
+        date:String,
         image: MultipartBody.Part
-    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
+    ):SimpleNetworkResponse<SucessStatusMsgResponse>{
         return safeApiCall {
-            ApiService.UploadVehOSMDefectChkFile(vdhDefectCheckId, fileType, date, image)
+            ApiService.UploadVehOSMDefectChkFile(vdhDefectCheckId,fileType,date,image)
         }
     }
 
@@ -176,6 +178,22 @@ class MainRepo(private val ApiService: ApiService) {
     ): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
             ApiService.SaveDefectSheetWeeklyOSMCheck(body)
+        }
+    }
+
+    suspend fun SaveVehWeeklyDefectSheetInspectionInfo(
+        saveInspectionRequestBody: SaveInspectionRequestBody
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.SaveVehWeeklyDefectSheetInspectionInfo(saveInspectionRequestBody)
+        }
+    }
+
+    suspend fun GetVehWeeklyDefectSheetInspectionInfo(
+        vdhCheckId: Int
+    ): SimpleNetworkResponse<ResponseInspectionDone> {
+        return safeApiCall {
+            ApiService.GetVehWeeklyDefectSheetInspectionInfo(vdhCheckId)
         }
     }
 }

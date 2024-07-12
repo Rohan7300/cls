@@ -173,7 +173,7 @@ class Prefs(context: Context) {
             return sharedPreferences.getBoolean("isBirthdayCardShown", false)
         }
         set(value) {
-            sharedPreferences.edit().putBoolean("isBirthdayCardShown", value?:false).apply()
+            sharedPreferences.edit().putBoolean("isBirthdayCardShown", value ?: false).apply()
         }
 
     var Isfirst: Boolean?
@@ -181,7 +181,7 @@ class Prefs(context: Context) {
             return sharedPreferences.getBoolean("Isfirsts", false)
         }
         set(value) {
-            sharedPreferences.edit().putBoolean("Isfirsts", value?:false).apply()
+            sharedPreferences.edit().putBoolean("Isfirsts", value ?: false).apply()
         }
     var quesID: Int
         get() = sharedPreferences.getInt("quesID", 0)
@@ -245,10 +245,30 @@ class Prefs(context: Context) {
         }
 
 
-
     var vehinspection: String
         get() = sharedPreferences.getString("userName", "") ?: ""
         set(value) = sharedPreferences.edit().putString("userName", value).apply()
+
+
+    var VdhCheckDaId: String
+        get() = sharedPreferences.getString("VdhCheckDaId", "") ?: ""
+        set(value) = sharedPreferences.edit().putString("VdhCheckDaId", value).apply()
+    var VdhCheckVmId: String
+        get() = sharedPreferences.getString("VdhCheckVmId", "") ?: ""
+        set(value) = sharedPreferences.edit().putString("VdhCheckVmId", value).apply()
+    var VehCheckLmId: String
+        get() = sharedPreferences.getString("VehCheckLmId", "") ?: ""
+        set(value) = sharedPreferences.edit().putString("VehCheckLmId", value).apply()
+    var VdhCheckWeekNo: String
+        get() = sharedPreferences.getString("VdhCheckWeekNo", "") ?: ""
+        set(value) = sharedPreferences.edit().putString("VdhCheckWeekNo", value).apply()
+    var vdhCheckId: String
+        get() = sharedPreferences.getString("vdhCheckId", "") ?: ""
+        set(value) = sharedPreferences.edit().putString("vdhCheckId", value).apply()
+    var VdhCheckYearNo: String
+        get() = sharedPreferences.getString("VdhCheckYearNo", "") ?: ""
+        set(value) = sharedPreferences.edit().putString("VdhCheckYearNo", value).apply()
+
 
     var vehinspectionUniqueID: String
         get() = sharedPreferences.getString("userNameID", "") ?: ""

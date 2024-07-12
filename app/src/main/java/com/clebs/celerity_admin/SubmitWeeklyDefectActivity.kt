@@ -20,6 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.work.Constraints
@@ -34,6 +35,7 @@ import com.clebs.celerity_admin.database.IsInspectionDone
 import com.clebs.celerity_admin.databinding.ActivitySubmitWeeklyDefectBinding
 import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
+import com.clebs.celerity_admin.models.SaveInspectionRequestBody
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
@@ -44,6 +46,7 @@ import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.getMimeType
 import com.clebs.celerity_admin.utils.radioButtonState
 import com.clebs.celerity_admin.utils.showToast
+import com.clebs.celerity_admin.utils.toast
 import com.clebs.celerity_admin.utils.uriToFileName
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
@@ -78,6 +81,13 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private lateinit var regexPattern: Regex
     private lateinit var inspectionID: String
     private var currentDefSheetID = 0
+    private var inspectionID = String()
+    private var VdhCheckDaId = String()
+    private var VdhCheckVmId = String()
+    private var VehCheckLmId = String()
+    private var VdhCheckWeekNo = String()
+    private var vdhCheckId = String()
+    private var VdhCheckYearNo = String()
     private var startonetime: Boolean? = false
     private var otherImagesList: MutableList<String> = mutableListOf()
     private var inspectionreg: String? = null
@@ -86,16 +96,15 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private var crrType: Int = 0
 
     companion object {
-        private val REQUIRED_PERMISSIONS =
-            mutableListOf(
-                Manifest.permission.CAMERA
-            ).apply {
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    add(Manifest.permission.READ_MEDIA_IMAGES)
-                }
-            }.toTypedArray()
+        private val REQUIRED_PERMISSIONS = mutableListOf(
+            Manifest.permission.CAMERA
+        ).apply {
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                add(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        }.toTypedArray()
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -112,6 +121,37 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_submit_weekly_defect)
         loadingDialog = LoadingDialog(this)
         cqCode()
+        vm.GetVehWeeklyDefectSheetInspectionInfo(
+           currentWeeklyDefectItem!!.vdhCheckId
+        )
+        vm.isinspectiondonelivedata.observe(this, Observer {
+            if (it != null) {
+                if (it.isInspectionDone) {
+                    binding.llmain.visibility = View.VISIBLE
+                    binding.llstart.visibility = View.VISIBLE
+                    binding.tvInspection.setText("OSM Vehicle Inspection Completed")
+                    binding.llstart.strokeColor = ContextCompat.getColor(this,R.color.green)
+                    binding.tvInspection.setTextColor(ContextCompat.getColor(this,R.color.green))
+                    binding.btStart.visibility = View.GONE
+                    binding.done.visibility = View.VISIBLE
+                    Glide.with(this).load(R.raw.dones).into(binding.done)
+
+                }
+            } else {
+                binding.llmain.visibility = View.GONE
+                binding.btStart.visibility = View.VISIBLE
+                binding.llstart.setStrokeColor(ContextCompat.getColor(this,R.color.very_very_light_red))
+                binding.tvInspection.setTextColor(ContextCompat.getColor(this,R.color.text_color))
+                binding.tvInspection.setText("Start OSM Inspection *")
+                binding.done.visibility = View.GONE
+                binding.llstart.visibility = View.VISIBLE
+            }
+
+
+        })
+
+        if (currentWeeklyDefectItem != null) vm.GetWeeklyDefectCheckImages(currentWeeklyDefectItem!!.vdhCheckId)
+
         currentDefSheetID = currentWeeklyDefectItem!!.vdhCheckId
         defectSheetUserId = currentWeeklyDefectItem!!.vdhCheckDaId
 
@@ -244,6 +284,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
         observers()
         clickListeners()
+        cqCode()
     }
 
     private fun clickListeners() {
@@ -761,30 +802,30 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                             showToast("Wrong Selection", this)
                         }
                     }
-                    /*                  val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
-                                      val tmpFile = createTempFile("temp", null, cacheDir).apply {
-                                          deleteOnExit()
-                                      }
+                    val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
+                    val tmpFile = createTempFile("temp", null, cacheDir).apply {
+                        deleteOnExit()
+                    }
 
-                                   val inputStream = contentResolver.openInputStream(selectedFileUri!!)
-                                      val outputStream = tmpFile.outputStream()
+                    val inputStream = contentResolver.openInputStream(selectedFileUri!!)
+                    val outputStream = tmpFile.outputStream()
 
-                                      inputStream?.use { input ->
-                                          outputStream.use { output ->
-                                              input.copyTo(output)
-                                          }
-                                      }
+                    inputStream?.use { input ->
+                        outputStream.use { output ->
+                            input.copyTo(output)
+                        }
+                    }
 
-                                      val fileExtension = getMimeType(selectedFileUri!!)?.let { mimeType ->
-                                          MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
-                                      }
+                    val fileExtension = getMimeType(selectedFileUri!!)?.let { mimeType ->
+                        MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+                    }
 
-                                      val requestBody = tmpFile.asRequestBody(mimeType)
-                                      filePart = MultipartBody.Part.createFormData(
-                                          "UploadTicketDoc",
-                                          selectedFileUri!!.lastPathSegment + "." + (fileExtension ?: "jpg"),
-                                          requestBody
-                                      )*/
+                    val requestBody = tmpFile.asRequestBody(mimeType)
+                    filePart = MultipartBody.Part.createFormData(
+                        "UploadTicketDoc",
+                        selectedFileUri!!.lastPathSegment + "." + (fileExtension ?: "jpg"),
+                        requestBody
+                    )
                     //save()
                 }
             } else {
@@ -937,7 +978,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         val message = intent?.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
             ?: "Could not identify status message"
         val tempCode =
-            intent?.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, 0)
+            intent?.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
 
         Log.e("tempcode", "onNewIntent: " + tempCode)
         if (tempCode == 200) {
@@ -955,6 +996,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             )
 
         } else {
+
             Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
         }
     }

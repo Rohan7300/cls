@@ -19,7 +19,7 @@
         android:layout_width="260dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:backgroundTint="@color/very_light_orange"
+        android:backgroundTint="@color/home_blue"
         android:fitsSystemWindows="true"
         android:theme="@style/NavigationTheme"
         app:drawerLayoutCornerSize="10dp"

@@ -23,15 +23,15 @@
                 android:layout_height="match_parent"
 
                 >
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:alpha="0.1"
-                    android:src="@drawable/cls_final_logo"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/imageView5"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="500dp"-->
+<!--                    android:alpha="0.1"-->
+<!--                    android:src="@drawable/cls_final_logo"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
 
                 <View
@@ -39,7 +39,7 @@
                     android:layout_width="match_parent"
 
                     android:layout_height="1dp"
-                    android:background="@color/very_light_orange"
+                    android:background="@color/maroon"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/orange"
                     android:src="@drawable/deep_curves"
-                    android:tint="@color/very_light_orange"
+                    android:tint="@color/maroon"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -62,7 +62,7 @@
                     android:layout_marginTop="16dp"
                     android:letterSpacing="0.06"
                     android:text="SIGN IN"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="19sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/imageView3"
@@ -78,12 +78,12 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="120dp"
                     android:background="@drawable/shape_edittext"
-                    android:backgroundTint="@color/very_light_orange"
+                    android:backgroundTint="@color/maroon"
                     android:gravity="center_horizontal"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
-                    android:text="OSM portal"
-                    android:textColor="@color/maroon"
+                    android:text="OSM PORTAL"
+                    android:textColor="@color/white"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@+id/textView2"
                     app:layout_constraintStart_toStartOf="@+id/textView2"
