@@ -79,7 +79,6 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private var dbDefectSheet: DefectSheet? = null
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var regexPattern: Regex
-    private lateinit var inspectionID: String
     private var currentDefSheetID = 0
     private var inspectionID = String()
     private var VdhCheckDaId = String()
@@ -275,11 +274,11 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             if (!dbDefectSheet!!.comment.isNullOrBlank()) {
                 binding.actionCommentET.setText(dbDefectSheet!!.comment!!)
             }
-            Toast.makeText(
+/*            Toast.makeText(
                 this@SubmitWeeklyDefectActivity,
                 " ${dbDefectSheet!!.comment}",
                 Toast.LENGTH_SHORT
-            ).show()
+            ).show()*/
         }
 
         observers()
@@ -802,7 +801,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                             showToast("Wrong Selection", this)
                         }
                     }
-                    val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
+               /*     val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
                     val tmpFile = createTempFile("temp", null, cacheDir).apply {
                         deleteOnExit()
                     }
@@ -825,7 +824,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         "UploadTicketDoc",
                         selectedFileUri!!.lastPathSegment + "." + (fileExtension ?: "jpg"),
                         requestBody
-                    )
+                    )*/
                     //save()
                 }
             } else {
@@ -837,39 +836,35 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private fun cqCode() {
         cqSDKInitializer = CQSDKInitializer(this)
 
-        if (intent.hasExtra("regno")) {
 
-            inspectionreg = intent?.getStringExtra("regno")?.replace(" ", "")
-            Prefs.getInstance(App.instance).vehinspection = inspectionreg.toString()
-        }
-        val inspectionInfo = App.offlineSyncDB!!.getInspectionInfo()
-        Log.e("result4", "onCreate: " + inspectionInfo)
-        if (!App.offlineSyncDB!!.isInspectionTableEmpty()) {
-
-
-            inspectionInfo.forEach {
-                if (Prefs.getInstance(App.instance).vehinspection == it.InspectionDoneRegNo) {
-                    binding.llmain.visibility = View.VISIBLE
-                    binding.llstart.visibility = View.VISIBLE
-                    binding.tvInspection.setText("OSM Vehicle Inspection Completed")
-                    binding.btStart.visibility = View.GONE
-                    binding.done.visibility = View.VISIBLE
-                    Glide.with(this).load(R.raw.dones).into(binding.done)
-
-                } else {
-                    Log.e("result3", "onCreate: ")
-                    binding.llmain.visibility = View.GONE
-                    binding.btStart.visibility = View.VISIBLE
-                    binding.tvInspection.setText("Start OSM Inspection *")
-                    binding.done.visibility = View.GONE
-                    binding.llstart.visibility = View.VISIBLE
-                }
-            }
-        }
+//        val inspectionInfo = App.offlineSyncDB!!.getInspectionInfo()
+//        Log.e("result4", "onCreate: " + inspectionInfo)
+//        if (!App.offlineSyncDB!!.isInspectionTableEmpty()) {
+//
+//
+//            inspectionInfo.forEach {
+//                if (Prefs.getInstance(App.instance).vehinspection == it.InspectionDoneRegNo) {
+//                    binding.llmain.visibility = View.VISIBLE
+//                    binding.llstart.visibility = View.VISIBLE
+//                    binding.tvInspection.setText("OSM Vehicle Inspection Completed")
+//                    binding.btStart.visibility = View.GONE
+//                    binding.done.visibility = View.VISIBLE
+//                    Glide.with(this).load(R.raw.dones).into(binding.done)
+//
+//                } else {
+//                    Log.e("result3", "onCreate: ")
+//                    binding.llmain.visibility = View.GONE
+//                    binding.btStart.visibility = View.VISIBLE
+//                    binding.tvInspection.setText("Start OSM Inspection *")
+//                    binding.done.visibility = View.GONE
+//                    binding.llstart.visibility = View.VISIBLE
+//                }
+//            }
+//        }
         isfirst = Prefs.getInstance(this).Isfirst
         startonetime = isfirst
 
-        Log.e("newinspection", "onCreate: " + Prefs.getInstance(App.instance).vehinspection)
+//        Log.e("newinspection", "onCreate: " + Prefs.getInstance(App.instance).vehinspection)
 
         binding.btStart.setOnClickListener {
             startInspection()
@@ -895,7 +890,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
                 ), inputDetails = InputDetails(
                     vehicleDetails = VehicleDetails(
-                        regNumber = inspectionreg?.replace(" ", ""), //if sent, user can't edit
+                        regNumber = currentWeeklyDefectItem!!.vehRegNo.replace(" ", ""), //if sent, user can't edit
                         make = "Van", //if sent, user can't edit
                         model = "Any Model", //if sent, user can't edit
                         bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
@@ -982,25 +977,71 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
         Log.e("tempcode", "onNewIntent: " + tempCode)
         if (tempCode == 200) {
+
             App.offlineSyncDB!!.insertinspectionInfo(
                 IsInspectionDone(
                     InspectionDoneRegNo = Prefs.getInstance(App.instance).vehinspection.replace(
-                        " ",
-                        ""
+                        " ", ""
                     ),
                     InspectionClientUniqueID = Prefs.getInstance(App.instance).vehinspectionUniqueID.replace(
-                        " ",
-                        ""
+                        " ", ""
                     )
                 )
             )
+
+
+            vm.SaveVehWeeklyDefectSheetInspectionInfo(
+                SaveInspectionRequestBody(
+                    currentWeeklyDefectItem!!.vdhCheckId,   Prefs.getInstance(App.instance).vehinspectionUniqueID,
+                    currentWeeklyDefectItem!!.vdhCheckDaId, currentWeeklyDefectItem!!.vdhCheckVmId,
+                    currentWeeklyDefectItem!!.vehWkCheckWeek, currentWeeklyDefectItem!!.vdhCheckYear,
+                    currentWeeklyDefectItem!!.vehCheckLmId
+                )
+            )
+
+
+            vm.saveinspectionlivedata.observe(this, Observer {
+                if (it?.Status == "200") {
+                    vm.GetVehWeeklyDefectSheetInspectionInfo(
+                        currentWeeklyDefectItem!!.vdhCheckId
+                    )
+                    Toast.makeText(this, "Inspection saved", Toast.LENGTH_SHORT).show()
+                    vm.isinspectiondonelivedata.observe(this, Observer {
+                        if (it!=null){
+
+                            if (it.isInspectionDone){
+
+                                binding.llmain.visibility = View.VISIBLE
+                                binding.llstart.visibility = View.VISIBLE
+                                binding.tvInspection.setText("OSM Vehicle Inspection Completed")
+                                binding.llstart.strokeColor = ContextCompat.getColor(this,R.color.green)
+                                binding.tvInspection.setTextColor(ContextCompat.getColor(this,R.color.green))
+                                binding.btStart.visibility = View.GONE
+                                binding.done.visibility = View.VISIBLE
+                                Glide.with(this).load(R.raw.dones).into(binding.done)
+                            }
+                        }
+                        else{
+                            binding.llmain.visibility = View.GONE
+                            binding.btStart.visibility = View.VISIBLE
+                            binding.llstart.setStrokeColor(ContextCompat.getColor(this,R.color.very_very_light_red))
+                            binding.tvInspection.setTextColor(ContextCompat.getColor(this,R.color.text_color))
+                            binding.tvInspection.setText("Start OSM Inspection *")
+                            binding.done.visibility = View.GONE
+                            binding.llstart.visibility = View.VISIBLE
+                        }
+
+
+                    })
+
+                }
+            })
 
         } else {
 
             Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
         }
     }
-
     private fun saveWithWorker(){
         val inputData = Data.Builder()
             .putInt("defectSheetID", currentDefSheetID)
