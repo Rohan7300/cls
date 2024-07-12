@@ -19,6 +19,8 @@ import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
+import com.clebs.celerity_admin.models.ResponseInspectionDone
+import com.clebs.celerity_admin.models.SaveInspectionRequestBody
 import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
@@ -37,6 +39,8 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
     val lDGetVehWindScreenConditionStatus: MutableLiveData<GetVehWindScreenConditionStatusResponse?> =
         MutableLiveData()
     val lDUploadVehOSMDefectChkFile: MutableLiveData<SucessStatusMsgResponse?> = MutableLiveData()
+    val saveinspectionlivedata: MutableLiveData<SucessStatusMsgResponse?> = MutableLiveData()
+    val isinspectiondonelivedata: MutableLiveData<ResponseInspectionDone?> = MutableLiveData()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -338,6 +342,32 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
                 lDUploadVehOSMDefectChkFile.postValue(null)
             else
                 lDUploadVehOSMDefectChkFile.postValue(response.body)
+        }
+    }
+
+    fun SaveVehWeeklyDefectSheetInspectionInfo(
+        saveInspectionRequestBody: SaveInspectionRequestBody
+    ) {
+        viewModelScope.launch {
+            val response =
+                repo.SaveVehWeeklyDefectSheetInspectionInfo(saveInspectionRequestBody)
+            if (response.failed || !response.isSuccessful)
+                saveinspectionlivedata.postValue(null)
+            else
+                saveinspectionlivedata.postValue(response.body)
+        }
+    }
+
+    fun GetVehWeeklyDefectSheetInspectionInfo(
+        vdhCheckId: Int
+    ) {
+        viewModelScope.launch {
+            val response =
+                repo.GetVehWeeklyDefectSheetInspectionInfo(vdhCheckId)
+            if (response.failed || !response.isSuccessful)
+                isinspectiondonelivedata.postValue(null)
+            else
+                isinspectiondonelivedata.postValue(response.body)
         }
     }
 }

@@ -51,7 +51,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
 
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
-        WeeklyDefectAdapter = WeeklyDefectAdapter(requireContext(), ArrayList(),this)
+        WeeklyDefectAdapter = WeeklyDefectAdapter(requireContext(), ArrayList(), this)
         binding.rvList.adapter = WeeklyDefectAdapter
         loadingDialog = (activity as MainActivityTwo).loadingDialog
         setPrevNextButton()
@@ -175,7 +175,13 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
         val intent = Intent(requireContext(), SubmitWeeklyDefectActivity::class.java)
         currentWeeklyDefectItem = item
         intent.putExtra("regno", item.vehRegNo)
+        intent.putExtra("vdhCheckId", item.vdhCheckId)
+        intent.putExtra("VdhCheckDaId",item.vdhCheckDaId)
         intent.putExtra("daname", item.dAName)
+        intent.putExtra("VdhCheckVmId",item.vdhCheckVmId)
+        intent.putExtra("VehCheckLmId",item.vehCheckLmId)
+        intent.putExtra("VdhCheckWeekNo",item.vehWkCheckWeek)
+        intent.putExtra("VdhCheckYearNo",item.vdhCheckYear)
         startActivity(intent)
     }
 

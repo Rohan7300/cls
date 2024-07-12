@@ -7,7 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [User::class, VehicleInformation::class, CheckInspection::class ,IsInspectionDone::class],
+    entities = [User::class, VehicleInformation::class, CheckInspection::class ,IsInspectionDone::class,DefectSheet::class],
     version = 2
 )
 abstract class OfflineSyncDB : RoomDatabase() {
