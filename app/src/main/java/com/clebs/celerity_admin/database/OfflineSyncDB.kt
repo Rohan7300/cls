@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [User::class, VehicleInformation::class, CheckInspection::class ,IsInspectionDone::class,DefectSheet::class],
-    version = 2
+    version = 3
 )
 abstract class OfflineSyncDB : RoomDatabase() {
     abstract fun osDao(): UserDao

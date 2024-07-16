@@ -13,6 +13,6 @@ interface DefectSheetDao {
     @Update
     suspend fun update(defectSheet: DefectSheet)
 
-    @Query("SELECT * FROM DefectSheet WHERE id = :id")
+    @Query("SELECT * FROM defectsheet WHERE id = :id")
     fun getDefectSheetById(id: Int): DefectSheet?
 }

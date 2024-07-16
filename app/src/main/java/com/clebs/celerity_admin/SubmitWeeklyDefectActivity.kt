@@ -23,22 +23,31 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.clebs.celerity_admin.database.CheckInspection
 import com.clebs.celerity_admin.database.DefectSheet
 import com.clebs.celerity_admin.database.IsInspectionDone
 import com.clebs.celerity_admin.databinding.ActivitySubmitWeeklyDefectBinding
+import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.models.SaveInspectionRequestBody
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.App
+import com.clebs.celerity_admin.utils.BackgroundUploadWorker
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.getMimeType
+import com.clebs.celerity_admin.utils.radioButtonState
 import com.clebs.celerity_admin.utils.showToast
 import com.clebs.celerity_admin.utils.toast
+import com.clebs.celerity_admin.utils.uriToFileName
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
@@ -57,19 +66,20 @@ import java.time.format.DateTimeFormatter
 class SubmitWeeklyDefectActivity : AppCompatActivity() {
     lateinit var binding: ActivitySubmitWeeklyDefectBinding
     private lateinit var vm: MainViewModel
-    private var selectedOilLevelID: Int = -1
-    private var selectedEngineCoolantLevelID: Int = -1
-    private var selectedBreakFluidLevelID: Int = -1
-    private var selectedWindscreenWashingID: Int = -1
-    private var selectedWindScreenConditionID: Int = -1
+    private var selectedOilLevelID: Int = 0
+    private var selectedEngineCoolantLevelID: Int = 0
+    private var selectedBreakFluidLevelID: Int = 0
+    private var selectedWindscreenWashingID: Int = 0
+    private var selectedWindScreenConditionID: Int = 0
     private lateinit var oilListNames: List<String>
+    private lateinit var loadingDialog: LoadingDialog
     private var selectedFileUri: Uri? = null
     private lateinit var oilLevelIds: List<Int>
-    lateinit var filePart: MultipartBody.Part
-    var imageMode = -1
-    var dbDefectSheet: DefectSheet? = null
+    private var imageMode = 0
+    private var dbDefectSheet: DefectSheet? = null
     private lateinit var cqSDKInitializer: CQSDKInitializer
     private lateinit var regexPattern: Regex
+    private var currentDefSheetID = 0
     private var inspectionID = String()
     private var VdhCheckDaId = String()
     private var VdhCheckVmId = String()
@@ -78,8 +88,11 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private var vdhCheckId = String()
     private var VdhCheckYearNo = String()
     private var startonetime: Boolean? = false
+    private var otherImagesList: MutableList<String> = mutableListOf()
     private var inspectionreg: String? = null
     private var isfirst: Boolean? = false
+    var defectSheetUserId:Int = 0
+    private var crrType: Int = 0
 
     companion object {
         private val REQUIRED_PERMISSIONS = mutableListOf(
@@ -105,6 +118,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         val mainRepo = MainRepo(apiService)
         vm = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         binding = DataBindingUtil.setContentView(this, R.layout.activity_submit_weekly_defect)
+        loadingDialog = LoadingDialog(this)
         cqCode()
         vm.GetVehWeeklyDefectSheetInspectionInfo(
            currentWeeklyDefectItem!!.vdhCheckId
@@ -137,6 +151,14 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
         if (currentWeeklyDefectItem != null) vm.GetWeeklyDefectCheckImages(currentWeeklyDefectItem!!.vdhCheckId)
 
+        currentDefSheetID = currentWeeklyDefectItem!!.vdhCheckId
+        defectSheetUserId = currentWeeklyDefectItem!!.vdhCheckDaId
+
+
+        if (currentWeeklyDefectItem != null) {
+            loadingDialog.show()
+            vm.GetWeeklyDefectCheckImages(currentWeeklyDefectItem!!.vdhCheckId)
+        }
 
         dbDefectSheet = App.offlineSyncDB?.getDefectSheet(
             currentWeeklyDefectItem!!.vdhCheckId
@@ -149,14 +171,119 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         id = currentWeeklyDefectItem!!.vdhCheckId
                     )
                 )
-
                 dbDefectSheet =
                     App.offlineSyncDB?.getDefectSheet(currentWeeklyDefectItem!!.vdhCheckId)
+
             }
+        }
+
+        binding.back.setOnClickListener {
+            finish()
+        }
+        binding.cancel.setOnClickListener {
+            finish()
+        }
+
+        if (dbDefectSheet != null) {
+            Log.d("DbDefectSheet", dbDefectSheet.toString())
+            selectedOilLevelID = dbDefectSheet?.oilLevelID!!
+            selectedEngineCoolantLevelID = dbDefectSheet!!.engineCoolantLevelID
+            selectedBreakFluidLevelID = dbDefectSheet!!.brakeFluidLevelID
+            selectedWindscreenWashingID = dbDefectSheet!!.windScreenWashingLevelId
+            selectedWindScreenConditionID = dbDefectSheet!!.windScreenConditionId
+
+            setUploadCardBtn2(
+                dbDefectSheet!!.tyreDepthFrontNSImage,
+                binding.tyreDepthFrontImageUploadBtn,
+                binding.tyreDepthFrontImageFileName
+            )
+
+            setRadioCard(
+                dbDefectSheet!!.tyrePressureRearOSRB == 1,
+                binding.tyrePressureFrontFullRB,
+                binding.tyrePressureFrontBelowRB
+            )
+
+            setUploadCardBtn2(
+                dbDefectSheet!!.tyreDepthRearNSImage,
+                binding.tyreDepthRearImageUploadBtn,
+                binding.tyreDepthRearImageUploadFileName
+            )
+
+            setRadioCard(
+                dbDefectSheet!!.tyrePressureRearNSRB == 1,
+                binding.tyrePressureRearNSFullRB,
+                binding.tyrePressureRearNSBelowRB
+            )
+
+            setUploadCardBtn2(
+                dbDefectSheet!!.tyreDepthRearOSImage,
+                binding.tyreDepthRearOSImageUploadBtn,
+                binding.tyreDepthRearOSFileNameTV
+            )
+
+            setRadioCard(
+                dbDefectSheet!!.tyrePressureRearOSRB == 1,
+                binding.tyrePressureRearOSFULLRB,
+                binding.tyrePressureRearOSBelowRB
+            )
+
+            setUploadCardBtn2(
+                dbDefectSheet!!.tyreDepthFrontOSImage,
+                binding.tyreDepthFrontOSImageUploadBtn,
+                binding.tyreDepthFrontOSImageFilenameTV
+            )
+
+            setRadioCard(
+                dbDefectSheet?.tyrePressureFrontNSRB == 1,
+                binding.tyrePressureFrontOSFullRB,
+                binding.tyrePressureFrontOSBelowRB
+            )
+
+            setUploadCardBtn2(
+                dbDefectSheet!!.engineLevelImage,
+                binding.engineOilImageUploadBtn,
+                binding.engineOilImageUploadFileName
+            )
+
+            setUploadCardBtn2(
+                dbDefectSheet!!.addBlueLevelImage,
+                binding.addBlueLevelUploadBtn,
+                binding.addBlueLevelUploadFileName
+            )
+
+            setUploadCardBtn2(
+                dbDefectSheet!!.nsWingMirrorImage,
+                binding.nsWingMirrorUploadBtn,
+                binding.nsWingMirrorUploadFileName
+            )
+
+            setUploadCardBtn2(
+                dbDefectSheet!!.osWingMirrorImage,
+                binding.osWingMirrorUploadBtn,
+                binding.osWingMirrorUploadFileName
+            )
+            setUploadCardBtn2(
+                dbDefectSheet!!.threeSixtyVideo,
+                binding.Three60VideoUploadBtn,
+                binding.Three60VideoFileNameTV
+            )
+
+            if (dbDefectSheet?.otherImages != null)
+                binding.otherImagesTV.text = dbDefectSheet?.otherImages
+            if (!dbDefectSheet!!.comment.isNullOrBlank()) {
+                binding.actionCommentET.setText(dbDefectSheet!!.comment!!)
+            }
+/*            Toast.makeText(
+                this@SubmitWeeklyDefectActivity,
+                " ${dbDefectSheet!!.comment}",
+                Toast.LENGTH_SHORT
+            ).show()*/
         }
 
         observers()
         clickListeners()
+        cqCode()
     }
 
     private fun clickListeners() {
@@ -169,46 +296,88 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         }
 
         binding.tyreDepthRearOSImageUploadBtn.setOnClickListener {
+            addImage(2)
+        }
+        binding.tyreDepthFrontOSImageUploadBtn.setOnClickListener {
             addImage(3)
         }
 
-        binding.tyreDepthRearOSImageUploadBtn.setOnClickListener {
+        binding.engineOilImageUploadBtn.setOnClickListener {
             addImage(4)
         }
 
-        binding.tyreDepthFrontOSImageUploadBtn.setOnClickListener {
+        binding.addBlueLevelUploadBtn.setOnClickListener {
             addImage(5)
         }
 
-        binding.engineOilImageUploadBtn.setOnClickListener {
+        binding.nsWingMirrorUploadBtn.setOnClickListener {
             addImage(6)
         }
 
-        binding.addBlueLevelUploadBtn.setOnClickListener {
+        binding.osWingMirrorUploadBtn.setOnClickListener {
             addImage(7)
         }
 
-        binding.nsWingMirrorUploadBtn.setOnClickListener {
-            addImage(8)
-        }
-
-        binding.osWingMirrorUploadBtn.setOnClickListener {
-            addImage(9)
-        }
-
         binding.Three60VideoUploadBtn.setOnClickListener {
-
+            imageMode = 8
+            crrType = 1
+            if (allPermissionsGranted()) {
+                upload()
+            } else {
+                requestPermissions()
+            }
         }
 
         binding.otherPictureUploadBtn.setOnClickListener {
-
+            addImage(9)
         }
 
+        binding.save.setOnClickListener {
+            dbDefectSheet?.tyrePressureFrontNSRB =
+                radioButtonState(
+                    binding.tyrePressureFrontFullRB, binding.tyrePressureFrontBelowRB
+                )
+
+            dbDefectSheet?.tyrePressureRearNSRB = radioButtonState(
+                binding.tyrePressureRearNSFullRB,
+                binding.tyrePressureRearNSBelowRB
+            )
+
+            dbDefectSheet?.tyrePressureFrontOSRB = radioButtonState(
+                binding.tyrePressureFrontOSFullRB,
+                binding.tyrePressureFrontOSBelowRB
+            )
+
+            dbDefectSheet?.tyrePressureRearOSRB = radioButtonState(
+                binding.tyrePressureRearOSFULLRB,
+                binding.tyrePressureRearOSBelowRB
+            )
+
+            dbDefectSheet?.brakeFluidLevelID = selectedBreakFluidLevelID
+            dbDefectSheet?.engineCoolantLevelID = selectedEngineCoolantLevelID
+            dbDefectSheet?.oilLevelID = selectedOilLevelID
+            dbDefectSheet?.windScreenWashingLevelId = selectedWindScreenConditionID
+            dbDefectSheet?.windScreenConditionId = selectedWindScreenConditionID
+
+            if (binding.actionCommentET.text != null)
+                dbDefectSheet?.comment = binding.actionCommentET.text.toString()
+
+            if (otherImagesList.size > 0)
+                dbDefectSheet?.otherImages = otherImagesList.joinToString(separator = ",")
+            lifecycleScope.launch {
+                App.offlineSyncDB?.insertOrUpdate(
+                    dbDefectSheet!!
+                )
+            }
+            saveWithWorker()
+        }
 
     }
 
+
     private fun addImage(mode: Int) {
         imageMode = mode
+        crrType = 0
         if (allPermissionsGranted()) {
             upload()
         } else {
@@ -216,8 +385,10 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         }
     }
 
+
     private fun observers() {
         vm.lDGetWeeklyDefectCheckImages.observe(this) {
+            loadingDialog.dismiss()
             if (it != null) {
                 selectedOilLevelID = it.VdhDefChkImgOilLevelId
                 selectedEngineCoolantLevelID = it.EngineCoolantLevelId
@@ -347,13 +518,10 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 oilLevelIds = oilLevelList.map { it.VehOilLevelId }
 
                 Log.d(
-                    "Selections", "indexes ${oilLevelIds.indexOf(selectedOilLevelID)}" + "\n${
-                        oilLevelIds.indexOf(selectedEngineCoolantLevelID)
-                    }" + "\n${oilLevelIds.indexOf(selectedBreakFluidLevelID)}" + "\n${
-                        oilLevelIds.indexOf(
-                            selectedWindscreenWashingID
-                        )
-                    }"
+                    "Selections", "indexes ${oilLevelIds.indexOf(selectedOilLevelID)}" +
+                            "\n${oilLevelIds.indexOf(selectedEngineCoolantLevelID)}" +
+                            "\n${oilLevelIds.indexOf(selectedBreakFluidLevelID)}" +
+                            "\n${oilLevelIds.indexOf(selectedWindscreenWashingID)}"
                 )
 
                 if (selectedOilLevelID > 0) {
@@ -428,6 +596,20 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         }
     }
 
+    private fun setUploadCardBtn2(
+        vdhDefChkImgTyreThreadDepthFrontNs: String?,
+        tyreDepthFrontImageUploadBtn: AppCompatButton,
+        tyreDepthFrontImageFileName: TextView
+    ) {
+        if (!vdhDefChkImgTyreThreadDepthFrontNs.isNullOrBlank()) {
+            "Upload Again".also { tyreDepthFrontImageUploadBtn.text = it }
+            tyreDepthFrontImageFileName.text = uriToFileName(vdhDefChkImgTyreThreadDepthFrontNs!!)
+            tyreDepthFrontImageFileName.setTextColor(ContextCompat.getColor(this, R.color.blue_hex))
+            tyreDepthFrontImageUploadBtn.backgroundTintList =
+                ContextCompat.getColorStateList(this, R.color.greenBtn)
+        }
+    }
+
     private fun setRadioCard(
         tyrePressureFrontNS: Boolean,
         tyrePressureFrontFullRB: RadioButton,
@@ -441,12 +623,15 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     }
 
     private fun setSpinner(
-        spinner: AutoCompleteTextView, items: List<String>, ids: List<Int>
+        spinner: AutoCompleteTextView,
+        items: List<String>,
+        ids: List<Int>
     ) {
         val itemsList = mutableListOf<String>()
         Log.d("ID", "$ids")
         itemsList.addAll(items)
-        val adapter = ArrayAdapter(this, R.layout.dropdown_menu_popup_item, itemsList)
+        val adapter =
+            ArrayAdapter(this, R.layout.dropdown_menu_popup_item, itemsList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         spinner.setAdapter(adapter)
@@ -456,14 +641,28 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
                     val selectedItem = "${nonNullParent.getItemAtPosition(position) ?: ""}"
                     selectedItem.let {
-                        /*                  when (spinner) {
-                                              *//*                     binding.spinnerRouteType -> {
-                                                     selectedRouteType = selectedItem
-                                                     selectedRouteId = ids[position]
-                                                 }*//*
-                        }*/
-                    }
+                        when (spinner) {
+                            binding.spinnerOilLevel -> {
+                                selectedOilLevelID = ids[position]
+                            }
 
+                            binding.spinnerBrakeFluid -> {
+                                selectedBreakFluidLevelID = ids[position]
+                            }
+
+                            binding.spinnerEngineCoolant -> {
+                                selectedEngineCoolantLevelID = ids[position]
+                            }
+
+                            binding.spinnerWindscreenWashingLiquid -> {
+                                selectedWindscreenWashingID = ids[position]
+                            }
+
+                            binding.spinnerWindScreenCondition -> {
+                                selectedWindscreenWashingID = ids[position]
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -473,23 +672,36 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         activityResultLauncher.launch(REQUIRED_PERMISSIONS)
     }
 
-    private val activityResultLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        var permissionGranted = true
-        permissions.entries.forEach {
-            if (it.key in REQUIRED_PERMISSIONS && it.value == false) permissionGranted = false
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        )
+        { permissions ->
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                showToast("Permission denied", this)
+            } else {
+                upload()
+            }
         }
-        if (!permissionGranted) {
-            showToast("Permission denied", this)
+
+    fun upload() {
+        if (crrType == 0) {
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.type = "image/*"
+            resultLauncher.launch(intent)
         } else {
-            upload()
+            pickVideo()
         }
     }
 
-    fun upload() {
+    private fun pickVideo() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
+        intent.type = "video/*"
         resultLauncher.launch(intent)
     }
 
@@ -501,46 +713,95 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     selectedFileUri = it
                     when (imageMode) {
                         0 -> {
-//dbDefectSheet.tyreDepthFrontNSImage
+                            dbDefectSheet?.tyreDepthFrontNSImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.tyreDepthFrontNSImage!!,
+                                binding.tyreDepthFrontImageUploadBtn,
+                                binding.tyreDepthFrontImageFileName
+                            )
                         }
 
                         1 -> {
-
+                            dbDefectSheet?.tyreDepthRearNSImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.tyreDepthRearNSImage!!,
+                                binding.tyreDepthRearImageUploadBtn,
+                                binding.tyreDepthRearImageUploadFileName
+                            )
                         }
 
                         2 -> {
-
+                            dbDefectSheet?.tyreDepthRearOSImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.tyreDepthRearOSImage!!,
+                                binding.tyreDepthRearOSImageUploadBtn,
+                                binding.tyreDepthRearOSFileNameTV
+                            )
                         }
 
                         3 -> {
-
+                            dbDefectSheet?.tyreDepthFrontOSImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.tyreDepthFrontOSImage!!,
+                                binding.tyreDepthFrontOSImageUploadBtn,
+                                binding.tyreDepthFrontOSImageFilenameTV
+                            )
                         }
 
                         4 -> {
-
+                            dbDefectSheet?.engineLevelImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.engineLevelImage!!,
+                                binding.engineOilImageUploadBtn,
+                                binding.engineOilImageUploadFileName
+                            )
                         }
 
                         5 -> {
-
+                            dbDefectSheet?.addBlueLevelImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.addBlueLevelImage!!,
+                                binding.addBlueLevelUploadBtn,
+                                binding.addBlueLevelUploadFileName
+                            )
                         }
 
                         6 -> {
-
+                            dbDefectSheet?.nsWingMirrorImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.nsWingMirrorImage!!,
+                                binding.nsWingMirrorUploadBtn,
+                                binding.nsWingMirrorUploadFileName
+                            )
                         }
 
                         7 -> {
-
+                            dbDefectSheet?.osWingMirrorImage = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.osWingMirrorImage!!,
+                                binding.osWingMirrorUploadBtn,
+                                binding.osWingMirrorUploadFileName
+                            )
                         }
 
                         8 -> {
-
+                            dbDefectSheet?.threeSixtyVideo = selectedFileUri.toString()
+                            setUploadCardBtn2(
+                                dbDefectSheet!!.threeSixtyVideo!!,
+                                binding.Three60VideoUploadBtn,
+                                binding.Three60VideoFileNameTV
+                            )
                         }
 
                         9 -> {
+                            otherImagesList.add(selectedFileUri.toString())
+                        }
 
+                        else -> {
+                            showToast("Wrong Selection", this)
                         }
                     }
-                    val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
+               /*     val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
                     val tmpFile = createTempFile("temp", null, cacheDir).apply {
                         deleteOnExit()
                     }
@@ -563,7 +824,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         "UploadTicketDoc",
                         selectedFileUri!!.lastPathSegment + "." + (fileExtension ?: "jpg"),
                         requestBody
-                    )
+                    )*/
                     //save()
                 }
             } else {
@@ -716,6 +977,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
         Log.e("tempcode", "onNewIntent: " + tempCode)
         if (tempCode == 200) {
+
             App.offlineSyncDB!!.insertinspectionInfo(
                 IsInspectionDone(
                     InspectionDoneRegNo = Prefs.getInstance(App.instance).vehinspection.replace(
@@ -730,7 +992,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
             vm.SaveVehWeeklyDefectSheetInspectionInfo(
                 SaveInspectionRequestBody(
-                   currentWeeklyDefectItem!!.vdhCheckId,   Prefs.getInstance(App.instance).vehinspectionUniqueID,
+                    currentWeeklyDefectItem!!.vdhCheckId,   Prefs.getInstance(App.instance).vehinspectionUniqueID,
                     currentWeeklyDefectItem!!.vdhCheckDaId, currentWeeklyDefectItem!!.vdhCheckVmId,
                     currentWeeklyDefectItem!!.vehWkCheckWeek, currentWeeklyDefectItem!!.vdhCheckYear,
                     currentWeeklyDefectItem!!.vehCheckLmId
@@ -779,6 +1041,24 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
             Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
         }
+    }
+    private fun saveWithWorker(){
+        val inputData = Data.Builder()
+            .putInt("defectSheetID", currentDefSheetID)
+            .putInt("defectSheetUserId", defectSheetUserId)
+            .build()
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val uploadWorkRequest = OneTimeWorkRequestBuilder<BackgroundUploadWorker>()
+            .setInputData(inputData)
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(this).enqueue(uploadWorkRequest)
+        finish()
     }
 
 }
