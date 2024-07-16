@@ -161,6 +161,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
         (activity as MainActivityTwo).binding.appBarMainActivityTwo.bottomBar.visibility =
             View.VISIBLE
     }
