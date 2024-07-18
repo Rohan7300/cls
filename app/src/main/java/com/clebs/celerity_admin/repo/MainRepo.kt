@@ -15,6 +15,7 @@ import com.clebs.celerity_admin.models.GetvehicleOilLevelList
 import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
+import com.clebs.celerity_admin.models.OtherDefectCheckImagesInDropBoxResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
 import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
 import com.clebs.celerity_admin.models.ResponseInspectionDone
@@ -29,6 +30,7 @@ import com.clebs.celerity_admin.utils.DefectFileType
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Part
+import retrofit2.http.Query
 
 class MainRepo(private val ApiService: ApiService) {
     private inline fun <T> safeApiCall(apiCall: () -> Response<T>): SimpleNetworkResponse<T> {
@@ -160,13 +162,29 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun UploadVehOSMDefectChkFile(
-        vdhDefectCheckId:Int,
+        vdhDefectCheckId: Int,
         fileType: DefectFileType,
-        date:String,
+        date: String,
         image: MultipartBody.Part
-    ):SimpleNetworkResponse<SucessStatusMsgResponse>{
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
-            ApiService.UploadVehOSMDefectChkFile(vdhDefectCheckId,fileType.toString(),date,image)
+            ApiService.UploadVehOSMDefectChkFile(vdhDefectCheckId, fileType.toString(), date, image)
+        }
+    }
+
+    suspend fun UploadOtherPictureOfPartsFile(
+        vdhDefectCheckId: Int,
+        fileType: DefectFileType,
+        date: String,
+        image: MultipartBody.Part
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.UploadOtherPictureOfPartsFile(
+                vdhDefectCheckId,
+                fileType.toString(),
+                date,
+                image
+            )
         }
     }
 
@@ -193,13 +211,23 @@ class MainRepo(private val ApiService: ApiService) {
             ApiService.GetVehWeeklyDefectSheetInspectionInfo(vdhCheckId)
         }
     }
+
     suspend fun Uploadvideo360(
-        vdhDefectCheckId:Int,
-        date:String,
+        vdhDefectCheckId: Int,
+        date: String,
         @Part file: MultipartBody.Part
     ): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
-            ApiService.UploadVideo360(vdhDefectCheckId,date,file)
+            ApiService.UploadVideo360(vdhDefectCheckId, date, file)
+        }
+    }
+
+    suspend fun GetOtherDefectCheckImagesInDropBox(
+        vdhDefectCheckId: Int,
+        fileType: String
+    ): SimpleNetworkResponse<OtherDefectCheckImagesInDropBoxResponse> {
+        return safeApiCall {
+            ApiService.GetOtherDefectCheckImagesInDropBox(vdhDefectCheckId, fileType)
         }
     }
 }

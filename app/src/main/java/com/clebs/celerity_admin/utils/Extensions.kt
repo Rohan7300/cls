@@ -510,3 +510,7 @@ fun Bitmap.toRequestBody(): okhttp3.RequestBody {
     compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
     return byteArrayOutputStream.toByteArray().toRequestBody("image/jpeg".toMediaTypeOrNull())
 }
+
+fun convertStringToList(storedString: String): MutableList<String> {
+    return storedString.split(",").toMutableList()
+}
