@@ -1,5 +1,6 @@
 package com.clebs.celerity_admin.utils
 
+
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -10,6 +11,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.provider.Settings
@@ -21,29 +23,19 @@ import android.util.Base64
 import android.util.Base64OutputStream
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.*
-import androidx.annotation.Keep
-
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
-import com.clebs.celerity_admin.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-
-
-import org.json.JSONObject
-
 import java.io.*
-import java.net.InetAddress
-import java.net.NetworkInterface
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -510,3 +502,24 @@ fun Bitmap.toRequestBody(): okhttp3.RequestBody {
     compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
     return byteArrayOutputStream.toByteArray().toRequestBody("image/jpeg".toMediaTypeOrNull())
 }
+
+fun getFilePathFromURI(context: Context?, contentUri: Uri?): String? {
+    //copy file and send new file path
+    val wallpaperDirectory: File = File(
+        Environment.getExternalStorageDirectory().parent!!
+    )
+    // have the object build the directory structure, if needed.
+    if (!wallpaperDirectory.exists()) {
+        wallpaperDirectory.mkdirs()
+    }
+    val copyFile = File(
+        wallpaperDirectory.toString() + File.separator + Calendar.getInstance()
+            .timeInMillis + ".mp4"
+    )
+    // create folder if not exists
+
+    return copyFile.absolutePath
+}
+
+
+

@@ -1,7 +1,9 @@
 package com.clebs.celerity_admin.utils
 
+import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.work.ListenableWorker
 import androidx.work.Worker
@@ -11,10 +13,12 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.App
+import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.MultipartBody.Part.Companion.createFormData
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
@@ -32,10 +36,13 @@ class BackgroundUploadWorker(
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         GlobalScope.launch {
+
             val dbDefectSheet = App.offlineSyncDB?.getDefectSheet(
                 DependencyClass.currentWeeklyDefectItem!!.vdhCheckId
             )
             if (dbDefectSheet != null) {
+
+                Log.d("DbDefectSheet","Worker $dbDefectSheet")
                 val response = mainRepo.SaveDefectSheetWeeklyOSMCheck(
                     SaveDefectSheetWeeklyOSMCheckRequest(
                         Comment = dbDefectSheet.comment ?: "",
@@ -64,8 +71,9 @@ class BackgroundUploadWorker(
                     )
                 )
                 if (response.isSuccessful || response.failed) {
-                    if (dbDefectSheet.tyreDepthFrontNSImage != null) {
 
+                    if (dbDefectSheet.tyreDepthFrontNSImage != null) {
+                        Log.e("kfdfhdjfdj", "doWork: ", )
                         val partBody = createMultipartPart(
                             dbDefectSheet.tyreDepthFrontNSImage!!,
                             "uploadVehOSMDefectChkFile",
@@ -166,19 +174,15 @@ class BackgroundUploadWorker(
                         )
                     }
                     if (dbDefectSheet.threeSixtyVideo != null) {
+                        Log.e("URIIIIIIIIIIIIIIIIIIBACKGROUND", "::::: "+dbDefectSheet.threeSixtyVideo, )
+                        val path = getFilePathFromURI(appContext, dbDefectSheet.threeSixtyVideo!!.toUri())
+                        val file: File = File(path!!)
+                        // Parsing any Media type file
+                        // Parsing any Media type file
 
-                        val file: File =
-                            getFileFromUri(appContext, dbDefectSheet.threeSixtyVideo!!.toUri())!!
-
-                        mainRepo.Uploadvideo360(
-                            dbDefectSheet.id,
-                            dateToday(),
-                            MultipartBody.Part.createFormData(
-                                "UploadVan360Video",
-                                "video ${UUID.randomUUID()}",
-                                file.asRequestBody()
-                            )
-                        )
+                        val fileToUpload: MultipartBody.Part =
+                           createFormData("filename", file.name,file.asRequestBody() )
+                     mainRepo.Uploadvideo360(currentWeeklyDefectItem!!.vdhCheckId, dateToday(),fileToUpload)
 
                     }
                     if (dbDefectSheet.otherImages != null) {
@@ -200,6 +204,30 @@ class BackgroundUploadWorker(
 
         return Result.success()
     }
+    fun uriToByteArray(uri: Uri,context:Context): ByteArray? {
+        var inputStream: InputStream? = null
+        var byteArray: ByteArray? = null
+
+        try {
+            // Open an InputStream for the URI using the ContentResolver
+            val contentResolver: ContentResolver = context.contentResolver
+            inputStream = contentResolver.openInputStream(uri)
+
+            // Create a byte array to hold the data
+            byteArray = if (inputStream != null) {
+                inputStream.readBytes()
+            } else {
+                null
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            // Close the InputStream
+            inputStream?.close()
+        }
+
+        return byteArray
+    }
 
     private fun createMultipartPart(
         image: String, partName: String, context: Context
@@ -216,33 +244,8 @@ class BackgroundUploadWorker(
         }
     }
 
-    fun getFileFromUri(context: Context, uri: Uri): File? {
-        return try {
-            // Check the URI scheme
-            when (uri.scheme) {
-                "content" -> {
-                    // Content URI, use ContentResolver to get the file
-                    val inputStream = context.contentResolver.openInputStream(uri)
-                    val file = createTempFile(context)
-                    inputStream?.copyToFile(file)
-                    file
-                }
 
-                "file" -> {
-                    // File URI, get the file path directly
-                    File(uri.path ?: return null)
-                }
 
-                else -> {
-                    // Unsupported URI scheme
-                    null
-                }
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            null
-        }
-    }
 
     private fun createTempFile(context: Context): File {
         val fileName = "temp_file_${System.currentTimeMillis()}.tmp"
@@ -256,5 +259,7 @@ class BackgroundUploadWorker(
             }
         }
     }
+
+
 
 }

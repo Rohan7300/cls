@@ -1,7 +1,5 @@
 package com.clebs.celerity_admin.network
 
-import android.provider.MediaStore.Video
-import androidx.camera.core.processing.SurfaceProcessorNode.In
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
@@ -122,6 +120,6 @@ interface ApiService {
     @POST("/api/Vehicle/UploadVan360VideoFile")
     suspend fun UploadVideo360(
         @Query("vdhDefectCheckId") vdhDefectCheckId: Int,
-        @Query("date") date: String,@Part video: MultipartBody.Part
+        @Query("date") date: String, @Part video: MultipartBody.Part
     ): Response<SucessStatusMsgResponse>
 }
