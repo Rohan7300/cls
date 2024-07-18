@@ -283,7 +283,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
         observers()
         clickListeners()
-        cqCode()
+      //cqCode()
     }
 
     private fun clickListeners() {
