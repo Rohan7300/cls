@@ -53,13 +53,13 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         WeeklyDefectAdapter = WeeklyDefectAdapter(requireContext(), ArrayList(), this)
         binding.rvList.adapter = WeeklyDefectAdapter
-        loadingDialog = (activity as MainActivityTwo).loadingDialog
+//        loadingDialog = (activity as MainActivityTwo).loadingDialog
         setPrevNextButton()
 
         binding.prev.setOnClickListener {
 
             if (isLoaded) {
-                loadingDialog.show()
+//                loadingDialog.show()
                 j -= 1
                 val y = week!! + j
                 binding.weekNoTV.text = "Week No. $y"
@@ -78,7 +78,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
 
         binding.next.setOnClickListener {
             if (isLoaded) {
-                loadingDialog.show()
+//                loadingDialog.show()
                 j += 1
                 isLoaded = false
                 val x = week!! + j
@@ -100,13 +100,13 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
 
     fun Observers() {
         mainViewModel.GetCurrentWeekYear().observe(viewLifecycleOwner, Observer {
-            loadingDialog.dismiss()
+//            loadingDialog.dismiss()
             if (it != null) {
                 isLoaded = true
                 week = it.weekNO
                 year = it.year
                 binding.weekNoTV.text = "Week No. $week"
-                loadingDialog.show()
+//                loadingDialog.show()
                 mainViewModel.GetWeeklyDefectChecks(
                     week!!.toDouble(),
                     year!!.toDouble(),
@@ -117,7 +117,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
             }
         })
         mainViewModel.lDGetWeeklyDefectChecks.observe(viewLifecycleOwner) {
-            loadingDialog.dismiss()
+//            loadingDialog.dismiss()
             isLoaded = true
             if (it != null) {
                 Log.e("dataass", "Observers: " + it)
@@ -161,6 +161,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
         (activity as MainActivityTwo).binding.appBarMainActivityTwo.bottomBar.visibility =
             View.VISIBLE
     }

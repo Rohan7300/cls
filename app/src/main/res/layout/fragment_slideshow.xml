@@ -12,7 +12,7 @@
         android:id="@+id/rv_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+android:layout_marginBottom="10dp"
         android:overScrollMode="never"
         android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -72,7 +72,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/cq_sdk_poppins_bold"
             android:gravity="center"
-            android:text="Week No. 24"
+            android:text="_ _ _ _"
             android:textColor="@color/white"
             android:textSize="15sp" />
 

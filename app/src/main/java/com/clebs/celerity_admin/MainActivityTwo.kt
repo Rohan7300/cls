@@ -64,6 +64,8 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         setSupportActionBar(binding.appBarMainActivityTwo.toolbar)
 
+        getSupportActionBar()?.setDisplayShowTitleEnabled(false)
+        binding.appBarMainActivityTwo.toolbarTitle.setText("Vehicle Allocation")
 
 //        binding.appBarMainActivityTwo.fab.setOnClickListener { view ->
 //            Snackbar.make(view, "Refreshing...", Snackbar.LENGTH_LONG)
@@ -118,6 +120,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         binding.appBarMainActivityTwo.cardone.setOnClickListener {
 
             navController.navigate(R.id.nav_gallery)
+            binding.appBarMainActivityTwo.toolbarTitle.setText("Vehicle Allocation")
             binding.appBarMainActivityTwo.cardone.setCardBackgroundColor(
                 ContextCompat.getColor(
                     applicationContext,
@@ -134,6 +137,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
             binding.appBarMainActivityTwo.cardtwo.alpha=0.4f
         }
         binding.appBarMainActivityTwo.cardtwo.setOnClickListener {
+            binding.appBarMainActivityTwo.toolbarTitle.setText("Weekly defects check")
             navController.navigate(R.id.nav_slideshow)
             binding.appBarMainActivityTwo.cardtwo.setCardBackgroundColor(
                 ContextCompat.getColor(
@@ -203,6 +207,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         val navController = findNavController(R.id.nav_host_fragment_content_main_activity_two)
         when (item.itemId) {
             R.id.nav_gallery -> {
+                binding.appBarMainActivityTwo.toolbarTitle.setText("Vehicle Allocation")
                 binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
                 navController.navigate(R.id.nav_gallery)
@@ -221,7 +226,8 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
             }
 
             R.id.nav_slideshow -> {
-                binding.appBarMainActivityTwo.bottomBar.visibility = View.GONE
+                binding.appBarMainActivityTwo.toolbarTitle.setText("Weekly defects check")
+                binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
                 navController.navigate(R.id.nav_slideshow)
 
@@ -240,7 +246,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
             }
 
             R.id.nav_weblogin -> {
-                binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
+                binding.appBarMainActivityTwo.bottomBar.visibility = View.GONE
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
                 navController.navigate(R.id.nav_weblogin)
 

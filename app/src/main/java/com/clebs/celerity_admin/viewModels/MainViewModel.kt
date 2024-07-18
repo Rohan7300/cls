@@ -340,7 +340,7 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
     ) {
         viewModelScope.launch {
             val response =
-                repo.UploadVehOSMDefectChkFile(vdhDefectCheckId, fileType.toString(), date, image)
+                repo.UploadVehOSMDefectChkFile(vdhDefectCheckId, fileType, date, image)
             if (response.failed || !response.isSuccessful)
                 lDUploadVehOSMDefectChkFile.postValue(null)
             else

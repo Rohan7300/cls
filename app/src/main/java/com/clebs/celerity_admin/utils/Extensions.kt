@@ -3,8 +3,11 @@ package com.clebs.celerity_admin.utils
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -32,6 +35,8 @@ import androidx.navigation.NavController
 import com.clebs.celerity_admin.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 
 
 import org.json.JSONObject
@@ -481,4 +486,27 @@ fun getRadioButtonState(rbState: Int): Boolean {
 
 fun uriToFileName(uriString: String): String {
     return Uri.parse(uriString).lastPathSegment ?: "Unknown"
+}
+
+fun dateToday():String{
+    return SimpleDateFormat("yyyy-MM-dd").format(Date())
+}
+
+fun getImageBitmapFromUri(context: Context, uri: Uri): Bitmap? {
+    var bitmap: Bitmap? = null
+    try {
+        val contentResolver: ContentResolver = context.contentResolver
+        val inputStream = contentResolver.openInputStream(uri)
+        bitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream?.close()
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return bitmap
+}
+
+fun Bitmap.toRequestBody(): okhttp3.RequestBody {
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+    return byteArrayOutputStream.toByteArray().toRequestBody("image/jpeg".toMediaTypeOrNull())
 }
