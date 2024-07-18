@@ -11,10 +11,12 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.App
+import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.MultipartBody.Part.Companion.createFormData
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -169,7 +171,7 @@ class BackgroundUploadWorker(
                         )
                     }
                     if (dbDefectSheet.threeSixtyVideo != null) {
-                        Log.e("URIIIIIIIIIIIIIIIIIIBACKGROUND", "::::: "+dbDefectSheet.threeSixtyVideo, )
+
                         val path = getFilePathFromURI(appContext, dbDefectSheet.threeSixtyVideo!!.toUri())
                         val file: File = File(path!!)
                         // Parsing any Media type file
