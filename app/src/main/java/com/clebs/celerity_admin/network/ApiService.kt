@@ -117,6 +117,7 @@ interface ApiService {
     ): Response<SucessStatusMsgResponse>
 
 
+    @Multipart
     @POST("/api/Vehicle/UploadVan360VideoFile")
     suspend fun UploadVideo360(
         @Query("vdhDefectCheckId") vdhDefectCheckId: Int,

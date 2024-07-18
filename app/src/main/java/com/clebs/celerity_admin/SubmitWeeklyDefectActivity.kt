@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -13,14 +12,12 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -30,15 +27,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.work.Constraints
 import androidx.work.Data
-import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.bumptech.glide.Glide
-import com.clebs.celerity_admin.database.CheckInspection
 import com.clebs.celerity_admin.database.DefectSheet
 import com.clebs.celerity_admin.database.IsInspectionDone
 import com.clebs.celerity_admin.databinding.ActivitySubmitWeeklyDefectBinding
@@ -53,16 +47,10 @@ import com.clebs.celerity_admin.utils.BackgroundUploadWorker
 import com.clebs.celerity_admin.utils.DefectFileType
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import com.clebs.celerity_admin.utils.Prefs
-import com.clebs.celerity_admin.utils.convertImageUriToBase64
-import com.clebs.celerity_admin.utils.dateToday
-import com.clebs.celerity_admin.utils.getMimeType
 import com.clebs.celerity_admin.utils.radioButtonState
 import com.clebs.celerity_admin.utils.showToast
-import com.clebs.celerity_admin.utils.toast
 import com.clebs.celerity_admin.utils.uriToFileName
 import com.clebs.celerity_admin.viewModels.MainViewModel
-import com.google.android.material.snackbar.Snackbar
-import com.google.common.util.concurrent.ListenableFuture
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
 import io.clearquote.assessment.cq_sdk.models.CustomerDetails
@@ -70,20 +58,9 @@ import io.clearquote.assessment.cq_sdk.models.InputDetails
 import io.clearquote.assessment.cq_sdk.models.UserFlowParams
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
-
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.UUID
-import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executors
 
 class SubmitWeeklyDefectActivity : AppCompatActivity() {
@@ -112,6 +89,16 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private var isupload: Boolean? = true
     var defectSheetUserId: Int = 0
     private var crrType: Int = 0
+
+    var tyreThreadDepthFrontNS:String? = null
+    var tyreThreadDepthRearNS:String? = null
+    var tyreThreadDepthFrontOS:String? = null
+    var tyreThreadDepthRearOS:String? = null
+    var engineOilLevelImage:String? = null
+    var addBlueLevelImage:String? = null
+    var nsWingMirrorImage:String? = null
+    var osWingMirrorImage:String? = null
+    var three60Video:String? = null
 
     companion object {
 
@@ -162,7 +149,6 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                             R.drawable.donessss
                         )
                     )
-
                 }
             } else {
                 binding.llmain.visibility = View.GONE
@@ -177,8 +163,6 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 binding.done.visibility = View.GONE
                 binding.llstart.visibility = View.VISIBLE
             }
-
-
         })
 
         //if (currentWeeklyDefectItem != null) vm.GetWeeklyDefectCheckImages(currentWeeklyDefectItem!!.vdhCheckId)
@@ -400,7 +384,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             if (binding.actionCommentET.text != null)
                 dbDefectSheet?.comment = binding.actionCommentET.text.toString()
 
-            if (otherImagesList.isNotBlank()) //sir ab dekhna ok
+            if (otherImagesList.isNotBlank())
                 dbDefectSheet?.otherImages = otherImagesList
 
             if (binding.actionCommentET.text.isNullOrEmpty()) {
@@ -411,72 +395,67 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             } else {
                 if (isWorkCompleted(isupload!!)) {
 
-//                    if (dbDefectSheet?.tyreDepthFrontNSImage.isNullOrEmpty()) {
-//                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
-//                        binding.signactioncheck.visibility = View.GONE
-//                        binding.signaprrovecheck.visibility = View.GONE
-//
-//                    } else if (dbDefectSheet?.tyreDepthRearNSImage.isNullOrEmpty()) {
-//
-//                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
-//                        binding.signactioncheck.visibility = View.GONE
-//                        binding.signaprrovecheck.visibility = View.GONE
-//                    } else if (dbDefectSheet?.tyreDepthRearOSImage.isNullOrEmpty()) {
-//                        binding.signactioncheck.visibility = View.GONE
-//                        binding.signaprrovecheck.visibility = View.GONE
-//                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
-//
-//                    } else if (dbDefectSheet?.tyreDepthFrontOSImage.isNullOrEmpty()) {
-//                        binding.signactioncheck.visibility = View.GONE
-//                        binding.signaprrovecheck.visibility = View.GONE
-//
-//                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
-//                    } else if (dbDefectSheet?.addBlueLevelImage.isNullOrEmpty()) {
-//                        binding.signactioncheck.visibility = View.GONE
-//                        binding.signaprrovecheck.visibility = View.GONE
-//
-//                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
-//                    } else if (dbDefectSheet?.engineLevelImage.isNullOrEmpty()) {
-//                        binding.signactioncheck.visibility = View.GONE
-//                        binding.signaprrovecheck.visibility = View.GONE
-//
-//                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
-//                    } else if (dbDefectSheet?.nsWingMirrorImage.isNullOrEmpty()) {
-//                        binding.signactioncheck.visibility = View.GONE
-//                        binding.signaprrovecheck.visibility = View.GONE
-//                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
-//                    } else if (dbDefectSheet?.osWingMirrorImage.isNullOrEmpty()) {
-//                        binding.signactioncheck.visibility = View.GONE
-//                        binding.signaprrovecheck.visibility = View.GONE
-//                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
-//                    } else {
-//                        binding.signactioncheck.visibility = View.VISIBLE
-//                        binding.signaprrovecheck.visibility = View.VISIBLE
-//                        lifecycleScope.launch {
-//                            App.offlineSyncDB?.insertOrUpdate(
-//                                dbDefectSheet!!
-//                            )
-//                        }
-                    binding.signactioncheck.visibility = View.VISIBLE
-                    binding.signaprrovecheck.visibility = View.VISIBLE
-                    if (!binding.signactioncheck.isChecked || !binding.signaprrovecheck.isChecked) {
-                        Toast.makeText(this, "Please check the ticks", Toast.LENGTH_SHORT)
-                            .show()
-                    } else {
-                        saveWithWorker()
-                    }
+                    if (dbDefectSheet?.tyreDepthFrontNSImage.isNullOrEmpty()) {
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
 
+                    } else if (dbDefectSheet?.tyreDepthRearNSImage.isNullOrEmpty()) {
+
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+                    } else if (dbDefectSheet?.tyreDepthRearOSImage.isNullOrEmpty()) {
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+
+                    } else if (dbDefectSheet?.tyreDepthFrontOSImage.isNullOrEmpty()) {
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                    } else if (dbDefectSheet?.addBlueLevelImage.isNullOrEmpty()) {
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                    } else if (dbDefectSheet?.engineLevelImage.isNullOrEmpty()) {
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                    } else if (dbDefectSheet?.nsWingMirrorImage.isNullOrEmpty()) {
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                    } else if (dbDefectSheet?.osWingMirrorImage.isNullOrEmpty()) {
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        binding.signactioncheck.visibility = View.VISIBLE
+                        binding.signaprrovecheck.visibility = View.VISIBLE
+                        lifecycleScope.launch {
+                            App.offlineSyncDB?.insertOrUpdate(
+                                dbDefectSheet!!
+                            )
+                        }
+                        if (!binding.signactioncheck.isChecked || !binding.signaprrovecheck.isChecked) {
+                            Toast.makeText(this, "Please check the ticks", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            saveWithWorker()
+                        }
+                    }
+                } else {
+                    Toast.makeText(
+                        this@SubmitWeeklyDefectActivity,
+                        "Background upload still in progress",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
-
-//                } else {
-//                    Toast.makeText(
-//                        this@SubmitWeeklyDefectActivity,
-//                        "Background upload still in progress",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//            }
 
 //            saveWithWorker()
 //            lifecycleScope.launch {
@@ -527,6 +506,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     "Selections",
                     "$selectedOilLevelID \n$selectedEngineCoolantLevelID \n$selectedBreakFluidLevelID \n$selectedWindscreenWashingID \n$selectedWindScreenConditionID"
                 )
+
                 setUploadCardBtn(
                     it.VdhDefChkImgTyrethreaddepthFrontNs,
                     binding.tyreDepthFrontImageUploadBtn,
@@ -730,6 +710,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             tyreDepthFrontImageFileName.setTextColor(ContextCompat.getColor(this, R.color.blue_hex))
             tyreDepthFrontImageUploadBtn.backgroundTintList =
                 ContextCompat.getColorStateList(this, R.color.green)
+
         }
     }
 
@@ -834,9 +815,8 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     }
 
     private fun pickVideo() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-
-        intent.type = "video/*"
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         resultLauncher.launch(intent)
     }
 
@@ -844,8 +824,15 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
-
                 data?.data?.let {
+                    try {
+                        contentResolver.takePersistableUriPermission(
+                            it,
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        )
+                    } catch (e: SecurityException) {
+                        e.printStackTrace()
+                    }
 
                     selectedFileUri = it
                     when (imageMode) {
@@ -922,8 +909,11 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         }
 
                         8 -> {
+
+             /*               this.contentResolver.releasePersistableUriPermission(
+                                selectedFileUri.toString().toUri(), FLAG_GRANT_READ_URI_PERMISSION
+                            );*/
                             dbDefectSheet?.threeSixtyVideo = selectedFileUri.toString()
-                            Log.e("URIIIIIIIIIIIIIIIIII", "::::: "+selectedFileUri, )
                             setUploadCardBtn2(
                                 dbDefectSheet!!.threeSixtyVideo!!,
                                 binding.Three60VideoUploadBtn,

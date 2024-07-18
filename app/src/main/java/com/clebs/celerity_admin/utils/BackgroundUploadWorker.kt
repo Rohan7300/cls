@@ -1,7 +1,9 @@
 package com.clebs.celerity_admin.utils
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.work.ListenableWorker
 import androidx.work.Worker
@@ -11,12 +13,10 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.App
-import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.MultipartBody.Part.Companion.createFormData
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -172,14 +172,16 @@ class BackgroundUploadWorker(
                     }
                     if (dbDefectSheet.threeSixtyVideo != null) {
 
-                        val path = getFilePathFromURI(appContext, dbDefectSheet.threeSixtyVideo!!.toUri())
-                        val file: File = File(path!!)
-                        // Parsing any Media type file
-                        // Parsing any Media type file
-
-                        val fileToUpload: MultipartBody.Part =
-                           createFormData("filename", file.name,file.asRequestBody() )
-                     mainRepo.Uploadvideo360(currentWeeklyDefectItem!!.vdhCheckId, dateToday(),fileToUpload)
+                        val partBody = createVideoMultipart(
+                            dbDefectSheet.threeSixtyVideo!!,
+                            "UploadVan360Video",
+                            appContext
+                        )
+                        mainRepo.Uploadvideo360(
+                            dbDefectSheet.id,
+                            dateToday(),
+                            partBody
+                        )
 
                     }
                     if (dbDefectSheet.otherImages != null) {
@@ -212,6 +214,40 @@ class BackgroundUploadWorker(
             MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
         } catch (e: Exception) {
             e.printStackTrace()
+            val defaultRequestBody = "".toRequestBody("text/plain".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData(partName, "default.jpg", defaultRequestBody)
+        }
+    }
+
+    private fun createVideoMultipart(
+        uri: String, partName: String, context: Context
+    ): MultipartBody.Part {
+        return try {
+            val uriX = uri.toUri()
+            val contentResolver = context.contentResolver
+            val mimeType = contentResolver.getType(uriX)
+            val fileExtension = when (mimeType) {
+                "video/mp4" -> ".mp4"
+                else -> throw IllegalArgumentException("Unsupported file type")
+            }
+
+            val uniqueFileName = "${UUID.randomUUID()}$fileExtension"
+            val inputStream: InputStream? = contentResolver.openInputStream(uriX)
+            val requestBody = inputStream?.let {
+                object : RequestBody() {
+                    override fun contentType() = mimeType?.toMediaTypeOrNull()
+
+                    override fun writeTo(sink: BufferedSink) {
+                        it.source().use { source ->
+                            sink.writeAll(source)
+                        }
+                    }
+                }
+            } ?: throw IllegalArgumentException("Unable to open input stream")
+
+            MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
+        } catch (e: Exception) {
+            Log.d("VideoUploadEx", e.printStackTrace().toString())
             val defaultRequestBody = "".toRequestBody("text/plain".toMediaTypeOrNull())
             MultipartBody.Part.createFormData(partName, "default.jpg", defaultRequestBody)
         }

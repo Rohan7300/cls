@@ -230,7 +230,7 @@ android:id="@+id/tvInspection"
                                 android:layout_weight="1"
                                 android:id="@+id/tyreDepthFrontImageFileName"
                                 android:fontFamily="@font/poppins_medium"
-                                android:text="FileName.PNG"
+                                android:text="- - - -"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -337,7 +337,7 @@ android:id="@+id/tvInspection"
                                 android:layout_marginStart="4dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_medium"
-                                android:text="FileName.PNG"
+                                android:text="- - - -"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -443,7 +443,7 @@ android:id="@+id/tvInspection"
                                 android:layout_marginStart="4dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_medium"
-                                android:text="FileName.PNG"
+                                android:text="- - - -"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -549,7 +549,7 @@ android:id="@+id/tvInspection"
                                 android:layout_marginStart="4dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_medium"
-                                android:text="FileName.PNG"
+                                android:text="- - - -"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -655,7 +655,7 @@ android:id="@+id/tvInspection"
                                 android:layout_marginStart="4dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_semibold"
-                                android:text="FileName.PNG"
+                                android:text="- - - -"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -839,7 +839,7 @@ android:id="@+id/tvInspection"
                                 android:layout_marginStart="4dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_medium"
-                                android:text="FILENAME.PNG"
+                                android:text="- - - -"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -890,7 +890,7 @@ android:id="@+id/tvInspection"
                                 android:layout_marginStart="4dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_semibold"
-                                android:text="FILENAME.PNG"
+                                android:text="- - - -"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -942,7 +942,7 @@ android:id="@+id/tvInspection"
                                 android:layout_marginStart="4dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_medium"
-                                android:text="FILENAME.PNG"
+                                android:text="- - - -"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -994,7 +994,7 @@ android:id="@+id/tvInspection"
                                 android:layout_marginStart="4dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_medium"
-                                android:text="video_name.mp4"
+                                android:text="- - - -"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -1045,7 +1045,7 @@ android:id="@+id/tvInspection"
                                 android:layout_marginStart="4dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_semibold"
-                                android:text=""
+                                android:text="- - - -"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
