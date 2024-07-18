@@ -1,7 +1,6 @@
 package com.clebs.celerity_admin.repo
 
 import android.util.Log
-import com.clebs.celerity_admin.database.User
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
@@ -26,12 +25,10 @@ import com.clebs.celerity_admin.models.WeekYearModel
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
 import com.clebs.celerity_admin.models.basemodel.SimpleNetworkResponse
 import com.clebs.celerity_admin.network.ApiService
-import com.clebs.celerity_admin.ui.App
+import com.clebs.celerity_admin.utils.DefectFileType
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Part
-import retrofit2.http.Query
-import java.time.Year
 
 class MainRepo(private val ApiService: ApiService) {
     private inline fun <T> safeApiCall(apiCall: () -> Response<T>): SimpleNetworkResponse<T> {
@@ -164,12 +161,12 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun UploadVehOSMDefectChkFile(
         vdhDefectCheckId:Int,
-        fileType:String,
+        fileType: DefectFileType,
         date:String,
         image: MultipartBody.Part
     ):SimpleNetworkResponse<SucessStatusMsgResponse>{
         return safeApiCall {
-            ApiService.UploadVehOSMDefectChkFile(vdhDefectCheckId,fileType,date,image)
+            ApiService.UploadVehOSMDefectChkFile(vdhDefectCheckId,fileType.toString(),date,image)
         }
     }
 
@@ -194,6 +191,15 @@ class MainRepo(private val ApiService: ApiService) {
     ): SimpleNetworkResponse<ResponseInspectionDone> {
         return safeApiCall {
             ApiService.GetVehWeeklyDefectSheetInspectionInfo(vdhCheckId)
+        }
+    }
+    suspend fun Uploadvideo360(
+        vdhDefectCheckId:Int,
+        date:String,
+        @Part file: MultipartBody.Part
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.UploadVideo360(vdhDefectCheckId,date,file)
         }
     }
 }

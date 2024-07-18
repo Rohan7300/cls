@@ -1,5 +1,6 @@
 package com.clebs.celerity_admin.network
 
+import android.provider.MediaStore.Video
 import androidx.camera.core.processing.SurfaceProcessorNode.In
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
@@ -99,21 +100,28 @@ interface ApiService {
     @POST("/api/Vehicle/UploadVehOSMDefectChkFile")
     @Multipart
     suspend fun UploadVehOSMDefectChkFile(
-        @Query("vdhDefectCheckId") vdhDefectCheckId:Int,
-        @Query("fileType") fileType:String,
-        @Query("date") date:String,
-        @Part image:MultipartBody.Part
-    ):Response<SucessStatusMsgResponse>
+        @Query("vdhDefectCheckId") vdhDefectCheckId: Int,
+        @Query("fileType") fileType: String,
+        @Query("date") date: String,
+        @Part image: MultipartBody.Part
+    ): Response<SucessStatusMsgResponse>
 
     @POST("/api/WeeklyDefectSheet/SaveVehWeeklyDefectSheetInspectionInfo")
-    suspend fun SaveVehWeeklyDefectSheetInspectionInfo(@Body body: SaveInspectionRequestBody):Response<SucessStatusMsgResponse>
+    suspend fun SaveVehWeeklyDefectSheetInspectionInfo(@Body body: SaveInspectionRequestBody): Response<SucessStatusMsgResponse>
 
 
     @GET("/api/WeeklyDefectSheet/GetVehWeeklyDefectSheetInspectionInfo/{vdhCheckId}")
-    suspend fun GetVehWeeklyDefectSheetInspectionInfo(@Path("vdhCheckId") vdhCheckId: Int):Response<ResponseInspectionDone>
+    suspend fun GetVehWeeklyDefectSheetInspectionInfo(@Path("vdhCheckId") vdhCheckId: Int): Response<ResponseInspectionDone>
 
     @POST("/api/WeeklyDefectSheet/SaveDefectSheetWeeklyOSMCheck")
     suspend fun SaveDefectSheetWeeklyOSMCheck(
         @Body request: SaveDefectSheetWeeklyOSMCheckRequest
-    ):Response<SucessStatusMsgResponse>
+    ): Response<SucessStatusMsgResponse>
+
+
+    @POST("/api/Vehicle/UploadVan360VideoFile")
+    suspend fun UploadVideo360(
+        @Query("vdhDefectCheckId") vdhDefectCheckId: Int,
+        @Query("date") date: String,@Part video: MultipartBody.Part
+    ): Response<SucessStatusMsgResponse>
 }

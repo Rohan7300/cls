@@ -70,6 +70,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:id="@+id/daTv"
                         android:fontFamily="@font/poppins_medium"
                         android:text="DA Name"
                         android:textColor="@color/white"
@@ -94,8 +95,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:textColor="@color/white"
+                        android:id="@+id/daReg"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="DA Name"
+                        android:text="DA Reg No"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -117,8 +119,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:textColor="@color/white"
+                        android:id="@+id/daLoc"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="DA Name"
+                        android:text="DA location"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -180,7 +183,7 @@ android:id="@+id/tvInspection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/llmain"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:orientation="vertical">
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -202,7 +205,7 @@ android:id="@+id/tvInspection"
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="Tyre thread depth N/S front Image Uploaded :"
+                            android:text="Tyre thread depth N/S front Image upload :"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -670,7 +673,7 @@ android:id="@+id/tvInspection"
                         android:layout_margin="8dp"
                         android:layout_weight="1"
                         android:hint="Oil Level"
-                        android:textColorHint="@color/hintColor">
+                        android:textColorHint="@color/black">
 
                         <AutoCompleteTextView
                             android:layout_width="match_parent"
@@ -680,7 +683,7 @@ android:id="@+id/tvInspection"
                             android:importantForAutofill="no"
                             android:inputType="none"
                             android:padding="12dp"
-                            android:textColorHint="@color/hintColor"
+                            android:textColorHint="@color/black"
                             android:textSize="14sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -692,7 +695,7 @@ android:id="@+id/tvInspection"
                         android:layout_margin="8dp"
                         android:layout_weight="1"
                         android:hint="Engine Coolant"
-                        android:textColorHint="@color/hintColor">
+                        android:textColorHint="@color/black">
 
                         <AutoCompleteTextView
                             android:layout_width="match_parent"
@@ -702,7 +705,7 @@ android:id="@+id/tvInspection"
                             android:inputType="none"
                             android:id="@+id/spinnerEngineCoolant"
                             android:padding="12dp"
-                            android:textColorHint="@color/hintColor"
+                            android:textColorHint="@color/black"
                             android:textSize="14sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -715,7 +718,7 @@ android:id="@+id/tvInspection"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
                     android:hint="Brake Fluid"
-                    android:textColorHint="@color/hintColor">
+                    android:textColorHint="@color/black">
 
                     <AutoCompleteTextView
                         android:layout_width="match_parent"
@@ -725,7 +728,7 @@ android:id="@+id/tvInspection"
                         android:id="@+id/spinnerBrakeFluid"
                         android:inputType="none"
                         android:padding="12dp"
-                        android:textColorHint="@color/hintColor"
+                        android:textColorHint="@color/black"
                         android:textSize="14sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -736,6 +739,7 @@ android:id="@+id/tvInspection"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
                     android:checked="true"
+                    android:id="@+id/checkpower"
                     android:text="Power Steering Liquid"
                     android:textSize="12sp" />
 
@@ -751,7 +755,7 @@ android:id="@+id/tvInspection"
                         android:layout_margin="8dp"
                         android:layout_weight="1"
                         android:hint="WindScreen Washing Liquid"
-                        android:textColorHint="@color/hintColor"
+                        android:textColorHint="@color/black"
                         app:expandedHintEnabled="true">
 
                         <AutoCompleteTextView
@@ -762,7 +766,7 @@ android:id="@+id/tvInspection"
                             android:importantForAutofill="no"
                             android:inputType="none"
                             android:padding="12dp"
-                            android:textColorHint="@color/hintColor"
+                            android:textColorHint="@color/black"
                             android:textSize="14sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -774,7 +778,7 @@ android:id="@+id/tvInspection"
                         android:layout_margin="8dp"
                         android:layout_weight="1"
                         android:hint="Windscreen Condition"
-                        android:textColorHint="@color/hintColor">
+                        android:textColorHint="@color/black">
 
                         <AutoCompleteTextView
                             android:id="@+id/spinnerWindScreenCondition"
@@ -784,7 +788,7 @@ android:id="@+id/tvInspection"
                             android:importantForAutofill="no"
                             android:inputType="none"
                             android:padding="12dp"
-                            android:textColorHint="@color/hintColor"
+                            android:textColorHint="@color/black"
                             android:textSize="14sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -1016,7 +1020,7 @@ android:id="@+id/tvInspection"
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="Other pictures of parts not working, browse"
+                            android:text="Other pictures of parts not working."
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -1052,10 +1056,12 @@ android:id="@+id/tvInspection"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="5dp"
                     android:layout_marginBottom="5dp"
+                    android:visibility="gone"
+                    android:id="@+id/signactioncheck"
                     android:layout_marginTop="10dp"
                     android:layout_weight="1"
                     android:textSize="12sp"
-                    android:checked="true"
+                    android:checked="false"
                     android:text="By ticking this box, I declare I have carried out my weekly vehicle checks" />
 
                 <androidx.appcompat.widget.AppCompatCheckBox
@@ -1063,9 +1069,11 @@ android:id="@+id/tvInspection"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:textSize="12sp"
+                    android:visibility="gone"
+                    android:id="@+id/signaprrovecheck"
                     android:layout_weight="1"
-                    android:checked="true"
-                    android:text="By ticking this box, I declare I have carried out my weekly vehicle checks" />
+                    android:checked="false"
+                    android:text="Click to approve weekly defect checks." />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

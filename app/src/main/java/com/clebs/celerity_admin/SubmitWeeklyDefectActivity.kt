@@ -2,12 +2,15 @@ package com.clebs.celerity_admin
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.webkit.MimeTypeMap
@@ -17,17 +20,23 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.work.Constraints
 import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import androidx.work.Worker
+import androidx.work.WorkerParameters
 import com.bumptech.glide.Glide
 import com.clebs.celerity_admin.database.CheckInspection
 import com.clebs.celerity_admin.database.DefectSheet
@@ -41,14 +50,19 @@ import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.BackgroundUploadWorker
+import com.clebs.celerity_admin.utils.DefectFileType
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import com.clebs.celerity_admin.utils.Prefs
+import com.clebs.celerity_admin.utils.convertImageUriToBase64
+import com.clebs.celerity_admin.utils.dateToday
 import com.clebs.celerity_admin.utils.getMimeType
 import com.clebs.celerity_admin.utils.radioButtonState
 import com.clebs.celerity_admin.utils.showToast
 import com.clebs.celerity_admin.utils.toast
 import com.clebs.celerity_admin.utils.uriToFileName
 import com.clebs.celerity_admin.viewModels.MainViewModel
+import com.google.android.material.snackbar.Snackbar
+import com.google.common.util.concurrent.ListenableFuture
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
 import io.clearquote.assessment.cq_sdk.models.CustomerDetails
@@ -56,16 +70,26 @@ import io.clearquote.assessment.cq_sdk.models.InputDetails
 import io.clearquote.assessment.cq_sdk.models.UserFlowParams
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.UUID
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.Executors
 
 class SubmitWeeklyDefectActivity : AppCompatActivity() {
     lateinit var binding: ActivitySubmitWeeklyDefectBinding
     private lateinit var vm: MainViewModel
+    private val syncWorker by lazy { OneTimeWorkRequestBuilder<SyncWorker>().build() }
     private var selectedOilLevelID: Int = 0
     private var selectedEngineCoolantLevelID: Int = 0
     private var selectedBreakFluidLevelID: Int = 0
@@ -88,13 +112,15 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private var vdhCheckId = String()
     private var VdhCheckYearNo = String()
     private var startonetime: Boolean? = false
-    private var otherImagesList: MutableList<String> = mutableListOf()
+    private var otherImagesList: String = ""
     private var inspectionreg: String? = null
     private var isfirst: Boolean? = false
-    var defectSheetUserId:Int = 0
+    private var isupload: Boolean? = true
+    var defectSheetUserId: Int = 0
     private var crrType: Int = 0
 
     companion object {
+
         private val REQUIRED_PERMISSIONS = mutableListOf(
             Manifest.permission.CAMERA
         ).apply {
@@ -120,8 +146,11 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_submit_weekly_defect)
         loadingDialog = LoadingDialog(this)
         cqCode()
+        binding.daTv.setText(currentWeeklyDefectItem!!.dAName)
+        binding.daReg.setText(currentWeeklyDefectItem!!.vehRegNo)
+        binding.daLoc.setText(currentWeeklyDefectItem!!.locationName)
         vm.GetVehWeeklyDefectSheetInspectionInfo(
-           currentWeeklyDefectItem!!.vdhCheckId
+            currentWeeklyDefectItem!!.vdhCheckId
         )
         vm.isinspectiondonelivedata.observe(this, Observer {
             if (it != null) {
@@ -129,18 +158,27 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     binding.llmain.visibility = View.VISIBLE
                     binding.llstart.visibility = View.VISIBLE
                     binding.tvInspection.setText("OSM Vehicle Inspection Completed")
-                    binding.llstart.strokeColor = ContextCompat.getColor(this,R.color.green)
-                    binding.tvInspection.setTextColor(ContextCompat.getColor(this,R.color.green))
+                    binding.llstart.strokeColor = ContextCompat.getColor(this, R.color.green)
+                    binding.tvInspection.setTextColor(ContextCompat.getColor(this, R.color.green))
                     binding.btStart.visibility = View.GONE
                     binding.done.visibility = View.VISIBLE
-                    Glide.with(this).load(R.raw.dones).into(binding.done)
+                    binding.done.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            this@SubmitWeeklyDefectActivity,
+                            R.drawable.donessss
+                        )
+                    )
 
                 }
             } else {
                 binding.llmain.visibility = View.GONE
                 binding.btStart.visibility = View.VISIBLE
-                binding.llstart.setStrokeColor(ContextCompat.getColor(this,R.color.very_very_light_red))
-                binding.tvInspection.setTextColor(ContextCompat.getColor(this,R.color.text_color))
+                binding.llstart.setStrokeColor(
+                    ContextCompat.getColor(
+                        this, R.color.very_very_light_red
+                    )
+                )
+                binding.tvInspection.setTextColor(ContextCompat.getColor(this, R.color.text_color))
                 binding.tvInspection.setText("Start OSM Inspection *")
                 binding.done.visibility = View.GONE
                 binding.llstart.visibility = View.VISIBLE
@@ -191,7 +229,9 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             selectedBreakFluidLevelID = dbDefectSheet!!.brakeFluidLevelID
             selectedWindscreenWashingID = dbDefectSheet!!.windScreenWashingLevelId
             selectedWindScreenConditionID = dbDefectSheet!!.windScreenConditionId
-
+            binding.checkpower.isChecked = dbDefectSheet!!.powerSteeringCheck
+//            binding.signactioncheck.isChecked = dbDefectSheet!!.WeeklyActionCheck
+//            binding.signaprrovecheck.isChecked = dbDefectSheet!!.WeeklyApproveCheck
             setUploadCardBtn2(
                 dbDefectSheet!!.tyreDepthFrontNSImage,
                 binding.tyreDepthFrontImageUploadBtn,
@@ -269,16 +309,22 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 binding.Three60VideoFileNameTV
             )
 
-            if (dbDefectSheet?.otherImages != null)
-                binding.otherImagesTV.text = dbDefectSheet?.otherImages
+            if (dbDefectSheet?.otherImages != null) {
+                var size = dbDefectSheet?.otherImages!!.split(",").size
+                var others = ""
+                for (i in 0 until size) {
+                    others += "im$i.jpg \n"
+                }
+                binding.otherImagesTV.text = others
+
+            }
             if (!dbDefectSheet!!.comment.isNullOrBlank()) {
                 binding.actionCommentET.setText(dbDefectSheet!!.comment!!)
-            }
-/*            Toast.makeText(
-                this@SubmitWeeklyDefectActivity,
-                " ${dbDefectSheet!!.comment}",
-                Toast.LENGTH_SHORT
-            ).show()*/
+            }/*            Toast.makeText(
+                            this@SubmitWeeklyDefectActivity,
+                            " ${dbDefectSheet!!.comment}",
+                            Toast.LENGTH_SHORT
+                        ).show()*/
         }
 
         observers()
@@ -289,6 +335,8 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private fun clickListeners() {
         binding.tyreDepthFrontImageUploadBtn.setOnClickListener {
             addImage(0)
+
+
         }
 
         binding.tyreDepthRearImageUploadBtn.setOnClickListener {
@@ -333,43 +381,126 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         }
 
         binding.save.setOnClickListener {
-            dbDefectSheet?.tyrePressureFrontNSRB =
-                radioButtonState(
-                    binding.tyrePressureFrontFullRB, binding.tyrePressureFrontBelowRB
-                )
+            dbDefectSheet?.tyrePressureFrontNSRB = radioButtonState(
+                binding.tyrePressureFrontFullRB, binding.tyrePressureFrontBelowRB
+            )
 
             dbDefectSheet?.tyrePressureRearNSRB = radioButtonState(
-                binding.tyrePressureRearNSFullRB,
-                binding.tyrePressureRearNSBelowRB
+                binding.tyrePressureRearNSFullRB, binding.tyrePressureRearNSBelowRB
             )
 
             dbDefectSheet?.tyrePressureFrontOSRB = radioButtonState(
-                binding.tyrePressureFrontOSFullRB,
-                binding.tyrePressureFrontOSBelowRB
+                binding.tyrePressureFrontOSFullRB, binding.tyrePressureFrontOSBelowRB
             )
 
             dbDefectSheet?.tyrePressureRearOSRB = radioButtonState(
-                binding.tyrePressureRearOSFULLRB,
-                binding.tyrePressureRearOSBelowRB
+                binding.tyrePressureRearOSFULLRB, binding.tyrePressureRearOSBelowRB
             )
 
             dbDefectSheet?.brakeFluidLevelID = selectedBreakFluidLevelID
             dbDefectSheet?.engineCoolantLevelID = selectedEngineCoolantLevelID
             dbDefectSheet?.oilLevelID = selectedOilLevelID
-            dbDefectSheet?.windScreenWashingLevelId = selectedWindScreenConditionID
+            dbDefectSheet?.windScreenWashingLevelId = selectedWindscreenWashingID
             dbDefectSheet?.windScreenConditionId = selectedWindScreenConditionID
-
+            dbDefectSheet?.powerSteeringCheck = binding.checkpower.isChecked
+            dbDefectSheet?.WeeklyActionCheck = binding.signactioncheck.isChecked
+            dbDefectSheet?.WeeklyApproveCheck = binding.signaprrovecheck.isChecked
             if (binding.actionCommentET.text != null)
                 dbDefectSheet?.comment = binding.actionCommentET.text.toString()
 
-            if (otherImagesList.size > 0)
-                dbDefectSheet?.otherImages = otherImagesList.joinToString(separator = ",")
-            lifecycleScope.launch {
-                App.offlineSyncDB?.insertOrUpdate(
-                    dbDefectSheet!!
-                )
+            if (otherImagesList.isNotBlank()) //sir ab dekhna ok
+                dbDefectSheet?.otherImages = otherImagesList
+
+            if (binding.actionCommentET.text.isNullOrEmpty()) {
+
+                Toast.makeText(this, "Please enter comment.", Toast.LENGTH_SHORT).show()
+
+
+            } else {
+                if (isWorkCompleted(isupload!!)) {
+
+                    if (dbDefectSheet?.tyreDepthFrontNSImage.isNullOrEmpty()) {
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+
+                    } else if (dbDefectSheet?.tyreDepthRearNSImage.isNullOrEmpty()) {
+
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+                    } else if (dbDefectSheet?.tyreDepthRearOSImage.isNullOrEmpty()) {
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+
+                    } else if (dbDefectSheet?.tyreDepthFrontOSImage.isNullOrEmpty()) {
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                    } else if (dbDefectSheet?.addBlueLevelImage.isNullOrEmpty()) {
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                    } else if (dbDefectSheet?.engineLevelImage.isNullOrEmpty()) {
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                    } else if (dbDefectSheet?.nsWingMirrorImage.isNullOrEmpty()) {
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                    } else if (dbDefectSheet?.osWingMirrorImage.isNullOrEmpty()) {
+                        binding.signactioncheck.visibility = View.GONE
+                        binding.signaprrovecheck.visibility = View.GONE
+                        Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        binding.signactioncheck.visibility = View.VISIBLE
+                        binding.signaprrovecheck.visibility = View.VISIBLE
+                        lifecycleScope.launch {
+                            App.offlineSyncDB?.insertOrUpdate(
+                                dbDefectSheet!!
+                            )
+                        }
+                        if (!binding.signactioncheck.isChecked || !binding.signaprrovecheck.isChecked) {
+                            Toast.makeText(this, "Please check the ticks", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            saveWithWorker()
+                        }
+
+                    }
+
+
+                } else {
+                    Toast.makeText(
+                        this@SubmitWeeklyDefectActivity,
+                        "Background upload still in progress",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
-            saveWithWorker()
+
+//            saveWithWorker()
+//            lifecycleScope.launch {
+//                val isWorkSuccessful = observeUniqueWork(this@SubmitWeeklyDefectActivity)
+//                if (isWorkSuccessful) {
+//                    saveWithWorker()
+//                    // The unique work succeeded
+//                } else {
+//                    Toast.makeText(
+//                        this@SubmitWeeklyDefectActivity,
+//                        "Uploading work is in progress",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                    // The unique work failed or was cancelled
+//                }
+//            }
+
+
         }
 
     }
@@ -395,6 +526,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 selectedBreakFluidLevelID = it.BrakeFluidLevelId
                 selectedWindscreenWashingID = it.WindowScreenWashingLiquidId
                 selectedWindScreenConditionID = it.WindScreenConditionId
+                Log.e("lkekskdsldkls", "observers: " + it)
                 vm.GetVehOilLevelList()
                 vm.GetVehWindScreenConditionStatus()
                 Log.d(
@@ -487,21 +619,22 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
         vm.lDGetVehWindScreenConditionStatus.observe(this) { windScreenConditionList ->
             if (windScreenConditionList != null) {
+
                 val windScreenConditionStatusNameList = windScreenConditionList.map { it.Name }
                 val windScreenConditionStatusNameId = windScreenConditionList.map { it.Id }
 
-                if (selectedWindScreenConditionID > 0) {
-                    binding.spinnerWindScreenCondition.setText(
-                        windScreenConditionStatusNameList[windScreenConditionStatusNameId.indexOf(
-                            selectedWindScreenConditionID
-                        )]
-                    )
-                    binding.spinnerWindScreenCondition.setSelection(
-                        windScreenConditionStatusNameId.indexOf(
-                            selectedWindScreenConditionID
-                        )
-                    )
-                }
+//                if (selectedWindScreenConditionID > 0) {
+//                    binding.spinnerWindScreenCondition.setText(
+//                        windScreenConditionStatusNameList[windScreenConditionStatusNameId.indexOf(
+//                            selectedWindScreenConditionID
+//                        )]
+//                    )
+//                    binding.spinnerWindScreenCondition.setSelection(
+//                        windScreenConditionStatusNameId.indexOf(
+//                            selectedWindScreenConditionID
+//                        )
+//                    )
+//                }
 
                 setSpinner(
                     binding.spinnerWindScreenCondition,
@@ -516,12 +649,16 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             if (oilLevelList != null) {
                 oilListNames = oilLevelList.map { it.VehOilLevelName }
                 oilLevelIds = oilLevelList.map { it.VehOilLevelId }
-
+                Log.e("ksdskjdsk", "observers: " + oilLevelList)
                 Log.d(
-                    "Selections", "indexes ${oilLevelIds.indexOf(selectedOilLevelID)}" +
-                            "\n${oilLevelIds.indexOf(selectedEngineCoolantLevelID)}" +
-                            "\n${oilLevelIds.indexOf(selectedBreakFluidLevelID)}" +
-                            "\n${oilLevelIds.indexOf(selectedWindscreenWashingID)}"
+                    "Selections",
+                    "indexes ${oilLevelIds.indexOf(selectedOilLevelID)}" + "\n${
+                        oilLevelIds.indexOf(selectedEngineCoolantLevelID)
+                    }" + "\n${oilLevelIds.indexOf(selectedBreakFluidLevelID)}" + "\n${
+                        oilLevelIds.indexOf(
+                            selectedWindscreenWashingID
+                        )
+                    }"
                 )
 
                 if (selectedOilLevelID > 0) {
@@ -560,23 +697,29 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     )
                 }
 
-                if (selectedWindscreenWashingID > 0) {
-                    binding.spinnerWindscreenWashingLiquid.setText(
-                        oilListNames[oilLevelIds.indexOf(
-                            selectedWindscreenWashingID
-                        )]
-                    )
-                    binding.spinnerWindscreenWashingLiquid.setSelection(
-                        oilLevelIds.indexOf(
-                            selectedWindscreenWashingID
-                        )
-                    )
-                }
+//                if (selectedWindscreenWashingID > 0) {
+//                    binding.spinnerWindscreenWashingLiquid.setText(
+//                        oilListNames[oilLevelIds.indexOf(
+//                            selectedWindscreenWashingID
+//                        )]
+//                    )
+//
+//
+//                    binding.spinnerWindscreenWashingLiquid.setSelection(
+//                        oilLevelIds.indexOf(
+//                            selectedWindscreenWashingID
+//                        )
+//                    )
+
+
+//                    }
+
 
                 setSpinner(binding.spinnerOilLevel, oilListNames, oilLevelIds)
                 setSpinner(binding.spinnerEngineCoolant, oilListNames, oilLevelIds)
                 setSpinner(binding.spinnerBrakeFluid, oilListNames, oilLevelIds)
                 setSpinner(binding.spinnerWindscreenWashingLiquid, oilListNames, oilLevelIds)
+
             }
         }
 
@@ -592,7 +735,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             tyreDepthFrontImageFileName.text = vdhDefChkImgTyreThreadDepthFrontNs
             tyreDepthFrontImageFileName.setTextColor(ContextCompat.getColor(this, R.color.blue_hex))
             tyreDepthFrontImageUploadBtn.backgroundTintList =
-                ContextCompat.getColorStateList(this, R.color.greenBtn)
+                ContextCompat.getColorStateList(this, R.color.green)
         }
     }
 
@@ -617,21 +760,20 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     ) {
         if (tyrePressureFrontNS) {
             tyrePressureFrontFullRB.isChecked = true
+            tyrePressureFrontBelowRB.isChecked = false
         } else {
             tyrePressureFrontBelowRB.isChecked = true
+            tyrePressureFrontFullRB.isChecked = false
         }
     }
 
     private fun setSpinner(
-        spinner: AutoCompleteTextView,
-        items: List<String>,
-        ids: List<Int>
+        spinner: AutoCompleteTextView, items: List<String>, ids: List<Int>
     ) {
         val itemsList = mutableListOf<String>()
         Log.d("ID", "$ids")
         itemsList.addAll(items)
-        val adapter =
-            ArrayAdapter(this, R.layout.dropdown_menu_popup_item, itemsList)
+        val adapter = ArrayAdapter(this, R.layout.dropdown_menu_popup_item, itemsList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         spinner.setAdapter(adapter)
@@ -656,10 +798,11 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
                             binding.spinnerWindscreenWashingLiquid -> {
                                 selectedWindscreenWashingID = ids[position]
+
                             }
 
                             binding.spinnerWindScreenCondition -> {
-                                selectedWindscreenWashingID = ids[position]
+                                selectedWindScreenConditionID = ids[position]
                             }
                         }
                     }
@@ -672,22 +815,19 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         activityResultLauncher.launch(REQUIRED_PERMISSIONS)
     }
 
-    private val activityResultLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        )
-        { permissions ->
-            var permissionGranted = true
-            permissions.entries.forEach {
-                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
-                    permissionGranted = false
-            }
-            if (!permissionGranted) {
-                showToast("Permission denied", this)
-            } else {
-                upload()
-            }
+    private val activityResultLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        var permissionGranted = true
+        permissions.entries.forEach {
+            if (it.key in REQUIRED_PERMISSIONS && !it.value) permissionGranted = false
         }
+        if (!permissionGranted) {
+            showToast("Permission denied", this)
+        } else {
+            upload()
+        }
+    }
 
     fun upload() {
         if (crrType == 0) {
@@ -701,6 +841,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
     private fun pickVideo() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
+
         intent.type = "video/*"
         resultLauncher.launch(intent)
     }
@@ -785,6 +926,10 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         }
 
                         8 -> {
+
+                            this.contentResolver.releasePersistableUriPermission(
+                                selectedFileUri.toString().toUri(), FLAG_GRANT_READ_URI_PERMISSION
+                            );
                             dbDefectSheet?.threeSixtyVideo = selectedFileUri.toString()
                             setUploadCardBtn2(
                                 dbDefectSheet!!.threeSixtyVideo!!,
@@ -794,37 +939,36 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         }
 
                         9 -> {
-                            otherImagesList.add(selectedFileUri.toString())
+                            otherImagesList = selectedFileUri.toString()
                         }
 
                         else -> {
                             showToast("Wrong Selection", this)
                         }
-                    }
-               /*     val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
-                    val tmpFile = createTempFile("temp", null, cacheDir).apply {
-                        deleteOnExit()
-                    }
+                    }/*     val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
+                         val tmpFile = createTempFile("temp", null, cacheDir).apply {
+                             deleteOnExit()
+                         }
 
-                    val inputStream = contentResolver.openInputStream(selectedFileUri!!)
-                    val outputStream = tmpFile.outputStream()
+                         val inputStream = contentResolver.openInputStream(selectedFileUri!!)
+                         val outputStream = tmpFile.outputStream()
 
-                    inputStream?.use { input ->
-                        outputStream.use { output ->
-                            input.copyTo(output)
-                        }
-                    }
+                         inputStream?.use { input ->
+                             outputStream.use { output ->
+                                 input.copyTo(output)
+                             }
+                         }
 
-                    val fileExtension = getMimeType(selectedFileUri!!)?.let { mimeType ->
-                        MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
-                    }
+                         val fileExtension = getMimeType(selectedFileUri!!)?.let { mimeType ->
+                             MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+                         }
 
-                    val requestBody = tmpFile.asRequestBody(mimeType)
-                    filePart = MultipartBody.Part.createFormData(
-                        "UploadTicketDoc",
-                        selectedFileUri!!.lastPathSegment + "." + (fileExtension ?: "jpg"),
-                        requestBody
-                    )*/
+                         val requestBody = tmpFile.asRequestBody(mimeType)
+                         filePart = MultipartBody.Part.createFormData(
+                             "UploadTicketDoc",
+                             selectedFileUri!!.lastPathSegment + "." + (fileExtension ?: "jpg"),
+                             requestBody
+                         )*/
                     //save()
                 }
             } else {
@@ -890,7 +1034,9 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
                 ), inputDetails = InputDetails(
                     vehicleDetails = VehicleDetails(
-                        regNumber = currentWeeklyDefectItem!!.vehRegNo.replace(" ", ""), //if sent, user can't edit
+                        regNumber = currentWeeklyDefectItem!!.vehRegNo.replace(
+                            " ", ""
+                        ), //if sent, user can't edit
                         make = "Van", //if sent, user can't edit
                         model = "Any Model", //if sent, user can't edit
                         bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
@@ -992,13 +1138,18 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
             vm.SaveVehWeeklyDefectSheetInspectionInfo(
                 SaveInspectionRequestBody(
-                    currentWeeklyDefectItem!!.vdhCheckId,   Prefs.getInstance(App.instance).vehinspectionUniqueID,
-                    currentWeeklyDefectItem!!.vdhCheckDaId, currentWeeklyDefectItem!!.vdhCheckVmId,
-                    currentWeeklyDefectItem!!.vehWkCheckWeek, currentWeeklyDefectItem!!.vdhCheckYear,
+                    currentWeeklyDefectItem!!.vdhCheckId,
+                    Prefs.getInstance(App.instance).vehinspectionUniqueID,
+                    currentWeeklyDefectItem!!.vdhCheckDaId,
+                    currentWeeklyDefectItem!!.vdhCheckVmId,
+                    currentWeeklyDefectItem!!.vehWkCheckWeek,
+                    currentWeeklyDefectItem!!.vdhCheckYear,
                     currentWeeklyDefectItem!!.vehCheckLmId
                 )
             )
-
+//vm.UploadVehOSMDefectChkFile(vdhCheckId.toInt(),"",
+//    uriToMultipart(this@SubmitWeeklyDefectActivity,selectedFileUri!!)
+//)
 
             vm.saveinspectionlivedata.observe(this, Observer {
                 if (it?.Status == "200") {
@@ -1007,25 +1158,44 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     )
                     Toast.makeText(this, "Inspection saved", Toast.LENGTH_SHORT).show()
                     vm.isinspectiondonelivedata.observe(this, Observer {
-                        if (it!=null){
+                        if (it != null) {
 
-                            if (it.isInspectionDone){
+                            if (it.isInspectionDone) {
 
                                 binding.llmain.visibility = View.VISIBLE
                                 binding.llstart.visibility = View.VISIBLE
-                                binding.tvInspection.setText("OSM Vehicle Inspection Completed")
-                                binding.llstart.strokeColor = ContextCompat.getColor(this,R.color.green)
-                                binding.tvInspection.setTextColor(ContextCompat.getColor(this,R.color.green))
+                                binding.tvInspection.setText("OSM Vehicle Inspection is done.")
+                                binding.llstart.strokeColor =
+                                    ContextCompat.getColor(this, R.color.green)
+                                binding.llstart.strokeWidth = 4
+                                binding.tvInspection.setTextColor(
+                                    ContextCompat.getColor(
+                                        this, R.color.green
+                                    )
+                                )
                                 binding.btStart.visibility = View.GONE
                                 binding.done.visibility = View.VISIBLE
-                                Glide.with(this).load(R.raw.dones).into(binding.done)
+                                binding.done.setImageDrawable(
+                                    ContextCompat.getDrawable(
+                                        this@SubmitWeeklyDefectActivity,
+                                        R.drawable.donessss
+                                    )
+                                )
                             }
-                        }
-                        else{
+                        } else {
                             binding.llmain.visibility = View.GONE
                             binding.btStart.visibility = View.VISIBLE
-                            binding.llstart.setStrokeColor(ContextCompat.getColor(this,R.color.very_very_light_red))
-                            binding.tvInspection.setTextColor(ContextCompat.getColor(this,R.color.text_color))
+                            binding.llstart.strokeWidth = 2
+                            binding.llstart.setStrokeColor(
+                                ContextCompat.getColor(
+                                    this, R.color.very_very_light_red
+                                )
+                            )
+                            binding.tvInspection.setTextColor(
+                                ContextCompat.getColor(
+                                    this, R.color.text_color
+                                )
+                            )
                             binding.tvInspection.setText("Start OSM Inspection *")
                             binding.done.visibility = View.GONE
                             binding.llstart.visibility = View.VISIBLE
@@ -1042,23 +1212,111 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
         }
     }
-    private fun saveWithWorker(){
-        val inputData = Data.Builder()
-            .putInt("defectSheetID", currentDefSheetID)
-            .putInt("defectSheetUserId", defectSheetUserId)
-            .build()
 
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
+    private fun saveWithWorker() {
+        val inputData = Data.Builder().putInt("defectSheetID", currentDefSheetID)
+            .putInt("defectSheetUserId", defectSheetUserId).build()
 
-        val uploadWorkRequest = OneTimeWorkRequestBuilder<BackgroundUploadWorker>()
-            .setInputData(inputData)
-            .setConstraints(constraints)
-            .build()
 
-        WorkManager.getInstance(this).enqueue(uploadWorkRequest)
+        val constraints =
+            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+
+        val uploadWorkRequest =
+            OneTimeWorkRequestBuilder<BackgroundUploadWorker>().setInputData(inputData)
+                .setConstraints(constraints).build()
+
+        WorkManager.getInstance(this)
+            .enqueue(uploadWorkRequest)
+
+        Toast.makeText(
+            this@SubmitWeeklyDefectActivity,
+            "Data is being uploaded.",
+            Toast.LENGTH_SHORT
+        ).show()
         finish()
     }
 
+    fun isWorkCompleted(isuploadnew: Boolean): Boolean {
+        // Get the WorkInfo for the given work ID
+        val workManager = WorkManager.getInstance(this)
+
+// Get the work info for the unique work with the tag "sync"
+        val workInfoListenableFuture = workManager.getWorkInfoById(syncWorker.id)
+        workInfoListenableFuture.addListener({
+            // Get the WorkInfo object
+            val workInfo = workInfoListenableFuture.get()
+
+            // Check the work status
+
+            if (workInfo != null) {
+                when (workInfo.state) {
+                    WorkInfo.State.SUCCEEDED -> {
+                        isupload = true
+                        Log.e("completed", "isWorkCompletedcompleted: ")
+                        // Work completed successfully
+                        // Handle success scenario
+                    }
+
+                    WorkInfo.State.FAILED -> {
+                        isupload = false
+                        Log.e("completed", "isWorkfailded: ")
+                        // Work failed
+                        // Handle failure scenario
+                    }
+
+                    WorkInfo.State.RUNNING -> {
+                        isupload = false
+                        Log.e("completed", "i ")
+                        // Work is currently running
+                        // Handle running scenario
+                    }
+
+                    WorkInfo.State.ENQUEUED -> {
+                        Log.e("completed", "j ")
+                        isupload = false
+                        // Work is enqueued and waiting to run
+                        // Handle enqueued scenario
+                    }
+
+                    WorkInfo.State.BLOCKED -> {
+                        isupload = false
+                        Log.e("completed", "k ")
+                        // Work is blocked and cannot run
+                        // Handle blocked scenario
+                    }
+
+                    WorkInfo.State.CANCELLED -> {
+                        Log.e("completed", "l")
+                        isupload = false
+                        // Work was cancelled
+                        // Handle cancelled scenario
+                    }
+                }
+            }
+        }, Executors.newSingleThreadExecutor())
+
+        return isuploadnew
+
+    }
+
+
 }
+
+// Get the work info for the unique work with the given tag
+
+// Wait for the work info to be available
+
+
+class SyncWorker(
+    context: Context, workerParameters: WorkerParameters
+) : Worker(context, workerParameters) {
+    override fun doWork(): Result {
+        // Perform the sync work here
+        // ...
+        return Result.success()
+    }
+
+
+}
+
+
