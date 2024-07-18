@@ -1,7 +1,9 @@
 package com.clebs.celerity_admin.utils
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.work.ListenableWorker
 import androidx.work.Worker
@@ -218,19 +220,19 @@ class BackgroundUploadWorker(
     }
 
     private fun createVideoMultipart(
-        uri: String,partName: String, context: Context
-    ) :MultipartBody.Part {
+        uri: String, partName: String, context: Context
+    ): MultipartBody.Part {
         return try {
-            val uri = uri.toUri()
+            val uriX = uri.toUri()
             val contentResolver = context.contentResolver
-            val mimeType = contentResolver.getType(uri)
+            val mimeType = contentResolver.getType(uriX)
             val fileExtension = when (mimeType) {
                 "video/mp4" -> ".mp4"
                 else -> throw IllegalArgumentException("Unsupported file type")
             }
 
             val uniqueFileName = "${UUID.randomUUID()}$fileExtension"
-            val inputStream: InputStream? = contentResolver.openInputStream(uri)
+            val inputStream: InputStream? = contentResolver.openInputStream(uriX)
             val requestBody = inputStream?.let {
                 object : RequestBody() {
                     override fun contentType() = mimeType?.toMediaTypeOrNull()
@@ -245,7 +247,7 @@ class BackgroundUploadWorker(
 
             MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.d("VideoUploadEx", e.printStackTrace().toString())
             val defaultRequestBody = "".toRequestBody("text/plain".toMediaTypeOrNull())
             MultipartBody.Part.createFormData(partName, "default.jpg", defaultRequestBody)
         }
