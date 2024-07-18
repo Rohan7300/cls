@@ -15,8 +15,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okio.BufferedSink
+import okio.source
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -167,17 +170,15 @@ class BackgroundUploadWorker(
                     }
                     if (dbDefectSheet.threeSixtyVideo != null) {
 
-                        val file: File =
-                            getFileFromUri(appContext, dbDefectSheet.threeSixtyVideo!!.toUri())!!
-
+                        val partBody = createVideoMultipart(
+                            dbDefectSheet.threeSixtyVideo!!,
+                            "UploadVan360Video",
+                            appContext
+                        )
                         mainRepo.Uploadvideo360(
                             dbDefectSheet.id,
                             dateToday(),
-                            MultipartBody.Part.createFormData(
-                                "UploadVan360Video",
-                                "video ${UUID.randomUUID()}",
-                                file.asRequestBody()
-                            )
+                            partBody
                         )
 
                     }
@@ -208,6 +209,40 @@ class BackgroundUploadWorker(
             val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
             val bs64ImageString = getImageBitmapFromUri(context, image.toUri())
             val requestBody = bs64ImageString!!.toRequestBody()
+            MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            val defaultRequestBody = "".toRequestBody("text/plain".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData(partName, "default.jpg", defaultRequestBody)
+        }
+    }
+
+    private fun createVideoMultipart(
+        uri: String,partName: String, context: Context
+    ) :MultipartBody.Part {
+        return try {
+            val uri = uri.toUri()
+            val contentResolver = context.contentResolver
+            val mimeType = contentResolver.getType(uri)
+            val fileExtension = when (mimeType) {
+                "video/mp4" -> ".mp4"
+                else -> throw IllegalArgumentException("Unsupported file type")
+            }
+
+            val uniqueFileName = "${UUID.randomUUID()}$fileExtension"
+            val inputStream: InputStream? = contentResolver.openInputStream(uri)
+            val requestBody = inputStream?.let {
+                object : RequestBody() {
+                    override fun contentType() = mimeType?.toMediaTypeOrNull()
+
+                    override fun writeTo(sink: BufferedSink) {
+                        it.source().use { source ->
+                            sink.writeAll(source)
+                        }
+                    }
+                }
+            } ?: throw IllegalArgumentException("Unable to open input stream")
+
             MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
         } catch (e: Exception) {
             e.printStackTrace()

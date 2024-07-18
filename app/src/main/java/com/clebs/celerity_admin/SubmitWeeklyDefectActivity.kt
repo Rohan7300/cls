@@ -105,12 +105,6 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private lateinit var regexPattern: Regex
     private var currentDefSheetID = 0
     private var inspectionID = String()
-    private var VdhCheckDaId = String()
-    private var VdhCheckVmId = String()
-    private var VehCheckLmId = String()
-    private var VdhCheckWeekNo = String()
-    private var vdhCheckId = String()
-    private var VdhCheckYearNo = String()
     private var startonetime: Boolean? = false
     private var otherImagesList: String = ""
     private var inspectionreg: String? = null
@@ -187,7 +181,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
         })
 
-        if (currentWeeklyDefectItem != null) vm.GetWeeklyDefectCheckImages(currentWeeklyDefectItem!!.vdhCheckId)
+        //if (currentWeeklyDefectItem != null) vm.GetWeeklyDefectCheckImages(currentWeeklyDefectItem!!.vdhCheckId)
 
         currentDefSheetID = currentWeeklyDefectItem!!.vdhCheckId
         defectSheetUserId = currentWeeklyDefectItem!!.vdhCheckDaId
@@ -335,8 +329,6 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private fun clickListeners() {
         binding.tyreDepthFrontImageUploadBtn.setOnClickListener {
             addImage(0)
-
-
         }
 
         binding.tyreDepthRearImageUploadBtn.setOnClickListener {
@@ -945,31 +937,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         else -> {
                             showToast("Wrong Selection", this)
                         }
-                    }/*     val mimeType = getMimeType(selectedFileUri!!)?.toMediaTypeOrNull()
-                         val tmpFile = createTempFile("temp", null, cacheDir).apply {
-                             deleteOnExit()
-                         }
-
-                         val inputStream = contentResolver.openInputStream(selectedFileUri!!)
-                         val outputStream = tmpFile.outputStream()
-
-                         inputStream?.use { input ->
-                             outputStream.use { output ->
-                                 input.copyTo(output)
-                             }
-                         }
-
-                         val fileExtension = getMimeType(selectedFileUri!!)?.let { mimeType ->
-                             MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
-                         }
-
-                         val requestBody = tmpFile.asRequestBody(mimeType)
-                         filePart = MultipartBody.Part.createFormData(
-                             "UploadTicketDoc",
-                             selectedFileUri!!.lastPathSegment + "." + (fileExtension ?: "jpg"),
-                             requestBody
-                         )*/
-                    //save()
+                    }
                 }
             } else {
                 finish()
