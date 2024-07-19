@@ -218,7 +218,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@color/red_light"
-                                android:text="UPLOAD AGAIN"
+                                android:text="UPLOAD"
                                 android:id="@+id/tyreDepthFrontImageUploadBtn"
                                 android:textSize="12sp" />
 
@@ -326,7 +326,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@color/red_light"
-                                android:text="UPLOAD AGAIN"
+                                android:text="UPLOAD"
                                 android:textSize="12sp" />
 
                             <TextView
@@ -432,7 +432,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@color/red_light"
-                                android:text="UPLOAD AGAIN"
+                                android:text="UPLOAD"
                                 android:textSize="12sp" />
 
                             <TextView
@@ -538,7 +538,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@color/red_light"
-                                android:text="UPLOAD AGAIN"
+                                android:text="UPLOAD"
                                 android:textSize="12sp" />
 
                             <TextView
@@ -644,7 +644,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@color/red_light"
-                                android:text="UPLOAD AGAIN"
+                                android:text="UPLOAD"
                                 android:textSize="12sp" />
 
                             <TextView
@@ -664,7 +664,7 @@ android:id="@+id/tvInspection"
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -746,7 +746,7 @@ android:id="@+id/tvInspection"
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -1059,30 +1059,6 @@ android:id="@+id/tvInspection"
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <androidx.appcompat.widget.AppCompatCheckBox
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:visibility="gone"
-                    android:id="@+id/signactioncheck"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:checked="false"
-                    android:text="By ticking this box, I declare I have carried out my weekly vehicle checks" />
-
-                <androidx.appcompat.widget.AppCompatCheckBox
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:textSize="12sp"
-                    android:visibility="gone"
-                    android:id="@+id/signaprrovecheck"
-                    android:layout_weight="1"
-                    android:checked="false"
-                    android:text="Click to approve weekly defect checks." />
-
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -1102,6 +1078,30 @@ android:id="@+id/tvInspection"
                         android:padding="12dp"
                         android:textSize="13sp" />
                 </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:visibility="visible"
+                    android:id="@+id/signactioncheck"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:checked="false"
+                    android:text="By ticking this box, I declare I have carried out my weekly vehicle checks" />
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:textSize="12sp"
+                    android:visibility="visible"
+                    android:id="@+id/signaprrovecheck"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:text="Click to approve weekly defect checks." />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"

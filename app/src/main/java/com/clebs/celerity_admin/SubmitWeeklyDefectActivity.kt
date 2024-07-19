@@ -411,7 +411,6 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         binding.signactioncheck.visibility = View.GONE
                         binding.signaprrovecheck.visibility = View.GONE
                         Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
-
                     } else if (tyreThreadDepthFrontOS.isNullOrEmpty()) {
                         binding.signactioncheck.visibility = View.GONE
                         binding.signaprrovecheck.visibility = View.GONE
@@ -440,8 +439,8 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         binding.signaprrovecheck.visibility = View.GONE
                         Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
                     } else {
-                        binding.signactioncheck.visibility = View.VISIBLE
-                        binding.signaprrovecheck.visibility = View.VISIBLE
+                        /*binding.signactioncheck.visibility = View.VISIBLE
+                        binding.signaprrovecheck.visibility = View.VISIBLE*/
                         lifecycleScope.launch {
                             App.offlineSyncDB?.insertOrUpdate(
                                 dbDefectSheet!!
