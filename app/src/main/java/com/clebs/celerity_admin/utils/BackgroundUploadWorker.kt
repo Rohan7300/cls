@@ -13,8 +13,10 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.App
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -185,15 +187,21 @@ class BackgroundUploadWorker(
 
                     }
                     if (dbDefectSheet.otherImages != null) {
-
-
-                        val partBody = createMultipartPart(
-                            dbDefectSheet.otherImages!!, "uploadVehOSMDefectChkFile", appContext
-                        )
-                        mainRepo.UploadVehOSMDefectChkFile(
-                            dbDefectSheet.id, DefectFileType.OtherPicOfParts, dateToday(), partBody
-                        )
-
+                        for (imageUri in convertStringToList(dbDefectSheet.otherImages!!)) {
+                            val partBody = createMultipartPart(
+                                imageUri, "uploadOtherPictureOfPartsFile", appContext
+                            )
+                            val response = withContext(Dispatchers.IO) {
+                                mainRepo.UploadOtherPictureOfPartsFile(
+                                    dbDefectSheet.id, DefectFileType.OtherPicOfParts, dateToday(), partBody
+                                )
+                            }
+                            if (response.isSuccessful) {
+                                println("Upload successful for $imageUri")
+                            } else {
+                                println("Upload failed for $imageUri")
+                            }
+                        }
                     }
                 }
             }
@@ -225,6 +233,10 @@ class BackgroundUploadWorker(
         return try {
             val uriX = uri.toUri()
             val contentResolver = context.contentResolver
+
+            // Ensure the app has read permissions
+            context.grantUriPermission(context.packageName, uriX, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
             val mimeType = contentResolver.getType(uriX)
             val fileExtension = when (mimeType) {
                 "video/mp4" -> ".mp4"
@@ -233,21 +245,25 @@ class BackgroundUploadWorker(
 
             val uniqueFileName = "${UUID.randomUUID()}$fileExtension"
             val inputStream: InputStream? = contentResolver.openInputStream(uriX)
-            val requestBody = inputStream?.let {
+
+            val requestBody = inputStream?.let { stream ->
+                val buffer = stream.readBytes() // Read the stream into a byte array
                 object : RequestBody() {
                     override fun contentType() = mimeType?.toMediaTypeOrNull()
 
                     override fun writeTo(sink: BufferedSink) {
-                        it.source().use { source ->
-                            sink.writeAll(source)
-                        }
+                        sink.write(buffer) // Write the byte array to the sink
                     }
                 }
             } ?: throw IllegalArgumentException("Unable to open input stream")
 
             MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
+        } catch (e: SecurityException) {
+            Log.d("VideoUploadEx", "SecurityException: ${e.message}")
+            val defaultRequestBody = "".toRequestBody("text/plain".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData(partName, "default.jpg", defaultRequestBody)
         } catch (e: Exception) {
-            Log.d("VideoUploadEx", e.printStackTrace().toString())
+            Log.d("VideoUploadEx", "Exception: ${e.message}")
             val defaultRequestBody = "".toRequestBody("text/plain".toMediaTypeOrNull())
             MultipartBody.Part.createFormData(partName, "default.jpg", defaultRequestBody)
         }

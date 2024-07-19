@@ -18,6 +18,7 @@ import com.clebs.celerity_admin.models.GetvehicleOilLevelList
 import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
+import com.clebs.celerity_admin.models.OtherDefectCheckImagesInDropBoxResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
 import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
 import com.clebs.celerity_admin.models.ResponseInspectionDone
@@ -44,6 +45,8 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         MutableLiveData()
     val saveinspectionlivedata: MutableLiveData<SucessStatusMsgResponse?> = MutableLiveData()
     val isinspectiondonelivedata: MutableLiveData<ResponseInspectionDone?> = MutableLiveData()
+    val otherImagesListLiveData: MutableLiveData<OtherDefectCheckImagesInDropBoxResponse?> =
+        MutableLiveData()
 
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
@@ -374,15 +377,18 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         }
     }
 
-    fun SaveDefectSheetWeeklyOSMCheck(
-        body: SaveDefectSheetWeeklyOSMCheckRequest
+
+
+    fun GetOtherDefectCheckImagesInDropBox(
+        vdhDefectCheckId: Int,
+        fileType: String
     ) {
         viewModelScope.launch {
-            val response = repo.SaveDefectSheetWeeklyOSMCheck(body)
+            val response = repo.GetOtherDefectCheckImagesInDropBox(vdhDefectCheckId, fileType)
             if (!response.isSuccessful || response.failed)
-                lDSaveDefectSheetWeeklyOSMCheck.postValue(null)
+                otherImagesListLiveData.postValue(null)
             else
-                lDSaveDefectSheetWeeklyOSMCheck.postValue(response.body)
+                otherImagesListLiveData.postValue(response.body)
         }
     }
 }

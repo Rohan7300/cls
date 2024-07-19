@@ -14,6 +14,7 @@ import com.clebs.celerity_admin.models.GetvehicleOilLevelList
 import com.clebs.celerity_admin.models.LastMileageInfo
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
+import com.clebs.celerity_admin.models.OtherDefectCheckImagesInDropBoxResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
 import com.clebs.celerity_admin.models.ResponseInspectionDone
 import com.clebs.celerity_admin.models.SaveInspectionRequestBody
@@ -123,4 +124,20 @@ interface ApiService {
         @Query("vdhDefectCheckId") vdhDefectCheckId: Int,
         @Query("date") date: String, @Part video: MultipartBody.Part
     ): Response<SucessStatusMsgResponse>
+
+    @Multipart
+    @POST("/api/Vehicle/UploadOtherPictureOfPartsFile")
+    suspend fun UploadOtherPictureOfPartsFile(
+        @Query("vdhDefectCheckId") vdhDefectCheckId: Int,
+        @Query("fileType") fileType: String,
+        @Query("date") date: String,
+        @Part image: MultipartBody.Part
+    ): Response<SucessStatusMsgResponse>
+
+    @GET("/api/WeeklyDefectSheet/GetOtherDefectCheckImagesInDropBox")
+    suspend fun GetOtherDefectCheckImagesInDropBox(
+        @Query("vdhDefectCheckId") vdhDefectCheckId: Int,
+        @Query("fileType") fileType: String
+    ): Response<OtherDefectCheckImagesInDropBoxResponse>
+
 }
