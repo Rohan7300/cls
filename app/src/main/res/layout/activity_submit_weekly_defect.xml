@@ -29,10 +29,10 @@
 
                 <ImageView
                     android:id="@+id/back"
-                    android:layout_width="25dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     app:tint="@color/white"
-                    android:layout_height="25dp"
-                    android:src="@drawable/back1" />
+                    android:src="@drawable/baseline_arrow_back_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_semibold"
                     android:gravity="center"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:text="Vehicle Defect Sheet Weekly Check Action"
                     android:textColor="@color/white" />
             </LinearLayout>
@@ -69,12 +69,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginStart="4dp"
                         android:id="@+id/daTv"
                         android:fontFamily="@font/poppins_medium"
                         android:text="DA Name"
                         android:textColor="@color/white"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -93,12 +93,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginStart="4dp"
                         android:textColor="@color/white"
                         android:id="@+id/daReg"
                         android:fontFamily="@font/poppins_medium"
                         android:text="DA Reg No"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -117,12 +117,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginStart="4dp"
                         android:textColor="@color/white"
                         android:id="@+id/daLoc"
                         android:fontFamily="@font/poppins_medium"
                         android:text="DA location"
-                        android:textSize="12sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -205,7 +205,7 @@ android:id="@+id/tvInspection"
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="Tyre thread depth N/S front Image :"
+                            android:text="Tyre Thread Depth N/S Front Image :"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -226,7 +226,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="5dp"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="5dp"
                                 android:layout_weight="1"
                                 android:id="@+id/tyreDepthFrontImageFileName"
                                 android:fontFamily="@font/poppins_medium"
@@ -312,7 +312,7 @@ android:id="@+id/tvInspection"
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="Tyre thread depth N/S Rear Image :"
+                            android:text="Tyre Thread Depth N/S Rear Image :"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -334,7 +334,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="5dp"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="5dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
@@ -418,7 +418,7 @@ android:id="@+id/tvInspection"
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="Tyre thread depth O/S Rear Image :"
+                            android:text="Tyre Thread Depth O/S Rear Image :"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -440,7 +440,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="5dp"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="5dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
@@ -524,7 +524,7 @@ android:id="@+id/tvInspection"
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="Tyre thread depth O/S Front Image :"
+                            android:text="Tyre Thread Depth O/S Front Image :"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -546,7 +546,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="5dp"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="5dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
@@ -575,7 +575,7 @@ android:id="@+id/tvInspection"
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="Tyre pressure front O/S *"
+                            android:text="Tyre Pressure Front O/S *"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -630,7 +630,7 @@ android:id="@+id/tvInspection"
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="Engine oil level Image :"
+                            android:text="Engine Oil Level Image :"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -652,7 +652,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="5dp"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="5dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_semibold"
                                 android:text="- - - -"
@@ -814,7 +814,7 @@ android:id="@+id/tvInspection"
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="Add blue level (dashboard) :"
+                            android:text="Add Blue Level (Dashboard) :"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -836,7 +836,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="5dp"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="5dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
@@ -865,7 +865,7 @@ android:id="@+id/tvInspection"
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="N/S wing mirror :"
+                            android:text="N/S Wing Mirror :"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -887,7 +887,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="5dp"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="5dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_semibold"
                                 android:text="- - - -"
@@ -914,10 +914,9 @@ android:id="@+id/tvInspection"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="5dp"
-
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="O/S wing mirror :"
+                            android:text="O/S Wing Mirror :"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -939,7 +938,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="5dp"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="5dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
@@ -968,8 +967,7 @@ android:id="@+id/tvInspection"
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="360 of the van showing: high beam, low beam, hazards, brake lights, reverse light, presence, Moving Wipers
-"
+                            android:text="360 of the van showing: high beam, low beam, hazards, brake lights, reverse light, presence, Moving Wipers :"
                             android:textSize="12sp" />
 
                         <LinearLayout
@@ -991,7 +989,7 @@ android:id="@+id/tvInspection"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="5dp"
-                                android:layout_marginStart="4dp"
+                                android:layout_marginStart="5dp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
@@ -1020,7 +1018,7 @@ android:id="@+id/tvInspection"
                             android:layout_marginVertical="5dp"
                             android:layout_marginStart="4dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="Other pictures of parts not working."
+                            android:text="Other pictures of parts not working :"
                             android:textSize="12sp" />
 
                         <LinearLayout

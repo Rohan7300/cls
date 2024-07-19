@@ -488,7 +488,7 @@ fun uriToFileName(uriString: String): String {
     return Uri.parse(uriString).lastPathSegment ?: "Unknown"
 }
 
-fun dateToday():String{
+fun dateToday(): String {
     return SimpleDateFormat("yyyy-MM-dd").format(Date())
 }
 
@@ -513,4 +513,20 @@ fun Bitmap.toRequestBody(): okhttp3.RequestBody {
 
 fun convertStringToList(storedString: String): MutableList<String> {
     return storedString.split(",").toMutableList()
+}
+
+fun shortenFileName(originalName: String): String {
+    return try {
+        val nameParts = originalName.split(".")
+        if (nameParts.size < 2) {
+            originalName
+        } else {
+            val extension = nameParts.last()
+            val shortenedName = originalName.take(15)
+            "$shortenedName.$extension"
+        }
+    } catch (_: Exception) {
+        originalName
+    }
+
 }

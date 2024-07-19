@@ -28,11 +28,11 @@ import org.checkerframework.common.subtyping.qual.Bottom
 class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClickListener {
 
     private var _binding: FragmentSlideshowBinding? = null
-    lateinit var mainViewModel: MainViewModel
+    private lateinit var mainViewModel: MainViewModel
     var week: Int? = null
     var isLoaded = false
     var j = 0
-    var year: Int? = null
+    private var year: Int? = null
     private lateinit var WeeklyDefectAdapter: WeeklyDefectAdapter
     private lateinit var loadingDialog: LoadingDialog
     private val binding get() = _binding!!
@@ -42,8 +42,6 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-
         _binding = FragmentSlideshowBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
@@ -53,13 +51,13 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         WeeklyDefectAdapter = WeeklyDefectAdapter(requireContext(), ArrayList(), this)
         binding.rvList.adapter = WeeklyDefectAdapter
-//        loadingDialog = (activity as MainActivityTwo).loadingDialog
+        loadingDialog = (activity as MainActivityTwo).loadingDialog
         setPrevNextButton()
 
         binding.prev.setOnClickListener {
 
             if (isLoaded) {
-//                loadingDialog.show()
+                loadingDialog.show()
                 j -= 1
                 val y = week!! + j
                 binding.weekNoTV.text = "Week No. $y"
@@ -78,7 +76,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
 
         binding.next.setOnClickListener {
             if (isLoaded) {
-//                loadingDialog.show()
+                loadingDialog.show()
                 j += 1
                 isLoaded = false
                 val x = week!! + j
@@ -98,15 +96,16 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
         return root
     }
 
-    fun Observers() {
+    private fun Observers() {
+        loadingDialog.show()
         mainViewModel.GetCurrentWeekYear().observe(viewLifecycleOwner, Observer {
-//            loadingDialog.dismiss()
+            loadingDialog.dismiss()
             if (it != null) {
                 isLoaded = true
                 week = it.weekNO
                 year = it.year
                 binding.weekNoTV.text = "Week No. $week"
-//                loadingDialog.show()
+                loadingDialog.show()
                 mainViewModel.GetWeeklyDefectChecks(
                     week!!.toDouble(),
                     year!!.toDouble(),
@@ -117,7 +116,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
             }
         })
         mainViewModel.lDGetWeeklyDefectChecks.observe(viewLifecycleOwner) {
-//            loadingDialog.dismiss()
+            loadingDialog.dismiss()
             isLoaded = true
             if (it != null) {
                 Log.e("dataass", "Observers: " + it)
