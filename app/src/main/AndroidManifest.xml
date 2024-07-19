@@ -34,6 +34,7 @@
         android:theme="@style/Theme.Celerity_admin"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
             android:name=".SubmitWeeklyDefectActivity"
             android:exported="false" />
@@ -61,7 +62,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="false"></activity>
@@ -81,6 +84,8 @@
                 android:resource="@xml/provider_paths"
                 tools:replace="android:resource" />
         </provider>
+
+
     </application>
 
 </manifest>
