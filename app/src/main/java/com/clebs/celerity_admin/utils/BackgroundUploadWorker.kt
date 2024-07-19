@@ -245,14 +245,14 @@ class BackgroundUploadWorker(
 
             val uniqueFileName = "${UUID.randomUUID()}$fileExtension"
             val inputStream: InputStream? = contentResolver.openInputStream(uriX)
-            val requestBody = inputStream?.let {
+
+            val requestBody = inputStream?.let { stream ->
+                val buffer = stream.readBytes() // Read the stream into a byte array
                 object : RequestBody() {
                     override fun contentType() = mimeType?.toMediaTypeOrNull()
 
                     override fun writeTo(sink: BufferedSink) {
-                        it.source().use { source ->
-                            sink.writeAll(source)
-                        }
+                        sink.write(buffer) // Write the byte array to the sink
                     }
                 }
             } ?: throw IllegalArgumentException("Unable to open input stream")
@@ -268,6 +268,7 @@ class BackgroundUploadWorker(
             MultipartBody.Part.createFormData(partName, "default.jpg", defaultRequestBody)
         }
     }
+
     fun getFileFromUri(context: Context, uri: Uri): File? {
         return try {
             // Check the URI scheme
