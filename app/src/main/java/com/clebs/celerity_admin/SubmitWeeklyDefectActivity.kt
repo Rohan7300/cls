@@ -171,7 +171,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         currentDefSheetID = currentWeeklyDefectItem!!.vdhCheckId
         defectSheetUserId = currentWeeklyDefectItem!!.vdhCheckDaId
 
-        vm.GetOtherDefectCheckImagesInDropBox(currentDefSheetID,"OtherPicOfParts")
+        vm.GetOtherDefectCheckImagesInDropBox(currentDefSheetID, "OtherPicOfParts")
 
         if (currentWeeklyDefectItem != null) {
             loadingDialog.show()
@@ -656,7 +656,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     }"
                 )
 
-                if (selectedOilLevelID > 0) {
+                if (selectedOilLevelID > 0 && oilLevelIds.indexOf(selectedOilLevelID) != -1) {
                     binding.spinnerOilLevel.setText(
                         oilListNames[oilLevelIds.indexOf(
                             selectedOilLevelID
@@ -666,7 +666,10 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 }
 
 
-                if (selectedEngineCoolantLevelID > 0) {
+                if (selectedEngineCoolantLevelID > 0 && oilLevelIds.indexOf(
+                        selectedEngineCoolantLevelID
+                    ) != -1
+                ) {
                     binding.spinnerEngineCoolant.setText(
                         oilListNames[oilLevelIds.indexOf(
                             selectedEngineCoolantLevelID
@@ -679,7 +682,10 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     )
                 }
 
-                if (selectedBreakFluidLevelID > 0) {
+                if (selectedBreakFluidLevelID > 0 && oilLevelIds.indexOf(
+                        selectedBreakFluidLevelID
+                    ) != -1
+                ) {
                     binding.spinnerBrakeFluid.setText(
                         oilListNames[oilLevelIds.indexOf(
                             selectedBreakFluidLevelID
@@ -692,7 +698,10 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     )
                 }
 
-                if (selectedWindscreenWashingID > 0) {
+                if (selectedWindscreenWashingID > 0 && oilLevelIds.indexOf(
+                        selectedWindscreenWashingID
+                    ) != -1
+                ) {
                     binding.spinnerWindscreenWashingLiquid.setText(
                         oilListNames[oilLevelIds.indexOf(
                             selectedWindscreenWashingID
@@ -715,11 +724,11 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             }
         }
 
-        vm.otherImagesListLiveData.observe(this){
+        vm.otherImagesListLiveData.observe(this) {
             binding.pbX.visibility = View.GONE
             binding.otherImagesTV.visibility = View.VISIBLE
             binding.otherPictureUploadBtn.isEnabled = true
-            if(it!=null){
+            if (it != null) {
                 val otherFiles = it.map { it.FileName }
                 setUploadCardOtherImages(
                     otherFiles.toMutableList(),
@@ -854,7 +863,8 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
     fun upload() {
         if (crrType == 0) {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             intent.type = "image/*"
             resultLauncher.launch(intent)
         } else {

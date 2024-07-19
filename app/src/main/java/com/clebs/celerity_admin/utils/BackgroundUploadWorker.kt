@@ -216,11 +216,14 @@ class BackgroundUploadWorker(
         image: String, partName: String, context: Context
     ): MultipartBody.Part {
         return try {
+            val uriX = image.toUri()
+            context.grantUriPermission(context.packageName, uriX, Intent.FLAG_GRANT_READ_URI_PERMISSION)
             val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
-            val bs64ImageString = getImageBitmapFromUri(context, image.toUri())
+            val bs64ImageString = getImageBitmapFromUri(context, uriX)
             val requestBody = bs64ImageString!!.toRequestBody()
             MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
         } catch (e: Exception) {
+            Log.d("PhotoExec",e.message.toString())
             e.printStackTrace()
             val defaultRequestBody = "".toRequestBody("text/plain".toMediaTypeOrNull())
             MultipartBody.Part.createFormData(partName, "default.jpg", defaultRequestBody)
