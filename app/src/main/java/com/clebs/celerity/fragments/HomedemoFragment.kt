@@ -675,7 +675,6 @@ class HomedemoFragment : Fragment() {
                 }
 
 
-
                 if (avprofit.equals(0.0f) && avdeductions.equals(0.0f)) {
                     colors[0] = resources.getColor(R.color.red_light)
                     colors[1] = resources.getColor(R.color.red_light)

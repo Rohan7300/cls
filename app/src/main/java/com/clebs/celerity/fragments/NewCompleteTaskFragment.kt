@@ -407,6 +407,10 @@ class NewCompleteTaskFragment : Fragment() {
         } else {
             mbinding.startinspection.visibility = View.VISIBLE
         }
+
+        if(prefs.isInspectionIDFailedToUpload){
+            startUploadWithWorkManager(3, prefs, requireContext())
+        }
     }
 
     private fun observers() {

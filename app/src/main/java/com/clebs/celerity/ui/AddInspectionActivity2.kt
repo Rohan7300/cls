@@ -480,7 +480,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             prefs.saveBoolean("Inspection", true)
             prefs.Isfirst = false
             prefs.updateInspectionStatus(true)
-            SaveVehicleInspection(viewModel)
+            //SaveVehicleInspection(viewModel)
+            startUploadWithWorkManager(3, prefs, this)
             uploadStatus()
             showToast("Vehicle Inspection is successfully completed ", this)
         } else {

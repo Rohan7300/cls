@@ -77,6 +77,7 @@ import com.clebs.celerity.utils.parseToInt
 import com.clebs.celerity.utils.showBirthdayCard
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.showUpdateDialog
+import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.vehicleExpiringDocuments
 import com.clebs.celerity.utils.weeklyLocationRota
@@ -949,10 +950,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val factory = LayoutInflater.from(this)
         val view: View = factory.inflate(R.layout.logout_layout, null)
         val deleteDialog: AlertDialog = AlertDialog.Builder(this).create()
-        val imageView: ImageView = view.findViewById(R.id.ic_cross_orange)
+/*        val imageView: ImageView = view.findViewById(R.id.ic_cross_orange)
         imageView.setOnClickListener {
             deleteDialog.dismiss()
-        }
+        }*/
         val btone: Button = view.findViewById(R.id.bt_no)
         val bttwo: Button = view.findViewById(R.id.bt_yes)
 

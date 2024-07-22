@@ -24,16 +24,12 @@ class LoadingDialog(context: Context) : Dialog(context) {
         setCancelable(false)
         setOnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
-                // Handle back press
                 dismiss()
                 true
             } else {
                 false
             }
         }
-//        window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-
-        // Set the system UI visibility
 
     }
 

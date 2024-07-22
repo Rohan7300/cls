@@ -672,5 +672,8 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getString("notificationId","0")
         set(value) = sharedPreferences.edit().putString("notificationId",value).apply()
 
+    var isInspectionIDFailedToUpload:Boolean
+        get() = sharedPreferences.getBoolean("isInspectionIDFailedToUpload",false)
+        set(value) = sharedPreferences.edit().putBoolean("isInspectionIDFailedToUpload",value).apply()
 
 }
