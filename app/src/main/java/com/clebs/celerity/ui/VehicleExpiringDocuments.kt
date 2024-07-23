@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
-import com.clebs.celerity.adapters.ExpiringDocAdapter
 import com.clebs.celerity.adapters.VehicleExpiringDocAdapter
 import com.clebs.celerity.adapters.VehicleExpiringUploadListener
 import com.clebs.celerity.databinding.ActivityVehicleExpiringDocumentsBinding

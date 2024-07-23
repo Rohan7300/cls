@@ -8,7 +8,6 @@ import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.adapters.DADeductionHistoryAdapter
 import com.clebs.celerity.databinding.ActivityDeductionHistoryBinding
-import com.clebs.celerity.databinding.ActivityDownloadDeductionsBinding
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.currentDeductionHistory

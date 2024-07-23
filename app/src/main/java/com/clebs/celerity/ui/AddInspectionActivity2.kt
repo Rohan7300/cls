@@ -1,19 +1,14 @@
 package com.clebs.celerity.ui
 
 import android.Manifest
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -23,7 +18,6 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
@@ -32,18 +26,14 @@ import com.clebs.celerity.ViewModel.OSyncVMProvider
 import com.clebs.celerity.ViewModel.OSyncViewModel
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.ActivityAddInspection2Binding
-import com.clebs.celerity.databinding.ActivityAddInspectionBinding
-import com.clebs.celerity.databinding.ActivityHomeBinding
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.BackgroundUploadDialog
 import com.clebs.celerity.utils.BackgroundUploadDialogListener
 import com.clebs.celerity.dialogs.LoadingDialog
-import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.utils.ClsCapture
 import com.clebs.celerity.utils.ClsCaptureTwo
-import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.currentUri
 import com.clebs.celerity.utils.DependencyProvider.insLevel
 import com.clebs.celerity.utils.DependencyProvider.isComingBackFromCLSCapture
@@ -54,29 +44,22 @@ import com.clebs.celerity.utils.checkIfInspectionFailed
 import com.clebs.celerity.utils.checkIfInspectionFailed2
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.noInternetCheck
-import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.startUploadWithWorkManager
-import com.clebs.celerity.utils.toast
 import com.elconfidencial.bubbleshowcase.BubbleShowCase
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import com.elconfidencial.bubbleshowcase.BubbleShowCaseListener
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.crashlytics.internal.model.CrashlyticsReport.Session.User
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
-import io.clearquote.assessment.cq_sdk.CQSDKInitializer.Companion.userFlowParams
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
 import io.clearquote.assessment.cq_sdk.models.CustomerDetails
 import io.clearquote.assessment.cq_sdk.models.InputDetails
 import io.clearquote.assessment.cq_sdk.models.UserFlowParams
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
-import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
-import java.util.Locale
 import java.util.TimeZone
 
 
@@ -100,15 +83,16 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
     companion object {
 
-        private val REQUIRED_PERMISSIONS = mutableListOf(
-            Manifest.permission.CAMERA,
-        ).apply {
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf(
+                Manifest.permission.CAMERA,
+            ).apply {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
 
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
-            }
-        }.toTypedArray()
+                }
+            }.toTypedArray()
 
     }
 
@@ -124,7 +108,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         cqSDKInitializer.triggerOfflineSync()
 
         initPreviewView()
-        noInternetCheck(this, binding.nointernetLL, this)
+        noInternetCheck(this,binding.nointernetLL,this)
 
         startonetime = prefs.Isfirst!!
 
@@ -135,7 +119,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
         val osRepo = offlineSyncRepo(this)
         oSyncViewModel = ViewModelProvider(
-            this, OSyncVMProvider(osRepo, prefs.clebUserId.toInt(), todayDate)
+            this,
+            OSyncVMProvider(osRepo, prefs.clebUserId.toInt(), todayDate)
         )[OSyncViewModel::class.java]
 
 
@@ -158,7 +143,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             .image(ContextCompat.getDrawable(this, R.drawable.scan2)!!) //Bubble main image
             .closeActionImage(
                 ContextCompat.getDrawable(
-                    this, R.drawable.cross
+                    this,
+                    R.drawable.cross
                 )!!
             ) //Custom close action image
 
@@ -223,33 +209,40 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         observers()
 
         viewModel.GetVehicleImageUploadInfo(
-            prefs.clebUserId.toInt(), prefs.vmId, currentDateTime
+            prefs.clebUserId.toInt(),
+            prefs.vmId,
+            currentDateTime
         )
         loadingDialog.show()
 
         uploadStatus()
 
         binding.ivUploadImage.setOnClickListener {
-            if (allPermissionsGranted()) openClsCapture()
+            if (allPermissionsGranted())
+                openClsCapture()
             //uploadImage()
             else {
                 requestpermissions()
             }
         }
         binding.tvUploadMainTV.setOnClickListener {
-            if (allPermissionsGranted()) openClsCapture()
+            if (allPermissionsGranted())
+                openClsCapture()
             //uploadImage()
-            else requestpermissions()
+            else
+                requestpermissions()
         }
         binding.fullClick.setOnClickListener {
-            if (allPermissionsGranted()) openClsCapture()
+            if (allPermissionsGranted())
+                openClsCapture()
             //uploadImage()
             else {
                 requestpermissions()
             }
         }
         binding.newUploadBtn.setOnClickListener {
-            if (allPermissionsGranted()) openClsCapture()
+            if (allPermissionsGranted())
+                openClsCapture()
             //uploadImage()
             else {
                 requestpermissions()
@@ -266,23 +259,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             startActivity(intent)
         }
         binding.tvNext.setOnClickListener {
-            if (Prefs.getInstance(App.instance).isClientIDUplaoded != true) {
-                prefs.saveBoolean("Inspection", false)
-                if (noInternetCheck(this, binding.nointernetLL, this).equals(true)) {
-                    onSaveClick()
-                } else {
-                    Snackbar.make(
-                        binding.llmains,
-                        "Please turn internet on to complete inspection",
-                        Snackbar.LENGTH_SHORT
-                    ).setAction("Action", null).show()
-                }
-//            prefs.Isfirst = false
+            onSaveClick()
 
-
-            } else {
-                onSaveClick()
-            }
         }
     }
 
@@ -290,12 +268,15 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-            val preview = Preview.Builder().build().also {
+            val preview = Preview.Builder()
+                .build()
+                .also {
                     it.setSurfaceProvider(binding.inspectionPreviewView.surfaceProvider)
                 }
             imageCapture = ImageCapture.Builder().build()
             PreviewView.ImplementationMode.COMPATIBLE
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            val cameraSelector =
+                CameraSelector.DEFAULT_BACK_CAMERA
             try {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
@@ -314,7 +295,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             i = 0
             if (it != null) {
                 Log.d("OSData2 ", "$osData")
-                if (it.DaVehImgOilLevelFileName != null && !checkIfInspectionFailed2(osData)) {
+                if (it.DaVehImgOilLevelFileName != null
+                    && !checkIfInspectionFailed2(osData)
+                ) {
                     prefs.oilLevelRequired = false
                     osData.isaddBlueImageRequired = false
                     osData.isDashboardImageRequired = false
@@ -367,7 +350,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             loadingDialog.show()
             if (it != null) {
                 viewModel.GetVehicleImageUploadInfo(
-                    prefs.clebUserId.toInt(), prefs.baseVmID.toInt(), getCurrentDateTime()
+                    prefs.clebUserId.toInt(),
+                    prefs.baseVmID.toInt(),
+                    getCurrentDateTime()
                 )
             }
         }
@@ -378,11 +363,13 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         binding.uploadStatus.text = uploadStatus
         with(binding) {
             listOf(
-                addBlueIV, oilLevelIV
+                addBlueIV,
+                oilLevelIV
             ).forEach {
                 it.setImageDrawable(
                     ContextCompat.getDrawable(
-                        this@AddInspectionActivity2, R.drawable.fileins
+                        this@AddInspectionActivity2,
+                        R.drawable.fileins
                     )
                 )
             }
@@ -406,19 +393,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             osData.oillevelImage = imageUri.toString()
             oSyncViewModel.insertData(osData)
         } else {
-
-            if (Prefs.getInstance(App.instance).isClientIDUplaoded != true) {
-                prefs.saveBoolean("Inspection", false)
-//            prefs.Isfirst = false
-
-                SaveVehicleInspection(viewModel)
-
-            } else {
-                binding.tvNext.isEnabled = true
-////                    oSyncViewModel.insertData(osData)
-                binding.tvNext.setTextColor(ContextCompat.getColor(this, R.color.white))
-            }
-
+            binding.tvNext.isEnabled = true
+            binding.tvNext.setTextColor(ContextCompat.getColor(this, R.color.white))
         }
 
         uploadStatus()
@@ -426,16 +402,16 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
     private fun clientUniqueID(): String {
         val x = Prefs.getInstance(App.instance).clebUserId.toString()
-        val y = Prefs.getInstance(App.instance).scannedVmRegNo.replace(" ", "")
+        val y = Prefs.getInstance(App.instance).scannedVmRegNo.replace(" ","")
 
         val currentDate = LocalDateTime.now()
         val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
         val regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
-        prefs.inspectionID = regexPattern.toString().replace(" ", "")
+        prefs.inspectionID = regexPattern.toString().replace(" ","")
         //inspectionID = regexPattern.toString().replace(" ","")
         Log.e(
             "kjfdjkfhdjfjdhfdjclientuniqueidfunction",
-            "clientUniqueID: ------" + prefs.inspectionID.replace(" ", "")
+            "clientUniqueID: ------" + prefs.inspectionID.replace(" ","")
         )
 
         return regexPattern.toString()
@@ -455,6 +431,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     }
 
 
+
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             this, it
@@ -465,31 +442,36 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         activityResultLauncher.launch(REQUIRED_PERMISSIONS)
     }
 
-    private val activityResultLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        var permissionGranted = true
-        permissions.entries.forEach {
-            if (it.key in REQUIRED_PERMISSIONS && it.value == false) permissionGranted = false
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        )
+        { permissions ->
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                showToast("Permission denied", this)
+            } else {
+                openClsCapture()
+            }
         }
-        if (!permissionGranted) {
-            showToast("Permission denied", this)
-        } else {
-            openClsCapture()
-        }
-    }
 
     override fun onResume() {
         super.onResume()
         initPreviewView()
         if (isComingBackFromCLSCapture) {
-            if (currentUri != null) sendImage(currentUri!!)
+            if (currentUri != null)
+                sendImage(currentUri!!)
             isComingBackFromCLSCapture = false
         }
 
         startonetime = prefs.Isfirst
-        val message = intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
-            ?: "Could not identify status message"
+        val message =
+            intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
+                ?: "Could not identify status message"
         val tempCode =
             intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
 
@@ -498,20 +480,14 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             prefs.saveBoolean("Inspection", true)
             prefs.Isfirst = false
             prefs.updateInspectionStatus(true)
-            SaveVehicleInspection(viewModel)
-
+            //SaveVehicleInspection(viewModel)
+            startUploadWithWorkManager(3, prefs, this)
             uploadStatus()
             showToast("Vehicle Inspection is successfully completed ", this)
         } else {
-            prefs.saveBoolean("Inspection", false)
+
             //showToast("Vehicle Inspection Failed!! ", this)
             Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
-        }
-        if (Prefs.getInstance(App.instance).isClientIDUplaoded != true) {
-            SaveVehicleInspection(viewModel)
-            prefs.saveBoolean("Inspection", false)
-//            prefs.Isfirst = false
-
         }
     }
 
@@ -587,40 +563,42 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     }
 
     private fun startInspectionMain() {
-        var model = clientUniqueID()
-        Log.d("CLSInspection", "Name : CLS" + Prefs.getInstance(applicationContext).clebUserId)
+        var model =
+        clientUniqueID()
+        Log.d("CLSInspection","Name : CLS"+Prefs.getInstance(applicationContext).clebUserId)
         Log.d("CLSInspection", "VehicleModel: ${prefs.VehicleModel}")
-        Log.d("CLSInspection", "VehicleBodyStyle ${prefs.VehicleBodyStyle}")
-        Log.d("CLSInspection", "InspectionID: ${prefs.inspectionID.replace(" ", "")}")
-        cqSDKInitializer.startInspection(activity = this, clientAttrs = ClientAttrs(
-            userName = " ",
-            dealer = " ",
-            dealerIdentifier = " ",
-            client_unique_id = prefs.inspectionID.replace(" ", "")
-        ), inputDetails = InputDetails(
-            vehicleDetails = VehicleDetails(
-                regNumber = prefs.scannedVmRegNo.replace(" ", ""),
-                make = prefs.VehicleMake, //if sent, user can't edit
-                model = prefs.VehicleModel, //if sent, user can't edit
-                bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
-            ), customerDetails = CustomerDetails(
-                name = "CLS" + Prefs.getInstance(applicationContext).clebUserId, //if sent, user can't edit CLS-userid
-                email = "", //if sent, user can't edit
-                dialCode = "", //if sent, user can't edit
-                phoneNumber = "", //if sent, user can't edit
-            )
-        ), userFlowParams = UserFlowParams(
-            isOffline = !startonetime!!,
-            skipInputPage = true,
-        ),
+        Log.d("CLSInspection","VehicleBodyStyle ${prefs.VehicleBodyStyle}")
+        Log.d("CLSInspection","InspectionID: ${prefs.inspectionID.replace(" ","")}")
+        cqSDKInitializer.startInspection(activity = this,
+            clientAttrs = ClientAttrs(
+                userName = " ",
+                dealer = " ",
+                dealerIdentifier = " ",
+                client_unique_id = prefs.inspectionID.replace(" ","")
+            ),
+            inputDetails = InputDetails(
+                vehicleDetails = VehicleDetails(
+                    regNumber = prefs.scannedVmRegNo.replace(" ", ""),
+                    make = prefs.VehicleMake, //if sent, user can't edit
+                    model = prefs.VehicleModel, //if sent, user can't edit
+                    bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
+                ),
+                customerDetails = CustomerDetails(
+                    name = "CLS"+Prefs.getInstance(applicationContext).clebUserId, //if sent, user can't edit CLS-userid
+                    email = "", //if sent, user can't edit
+                    dialCode = "", //if sent, user can't edit
+                    phoneNumber = "", //if sent, user can't edit
+                )
+            ),
+            userFlowParams = UserFlowParams(
+                isOffline = !startonetime!!,
+                skipInputPage = true,
+            ),
 
 
             result = { isStarted, msg, code ->
                 loadingDialog.dismiss()
-                Log.e(
-                    "startinspecctionID",
-                    "onCreateView: startone ${prefs.inspectionID.replace(" ", "")} "
-                )
+                Log.e("startinspecctionID", "onCreateView: startone ${prefs.inspectionID.replace(" ","")} ")
                 Log.e("messsagesss", "startInspection: $msg$code")
                 Log.e("CQSDKXX", "regNo: ${prefs.scannedVmRegNo}")
                 if (isStarted) {
@@ -636,8 +614,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     } else if (msg.equals("Sufficient data not available to create an offline quote")) {
                         showToast("Please Retry!!", this)
                         Log.d("CQSDKXX", "Not isStarted2  " + msg)
-                    } else if (msg.equals("Unable to download setting updates, Please check internet")) {
-                        showToast("Please Turn on the internet", this)
+                    }
+                    else if (msg.equals("Unable to download setting updates, Please check internet")){
+                        showToast("Please Turn on the internet",this)
                         Log.d("CQSDKXX", "Not isStarted3  " + msg)
                     }
 
@@ -685,7 +664,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             binding.uploadBtnText.setTextColor(ContextCompat.getColor(this, R.color.orange))
             binding.tvUploadType.text = "You can exit and continue on remaining steps."
 
-            binding.tvUploadType.text = "You can save and exit while images are being uploaded."/*
+            binding.tvUploadType.text =
+                "You can save and exit while images are being uploaded."
+            /*
          if(osData!=null){
              osData.isdashboardUploadedFailed = false
              osData.isfrontImageFailed = false
@@ -704,7 +685,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             binding.uploadBtnText.setTextColor(ContextCompat.getColor(this, R.color.orange))
             binding.newUploadBtn.background.setTint(
                 ContextCompat.getColor(
-                    this, R.color.very_light_orange
+                    this,
+                    R.color.very_light_orange
                 )
             )
 

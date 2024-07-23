@@ -1,6 +1,5 @@
 package com.clebs.celerity.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,12 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.RadioButton
-import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
@@ -24,9 +21,7 @@ import com.clebs.celerity.models.requests.AddOnRideAlongRouteInfoRequest
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getLocID
-import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.showToast
 
 

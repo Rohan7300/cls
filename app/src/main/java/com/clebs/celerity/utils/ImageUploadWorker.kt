@@ -13,9 +13,11 @@ import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.database.ImagesRepo
 import com.clebs.celerity.database.OSyncRepo
 import com.clebs.celerity.database.OfflineSyncDB
+import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +28,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import java.util.TimeZone
 import java.util.UUID
 
@@ -623,6 +626,34 @@ class ImageUploadWorker(
 
                         }
 
+                    }
+
+                    3->{
+                        val currentDate =
+                            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
+                                Date()
+                            )
+
+                        val currentLoction = Prefs.getInstance(App.instance).currLocationId
+                        val workingLocation = Prefs.getInstance(App.instance).workLocationId
+                        val locationID: Int = if (workingLocation != 0) {
+                            workingLocation
+                        } else {
+                            currentLoction
+                        }
+                        val response = mainRepo.SaveVehicleInspectionInfo(SaveVehicleInspectionInfo(
+                            prefs.clebUserId.toInt(),
+                            currentDate,
+                            prefs.inspectionID.replace(" ",""),
+                            locationID,
+                            prefs.vmId
+                        ))
+
+                        if(!response.isSuccessful||response.failed){
+                            prefs.isInspectionIDFailedToUpload = true
+                        }else{
+                            prefs.isInspectionIDFailedToUpload = false
+                        }
                     }
                 }
 

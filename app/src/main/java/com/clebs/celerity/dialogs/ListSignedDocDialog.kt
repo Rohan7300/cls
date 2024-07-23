@@ -2,7 +2,6 @@ package com.clebs.celerity.dialogs
 
 import android.Manifest
 import android.app.Dialog
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -16,7 +15,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -31,16 +29,13 @@ import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
 import com.clebs.celerity.ui.SignedDocActivity
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.getCompanySignedDocsClicked
-import com.clebs.celerity.utils.NotificationBroadcastReciever
 import com.clebs.celerity.utils.OpenMode
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
-import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.text.SimpleDateFormat
-import java.util.Base64
 import java.util.Date
 import java.util.Locale
 import java.util.UUID

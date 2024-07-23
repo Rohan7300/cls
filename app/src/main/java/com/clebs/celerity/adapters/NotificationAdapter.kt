@@ -1,7 +1,6 @@
 package com.clebs.celerity.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
@@ -20,26 +19,17 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.DailyrotaapprovaldialogBinding
 import com.clebs.celerity.databinding.DialogvehicleadvancepaymentBinding
 import com.clebs.celerity.databinding.NotificationAdapterDialogBinding
-import com.clebs.celerity.dialogs.ExpiredDocDialog
-import com.clebs.celerity.dialogs.InvoiceReadytoViewDialog
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.dialogs.VehicleAdvancePaymentDialog
 import com.clebs.celerity.models.requests.ApproveDaDailyRotaRequest
 import com.clebs.celerity.models.response.NotificationResponseItem
-import com.clebs.celerity.ui.DeductionAgreementActivity
-import com.clebs.celerity.ui.ExpiringDocumentsActivity
-import com.clebs.celerity.ui.WeeklyRotaApprovalActivity
 import com.clebs.celerity.utils.DependencyProvider.dailyRotaNotificationShowing
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.dailyRota
 import com.clebs.celerity.utils.deductions
 import com.clebs.celerity.utils.expiredDocuments
 import com.clebs.celerity.utils.expiringDocument
-import com.clebs.celerity.utils.getCurrentWeek
-import com.clebs.celerity.utils.getCurrentYear
 import com.clebs.celerity.utils.invoiceReadyToView
 import com.clebs.celerity.utils.showToast
-import com.clebs.celerity.utils.thirdPartyAcessRequest
 import com.clebs.celerity.utils.vehicleExpiringDocuments
 import com.clebs.celerity.utils.weeklyLocationRota
 import java.time.LocalDateTime

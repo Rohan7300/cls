@@ -37,6 +37,7 @@ import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.response.LoginResponse
 import com.clebs.celerity.models.requests.logoutModel
+import com.clebs.celerity.models.response.AppVersionResponse
 import com.clebs.celerity.models.response.BaseResponseTwo
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
 import com.clebs.celerity.models.response.DaDailyLocationRotaResponse
@@ -205,6 +206,7 @@ class MainViewModel(
     val liveDataGetDAOutStandingDeductionList =
         MutableLiveData<GetDAOutStandingDeductionListResponseItem?>()
     val liveDataGetDriverDeductionHistory = MutableLiveData<GetDriverDeductionHistoryResponse?>()
+    val liveDataGetLatestAppVersion = MutableLiveData<AppVersionResponse?>()
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
@@ -1982,6 +1984,16 @@ class MainViewModel(
             else {
                 liveDataGetDriverDeductionHistory.postValue(response.body)
             }
+        }
+    }
+
+    fun GetLatestAppVersion() {
+        viewModelScope.launch {
+            val response = repo.GetLatestAppVersion()
+            if (response.failed || !response.isSuccessful)
+                liveDataGetLatestAppVersion.postValue(null)
+            else
+                liveDataGetLatestAppVersion.postValue(response.body)
         }
     }
 

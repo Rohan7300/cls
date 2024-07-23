@@ -11,19 +11,14 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -43,7 +38,6 @@ import com.clebs.celerity.ViewModel.OSyncViewModel
 import com.clebs.celerity.adapters.BreakTimeAdapter
 import com.clebs.celerity.adapters.DriverRouteAdapter
 import com.clebs.celerity.adapters.RideAlongAdapter
-import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.FragmentCompleteTaskBinding
 import com.clebs.celerity.databinding.TimePickerDialogBinding
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
@@ -51,7 +45,6 @@ import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
-import com.clebs.celerity.ui.AddInspection
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
@@ -62,11 +55,8 @@ import com.clebs.celerity.ui.FaceScanActivity
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.currentUri
 import com.clebs.celerity.utils.DependencyProvider.osData
-import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.addLeadingZeroIfNeeded
 import com.clebs.celerity.utils.bitmapToBase64
-import com.clebs.celerity.utils.getCameraURI
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
@@ -80,10 +70,6 @@ import com.clebs.celerity.utils.toRequestBody
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.tapadoo.alerter.Alerter
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
-import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
-import io.clearquote.assessment.cq_sdk.models.CustomerDetails
-import io.clearquote.assessment.cq_sdk.models.InputDetails
-import io.clearquote.assessment.cq_sdk.models.VehicleDetails
 
 import okhttp3.MultipartBody
 import java.text.ParseException

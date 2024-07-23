@@ -14,10 +14,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.HandlerThread
 import android.os.Looper
-import android.os.Process.THREAD_PRIORITY_BACKGROUND
-import android.os.Process.THREAD_PRIORITY_MORE_FAVORABLE
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -45,16 +42,16 @@ import com.clebs.celerity.adapters.DriverRouteAdapter
 import com.clebs.celerity.adapters.RideAlongAdapter
 import com.clebs.celerity.databinding.FragmentNewCompleteTaskBinding
 import com.clebs.celerity.databinding.TimePickerDialogBinding
-import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.models.requests.SaveBreakTimeRequest
 import com.clebs.celerity.models.response.GetDriverBreakTimeInfoResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.RideAlongDriverInfoByDateResponse
-import com.clebs.celerity.ui.AddInspectionActivity2
 import com.clebs.celerity.ui.App
-import com.clebs.celerity.ui.FaceScanActivity
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.HomeActivity.Companion.checked
+import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.ui.AddInspectionActivity2
+import com.clebs.celerity.ui.FaceScanActivity
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.currentUri
 import com.clebs.celerity.utils.DependencyProvider.osData
@@ -408,13 +405,11 @@ class NewCompleteTaskFragment : Fragment() {
         if (inspectionstarted?.equals(true) == true) {
             setVisibiltyLevel()
         } else {
-            if (prefs.isClientIDUplaoded!=true){
-                mbinding.startinspection.visibility = View.VISIBLE
-            }
-            else{
-                mbinding.startinspection.visibility = View.GONE
-            }
+            mbinding.startinspection.visibility = View.VISIBLE
+        }
 
+        if(prefs.isInspectionIDFailedToUpload){
+            startUploadWithWorkManager(3, prefs, requireContext())
         }
     }
 
@@ -1088,6 +1083,7 @@ class NewCompleteTaskFragment : Fragment() {
         with(mbinding) {
             listOf(
                 uploadLayouts,
+                startinspection,
                 rlcomtwoBreak,
                 onRoadView,
                 rlcomtwoBreak,
@@ -1097,30 +1093,13 @@ class NewCompleteTaskFragment : Fragment() {
                 taskDetails,
                 view2
             ).forEach { thisView -> thisView.visibility = View.GONE }
-            if ( Prefs.getInstance(App.instance).isClientIDUplaoded!=true) {
-                mbinding.startinspection.visibility = View.VISIBLE
-                mbinding.imageUploadView.visibility = View.GONE
-            }
-            else{
-                mbinding.startinspection.visibility = View.GONE
-                mbinding.imageUploadView.visibility = View.VISIBLE
-            }
         }
         when (visibilityLevel) {
             -1 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
-
+                mbinding.startinspection.visibility = View.VISIBLE
                 mbinding.imageUploadView.visibility = View.GONE
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.cross3)
-
-                if ( Prefs.getInstance(App.instance).isClientIDUplaoded!=true) {
-                    mbinding.startinspection.visibility = View.VISIBLE
-                    mbinding.imageUploadView.visibility = View.GONE
-                }
-                else{
-                    mbinding.startinspection.visibility = View.GONE
-                    mbinding.imageUploadView.visibility = View.VISIBLE
-                }
                 /*mbinding.clFaceMask.visibility = View.GONE
                 mbinding.clOilLevel.visibility = View.GONE*/
                 /*         mbinding.vehiclePicturesIB.setImageResource(R.drawable.ic_cross)
@@ -1133,14 +1112,7 @@ class NewCompleteTaskFragment : Fragment() {
             0 -> {
                 mbinding.uploadLayouts.visibility = View.VISIBLE
 //                mbinding.taskDetails.visibility = View.VISIBLE
-                if ( Prefs.getInstance(App.instance).isClientIDUplaoded!=true) {
-                    mbinding.startinspection.visibility = View.VISIBLE
-                    mbinding.imageUploadView.visibility = View.GONE
-                }
-                else{
-                    mbinding.startinspection.visibility = View.GONE
-                    mbinding.imageUploadView.visibility = View.VISIBLE
-                }
+                mbinding.imageUploadView.visibility = View.VISIBLE
                 mbinding.vehiclePicturesIB.setImageResource(R.drawable.not_uploaded)
                 mbinding.complete.setBackground(
                     ContextCompat.getDrawable(
@@ -1218,7 +1190,6 @@ class NewCompleteTaskFragment : Fragment() {
             }
 
         }
-
     }
 
     private fun setVisibiltyLevel() {
@@ -1277,21 +1248,10 @@ class NewCompleteTaskFragment : Fragment() {
                     }
                 }
             }, 0, 1000)
-            if (prefs.isClientIDUplaoded!=true){
-                mbinding.startinspection.visibility = View.VISIBLE
-            }
-            else{
-                mbinding.startinspection.visibility = View.GONE
-            }
-
+            mbinding.startinspection.visibility = View.GONE
 
         } else {
-            if (prefs.isClientIDUplaoded!=true){
-                mbinding.startinspection.visibility = View.VISIBLE
-            }
-            else{
-                mbinding.startinspection.visibility = View.GONE
-            }
+            mbinding.startinspection.visibility = View.VISIBLE
         }
     }
 

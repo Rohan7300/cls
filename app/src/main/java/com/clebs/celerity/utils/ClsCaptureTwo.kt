@@ -3,7 +3,6 @@ package com.clebs.celerity.utils
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -11,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -24,7 +22,6 @@ import androidx.databinding.DataBindingUtil
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.ActivityClsCaptureTwoBinding
-import com.clebs.celerity.databinding.FragmentDailyWorkBinding
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.fragments.DailyWorkFragment
 import java.io.IOException

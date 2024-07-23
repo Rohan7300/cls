@@ -1,6 +1,5 @@
 package com.clebs.celerity.ui
 
-import android.R.layout
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
@@ -19,12 +18,9 @@ import android.view.View.AUTOFILL_TYPE_NONE
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.biometric.BiometricManager
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -71,13 +67,17 @@ import com.clebs.celerity.utils.dbLog
 import com.clebs.celerity.utils.deductions
 import com.clebs.celerity.utils.expiredDocuments
 import com.clebs.celerity.utils.expiringDocument
+import com.clebs.celerity.utils.getCurrentAppVersion
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.invoiceReadyToView
+import com.clebs.celerity.utils.isVersionNewer
 import com.clebs.celerity.utils.logOSEntity
 import com.clebs.celerity.utils.parseToInt
 import com.clebs.celerity.utils.showBirthdayCard
 import com.clebs.celerity.utils.showToast
+import com.clebs.celerity.utils.showUpdateDialog
+import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.vehicleExpiringDocuments
 import com.clebs.celerity.utils.weeklyLocationRota
@@ -169,9 +169,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 false
             }
         }
-        isBioMetricEnable()
-
-
         deleteDialogtwo = android.app.AlertDialog.Builder(this).create()
         prefs = Prefs.getInstance(this)
         checkTokenExpirationAndLogout(this, prefs)
@@ -232,35 +229,18 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.menu.findItem(R.id.daily).setTooltipText("Daily work")
         val menu: MenuItem = ActivityHomeBinding.navView.menu.findItem(R.id.EnableDisableBio)
-        if (!isBioMetricEnable()) {
-            menu.setTitle("Biometric not available")
-            menu.setEnabled(false)
-            menu.setIcon(ContextCompat.getDrawable(this,R.drawable.baseline_fingerprint_24_red))
-
+        if (isLoggedInBio()) {
+            Log.e("kdjfjkfdk", "onCreate: ")
+            menu.setTitle("Disable Biometric")
         } else {
-            if (isLoggedInBio()) {
-                Log.e("kdjfjkfdk", "onCreate: ")
-                menu.setTitle("Disable Biometric")
-                menu.setEnabled(true)
-                menu.setIcon(ContextCompat.getDrawable(this,R.drawable.baseline_fingerprint_24_black))
-            } else {
-                Log.e("kdjfjkfdktwo", "onCreate: ")
-                menu.setTitle("Enable Biometric")
-                menu.setEnabled(true)
-                menu.setIcon(ContextCompat.getDrawable(this,R.drawable.baseline_fingerprint_24_black))
-            }
+            Log.e("kdjfjkfdktwo", "onCreate: ")
+            menu.setTitle("Enable Biometric")
         }
-
-
         getDeviceID()
         val deviceID =
-            Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID).toString()
+            Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID)
+                .toString()
         Log.e("kjkcjkvckvck", "onCreate: " + deviceID)
-
-
-
-
-
 
         try {
             val apiService = RetrofitService.getInstance().create(ApiService::class.java)
@@ -281,8 +261,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
                 Log.d("GetVehicleDefectSheetInfoLiveData ", "$it")
                 hideDialog()
-                hidedialogtwo()
-                ActivityHomeBinding.searchLayout.visibility = View.GONE
                 if (it != null) {
                     completeTaskScreen = it.IsSubmited
                     if (!completeTaskScreen) {
@@ -345,7 +323,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                 || navController.currentDestination?.id == R.id.dailyWorkFragment ||
                                 navController.currentDestination?.id == R.id.homeFragment
                             ) {
-                                //navController.navigate(R.id.homedemoFragment)
                                 bottomNavigationView.selectedItemId = R.id.home
 
                                 prefs.clearNavigationHistory()
@@ -376,7 +353,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                 }
                             }
                         }
-                    } catch (_: Exception) {
+                    } catch (e: Exception) {
+                        Log.e("HomeActivity", "BackException ${e.printStackTrace()}")
                     }
 
                     if (doubleBackToExitPressedOnce) {
@@ -435,9 +413,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             ActivityHomeBinding.logout.visibility = View.GONE
                             ActivityHomeBinding.title.text = "Routes"
                             ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
-                            viewModel.GetVehicleDefectSheetInfo(Prefs.getInstance(applicationContext).clebUserId.toInt())
+                            viewModel.GetVehicleDefectSheetInfo(
+                                Prefs.getInstance(
+                                    applicationContext
+                                ).clebUserId.toInt()
+                            )
 //                            showDialog()
-
+                            hidedialogtwo()
+                            ActivityHomeBinding.searchLayout.visibility = View.GONE
                         } else {
                             hidedialogtwo()
                             ActivityHomeBinding.searchLayout.visibility = View.GONE
@@ -634,6 +617,20 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     private fun observers() {
+        viewModel.GetLatestAppVersion()
+
+        viewModel.liveDataGetLatestAppVersion.observe(this) {
+            val currentAppVersion = getCurrentAppVersion(this)
+            if (it != null) {
+                if (isVersionNewer(currentAppVersion, it.AndroidAppVersion)) {
+                    val playStoreUrl =
+                        "https://play.google.com/store/apps/details?id=com.clebs.celerity&hl=en"
+                    showUpdateDialog(this, playStoreUrl)
+                }
+            } else
+                showToast("Failed to fetch the latest app version", this@HomeActivity)
+        }
+
         viewModel.vechileInformationLiveData.observe(this) {
             if (it != null) {
                 prefs.VinNumber = it.VinNumber
@@ -890,7 +887,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         super.onBackPressed()
                     }
                 } catch (_: Exception) {
-
+                    bottomNavigationView.selectedItemId = R.id.home
                 }
             }
 
@@ -953,8 +950,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val factory = LayoutInflater.from(this)
         val view: View = factory.inflate(R.layout.logout_layout, null)
         val deleteDialog: AlertDialog = AlertDialog.Builder(this).create()
-
-
+/*        val imageView: ImageView = view.findViewById(R.id.ic_cross_orange)
+        imageView.setOnClickListener {
+            deleteDialog.dismiss()
+        }*/
         val btone: Button = view.findViewById(R.id.bt_no)
         val bttwo: Button = view.findViewById(R.id.bt_yes)
 
@@ -1209,39 +1208,17 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onResume() {
         super.onResume()
-        oSyncViewModel.getData()
-        if (isComingBackFromFaceScan) {
-            navController.navigate(R.id.newCompleteTaskFragment)
+        try {
+            if (oSyncViewModel != null || this::oSyncViewModel.isInitialized) {
+                oSyncViewModel.getData()
+                if (isComingBackFromFaceScan) {
+                    navController.navigate(R.id.newCompleteTaskFragment)
+                }
+            }
+        } catch (_: Exception) {
+
         }
     }
 
-    fun isBioMetricEnable(): Boolean {
-        var canAuth = true
-        val biometricManager = BiometricManager.from(this)
-        when (biometricManager.canAuthenticate()) {
-
-            BiometricManager.BIOMETRIC_SUCCESS -> {
-                canAuth = true
-
-            }
-
-            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
-                canAuth = false
-
-            }
-
-            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
-                canAuth = false
-
-            }
-
-            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
-                canAuth = false
-
-            }
-
-        }
-        return canAuth
-    }
 
 }

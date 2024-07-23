@@ -16,11 +16,9 @@ import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.dialogs.NoInternetDialog
-import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.getVRegNo
-import com.clebs.celerity.utils.isNetworkAvailable
 import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.startUploadWithWorkManager
@@ -140,7 +138,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 imageEntity = imageViewModel.images.value!!
-                setImageView(defaultIv, it.exSpareWheel.toString(),requireContext())
+                setImageView(defaultIv, it.exSpareWheel.toString(), requireContext())
                 if (it.dfNameSpareWheel!!.isNotEmpty() && it.dfNameSpareWheel != "f") {
                     edtDefect.setText(it.dfNameSpareWheel.toString())
                 }
@@ -177,8 +175,8 @@ class SpareWheelFragment : BaseInteriorFragment() {
                         VdhVmId = it.vmId
                         if (it.vmId != 0)
                             Prefs.getInstance(requireContext()).vmId = it.vmId
-                        if(it.vmId!=null&&Prefs.getInstance(App.instance).vmId==0)
-                        Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()
+                        if (it.vmId != null && Prefs.getInstance(App.instance).vmId == 0)
+                            Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()
                         Prefs.getInstance(App.instance).save("lm", it.vmLocId.toString())
                         VdhLmId = it.vmLocId
                         VdhOdoMeterReading =
@@ -251,11 +249,10 @@ class SpareWheelFragment : BaseInteriorFragment() {
                             vdhFuelOilLeaksComment = imageEntity.dfNameOilCoolantLevel!!,
                             vdhIsDefected = isDefected,
                         )
-                        if(isDefected){
-                            startUploadWithWorkManager(2,prefs,requireContext(),VdhLmId,VdhVmId)
+                        if (isDefected) {
+                            startUploadWithWorkManager(2, prefs, requireContext(), VdhLmId, VdhVmId)
                         }
-                        (activity as HomeActivity).
-                        viewModel.SaveVehDefectSheet(request)
+                        (activity as HomeActivity).viewModel.SaveVehDefectSheet(request)
                     }
                 } else {
                     if (prefs.scannedVmRegNo.isNotEmpty() && !secondTry) {

@@ -34,6 +34,7 @@ import com.clebs.celerity.models.requests.UpdateDeductioRequest
 import com.clebs.celerity.models.requests.UpdateDriverAgreementSignatureRequest
 import com.clebs.celerity.models.requests.UpdateProfileRequestBody
 import com.clebs.celerity.models.requests.logoutModel
+import com.clebs.celerity.models.response.AppVersionResponse
 import com.clebs.celerity.models.response.BaseResponseTwo
 
 import com.clebs.celerity.models.response.CheckIFTodayCheckIsDone
@@ -945,5 +946,7 @@ interface ApiService {
         @Query("parentCompanyId") parentCompanyId: Int
     ): Response<GetDriverDeductionHistoryResponse>
 
+    @GET("/api/Dashboard/GetLatestAppVersion")
+    suspend fun GetLatestAppVersion():Response<AppVersionResponse>
 }
 
