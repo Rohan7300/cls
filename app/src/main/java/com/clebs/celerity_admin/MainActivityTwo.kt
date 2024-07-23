@@ -137,7 +137,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
             binding.appBarMainActivityTwo.cardtwo.alpha=0.4f
         }
         binding.appBarMainActivityTwo.cardtwo.setOnClickListener {
-            binding.appBarMainActivityTwo.toolbarTitle.setText("Weekly defects check")
+            binding.appBarMainActivityTwo.toolbarTitle.setText("Weekly Defects Check")
             navController.navigate(R.id.nav_slideshow)
             binding.appBarMainActivityTwo.cardtwo.setCardBackgroundColor(
                 ContextCompat.getColor(
@@ -226,7 +226,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
             }
 
             R.id.nav_slideshow -> {
-                binding.appBarMainActivityTwo.toolbarTitle.setText("Weekly defects check")
+                binding.appBarMainActivityTwo.toolbarTitle.setText("Weekly Defects Check")
                 binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
                 navController.navigate(R.id.nav_slideshow)
