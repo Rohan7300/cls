@@ -63,6 +63,7 @@ import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 import java.util.concurrent.Executors
 
 class SubmitWeeklyDefectActivity : AppCompatActivity() {
@@ -239,10 +240,10 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 nsWingMirrorImage = dbDefectSheet!!.nsWingMirrorImage
             }
             if (!dbDefectSheet!!.osWingMirrorImage.isNullOrBlank()) {
-                osWingMirrorImage =dbDefectSheet!!.osWingMirrorImage
+                osWingMirrorImage = dbDefectSheet!!.osWingMirrorImage
             }
             if (!dbDefectSheet!!.threeSixtyVideo.isNullOrBlank()) {
-                three60Video =dbDefectSheet!!.threeSixtyVideo
+                three60Video = dbDefectSheet!!.threeSixtyVideo
             }
             setUploadCardBtn2(
                 dbDefectSheet!!.tyreDepthFrontNSImage,
@@ -422,7 +423,8 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 dbDefectSheet?.otherImages = otherImagesList.joinToString(",")
 
 
-            if (isWorkCompleted(isupload!!)) {
+            //if (isWorkCompleted(isupload!!)) {
+            if (canStartNewWork()) {
 
                 if (tyreThreadDepthFrontNS.isNullOrEmpty()) {
                     Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
@@ -462,8 +464,8 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                      binding.signaprrovecheck.visibility = View.GONE*/
                     Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
                 } else if (three60Video.isNullOrEmpty()) {
-                 /*   binding.signactioncheck.visibility = View.GONE
-                    binding.signaprrovecheck.visibility = View.GONE*/
+                    /*   binding.signactioncheck.visibility = View.GONE
+                       binding.signaprrovecheck.visibility = View.GONE*/
                     Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
                 } else if (binding.actionCommentET.text.isNullOrEmpty()) {
 
@@ -1296,8 +1298,12 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             OneTimeWorkRequestBuilder<BackgroundUploadWorker>().setInputData(inputData)
                 .setConstraints(constraints).build()
 
-        WorkManager.getInstance(this)
-            .enqueue(uploadWorkRequest)
+
+        val workManager = WorkManager.getInstance(this)
+        val workRequestId = uploadWorkRequest.id
+        workManager.enqueue(uploadWorkRequest)
+
+        Prefs.getInstance(this).saveWorkRequestId(workRequestId.toString())
 
         Toast.makeText(
             this@SubmitWeeklyDefectActivity,
@@ -1330,7 +1336,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
                     WorkInfo.State.FAILED -> {
                         isupload = false
-                        Log.e("completed", "isWorkfailded: ")
+                        Log.e("completed", "isWorkfailed: ")
                         // Work failed
                         // Handle failure scenario
                     }
@@ -1370,7 +1376,17 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
     }
 
+    private fun canStartNewWork(): Boolean {
+        val lastWorkRequestId = Prefs.getInstance(this).getWorkRequestId()
 
+        return if (lastWorkRequestId != null) {
+            val workManager = WorkManager.getInstance(this)
+            val workInfo = workManager.getWorkInfoById(UUID.fromString(lastWorkRequestId)).get()
+            workInfo.state.isFinished
+        } else {
+            true
+        }
+    }
 }
 
 class SyncWorker(
@@ -1381,8 +1397,6 @@ class SyncWorker(
         // ...
         return Result.success()
     }
-
-
 }
 
 
