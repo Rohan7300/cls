@@ -1165,6 +1165,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                             startonetime = Prefs.getInstance(App.instance).Isfirst
                             Log.d("CQSDKXX", "isStarted " + msg)
                         } else {
+                            loadingDialog.dismiss()
                             Prefs.getInstance(App.instance).Isfirst = true
                             startonetime = Prefs.getInstance(App.instance).Isfirst
                             if (msg.equals("Online quote can not be created without internet")) {
