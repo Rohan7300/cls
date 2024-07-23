@@ -588,7 +588,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 )
 
                 setRadioCard2(
-                    it.TyrePressureFrontNS,
+                    it.TyrePressureRearNS,
                     binding.tyrePressureRearNSFullRB,
                     binding.tyrePressureRearNSBelowRB
                 )
@@ -1121,7 +1121,6 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
     private fun startInspection() {
         clientUniqueID()
-
 
 
         if (cqSDKInitializer.isCQSDKInitialized()) {
