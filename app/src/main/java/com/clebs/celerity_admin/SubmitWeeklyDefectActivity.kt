@@ -245,6 +245,10 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             if (!dbDefectSheet!!.threeSixtyVideo.isNullOrBlank()) {
                 three60Video = dbDefectSheet!!.threeSixtyVideo
             }
+
+            binding.signactioncheck.isChecked = dbDefectSheet!!.WeeklyActionCheck
+            binding.signaprrovecheck.isChecked = dbDefectSheet!!.WeeklyApproveCheck
+
             setUploadCardBtn2(
                 dbDefectSheet!!.tyreDepthFrontNSImage,
                 binding.tyreDepthFrontImageUploadBtn,
@@ -252,7 +256,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             )
 
             setRadioCard(
-                dbDefectSheet!!.tyrePressureRearOSRB == 1,
+                dbDefectSheet!!.tyrePressureRearOSRB,
                 binding.tyrePressureFrontFullRB,
                 binding.tyrePressureFrontBelowRB
             )
@@ -264,7 +268,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             )
 
             setRadioCard(
-                dbDefectSheet!!.tyrePressureRearNSRB == 1,
+                dbDefectSheet!!.tyrePressureRearNSRB,
                 binding.tyrePressureRearNSFullRB,
                 binding.tyrePressureRearNSBelowRB
             )
@@ -276,7 +280,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             )
 
             setRadioCard(
-                dbDefectSheet!!.tyrePressureRearOSRB == 1,
+                dbDefectSheet!!.tyrePressureRearOSRB,
                 binding.tyrePressureRearOSFULLRB,
                 binding.tyrePressureRearOSBelowRB
             )
@@ -288,7 +292,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             )
 
             setRadioCard(
-                dbDefectSheet?.tyrePressureFrontNSRB == 1,
+                dbDefectSheet!!.tyrePressureFrontNSRB,
                 binding.tyrePressureFrontOSFullRB,
                 binding.tyrePressureFrontOSBelowRB
             )
@@ -326,7 +330,10 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 var size = dbDefectSheet?.otherImages!!.split(",").size
                 var others = ""
                 for (i in 0 until size) {
-                    others += "im$i.jpg \n"
+                    if (i != size - 1)
+                        others += "im$i.jpg \n"
+                    else
+                        others += "im$i.jpg"
                 }
                 binding.otherImagesTV.text = others
 
@@ -567,7 +574,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     binding.tyreDepthFrontImageFileName
                 )
 
-                setRadioCard(
+                setRadioCard2(
                     it.TyrePressureFrontNS,
                     binding.tyrePressureFrontFullRB,
                     binding.tyrePressureFrontBelowRB
@@ -579,7 +586,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     binding.tyreDepthRearImageUploadFileName
                 )
 
-                setRadioCard(
+                setRadioCard2(
                     it.TyrePressureFrontNS,
                     binding.tyrePressureRearNSFullRB,
                     binding.tyrePressureRearNSBelowRB
@@ -591,7 +598,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     binding.tyreDepthRearOSFileNameTV
                 )
 
-                setRadioCard(
+                setRadioCard2(
                     it.TyrePressureRearOS,
                     binding.tyrePressureRearOSFULLRB,
                     binding.tyrePressureRearOSBelowRB
@@ -603,7 +610,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     binding.tyreDepthFrontOSImageFilenameTV
                 )
 
-                setRadioCard(
+                setRadioCard2(
                     it.TyrePressureFrontOS,
                     binding.tyrePressureFrontOSFullRB,
                     binding.tyrePressureFrontOSBelowRB
@@ -809,8 +816,11 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     ) {
         "Add More".also { tyreDepthFrontImageUploadBtn.text = it }
         var otherFiles = ""
-        for (i in imagesString) {
-            otherFiles += shortenFileName(uriToFileName(i)) + "\n"
+        for (i in 0 until imagesString.size) {
+            otherFiles += if (i != imagesString.size - 1)
+                shortenFileName(uriToFileName(imagesString[i])) + "\n"
+            else
+                shortenFileName(uriToFileName(imagesString[i]))
         }
 
         tyreDepthFrontImageFileName.text = otherFiles
@@ -820,14 +830,33 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     }
 
     private fun setRadioCard(
-        tyrePressureFrontNS: Boolean,
+        tyrePressureFrontNS: Int,
         tyrePressureFrontFullRB: RadioButton,
         tyrePressureFrontBelowRB: RadioButton
     ) {
-        if (tyrePressureFrontNS) {
+        if (tyrePressureFrontNS == 1) {
             tyrePressureFrontFullRB.isChecked = true
             tyrePressureFrontBelowRB.isChecked = false
-        } else {
+        } else if (tyrePressureFrontNS == -1) {
+            tyrePressureFrontBelowRB.isChecked = false
+            tyrePressureFrontFullRB.isChecked = false
+        } else{
+            tyrePressureFrontBelowRB.isChecked = true
+            tyrePressureFrontFullRB.isChecked = false
+        }
+    }
+    private fun setRadioCard2(
+        tyrePressureFrontNS: Boolean?,
+        tyrePressureFrontFullRB: RadioButton,
+        tyrePressureFrontBelowRB: RadioButton
+    ) {
+        if (tyrePressureFrontNS == null) {
+            tyrePressureFrontFullRB.isChecked = false
+            tyrePressureFrontBelowRB.isChecked = false
+        } else if (tyrePressureFrontNS) {
+            tyrePressureFrontBelowRB.isChecked = false
+            tyrePressureFrontFullRB.isChecked = true
+        } else{
             tyrePressureFrontBelowRB.isChecked = true
             tyrePressureFrontFullRB.isChecked = false
         }
@@ -1098,6 +1127,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             Log.e("sdkskdkdkskdkskd", "onCreateView " + inspectionreg)
 
             try {
+                loadingDialog.show()
                 cqSDKInitializer.startInspection(activity = this, clientAttrs = ClientAttrs(
                     userName = " ",
                     dealer = " ",
@@ -1166,7 +1196,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         }
                     })
             } catch (_: Exception) {
-
+                loadingDialog.dismiss()
             }
         }
     }
@@ -1189,6 +1219,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        loadingDialog.dismiss()
         val message = intent?.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
             ?: "Could not identify status message"
         val tempCode =
