@@ -9,14 +9,14 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:background="@color/home_blue"
         android:layout_height="match_parent"
+        android:background="@color/home_blue"
         tools:context=".SubmitWeeklyDefectActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:background="@color/home_blue"
             android:layout_height="match_parent"
+            android:background="@color/home_blue"
             android:orientation="vertical">
 
             <LinearLayout
@@ -31,8 +31,8 @@
                     android:id="@+id/back"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    app:tint="@color/white"
-                    android:src="@drawable/baseline_arrow_back_24" />
+                    android:src="@drawable/baseline_arrow_back_24"
+                    app:tint="@color/white" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -41,9 +41,9 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_semibold"
                     android:gravity="center"
-                    android:textSize="14sp"
                     android:text="Vehicle Defect Sheet Weekly Check Action"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -63,14 +63,14 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        app:tint="@color/white"
-                        android:src="@drawable/user" />
+                        android:src="@drawable/user"
+                        app:tint="@color/white" />
 
                     <TextView
+                        android:id="@+id/daTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:id="@+id/daTv"
                         android:fontFamily="@font/poppins_medium"
                         android:text="DA Name"
                         android:textColor="@color/white"
@@ -87,17 +87,17 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        app:tint="@color/white"
-                        android:src="@drawable/deliverytruck" />
+                        android:src="@drawable/deliverytruck"
+                        app:tint="@color/white" />
 
                     <TextView
+                        android:id="@+id/daReg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:textColor="@color/white"
-                        android:id="@+id/daReg"
                         android:fontFamily="@font/poppins_medium"
                         android:text="DA Reg No"
+                        android:textColor="@color/white"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -111,26 +111,26 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        app:tint="@color/white"
-                        android:src="@drawable/target" />
+                        android:src="@drawable/target"
+                        app:tint="@color/white" />
 
                     <TextView
+                        android:id="@+id/daLoc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:textColor="@color/white"
-                        android:id="@+id/daLoc"
                         android:fontFamily="@font/poppins_medium"
                         android:text="DA location"
+                        android:textColor="@color/white"
                         android:textSize="11sp" />
                 </LinearLayout>
             </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/llstart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:id="@+id/llstart"
                 app:strokeColor="@color/very_very_light_red"
                 app:strokeWidth="2dp">
 
@@ -142,11 +142,11 @@
                     android:padding="10dp">
 
                     <TextView
+                        android:id="@+id/tvInspection"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="5dp"
                         android:layout_marginStart="4dp"
-android:id="@+id/tvInspection"
                         android:fontFamily="@font/poppins_semibold"
                         android:text="Start OSM Inspection *"
                         android:textColor="@color/black"
@@ -159,32 +159,35 @@ android:id="@+id/tvInspection"
                         android:orientation="vertical">
 
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btStart"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/red_light"
-                            android:text="START INSPECTION"
-                            android:padding="15dp"
-                            android:id="@+id/btStart"
-                            android:drawableTint="@color/black"
-                            android:drawablePadding="4dp"
                             android:drawableEnd="@drawable/baseline_camera_24"
+                            android:drawablePadding="4dp"
+                            android:drawableTint="@color/black"
                             android:fontFamily="@font/poppins_semibold"
+                            android:padding="15dp"
+                            android:text="START INSPECTION"
                             android:textSize="12sp" />
+
                         <ImageView
+                            android:id="@+id/done"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:visibility="gone"
-                            android:id="@+id/done"/>
+                            android:visibility="gone" />
 
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
             <LinearLayout
+                android:id="@+id/llmain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/llmain"
-                android:visibility="visible"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
+
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -215,20 +218,20 @@ android:id="@+id/tvInspection"
                             android:orientation="horizontal">
 
                             <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/tyreDepthFrontImageUploadBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@color/red_light"
                                 android:text="UPLOAD"
-                                android:id="@+id/tyreDepthFrontImageUploadBtn"
                                 android:textSize="12sp" />
 
                             <TextView
+                                android:id="@+id/tyreDepthFrontImageFileName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="5dp"
                                 android:layout_marginStart="5dp"
                                 android:layout_weight="1"
-                                android:id="@+id/tyreDepthFrontImageFileName"
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
                                 android:textSize="12sp" />
@@ -266,9 +269,9 @@ android:id="@+id/tvInspection"
                             android:orientation="horizontal">
 
                             <RadioGroup
+                                android:id="@+id/tyrePressureFrontRG"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/tyrePressureFrontRG"
                                 android:orientation="horizontal">
 
                                 <RadioButton
@@ -378,18 +381,18 @@ android:id="@+id/tvInspection"
                                 android:orientation="horizontal">
 
                                 <RadioButton
+                                    android:id="@+id/tyrePressureRearNSFullRB"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginHorizontal="10dp"
                                     android:fontFamily="@font/poppins_medium"
-                                    android:id="@+id/tyrePressureRearNSFullRB"
                                     android:text="FULL"
                                     android:textSize="11sp" />
 
                                 <RadioButton
+                                    android:id="@+id/tyrePressureRearNSBelowRB"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/tyrePressureRearNSBelowRB"
                                     android:fontFamily="@font/poppins_medium"
                                     android:text="BELOW"
                                     android:textSize="11sp" />
@@ -676,10 +679,10 @@ android:id="@+id/tvInspection"
                         android:textColorHint="@color/black">
 
                         <AutoCompleteTextView
+                            android:id="@+id/spinnerOilLevel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:id="@+id/spinnerOilLevel"
                             android:importantForAutofill="no"
                             android:inputType="none"
                             android:padding="12dp"
@@ -698,12 +701,12 @@ android:id="@+id/tvInspection"
                         android:textColorHint="@color/black">
 
                         <AutoCompleteTextView
+                            android:id="@+id/spinnerEngineCoolant"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:importantForAutofill="no"
                             android:inputType="none"
-                            android:id="@+id/spinnerEngineCoolant"
                             android:padding="12dp"
                             android:textColorHint="@color/black"
                             android:textSize="14sp" />
@@ -721,11 +724,11 @@ android:id="@+id/tvInspection"
                     android:textColorHint="@color/black">
 
                     <AutoCompleteTextView
+                        android:id="@+id/spinnerBrakeFluid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:importantForAutofill="no"
-                        android:id="@+id/spinnerBrakeFluid"
                         android:inputType="none"
                         android:padding="12dp"
                         android:textColorHint="@color/black"
@@ -734,12 +737,12 @@ android:id="@+id/tvInspection"
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/checkpower"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
-                    android:checked="true"
-                    android:id="@+id/checkpower"
+                    android:checked="false"
                     android:text="Power Steering Liquid"
                     android:textSize="12sp" />
 
@@ -1024,14 +1027,14 @@ android:id="@+id/tvInspection"
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="center_vertical"
                             android:orientation="horizontal">
 
                             <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/otherPictureUploadBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@color/red_light"
-                                android:id="@+id/otherPictureUploadBtn"
                                 android:enabled="false"
                                 android:text="UPLOAD"
                                 android:textSize="12sp" />
@@ -1040,24 +1043,24 @@ android:id="@+id/tvInspection"
                                 android:id="@+id/otherImagesTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginVertical="5dp"
-                                android:visibility="gone"
                                 android:layout_marginStart="4dp"
-                                android:layout_weight="1"
                                 android:fontFamily="@font/poppins_semibold"
+                                android:gravity="center_vertical"
                                 android:text="- - - -"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+
                             <LinearLayout
+                                android:id="@+id/pbX"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:id="@+id/pbX"
                                 android:gravity="center"
-                                >
-                            <ProgressBar
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:indeterminateTint="@color/red"
-                                />
+                                android:visibility="visible">
+
+                                <ProgressBar
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:indeterminateTint="@color/red" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -1072,39 +1075,40 @@ android:id="@+id/tvInspection"
                     app:hintTextColor="@color/black">
 
                     <EditText
+                        android:id="@+id/actionCommentET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:id="@+id/actionCommentET"
                         android:fontFamily="@font/poppins_medium"
                         android:importantForAutofill="no"
                         android:inputType="textCapWords"
                         android:padding="12dp"
                         android:textSize="13sp" />
                 </com.google.android.material.textfield.TextInputLayout>
+
                 <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/signactioncheck"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:visibility="visible"
-                    android:id="@+id/signactioncheck"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_weight="1"
-                    android:textSize="12sp"
                     android:checked="false"
-                    android:text="By ticking this box, I declare I have carried out my weekly vehicle checks" />
+                    android:text="By ticking this box, I declare I have carried out my weekly vehicle checks"
+                    android:textSize="12sp"
+                    android:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/signaprrovecheck"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:textSize="12sp"
-                    android:visibility="visible"
-                    android:id="@+id/signaprrovecheck"
                     android:layout_weight="1"
                     android:checked="false"
-                    android:text="Click to approve weekly defect checks." />
+                    android:text="Click to approve weekly defect checks."
+                    android:textSize="12sp"
+                    android:visibility="visible" />
 
 
                 <LinearLayout
@@ -1131,7 +1135,7 @@ android:id="@+id/tvInspection"
                 </LinearLayout>
             </LinearLayout>
 
-            </LinearLayout>
+        </LinearLayout>
 
     </ScrollView>
 </layout>

@@ -56,7 +56,8 @@ class BackgroundUploadWorker(
                         TyreThreadDepthFrontOSVal = 0,
                         TyreThreadDepthRearNSVal = 0,
                         TyreThreadDepthRearOSVal = 0,
-                        UserId = Prefs.getInstance(App.instance).clebUserId.toString().toInt(),
+                        UserId = Prefs.getInstance(applicationContext).clebUserId.toInt()
+                        ,
                         VdhAdminComment = "",
                         VdhBrakeFluidLevelId = dbDefectSheet.brakeFluidLevelID,
                         VdhCheckId = dbDefectSheet.id,

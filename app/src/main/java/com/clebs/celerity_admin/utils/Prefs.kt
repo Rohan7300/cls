@@ -404,6 +404,14 @@ class Prefs(context: Context) {
             return false
         }
     }
+    fun saveWorkRequestId(workRequestId: String) {
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString("lastWorkRequestId", workRequestId)
+        editor.apply()
+    }
 
+    fun getWorkRequestId():String?{
+        return sharedPreferences.getString("lastWorkRequestId", null)
+    }
 
 }
