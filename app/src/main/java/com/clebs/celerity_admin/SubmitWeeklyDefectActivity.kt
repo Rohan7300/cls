@@ -539,33 +539,42 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
                 if (it.VdhDefChkImgTyrethreaddepthFrontNs.isNotBlank()) {
                     tyreThreadDepthFrontNS = it.VdhDefChkImgTyrethreaddepthFrontNs
+                    dbDefectSheet!!.uploadTyreDepthFrontNSImage = false
                 }
                 if (it.VdhDefChkImgTyrethreaddepthRearNs.isNotBlank()) {
                     tyreThreadDepthRearNS = it.VdhDefChkImgTyrethreaddepthRearNs
+                    dbDefectSheet!!.uploadTyreDepthRearNSImage = false
                 }
                 if (it.VdhDefChkImgTyrethreaddepthRearOs.isNotBlank()) {
                     tyreThreadDepthRearOS = it.VdhDefChkImgTyrethreaddepthRearOs
+                    dbDefectSheet!!.uploadTyreDepthRearOSImage = false
                 }
 
                 if (it.VdhDefChkImgTyrethreaddepthFrontOs.isNotBlank()) {
                     tyreThreadDepthFrontOS = it.VdhDefChkImgTyrethreaddepthFrontOs
+                    dbDefectSheet!!.uploadTyreDepthFrontOSImage = false
                 }
 
                 if (it.VdhDefChkImgEngineOilLevel.isNotBlank()) {
                     engineOilLevelImage = it.VdhDefChkImgEngineOilLevel
+                    dbDefectSheet!!.uploadEngineLevelImage = false
                 }
 
                 if (it.VdhDefChkImgAddBlueLevel.isNotBlank()) {
                     addBlueLevelImage = it.VdhDefChkImgAddBlueLevel
+                    dbDefectSheet!!.uploadAddBlueLevelImage = false
                 }
                 if (it.VdhDefChkImgNswingMirror.isNotBlank()) {
                     nsWingMirrorImage = it.VdhDefChkImgNswingMirror
+                    dbDefectSheet!!.uploadNSWingMirrorImage = false
                 }
                 if (it.VdhDefChkImgOswingMirror.isNotBlank()) {
                     osWingMirrorImage = it.VdhDefChkImgOswingMirror
+                    dbDefectSheet!!.uploadOSWingMirrorImage = false
                 }
                 if (it.VdhDefChkImgVan360Video.isNotBlank()) {
                     three60Video = it.VdhDefChkImgVan360Video
+                    dbDefectSheet!!.uploadThreeSixtyVideo = false
                 }
 
                 setUploadCardBtn(
@@ -840,11 +849,12 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         } else if (tyrePressureFrontNS == -1) {
             tyrePressureFrontBelowRB.isChecked = false
             tyrePressureFrontFullRB.isChecked = false
-        } else{
+        } else {
             tyrePressureFrontBelowRB.isChecked = true
             tyrePressureFrontFullRB.isChecked = false
         }
     }
+
     private fun setRadioCard2(
         tyrePressureFrontNS: Boolean?,
         tyrePressureFrontFullRB: RadioButton,
@@ -856,7 +866,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         } else if (tyrePressureFrontNS) {
             tyrePressureFrontBelowRB.isChecked = false
             tyrePressureFrontFullRB.isChecked = true
-        } else{
+        } else {
             tyrePressureFrontBelowRB.isChecked = true
             tyrePressureFrontFullRB.isChecked = false
         }
@@ -960,7 +970,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         0 -> {
                             dbDefectSheet?.tyreDepthFrontNSImage = selectedFileUri.toString()
                             tyreThreadDepthFrontNS = selectedFileUri.toString()
-
+                            dbDefectSheet!!.uploadTyreDepthFrontNSImage = true
                             setUploadCardBtn2(
                                 dbDefectSheet!!.tyreDepthFrontNSImage!!,
                                 binding.tyreDepthFrontImageUploadBtn,
@@ -971,7 +981,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         1 -> {
                             dbDefectSheet?.tyreDepthRearNSImage = selectedFileUri.toString()
                             tyreThreadDepthRearNS = selectedFileUri.toString()
-
+                            dbDefectSheet!!.uploadTyreDepthRearNSImage = true
                             setUploadCardBtn2(
                                 dbDefectSheet!!.tyreDepthRearNSImage!!,
                                 binding.tyreDepthRearImageUploadBtn,
@@ -982,7 +992,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         2 -> {
                             dbDefectSheet?.tyreDepthRearOSImage = selectedFileUri.toString()
                             tyreThreadDepthRearOS = selectedFileUri.toString()
-
+                            dbDefectSheet!!.uploadTyreDepthRearOSImage = true
                             setUploadCardBtn2(
                                 dbDefectSheet!!.tyreDepthRearOSImage!!,
                                 binding.tyreDepthRearOSImageUploadBtn,
@@ -993,7 +1003,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         3 -> {
                             dbDefectSheet?.tyreDepthFrontOSImage = selectedFileUri.toString()
                             tyreThreadDepthFrontOS = selectedFileUri.toString()
-
+                            dbDefectSheet!!.uploadTyreDepthFrontOSImage = true
                             setUploadCardBtn2(
                                 dbDefectSheet!!.tyreDepthFrontOSImage!!,
                                 binding.tyreDepthFrontOSImageUploadBtn,
@@ -1004,7 +1014,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         4 -> {
                             dbDefectSheet?.engineLevelImage = selectedFileUri.toString()
                             engineOilLevelImage = selectedFileUri.toString()
-
+                            dbDefectSheet!!.uploadEngineLevelImage = true
                             setUploadCardBtn2(
                                 dbDefectSheet!!.engineLevelImage!!,
                                 binding.engineOilImageUploadBtn,
@@ -1015,7 +1025,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         5 -> {
                             dbDefectSheet?.addBlueLevelImage = selectedFileUri.toString()
                             addBlueLevelImage = selectedFileUri.toString()
-
+                            dbDefectSheet!!.uploadAddBlueLevelImage = true
                             setUploadCardBtn2(
                                 dbDefectSheet!!.addBlueLevelImage!!,
                                 binding.addBlueLevelUploadBtn,
@@ -1026,7 +1036,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         6 -> {
                             dbDefectSheet?.nsWingMirrorImage = selectedFileUri.toString()
                             nsWingMirrorImage = selectedFileUri.toString()
-
+                            dbDefectSheet!!.uploadNSWingMirrorImage = true
                             setUploadCardBtn2(
                                 dbDefectSheet!!.nsWingMirrorImage!!,
                                 binding.nsWingMirrorUploadBtn,
@@ -1037,7 +1047,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         7 -> {
                             dbDefectSheet?.osWingMirrorImage = selectedFileUri.toString()
                             osWingMirrorImage = selectedFileUri.toString()
-
+                            dbDefectSheet!!.uploadOSWingMirrorImage = true
                             setUploadCardBtn2(
                                 dbDefectSheet!!.osWingMirrorImage!!,
                                 binding.osWingMirrorUploadBtn,
@@ -1051,6 +1061,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                                                selectedFileUri.toString().toUri(), FLAG_GRANT_READ_URI_PERMISSION
                                            );*/
                             dbDefectSheet?.threeSixtyVideo = selectedFileUri.toString()
+                            dbDefectSheet!!.uploadThreeSixtyVideo = true
                             three60Video = selectedFileUri.toString()
                             setUploadCardBtn2(
                                 dbDefectSheet!!.threeSixtyVideo!!,
@@ -1061,6 +1072,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
                         9 -> {
                             otherImagesList.add(selectedFileUri.toString())
+                            dbDefectSheet!!.uploadOtherImages = true
                             setUploadCardOtherImages(
                                 otherImagesList,
                                 binding.otherPictureUploadBtn,

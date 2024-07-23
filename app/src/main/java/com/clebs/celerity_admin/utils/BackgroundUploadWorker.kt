@@ -71,7 +71,7 @@ class BackgroundUploadWorker(
                     )
                 )
                 if (response.isSuccessful || response.failed) {
-                    if (dbDefectSheet.tyreDepthFrontNSImage != null) {
+                    if (dbDefectSheet.tyreDepthFrontNSImage != null && dbDefectSheet.uploadTyreDepthFrontNSImage) {
 
                         val partBody = createMultipartPart(
                             dbDefectSheet.tyreDepthFrontNSImage!!,
@@ -85,7 +85,7 @@ class BackgroundUploadWorker(
                             partBody
                         )
                     }
-                    if (dbDefectSheet.tyreDepthRearNSImage != null) {
+                    if (dbDefectSheet.tyreDepthRearNSImage != null && dbDefectSheet.uploadTyreDepthRearNSImage) {
                         val partBody = createMultipartPart(
                             dbDefectSheet.tyreDepthRearNSImage!!,
                             "uploadVehOSMDefectChkFile",
@@ -99,7 +99,7 @@ class BackgroundUploadWorker(
                         )
 
                     }
-                    if (dbDefectSheet.tyreDepthRearOSImage != null) {
+                    if (dbDefectSheet.tyreDepthRearOSImage != null && dbDefectSheet.uploadTyreDepthRearOSImage) {
                         val partBody = createMultipartPart(
                             dbDefectSheet.tyreDepthRearOSImage!!,
                             "uploadVehOSMDefectChkFile",
@@ -114,7 +114,7 @@ class BackgroundUploadWorker(
 
 
                     }
-                    if (dbDefectSheet.tyreDepthFrontOSImage != null) {
+                    if (dbDefectSheet.tyreDepthFrontOSImage != null && dbDefectSheet.uploadTyreDepthFrontOSImage) {
                         val partBody = createMultipartPart(
                             dbDefectSheet.tyreDepthFrontOSImage!!,
                             "uploadVehOSMDefectChkFile",
@@ -128,7 +128,7 @@ class BackgroundUploadWorker(
                         )
 
                     }
-                    if (dbDefectSheet.addBlueLevelImage != null) {
+                    if (dbDefectSheet.addBlueLevelImage != null && dbDefectSheet.uploadAddBlueLevelImage) {
                         val partBody = createMultipartPart(
                             dbDefectSheet.addBlueLevelImage!!,
                             "uploadVehOSMDefectChkFile",
@@ -140,7 +140,7 @@ class BackgroundUploadWorker(
 
                     }
 
-                    if (dbDefectSheet.engineLevelImage != null) {
+                    if (dbDefectSheet.engineLevelImage != null && dbDefectSheet.uploadEngineLevelImage) {
                         val partBody = createMultipartPart(
                             dbDefectSheet.engineLevelImage!!,
                             "uploadVehOSMDefectChkFile",
@@ -152,7 +152,7 @@ class BackgroundUploadWorker(
 
 
                     }
-                    if (dbDefectSheet.nsWingMirrorImage != null) {
+                    if (dbDefectSheet.nsWingMirrorImage != null && dbDefectSheet.uploadNSWingMirrorImage) {
                         val partBody = createMultipartPart(
                             dbDefectSheet.nsWingMirrorImage!!,
                             "uploadVehOSMDefectChkFile",
@@ -162,7 +162,7 @@ class BackgroundUploadWorker(
                             dbDefectSheet.id, DefectFileType.NSWingMirror, dateToday(), partBody
                         )
                     }
-                    if (dbDefectSheet.osWingMirrorImage != null) {
+                    if (dbDefectSheet.osWingMirrorImage != null && dbDefectSheet.uploadOSWingMirrorImage) {
                         val partBody = createMultipartPart(
                             dbDefectSheet.osWingMirrorImage!!,
                             "uploadVehOSMDefectChkFile",
@@ -172,7 +172,7 @@ class BackgroundUploadWorker(
                             dbDefectSheet.id, DefectFileType.OSWingMirror, dateToday(), partBody
                         )
                     }
-                    if (dbDefectSheet.threeSixtyVideo != null) {
+                    if (dbDefectSheet.threeSixtyVideo != null && dbDefectSheet.uploadThreeSixtyVideo) {
 
                         val partBody = createVideoMultipart(
                             dbDefectSheet.threeSixtyVideo!!,
@@ -186,14 +186,17 @@ class BackgroundUploadWorker(
                         )
 
                     }
-                    if (dbDefectSheet.otherImages != null) {
+                    if (dbDefectSheet.otherImages != null && dbDefectSheet.uploadOtherImages) {
                         for (imageUri in convertStringToList(dbDefectSheet.otherImages!!)) {
                             val partBody = createMultipartPart(
                                 imageUri, "uploadOtherPictureOfPartsFile", appContext
                             )
                             val response = withContext(Dispatchers.IO) {
                                 mainRepo.UploadOtherPictureOfPartsFile(
-                                    dbDefectSheet.id, DefectFileType.OtherPicOfParts, dateToday(), partBody
+                                    dbDefectSheet.id,
+                                    DefectFileType.OtherPicOfParts,
+                                    dateToday(),
+                                    partBody
                                 )
                             }
                             if (response.isSuccessful) {
@@ -217,13 +220,17 @@ class BackgroundUploadWorker(
     ): MultipartBody.Part {
         return try {
             val uriX = image.toUri()
-            context.grantUriPermission(context.packageName, uriX, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            context.grantUriPermission(
+                context.packageName,
+                uriX,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
             val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
             val bs64ImageString = getImageBitmapFromUri(context, uriX)
             val requestBody = bs64ImageString!!.toRequestBody()
             MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)
         } catch (e: Exception) {
-            Log.d("PhotoExec",e.message.toString())
+            Log.d("PhotoExec", e.message.toString())
             e.printStackTrace()
             val defaultRequestBody = "".toRequestBody("text/plain".toMediaTypeOrNull())
             MultipartBody.Part.createFormData(partName, "default.jpg", defaultRequestBody)
@@ -238,7 +245,11 @@ class BackgroundUploadWorker(
             val contentResolver = context.contentResolver
 
             // Ensure the app has read permissions
-            context.grantUriPermission(context.packageName, uriX, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            context.grantUriPermission(
+                context.packageName,
+                uriX,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
 
             val mimeType = contentResolver.getType(uriX)
             val fileExtension = when (mimeType) {
