@@ -239,10 +239,16 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 nsWingMirrorImage = dbDefectSheet!!.nsWingMirrorImage
             }
             if (!dbDefectSheet!!.osWingMirrorImage.isNullOrBlank()) {
-                osWingMirrorImage =dbDefectSheet!!.osWingMirrorImage
+                osWingMirrorImage = dbDefectSheet!!.osWingMirrorImage
             }
             if (!dbDefectSheet!!.threeSixtyVideo.isNullOrBlank()) {
-                three60Video =dbDefectSheet!!.threeSixtyVideo
+                three60Video = dbDefectSheet!!.threeSixtyVideo
+            }
+            if (!dbDefectSheet!!.WeeklyActionCheck.equals(null)) {
+                binding.signactioncheck.isChecked = dbDefectSheet!!.WeeklyActionCheck
+            }
+            if (!dbDefectSheet!!.WeeklyApproveCheck.equals(null)) {
+                binding.signaprrovecheck.isChecked = dbDefectSheet!!.WeeklyApproveCheck
             }
             setUploadCardBtn2(
                 dbDefectSheet!!.tyreDepthFrontNSImage,
@@ -462,8 +468,8 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                      binding.signaprrovecheck.visibility = View.GONE*/
                     Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
                 } else if (three60Video.isNullOrEmpty()) {
-                 /*   binding.signactioncheck.visibility = View.GONE
-                    binding.signaprrovecheck.visibility = View.GONE*/
+                    /*   binding.signactioncheck.visibility = View.GONE
+                       binding.signaprrovecheck.visibility = View.GONE*/
                     Toast.makeText(this, "Please upload all images.", Toast.LENGTH_SHORT).show()
                 } else if (binding.actionCommentET.text.isNullOrEmpty()) {
 

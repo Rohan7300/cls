@@ -17,7 +17,7 @@ class MyApplicationIntro :  AppIntro() {
         addSlide(
             AppIntroFragment.createInstance(
                 title = "WELCOME TO CLS OSM",
-                description = "We are the friendly face of our business - the helpful driver who delivers the unique blend of quality and outstanding service right to our customers' door.",
+                description = "We are the friendly face of our business - Providing OSM features right away .",
                 imageDrawable = R.drawable.cls_final_logo,
                 backgroundDrawable = R.drawable.back_four,
                 titleColorRes = R.color.black,
@@ -28,7 +28,7 @@ class MyApplicationIntro :  AppIntro() {
         addSlide(
             AppIntroFragment.createInstance(
                 title = "THE GREAT STUFF WE OFFER",
-                description = "1. PALLET SERVICE \n 2. 2-MAN DELIVERY\n 3. 3-FIRST MILE/MIDDLE MILE/LAST MILE \n 4. SAME DAY & EXPRESS DELIVERY \n 5. WAREHOUSING \n 6. CUSTOMISED SOLUTIONS"
+                description = "1. PALLET SERVICE \n 2. MAN DELIVERY\n 3.FIRST MILE/MIDDLE MILE/LAST MILE \n 4. SAME DAY & EXPRESS DELIVERY \n 5. WAREHOUSING \n 6. CUSTOMISED SOLUTIONS"
 ,
                 imageDrawable = R.drawable.we,
                 backgroundDrawable = R.drawable.back_three,
@@ -41,7 +41,7 @@ class MyApplicationIntro :  AppIntro() {
         addSlide(
             AppIntroFragment.createInstance(
                 title = "LETS GO TO OSM",
-                description = "We are the fastest growing and most stable industry to be in right now!)",
+                description = "We are the fastest growing and most stable industry to be in right now.",
                 imageDrawable = R.drawable.started,
                 backgroundDrawable = R.drawable.back_two,
                 titleColorRes = R.color.black,
