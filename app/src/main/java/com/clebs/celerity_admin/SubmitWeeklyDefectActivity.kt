@@ -43,6 +43,7 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.App
+import com.clebs.celerity_admin.ui.App.Companion.prefs
 import com.clebs.celerity_admin.utils.BackgroundUploadWorker
 import com.clebs.celerity_admin.utils.DefectFileType
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
@@ -85,7 +86,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private lateinit var regexPattern: Regex
     private var currentDefSheetID = 0
     private var inspectionID = String()
-    private var startonetime: Boolean? = false
+    private var startonetime: Boolean? = true
     private var otherImagesList: MutableList<String> = mutableListOf()
     private var inspectionreg: String? = null
     private var isfirst: Boolean? = false
@@ -1107,11 +1108,12 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 //                }
 //            }
 //        }
-        isfirst = Prefs.getInstance(this).Isfirst
-        startonetime = isfirst
+//        isfirst = Prefs.getInstance(this).Isfirst
+//        startonetime = isfirst
 
 //        Log.e("newinspection", "onCreate: " + Prefs.getInstance(App.instance).vehinspection)
-
+        prefs?.Isfirst=true
+        startonetime = prefs?.Isfirst!!
         binding.btStart.setOnClickListener {
             startInspection()
         }
@@ -1311,7 +1313,11 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 }
             })
 
-        } else {
+        }
+
+        else {
+            Prefs.getInstance(App.instance).Isfirst = true
+            startonetime = Prefs.getInstance(App.instance).Isfirst
 
             Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
         }
