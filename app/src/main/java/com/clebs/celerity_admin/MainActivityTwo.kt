@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,7 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.App
+import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
@@ -66,7 +68,8 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
 
         getSupportActionBar()?.setDisplayShowTitleEnabled(false)
         binding.appBarMainActivityTwo.toolbarTitle.setText("Vehicle Allocation")
-
+        binding.navView.getHeaderView(0).findViewById<TextView>(R.id.textViewweb)
+            .setText("CLS OSM ID-"+Prefs.getInstance(App.instance).clebUserId)
 //        binding.appBarMainActivityTwo.fab.setOnClickListener { view ->
 //            Snackbar.make(view, "Refreshing...", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show()
@@ -105,9 +108,9 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
 
         cqSDKInitializer = CQSDKInitializer(this)
         if (!cqSDKInitializer.isCQSDKInitialized()) {
-            Log.e("dsjhjfhdfdjfcqkintialization", "onCreate: ", )
+            Log.e("dsjhjfhdfdjfcqkintialization", "onCreate: ")
             cqSDKInitializer.initSDK(
-                sdkKey ="ab8c0110-9529-4e2c-a1d4-d810636bccf3.eu",
+                sdkKey = "ab8c0110-9529-4e2c-a1d4-d810636bccf3.eu",
                 result = { isInitialized, code, message ->
                     if (code == PublicConstants.sdkInitializationSuccessCode) {
                         Log.e("sucesss", "onCreateView: ")
@@ -127,14 +130,14 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
                     R.color.maroon
                 )
             )
-            binding.appBarMainActivityTwo.cardone.alpha=1f
+            binding.appBarMainActivityTwo.cardone.alpha = 1f
             binding.appBarMainActivityTwo.cardtwo.setCardBackgroundColor(
                 ContextCompat.getColor(
                     applicationContext,
                     R.color.darkcommentbg
                 )
             )
-            binding.appBarMainActivityTwo.cardtwo.alpha=0.4f
+            binding.appBarMainActivityTwo.cardtwo.alpha = 0.4f
         }
         binding.appBarMainActivityTwo.cardtwo.setOnClickListener {
             binding.appBarMainActivityTwo.toolbarTitle.setText("Weekly Defects Check")
@@ -145,14 +148,14 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
                     R.color.maroon
                 )
             )
-            binding.appBarMainActivityTwo.cardtwo.alpha=1f
+            binding.appBarMainActivityTwo.cardtwo.alpha = 1f
             binding.appBarMainActivityTwo.cardone.setCardBackgroundColor(
                 ContextCompat.getColor(
                     applicationContext,
                     R.color.darkcommentbg
                 )
             )
-            binding.appBarMainActivityTwo.cardone.alpha=0.4f
+            binding.appBarMainActivityTwo.cardone.alpha = 0.4f
         }
     }
 
