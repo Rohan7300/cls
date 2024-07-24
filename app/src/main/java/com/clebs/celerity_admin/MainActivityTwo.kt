@@ -33,6 +33,8 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.App
+import com.clebs.celerity_admin.utils.OnButtonClickListener
+import com.clebs.celerity_admin.utils.OnclickDriver
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import com.google.android.material.navigation.NavigationView
@@ -41,13 +43,15 @@ import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
 import kotlinx.coroutines.launch
 
-class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
+class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener
+   {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var binding: ActivityMainTwoBinding
     lateinit var loadingDialog: LoadingDialog
     private var saveClickCounter = 0
     lateinit var resumedialog: AlertDialog
+
 
     private lateinit var cqSDKInitializer: CQSDKInitializer
     lateinit var mainViewModel: MainViewModel
@@ -69,7 +73,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         getSupportActionBar()?.setDisplayShowTitleEnabled(false)
         binding.appBarMainActivityTwo.toolbarTitle.setText("Vehicle Allocation")
         binding.navView.getHeaderView(0).findViewById<TextView>(R.id.textViewweb)
-            .setText("CLS OSM ID-"+Prefs.getInstance(App.instance).clebUserId)
+            .setText("CLS OSM ID-" + Prefs.getInstance(App.instance).clebUserId)
 //        binding.appBarMainActivityTwo.fab.setOnClickListener { view ->
 //            Snackbar.make(view, "Refreshing...", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show()
@@ -123,6 +127,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         binding.appBarMainActivityTwo.cardone.setOnClickListener {
 
             navController.navigate(R.id.nav_gallery)
+            binding.appBarMainActivityTwo.filter.visibility=View.GONE
             binding.appBarMainActivityTwo.toolbarTitle.setText("Vehicle Allocation")
             binding.appBarMainActivityTwo.cardone.setCardBackgroundColor(
                 ContextCompat.getColor(
@@ -142,6 +147,10 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         binding.appBarMainActivityTwo.cardtwo.setOnClickListener {
             binding.appBarMainActivityTwo.toolbarTitle.setText("Weekly Defects Check")
             navController.navigate(R.id.nav_slideshow)
+            binding.appBarMainActivityTwo.filter.visibility=View.VISIBLE
+            binding.appBarMainActivityTwo.filter.setOnClickListener {
+
+            }
             binding.appBarMainActivityTwo.cardtwo.setCardBackgroundColor(
                 ContextCompat.getColor(
                     applicationContext,
@@ -212,6 +221,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
             R.id.nav_gallery -> {
                 binding.appBarMainActivityTwo.toolbarTitle.setText("Vehicle Allocation")
                 binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
+                binding.appBarMainActivityTwo.filter.visibility = View.GONE
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
                 navController.navigate(R.id.nav_gallery)
                 binding.appBarMainActivityTwo.cardone.setCardBackgroundColor(
@@ -231,6 +241,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
             R.id.nav_slideshow -> {
                 binding.appBarMainActivityTwo.toolbarTitle.setText("Weekly Defects Check")
                 binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
+                binding.appBarMainActivityTwo.filter.visibility = View.VISIBLE
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
                 navController.navigate(R.id.nav_slideshow)
 
@@ -303,4 +314,8 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
     override fun onBackPressed() {
         super.onBackPressed()
     }
-}
+
+
+
+
+   }

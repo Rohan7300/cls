@@ -1,6 +1,9 @@
 package com.clebs.celerity_admin.ui.ClSReports
 
+import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,9 +12,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.MainActivityTwo
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.SubmitWeeklyDefectActivity
+import com.clebs.celerity_admin.adapters.SelectVehicleLocationAdapter
+import com.clebs.celerity_admin.adapters.SelectVehicleLocationAdapterTwo
 import com.clebs.celerity_admin.adapters.WeeklyDefectAdapter
 import com.clebs.celerity_admin.databinding.FragmentSlideshowBinding
 import com.clebs.celerity_admin.dialogs.LoadingDialog
@@ -21,19 +27,22 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
-import com.clebs.celerity_admin.utils.Prefs
+import com.clebs.celerity_admin.utils.OnItemClickRecyclerView
 import com.clebs.celerity_admin.viewModels.MainViewModel
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import org.checkerframework.common.subtyping.qual.Bottom
 
-class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClickListener {
+class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClickListener,
+    OnItemClickRecyclerView {
 
     private var _binding: FragmentSlideshowBinding? = null
     private lateinit var mainViewModel: MainViewModel
     var week: Int? = null
     var isLoaded = false
     var j = 0
+    private var rv_locatio: RecyclerView? = null
+    lateinit var selectVehcilelocationadapter: SelectVehicleLocationAdapterTwo
+    var filter: Boolean = true
     private var year: Int? = null
+    lateinit var deleteDialogthree: AlertDialog
     private lateinit var WeeklyDefectAdapter: WeeklyDefectAdapter
     private lateinit var loadingDialog: LoadingDialog
     private val binding get() = _binding!!
@@ -52,9 +61,33 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         WeeklyDefectAdapter = WeeklyDefectAdapter(requireContext(), ArrayList(), this)
         binding.rvList.adapter = WeeklyDefectAdapter
+        selectVehcilelocationadapter = SelectVehicleLocationAdapterTwo(ArrayList(), this)
+        mainViewModel.GetVehicleLocationListing().observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+
+                selectVehcilelocationadapter.data.addAll(it)
+                selectVehcilelocationadapter.notifyDataSetChanged()
+            } else {
+
+            }
+        })
         loadingDialog = (activity as MainActivityTwo).loadingDialog
         setPrevNextButton()
+        val activity = requireActivity() as MainActivityTwo
+        val view = activity.findViewById<View>(R.id.filter)
+        view.setOnClickListener {
+            if (filter) {
+                binding.llfilter.visibility = View.GONE
+                filter = false
+            } else {
+                binding.llfilter.visibility = View.VISIBLE
+                filter = true
+            }
 
+        }
+        binding.rltwo.setOnClickListener {
+            ShowReturnVehicleList()
+        }
         binding.prev.setOnClickListener {
 
             if (isLoaded) {
@@ -174,11 +207,59 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
 
     override fun docClickAction(item: WeeklyDefectChecksModelItem) {
         val intent = Intent(requireContext(), SubmitWeeklyDefectActivity::class.java)
-        Prefs.getInstance(requireContext()).currentWeeklyDefectItemVehRegNo = item.vehRegNo
         currentWeeklyDefectItem = item
 
         startActivity(intent)
     }
 
+    fun ShowReturnVehicleList() {
+        val factory = LayoutInflater.from(requireContext())
+        val view: View = factory.inflate(R.layout.dialog_location_list, null)
+        deleteDialogthree = AlertDialog.Builder(requireContext()).create()
+        deleteDialogthree.setView(view)
+        rv_locatio = view.findViewById(R.id.tvcompany)
+        rv_locatio?.adapter = selectVehcilelocationadapter
+        deleteDialogthree.setCancelable(true)
+        deleteDialogthree.setCanceledOnTouchOutside(true);
+        deleteDialogthree.show()
+    }
+
+    override fun OnItemClickRecyclerViewClicks(
+        recyclerViewId: Int,
+        position: Int,
+        itemclicked: String
+    ) {
+        deleteDialogthree.dismiss()
+        binding.tvlocname.setText(itemclicked)
+
+        mainViewModel.GetWeeklyDefectChecks(
+            week!!.toDouble(),
+            year!!.toDouble(),
+            0.0,
+            position.toDouble(),
+            false
+        )
+        mainViewModel.lDGetWeeklyDefectChecks.observe(viewLifecycleOwner) {
+            loadingDialog.dismiss()
+            isLoaded = true
+            if (it != null) {
+                Log.e("dataass", "Observers: " + it)
+                WeeklyDefectAdapter.data.clear()
+                if (it.size > 0) {
+                    binding.nodataLayout.visibility = View.GONE
+                    binding.rvList.visibility = View.VISIBLE
+                    WeeklyDefectAdapter.data.addAll(it)
+                    WeeklyDefectAdapter.notifyDataSetChanged()
+                } else {
+                    binding.nodataLayout.visibility = View.VISIBLE
+                    binding.rvList.visibility = View.GONE
+                }
+            } else {
+                binding.nodataLayout.visibility = View.VISIBLE
+                binding.rvList.visibility = View.GONE
+            }
+        }
+
+    }
 
 }

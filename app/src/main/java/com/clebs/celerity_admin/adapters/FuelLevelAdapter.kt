@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.databinding.RecylerviewAdapterBinding
-import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelListItem
 import com.clebs.celerity_admin.utils.OnItemClickRecyclerView
 
@@ -35,7 +34,9 @@ class FuelLevelAdapter(var data:ArrayList<GetVehicleFuelLevelListItem>, var clic
     }
 
     override fun onBindViewHolder(holder: FuelLevelViewHolder, position: Int) {
+
         val item = data[position]
+
         holder.bindView(item)
     }
 }

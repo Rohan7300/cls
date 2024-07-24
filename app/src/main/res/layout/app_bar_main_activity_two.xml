@@ -29,6 +29,14 @@
                 android:textStyle="bold"
                 style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
                 android:layout_gravity="center" />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/filter"
+                android:visibility="gone"
+                android:layout_marginEnd="10dp"
+                android:layout_gravity="end"
+                android:src="@drawable/baseline_filter_list_24"/>
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -73,7 +81,7 @@
                 android:background="@drawable/shape_editext_main"
                 android:backgroundTint="@color/new_light_orange"
                 android:orientation="horizontal"
-                android:weightSum="2">
+                android:weightSum="3">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardone"
@@ -125,7 +133,29 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardthree"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:alpha="0.4"
+                    android:background="@drawable/shape_bottom_nav"
+                    android:elevation="10dp"
+                    android:padding="4dp"
+                    app:cardBackgroundColor="@color/darkcommentbg"
+                    app:cardCornerRadius="20dp"
 
+                    app:cardElevation="10dp">
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="55dp"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:src="@drawable/carcollection"
+                    android:textColor="@color/white" />
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
         </LinearLayout>
 </LinearLayout>
