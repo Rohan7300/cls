@@ -235,6 +235,14 @@
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
                                 android:textSize="12sp" />
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/uploadLoader"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                app:lottie_rawRes="@raw/uploadloader"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
