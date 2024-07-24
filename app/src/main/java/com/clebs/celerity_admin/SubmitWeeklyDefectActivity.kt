@@ -1313,7 +1313,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     vm.GetVehWeeklyDefectSheetInspectionInfo(
                         currentWeeklyDefectItem!!.vdhCheckId
                     )
-                    Toast.makeText(this, "Inspection saved", Toast.LENGTH_SHORT).show()
+                  //  Toast.makeText(this, "Inspection saved", Toast.LENGTH_SHORT).show()
                     vm.isinspectiondonelivedata.observe(this, Observer {
                         if (it != null) {
 
