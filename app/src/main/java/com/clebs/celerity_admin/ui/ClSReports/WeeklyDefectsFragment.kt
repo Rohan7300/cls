@@ -28,6 +28,7 @@ import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import com.clebs.celerity_admin.utils.OnItemClickRecyclerView
+import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.viewModels.MainViewModel
 
 class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClickListener,
@@ -41,12 +42,13 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
     private var rv_locatio: RecyclerView? = null
     lateinit var selectVehcilelocationadapter: SelectVehicleLocationAdapterTwo
     var filter: Boolean = true
+    var showDefectCheckboxValue:Boolean = false
     private var year: Int? = null
     lateinit var deleteDialogthree: AlertDialog
     private lateinit var WeeklyDefectAdapter: WeeklyDefectAdapter
     private lateinit var loadingDialog: LoadingDialog
     private val binding get() = _binding!!
-
+    var currentWeek = 0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,6 +73,20 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
 
             }
         })
+        binding.showDefectCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+            showDefectCheckboxValue = isChecked
+            if (isLoaded) {
+                loadingDialog.show()
+                isLoaded=false
+                mainViewModel.GetWeeklyDefectChecks(
+                    currentWeek.toDouble(),
+                    year!!.toDouble(),
+                    0.0,
+                    0.0,
+                    showDefectCheckboxValue
+                )
+            }
+        }
         loadingDialog = (activity as MainActivityTwo).loadingDialog
         setPrevNextButton()
         val activity = requireActivity() as MainActivityTwo
@@ -96,12 +112,13 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
                 val y = week!! + j
                 binding.weekNoTV.text = "Week No. $y"
                 isLoaded = false
+                currentWeek = y
                 mainViewModel.GetWeeklyDefectChecks(
                     y.toDouble(),
                     year!!.toDouble(),
                     0.0,
                     0.0,
-                    false
+                    showDefectCheckboxValue
                 )
 
                 setPrevNextButton()
@@ -115,12 +132,13 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
                 isLoaded = false
                 val x = week!! + j
                 binding.weekNoTV.text = "Week No. $x"
+                currentWeek = x
                 mainViewModel.GetWeeklyDefectChecks(
                     x.toDouble(),
                     year!!.toDouble(),
                     0.0,
                     0.0,
-                    false
+                    showDefectCheckboxValue
                 )
                 setPrevNextButton()
             }
@@ -140,12 +158,13 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
                 year = it.year
                 binding.weekNoTV.text = "Week No. $week"
                 loadingDialog.show()
+                currentWeek = week!!.toInt()
                 mainViewModel.GetWeeklyDefectChecks(
                     week!!.toDouble(),
                     year!!.toDouble(),
                     0.0,
                     0.0,
-                    false
+                    showDefectCheckboxValue
                 )
             }
         })
@@ -208,11 +227,11 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
     override fun docClickAction(item: WeeklyDefectChecksModelItem) {
         val intent = Intent(requireContext(), SubmitWeeklyDefectActivity::class.java)
         currentWeeklyDefectItem = item
-
+        Prefs.getInstance(requireContext()).currentWeeklyDefectItemVehRegNo = item.vehRegNo
         startActivity(intent)
     }
 
-    fun ShowReturnVehicleList() {
+    private fun ShowReturnVehicleList() {
         val factory = LayoutInflater.from(requireContext())
         val view: View = factory.inflate(R.layout.dialog_location_list, null)
         deleteDialogthree = AlertDialog.Builder(requireContext()).create()
@@ -233,11 +252,11 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
         binding.tvlocname.setText(itemclicked)
 
         mainViewModel.GetWeeklyDefectChecks(
-            week!!.toDouble(),
+            currentWeek!!.toDouble(),
             year!!.toDouble(),
             0.0,
             position.toDouble(),
-            false
+            showDefectCheckboxValue
         )
         mainViewModel.lDGetWeeklyDefectChecks.observe(viewLifecycleOwner) {
             loadingDialog.dismiss()

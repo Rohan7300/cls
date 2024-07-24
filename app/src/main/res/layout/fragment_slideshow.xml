@@ -37,6 +37,7 @@
             <CheckBox
                 android:layout_width="16dp"
                 android:layout_height="16dp"
+                android:id="@+id/showDefectCheckbox"
                 android:layout_margin="6dp"
                 android:layout_toEndOf="@+id/tvdefects"/>
         </RelativeLayout>
