@@ -66,7 +66,6 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
         selectVehcilelocationadapter = SelectVehicleLocationAdapterTwo(ArrayList(), this)
         mainViewModel.GetVehicleLocationListing().observe(viewLifecycleOwner, Observer {
             if (it != null) {
-
                 selectVehcilelocationadapter.data.addAll(it)
                 selectVehcilelocationadapter.notifyDataSetChanged()
             } else {
@@ -248,6 +247,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
         position: Int,
         itemclicked: String
     ) {
+        loadingDialog.show()
         deleteDialogthree.dismiss()
         binding.tvlocname.setText(itemclicked)
 
@@ -258,26 +258,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
             position.toDouble(),
             showDefectCheckboxValue
         )
-        mainViewModel.lDGetWeeklyDefectChecks.observe(viewLifecycleOwner) {
-            loadingDialog.dismiss()
-            isLoaded = true
-            if (it != null) {
-                Log.e("dataass", "Observers: " + it)
-                WeeklyDefectAdapter.data.clear()
-                if (it.size > 0) {
-                    binding.nodataLayout.visibility = View.GONE
-                    binding.rvList.visibility = View.VISIBLE
-                    WeeklyDefectAdapter.data.addAll(it)
-                    WeeklyDefectAdapter.notifyDataSetChanged()
-                } else {
-                    binding.nodataLayout.visibility = View.VISIBLE
-                    binding.rvList.visibility = View.GONE
-                }
-            } else {
-                binding.nodataLayout.visibility = View.VISIBLE
-                binding.rvList.visibility = View.GONE
-            }
-        }
+
 
     }
 

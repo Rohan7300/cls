@@ -1,5 +1,6 @@
 package com.clebs.celerity_admin.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -21,11 +22,19 @@ class SelectVehicleLocationAdapterTwo(
         RecyclerView.ViewHolder(binding.root) {
         fun bindView(item: GetVehicleLocationItem) {
             itemView.setOnClickListener {
-                click.OnItemClickRecyclerViewClicks(
-                    R.id.tvcompany,
-                    item.locId,
-                    item.locationName
-                )
+                if(data.indexOf(item)!=0 && item.locationName!="ALL") {
+                    click.OnItemClickRecyclerViewClicks(
+                        R.id.tvcompany,
+                        item.locId,
+                        item.locationName
+                    )
+                }else{
+                    click.OnItemClickRecyclerViewClicks(
+                        R.id.tvcompany,
+                        0,
+                        item.locationName
+                    )
+                }
             }
 
 
@@ -46,16 +55,20 @@ class SelectVehicleLocationAdapterTwo(
     }
 
     override fun onBindViewHolder(holder: SelectVehicleLocationAdapterViewHolder, position: Int) {
-        val item = data[position]
-        holder.bindView(item)
+        try {
+            val item = data[position]
+            holder.bindView(item)
 
-        if (position == 0) {
-            // This is the default item
-            holder.itemView.findViewById<TextView>(R.id.tvcompany).setText("ALL")
-        } else {
-            // This is a regular item
-            val itema = data[position-1]
-            holder.itemView.findViewById<TextView>(R.id.tvcompany).setText(itema.locationName)
+            if (position == 0) {
+                // This is the default item
+                holder.itemView.findViewById<TextView>(R.id.tvcompany).setText("ALL")
+            } else {
+                // This is a regular item
+                val itema = data[position-1]
+                holder.itemView.findViewById<TextView>(R.id.tvcompany).setText(itema.locationName)
+            }
+        }catch (e:Exception){
+            Log.d("BindView","BindViewHolderException $e")
         }
     }
 
