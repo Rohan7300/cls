@@ -236,9 +236,10 @@
                                 android:text="- - - -"
                                 android:textSize="12sp" />
                             <com.airbnb.lottie.LottieAnimationView
-                                android:id="@+id/uploadLoader"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:id="@+id/ulTyreDepthFrontNS"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginHorizontal="5dp"
                                 app:lottie_rawRes="@raw/uploadloader"
                                 app:lottie_autoPlay="true"
                                 app:lottie_loop="true"
@@ -350,6 +351,15 @@
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
                                 android:textSize="12sp" />
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/ulTyreDepthRearNS"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginHorizontal="5dp"
+                                app:lottie_rawRes="@raw/uploadloader"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -456,6 +466,15 @@
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
                                 android:textSize="12sp" />
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/ulTyreDepthRearOS"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginHorizontal="5dp"
+                                app:lottie_rawRes="@raw/uploadloader"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -562,6 +581,15 @@
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
                                 android:textSize="12sp" />
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/ulTyreDepthFrontOS"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginHorizontal="5dp"
+                                app:lottie_rawRes="@raw/uploadloader"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -668,6 +696,15 @@
                                 android:fontFamily="@font/poppins_semibold"
                                 android:text="- - - -"
                                 android:textSize="12sp" />
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/ulEngineOilLevelImage"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginHorizontal="5dp"
+                                app:lottie_rawRes="@raw/uploadloader"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -852,6 +889,15 @@
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
                                 android:textSize="12sp" />
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/ulAddBlueLevelImage"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginHorizontal="5dp"
+                                app:lottie_rawRes="@raw/uploadloader"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -903,6 +949,15 @@
                                 android:fontFamily="@font/poppins_semibold"
                                 android:text="- - - -"
                                 android:textSize="12sp" />
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/ulNSWingMirrorImage"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginHorizontal="5dp"
+                                app:lottie_rawRes="@raw/uploadloader"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -954,6 +1009,15 @@
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
                                 android:textSize="12sp" />
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/ulOSWingMirrorImage"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginHorizontal="5dp"
+                                app:lottie_rawRes="@raw/uploadloader"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -1005,6 +1069,15 @@
                                 android:fontFamily="@font/poppins_medium"
                                 android:text="- - - -"
                                 android:textSize="12sp" />
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/ulThreeSixtyVideo"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginHorizontal="5dp"
+                                app:lottie_rawRes="@raw/uploadloader"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -1060,8 +1133,9 @@
 
                             <LinearLayout
                                 android:id="@+id/pbX"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
+                                android:layout_weight="1"
                                 android:gravity="center"
                                 android:visibility="visible">
 
@@ -1070,6 +1144,15 @@
                                     android:layout_height="20dp"
                                     android:indeterminateTint="@color/red" />
                             </LinearLayout>
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/ulotherPictureofPartsImage"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginHorizontal="5dp"
+                                app:lottie_rawRes="@raw/uploadloader"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

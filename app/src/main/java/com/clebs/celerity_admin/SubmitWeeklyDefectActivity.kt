@@ -134,6 +134,18 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         binding.daTv.setText(currentWeeklyDefectItem!!.dAName)
         binding.daReg.setText(currentWeeklyDefectItem!!.vehRegNo)
         binding.daLoc.setText(currentWeeklyDefectItem!!.locationName)
+
+        binding.ulTyreDepthFrontNS.visibility = View.GONE
+        binding.ulTyreDepthRearNS.visibility = View.GONE
+        binding.ulTyreDepthRearOS.visibility = View.GONE
+        binding.ulTyreDepthFrontOS.visibility = View.GONE
+        binding.ulEngineOilLevelImage.visibility = View.GONE
+        binding.ulAddBlueLevelImage.visibility = View.GONE
+        binding.ulNSWingMirrorImage.visibility = View.GONE
+        binding.ulOSWingMirrorImage.visibility = View.GONE
+        binding.ulThreeSixtyVideo.visibility = View.GONE
+        binding.ulotherPictureofPartsImage.visibility = View.GONE
+
         vm.GetVehWeeklyDefectSheetInspectionInfo(
             currentWeeklyDefectItem!!.vdhCheckId
         )
@@ -218,33 +230,42 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
             if (!dbDefectSheet!!.tyreDepthFrontNSImage.isNullOrBlank()) {
                 tyreThreadDepthFrontNS = dbDefectSheet!!.tyreDepthFrontNSImage
+                binding.ulTyreDepthFrontNS.visibility = View.VISIBLE
             }
             if (!dbDefectSheet!!.tyreDepthRearNSImage.isNullOrBlank()) {
                 tyreThreadDepthRearNS = dbDefectSheet!!.tyreDepthRearNSImage
+                binding.ulTyreDepthRearNS.visibility = View.VISIBLE
             }
             if (!dbDefectSheet!!.tyreDepthRearOSImage.isNullOrBlank()) {
                 tyreThreadDepthRearOS = dbDefectSheet!!.tyreDepthRearOSImage
+                binding.ulTyreDepthRearOS.visibility = View.VISIBLE
             }
 
             if (!dbDefectSheet!!.tyreDepthFrontOSImage.isNullOrBlank()) {
                 tyreThreadDepthFrontOS = dbDefectSheet!!.tyreDepthFrontOSImage
+                binding.ulTyreDepthFrontOS.visibility = View.VISIBLE
             }
 
             if (!dbDefectSheet!!.engineLevelImage.isNullOrBlank()) {
                 engineOilLevelImage = dbDefectSheet!!.engineLevelImage
+                binding.ulEngineOilLevelImage.visibility = View.VISIBLE
             }
 
             if (!dbDefectSheet!!.addBlueLevelImage.isNullOrBlank()) {
                 addBlueLevelImage = dbDefectSheet!!.addBlueLevelImage
+                binding.ulAddBlueLevelImage.visibility = View.VISIBLE
             }
             if (!dbDefectSheet!!.nsWingMirrorImage.isNullOrBlank()) {
                 nsWingMirrorImage = dbDefectSheet!!.nsWingMirrorImage
+                binding.ulNSWingMirrorImage.visibility = View.VISIBLE
             }
             if (!dbDefectSheet!!.osWingMirrorImage.isNullOrBlank()) {
                 osWingMirrorImage = dbDefectSheet!!.osWingMirrorImage
+                binding.ulOSWingMirrorImage.visibility = View.VISIBLE
             }
             if (!dbDefectSheet!!.threeSixtyVideo.isNullOrBlank()) {
                 three60Video = dbDefectSheet!!.threeSixtyVideo
+                binding.ulThreeSixtyVideo.visibility = View.VISIBLE
             }
 
             binding.signactioncheck.isChecked = dbDefectSheet!!.WeeklyActionCheck
@@ -329,6 +350,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
             if (dbDefectSheet?.otherImages != null) {
                 var size = dbDefectSheet?.otherImages!!.split(",").size
+                binding.ulotherPictureofPartsImage.visibility = View.VISIBLE
                 var others = ""
                 for (i in 0 until size) {
                     if (i != size - 1)
@@ -541,41 +563,57 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 if (it.VdhDefChkImgTyrethreaddepthFrontNs.isNotBlank()) {
                     tyreThreadDepthFrontNS = it.VdhDefChkImgTyrethreaddepthFrontNs
                     dbDefectSheet!!.uploadTyreDepthFrontNSImage = false
+                    binding.ulTyreDepthFrontNS.visibility = View.GONE
                 }
                 if (it.VdhDefChkImgTyrethreaddepthRearNs.isNotBlank()) {
                     tyreThreadDepthRearNS = it.VdhDefChkImgTyrethreaddepthRearNs
                     dbDefectSheet!!.uploadTyreDepthRearNSImage = false
+
+                    binding.ulTyreDepthRearNS.visibility = View.GONE
                 }
                 if (it.VdhDefChkImgTyrethreaddepthRearOs.isNotBlank()) {
                     tyreThreadDepthRearOS = it.VdhDefChkImgTyrethreaddepthRearOs
                     dbDefectSheet!!.uploadTyreDepthRearOSImage = false
+
+                    binding.ulTyreDepthRearOS.visibility = View.GONE
                 }
 
                 if (it.VdhDefChkImgTyrethreaddepthFrontOs.isNotBlank()) {
                     tyreThreadDepthFrontOS = it.VdhDefChkImgTyrethreaddepthFrontOs
                     dbDefectSheet!!.uploadTyreDepthFrontOSImage = false
+
+                    binding.ulTyreDepthFrontOS.visibility = View.GONE
                 }
 
                 if (it.VdhDefChkImgEngineOilLevel.isNotBlank()) {
                     engineOilLevelImage = it.VdhDefChkImgEngineOilLevel
                     dbDefectSheet!!.uploadEngineLevelImage = false
+
+                    binding.ulEngineOilLevelImage.visibility = View.GONE
                 }
 
                 if (it.VdhDefChkImgAddBlueLevel.isNotBlank()) {
                     addBlueLevelImage = it.VdhDefChkImgAddBlueLevel
                     dbDefectSheet!!.uploadAddBlueLevelImage = false
+
+                    binding.ulAddBlueLevelImage.visibility = View.GONE
                 }
                 if (it.VdhDefChkImgNswingMirror.isNotBlank()) {
                     nsWingMirrorImage = it.VdhDefChkImgNswingMirror
                     dbDefectSheet!!.uploadNSWingMirrorImage = false
+
+                    binding.ulNSWingMirrorImage.visibility = View.GONE
                 }
                 if (it.VdhDefChkImgOswingMirror.isNotBlank()) {
                     osWingMirrorImage = it.VdhDefChkImgOswingMirror
                     dbDefectSheet!!.uploadOSWingMirrorImage = false
+
+                    binding.ulOSWingMirrorImage.visibility = View.GONE
                 }
                 if (it.VdhDefChkImgVan360Video.isNotBlank()) {
                     three60Video = it.VdhDefChkImgVan360Video
                     dbDefectSheet!!.uploadThreeSixtyVideo = false
+                    binding.ulThreeSixtyVideo.visibility = View.GONE
                 }
 
                 setUploadCardBtn(
@@ -780,6 +818,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             binding.otherImagesTV.visibility = View.VISIBLE
             binding.otherPictureUploadBtn.isEnabled = true
             if (it != null) {
+                binding.ulotherPictureofPartsImage.visibility = View.GONE
                 val otherFiles = it.map { it.FileName }
                 setUploadCardOtherImages(
                     otherFiles.toMutableList(),
