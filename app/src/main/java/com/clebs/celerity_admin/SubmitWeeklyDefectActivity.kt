@@ -89,7 +89,6 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private var startonetime: Boolean? = true
     private var otherImagesList: MutableList<String> = mutableListOf()
     private var inspectionreg: String? = null
-    private var isfirst: Boolean? = false
     private var isupload: Boolean? = true
     var defectSheetUserId: Int = 0
     private var crrType: Int = 0
@@ -132,7 +131,8 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         loadingDialog = LoadingDialog(this)
         cqCode()
         binding.daTv.setText(currentWeeklyDefectItem!!.dAName)
-        binding.daReg.setText(currentWeeklyDefectItem!!.vehRegNo)
+        if (!prefs!!.currentWeeklyDefectItemVehRegNo.isNullOrBlank())
+            binding.daReg.setText(prefs!!.currentWeeklyDefectItemVehRegNo)
         binding.daLoc.setText(currentWeeklyDefectItem!!.locationName)
 
         binding.ulTyreDepthFrontNS.visibility = View.GONE
@@ -167,7 +167,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     )
                 }
             } else {
-                binding.llmain.visibility = View.GONE
+              //  binding.llmain.visibility = View.GONE
                 binding.btStart.visibility = View.VISIBLE
                 binding.llstart.setStrokeColor(
                     ContextCompat.getColor(
@@ -1163,7 +1163,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 //        startonetime = isfirst
 
 //        Log.e("newinspection", "onCreate: " + Prefs.getInstance(App.instance).vehinspection)
-        prefs?.Isfirst=true
+        //prefs?.Isfirst=true
         startonetime = prefs?.Isfirst!!
         binding.btStart.setOnClickListener {
             startInspection()
@@ -1171,86 +1171,92 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     }
 
     private fun startInspection() {
-        clientUniqueID()
+        if (!prefs!!.currentWeeklyDefectItemVehRegNo.isNullOrBlank()) {
+            clientUniqueID()
 
 
-        if (cqSDKInitializer.isCQSDKInitialized()) {
+            if (cqSDKInitializer.isCQSDKInitialized()) {
 
-            Log.e("sdkskdkdkskdkskd", "onCreateView " + inspectionreg)
+                Log.e("sdkskdkdkskdkskd", "onCreateView " + inspectionreg)
 
-            try {
-                loadingDialog.show()
-                cqSDKInitializer.startInspection(activity = this, clientAttrs = ClientAttrs(
-                    userName = " ",
-                    dealer = " ",
-                    dealerIdentifier = " ",
-                    client_unique_id = inspectionID
+                try {
+                    loadingDialog.show()
+                    cqSDKInitializer.startInspection(activity = this, clientAttrs = ClientAttrs(
+                        userName = " ",
+                        dealer = " ",
+                        dealerIdentifier = " ",
+                        client_unique_id = inspectionID
 
-                    //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
-                ), inputDetails = InputDetails(
-                    vehicleDetails = VehicleDetails(
-                        regNumber = currentWeeklyDefectItem!!.vehRegNo.replace(
-                            " ", ""
-                        ), //if sent, user can't edit
-                        make = "Van", //if sent, user can't edit
-                        model = "Any Model", //if sent, user can't edit
-                        bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
-                    ), customerDetails = CustomerDetails(
-                        name = "", //if sent, user can't edit
-                        email = "", //if sent, user can't edit
-                        dialCode = "", //if sent, user can't edit
-                        phoneNumber = "", //if sent, user can't edit
-                    )
-                ), userFlowParams = UserFlowParams(
-                    isOffline = !startonetime!!, // true, Offline quote will be created | false, online quote will be created | null, online
+                        //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                    ), inputDetails = InputDetails(
+                        vehicleDetails = VehicleDetails(
+                            regNumber = prefs!!.currentWeeklyDefectItemVehRegNo!!.replace(
+                                " ", ""
+                            ), //if sent, user can't edit
+                            make = "Van", //if sent, user can't edit
+                            model = "Any Model", //if sent, user can't edit
+                            bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
+                        ), customerDetails = CustomerDetails(
+                            name = "", //if sent, user can't edit
+                            email = "", //if sent, user can't edit
+                            dialCode = "", //if sent, user can't edit
+                            phoneNumber = "", //if sent, user can't edit
+                        )
+                    ), userFlowParams = UserFlowParams(
+                        isOffline = !startonetime!!, // true, Offline quote will be created | false, online quote will be created | null, online
 
-                    skipInputPage = true, // true, Inspection will be started with camera page | false, Inspection will be started
+                        skipInputPage = true, // true, Inspection will be started with camera page | false, Inspection will be started
 
-                ),
+                    ),
 
-                    result = { isStarted, msg, code ->
+                        result = { isStarted, msg, code ->
 
-                        Log.e("messsagesss", "startInspection: " + msg + code)
-                        if (isStarted) {
-                            Prefs.getInstance(App.instance).Isfirst = false
-                            startonetime = Prefs.getInstance(App.instance).Isfirst
-                            Log.d("CQSDKXX", "isStarted " + msg)
-                        } else {
-                            loadingDialog.dismiss()
-                            Prefs.getInstance(App.instance).Isfirst = true
-                            startonetime = Prefs.getInstance(App.instance).Isfirst
-                            if (msg.equals("Online quote can not be created without internet")) {
-                                Toast.makeText(
-                                    this, "Please Turn on the internet", Toast.LENGTH_SHORT
-                                ).show()
-                                Log.d("CQSDKXX", "Not isStarted1  " + msg)
-                            } else if (msg.equals("Sufficient data not available to create an offline quote")) {
-                                Toast.makeText(
-                                    this, "Please Turn on the internet", Toast.LENGTH_SHORT
-                                ).show()
-                                Log.d("CQSDKXX", "Not isStarted2  " + msg)
-                            } else if (msg.equals("Unable to download setting updates, Please check internet")) {
-                                Toast.makeText(
-                                    this, "Please Turn on the internet", Toast.LENGTH_SHORT
-                                ).show()
-                                Log.d("CQSDKXX", "Not isStarted3  " + msg)
+                            Log.e("messsagesss", "startInspection: " + msg + code)
+                            if (isStarted) {
+                                Prefs.getInstance(App.instance).Isfirst = false
+                                startonetime = Prefs.getInstance(App.instance).Isfirst
+                                Log.d("CQSDKXX", "isStarted " + msg)
+                            } else {
+                                loadingDialog.dismiss()
+                                Prefs.getInstance(App.instance).Isfirst = true
+                                startonetime = Prefs.getInstance(App.instance).Isfirst
+                                if (msg.equals("Online quote can not be created without internet")) {
+                                    Toast.makeText(
+                                        this, "Please Turn on the internet", Toast.LENGTH_SHORT
+                                    ).show()
+                                    Log.d("CQSDKXX", "Not isStarted1  " + msg)
+                                } else if (msg.equals("Sufficient data not available to create an offline quote")) {
+                                    Toast.makeText(
+                                        this,
+                                        "Please Turn on the internet & grant required permissions.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    Log.d("CQSDKXX", "Not isStarted2  " + msg)
+                                } else if (msg.equals("Unable to download setting updates, Please check internet")) {
+                                    Toast.makeText(
+                                        this, "Please Turn on the internet", Toast.LENGTH_SHORT
+                                    ).show()
+                                    Log.d("CQSDKXX", "Not isStarted3  " + msg)
+                                }
+
+                                Log.d("CQSDKXX", "Not isStarted4  " + msg)
                             }
+                            if (msg == "Success") {
+                                Log.d("CQSDKXX", "Success " + msg)
+                            } else {
 
-                            Log.d("CQSDKXX", "Not isStarted4  " + msg)
-                        }
-                        if (msg == "Success") {
-                            Log.d("CQSDKXX", "Success " + msg)
-                        } else {
-
-                            Log.d("CQSDKXX", "Not Success " + msg)
-                        }
-                        if (!isStarted) {
-                            Log.e("startedinspection", "onCreateView: $msg$isStarted")
-                        }
-                    })
-            } catch (_: Exception) {
-                loadingDialog.dismiss()
+                                Log.d("CQSDKXX", "Not Success " + msg)
+                            }
+                            if (!isStarted) {
+                                Log.e("startedinspection", "onCreateView: $msg$isStarted")
+                            }
+                        })
+                } catch (_: Exception) {
+                    loadingDialog.dismiss()
+                }
             }
+        }else{
+            Toast.makeText(this,"Vehicle RegNo not found!!",Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -1277,10 +1283,10 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             ?: "Could not identify status message"
         val tempCode =
             intent?.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
-
+        startonetime = prefs!!.Isfirst
         Log.e("tempcode", "onNewIntent: " + tempCode)
         if (tempCode == 200) {
-
+            prefs!!.Isfirst = false
             App.offlineSyncDB!!.insertinspectionInfo(
                 IsInspectionDone(
                     InspectionDoneRegNo = Prefs.getInstance(App.instance).vehinspection.replace(
@@ -1313,8 +1319,8 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     vm.GetVehWeeklyDefectSheetInspectionInfo(
                         currentWeeklyDefectItem!!.vdhCheckId
                     )
-                  //  Toast.makeText(this, "Inspection saved", Toast.LENGTH_SHORT).show()
-                    vm.isinspectiondonelivedata.observe(this, Observer {
+                    //  Toast.makeText(this, "Inspection saved", Toast.LENGTH_SHORT).show()
+/*                    vm.isinspectiondonelivedata.observe(this, Observer {
                         if (it != null) {
 
                             if (it.isInspectionDone) {
@@ -1359,16 +1365,14 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         }
 
 
-                    })
+                    })*/
 
                 }
             })
 
-        }
-
-        else {
-            Prefs.getInstance(App.instance).Isfirst = true
-            startonetime = Prefs.getInstance(App.instance).Isfirst
+        } else {
+           /* Prefs.getInstance(App.instance).Isfirst = true
+            startonetime = Prefs.getInstance(App.instance).Isfirst*/
 
             Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
         }

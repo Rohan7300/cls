@@ -183,6 +183,11 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putBoolean("Isfirsts", value ?: false).apply()
         }
+
+    var currentWeeklyDefectItemVehRegNo:String?
+        get() = sharedPreferences.getString("currentWeeklyDefectItemVehRegNo",null)
+        set(value) = sharedPreferences.edit().putString("currentWeeklyDefectItemVehRegNo",value).apply()
+
     var quesID: Int
         get() = sharedPreferences.getInt("quesID", 0)
         set(value) = sharedPreferences.edit().putInt("quesID", value).apply()

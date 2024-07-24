@@ -21,6 +21,7 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
+import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.checkerframework.common.subtyping.qual.Bottom
@@ -173,6 +174,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
 
     override fun docClickAction(item: WeeklyDefectChecksModelItem) {
         val intent = Intent(requireContext(), SubmitWeeklyDefectActivity::class.java)
+        Prefs.getInstance(requireContext()).currentWeeklyDefectItemVehRegNo = item.vehRegNo
         currentWeeklyDefectItem = item
 
         startActivity(intent)
