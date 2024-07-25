@@ -32,7 +32,7 @@ class SelectVehicleLocationAdapterTwo(
                     click.OnItemClickRecyclerViewClicks(
                         R.id.tvcompany,
                         0,
-                        item.locationName
+                       "ALL"
                     )
                 }
             }
