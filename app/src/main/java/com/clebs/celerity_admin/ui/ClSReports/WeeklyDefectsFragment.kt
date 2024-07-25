@@ -22,6 +22,7 @@ import com.clebs.celerity_admin.adapters.WeeklyDefectAdapter
 import com.clebs.celerity_admin.databinding.FragmentSlideshowBinding
 import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
+import com.clebs.celerity_admin.models.GetVehicleLocationItem
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModelItem
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
@@ -66,6 +67,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
         selectVehcilelocationadapter = SelectVehicleLocationAdapterTwo(ArrayList(), this)
         mainViewModel.GetVehicleLocationListing().observe(viewLifecycleOwner, Observer {
             if (it != null) {
+                it.add(0, GetVehicleLocationItem(0,"ALL"))
                 selectVehcilelocationadapter.data.addAll(it)
                 selectVehcilelocationadapter.notifyDataSetChanged()
             } else {
