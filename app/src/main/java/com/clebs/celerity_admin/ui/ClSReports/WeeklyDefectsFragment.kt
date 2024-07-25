@@ -40,6 +40,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
     var week: Int? = null
     var isLoaded = false
     var j = 0
+    var lmID = 0.0
     private var rv_locatio: RecyclerView? = null
     lateinit var selectVehcilelocationadapter: SelectVehicleLocationAdapterTwo
     var filter: Boolean = true
@@ -74,6 +75,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
 
             }
         })
+
         binding.showDefectCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
             showDefectCheckboxValue = isChecked
             if (isLoaded) {
@@ -83,11 +85,12 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
                     currentWeek.toDouble(),
                     year!!.toDouble(),
                     0.0,
-                    0.0,
+                    lmID,
                     showDefectCheckboxValue
                 )
             }
         }
+
         loadingDialog = (activity as MainActivityTwo).loadingDialog
         setPrevNextButton()
         val activity = requireActivity() as MainActivityTwo
@@ -118,7 +121,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
                     y.toDouble(),
                     year!!.toDouble(),
                     0.0,
-                    0.0,
+                    lmID,
                     showDefectCheckboxValue
                 )
 
@@ -138,7 +141,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
                     x.toDouble(),
                     year!!.toDouble(),
                     0.0,
-                    0.0,
+                    lmID,
                     showDefectCheckboxValue
                 )
                 setPrevNextButton()
@@ -164,7 +167,7 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
                     week!!.toDouble(),
                     year!!.toDouble(),
                     0.0,
-                    0.0,
+                    lmID,
                     showDefectCheckboxValue
                 )
             }
@@ -252,12 +255,12 @@ class WeeklyDefectsFragment : Fragment(), WeeklyDefectAdapter.WeeklyDefectsClick
         loadingDialog.show()
         deleteDialogthree.dismiss()
         binding.tvlocname.setText(itemclicked)
-
+        lmID = position.toDouble()
         mainViewModel.GetWeeklyDefectChecks(
             currentWeek!!.toDouble(),
             year!!.toDouble(),
             0.0,
-            position.toDouble(),
+            lmID,
             showDefectCheckboxValue
         )
 
