@@ -8,9 +8,9 @@
             android:id="@+id/nav_gallery"
             android:icon="@drawable/baseline_car_crash_24"
             android:title="Change Vehicle Allocation" />
+
         <item
             android:id="@+id/nav_slideshow"
-
             android:icon="@drawable/baseline_next_week_24"
             android:title="Weekly Defect Checks" />
 
@@ -18,9 +18,14 @@
             android:id="@+id/nav_weblogin"
             android:icon="@drawable/baseline_contact_emergency_24"
             android:title="Emergency Contacts" />
-<!--        <item-->
-<!--            android:id="@+id/nav_weblogin"-->
-<!--            android:icon="@drawable/baseline_network_cell_24"-->
-<!--            android:title="Web Login" />-->
+
+        <item
+            android:id="@+id/vehicle_collection_list"
+            android:icon="@drawable/gallery"
+            android:title="Vehicle Collection List" />
+        <!--        <item-->
+        <!--            android:id="@+id/nav_weblogin"-->
+        <!--            android:icon="@drawable/baseline_network_cell_24"-->
+        <!--            android:title="Web Login" />-->
     </group>
 </menu>

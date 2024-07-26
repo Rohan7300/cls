@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -34,7 +34,11 @@
         android:theme="@style/Theme.Celerity_admin"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".VehicleCollectionListActivity"
+            android:exported="false"
+            android:label="@string/title_activity_vehicle_collection_list"
+            android:theme="@style/Theme.Celerity_admin" />
         <activity
             android:name=".SubmitWeeklyDefectActivity"
             android:exported="false" />
@@ -62,12 +66,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"
@@ -84,8 +86,6 @@
                 android:resource="@xml/provider_paths"
                 tools:replace="android:resource" />
         </provider>
-
-
     </application>
 
 </manifest>

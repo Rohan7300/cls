@@ -168,7 +168,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         val message =
             intent?.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
@@ -276,6 +276,10 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener
                         R.color.maroon
                     )
                 )
+            }
+
+            R.id.vehicle_collection_list->{
+                startActivity(Intent(this,VehicleCollectionListActivity::class.java))
             }
 
         }

@@ -15,6 +15,7 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.clebs.celerity_admin.MainActivityTwo
 import com.clebs.celerity_admin.databinding.FragmentWebBinding
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.network.ApiService
@@ -56,7 +57,6 @@ class WebFragment : Fragment() {
         binding.web.webViewClient = WebViewClient()
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
-
 
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
