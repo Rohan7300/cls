@@ -1,12 +1,11 @@
 package com.clebs.celerity_admin
 
 import android.os.Bundle
-import android.view.Surface
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,16 +14,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,28 +39,56 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import com.clebs.celerity_admin.ui.theme.CLSOSMTheme
-import okhttp3.internal.wait
 
 class VehicleCollectionListActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.statusBarColor = ContextCompat.getColor(this, R.color.orange)
         setContent {
+            var showDialog by remember {
+                mutableStateOf(false)
+            }
             CLSOSMTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    VehicleCollectionList()
+                    VehicleCollectionList(dialogOpen = { showDialog = true })
+                    FilterDialog(showDialog = showDialog, onDismissRequest = { showDialog = false })
                 }
             }
         }
     }
 
     @Composable
-    fun VehicleCollectionList() {
+    fun FilterDialog(showDialog: Boolean, onDismissRequest: () -> Unit) {
+        if (showDialog) {
+            Dialog(onDismissRequest = onDismissRequest) {
+                Column(
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier
+                        .background(Color.White, RoundedCornerShape(16.dp))
+                        .padding(16.dp)
+                ) {
+                    IconButton(onClick = onDismissRequest) {
+                        Icon(painter = painterResource(id = R.drawable.xmark), contentDescription = "Cross")
+                    }
+                    Text("Filters")
+                    Button(onClick = onDismissRequest) {
+                        Text("Dismiss")
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun VehicleCollectionList(dialogOpen: () -> Unit) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(1.dp),
@@ -100,10 +133,10 @@ class VehicleCollectionListActivity : ComponentActivity() {
                         .padding(vertical = 5.dp, horizontal = 12.dp),
                     elevation = CardDefaults.cardElevation(8.dp)
                 ) {
-                    Row (
+                    Row(
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
-                    ){
+                    ) {
                         TextField(value = "",
                             onValueChange = {
 
@@ -123,7 +156,7 @@ class VehicleCollectionListActivity : ComponentActivity() {
                     }
                 }
                 Spacer(modifier = Modifier.width(8.dp))
-                IconButton(onClick = {}) {
+                IconButton(onClick = dialogOpen) {
                     Icon(
                         painter = painterResource(id = R.drawable.sort),
                         contentDescription = "Search",
@@ -131,7 +164,6 @@ class VehicleCollectionListActivity : ComponentActivity() {
                         modifier = Modifier.size(20.dp)
                     )
                 }
-
             }
         }
     }
@@ -144,7 +176,7 @@ class VehicleCollectionListActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                VehicleCollectionList()
+                //  VehicleCollectionList()
             }
         }
     }
