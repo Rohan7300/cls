@@ -108,7 +108,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         cqSDKInitializer.triggerOfflineSync()
 
         initPreviewView()
-        noInternetCheck(this,binding.nointernetLL,this)
+        noInternetCheck(this, binding.nointernetLL, this)
 
         startonetime = prefs.Isfirst!!
 
@@ -402,16 +402,16 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
     private fun clientUniqueID(): String {
         val x = Prefs.getInstance(App.instance).clebUserId.toString()
-        val y = Prefs.getInstance(App.instance).scannedVmRegNo.replace(" ","")
+        val y = Prefs.getInstance(App.instance).scannedVmRegNo.replace(" ", "")
 
         val currentDate = LocalDateTime.now()
         val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
         val regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
-        prefs.inspectionID = regexPattern.toString().replace(" ","")
+        prefs.inspectionID = regexPattern.toString().replace(" ", "")
         //inspectionID = regexPattern.toString().replace(" ","")
         Log.e(
             "kjfdjkfhdjfjdhfdjclientuniqueidfunction",
-            "clientUniqueID: ------" + prefs.inspectionID.replace(" ","")
+            "clientUniqueID: ------" + prefs.inspectionID.replace(" ", "")
         )
 
         return regexPattern.toString()
@@ -429,7 +429,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         intent.putExtra("notificationId", "0")
         startActivity(intent)
     }
-
 
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -564,17 +563,17 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
     private fun startInspectionMain() {
         var model =
-        clientUniqueID()
-        Log.d("CLSInspection","Name : CLS"+Prefs.getInstance(applicationContext).clebUserId)
+            clientUniqueID()
+        Log.d("CLSInspection", "Name : CLS" + Prefs.getInstance(applicationContext).clebUserId)
         Log.d("CLSInspection", "VehicleModel: ${prefs.VehicleModel}")
-        Log.d("CLSInspection","VehicleBodyStyle ${prefs.VehicleBodyStyle}")
-        Log.d("CLSInspection","InspectionID: ${prefs.inspectionID.replace(" ","")}")
+        Log.d("CLSInspection", "VehicleBodyStyle ${prefs.VehicleBodyStyle}")
+        Log.d("CLSInspection", "InspectionID: ${prefs.inspectionID.replace(" ", "")}")
         cqSDKInitializer.startInspection(activity = this,
             clientAttrs = ClientAttrs(
                 userName = " ",
                 dealer = " ",
                 dealerIdentifier = " ",
-                client_unique_id = prefs.inspectionID.replace(" ","")
+                client_unique_id = prefs.inspectionID.replace(" ", "")
             ),
             inputDetails = InputDetails(
                 vehicleDetails = VehicleDetails(
@@ -584,7 +583,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
                 ),
                 customerDetails = CustomerDetails(
-                    name = "CLS"+Prefs.getInstance(applicationContext).clebUserId, //if sent, user can't edit CLS-userid
+                    name = "CLS" + Prefs.getInstance(applicationContext).clebUserId, //if sent, user can't edit CLS-userid
                     email = "", //if sent, user can't edit
                     dialCode = "", //if sent, user can't edit
                     phoneNumber = "", //if sent, user can't edit
@@ -598,7 +597,10 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
             result = { isStarted, msg, code ->
                 loadingDialog.dismiss()
-                Log.e("startinspecctionID", "onCreateView: startone ${prefs.inspectionID.replace(" ","")} ")
+                Log.e(
+                    "startinspecctionID",
+                    "onCreateView: startone ${prefs.inspectionID.replace(" ", "")} "
+                )
                 Log.e("messsagesss", "startInspection: $msg$code")
                 Log.e("CQSDKXX", "regNo: ${prefs.scannedVmRegNo}")
                 if (isStarted) {
@@ -614,9 +616,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     } else if (msg.equals("Sufficient data not available to create an offline quote")) {
                         showToast("Please Retry!!", this)
                         Log.d("CQSDKXX", "Not isStarted2  " + msg)
-                    }
-                    else if (msg.equals("Unable to download setting updates, Please check internet")){
-                        showToast("Please Turn on the internet",this)
+                    } else if (msg.equals("Unable to download setting updates, Please check internet")) {
+                        showToast("Please Turn on the internet", this)
                         Log.d("CQSDKXX", "Not isStarted3  " + msg)
                     }
 

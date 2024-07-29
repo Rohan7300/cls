@@ -12,5 +12,6 @@ data class GetDriverRouteInfoByDateResponseItem(
     val RtNoParcelsbroughtback: Int,
     val RtTypeId: Int,
     val RtUsrId: Int,
-    val VehicleId: Int
+    val VehicleId: Int,
+    val RtIsByod:Boolean = false
 )

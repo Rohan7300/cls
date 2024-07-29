@@ -537,6 +537,15 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         )
                     }
 
+                    R.id.nextWeekSchedule -> {
+                        startActivity(
+                            Intent(
+                                this@HomeActivity,
+                                NextWeekScheduleActivity::class.java
+                            )
+                        )
+                    }
+
                     R.id.logoutNav -> {
                         showAlertLogout()
                     }
@@ -950,10 +959,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val factory = LayoutInflater.from(this)
         val view: View = factory.inflate(R.layout.logout_layout, null)
         val deleteDialog: AlertDialog = AlertDialog.Builder(this).create()
-/*        val imageView: ImageView = view.findViewById(R.id.ic_cross_orange)
-        imageView.setOnClickListener {
-            deleteDialog.dismiss()
-        }*/
+        /*        val imageView: ImageView = view.findViewById(R.id.ic_cross_orange)
+                imageView.setOnClickListener {
+                    deleteDialog.dismiss()
+                }*/
         val btone: Button = view.findViewById(R.id.bt_no)
         val bttwo: Button = view.findViewById(R.id.bt_yes)
 

@@ -2,7 +2,9 @@ package com.clebs.celerity.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -33,6 +35,10 @@ class DriverRouteAdapter(
 
         fun bind(item: GetDriverRouteInfoByDateResponseItem) {
             binding.routeNameTwo.text = item.RtName
+            if (item.RtIsByod)
+                binding.byodIC.setColorFilter(ContextCompat.getColor(requireContext,R.color.green_new))
+            else
+                binding.byodIC.setColorFilter(ContextCompat.getColor(requireContext,R.color.light_grey))
             binding.delRouteIV.setOnClickListener {
                 loadingDialog()
                 mainViewModel.DeleteOnRouteDetails(item.RtId)

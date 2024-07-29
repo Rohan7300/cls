@@ -37,6 +37,11 @@
         android:icon="@drawable/tickets_ic"
         android:title="Tickets" />
     <item
+        android:id="@+id/nextWeekSchedule"
+        android:icon="@drawable/calendar"
+        android:title="Next Week schedule"
+        />
+    <item
         android:id="@+id/EnableDisableBio"
         android:iconTint="@color/black"
         android:icon="@drawable/baseline_fingerprint_24"
