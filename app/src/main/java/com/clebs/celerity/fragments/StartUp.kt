@@ -15,6 +15,7 @@ import com.clebs.celerity.models.QuestionWithOption
 import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.models.requests.SaveQuestionareStartupRequestNew
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 
@@ -36,12 +37,12 @@ class StartUp : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val questions = arrayListOf(
-            QuestionWithOption("CLS DA System Log in and out(payment and vehicle check)*"),
-            QuestionWithOption("eMeter(every working day log in:start trip and end trip;speeding;FICO score)*"),
-            QuestionWithOption("DVIC(pre and post trip checks)*"),
-            QuestionWithOption("Use Of trollies,cages,bags *"),
+            QuestionWithOption("CLS DA system Log in & out (payment and vehicle check) *"),
+            QuestionWithOption("eMentor (every working day log in; start trip & end trip; speeding; FiCO score) *"),
+            QuestionWithOption("DVIC (pre and post trip checks) *"),
+            QuestionWithOption("Use of trollies, cages, bags *"),
             QuestionWithOption("Yard Safety *"),
-            QuestionWithOption("loading Vehicle *")
+            QuestionWithOption("Loading vehicle safely *")
         )
         pref = Prefs.getInstance(requireContext())
         viewModel = (activity as HomeActivity).viewModel
@@ -56,9 +57,9 @@ class StartUp : Fragment() {
             loadingDialog.cancel()
             if (pref.submittedStartUp) {
                 if (it != null) {
-                    viewModel.currentViewPage.postValue(2)
+                    viewModel.currentViewPage.postValue(1)
                     pref.quesID = it.QuestionId
-                    pref.qStage = 2
+                    pref.qStage = 1
                 }
             }
         }
@@ -68,9 +69,9 @@ class StartUp : Fragment() {
         }
 
         binding.saveBTNStartup.setOnClickListener {
-            if (pref.qStage < 1 || pref.quesID == 0) {
+/*            if (pref.qStage < 1 || pref.quesID == 1) {
                 showToast("Please complete previous assessment first", requireContext())
-            } else {
+            } else {*/
                 val allQuestionsSelected = adapter.areAllQuestionsSelected()
                 val comment =
                     if (binding.startupComment.text.isNullOrEmpty()) " " else binding.startupComment.text
@@ -85,7 +86,7 @@ class StartUp : Fragment() {
                     else
                         showToast("Please select answer to all questions.", requireContext())
                 }
-            }
+            //}
         }
     }
 
@@ -93,15 +94,19 @@ class StartUp : Fragment() {
         loadingDialog.show()
         pref.submittedStartUp = true
         viewModel.SaveQuestionaireStartup(
-            SaveQuestionaireStartupRequest(
-                QuestionId = pref.quesID,
+            SaveQuestionareStartupRequestNew(
+                QuestionId = 0,
                 RaStartupClsDaSystem = selectedOptions[0],
                 RaStartupComments = comment.toString(),
                 RaStartupEmentor = selectedOptions[1],
                 RaStartupDvic = selectedOptions[2],
                 RaStartupUseOfTrollies = selectedOptions[3],
                 RaStartupYardSafty = selectedOptions[4],
-                RaStartupLoadingVehicle = selectedOptions[5]
+                RaStartupLoadingVehicle = selectedOptions[5],
+                DaDailyWorkId = pref.daWID,
+                LeadDriverId = pref.clebUserId.toInt(),
+                RideAlongDriverId = pref.currRideAlongID,
+                RoutetId = pref.currRtId,
             )
         )
     }

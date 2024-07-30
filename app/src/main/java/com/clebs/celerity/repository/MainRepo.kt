@@ -22,6 +22,8 @@ import com.clebs.celerity.models.requests.SaveQuestionaireOnGoingActivitiesReque
 import com.clebs.celerity.models.requests.SaveQuestionairePreparednessRequest
 import com.clebs.celerity.models.requests.SaveQuestionaireReturnToDeliveryStationRequest
 import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
+import com.clebs.celerity.models.requests.SaveQuestionareDrivingabilityassessment
+import com.clebs.celerity.models.requests.SaveQuestionareStartupRequestNew
 import com.clebs.celerity.models.requests.SaveTicketDataRequestBody
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
@@ -574,7 +576,7 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun SaveQuestionaireStartup(
-        request: SaveQuestionaireStartupRequest
+        request: SaveQuestionareStartupRequestNew
     ): SimpleNetworkResponse<SimpleQuestionResponse> {
         /* val response = ApiService.SaveQuestionaireStartup(request)
          if (response.isSuccessful)
@@ -604,7 +606,7 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun SaveQuestionaireDeliverProcedures(
-        request: SaveQuestionaireDeliverProceduresRequest
+        request: SaveQuestionareDrivingabilityassessment
     ): SimpleNetworkResponse<SimpleQuestionResponse> {
         /*        val response = ApiService.SaveQuestionaireDeliverProcedures(request)
                 if (response.isSuccessful)

@@ -56,7 +56,7 @@ class FinalAssesmentFragment : Fragment() {
 
         binding.finalAssesmentSubmit.setOnClickListener {
             if (binding.etFinalAssesmentComment.text.isNotEmpty()) {
-                if (pref.qStage < 5 || pref.quesID == 0) {
+                if (pref.qStage < 2 || pref.quesID == 0) {
                     showToast("Please complete previous assessment first", requireContext())
                 } else {
                     val assesment =

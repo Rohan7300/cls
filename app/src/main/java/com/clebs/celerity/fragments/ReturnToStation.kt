@@ -54,9 +54,9 @@ class ReturnToStation : Fragment() {
             loadingDialog.cancel()
             if(it!=null){
                 if(pref.submittedReturnToStation){
-                    viewModel.currentViewPage.postValue(5)
+                    viewModel.currentViewPage.postValue(3)
                     pref.quesID = it.QuestionId
-                    pref.qStage = 5
+                    pref.qStage = 3
                 }
             }
         }

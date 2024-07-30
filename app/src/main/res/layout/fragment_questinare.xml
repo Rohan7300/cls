@@ -94,16 +94,16 @@
                 app:tabMode="scrollable"
                 app:tabMinWidth="100dp"
                 app:tabGravity="fill"
-
-                app:tabMaxWidth="300dp"
+                app:tabMaxWidth="200dp"
                 >
 
-                <com.google.android.material.tabs.TabItem
+ <!--               <com.google.android.material.tabs.TabItem
                     android:id="@+id/prep"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="12dp"
-                    android:text="Preparedness" />
+
+                    android:text="Preparedness" />-->
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
@@ -111,24 +111,26 @@
                     android:textSize="12dp"
                     android:text="Start Up" />
 
+<!--
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12dp"
                     android:text="Going On" />
+-->
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12dp"
-                    android:text="Delivery Procedures" />
+                    android:text="Driving Ability Assessment" />
 
-                <com.google.android.material.tabs.TabItem
+    <!--            <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12dp"
                     android:text="Return" />
-
+-->
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:textSize="12dp"

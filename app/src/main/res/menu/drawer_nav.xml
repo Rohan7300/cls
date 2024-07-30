@@ -39,7 +39,7 @@
     <item
         android:id="@+id/nextWeekSchedule"
         android:icon="@drawable/calendar"
-        android:title="Next Week schedule"
+        android:title="Next Week Schedule"
         />
     <item
         android:id="@+id/EnableDisableBio"

@@ -25,6 +25,8 @@ import com.clebs.celerity.models.requests.SaveQuestionaireOnGoingActivitiesReque
 import com.clebs.celerity.models.requests.SaveQuestionairePreparednessRequest
 import com.clebs.celerity.models.requests.SaveQuestionaireReturnToDeliveryStationRequest
 import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
+import com.clebs.celerity.models.requests.SaveQuestionareDrivingabilityassessment
+import com.clebs.celerity.models.requests.SaveQuestionareStartupRequestNew
 import com.clebs.celerity.models.requests.SaveTicketDataRequestBody
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
@@ -318,7 +320,7 @@ interface ApiService {
 
     @POST("/api/DriverQuestionnaire/SaveQuestionaireStartup")
     suspend fun SaveQuestionaireStartup(
-        @Body request: SaveQuestionaireStartupRequest
+        @Body request: SaveQuestionareStartupRequestNew
     ): Response<SimpleQuestionResponse>
 
     @POST("/api/DriverQuestionnaire/SaveQuestionaireOnGoingActivities")
@@ -328,7 +330,7 @@ interface ApiService {
 
     @POST("/api/DriverQuestionnaire/SaveQuestionaireDeliverProcedures")
     suspend fun SaveQuestionaireDeliverProcedures(
-        @Body request: SaveQuestionaireDeliverProceduresRequest
+        @Body request: SaveQuestionareDrivingabilityassessment
     ): Response<SimpleQuestionResponse>
 
     @POST("/api/DriverQuestionnaire/SaveQuestionaireReturnToDeliveryStation")

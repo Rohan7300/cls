@@ -15,6 +15,7 @@ import com.clebs.celerity.models.QuestionWithOption
 import com.clebs.celerity.models.requests.SaveQuestionaireDeliverProceduresRequest
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.models.requests.SaveQuestionareDrivingabilityassessment
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 
@@ -43,18 +44,18 @@ class DeliveryProcedures : Fragment() {
         loadingDialog = (activity as HomeActivity).loadingDialog
 
         val questions = arrayListOf(
-            QuestionWithOption("Age verification Deliveries *"),
-            QuestionWithOption("Handle all packages with care *"),
-            QuestionWithOption("Geocodes, Geo fences *"),
-            QuestionWithOption("Verify Address, Street, and Houses *"),
-            QuestionWithOption("Person named on shipping Label *"),
-            QuestionWithOption("POD (Photo On Delivery) *"),
-            QuestionWithOption("Letterbox Deliveries *"),
-            QuestionWithOption("Package Left 'as Instructed'; PHR (Preference Honor Rate) *"),
-            QuestionWithOption("Delivered to a neighbor *"),
-            QuestionWithOption("Front Desk, Mail room *"),
+            QuestionWithOption("Speed awareness *"),
+            QuestionWithOption("Mirrors checks *"),
+            QuestionWithOption("Indicating in time *"),
+            QuestionWithOption("Distance between other vehicles *"),
+            QuestionWithOption("Parking correctly *"),
+            QuestionWithOption("Courtesy to other road users *"),
+            QuestionWithOption("Stop signs and road junction adherence *"),
+            QuestionWithOption("Instructed on No reversing policy *"),
+            QuestionWithOption("Vehicle security – Keys left in ignition *"),
+            /*QuestionWithOption("Front Desk, Mail room *"),
             QuestionWithOption("Locker Deliveries/Collections *"),
-            QuestionWithOption("Contact Compliance *")
+            QuestionWithOption("Contact Compliance *")*/
         )
 
 
@@ -71,9 +72,9 @@ class DeliveryProcedures : Fragment() {
             loadingDialog.cancel()
             if (it != null) {
                 if (pref.submittedDeliveryProcedures) {
-                    viewModel.currentViewPage.postValue(4)
+                    viewModel.currentViewPage.postValue(2)
                     pref.quesID = it.QuestionId
-                    pref.qStage = 4
+                    pref.qStage = 2
                 }
             } else {
                 showToast("Failed to submit!!", requireContext())
@@ -81,7 +82,7 @@ class DeliveryProcedures : Fragment() {
         }
 
         binding.deliverSaveBtn.setOnClickListener {
-            if (pref.qStage < 3 || pref.quesID == 0) {
+            if (pref.qStage <1 || pref.quesID == 0) {
                 showToast("Please complete previous assessment first", requireContext())
             } else {
                 val allQuestionsSelected = adapter.areAllQuestionsSelected()
@@ -104,7 +105,7 @@ class DeliveryProcedures : Fragment() {
         loadingDialog.show()
         pref.submittedDeliveryProcedures = true
         viewModel.SaveQuestionaireDelivery(
-            SaveQuestionaireDeliverProceduresRequest(
+            SaveQuestionareDrivingabilityassessment(
                 QuestionId = pref.quesID,
                 RaDeliveryProceduresAgeVerificationDelivery = selectedOptions[0],
                 RaDeliveryProceduresHandleWithCare = selectedOptions[1],
@@ -115,9 +116,9 @@ class DeliveryProcedures : Fragment() {
                 RaDeliveryProceduresLetterboxDelivery = selectedOptions[6],
                 RaDeliveryProceduresPhr = selectedOptions[7],
                 RaDeliveryProceduresDeliveredToNeighbour = selectedOptions[8],
-                RaDeliveryProceduresFrontDeskMailRoom = selectedOptions[9],
-                RaDeliveryProceduresLockerDeleveries = selectedOptions[10],
-                RaDeliveryProceduresContractCompliance = selectedOptions[11],
+                //RaDeliveryProceduresFrontDeskMailRoom = selectedOptions[9],
+                //RaDeliveryProceduresLockerDeleveries = selectedOptions[10],
+                //RaDeliveryProceduresContractCompliance = selectedOptions[11],
                 RaDeliveryProceduresComments = comment.toString()
             )
         )

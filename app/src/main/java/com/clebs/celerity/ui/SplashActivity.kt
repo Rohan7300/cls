@@ -125,6 +125,8 @@ class SplashActivity : AppCompatActivity() {
                         } else {
                             useBiometric()
                         }
+                    }else{
+                        next()
                     }
 //                useBiometric()
                 } else {

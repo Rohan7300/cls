@@ -59,11 +59,11 @@ class QuestinareFragment : Fragment() {
         }
 
         val headingList = arrayOf(
-            "Preparedness",
+            //"Preparedness",
             "Start Up",
-            "Going On",
-            "Delivery Procedures",
-            "Return",
+            //"Going On",
+            "Driving Ability Assessment",
+            //"Return",
             "Final Assessment"
         )
         val str = "Observations and explanations must be conducted on a" +
@@ -96,13 +96,13 @@ class QuestinareFragment : Fragment() {
         )
         binding.viewPager.adapter = adapter
         binding.viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.tablay))
-        binding.viewPager.offscreenPageLimit = 6
-        binding.tablay.getTabAt(0)?.select()
+        binding.viewPager.offscreenPageLimit = 3
+
 
         for (i in headingList.indices) {
             binding.tablay.getTabAt(i)?.text = headingList[i]
         }
-
+        binding.tablay!!.selectTab( binding.tablay.getTabAt(0))
         binding.tablay!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 binding.viewPager!!.currentItem = tab.position
@@ -111,8 +111,7 @@ class QuestinareFragment : Fragment() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
-                tab.text = tab.contentDescription?.substring(0, 3)
-
+                tab.text = tab.contentDescription?.substring(0, 5)
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {}

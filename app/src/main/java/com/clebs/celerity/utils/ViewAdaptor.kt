@@ -28,22 +28,24 @@ class ViewAdaptor(
 
     override fun getItem(position: Int): Fragment {
 
-
         return when (position) {
             0 -> {
-                Prepardness()
-            }
-
-            1 -> {
+                //Prepardness()
                 StartUp()
             }
 
-            2 -> {
-                GoingOn()
+            1 -> {
+               // StartUp()
+                DeliveryProcedures()
             }
 
-            3 -> {
-                DeliveryProcedures()
+            2 -> {
+                FinalAssesmentFragment()
+               // GoingOn()
+            }
+
+            /*3 -> {
+              DeliveryProcedures()
             }
 
             4 -> {
@@ -51,7 +53,7 @@ class ViewAdaptor(
             }
             5->{
                 FinalAssesmentFragment()
-            }
+            }*/
 
             else -> getItem(position)
         }

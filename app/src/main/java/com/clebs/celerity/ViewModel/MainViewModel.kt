@@ -27,6 +27,8 @@ import com.clebs.celerity.models.requests.SaveQuestionaireOnGoingActivitiesReque
 import com.clebs.celerity.models.requests.SaveQuestionairePreparednessRequest
 import com.clebs.celerity.models.requests.SaveQuestionaireReturnToDeliveryStationRequest
 import com.clebs.celerity.models.requests.SaveQuestionaireStartupRequest
+import com.clebs.celerity.models.requests.SaveQuestionareDrivingabilityassessment
+import com.clebs.celerity.models.requests.SaveQuestionareStartupRequestNew
 import com.clebs.celerity.models.requests.SaveTicketDataRequestBody
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
@@ -735,7 +737,7 @@ class MainViewModel(
         }
     }
 
-    fun SaveQuestionaireStartup(request: SaveQuestionaireStartupRequest) {
+    fun SaveQuestionaireStartup(request: SaveQuestionareStartupRequestNew) {
         viewModelScope.launch {
             var response = repo.SaveQuestionaireStartup(request)
             if (response.failed)
@@ -779,7 +781,7 @@ class MainViewModel(
         }
     }
 
-    fun SaveQuestionaireDelivery(request: SaveQuestionaireDeliverProceduresRequest) {
+    fun SaveQuestionaireDelivery(request: SaveQuestionareDrivingabilityassessment) {
         viewModelScope.launch {
             var response = repo.SaveQuestionaireDeliverProcedures(request)
             if (response.failed)
