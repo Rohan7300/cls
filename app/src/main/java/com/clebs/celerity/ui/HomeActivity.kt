@@ -540,6 +540,15 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     R.id.logoutNav -> {
                         showAlertLogout()
                     }
+                    R.id.WeeklyPerformanceBtn ->{
+
+                        startActivity(
+                            Intent(
+                                this@HomeActivity,
+                                WeeklyPerformanceActivity::class.java
+                            )
+                        )
+                    }
 
                     R.id.EnableDisableBio -> {
                         if (isLoggedInBio()) {

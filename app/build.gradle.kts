@@ -17,8 +17,8 @@ android {
         applicationId = "com.clebs.celerity"
         minSdk = 27
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.0.2"
+        versionCode = 5
+        versionName = "1.0.3"
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -110,6 +110,7 @@ dependencies {
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.facebook.shimmer:shimmer:0.1.0@aar")
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+
 
     val camerax_version = "1.0.0-rc01"
     implementation("androidx.camera:camera-camera2:$camerax_version")
