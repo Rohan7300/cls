@@ -44,11 +44,13 @@ class HomeFragment : Fragment() {
         }
         viewModel = (activity as HomeActivity).viewModel
         showDialog()
+        mbinding.llmainHome.alpha=0.5f
         viewModel.GetDriversBasicInformation(
             Prefs.getInstance(App.instance).clebUserId.toInt().toDouble()
         ).observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
+                mbinding.llmainHome.alpha=1f
                 if (it.currentlocation != null) {
                     mbinding.location.text = it.currentlocation
                     mbinding.away.text = it.currentlocation

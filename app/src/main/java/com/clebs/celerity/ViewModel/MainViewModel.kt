@@ -1584,12 +1584,16 @@ class MainViewModel(
     fun SaveVehicleInspectionInfo(body: SaveVehicleInspectionInfo) {
         viewModelScope.launch {
             val response = repo.SaveVehicleInspectionInfo(body)
-            if (response.failed)
+            if (response.failed) {
                 livedataSavevehicleinspectioninfo.postValue(null)
-            if (!response.isSuccessful)
+                Prefs.getInstance(App.instance).isClientIDUplaoded = false
+            } else if (!response.isSuccessful) {
                 livedataSavevehicleinspectioninfo.postValue(null)
-            else
+                Prefs.getInstance(App.instance).isClientIDUplaoded = false
+            } else {
+                Prefs.getInstance(App.instance).isClientIDUplaoded = true
                 livedataSavevehicleinspectioninfo.postValue(response.body)
+            }
 
 
             /*            val result = runCatching {

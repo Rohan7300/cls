@@ -89,6 +89,9 @@ class SplashActivity : AppCompatActivity() {
                         useBiometric()
                     }
                 }
+                else{
+                    next()
+                }
 //                useBiometric()
             } else {
                 next()
@@ -103,6 +106,9 @@ class SplashActivity : AppCompatActivity() {
                     } else {
                         useBiometric()
                     }
+                }
+                else{
+                    next()
                 }
 //                useBiometric()
             } else {
@@ -128,6 +134,9 @@ class SplashActivity : AppCompatActivity() {
                     }else{
                         next()
                     }
+                    else{
+                        next()
+                    }
 //                useBiometric()
                 } else {
                     next()
@@ -145,6 +154,7 @@ class SplashActivity : AppCompatActivity() {
                     }else{
                         next()
                     }
+
 //                useBiometric()
                 } else {
                     next()
@@ -207,6 +217,7 @@ class SplashActivity : AppCompatActivity() {
                 }else{
                     next()
                 }
+
 //                useBiometric()
             } else {
                 next()
@@ -530,22 +541,22 @@ class SplashActivity : AppCompatActivity() {
 
             BiometricManager.BIOMETRIC_SUCCESS -> {
                 canAuth = true
-                Log.e(TAG, "useBiometric: ")
+                Log.e(TAG, "useBiometric1: ")
             }
 
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
                 canAuth = false
-                Log.e(TAG, "useBiometric: ")
+                Log.e(TAG, "useBiometric2: ")
             }
 
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
                 canAuth = false
-                Log.e(TAG, "useBiometric: ")
+                Log.e(TAG, "useBiometric3: ")
             }
 
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
                 canAuth = false
-                Log.e(TAG, "useBiometric: ")
+                Log.e(TAG, "useBiometric4: ")
             }
 
         }

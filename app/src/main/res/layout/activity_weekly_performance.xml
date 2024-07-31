@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        tools:context=".ui.WeeklyPerformanceActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/consts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F1550D"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/back_icon"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/baseline_auto_graph_24"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/white"
+                android:padding="16dp"
+                android:text="Weekly performance"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/fm"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout9"
+            app:layout_constraintTop_toBottomOf="@id/consts">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableRight="@drawable/data"
+                android:gravity="center"
+                android:text="No data found"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+
+        </FrameLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+
+            android:padding="4dp"
+            android:scrollbarAlwaysDrawHorizontalTrack="true"
+            android:scrollbarDefaultDelayBeforeFade="5000"
+            android:scrollbars="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/consts"
+            tools:layout_editor_absoluteX="15dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewMovieList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/table_list_item" />
+
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout9"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_rectangle_blue"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView2"
+            app:layout_constraintVertical_bias="1.0">
+
+            <View
+                android:id="@+id/placeholder1"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/prev"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/baseline_arrow_circle_left_24"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/weekNoTV"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="@font/cq_sdk_poppins_bold"
+                android:gravity="center"
+                android:text="Week no."
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/next"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/baseline_arrow_circle_right_24"
+                app:tint="@color/white" />
+
+            <View
+                android:id="@+id/placeholder2"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

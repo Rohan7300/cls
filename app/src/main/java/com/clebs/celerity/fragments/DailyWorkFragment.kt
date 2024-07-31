@@ -567,7 +567,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                                 this@DailyWorkFragment,
                                 fragmentManager,
                                 "DWF-03",
-                                " This Vehicle ${if (vrn.isNotEmpty()) (vrn) else ""} doesn't exist. Please scan again or contact your supervisor."
+                                " No VRN found in image.."
                             )
 //                        if (loadingDialog.isShowing){
 //                            loadingDialog.dismiss()
@@ -605,6 +605,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
     fun getVichleinformation() {
         Prefs.getInstance(App.instance).scannedVmRegNo = vrn
+        Log.e(TAG, "getVichleinformationVRN: "+vrn )
         (activity as HomeActivity).GetDriversBasicInformation()
         mainViewModel.getVichelinformationResponse(
             Prefs.getInstance(App.instance).clebUserId.toString().toDouble(), 0.toDouble(), vrn

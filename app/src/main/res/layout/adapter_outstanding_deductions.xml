@@ -63,6 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"
+        android:id="@+id/llm"
         android:background="@drawable/shape_edittext_onroad"
         android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +122,7 @@
                     android:src="@drawable/eye"
                     android:textColor="@color/text_color"
                     android:textSize="12sp"
-                    app:tint="@color/black" />
+                   />
             </LinearLayout>
         </LinearLayout>
 

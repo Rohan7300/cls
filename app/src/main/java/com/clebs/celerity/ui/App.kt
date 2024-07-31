@@ -21,6 +21,7 @@ class App: Application()
 
         instance = this
         prefs = Prefs(applicationContext)
+        RetrofitService.initialize(applicationContext)
 
 /*        val connectivityWorker = OneTimeWorkRequestBuilder<NetworkChangeReceiver>().build()
         WorkManager.getInstance(this).enqueue(connectivityWorker)*/

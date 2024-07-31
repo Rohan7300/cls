@@ -43,13 +43,16 @@
         />
     <item
         android:id="@+id/EnableDisableBio"
-        android:iconTint="@color/black"
-        android:icon="@drawable/baseline_fingerprint_24"
+        android:icon="@drawable/baseline_fingerprint_24_black"
         android:title=" " />
     <item
         android:id="@+id/profileBtn"
         android:icon="@drawable/user_profile_icon"
         android:title="Profile" />
+    <item
+        android:id="@+id/WeeklyPerformanceBtn"
+        android:icon="@drawable/baseline_auto_graph_24"
+        android:title="Weekly performance" />
 
     <item
         android:id="@+id/logoutNav"

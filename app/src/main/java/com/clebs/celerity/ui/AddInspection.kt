@@ -19,6 +19,7 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.R
@@ -218,7 +219,8 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
         }
         binding.tvNext.setOnClickListener {
             generateInspectionID()
-            // backgroundUploadDialog.show(this.supportFragmentManager, BackgroundUploadDialog.TAG)
+            // backgroundUploadDialog.show(this.supportFragmentManager, BackgroundUploadDialog.TAG)\
+
             onSaveClick()
 
         }
@@ -373,9 +375,9 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
             osData.oillevelImage = imageUri.toString()
             oSyncViewModel.insertData(osData)
         } else {
-            binding.tvNext.isEnabled = true
-            oSyncViewModel.insertData(osData)
-            binding.tvNext.setTextColor(ContextCompat.getColor(this, R.color.white))
+
+
+
         }
 
         uploadStatus(x)

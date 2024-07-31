@@ -5,11 +5,11 @@
     android:viewportHeight="72">
 
 
-    <path
-        android:pathData="M0,16C0,7.163 7.163,0 16,0H359C367.837,0 375,7.163 375,16V72H0V16Z"
-        android:fillColor="@color/home_blue_two"/>
+  <path
+      android:pathData="M0,16C0,7.163 7.163,0 16,0H359C367.837,0 375,7.163 375,16V72H0V16Z"
+      android:fillColor="@color/maincolor"/>
 
-    <!--  <corners android:topLeftRadius="15dp"-->
-    <!--      android:topRightRadius="15dp"/>-->
+<!--  <corners android:topLeftRadius="15dp"-->
+<!--      android:topRightRadius="15dp"/>-->
 
 </vector>

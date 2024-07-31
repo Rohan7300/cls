@@ -20,7 +20,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Celerity"
+rootProject.name = "CLS DA"
 include(":app","library")
 
  

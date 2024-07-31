@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.RelativeSizeSpan
@@ -53,7 +55,7 @@ class HomedemoFragment : Fragment() {
     var week: Int = 0
     var entries = ArrayList<PieEntry>()
     var year: Int = 0
-    var currWeek:Int = 0
+    var currWeek: Int = 0
     var weekprev = 0
     protected val months = arrayOf(
         "Jan", "Feb", "Mar"
@@ -89,6 +91,7 @@ class HomedemoFragment : Fragment() {
             mbinding = FragmentHomedemoBinding.inflate(inflater, container, false)
 
         }
+
 
         viewModel = (activity as HomeActivity).viewModel
 
@@ -274,6 +277,7 @@ class HomedemoFragment : Fragment() {
 
         Observers()
         mbinding.btPrev.setOnClickListener {
+            mbinding.consttwo.visibility=View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.VISIBLE
@@ -293,7 +297,7 @@ class HomedemoFragment : Fragment() {
                 mbinding.txtLastWeek.text = "Week : "
             val weekschedule = week - 1
 
-            mbinding.viewfullschedule.text = "Full schedule for week ${currWeek-1}"
+            mbinding.viewfullschedule.text = "Full schedule for week ${currWeek - 1}"
             showDialog()
             val w = week - 3
 //            val baseText = "Cash flow \n week :"+w+"\n"+ "£"+totalearning
@@ -345,6 +349,7 @@ class HomedemoFragment : Fragment() {
         }
         mbinding.btPrevSecond.setOnClickListener {
             currWeek
+            mbinding.consttwo.visibility=View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.GONE
@@ -363,7 +368,7 @@ class HomedemoFragment : Fragment() {
             else
                 mbinding.txtLastWeek.text = "Week : "
             val weekschedule = week - 2
-            mbinding.viewfullschedule.text = "Full schedule for week ${currWeek-2}"
+            mbinding.viewfullschedule.text = "Full schedule for week ${currWeek - 2}"
             showDialog()
             val w = week - 4
             //      mbinding.pieChart.setCenterText("Cash flow \n week :" + w+"\n"+"£"+totalearning);
@@ -398,6 +403,7 @@ class HomedemoFragment : Fragment() {
         }
 
         mbinding.btNext.setOnClickListener {
+            mbinding.consttwo.visibility=View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.VISIBLE
@@ -417,7 +423,7 @@ class HomedemoFragment : Fragment() {
             else
                 mbinding.txtLastWeek.text = "Week : "
             val weekschedule = week - 1
-            mbinding.viewfullschedule.text = "Full schedule for week ${currWeek-1}"
+            mbinding.viewfullschedule.text = "Full schedule for week ${currWeek - 1}"
 
             showDialog()
             val w = week - 3
@@ -452,6 +458,7 @@ class HomedemoFragment : Fragment() {
 
         }
         mbinding.btThisWeek.setOnClickListener {
+            mbinding.consttwo.visibility=View.VISIBLE
             mbinding.const1.visibility = View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btThisWeek.visibility = View.GONE
@@ -819,28 +826,29 @@ class HomedemoFragment : Fragment() {
                             mbinding.textViewLocation.visibility = View.VISIBLE
                             mbinding.textViewDate.text = "${convertToDate(date)}"
 
-                            mbinding.textViewTime.text ="${convertToTime(it.NextWorkingDayWaveTime)}"
-                            mbinding.textViewLocation.text ="${nextLoc}"
+                            mbinding.textViewTime.text =
+                                "${convertToTime(it.NextWorkingDayWaveTime)}"
+                            mbinding.textViewLocation.text = "${nextLoc}"
                         } else {
                             mbinding.textViewDate.visibility = View.VISIBLE
                             mbinding.textViewLocation.visibility = View.VISIBLE
                             mbinding.textViewDate.text = "${convertToDate(date)}"
-                            mbinding.textViewTime.text ="-- : --"
-                            mbinding.textViewLocation.text ="${nextLoc}"
+                            mbinding.textViewTime.text = "-- : --"
+                            mbinding.textViewLocation.text = "${nextLoc}"
                         }
                         if (it.NextWorkingDay.isNullOrEmpty() || it.NextWorkingDay.isNullOrEmpty()) {
                             mbinding.textViewDate.visibility = View.GONE
                             mbinding.textViewLocation.visibility = View.GONE
-                            mbinding.textViewTime.text ="Not allocated"
+                            mbinding.textViewTime.text = "Not allocated"
                         }
 
 
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        Log.d("ExceptionHomeDemo",e.printStackTrace().toString())
+                        Log.d("ExceptionHomeDemo", e.printStackTrace().toString())
                         mbinding.textViewDate.visibility = View.GONE
                         mbinding.textViewLocation.visibility = View.GONE
-                        mbinding.textViewTime.text ="Not allocated"
+                        mbinding.textViewTime.text = "Not allocated"
                     }
 
 
@@ -892,8 +900,7 @@ class HomedemoFragment : Fragment() {
 
 
                 }
-            }
-            else {
+            } else {
                 mbinding.viewfullschedule.isClickable = false
                 mbinding.fullscheduleIV.visibility = View.GONE
                 mbinding.viewfullschedule.isEnabled = false
@@ -903,7 +910,7 @@ class HomedemoFragment : Fragment() {
                 mbinding.rlicons.visibility = View.GONE
                 mbinding.textViewDate.visibility = View.GONE
                 mbinding.textViewLocation.visibility = View.GONE
-                mbinding.textViewTime.text ="Not allocated"
+                mbinding.textViewTime.text = "Not allocated"
                 mbinding.yourNext.text = "Your next working day"
 
             }
