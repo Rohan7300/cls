@@ -189,6 +189,7 @@ class CreateTicketsActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val value = s?.toString()
+
                 when (editText.id) {
                     R.id.edt_title -> title = value
                     R.id.edt_des -> desc = value.toString()

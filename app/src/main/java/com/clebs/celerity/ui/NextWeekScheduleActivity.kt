@@ -84,6 +84,10 @@ class NextWeekScheduleActivity : AppCompatActivity() {
             isLoaded = true
             loadingDialog.dismiss()
             if (it != null) {
+
+                binding.viewfulldatalayout.visibility = View.VISIBLE
+                binding.llnodata.visibility = View.GONE
+                binding.rlicons.visibility = View.VISIBLE
                 val currentDate = Calendar.getInstance()
 
                 currentDate.set(Calendar.HOUR_OF_DAY, 0)
@@ -164,37 +168,37 @@ class NextWeekScheduleActivity : AppCompatActivity() {
                     binding.tvIsWorkingShowMonday.text = it.mondayLocation
                     binding.tvIsWorkingShowSat.text = it.saturdayLocation
 
-                    if (it.sundayLocation.equals("OFF")) {
+                    if (it.sundayLocation.equals("OFF")||it.sundayLocation.equals("7th Day Off")) {
                         binding.constsunday.alpha = 0.4f
                     } else {
                         binding.constsunday.alpha = 1f
                     }
-                    if (it.mondayLocation.equals("OFF")) {
+                    if (it.mondayLocation.equals("OFF")||it.mondayLocation.equals("7th Day Off")) {
                         binding.constmonday.alpha = 0.4f
                     } else {
                         binding.constmonday.alpha = 1f
                     }
-                    if (it.tuesdayLocation.equals("OFF")) {
+                    if (it.tuesdayLocation.equals("OFF")||it.tuesdayLocation.equals("7th Day Off")) {
                         binding.consttuesday.alpha = 0.4f
                     } else {
                         binding.consttuesday.alpha = 1f
                     }
-                    if (it.wednesdayLocation.equals("OFF")) {
+                    if (it.wednesdayLocation.equals("OFF")||it.wednesdayLocation.equals("7th Day Off")) {
                         binding.constwed.alpha = 0.4f
                     } else {
                         binding.constwed.alpha = 1f
                     }
-                    if (it.thursdayLocation.equals("OFF")) {
+                    if (it.thursdayLocation.equals("OFF")||it.thursdayLocation.equals("7th Day Off")) {
                         binding.constthu.alpha = 0.4f
                     } else {
                         binding.constthu.alpha = 1f
                     }
-                    if (it.fridayLocation.equals("OFF")) {
+                    if (it.fridayLocation.equals("OFF")||it.fridayLocation.equals("7th Day Off")) {
                         binding.constfri.alpha = 0.4f
                     } else {
                         binding.constfri.alpha = 1f
                     }
-                    if (it.saturdayLocation.equals("OFF")) {
+                    if (it.saturdayLocation.equals("OFF")||it.saturdayLocation.equals("7th Day Off")) {
                         binding.constsat.alpha = 0.4f
                     } else {
                         binding.constsat.alpha = 1f

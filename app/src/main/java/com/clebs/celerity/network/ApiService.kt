@@ -62,6 +62,7 @@ import com.clebs.celerity.models.response.GetDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
+import com.clebs.celerity.models.response.GetDriverWeeklyRewardsInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongDriverFeedbackQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
@@ -950,5 +951,13 @@ interface ApiService {
 
     @GET("/api/Dashboard/GetLatestAppVersion")
     suspend fun GetLatestAppVersion():Response<AppVersionResponse>
+
+    @GET("/api/Drivers/GetDriverWeeklyRewardsInfo")
+    suspend fun GetDriverWeeklyRewardsInfo(
+        @Query("userId") userId: Int,
+        @Query("lmId") lmId:Int,
+        @Query("year") year: Int,
+        @Query("weekNo") weekNo:Int
+    ):Response<GetDriverWeeklyRewardsInfoResponse>
 }
 

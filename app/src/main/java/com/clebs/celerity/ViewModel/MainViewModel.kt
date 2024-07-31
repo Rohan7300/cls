@@ -62,6 +62,7 @@ import com.clebs.celerity.models.response.GetDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
+import com.clebs.celerity.models.response.GetDriverWeeklyRewardsInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongDriverFeedbackQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
@@ -209,6 +210,7 @@ class MainViewModel(
         MutableLiveData<GetDAOutStandingDeductionListResponseItem?>()
     val liveDataGetDriverDeductionHistory = MutableLiveData<GetDriverDeductionHistoryResponse?>()
     val liveDataGetLatestAppVersion = MutableLiveData<AppVersionResponse?>()
+    val liveDataDriverWeeklyRewardsInfo = MutableLiveData<GetDriverWeeklyRewardsInfoResponse?>()
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
@@ -1996,6 +1998,21 @@ class MainViewModel(
                 liveDataGetLatestAppVersion.postValue(null)
             else
                 liveDataGetLatestAppVersion.postValue(response.body)
+        }
+    }
+
+    fun GetDriverWeeklyRewardsInfo(
+        userID: Int,
+        lmId: Int,
+        year: Int,
+        weekNo: Int
+    ) {
+        viewModelScope.launch {
+            val response = repo.GetDriverWeeklyRewardsInfo(userID, lmId, year, weekNo)
+            if (response.failed || !response.isSuccessful)
+                liveDataDriverWeeklyRewardsInfo.postValue(null)
+            else
+                liveDataDriverWeeklyRewardsInfo.postValue(response.body)
         }
     }
 

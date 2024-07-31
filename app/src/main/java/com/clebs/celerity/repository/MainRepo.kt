@@ -57,6 +57,7 @@ import com.clebs.celerity.models.response.GetDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponse
 import com.clebs.celerity.models.response.GetDriverRouteInfoByDateResponseItem
 import com.clebs.celerity.models.response.GetDriverSignatureInformationResponse
+import com.clebs.celerity.models.response.GetDriverWeeklyRewardsInfoResponse
 import com.clebs.celerity.models.response.GetRideAlongDriverFeedbackQuestionResponse
 import com.clebs.celerity.models.response.GetRideAlongDriversListResponse
 import com.clebs.celerity.models.response.GetRideAlongLeadDriverQuestionResponse
@@ -1763,6 +1764,17 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun GetLatestAppVersion():SimpleNetworkResponse<AppVersionResponse>{
         return safeApiCall {
             ApiService.GetLatestAppVersion()
+        }
+    }
+
+    suspend fun GetDriverWeeklyRewardsInfo(
+        userID: Int,
+        lmId:Int,
+        year:Int,
+        weekNo:Int
+    ):SimpleNetworkResponse<GetDriverWeeklyRewardsInfoResponse>{
+        return safeApiCall {
+            ApiService.GetDriverWeeklyRewardsInfo(userID,lmId,year,weekNo)
         }
     }
 }
