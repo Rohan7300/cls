@@ -48,7 +48,6 @@ class FinalAssesmentFragment : Fragment() {
             }
         }
 
-
         binding.cancelBtn.setOnClickListener {
             findNavController().navigate(R.id.newCompleteTaskFragment)
             findNavController().clearBackStack(R.id.newCompleteTaskFragment)
