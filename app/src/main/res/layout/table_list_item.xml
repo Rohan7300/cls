@@ -1,42 +1,94 @@
-<com.google.android.material.card.MaterialCardView
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:strokeColor="#AFEEFA"
-    app:strokeWidth="0.5dp">
-    <LinearLayout
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardWhite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        app:strokeColor="#AFEEFA"
+        app:strokeWidth="0.5dp">
 
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rewardTitle"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:layout_marginEnd="5dp"
-            android:textSize="12sp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/poppins_semibold"
-            android:text="---" />
-        <View
-            android:layout_width="0.5dp"
-            android:layout_height="match_parent"
-            android:background="#AFEEFA" />
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-        <TextView
-            android:layout_width="0dp"
+            <TextView
+                android:id="@+id/rewardTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_semibold"
+                android:gravity="left"
+                android:text="---"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="#AFEEFA" />
+
+            <TextView
+                android:id="@+id/rewardValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins"
+                android:gravity="left"
+                android:text="----"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cardBlue"
+        android:backgroundTint="#C4F3EF"
+        app:strokeColor="#AFEEFA"
+        app:strokeWidth="0.5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:layout_marginStart="5dp"
-            android:id="@+id/rewardValue"
-            android:textSize="12sp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/poppins"
-            android:text="----" />
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/rewardTitleblue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_semibold"
+                android:gravity="left"
+                android:text="---"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="#AFEEFA" />
+
+            <TextView
+                android:id="@+id/rewardValueblue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins"
+                android:gravity="left"
+                android:text="----"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>

@@ -51,7 +51,7 @@
                     android:layout_weight="1"
                     android:textAlignment="center"
                     android:fontFamily="@font/poppins"
-                    android:text="Celebrity LS Delivery Driver training Record"
+                    android:text="Celerity LS Delivery Driver training Record"
                     android:textSize="13sp" />
 
                 <ImageView
@@ -135,7 +135,7 @@
                     android:layout_width="wrap_content"
                     android:textSize="12dp"
                     android:layout_height="wrap_content"
-                    android:text="Final Assessment" />
+                    android:text="Ride-along Assessment" />
             </com.google.android.material.tabs.TabLayout>
 
             <androidx.viewpager.widget.ViewPager

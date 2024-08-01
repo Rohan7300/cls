@@ -63,7 +63,7 @@
     android:layout_height="wrap_content"
     android:text="CLS Deductions"
     android:padding="10dp"
-    android:textColor="@color/black"
+    android:textColor="@color/white"
     android:fontFamily="@font/poppins_bold"
     android:background="@color/medium_orange"
     />
@@ -85,7 +85,7 @@
             android:text="Third Party Deductions"
             android:id="@+id/thridPartyTv"
             android:padding="10dp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:fontFamily="@font/poppins_bold"
             android:background="@color/medium_orange"
             />

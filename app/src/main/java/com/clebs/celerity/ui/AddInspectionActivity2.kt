@@ -625,7 +625,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     else   if (msg.equals("Vehicle not in fleet list")){
                         Toast.makeText(this, "Missing vehicle parameters. “Null” argument detected. Contact Transport /IT department.", Toast.LENGTH_SHORT).show()
                     }
-
                     Log.d("CQSDKXX", "Not isStarted4  " + msg)
                 }
                 if (msg == "Success") {
@@ -636,9 +635,9 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                 }
                 if (!isStarted) {
                     Log.e("startedinspection", "onCreateView: $msg$isStarted")
-                    if (msg.equals("Vehicle not in fleet list")){
+                   /* if (msg.equals("Vehicle not in fleet list")){
                         Toast.makeText(this, "Missing vehicle parameters. “Null” argument detected. Contact Transport /IT department.", Toast.LENGTH_SHORT).show()
-                    }
+                    }*/
                 }
             })
 //                cqSDKInitializer.checkUserFlowBasedQuoteCreationFeasibility(

@@ -88,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:fontFamily="@font/poppins"
-                    android:text="[DS] Development Required  "
+                    android:text="[DR] Development Required  "
                     android:textSize="14sp" />
 
                 <RadioButton

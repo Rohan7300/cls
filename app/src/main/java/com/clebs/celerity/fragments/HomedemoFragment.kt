@@ -408,12 +408,12 @@ class HomedemoFragment : Fragment() {
             mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.VISIBLE
 
-            mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(
+    /*        mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(
                 R.drawable.baseline_keyboard_arrow_left_24,
                 0,
                 0,
                 0
-            );
+            );*/
             mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility = View.VISIBLE
             mbinding.btNext.visibility = View.GONE

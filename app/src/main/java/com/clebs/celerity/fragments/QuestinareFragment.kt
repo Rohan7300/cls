@@ -64,13 +64,11 @@ class QuestinareFragment : Fragment() {
             //"Going On",
             "Driving Ability Assessment",
             //"Return",
-            "Final Assessment"
+            "Ride-along Assessment"
         )
-        val str = "Observations and explanations must be conducted on a" +
-                " Nursery Level 1 route. The new driver should make at least 50 unassisted deliveries," +
-                " before being considered as fully trained. Where an individual is identified as not ready" +
-                " the On Site Manager must be made aware of the concerns and the development path to competency" +
-                " before the individual will be allowed to take a route out on their own. All sections must be completed."
+        val str = "Observations and explanations must be conducted on a Nursery Level 1 route. Drivers need to be made aware they " +
+                "are being assessed on their driving ability and need to be informed of the no reversing policy in force, always parallel " +
+                "park for safety and the roundabout competence by using the correct lane.\n"
 
         binding.hh1.setOnClickListener() {
             val orignalParams = binding.hiddenText.layoutParams
@@ -102,7 +100,7 @@ class QuestinareFragment : Fragment() {
         for (i in headingList.indices) {
             binding.tablay.getTabAt(i)?.text = headingList[i]
         }
-        binding.tablay!!.selectTab( binding.tablay.getTabAt(0))
+        binding.tablay!!.selectTab(binding.tablay.getTabAt(0))
         binding.tablay!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 binding.viewPager!!.currentItem = tab.position

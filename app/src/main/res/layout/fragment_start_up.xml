@@ -30,7 +30,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="30dp"
             android:fontFamily="@font/poppins_semibold"
-            android:text="Comment*"
+            android:text="Comments*"
             android:textColor="#675D5D"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/poppins"
-                android:hint="Enter Comment"
+                android:hint="Enter Comments"
                 android:background="@android:color/transparent"
                 android:backgroundTint="@android:color/transparent"
                 android:importantForAutofill="no"

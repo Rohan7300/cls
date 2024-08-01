@@ -41,7 +41,7 @@ class StartUp : Fragment() {
             QuestionWithOption("eMentor (every working day log in; start trip & end trip; speeding; FiCO score) *"),
             QuestionWithOption("DVIC (pre and post trip checks) *"),
             QuestionWithOption("Use of trollies, cages, bags *"),
-            QuestionWithOption("Yard Safety *"),
+            QuestionWithOption("Yard safety *"),
             QuestionWithOption("Loading vehicle safely *")
         )
         pref = Prefs.getInstance(requireContext())
@@ -59,6 +59,7 @@ class StartUp : Fragment() {
                 if (it != null) {
                     viewModel.currentViewPage.postValue(1)
                     pref.quesID = it.QuestionId
+                    if(pref.qStage<1)
                     pref.qStage = 1
                 }
             }

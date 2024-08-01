@@ -82,7 +82,7 @@ class DeliveryProcedures : Fragment() {
         }
 
         binding.deliverSaveBtn.setOnClickListener {
-            if (pref.qStage <1 || pref.quesID == 0) {
+            if (pref.qStage < 1 || pref.quesID == 0) {
                 showToast("Please complete previous assessment first", requireContext())
             } else {
                 val allQuestionsSelected = adapter.areAllQuestionsSelected()
@@ -92,10 +92,10 @@ class DeliveryProcedures : Fragment() {
                     val selectedOptions = questions.map { it.selectedOption }
                     saveDeliveryProcedureApi(selectedOptions, comment)
                 } else {
-                    if(binding.etDeliveryComment.text.isNullOrEmpty())
-                    showToast("Please add comment before submitting.", requireContext())
+                    if (binding.etDeliveryComment.text.isNullOrEmpty())
+                        showToast("Please add comment before submitting.", requireContext())
                     else
-                    showToast("Please select answer to all questions.", requireContext())
+                        showToast("Please select answer to all questions.", requireContext())
                 }
             }
         }

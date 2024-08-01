@@ -6,10 +6,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -24,6 +26,7 @@ import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.databinding.FragmentWindScreenBinding
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.ImageTakerActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getLoc
@@ -53,6 +56,7 @@ class WindScreenFragment : Fragment() {
     var imageEntity = ImageEntity()
     private lateinit var photoFile: File
     var timeStamp = "FileWindDefect"
+    lateinit var bubbleShowCase:BubbleShowCase
     private lateinit var photoURI: Uri
     lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
@@ -71,11 +75,10 @@ class WindScreenFragment : Fragment() {
 
         val vm_id = arguments?.get("vm_mileage")
         Log.e("vmvmvmv", "onCreateView: $vm_id")
-        BubbleShowCaseBuilder(requireActivity())//Activity instance
+      bubbleShowCase = BubbleShowCaseBuilder(requireActivity())//Activity instance
             .title("Wind screen") //Any title for the bubble view
             .description("Provide Vehicle information") //More detailed description
             .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
-
             //You can force the position of the arrow to change the location of the bubble.
             .backgroundColor((requireContext().getColor(R.color.very_light_orange)))
             //Bubble background color
@@ -84,7 +87,6 @@ class WindScreenFragment : Fragment() {
             .descriptionTextSize(12) //Subtitle text size in SP (default value 14sp)
             .image(requireContext().resources.getDrawable(R.drawable.windscreen_ic)!!) //Bubble main image
             .closeActionImage(requireContext().resources.getDrawable(R.drawable.cross)!!) //Custom close action image
-
             .listener(
                 (object : BubbleShowCaseListener { //Listener for user actions
                     override fun onTargetClick(bubbleShowCase: BubbleShowCase) {
@@ -106,11 +108,18 @@ class WindScreenFragment : Fragment() {
                         bubbleShowCase.dismiss()
                         //Called when the user clicks on the background dim
                     }
+
                 })
-            ).targetView(mbinding.lln).showOnce("1")
+            )
+            .targetView(mbinding.lln)
+            .showOnce("1")
             .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE)
-            .backgroundColor(resources.getColor(R.color.very_light_orange)) //View to point out
-            .show().finishSequence()
+            .backgroundColor(resources.getColor(R.color.very_light_orange)).show()
+        //View to point out
+
+        bubbleShowCase.finishSequence()
+
+
         viewModel = (activity as HomeActivity).viewModel
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.windScreenFragment)
         mbinding.tvNext.visibility = View.GONE
@@ -119,14 +128,29 @@ class WindScreenFragment : Fragment() {
         imageViewModel.images.value.let {
             if (it != null) {
                 if (it.dfNameWindScreen!!.isNotEmpty() && it.dfNameWindScreen != "f") {
-                    setImageView(mbinding.windScreenIV, it.inWindScreen.toString(),requireContext())
+                    setImageView(
+                        mbinding.windScreenIV,
+                        it.inWindScreen.toString(),
+                        requireContext()
+                    )
                     mbinding.edtDefect.setText(it.dfNameWindScreen.toString())
                     mbinding.tvNext.isEnabled = (mbinding.edtDefect.text?.length!! > 0)
-                    if (mbinding.edtDefect.text?.length!! > 0) defectName = mbinding.edtDefect.text?.toString()
+                    if (mbinding.edtDefect.text?.length!! > 0) defectName =
+                        mbinding.edtDefect.text?.toString()
                     if (mbinding.tvNext.isEnabled) {
-                        mbinding.tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        mbinding.tvNext.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.white
+                            )
+                        )
                     } else {
-                        mbinding.tvNext.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange))
+                        mbinding.tvNext.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.orange
+                            )
+                        )
                     }
                 }
             }
@@ -188,6 +212,19 @@ class WindScreenFragment : Fragment() {
             mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
         }
 
+        mbinding.root.setOnKeyListener { v, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN) {
+                try {
+                    bubbleShowCase.dismiss()
+                }catch (_:Exception){
+
+                }
+                true
+            } else {
+                false
+            }
+        }
+
 
         Log.d("Check ", imageViewModel.images.toString())
 
@@ -208,6 +245,17 @@ class WindScreenFragment : Fragment() {
         mbinding.imageRadioTwo.setOnClickListener {
             edtMil2()
         }
+
+        (activity as HomeActivity).onBackPressedDispatcher.addCallback(requireActivity(), object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                try {
+                    mbinding.headerTop.dxLoc.performClick()
+                    mbinding.lln.performClick()
+                    DependencyProvider.comingFromViewTickets = true
+                } catch (_: Exception) {
+                }
+            }
+        })
 
         mbinding.run {
             edtDefect.doAfterTextChanged {
@@ -372,30 +420,31 @@ class WindScreenFragment : Fragment() {
     }
 
     private fun showPictureDialog() {
-/*        val storageDir =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        if (!storageDir.exists()) {
-            storageDir.mkdirs()
-        }
-        val m_intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val uniqueFileName = "Defect_$timeStamp.jpg"
-        photoFile = File(storageDir, uniqueFileName)
-        photoURI = getFileUri(photoFile, (activity as HomeActivity))
-        m_intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-        startActivityForResult(m_intent, 101)*/
-        val imageTakerActivityIntent  =Intent(requireContext(), ImageTakerActivity::class.java)
+        /*        val storageDir =
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                if (!storageDir.exists()) {
+                    storageDir.mkdirs()
+                }
+                val m_intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                val uniqueFileName = "Defect_$timeStamp.jpg"
+                photoFile = File(storageDir, uniqueFileName)
+                photoURI = getFileUri(photoFile, (activity as HomeActivity))
+                m_intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(m_intent, 101)*/
+        val imageTakerActivityIntent = Intent(requireContext(), ImageTakerActivity::class.java)
         resultLauncher.launch(imageTakerActivityIntent)
     }
+
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 try {
                     val data = result.data
-                    if(data!=null){
+                    if (data != null) {
                         val outputUri = data.getStringExtra("outputUri")
                         if (outputUri != null) {
                             photoURI = outputUri.toUri()
-                            setImageView(mbinding.windScreenIV, outputUri,requireContext())
+                            setImageView(mbinding.windScreenIV, outputUri, requireContext())
                             base64 = photoURI.toString()
                         }
                     }
@@ -405,14 +454,14 @@ class WindScreenFragment : Fragment() {
                 }
             }
         }
-/*    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-            base64 = photoURI.toString()
-            setImageView(mbinding.windScreenIV, base64.toString(),requireContext())
-            Log.d("WindScreenFragment", "Base64 : ${base64!!.take(50)}")
-        }
-    }*/
+    /*    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+            super.onActivityResult(requestCode, resultCode, data)
+            if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+                base64 = photoURI.toString()
+                setImageView(mbinding.windScreenIV, base64.toString(),requireContext())
+                Log.d("WindScreenFragment", "Base64 : ${base64!!.take(50)}")
+            }
+        }*/
 
     private fun tvNextColorUpdate() {
         if (mbinding.tvNext.isEnabled) {
@@ -462,5 +511,15 @@ class WindScreenFragment : Fragment() {
         imageViewModel.insertDefectName(imageEntity)
         loadingDialog.show()
         navigateTo(R.id.windowsGlassFragment)
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        try {
+            bubbleShowCase.dismiss()
+        }catch (_:Exception){
+
+        }
     }
 }

@@ -378,9 +378,9 @@
                         android:id="@+id/pieChart"
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
-                        android:elevation="30dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
+                        android:elevation="30dp"
                         android:paddingBottom="10dp"
                         android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -879,7 +879,7 @@
 
                         <TextView
                             android:id="@+id/bt_prev"
-                            android:layout_width="150dp"
+                            android:layout_width="130dp"
                             android:layout_height="wrap_content"
                             android:background="#00D8CB"
                             android:drawableLeft="@drawable/baseline_keyboard_double_arrow_left_24"
@@ -896,15 +896,15 @@
 
                         <TextView
                             android:id="@+id/bt_prev_second"
-                            android:layout_width="150dp"
+                            android:layout_width="140dp"
                             android:layout_height="wrap_content"
                             android:background="#00D8CB"
                             android:drawableTint="@color/white"
                             android:fontFamily="@font/poppins_semibold"
-                            android:gravity="center"
+                            android:gravity="center_vertical"
+                            android:drawableStart="@drawable/baseline_keyboard_arrow_left_24"
+                            android:paddingHorizontal="6dp"
                             android:paddingVertical="6dp"
-                            android:paddingStart="6dp"
-                            android:paddingEnd="9dp"
                             android:text="Previous Week"
                             android:textColor="@color/white"
                             android:textSize="11sp"
@@ -928,7 +928,7 @@
 
                         <TextView
                             android:id="@+id/bt_next"
-                            android:layout_width="150dp"
+                            android:layout_width="130dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:background="#00D8CB"
@@ -948,7 +948,7 @@
 
                         <TextView
                             android:id="@+id/bt_this_week"
-                            android:layout_width="150dp"
+                            android:layout_width="130dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:background="@drawable/home_button_shape"
@@ -957,9 +957,8 @@
                             android:drawableTint="@color/white"
                             android:fontFamily="@font/poppins_semibold"
                             android:gravity="center"
+                            android:paddingHorizontal="6dp"
                             android:paddingVertical="6dp"
-                            android:paddingStart="9dp"
-                            android:paddingEnd="5dp"
                             android:text="Next Week"
                             android:textColor="@color/white"
                             android:textSize="11sp"

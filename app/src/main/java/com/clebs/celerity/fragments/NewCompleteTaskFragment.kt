@@ -68,6 +68,9 @@ import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.toRequestBody
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.crashlytics.crashlytics
 import com.tapadoo.alerter.Alerter
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import okhttp3.MultipartBody
@@ -165,7 +168,7 @@ class NewCompleteTaskFragment : Fragment() {
         oSyncViewModel = (activity as HomeActivity).oSyncViewModel
         prefs = Prefs.getInstance(requireContext())
         clebUserID = Prefs.getInstance(requireContext()).clebUserId.toInt()
-        (activity as HomeActivity).ActivityHomeBinding.title.text = ""
+        (activity as HomeActivity).ActivityHomeBinding.title.text = "Routes"
         mbinding.rlcomtwoBreak.setOnClickListener(clickListener)
         mbinding.addBreakIV.setOnClickListener(clickListener)
 
@@ -810,18 +813,35 @@ class NewCompleteTaskFragment : Fragment() {
         print("endtime $endTime")
 
         // Use 12-hour format with AM/PM
-        val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
+
 
         return try {
+            val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
             val start = sdf.parse(startTime)
             val end = sdf.parse(endTime)
 
             if (start != null && end != null) {
-                start.before(end)
+                if(start.before(end))
+                    true
+                else{
+                    Firebase.crashlytics.recordException(Throwable("CTE1: Start Time more than end time"))
+                    Firebase.crashlytics.log("CheckTimeException1: Start Time more than end time")
+                    FirebaseCrashlytics.getInstance().log("CheckTimeException Start Time more than end time")
+                    FirebaseCrashlytics.getInstance().recordException(Throwable("CTE1: Start Time more than end time"))
+                    false
+                }
             } else {
+                Firebase.crashlytics.recordException(Throwable("CTE2: Start Time end time null"))
+                Firebase.crashlytics.log("CheckTimeException Start Time end time null")
+                FirebaseCrashlytics.getInstance().log("CheckTimeException Start Time end time null")
+                FirebaseCrashlytics.getInstance().recordException(Throwable("CTE2: Start Time end time null"))
                 false
             }
         } catch (e: ParseException) {
+            Firebase.crashlytics.recordException(e)
+            Firebase.crashlytics.log("CheckTimeException3: $e")
+            FirebaseCrashlytics.getInstance().log("CheckTimeException3: $e")
+            FirebaseCrashlytics.getInstance().recordException(e)
             e.printStackTrace()
             false
         }

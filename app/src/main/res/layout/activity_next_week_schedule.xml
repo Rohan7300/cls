@@ -432,7 +432,7 @@
                 android:id="@+id/prev"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/back"
+                android:src="@drawable/baseline_arrow_circle_left_24"
                 app:tint="@color/white" />
 
             <TextView
@@ -450,7 +450,7 @@
                 android:id="@+id/next"
                 android:layout_width="27dp"
                 android:layout_height="27dp"
-                android:src="@drawable/next"
+                android:src="@drawable/baseline_arrow_circle_right_24"
                 app:tint="@color/white" />
 
             <View

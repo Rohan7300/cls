@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.R
 import com.clebs.celerity.models.MovieModel
 import com.clebs.celerity.models.RewardsModel
+import com.google.android.material.card.MaterialCardView
 import com.kotlinpermissions.notNull
 import kotlin.math.ceil
 
@@ -27,7 +28,7 @@ class TableViewAdapter(var context: Context, var rewardList: ArrayList<RewardsMo
 
     override fun onBindViewHolder(holder: RowViewHolder, position: Int) {
         val rowPos = rewardList[position]
-        holder.bind(rowPos)
+        holder.bind(rowPos,position)
     }
 
     override fun getItemCount(): Int {
@@ -35,9 +36,18 @@ class TableViewAdapter(var context: Context, var rewardList: ArrayList<RewardsMo
     }
 
     inner class RowViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item:RewardsModel){
-            itemView.findViewById<TextView>(R.id.rewardTitle).text = item.title
-            itemView.findViewById<TextView>(R.id.rewardValue).text = item.value
+        fun bind(item:RewardsModel,position: Int){
+            if(position%2==0){
+                itemView.findViewById<MaterialCardView>(R.id.cardWhite).visibility = View.VISIBLE
+                itemView.findViewById<MaterialCardView>(R.id.cardBlue).visibility = View.GONE
+                itemView.findViewById<TextView>(R.id.rewardTitle).text = item.title
+                itemView.findViewById<TextView>(R.id.rewardValue).text = item.value
+            }else{
+                itemView.findViewById<MaterialCardView>(R.id.cardWhite).visibility = View.GONE
+                itemView.findViewById<MaterialCardView>(R.id.cardBlue).visibility = View.VISIBLE
+                itemView.findViewById<TextView>(R.id.rewardTitleblue).text = item.title
+                itemView.findViewById<TextView>(R.id.rewardValueblue).text = item.value
+            }
         }
 
     }

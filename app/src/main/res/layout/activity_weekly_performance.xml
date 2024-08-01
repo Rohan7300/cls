@@ -39,9 +39,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableRight="@drawable/baseline_auto_graph_24"
                     android:drawablePadding="10dp"
-                    android:drawableTint="@color/white"
                     android:gravity="center"
                     android:padding="16dp"
                     android:text="Weekly Performance"
@@ -49,14 +47,13 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/mainLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/mainLayout"
             android:orientation="vertical"
             android:padding="0dp">
 
@@ -69,59 +66,61 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#E4FBF8"
-                    android:visibility="gone"
+                    android:background="#00D8CB"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="10dp"
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/poppins_semibold"
-                        android:gravity="center"
-                        android:text="Field"
+                        android:gravity="left"
+                        android:text="Metric"
                         android:textColor="@color/black" />
 
                     <View
-                        android:layout_width="1dp"
+                        android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:background="@color/black" />
+                        android:background="#AFEEFA" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/poppins_semibold"
-                        android:gravity="center"
-                        android:text="Value"
+                        android:gravity="left"
+                        android:text="Score"
                         android:textColor="@color/black" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/rewardsRV"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:visibility="gone"
-    android:id="@+id/nodataLayout"
-    >
-    <include
-        layout="@layout/no_data_layout"
-        />
-</LinearLayout>
+        <LinearLayout
+            android:id="@+id/nodataLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone">
+
+            <include layout="@layout/no_data_layout" />
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/linearLayout9"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_rectangle_blue"
+            android:background="#F1550D"
             android:orientation="horizontal">
+
             <ImageView
                 android:id="@+id/prev"
                 android:layout_width="28dp"
@@ -130,16 +129,65 @@
                 android:src="@drawable/baseline_arrow_circle_left_24"
                 app:tint="@color/white" />
 
-            <TextView
-                android:id="@+id/weekNoTV"
+            <View
+                android:id="@+id/placeHolderViewLeft"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_margin="16dp"
+                android:visibility="gone" />
+
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:fontFamily="@font/cq_sdk_poppins_bold"
-                android:gravity="center"
-                android:text="Week no."
-                android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:gravity="center">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/weekSpinner"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint=""
+                        android:textColorHint="#11FFFFFF"
+                        android:visibility="visible"
+                        app:boxBackgroundColor="#00FFFFFF"
+                        app:boxStrokeWidth="0dp"
+                        app:expandedHintEnabled="false">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/selectWeekET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#00FFFFFF"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:hint=""
+                            android:importantForAutofill="no"
+                            android:inputType="none"
+                            android:paddingVertical="6dp"
+                            android:text=""
+                            android:textColor="#00FFFFFF"
+                            android:textColorHint="#00FFFFFF"
+                            android:textSize="11sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/weekNoTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/cq_sdk_poppins_bold"
+                        android:gravity="center"
+                        android:text="Week ."
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </FrameLayout>
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/next"
@@ -149,6 +197,12 @@
                 android:src="@drawable/baseline_arrow_circle_right_24"
                 app:tint="@color/white" />
 
+            <View
+                android:id="@+id/placeHolderViewRight"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_margin="16dp"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 

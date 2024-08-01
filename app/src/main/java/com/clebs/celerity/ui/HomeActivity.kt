@@ -81,6 +81,7 @@ import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.vehicleExpiringDocuments
 import com.clebs.celerity.utils.weeklyLocationRota
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -311,6 +312,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     try {
                         val prefs = Prefs.getInstance(applicationContext)
                         val fragmentStack = prefs.getNavigationHistory()
+
                         if (prefs.get("90days")
                                 .equals("1") && navController.currentDestination?.id == R.id.profileFragment
                         ) {
