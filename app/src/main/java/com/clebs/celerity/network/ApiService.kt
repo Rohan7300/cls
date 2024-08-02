@@ -959,5 +959,11 @@ interface ApiService {
         @Query("year") year: Int,
         @Query("weekNo") weekNo:Int
     ):Response<GetDriverWeeklyRewardsInfoResponse>
+
+    @GET("/api/Drivers/TrackErrorLog")
+    suspend fun TrackErrorLog(
+        @Query("userId") userId:Int,
+        @Query("message") message:String
+    ):Response<SimpleStatusMsgResponse>
 }
 

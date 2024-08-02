@@ -277,7 +277,7 @@ class HomedemoFragment : Fragment() {
 
         Observers()
         mbinding.btPrev.setOnClickListener {
-            mbinding.consttwo.visibility=View.VISIBLE
+            mbinding.consttwo.visibility = View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.VISIBLE
@@ -349,7 +349,7 @@ class HomedemoFragment : Fragment() {
         }
         mbinding.btPrevSecond.setOnClickListener {
             currWeek
-            mbinding.consttwo.visibility=View.VISIBLE
+            mbinding.consttwo.visibility = View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.GONE
@@ -403,17 +403,17 @@ class HomedemoFragment : Fragment() {
         }
 
         mbinding.btNext.setOnClickListener {
-            mbinding.consttwo.visibility=View.VISIBLE
+            mbinding.consttwo.visibility = View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btPrev.visibility = View.GONE
             mbinding.btPrevSecond.visibility = View.VISIBLE
 
-    /*        mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(
-                R.drawable.baseline_keyboard_arrow_left_24,
-                0,
-                0,
-                0
-            );*/
+            /*        mbinding.btPrevSecond.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.baseline_keyboard_arrow_left_24,
+                        0,
+                        0,
+                        0
+                    );*/
             mbinding.const1.visibility = View.VISIBLE
             mbinding.btThisWeek.visibility = View.VISIBLE
             mbinding.btNext.visibility = View.GONE
@@ -458,7 +458,7 @@ class HomedemoFragment : Fragment() {
 
         }
         mbinding.btThisWeek.setOnClickListener {
-            mbinding.consttwo.visibility=View.VISIBLE
+            mbinding.consttwo.visibility = View.VISIBLE
             mbinding.const1.visibility = View.VISIBLE
             mbinding.viewfulldatalayout.visibility = View.GONE
             mbinding.btThisWeek.visibility = View.GONE
@@ -862,37 +862,37 @@ class HomedemoFragment : Fragment() {
                     mbinding.tvIsWorkingShowMonday.text = it.mondayLocation
                     mbinding.tvIsWorkingShowSat.text = it.saturdayLocation
 
-                    if (it.sundayLocation.equals("OFF")) {
+                    if (it.sundayLocation.equals("OFF") || it.sundayLocation.equals("7th Day Off")) {
                         mbinding.constsunday.alpha = 0.4f
                     } else {
                         mbinding.constsunday.alpha = 1f
                     }
-                    if (it.mondayLocation.equals("OFF")) {
+                    if (it.mondayLocation.equals("OFF") || it.mondayLocation.equals("7th Day Off")) {
                         mbinding.constmonday.alpha = 0.4f
                     } else {
                         mbinding.constmonday.alpha = 1f
                     }
-                    if (it.tuesdayLocation.equals("OFF")) {
+                    if (it.tuesdayLocation.equals("OFF") || it.tuesdayLocation.equals("7th Day Off")) {
                         mbinding.consttuesday.alpha = 0.4f
                     } else {
                         mbinding.consttuesday.alpha = 1f
                     }
-                    if (it.wednesdayLocation.equals("OFF")) {
+                    if (it.wednesdayLocation.equals("OFF") || it.wednesdayLocation.equals("7th Day Off")) {
                         mbinding.constwed.alpha = 0.4f
                     } else {
                         mbinding.constwed.alpha = 1f
                     }
-                    if (it.thursdayLocation.equals("OFF")) {
+                    if (it.thursdayLocation.equals("OFF") || it.thursdayLocation.equals("7th Day Off")) {
                         mbinding.constthu.alpha = 0.4f
                     } else {
                         mbinding.constthu.alpha = 1f
                     }
-                    if (it.fridayLocation.equals("OFF")) {
+                    if (it.fridayLocation.equals("OFF") || it.fridayLocation.equals("7th Day Off")) {
                         mbinding.constfri.alpha = 0.4f
                     } else {
                         mbinding.constfri.alpha = 1f
                     }
-                    if (it.saturdayLocation.equals("OFF")) {
+                    if (it.saturdayLocation.equals("OFF") || it.saturdayLocation.equals("7th Day Off")) {
                         mbinding.constsat.alpha = 0.4f
                     } else {
                         mbinding.constsat.alpha = 1f

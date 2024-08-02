@@ -93,6 +93,7 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.DBImages
 import com.clebs.celerity.utils.Prefs
+import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
@@ -211,6 +212,7 @@ class MainViewModel(
     val liveDataGetDriverDeductionHistory = MutableLiveData<GetDriverDeductionHistoryResponse?>()
     val liveDataGetLatestAppVersion = MutableLiveData<AppVersionResponse?>()
     val liveDataDriverWeeklyRewardsInfo = MutableLiveData<GetDriverWeeklyRewardsInfoResponse?>()
+    val liveDataErrorLog = MutableLiveData<SimpleStatusMsgResponse?>()
     private val _navigateToSecondPage = MutableLiveData<Boolean>()
     val currentViewPage: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
@@ -2013,6 +2015,19 @@ class MainViewModel(
                 liveDataDriverWeeklyRewardsInfo.postValue(null)
             else
                 liveDataDriverWeeklyRewardsInfo.postValue(response.body)
+        }
+    }
+
+    fun TrackErrorLog(
+        userID: Int,
+        message: String
+    ){
+        viewModelScope.launch {
+            val response = repo.TrackErrorLog(userID, message)
+            if (response.failed || !response.isSuccessful)
+                liveDataErrorLog.postValue(null)
+            else
+                liveDataErrorLog.postValue(response.body)
         }
     }
 

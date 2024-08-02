@@ -345,7 +345,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             } else if (navController.currentDestination?.id == R.id.clsinvoices ||
                                 navController.currentDestination?.id == R.id.cls_invoices_third_party
                             ) {
-                                bottomNavigationView.selectedItemId = R.id.invoices
+                                bottomNavigationView.selectedItemId = R.id.invoicesb
                             } else if (fragmentStack.size > 1) {
                                 fragmentStack.pop()
                                 val previousFragment = fragmentStack.peek()
@@ -436,7 +436,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         true
                     }
 
-                    R.id.invoices -> {
+                    R.id.invoicesb -> {
                         ActivityHomeBinding.title.text = "Invoices"
                         ActivityHomeBinding.logout.visibility = View.GONE
                         ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
@@ -492,7 +492,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     }
 
                     R.id.invoices -> {
-                        bottomNavigationView.selectedItemId = R.id.invoices
+                        bottomNavigationView.selectedItemId = R.id.invoicesb
                         /*                        ActivityHomeBinding.title.text = "Invoices"
                                                 ActivityHomeBinding.logout.visibility = View.GONE
                                                 ActivityHomeBinding.imgNotification.visibility = View.VISIBLE
@@ -895,7 +895,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     } else if (navController.currentDestination?.id == R.id.clsinvoices ||
                         navController.currentDestination?.id == R.id.cls_invoices_third_party
                     ) {
-                        bottomNavigationView.selectedItemId = R.id.invoices
+                        bottomNavigationView.selectedItemId = R.id.invoicesb
                     } else if (fragmentStack.size > 1) {
                         fragmentStack.pop()
                         val previousFragment = fragmentStack.peek()

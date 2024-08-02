@@ -901,7 +901,7 @@
                             android:background="#00D8CB"
                             android:drawableTint="@color/white"
                             android:fontFamily="@font/poppins_semibold"
-                            android:gravity="center_vertical"
+                            android:gravity="center"
                             android:drawableStart="@drawable/baseline_keyboard_arrow_left_24"
                             android:paddingHorizontal="6dp"
                             android:paddingVertical="6dp"

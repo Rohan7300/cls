@@ -21,7 +21,7 @@ data class GetDriverWeeklyRewardsInfoResponseItem(
     val RewardSC: Any?=null,
     val RewardTotalScore: Double?=0.00,
     val RewardUserID: Double?=0.00,
-    val RewardWeek: Double?=0.00,
+    val RewardWeek: Int?=0,
     val RewardYear: Double?=0.00,
     val StatusID: Double?=0.00,
     val StatusName: String? = "-",

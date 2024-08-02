@@ -811,7 +811,7 @@ class NewCompleteTaskFragment : Fragment() {
         val endTime = edtBreakend.text.toString()
         print("starttime $startTime")
         print("endtime $endTime")
-
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         // Use 12-hour format with AM/PM
 
 
@@ -824,22 +824,28 @@ class NewCompleteTaskFragment : Fragment() {
                 if(start.before(end))
                     true
                 else{
-                    Firebase.crashlytics.recordException(Throwable("CTE1: Start Time more than end time"))
-                    Firebase.crashlytics.log("CheckTimeException1: Start Time more than end time")
+                    var errorString = "BreakTime CTE-01 : NewCompleteTaskFragment - chkTime\n ElseBlock: Start Time (${startTime}) more than End time ($endTime)"
+                    viewModel.TrackErrorLog(prefs.clebUserId.toInt(),errorString)
+                    Log.d("CTE","Start Time more than end time")
                     FirebaseCrashlytics.getInstance().log("CheckTimeException Start Time more than end time")
-                    FirebaseCrashlytics.getInstance().recordException(Throwable("CTE1: Start Time more than end time"))
+                    FirebaseCrashlytics.getInstance().recordException(RuntimeException("CTE1: Start Time more than end time"))
                     false
                 }
             } else {
-                Firebase.crashlytics.recordException(Throwable("CTE2: Start Time end time null"))
-                Firebase.crashlytics.log("CheckTimeException Start Time end time null")
+                var errorString = "BreakTime CTE-02 : NewCompleteTaskFragment - chkTime\n ElseBlock2: Start Time (${startTime}) OR End Time (${endTime} null"
+                Log.d("CTE","Start Time end time null")
+                viewModel.TrackErrorLog(prefs.clebUserId.toInt(),errorString)
                 FirebaseCrashlytics.getInstance().log("CheckTimeException Start Time end time null")
-                FirebaseCrashlytics.getInstance().recordException(Throwable("CTE2: Start Time end time null"))
+                FirebaseCrashlytics.getInstance().recordException(RuntimeException("CTE2: Start Time end time null"))
                 false
             }
-        } catch (e: ParseException) {
-            Firebase.crashlytics.recordException(e)
-            Firebase.crashlytics.log("CheckTimeException3: $e")
+        } catch (e: Exception) {
+            var errorString = "BreakTime CTE-03 : NewCompleteTaskFragment - chkTime\n CatchBlock: Start Time (${startTime}) : EndTime (${endTime}\n" +
+                    "$e\n${e.localizedMessage} $e"
+            viewModel.TrackErrorLog(prefs.clebUserId.toInt(),errorString)
+            Log.d("CTE","CheckTimeException3 ${e.localizedMessage} $e")
+          //Firebase.crashlytics.recordException(RuntimeException(e))
+            //Firebase.crashlytics.log("CheckTimeException3: $e  ${e.localizedMessage}")
             FirebaseCrashlytics.getInstance().log("CheckTimeException3: $e")
             FirebaseCrashlytics.getInstance().recordException(e)
             e.printStackTrace()

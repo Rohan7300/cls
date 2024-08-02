@@ -1777,4 +1777,13 @@ class MainRepo(private val ApiService: ApiService) {
             ApiService.GetDriverWeeklyRewardsInfo(userID,lmId,year,weekNo)
         }
     }
+
+    suspend fun TrackErrorLog(
+        userID: Int,
+        message:String
+    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.TrackErrorLog(userID,message)
+        }
+    }
 }
