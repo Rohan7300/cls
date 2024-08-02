@@ -872,7 +872,14 @@ fun convertToTime(inputDate: String): String {
         val date = inputFormat.parse(inputDate)
         outputFormat.format(date!!)
     } catch (_: Exception) {
-        " -- : -- "
+        try {
+            val inputFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("hh:mm", Locale.getDefault())
+            val date = inputFormat.parse(inputDate)
+            outputFormat.format(date!!)
+        }catch (_:Exception){
+            " -- : -- "
+        }
     }
 }
 
