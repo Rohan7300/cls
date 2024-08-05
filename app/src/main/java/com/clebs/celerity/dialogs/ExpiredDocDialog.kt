@@ -2,6 +2,7 @@ package com.clebs.celerity.dialogs
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
@@ -11,9 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity.R
 import com.clebs.celerity.adapters.ExpiredDocAdapter
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
+import com.clebs.celerity.ui.CreateTicketsActivity
+import com.clebs.celerity.utils.DependencyProvider.blockCreateTicket
 import com.clebs.celerity.utils.Prefs
+import com.google.android.material.button.MaterialButton
 
-class ExpiredDocDialog(val prefs: Prefs,val rvContext: Context) : DialogFragment() {
+class ExpiredDocDialog(val prefs: Prefs, val rvContext: Context) : DialogFragment() {
 
     var data: GetDAVehicleExpiredDocumentsResponse? = null
     lateinit var expiredRV: RecyclerView
@@ -31,6 +35,11 @@ class ExpiredDocDialog(val prefs: Prefs,val rvContext: Context) : DialogFragment
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             setBackgroundDrawableResource(R.color.semi_transparent_color)
         }
+        val raiseTicketBtn = dialog.findViewById<MaterialButton>(R.id.raiseTicket)
+        raiseTicketBtn.setOnClickListener {
+            blockCreateTicket = true
+            rvContext.startActivity(Intent(rvContext, CreateTicketsActivity::class.java))
+        }
         expiredRV = dialog.findViewById(R.id.expiredRV)
         init()
         return dialog
@@ -38,7 +47,7 @@ class ExpiredDocDialog(val prefs: Prefs,val rvContext: Context) : DialogFragment
 
     fun showDialog(fragmentManager: FragmentManager) {
         val fragment = fragmentManager.findFragmentByTag(TAG)
-        if (!isVisible && fragment == null){
+        if (!isVisible && fragment == null) {
             show(fragmentManager, TAG)
         }
     }

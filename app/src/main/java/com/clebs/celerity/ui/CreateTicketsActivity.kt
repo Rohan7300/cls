@@ -13,10 +13,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -57,7 +59,7 @@ class CreateTicketsActivity : AppCompatActivity() {
     lateinit var pref: Prefs
     var desc: String? = null
     var uploadWithAttachement: Boolean = false
-    var ticketRegNo:String = "undefined"
+    var ticketRegNo: String = "undefined"
     lateinit var loadingDialog: LoadingDialog
     private var selectedFileUri: Uri? = null
     lateinit var filePart: MultipartBody.Part
@@ -92,21 +94,37 @@ class CreateTicketsActivity : AppCompatActivity() {
         showDialog()
         setInputListener(mbinding.edtTitle)
         setInputListener(mbinding.edtDes)
-        noInternetCheck(this,mbinding.nointernetLL,this)
+        noInternetCheck(this, mbinding.nointernetLL, this)
 
         mbinding.saveTickets.setOnClickListener {
-            if(chkNull()==1){
-                    showUploadDialog()
+            if (chkNull() == 1) {
+                showUploadDialog()
             }
+        }
+
+        if (DependencyProvider.blockCreateTicket) {
+            mbinding.cancel.visibility = View.GONE
+            mbinding.imageViewBack.visibility = View.GONE
+        } else {
+            mbinding.cancel.visibility = View.VISIBLE
+            mbinding.imageViewBack.visibility = View.VISIBLE
         }
 
         mbinding.imageViewBack.setOnClickListener {
             finish()
             //onBackPressed()
         }
-
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (DependencyProvider.blockCreateTicket)
+                    showToast(
+                        "Please submit the Deduction Agreement first!!",
+                        this@CreateTicketsActivity
+                    )
+            }
+        })
         mbinding.tvRegistration.doAfterTextChanged {
-            if(!it.isNullOrEmpty()){
+            if (!it.isNullOrEmpty()) {
                 ticketRegNo = it.toString()
             }
         }
@@ -134,17 +152,17 @@ class CreateTicketsActivity : AppCompatActivity() {
     }
 
     private fun chkNull(): Int {
-        if(selectedDeptID == -1 || selectedRequestTypeID == -1 || title.isNullOrBlank() || desc.isNullOrBlank()|| mbinding.edtDes.text.isNullOrBlank()){
-            if(selectedDeptID == -1)
-                showToast("Department not Selected!!",this)
-            else if(selectedRequestTypeID == -1)
-                showToast("Please add request type!!",this)
-            else if(title.isNullOrBlank())
-                showToast("Please add ticket title!!",this)
-            else if( mbinding.edtDes.text.isNullOrBlank())
-                showToast("Please add ticket description!!",this)
+        if (selectedDeptID == -1 || selectedRequestTypeID == -1 || title.isNullOrBlank() || desc.isNullOrBlank() || mbinding.edtDes.text.isNullOrBlank()) {
+            if (selectedDeptID == -1)
+                showToast("Department not Selected!!", this)
+            else if (selectedRequestTypeID == -1)
+                showToast("Please add request type!!", this)
+            else if (title.isNullOrBlank())
+                showToast("Please add ticket title!!", this)
+            else if (mbinding.edtDes.text.isNullOrBlank())
+                showToast("Please add ticket description!!", this)
             else
-                showToast("Please complete the form first!!",this)
+                showToast("Please complete the form first!!", this)
             return -1
         }
         return 1
@@ -440,7 +458,16 @@ class CreateTicketsActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (DependencyProvider.blockCreateTicket) {
+            showToast(
+                "Please submit the Deduction Agreement first!!",
+                this@CreateTicketsActivity
+            )
+        }
     }
 
 }

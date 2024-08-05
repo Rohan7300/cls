@@ -60,13 +60,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="10dp"
             android:layout_marginVertical="5dp"
+            android:layout_marginStart="10dp"
             android:fontFamily="@font/poppins"
             android:text="Please contact your OSM for more information."
             android:textAlignment="center"
             android:textColor="@color/red"
             android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="5dp"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/poppins"
+            android:text="OR"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="12sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/raiseTicket"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:backgroundTint="@color/medium_orange"
+            android:text="Raise Ticket"
+            android:textColor="@color/text_color"
+            app:strokeColor="@color/black"
+            app:strokeWidth="2dp" />
+
     </LinearLayout>
 
 

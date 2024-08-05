@@ -1108,8 +1108,11 @@ fun showUpdateDialog(context: Context, playStoreUrl: String) {
         dialog.dismiss()
     }
     builder.setCancelable(false)
-    builder.show()
+    val dialog = builder.create()
+    dialog.setCanceledOnTouchOutside(false)
+    dialog.show()
 }
+
 fun isVersionNewer(currentVersion: String, latestVersion: String): Boolean {
     val currentParts = currentVersion.split('.').map { it.toIntOrNull() ?: 0 }
     val latestParts = latestVersion.split('.').map { it.toIntOrNull() ?: 0 }

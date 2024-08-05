@@ -102,7 +102,6 @@ class TicketAdapter(var ticketList: GetUserTicketsResponse, var context: Context
 //        holder.itemView.animation=AnimationUtils.loadAnimation(holder.itemView.context,R.anim.slide_down)
         val item = ticketList.Docs[position]
 
-
         holder.bind(item)
     }
 

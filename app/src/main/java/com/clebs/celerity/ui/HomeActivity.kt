@@ -287,7 +287,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         navController.currentDestination!!.id = R.id.homeFragment
                     } catch (_: Exception) {
 
-                    }/*                    navController.navigate(R.id.homeFragment)
+                    }
+                    /*                    navController.navigate(R.id.homeFragment)
                                         navController.currentDestination!!.id = R.id.homeFragment*/
                 }
             }
@@ -297,9 +298,19 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.liveDataGetDAVehicleExpiredDocuments.observe(this) {
                 if (it != null) {
                     prefs.saveExpiredDocuments(it)
-                    //
                     expiredDocDialog.showDialog(supportFragmentManager)
                     expiredDocDialog.isCancelable = false
+                } else {
+                    viewModel.GetDeductionAgreement(prefs.clebUserId.toInt(), 0)
+                }
+            }
+
+            viewModel.liveDataDeductionAgreement.observe(this) {
+                if (it != null) {
+                    val intent = Intent(this@HomeActivity, DeductionAgreementActivity::class.java)
+                    intent.putExtra("actionID", it.DaDedAggrId)
+                    intent.putExtra("notificationID", 0)
+                    startActivity(intent)
                 }
             }
 
@@ -551,7 +562,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     R.id.logoutNav -> {
                         showAlertLogout()
                     }
-                    R.id.WeeklyPerformanceBtn ->{
+
+                    R.id.WeeklyPerformanceBtn -> {
 
                         startActivity(
                             Intent(
@@ -563,6 +575,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                     R.id.EnableDisableBio -> {
                         if (isLoggedInBio()) {
+                            Prefs.getInstance(this).useBiometric = false
                             val snackbar = Snackbar
                                 .make(
                                     ActivityHomeBinding.drawerLayout,
@@ -583,6 +596,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             menu.setTitle("Enable Biometric")
 
                         } else {
+                            Prefs.getInstance(this).useBiometric = true
                             val snackbar = Snackbar
                                 .make(
                                     ActivityHomeBinding.drawerLayout,

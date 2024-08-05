@@ -165,7 +165,8 @@ class LoginActivity : AppCompatActivity() {
                             loadingDialog.dismiss()
                         }
 
-                    } else {
+                    }
+                    else {
                         ActivityLoginBinding.progressbar.visibility = View.GONE
                         //Toast.makeText(this, "Error in login", Toast.LENGTH_SHORT).show()
                         showErrorDialog(fragmentManager, "LS-01", it.message)

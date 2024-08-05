@@ -684,4 +684,12 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getBoolean("isInspectionIDFailedToUpload",false)
         set(value) = sharedPreferences.edit().putBoolean("isInspectionIDFailedToUpload",value).apply()
 
+    var isBiometricChecked:Boolean
+        get() = sharedPreferences.getBoolean("isBiometricChecked",false)
+        set(value) = sharedPreferences.edit().putBoolean("isBiometricChecked",value).apply()
+
+    var useBiometric:Boolean
+        get() = sharedPreferences.getBoolean("useBiometric",true)
+        set(value) = sharedPreferences.edit().putBoolean("useBiometric",value).apply()
+
 }

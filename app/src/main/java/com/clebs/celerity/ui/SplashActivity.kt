@@ -80,41 +80,10 @@ class SplashActivity : AppCompatActivity() {
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
         if (isGranted) {
-            //showToast("Notification Permission denied",this)
-            if (isLoggedIn()) {
-                if (isBioMetricEnable()) {
-                    if (!isLoggedInBio()) {
-                        BiometricEnableDisableDialog()
-                    } else {
-                        useBiometric()
-                    }
-                }
-                else{
-                    next()
-                }
-//                useBiometric()
-            } else {
-                next()
-            }
-
+            handleLogin()
         } else {
             showToast("Notification Permission is required!!", this)
-            if (isLoggedIn()) {
-                if (isBioMetricEnable()) {
-                    if (!isLoggedInBio()) {
-                        BiometricEnableDisableDialog()
-                    } else {
-                        useBiometric()
-                    }
-                }
-                else{
-                    next()
-                }
-//                useBiometric()
-            } else {
-                next()
-            }
-
+            handleLogin()
         }
     }
 
@@ -124,39 +93,10 @@ class SplashActivity : AppCompatActivity() {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
                 PackageManager.PERMISSION_GRANTED
             ) {
-                if (isLoggedIn()) {
-                    if (isBioMetricEnable()) {
-                        if (!isLoggedInBio()) {
-                            BiometricEnableDisableDialog()
-                        } else {
-                            useBiometric()
-                        }
-                    }else{
-                        next()
-                    }
-
-//                useBiometric()
-                } else {
-                    next()
-                }
-
+                handleLogin()
                 return
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                if (isLoggedIn()) {
-                    if (isBioMetricEnable()) {
-                        if (!isLoggedInBio()) {
-                            BiometricEnableDisableDialog()
-                        } else {
-                            useBiometric()
-                        }
-                    }else{
-                        next()
-                    }
-
-//                useBiometric()
-                } else {
-                    next()
-                }
+                handleLogin()
             } else {
 
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -205,24 +145,13 @@ class SplashActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             askNotificationPermission()
         } else {
-            if (isLoggedIn()) {
-                if (isBioMetricEnable()) {
-                    if (!isLoggedInBio()) {
-                        BiometricEnableDisableDialog()
-                    } else {
-                        useBiometric()
-                    }
-                }else{
-                    next()
-                }
-
-//                useBiometric()
-            } else {
-                next()
-            }
+            handleLogin()
         }
 
 
+        ActivitySplashBinding.unlockBtn.setOnClickListener {
+            useBiometric()
+        }
 
         ActivitySplashBinding.ls.startAnimation(rotateAnimationtwo)
 //        ActivitySplashBinding.imgCircleLogo.startAnimation(rotateAnimation)
@@ -240,7 +169,7 @@ class SplashActivity : AppCompatActivity() {
         mainViewModel.liveDataGetLatestAppVersion.observe(this) {
             val currentAppVersion = getCurrentAppVersion(this)
             if (it != null) {
-                if (isVersionNewer(currentAppVersion,it.AndroidAppVersion)) {
+                if (isVersionNewer(currentAppVersion, it.AndroidAppVersion)) {
                     val playStoreUrl =
                         "https://play.google.com/store/apps/details?id=com.clebs.celerity&hl=en"
                     showUpdateDialog(this, playStoreUrl)
@@ -415,7 +344,8 @@ class SplashActivity : AppCompatActivity() {
                     } else if (errString.contains("Authentication canceled by user")) {
                         BiometricDialog()
                     } else {
-                        next()
+                        useBiometric()
+                        ActivitySplashBinding.unlockBtn.visibility = View.VISIBLE
                     }
 
                 }
@@ -423,8 +353,8 @@ class SplashActivity : AppCompatActivity() {
                 override fun onAuthenticationSucceeded(
                     result: BiometricPrompt.AuthenticationResult
                 ) {
-
                     super.onAuthenticationSucceeded(result)
+                    ActivitySplashBinding.unlockBtn.visibility = View.GONE
                     deleteDialog.dismiss()
                     Toast.makeText(
                         applicationContext,
@@ -437,9 +367,11 @@ class SplashActivity : AppCompatActivity() {
 
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
-                    next()
+                    //next()
+                    useBiometric()
+                    showToast("Authentication Failed",this@SplashActivity)
 
-
+                    ActivitySplashBinding.unlockBtn.visibility = View.VISIBLE
                     Log.e(TAG, "onAuthenticationFailed: ")
 //                    Toast.makeText(
 //                        applicationContext, "Authentication failed",
@@ -503,11 +435,15 @@ class SplashActivity : AppCompatActivity() {
         val biometeric: TextView = view.findViewById(R.id.saveBiono)
 
         biometeric.setOnClickListener {
+            Prefs.getInstance(this).isBiometricChecked = true
+            Prefs.getInstance(this).useBiometric = false
             next()
             deleteDialogtwo.dismiss()
         }
 
         biometric.setOnClickListener {
+            Prefs.getInstance(this).useBiometric = true
+            Prefs.getInstance(this).isBiometricChecked = true
             Toast.makeText(this, "Biometric Auth Enabled", Toast.LENGTH_SHORT).show()
             useBiometric()
             deleteDialogtwo.dismiss()
@@ -559,6 +495,25 @@ class SplashActivity : AppCompatActivity() {
 
         }
         return canAuth
+    }
+
+
+    private fun handleLogin() {
+        if (isLoggedIn()) {
+            if (isBioMetricEnable()) {
+                if (!isLoggedInBio() && !Prefs.getInstance(this).isBiometricChecked) {
+                    BiometricEnableDisableDialog()
+                } else if (Prefs.getInstance(this).useBiometric) {
+                    useBiometric()
+                } else {
+                    next()
+                }
+            } else {
+                next()
+            }
+        } else {
+            next()
+        }
     }
 }
 

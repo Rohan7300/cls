@@ -6,6 +6,8 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity.Factory.MyViewModelFactory
 import com.clebs.celerity.ViewModel.MainViewModel
@@ -54,7 +56,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
             ViewModelProvider(this, MyViewModelFactory(repo))[MainViewModel::class.java]
         loadingDialog = LoadingDialog(this)
         loadingDialog.show()
-        noInternetCheck(this,binding.nointernetLL,this)
+        noInternetCheck(this, binding.nointernetLL, this)
 
         viewmodel.liveDataDeductionAgreement.observe(this) {
             loadingDialog.dismiss()
@@ -78,91 +80,100 @@ class DeductionAgreementActivity : AppCompatActivity() {
         }
         viewmodel.GetDeductionAgreement(pref.clebUserId.toInt(), actionID!!.toInt())
 //        try {
-            Log.d("NOTIFICATIONID","$actionID  $notificationID")
+        Log.d("NOTIFICATIONID", "$actionID  $notificationID")
         val notificationIdX = try {
             parseToInt(actionID.toString()) ?: 0
         } catch (_: Exception) {
             notificationID
         }
-        try{
+        try {
 
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(notificationIdX)
             notificationManager.cancel(notificationID)
-        }catch (_:Exception){
+        } catch (_: Exception) {
 
         }
 
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showToast(
+                    "Please submit the Ticket first!!",
+                    this@DeductionAgreementActivity
+                )
+            }
+        })
 
         binding.rbAcceptClose.setOnClickListener {
-                if (isEnabled) {
-                    type = 0
-                    binding.rbAcceptDispute.isChecked = false
-                    binding.rbAcceptClose.isChecked = true
-                    showSignDialog(type)
-                } else {
-                    showToast("Failed to fetch data!! Pls try again", this)
-                }
+            if (isEnabled) {
+                type = 0
+                binding.rbAcceptDispute.isChecked = false
+                binding.rbAcceptClose.isChecked = true
+                showSignDialog(type)
+            } else {
+                showToast("Failed to fetch data!! Pls try again", this)
+            }
         }
 
         binding.acceptncloseMainLL.setOnClickListener {
-                if (isEnabled) {
-                    type = 0
-                    binding.rbAcceptDispute.isChecked = false
-                    binding.rbAcceptClose.isChecked = true
-                    showSignDialog(type)
-                } else {
-                    showToast("Failed to fetch data!! Pls try again", this)
-                }
+            if (isEnabled) {
+                type = 0
+                binding.rbAcceptDispute.isChecked = false
+                binding.rbAcceptClose.isChecked = true
+                showSignDialog(type)
+            } else {
+                showToast("Failed to fetch data!! Pls try again", this)
+            }
         }
 
         binding.rbAcceptDispute.setOnClickListener {
-                if (isEnabled) {
-                    type = 1
-                    binding.rbAcceptClose.isChecked = false
-                    binding.rbAcceptDispute.isChecked = true
-                    showSignDialog(type)
-                } else {
-                    showToast("Failed to fetch data!! Pls try again", this)
-                }
+            if (isEnabled) {
+                type = 1
+                binding.rbAcceptClose.isChecked = false
+                binding.rbAcceptDispute.isChecked = true
+                showSignDialog(type)
+            } else {
+                showToast("Failed to fetch data!! Pls try again", this)
+            }
         }
 
         binding.AcceptnDisputemainLL.setOnClickListener {
-                if (isEnabled) {
-                    type = 1
-                    binding.rbAcceptClose.isChecked = false
-                    binding.rbAcceptDispute.isChecked = true
-                    showSignDialog(type)
-                } else {
-                    showToast("Failed to fetch data!! Pls try again", this)
-                }
-        }
-
-        binding.backIcon.setOnClickListener {
-            finish()
-        }
-
-     /*   val retry = binding.signSV.RetryLay
-        val save = binding.signSV.sv
-        val testIV = binding.signSV.textIV
-        val drawView = binding.signSV.paintView.drawView
-        if (DrawViewClass.pathList.isNotEmpty())
-            drawView.clearSignature()
-
-        save.setOnClickListener {
-            if (DrawViewClass.pathList.isEmpty()) {
-                showToast("Please sign before saving", this)
+            if (isEnabled) {
+                type = 1
+                binding.rbAcceptClose.isChecked = false
+                binding.rbAcceptDispute.isChecked = true
+                showSignDialog(type)
             } else {
-                val signatureBitmap: Bitmap = drawView.getBitmap()
-                testIV.setImageBitmap(signatureBitmap)
-
-                loadingDialog.show()
-
+                showToast("Failed to fetch data!! Pls try again", this)
             }
         }
-        retry.setOnClickListener {
-            drawView.clearSignature()
-        }*/
+
+        /*        binding.backIcon.setOnClickListener {
+                    finish()
+                }*/
+
+        /*   val retry = binding.signSV.RetryLay
+           val save = binding.signSV.sv
+           val testIV = binding.signSV.textIV
+           val drawView = binding.signSV.paintView.drawView
+           if (DrawViewClass.pathList.isNotEmpty())
+               drawView.clearSignature()
+
+           save.setOnClickListener {
+               if (DrawViewClass.pathList.isEmpty()) {
+                   showToast("Please sign before saving", this)
+               } else {
+                   val signatureBitmap: Bitmap = drawView.getBitmap()
+                   testIV.setImageBitmap(signatureBitmap)
+
+                   loadingDialog.show()
+
+               }
+           }
+           retry.setOnClickListener {
+               drawView.clearSignature()
+           }*/
 
     }
 
@@ -187,8 +198,8 @@ class DeductionAgreementActivity : AppCompatActivity() {
             finish()
             if (it != null) {
 
-            }else{
-                showToast("Something went wrong!!",this)
+            } else {
+                showToast("Something went wrong!!", this)
             }
         }
     }
@@ -207,7 +218,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
                     FromLocation = FromLocation,
                     IsDaDedAggAccepted = true,
                     PaymentKey = PaymentKey,
-                    DisputeComment = disputeDesciption?:"Disputed",
+                    DisputeComment = disputeDesciption ?: "Disputed",
                     Signature = bse64
                 )
             )
@@ -221,8 +232,8 @@ class DeductionAgreementActivity : AppCompatActivity() {
                 finish()
                 if (it != null) {
                     //onBackPressed()
-                }else{
-                    showToast("Something went wrong!!",this)
+                } else {
+                    showToast("Something went wrong!!", this)
                 }
             }
         }
@@ -260,18 +271,25 @@ class DeductionAgreementActivity : AppCompatActivity() {
         )
     }
 
-    private fun showSignDialog(type:Int){
+    private fun showSignDialog(type: Int) {
         val dialog = CustDialogDeduction(type)
         dialog.setSignatureListener(object : DeductionSignatureListener {
             override fun onDeductionSignatureSaved(bitmap: Bitmap, disputeDesciption: String?) {
                 if (type == 0)
                     submitCondition(bitmap)
                 if (type == 1)
-                    disputeCondition(bitmap,disputeDesciption)
+                    disputeCondition(bitmap, disputeDesciption)
             }
         })
 
         dialog.show(supportFragmentManager, "sign")
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        showToast(
+            "Please submit the Ticket first!!",
+            this@DeductionAgreementActivity
+        )
+    }
 }
