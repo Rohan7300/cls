@@ -85,6 +85,7 @@ import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.kotlinpermissions.notNull
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
 import java.text.SimpleDateFormat
@@ -311,6 +312,18 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     intent.putExtra("actionID", it.DaDedAggrId)
                     intent.putExtra("notificationID", 0)
                     startActivity(intent)
+                } else {
+                    viewModel.WeeklyRotaExistForDAApproval(Prefs.getInstance(this@HomeActivity).clebUserId.toInt())
+                }
+            }
+            viewModel.liveDataWeeklyRotaExistForDAApproval.observe(this) {
+                if (it != null) {
+                    it.LrnId[0].notNull {lrn->
+                        val intent = Intent(this@HomeActivity, WeeklyRotaApprovalActivity::class.java)
+                        intent.putExtra("actionID", lrn)
+                        intent.putExtra("notificationID", 0)
+                        startActivity(intent)
+                    }
                 }
             }
 
@@ -353,8 +366,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             ) {
                                 bottomNavigationView.selectedItemId = R.id.daily
                                 prefs.clearNavigationHistory()
-                            } else if (navController.currentDestination?.id == R.id.clsinvoices ||
-                                navController.currentDestination?.id == R.id.cls_invoices_third_party
+                            } else if (navController.currentDestination?.id == R.id.CLSInvoicesFragment ||
+                                navController.currentDestination?.id == R.id.CLSThirdPartyFragment
                             ) {
                                 bottomNavigationView.selectedItemId = R.id.invoicesb
                             } else if (fragmentStack.size > 1) {
@@ -371,7 +384,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     }
 
                     if (doubleBackToExitPressedOnce) {
-                        finish()
+                        finishAffinity()
                     }
 
                     doubleBackToExitPressedOnce = true
@@ -906,8 +919,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     ) {
                         bottomNavigationView.selectedItemId = R.id.daily
                         prefs.clearNavigationHistory()
-                    } else if (navController.currentDestination?.id == R.id.clsinvoices ||
-                        navController.currentDestination?.id == R.id.cls_invoices_third_party
+                    } else if (navController.currentDestination?.id == R.id.CLSInvoicesFragment ||
+                        navController.currentDestination?.id == R.id.CLSThirdPartyFragment
                     ) {
                         bottomNavigationView.selectedItemId = R.id.invoicesb
                     } else if (fragmentStack.size > 1) {

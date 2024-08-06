@@ -37,7 +37,7 @@ class NotificationsFragment : Fragment(), NotificationAdapterCallback {
 
     lateinit var binding: FragmentNotifficationsBinding
     lateinit var viewModel: MainViewModel
-    lateinit var homeActivity: HomeActivity
+    private lateinit var homeActivity: HomeActivity
 
 
     val showDialog: () -> Unit = {
@@ -77,13 +77,14 @@ class NotificationsFragment : Fragment(), NotificationAdapterCallback {
         }
 
         observers()
-        showDialog()
-        viewModel.GetNotificationListByUserId(prefs.clebUserId.toInt())
+
+//        viewModel.GetNotificationListByUserId(prefs.clebUserId.toInt())
         return binding.root
     }
 
     private fun observers() {
         viewModel.livedataGetNotificationListByUserId.observe(viewLifecycleOwner) {
+            hideDialog()
             hideDialog()
             binding.swipeRefreshLayout.isRefreshing = false
             if (it != null) {
@@ -117,6 +118,7 @@ class NotificationsFragment : Fragment(), NotificationAdapterCallback {
 
     override fun onResume() {
         super.onResume()
+        showDialog()
         viewModel.GetNotificationListByUserId(prefs.clebUserId.toInt())
     }
 

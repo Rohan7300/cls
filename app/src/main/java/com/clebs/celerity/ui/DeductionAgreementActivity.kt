@@ -99,7 +99,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 showToast(
-                    "Please submit the Ticket first!!",
+                    "Please submit the Deduction Agreement first!!",
                     this@DeductionAgreementActivity
                 )
             }
@@ -288,7 +288,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         showToast(
-            "Please submit the Ticket first!!",
+            "Please submit the Deduction Agreement first!!",
             this@DeductionAgreementActivity
         )
     }

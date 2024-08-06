@@ -681,11 +681,16 @@ fun showScanErrorDialog(
     dailyWorkFragment: DailyWorkFragment,
     fragmentManager: FragmentManager,
     code: String,
-    msg: String
+    msg: String,
+    context: Context
 ) {
-    val scanDialog: ScanErrorDialog = ScanErrorDialog.newInstance(msg, code)
-    scanDialog.setListener(dailyWorkFragment)
-    scanDialog.show(fragmentManager, ScanErrorDialog.TAG)
+    try {
+        val scanDialog: ScanErrorDialog = ScanErrorDialog.newInstance(msg, code)
+        scanDialog.setListener(dailyWorkFragment)
+        scanDialog.show(fragmentManager, ScanErrorDialog.TAG)
+    }catch (_:Exception){
+        showToast(msg,context)
+    }
 }
 
 
@@ -1102,9 +1107,6 @@ fun showUpdateDialog(context: Context, playStoreUrl: String) {
     builder.setPositiveButton("Update") { dialog, _ ->
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(playStoreUrl))
         context.startActivity(intent)
-        dialog.dismiss()
-    }
-    builder.setNegativeButton("Cancel") { dialog, _ ->
         dialog.dismiss()
     }
     builder.setCancelable(false)

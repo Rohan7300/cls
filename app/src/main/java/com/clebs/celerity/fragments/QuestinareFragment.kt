@@ -109,7 +109,7 @@ class QuestinareFragment : Fragment() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
-                tab.text = tab.contentDescription?.substring(0, 5)
+            //    tab.text = tab.contentDescription?.substring(0, 5)
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {}

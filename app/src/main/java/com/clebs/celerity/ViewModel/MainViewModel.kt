@@ -89,6 +89,7 @@ import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.models.response.VehicleExpiringDocumentsResponse
 import com.clebs.celerity.models.response.WeeklyLocationRotabyIdResponse
+import com.clebs.celerity.models.response.WeeklyRotaExistForDAApprovalResponse
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.DBImages
@@ -185,7 +186,7 @@ class MainViewModel(
     val liveDataApproveWeeklyRota = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataUploadExpiringDocs = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataApproveVehicleAdvancePaymentAgreement = MutableLiveData<SimpleStatusMsgResponse?>()
-    val liveDataWeeklyRotaExistForDAApproval = MutableLiveData<SimpleStatusMsgResponse?>()
+    val liveDataWeeklyRotaExistForDAApproval = MutableLiveData<WeeklyRotaExistForDAApprovalResponse?>()
     val liveDataWeeklyLocationRotabyId = MutableLiveData<WeeklyLocationRotabyIdResponse?>()
     val liveDataMarkNotificationAsRead = MutableLiveData<SimpleStatusMsgResponse?>()
     val liveDataDaDailyLocationRota = MutableLiveData<DaDailyLocationRotaResponse?>()

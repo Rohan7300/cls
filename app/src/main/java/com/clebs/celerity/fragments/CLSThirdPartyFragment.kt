@@ -83,7 +83,7 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
             binding.dateUpdater.setOnClickListener {
                     showYearPicker()
                 }*/
-        findNavController().currentDestination!!.id = R.id.cls_invoices_third_party
+        findNavController().currentDestination!!.id = R.id.CLSThirdPartyFragment
         selectedYear = Year.now().value
         binding.selectYearET.setText(selectedYear.toString())
         showYearPickerNew()

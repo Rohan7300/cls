@@ -84,6 +84,7 @@ import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.models.response.VehicleExpiringDocumentsResponse
 import com.clebs.celerity.models.response.WeeklyLocationRotabyIdResponse
+import com.clebs.celerity.models.response.WeeklyRotaExistForDAApprovalResponse
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.utils.DBImages
 import com.google.gson.Gson
@@ -1315,7 +1316,7 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun WeeklyRotaExistForDAApproval(
         userID: Int
-    ): SimpleNetworkResponse<SimpleStatusMsgResponse> {
+    ): SimpleNetworkResponse<WeeklyRotaExistForDAApprovalResponse> {
         return safeApiCall {
             ApiService.WeeklyRotaExistForDAApproval(userID)
         }

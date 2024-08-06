@@ -64,7 +64,7 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
         homeActivity = (activity as HomeActivity)
         (activity as HomeActivity).ActivityHomeBinding.title.text = "Invoices"
         viewModel = homeActivity.viewModel
-        findNavController().currentDestination!!.id = R.id.clsinvoices
+        findNavController().currentDestination!!.id = R.id.CLSInvoicesFragment
         showDialog()
         selectedYear = Year.now().value
         binding.selectYearET.setText(selectedYear.toString())

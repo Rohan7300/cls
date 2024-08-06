@@ -126,7 +126,6 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
                 handbookID = it.handbookId
                 Prefs.getInstance(this).handbookId = handbookID
                 loadingDialog.dismiss()
-
             } else {
                 handbookID = Prefs.getInstance(this).handbookId
             }

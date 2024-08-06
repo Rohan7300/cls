@@ -622,6 +622,12 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                         showToast("Please Turn on the internet", this)
                         Log.d("CQSDKXX", "Not isStarted3  " + msg)
                     }
+                    else   if (msg.equals("Vehicle not in fleet list")){
+                        showToast("Vehicle not in fleet list.", this)
+                    }else{
+                        showToast("Please Retry", this)
+                        Log.d("CQSDKXX", "Not isStarted3  " + msg)
+                    }
 /*                    else   if (msg.equals("Vehicle not in fleet list")){
                         Toast.makeText(this, "Missing vehicle parameters. “Null” argument detected. Contact Transport /IT department.", Toast.LENGTH_SHORT).show()
                     }*/
@@ -638,6 +644,11 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                    /* if (msg.equals("Vehicle not in fleet list")){
                         Toast.makeText(this, "Missing vehicle parameters. “Null” argument detected. Contact Transport /IT department.", Toast.LENGTH_SHORT).show()
                     }*/
+                    if (msg.equals("Vehicle not in fleet list")){
+                        showToast("Vehicle not in fleet list.", this)
+                        //showToast("Please Retry", this)
+                        Log.d("CQSDKXX", "Not isStarted3  " + msg)
+                    }
                 }
             })
 //                cqSDKInitializer.checkUserFlowBasedQuoteCreationFeasibility(

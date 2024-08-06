@@ -151,18 +151,20 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/weekSpinner"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="95dp"
+                       android:layout_height="wrap_content"
                         android:hint=""
                         android:textColorHint="#11FFFFFF"
+                        app:endIconTint="@color/white"
                         android:visibility="visible"
-                        app:boxBackgroundColor="#00FFFFFF"
                         app:boxStrokeWidth="0dp"
                         app:expandedHintEnabled="false">
 
                         <AutoCompleteTextView
+                            android:backgroundTint="@color/white"
                             android:id="@+id/selectWeekET"
                             android:layout_width="match_parent"
+                            android:dropDownHeight="500dp"
                             android:layout_height="wrap_content"
                             android:background="#00FFFFFF"
                             android:fontFamily="@font/poppins_semibold"
@@ -183,6 +185,7 @@
                         android:layout_height="match_parent"
                         android:fontFamily="@font/cq_sdk_poppins_bold"
                         android:gravity="center"
+
                         android:text="Week ."
                         android:textColor="@color/white"
                         android:textSize="13sp" />

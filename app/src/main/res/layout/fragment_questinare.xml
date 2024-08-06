@@ -92,9 +92,9 @@
                 android:background="@color/white"
                 app:tabIndicatorColor="@color/orange"
                 app:tabMode="scrollable"
-                app:tabMinWidth="100dp"
+                app:tabMinWidth="120dp"
                 app:tabGravity="fill"
-                app:tabMaxWidth="200dp"
+                app:tabMaxWidth="170dp"
                 >
 
  <!--               <com.google.android.material.tabs.TabItem
@@ -108,7 +108,7 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12dp"
+                    android:textSize="11sp"
                     android:text="Start Up" />
 
 <!--
@@ -122,7 +122,7 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12dp"
+                    android:textSize="11sp"
                     android:text="Driving Ability Assessment" />
 
     <!--            <com.google.android.material.tabs.TabItem
@@ -133,7 +133,7 @@
 -->
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
-                    android:textSize="12dp"
+                    android:textSize="11sp"
                     android:layout_height="wrap_content"
                     android:text="Ride-along Assessment" />
             </com.google.android.material.tabs.TabLayout>

@@ -567,7 +567,8 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                                 this@DailyWorkFragment,
                                 fragmentManager,
                                 "DWF-03",
-                                " No VRN found in image.."
+                                " No VRN found in image..",
+                                requireContext()
                             )
 //                        if (loadingDialog.isShowing){
 //                            loadingDialog.dismiss()
@@ -594,7 +595,8 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                         this@DailyWorkFragment,
                         fragmentManager,
                         "DWF-99",
-                        "I/O error, Connection reset by peer"
+                        "I/O error, Connection reset by peer",
+                        requireContext()
                     )
                     Log.d("DailyWException","DailyWorkNetworkException $e")
                 }
@@ -637,7 +639,8 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                     this,
                     fragmentManager,
                     "",
-                    "This Vehicle ${if (vrn.isNotEmpty()) "[$vrn]" else ""} doesn't exist. Please scan again or contact your supervisor."
+                    "This Vehicle ${if (vrn.isNotEmpty()) "[$vrn]" else ""} doesn't exist. Please scan again or contact your supervisor.",
+                    requireContext()
                 )
                 /*     showToast(
                          "Vehicle doesn't exists. Please scan again or contact your supervisor.",

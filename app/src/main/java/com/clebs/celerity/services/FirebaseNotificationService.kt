@@ -29,13 +29,13 @@ import kotlinx.coroutines.launch
 class FirebaseNotificationService : FirebaseMessagingService() {
     val TAG = "FBNotification"
     private lateinit var mainRepo: MainRepo
+    var isNotificationShowing = false
 
     override fun onCreate() {
         super.onCreate()
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         mainRepo = MainRepo(apiService)
     }
-
 
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -65,14 +65,49 @@ class FirebaseNotificationService : FirebaseMessagingService() {
 
         Log.d(TAG, "FCMMessage MessageBody ${message.notification?.body} ")
         Log.d(TAG, "FCMMessage AlertType ${message.data["alertType"]} ")
-        showCustomNotification(
-            title,
-            messageBody,
-            actionToperform,
-            actionID,
-            tokenUrl,
-            notificationId
-        )
+        if (!isNotificationShowing) {
+            showCustomNotification(
+                title,
+                messageBody,
+                actionToperform,
+                actionID,
+                tokenUrl,
+                notificationId
+            )
+            isNotificationShowing = true
+        }
+    }
+
+    override fun handleIntent(intent: Intent?) {
+        isNotificationShowing = false
+        Log.d("TAG", "NewIntent : ${intent!!.extras}")
+        if (intent != null) {
+            val messageBody = intent.extras!!.getString("body") ?: "Notification Message"
+            val title = intent.extras!!.getString("title") ?: "Notification Title"
+            val actionID = intent.extras!!.getString("actionId") ?: "0.0"
+            val actionToperform = intent.extras!!.getString("alertType") ?: "undefined"
+            val tokenUrl = intent.extras!!.getString("gcm.notification.url") ?: "undefined"
+            val notificationId = intent.extras!!.getString("notificationId") ?: "0"
+
+            Log.d(TAG, "message : $messageBody")
+            Log.d(TAG, "title : $title")
+            Log.d(TAG, "actionID : $actionID")
+            Log.d(TAG, "actionToperform : $actionToperform")
+            Log.d(TAG, "tokenUrl : $tokenUrl")
+            Log.d(TAG, "notificationId : $notificationId")
+            if (!isNotificationShowing) {
+                if (notificationId != "0")
+                    showCustomNotification(
+                        title,
+                        messageBody,
+                        actionToperform,
+                        actionID,
+                        tokenUrl,
+                        notificationId
+                    )
+                isNotificationShowing = true
+            }
+        }
     }
 
     override fun onNewToken(token: String) {
@@ -104,16 +139,16 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         tokenUrl: String,
         notificationID: String
     ) {
-        var intent:Intent?= null
+        var intent: Intent? = null
 
-        if(Prefs.getInstance(applicationContext).getBoolean("isLoggedIn", false)){
+        if (Prefs.getInstance(applicationContext).getBoolean("isLoggedIn", false)) {
             intent = Intent(this, HomeActivity::class.java)
             intent.putExtra("destinationFragment", "NotificationsFragment")
             intent.putExtra("actionToperform", actionToPerform)
             intent.putExtra("actionID", actionID)
             intent.putExtra("tokenUrl", tokenUrl)
             intent.putExtra("notificationId", notificationID)
-        }else{
+        } else {
             intent = Intent(this, SplashActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
@@ -175,14 +210,33 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         val remoteViews = RemoteViews(packageName, R.layout.notification_layout)
 
         when (title) {
-            "UserExpiringDocuments" ->  remoteViews.setTextViewText(R.id.title, "User Expiring Documents")
-            "VehicleExpiringDocuments" ->  remoteViews.setTextViewText(R.id.title,"Vehicle Expiring Documents")
-            "ExpiredDocuments" ->  remoteViews.setTextViewText(R.id.title, "Expired Documents")
+            "UserExpiringDocuments" -> remoteViews.setTextViewText(
+                R.id.title,
+                "User Expiring Documents"
+            )
+
+            "VehicleExpiringDocuments" -> remoteViews.setTextViewText(
+                R.id.title,
+                "Vehicle Expiring Documents"
+            )
+
+            "ExpiredDocuments" -> remoteViews.setTextViewText(R.id.title, "Expired Documents")
             "WeeklyRotaApproval" -> remoteViews.setTextViewText(R.id.title, "Weekly Rota Approval")
             "DailyRotaApproval" -> remoteViews.setTextViewText(R.id.title, "Daily Rota Approval")
-            "InvoiceReadyToReview" ->  remoteViews.setTextViewText(R.id.title, "Invoice Ready ToReview")
-            "DriverDeductionWithAgreement" ->  remoteViews.setTextViewText(R.id.title, "Driver Deduction With Agreement")
-            "ThirdPartyAccessRequestNotification" ->  remoteViews.setTextViewText(R.id.title, "Third Party Access Request Notification")
+            "InvoiceReadyToReview" -> remoteViews.setTextViewText(
+                R.id.title,
+                "Invoice Ready ToReview"
+            )
+
+            "DriverDeductionWithAgreement" -> remoteViews.setTextViewText(
+                R.id.title,
+                "Driver Deduction With Agreement"
+            )
+
+            "ThirdPartyAccessRequestNotification" -> remoteViews.setTextViewText(
+                R.id.title,
+                "Third Party Access Request Notification"
+            )
         }
 //        remoteViews.setTextViewText(R.id.title, title)
         remoteViews.setTextViewText(R.id.descriptionXX, message)

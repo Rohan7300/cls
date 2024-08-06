@@ -88,6 +88,7 @@ import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.models.response.VehicleExpiringDocumentsResponse
 import com.clebs.celerity.models.response.WeeklyLocationRotabyIdResponse
+import com.clebs.celerity.models.response.WeeklyRotaExistForDAApprovalResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -582,7 +583,7 @@ interface ApiService {
     @GET("/api/Drivers/WeeklyRotaExistForDAApproval/{userId}")
     suspend fun WeeklyRotaExistForDAApproval(
         @Path("userId") userId: Int
-    ): Response<SimpleStatusMsgResponse>
+    ): Response<WeeklyRotaExistForDAApprovalResponse>
 
     @GET("/api/Drivers/GetWeeklyLocationRotabyId/{lrnId}")
     suspend fun GetWeeklyLocationRotabyId(
@@ -965,5 +966,6 @@ interface ApiService {
         @Query("userId") userId:Int,
         @Query("message") message:String
     ):Response<SimpleStatusMsgResponse>
+
 }
 

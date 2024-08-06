@@ -36,6 +36,7 @@ class InvoicesFragment : Fragment() {
         (activity as HomeActivity).ActivityHomeBinding.title.text = "Invoices"
         prefs = Prefs.getInstance(requireContext())
         observers()
+        findNavController().currentDestination!!.id = R.id.invoicesFragment
         binding.clsinvoices.setOnClickListener {
             findNavController().navigate(R.id.CLSInvoicesFragment)
         }
