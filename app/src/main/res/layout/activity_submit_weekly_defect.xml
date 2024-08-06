@@ -125,13 +125,20 @@
                         android:textSize="11sp" />
                 </LinearLayout>
             </LinearLayout>
-
+<ProgressBar
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:id="@+id/pbs"
+    android:visibility="gone"
+    android:layout_marginTop="10dp"
+    android:layout_gravity="center"
+    android:indeterminateTint="@color/maroon"/>
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/llstart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                app:strokeColor="@color/very_very_light_red"
+                app:strokeColor="@color/maroon"
                 app:strokeWidth="2dp">
 
                 <LinearLayout
@@ -162,10 +169,13 @@
                             android:id="@+id/btStart"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/red_light"
+                            android:layout_margin="20dp"
+                            android:textColor="@color/white"
+                            android:background="@drawable/shape_green"
+                            android:backgroundTint="@color/maroon"
                             android:drawableEnd="@drawable/baseline_camera_24"
-                            android:drawablePadding="4dp"
-                            android:drawableTint="@color/black"
+                            android:drawablePadding="6dp"
+                            android:drawableTint="@color/white"
                             android:fontFamily="@font/poppins_semibold"
                             android:padding="15dp"
                             android:text="START INSPECTION"
@@ -186,13 +196,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -221,9 +231,11 @@
                                 android:id="@+id/tyreDepthFrontImageUploadBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/red_light"
+                                android:textColor="@color/white"
+                                android:backgroundTint="@color/maroon"
+                                android:background="@drawable/shape_green"
                                 android:text="UPLOAD"
-                                android:textSize="12sp" />
+                                android:textSize="11sp" />
 
                             <TextView
                                 android:id="@+id/tyreDepthFrontImageFileName"
@@ -252,7 +264,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -308,7 +320,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -337,9 +349,11 @@
                                 android:id="@+id/tyreDepthRearImageUploadBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/red_light"
+                                android:textColor="@color/white"
+                                android:backgroundTint="@color/maroon"
+                                android:background="@drawable/shape_green"
                                 android:text="UPLOAD"
-                                android:textSize="12sp" />
+                                android:textSize="11sp" />
 
                             <TextView
                                 android:id="@+id/tyreDepthRearImageUploadFileName"
@@ -368,7 +382,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -423,7 +437,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -452,9 +466,11 @@
                                 android:id="@+id/tyreDepthRearOSImageUploadBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/red_light"
+                                android:textColor="@color/white"
+                                android:backgroundTint="@color/maroon"
+                                android:background="@drawable/shape_green"
                                 android:text="UPLOAD"
-                                android:textSize="12sp" />
+                                android:textSize="11sp" />
 
                             <TextView
                                 android:id="@+id/tyreDepthRearOSFileNameTV"
@@ -483,7 +499,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -538,7 +554,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -567,9 +583,11 @@
                                 android:id="@+id/tyreDepthFrontOSImageUploadBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/red_light"
+                                android:textColor="@color/white"
+                                android:backgroundTint="@color/maroon"
+                                android:background="@drawable/shape_green"
                                 android:text="UPLOAD"
-                                android:textSize="12sp" />
+                                android:textSize="11sp"  />
 
                             <TextView
                                 android:id="@+id/tyreDepthFrontOSImageFilenameTV"
@@ -598,7 +616,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -653,7 +671,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -682,9 +700,11 @@
                                 android:id="@+id/engineOilImageUploadBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/red_light"
+                                android:textColor="@color/white"
+                                android:backgroundTint="@color/maroon"
+                                android:background="@drawable/shape_green"
                                 android:text="UPLOAD"
-                                android:textSize="12sp" />
+                                android:textSize="11sp" />
 
                             <TextView
                                 android:id="@+id/engineOilImageUploadFileName"
@@ -846,7 +866,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -875,9 +895,11 @@
                                 android:id="@+id/addBlueLevelUploadBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/red_light"
+                                android:textColor="@color/white"
+                                android:backgroundTint="@color/maroon"
+                                android:background="@drawable/shape_green"
                                 android:text="Upload"
-                                android:textSize="12sp" />
+                                android:textSize="11sp" />
 
                             <TextView
                                 android:id="@+id/addBlueLevelUploadFileName"
@@ -906,7 +928,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -935,9 +957,11 @@
                                 android:id="@+id/nsWingMirrorUploadBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/red_light"
+                                android:textColor="@color/white"
+                                android:backgroundTint="@color/maroon"
+                                android:background="@drawable/shape_green"
                                 android:text="Upload"
-                                android:textSize="12sp" />
+                                android:textSize="11sp" />
 
                             <TextView
                                 android:id="@+id/nsWingMirrorUploadFileName"
@@ -966,7 +990,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -995,9 +1019,11 @@
                                 android:id="@+id/osWingMirrorUploadBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/red_light"
+                                android:textColor="@color/white"
+                                android:backgroundTint="@color/maroon"
+                                android:background="@drawable/shape_green"
                                 android:text="Upload"
-                                android:textSize="12sp" />
+                                android:textSize="11sp"  />
 
                             <TextView
                                 android:id="@+id/osWingMirrorUploadFileName"
@@ -1026,7 +1052,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -1055,9 +1081,11 @@
                                 android:id="@+id/Three60VideoUploadBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/red_light"
+                                android:textColor="@color/white"
+                                android:backgroundTint="@color/maroon"
+                                android:background="@drawable/shape_green"
                                 android:text="Upload"
-                                android:textSize="12sp" />
+                                android:textSize="11sp" />
 
                             <TextView
                                 android:id="@+id/Three60VideoFileNameTV"
@@ -1086,7 +1114,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:strokeColor="@color/very_very_light_red"
+                    app:strokeColor="@color/maroon"
                     app:strokeWidth="2dp">
 
                     <LinearLayout
@@ -1115,10 +1143,12 @@
                                 android:id="@+id/otherPictureUploadBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@color/red_light"
+                                android:textColor="@color/white"
+                                android:backgroundTint="@color/maroon"
+                                android:background="@drawable/shape_green"
                                 android:enabled="false"
                                 android:text="UPLOAD"
-                                android:textSize="12sp" />
+                                android:textSize="11sp"  />
 
                             <TextView
                                 android:id="@+id/otherImagesTV"
@@ -1202,7 +1232,7 @@
                     android:visibility="visible" />
 
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -1212,6 +1242,8 @@
                         android:id="@+id/save"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:background="@drawable/shape_green"
                         android:backgroundTint="#52B84E"
                         android:text="SAVE"
                         android:textSize="12sp" />
@@ -1220,10 +1252,14 @@
                         android:id="@+id/cancel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/red_light"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="@color/white"
+                  android:layout_gravity="right"
+                        android:backgroundTint="@color/maroon"
+                        android:background="@drawable/shape_green"
                         android:text="CANCEL"
                         android:textSize="12sp" />
-                </LinearLayout>
+                </RelativeLayout>
             </LinearLayout>
 
         </LinearLayout>

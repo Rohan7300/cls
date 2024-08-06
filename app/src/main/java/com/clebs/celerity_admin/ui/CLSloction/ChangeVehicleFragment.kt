@@ -98,6 +98,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
     private var requesttype: TextInputLayout? = null
     private var requesttypetext: EditText? = null
     private var DA_id = String()
+    private var checkChMessage: String? = null
     var spinnerposition: Int? = -1
     private var returbDA_wmID = String()
     lateinit var deleteDialog: AlertDialog
@@ -139,6 +140,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
     lateinit var FuellevelAdapter: FuelLevelAdapter
     lateinit var OillevelAdapter: VehicleOilLevelAdapter
     lateinit var textView: TextView
+    lateinit var textviewbreakdwon: TextView
     lateinit var returndepo: TextView
     private var radioButtonDA: RadioButton? = null
     private var radioButtonreturn: RadioButton? = null
@@ -197,9 +199,26 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
 
         isfirst = Prefs.getInstance(requireContext()).Isfirst
+        binding.imgchangevehicleAllocation.setOnClickListener {
+
+            EditableTrue(binding.textView3)
+setFullAlpha(binding.ll1)
+            setFullAlpha(binding.linearLayout3)
+            binding.textView3.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.img_round))
+            changeBackgroundImage(binding.imgchangevehicleTransfer)
+            setFullAlpha(binding.textView3)
+            setHalfAlpha(binding.imgchangevehicleTransfer)
+            changeBackgroundImage(binding.imgchangevehicleCollection)
+            setHalfAlpha(binding.imgchangevehicleCollection)
+            changeBackgroundImage(binding.imgchangevehicleReturn)
+            setHalfAlpha(binding.imgchangevehicleReturn)
+
+        }
 
         binding.pb2.visibility = View.VISIBLE
         binding.constmain.alpha = 0.5f
+        EditableFalse(binding.textView5)
+        EditableFalse(binding.textView3)
         EditableFalse(binding.textView5)
         Observers()
         Thread {
@@ -421,8 +440,16 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
         mainViewModel.GetDDAmandate(DA_id).observe(viewLifecycleOwner, Observer {
             if (it != null) {
+                if (!it.vehicleInfo.chMessage.isNullOrEmpty()) {
 
+                    textView.setText(it.vehicleInfo.chMessage)
+                    textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                    textviewbreakdwon.visibility = View.VISIBLE
+
+                }
+                textviewbreakdwon.visibility = View.GONE
                 textView.setText("Allocated Vehicle: " + it.vehicleInfo.currentVehicleRegNo + "\n" + "Vehicle location: " + it.vehicleInfo.vehicleLocation)
+                textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_color))
                 Prefs.getInstance(App.instance).VmID = it.vehicleInfo.vmRegId.toString()
                 relativelayout?.visibility = View.GONE
                 linearLayout?.visibility = View.GONE
@@ -537,6 +564,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
         llmthree = showSheet.findViewById(R.id.llmthree)
 
         textView = showSheet.findViewById(R.id.txt_info)
+        textviewbreakdwon = showSheet.findViewById(R.id.tvBreakdown)
         returndepo = showSheet.findViewById(R.id.returndepo)
         returnvehiclename = showSheet.findViewById(R.id.edt_return_da)
         radioButtonDA = showSheet.findViewById(R.id.rbReTraining)
@@ -864,7 +892,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
             rv_oil?.visibility = View.GONE
         }
 
-        mainViewModel.GetlastMileageInfo( Prefs.getInstance(App.instance).vmIdReturnveh)
+        mainViewModel.GetlastMileageInfo(Prefs.getInstance(App.instance).vmIdReturnveh)
             .observe(viewLifecycleOwner, Observer {
                 Log.e("kdkjfjdkffdfkdjfkd", "selectVehicleInformation: " + it)
                 if (it != null) {
@@ -1290,7 +1318,9 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
         daname?.setText(item.name)
 
         DA_id = item.id.toString()
+
         getDDAMandate()
+
         textView.visibility = View.VISIBLE
 
         deleteDialogtwo.dismiss()
@@ -1509,7 +1539,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
     fun EditableFalse(view: View) {
 
-        view.isEnabled = true
+        view.isEnabled = false
         view.isClickable = false
         view.isFocusable = false
         view.isFocusableInTouchMode = false
@@ -1657,6 +1687,20 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
     fun setFullAlpha(view: View) {
         view.alpha = 1f
+    }
+
+    fun setHalfAlpha(view: View) {
+        view.alpha = 0.2f
+    }
+
+    fun changeBackgroundImage(view: ImageView) {
+
+        view.setImageDrawable(
+            ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.img_round_1
+            )
+        )
     }
 
 }

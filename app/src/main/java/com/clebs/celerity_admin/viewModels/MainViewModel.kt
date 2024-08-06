@@ -1,5 +1,6 @@
 package com.clebs.celerity_admin.viewModels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -47,7 +48,14 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
     val isinspectiondonelivedata: MutableLiveData<ResponseInspectionDone?> = MutableLiveData()
     val otherImagesListLiveData: MutableLiveData<OtherDefectCheckImagesInDropBoxResponse?> =
         MutableLiveData()
+    val GetLocationListbyUserIdLiveData: MutableLiveData<GetVehicleLocation?> =
+        MutableLiveData()
+    private val _clickEvent = MutableLiveData<Boolean>()
+    val clickEvent: LiveData<Boolean> = _clickEvent
 
+    fun setClickEvent(clicked: Boolean) {
+        _clickEvent.value = clicked
+    }
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
 
@@ -389,6 +397,18 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
                 otherImagesListLiveData.postValue(null)
             else
                 otherImagesListLiveData.postValue(response.body)
+        }
+    }
+
+    fun GetLocationListbyUserId(
+      userid: Double
+    ) {
+        viewModelScope.launch {
+            val response = repo.GetLocationListbyUserId(userid)
+            if (!response.isSuccessful || response.failed)
+                GetLocationListbyUserIdLiveData.postValue(null)
+            else
+                GetLocationListbyUserIdLiveData.postValue(response.body)
         }
     }
 }

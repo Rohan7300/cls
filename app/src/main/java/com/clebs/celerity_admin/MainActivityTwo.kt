@@ -26,6 +26,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.clebs.celerity_admin.database.CheckInspection
+import com.clebs.celerity_admin.database.OfflineSyncDB
 import com.clebs.celerity_admin.databinding.ActivityMainTwoBinding
 import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
@@ -57,12 +58,15 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener
     lateinit var mainViewModel: MainViewModel
     lateinit var navController: NavController
 
+companion object{
 
+}
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainTwoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         loadingDialog = LoadingDialog(this)
@@ -132,7 +136,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener
             binding.appBarMainActivityTwo.cardone.setCardBackgroundColor(
                 ContextCompat.getColor(
                     applicationContext,
-                    R.color.maroon
+                    R.color.very_very_light
                 )
             )
             binding.appBarMainActivityTwo.cardone.alpha = 1f
@@ -154,7 +158,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener
             binding.appBarMainActivityTwo.cardtwo.setCardBackgroundColor(
                 ContextCompat.getColor(
                     applicationContext,
-                    R.color.maroon
+                    R.color.very_very_light
                 )
             )
             binding.appBarMainActivityTwo.cardtwo.alpha = 1f
@@ -227,7 +231,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener
                 binding.appBarMainActivityTwo.cardone.setCardBackgroundColor(
                     ContextCompat.getColor(
                         applicationContext,
-                        R.color.maroon
+                        R.color.very_very_light
                     )
                 )
                 binding.appBarMainActivityTwo.cardtwo.setCardBackgroundColor(
@@ -254,7 +258,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener
                 binding.appBarMainActivityTwo.cardtwo.setCardBackgroundColor(
                     ContextCompat.getColor(
                         applicationContext,
-                        R.color.maroon
+                        R.color.very_very_light
                     )
                 )
             }

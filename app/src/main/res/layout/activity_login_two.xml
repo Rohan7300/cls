@@ -80,11 +80,12 @@
                     android:background="@drawable/shape_edittext"
                     android:backgroundTint="@color/maroon"
                     android:gravity="center_horizontal"
+                    android:fontFamily="@font/poppins_semibold"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:text="OSM PORTAL"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="@+id/textView2"
                     app:layout_constraintStart_toStartOf="@+id/textView2"
                     app:layout_constraintTop_toBottomOf="@+id/imageView3" />

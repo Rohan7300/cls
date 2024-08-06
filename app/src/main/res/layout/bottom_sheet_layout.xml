@@ -184,8 +184,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="5dp"
-                            android:layout_toRightOf="@id/edt_traingtwo"
-                        />
+                            android:layout_toRightOf="@id/edt_traingtwo" />
 
                     </RelativeLayout>
 
@@ -224,8 +223,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="8dp"
                     android:hint="Select DA *"
-                    app:hintAnimationEnabled="false"
                     android:visibility="gone"
+                    app:hintAnimationEnabled="false"
                     app:hintTextColor="@color/black"
                     app:layout_constraintTop_toBottomOf="@id/llm">
 
@@ -237,8 +236,9 @@
                         android:importantForAutofill="no"
                         android:inputType="text"
                         android:padding="12dp"
+                        android:textSize="13sp"
 
-                        android:textSize="13sp" />
+                        android:visibility="visible" />
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -253,6 +253,23 @@ Vehicle Location : Birmingham - DBI2"
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/edt_layout_return" />
+
+                <TextView
+                    android:id="@+id/tvBreakdown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/shape_editext_main"
+                    android:backgroundTint="@color/purple"
+                    android:padding="8dp"
+                    android:text="BREAK DOWN"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@+id/edt_layout_two"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@id/txt_info"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_layout_two" />
 
                 <LinearLayout
                     android:id="@+id/llmtwo"

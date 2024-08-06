@@ -230,4 +230,11 @@ class MainRepo(private val ApiService: ApiService) {
             ApiService.GetOtherDefectCheckImagesInDropBox(vdhDefectCheckId, fileType)
         }
     }
+    suspend fun GetLocationListbyUserId(
+       userID: Double
+    ): SimpleNetworkResponse<GetVehicleLocation> {
+        return safeApiCall {
+            ApiService.GetLocationListbyUserId(userID)
+        }
+    }
 }

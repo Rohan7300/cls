@@ -140,4 +140,6 @@ interface ApiService {
         @Query("fileType") fileType: String
     ): Response<OtherDefectCheckImagesInDropBoxResponse>
 
+    @GET("/api/WeeklyDefectSheet/GetLocationListbyUserId/{userId}")
+    suspend fun GetLocationListbyUserId( @Path("userId") userId: Double): Response<GetVehicleLocation>
 }
