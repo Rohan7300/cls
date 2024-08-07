@@ -310,7 +310,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 if (it != null) {
                     val intent = Intent(this@HomeActivity, DeductionAgreementActivity::class.java)
                     intent.putExtra("actionID", it.DaDedAggrId)
-                    intent.putExtra("notificationID", 0)
+                    intent.putExtra("notificationID", it.NotificationId)
                     startActivity(intent)
                 } else {
                     viewModel.WeeklyRotaExistForDAApproval(Prefs.getInstance(this@HomeActivity).clebUserId.toInt())
@@ -318,10 +318,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
             viewModel.liveDataWeeklyRotaExistForDAApproval.observe(this) {
                 if (it != null) {
-                    it.LrnId[0].notNull {lrn->
+                    it.Data[0].notNull {itx->
                         val intent = Intent(this@HomeActivity, WeeklyRotaApprovalActivity::class.java)
-                        intent.putExtra("actionID", lrn)
-                        intent.putExtra("notificationID", 0)
+                        intent.putExtra("actionID", itx.LrnId)
+                        intent.putExtra("notificationID", itx.NotificationId)
                         startActivity(intent)
                     }
                 }
@@ -1262,6 +1262,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     navController.navigate(R.id.newCompleteTaskFragment)
                 }
             }
+            viewModel.GetDAVehicleExpiredDocuments(prefs.clebUserId.toInt())
         } catch (_: Exception) {
 
         }

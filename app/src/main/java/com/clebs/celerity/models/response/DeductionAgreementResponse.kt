@@ -10,5 +10,6 @@ data class DeductionAgreementResponse(
     val FromLocation: String,
     val PaymentKey: String,
     val TotalAdvanceAmt: Int,
-    val WeeklyDeductionAmt: Int
+    val WeeklyDeductionAmt: Int,
+    val NotificationId:Int
 )

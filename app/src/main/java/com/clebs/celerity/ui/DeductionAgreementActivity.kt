@@ -227,7 +227,6 @@ class DeductionAgreementActivity : AppCompatActivity() {
 
             viewmodel.liveDataUpdateDeducton.observe(this) {
                 viewmodel.MarkNotificationAsRead(notificationID)
-
                 loadingDialog.dismiss()
                 finish()
                 if (it != null) {

@@ -1,5 +1,7 @@
 package com.clebs.celerity.ui
 
+import android.app.NotificationManager
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +18,7 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertDateFormat
 import com.clebs.celerity.utils.noInternetCheck
+import com.clebs.celerity.utils.parseToInt
 import com.clebs.celerity.utils.showToast
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -41,6 +44,19 @@ class WeeklyRotaApprovalActivity : AppCompatActivity() {
         pref = Prefs(this)
         loadingDialog = LoadingDialog(this)
         viewmodel = ViewModelProvider(this, MyViewModelFactory(repo))[MainViewModel::class.java]
+        val notificationIdX = try {
+            parseToInt(actionID.toString()) ?: 0
+        } catch (_: Exception) {
+            notificationID
+        }
+        try {
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancel(notificationIdX)
+            notificationManager.cancel(notificationID)
+        } catch (_: Exception) {
+
+        }
 
         binding.mainLayout.visibility = View.GONE
         binding.nodataLayout.visibility = View.VISIBLE

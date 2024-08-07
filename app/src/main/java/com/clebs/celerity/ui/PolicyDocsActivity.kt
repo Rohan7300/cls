@@ -538,11 +538,11 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
 
             val driverVanHire = DriverHireAgreementX(
                 Accidents = false,
-                HireAgrDOB = "2024-02-27T11:58:30.668Z",
-                VehType = "HR",
-                AgrLicenceNo = "HR9897896",
-                AgrLicenceStartDate = "2024-02-27T11:58:30.668Z",
-                DaHireLicenceEndDate = "2024-02-27T11:58:30.668Z",
+                HireAgrDOB = "2024-08-07T07:14:37.994Z",
+                VehType = "",
+                AgrLicenceNo = "",
+                AgrLicenceStartDate = "2024-08-07T07:14:37.994Z",
+                DaHireLicenceEndDate = "2024-08-07T07:14:37.994Z",
                 Conviction = true,
                 Comments = "",
                 Address = "",
@@ -568,7 +568,6 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
                     IsDAEngagementChecked = driverSignatureInfo!!.DAEngagementSectionReq
                 )
             )
-
         } else {
             showToast("Pls Wait!!", this)
         }
