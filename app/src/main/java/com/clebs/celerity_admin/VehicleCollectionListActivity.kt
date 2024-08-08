@@ -16,6 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Checkbox
+import androidx.compose.material.RadioButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -75,12 +79,48 @@ class VehicleCollectionListActivity : ComponentActivity() {
                         .background(Color.White, RoundedCornerShape(16.dp))
                         .padding(16.dp)
                 ) {
-                    IconButton(onClick = onDismissRequest) {
-                        Icon(painter = painterResource(id = R.drawable.xmark), contentDescription = "Cross")
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.TopEnd
+                    ) {
+                        IconButton(onClick = onDismissRequest) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.xmark),
+                                contentDescription = "Cross"
+                            )
+                        }
                     }
                     Text("Filters")
-                    Button(onClick = onDismissRequest) {
-                        Text("Dismiss")
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(checked = false,
+                            onCheckedChange = {})
+                        Text("Show Completed Collections")
+                    }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = true, onClick = { /*TODO*/ })
+                        Text("Collect Vehicle")
+
+                    }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = true, onClick = { /*TODO*/ })
+                        Text("Return Vehicle")
+                    }
+                    Button(
+                        onClick = onDismissRequest,
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.Red
+                        )
+                    ) {
+                        Text(
+                            text = "Dismiss",
+                            color = Color.White
+                        )
                     }
                 }
             }
@@ -176,7 +216,22 @@ class VehicleCollectionListActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                //  VehicleCollectionList()
+                //VehicleCollectionList()
+            }
+        }
+    }
+
+    @Preview
+    @Composable
+    fun FilterPreview() {
+        setContent {
+            CLSOSMTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    FilterDialog(true) {}
+                }
             }
         }
     }
