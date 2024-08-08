@@ -420,6 +420,7 @@ class NewCompleteTaskFragment : Fragment() {
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
             mbinding.headerTop.anaCarolin.text = name
         }
+
         mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
         mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 

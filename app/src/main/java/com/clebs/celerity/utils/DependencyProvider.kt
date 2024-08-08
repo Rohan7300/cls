@@ -36,6 +36,7 @@ object DependencyProvider {
     var currentDeductionHistory: GetDriverDeductionHistoryResponse? = null
     var brkStart:String = ""
     var brkEnd:String = ""
+    var isComingToRaiseTicketforExpiredDocs:Boolean = false
     var blockCreateTicket:Boolean = false
     var notify:MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply {
         postValue(false)

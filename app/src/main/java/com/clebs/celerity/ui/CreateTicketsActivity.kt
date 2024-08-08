@@ -118,7 +118,7 @@ class CreateTicketsActivity : AppCompatActivity() {
             override fun handleOnBackPressed() {
                 if (DependencyProvider.blockCreateTicket)
                     showToast(
-                        "Please submit the Deduction Agreement first!!",
+                        "Please submit the Ticket first!!",
                         this@CreateTicketsActivity
                     )
             }
@@ -221,6 +221,9 @@ class CreateTicketsActivity : AppCompatActivity() {
     private fun observers() {
         viewmodel.liveDataSaveTicketResponse.observe(this) {
             hideDialog()
+            if(DependencyProvider.isComingToRaiseTicketforExpiredDocs){
+                pref.updateRaiseTicketStatus()
+            }
             if (it != null) {
                 ticketID = it.TicketId
                 if (uploadWithAttachement) {
@@ -239,6 +242,7 @@ class CreateTicketsActivity : AppCompatActivity() {
         viewmodel.liveDataUploadTicketAttachmentDoc.observe(this) {
             hideDialog()
             if (it != null) {
+
                 finish()
                 //onBackPressed()
             } else {
@@ -464,7 +468,7 @@ class CreateTicketsActivity : AppCompatActivity() {
         super.onBackPressed()
         if (DependencyProvider.blockCreateTicket) {
             showToast(
-                "Please submit the Deduction Agreement first!!",
+                "Please submit the Ticket first!!",
                 this@CreateTicketsActivity
             )
         }

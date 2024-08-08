@@ -14,7 +14,10 @@ import com.clebs.celerity.adapters.ExpiredDocAdapter
 import com.clebs.celerity.models.response.GetDAVehicleExpiredDocumentsResponse
 import com.clebs.celerity.ui.CreateTicketsActivity
 import com.clebs.celerity.utils.DependencyProvider.blockCreateTicket
+import com.clebs.celerity.utils.DependencyProvider.isComingToRaiseTicketforExpiredDocs
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.ShowToast
+import com.clebs.celerity.utils.showToast
 import com.google.android.material.button.MaterialButton
 
 class ExpiredDocDialog(val prefs: Prefs, val rvContext: Context) : DialogFragment() {
@@ -36,9 +39,18 @@ class ExpiredDocDialog(val prefs: Prefs, val rvContext: Context) : DialogFragmen
             setBackgroundDrawableResource(R.color.semi_transparent_color)
         }
         val raiseTicketBtn = dialog.findViewById<MaterialButton>(R.id.raiseTicket)
+
+/*        if(prefs.isTicketRaisedToday()){
+            raiseTicketBtn.isEnabled = false
+        }*/
         raiseTicketBtn.setOnClickListener {
-            blockCreateTicket = true
-            rvContext.startActivity(Intent(rvContext, CreateTicketsActivity::class.java))
+            if(prefs.isTicketRaisedToday()){
+                showToast("Ticket already raised today.",rvContext)
+            }else{
+                blockCreateTicket = true
+                isComingToRaiseTicketforExpiredDocs = true
+                rvContext.startActivity(Intent(rvContext, CreateTicketsActivity::class.java))
+            }
         }
         expiredRV = dialog.findViewById(R.id.expiredRV)
         init()

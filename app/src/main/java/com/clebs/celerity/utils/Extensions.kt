@@ -63,6 +63,7 @@ import com.clebs.celerity.dialogs.ScanErrorDialog
 import com.clebs.celerity.fragments.DailyWorkFragment
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
 import com.clebs.celerity.ui.App
+import com.clebs.celerity.ui.App.Companion.showToastX
 import com.clebs.celerity.ui.LoginActivity
 import com.clebs.celerity.utils.DependencyProvider.brkEnd
 import com.clebs.celerity.utils.DependencyProvider.brkStart
@@ -410,7 +411,8 @@ fun navigateTo(fragmentId: Int, context: Context, navController: NavController) 
 
 fun showToast(msg: String, context: Context) {
     try {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+        showToastX!!.show(context,msg)
+        //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     } catch (e: Exception) {
         Log.d("ToastException", e.message.toString())
     }

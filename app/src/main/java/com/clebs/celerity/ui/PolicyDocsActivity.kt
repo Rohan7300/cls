@@ -527,6 +527,7 @@ class PolicyDocsActivity : AppCompatActivity(), OtherPolicyCallbackInterface {
                     document.CompanyDocId
                 }
             } ?: emptyList<Int>()
+
             val companyIDS = arrayListOf<CompanySignedDocX>()
             driverSignatureInfo!!.OtherCompanyDocuments?.map {
                 companyIDS.add(

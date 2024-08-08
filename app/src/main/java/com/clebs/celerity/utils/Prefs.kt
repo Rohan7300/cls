@@ -45,11 +45,11 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putString(USER_ACCESS_TOKEN, value).apply()
         }
 
-    var thridPartyAcess:Boolean
-        get(){
-            return sharedPreferences.getBoolean("thirdPartyAccess",false)
+    var thridPartyAcess: Boolean
+        get() {
+            return sharedPreferences.getBoolean("thirdPartyAccess", false)
         }
-        set(value) = sharedPreferences.edit().putBoolean("thirdPartyAccess",value).apply()
+        set(value) = sharedPreferences.edit().putBoolean("thirdPartyAccess", value).apply()
 
     var vmRegNo: String
         get() {
@@ -469,6 +469,30 @@ class Prefs(context: Context) {
         editor.apply()
     }
 
+    fun updateRaiseTicketStatus() {
+        val editor = sharedPreferences.edit()
+        val lastRaiseTicketDateTime = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(
+            Date()
+        )
+        editor.putBoolean("ticket_raised_today", true)
+        editor.putString("last_ticket_raised_datetime", lastRaiseTicketDateTime)
+        editor.apply()
+    }
+
+    fun isTicketRaisedToday():Boolean{
+        val isTicketRaisedToday = sharedPreferences.getBoolean("ticket_raised_today",false)
+        if (isTicketRaisedToday) {
+            val lastTicketRaisedDateTimeString =
+                sharedPreferences.getString("last_ticket_raised_datetime", "")
+            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+         //   Log.d("isInspectionDoneToday", "$currentDate \n$lastTicketRaisedDateTimeString")
+
+            return lastTicketRaisedDateTimeString == currentDate
+        } else {
+            return false
+        }
+    }
+
     fun isInspectionDoneToday(): Boolean {
         val isInspectionDone = sharedPreferences.getBoolean("is_inspection_done", false)
         if (isInspectionDone) {
@@ -641,55 +665,55 @@ class Prefs(context: Context) {
             ?: "2024-06-19T06:49:38Z"
         set(value) = sharedPreferences.edit().putString("TokenExpiredOn", value).apply()
 
-    var VinNumber:String?
-        get() = sharedPreferences.getString("VinNumber",null)
-        set(value) = sharedPreferences.edit().putString("VinNumber",value).apply()
+    var VinNumber: String?
+        get() = sharedPreferences.getString("VinNumber", null)
+        set(value) = sharedPreferences.edit().putString("VinNumber", value).apply()
 
-    var VehicleMake:String?
-        get() = sharedPreferences.getString("VehicleMake","Van")?:"Van"
-        set(value) = sharedPreferences.edit().putString("VehicleMake",value).apply()
+    var VehicleMake: String?
+        get() = sharedPreferences.getString("VehicleMake", "Van") ?: "Van"
+        set(value) = sharedPreferences.edit().putString("VehicleMake", value).apply()
 
-    var VehicleBodyStyle:String
-        get() = sharedPreferences.getString("VehicleBodyStyle","Van")?:"Van"
-        set(value) = sharedPreferences.edit().putString("VehicleBodyStyle",value).apply()
+    var VehicleBodyStyle: String
+        get() = sharedPreferences.getString("VehicleBodyStyle", "Van") ?: "Van"
+        set(value) = sharedPreferences.edit().putString("VehicleBodyStyle", value).apply()
 
-    var VehicleModel:String
-        get() = sharedPreferences.getString("VehicleModel","Any Model")?:"Any Model"
-        set(value) = sharedPreferences.edit().putString("VehicleModel",value).apply()
+    var VehicleModel: String
+        get() = sharedPreferences.getString("VehicleModel", "Any Model") ?: "Any Model"
+        set(value) = sharedPreferences.edit().putString("VehicleModel", value).apply()
 
-    var VmCreatedDate:String?
-        get() = sharedPreferences.getString("VmCreatedDate",null)
-        set(value) = sharedPreferences.edit().putString("VmCreatedDate",value).apply()
+    var VmCreatedDate: String?
+        get() = sharedPreferences.getString("VmCreatedDate", null)
+        set(value) = sharedPreferences.edit().putString("VmCreatedDate", value).apply()
 
 
+    var destinationFragment: String?
+        get() = sharedPreferences.getString("destinationFragment", "HomeFragment")
+        set(value) = sharedPreferences.edit().putString("destinationFragment", value).apply()
+    var actionToperform: String?
+        get() = sharedPreferences.getString("actionToperform", "undef")
+        set(value) = sharedPreferences.edit().putString("actionToperform", value).apply()
+    var actionID: String?
+        get() = sharedPreferences.getString("actionID", "0")
+        set(value) = sharedPreferences.edit().putString("actionID", value).apply()
+    var tokenUrl: String?
+        get() = sharedPreferences.getString("tokenUrl", "undef")
+        set(value) = sharedPreferences.edit().putString("tokenUrl", value).apply()
 
-    var destinationFragment:String?
-        get() = sharedPreferences.getString("destinationFragment","HomeFragment")
-        set(value) = sharedPreferences.edit().putString("destinationFragment",value).apply()
-    var actionToperform:String?
-        get() = sharedPreferences.getString("actionToperform","undef")
-        set(value) = sharedPreferences.edit().putString("actionToperform",value).apply()
-    var actionID:String?
-        get() = sharedPreferences.getString("actionID","0")
-        set(value) = sharedPreferences.edit().putString("actionID",value).apply()
-    var tokenUrl:String?
-        get() = sharedPreferences.getString("tokenUrl","undef")
-        set(value) = sharedPreferences.edit().putString("tokenUrl",value).apply()
+    var notificationId: String?
+        get() = sharedPreferences.getString("notificationId", "0")
+        set(value) = sharedPreferences.edit().putString("notificationId", value).apply()
 
-    var notificationId:String?
-        get() = sharedPreferences.getString("notificationId","0")
-        set(value) = sharedPreferences.edit().putString("notificationId",value).apply()
+    var isInspectionIDFailedToUpload: Boolean
+        get() = sharedPreferences.getBoolean("isInspectionIDFailedToUpload", false)
+        set(value) = sharedPreferences.edit().putBoolean("isInspectionIDFailedToUpload", value)
+            .apply()
 
-    var isInspectionIDFailedToUpload:Boolean
-        get() = sharedPreferences.getBoolean("isInspectionIDFailedToUpload",false)
-        set(value) = sharedPreferences.edit().putBoolean("isInspectionIDFailedToUpload",value).apply()
+    var isBiometricChecked: Boolean
+        get() = sharedPreferences.getBoolean("isBiometricChecked", false)
+        set(value) = sharedPreferences.edit().putBoolean("isBiometricChecked", value).apply()
 
-    var isBiometricChecked:Boolean
-        get() = sharedPreferences.getBoolean("isBiometricChecked",false)
-        set(value) = sharedPreferences.edit().putBoolean("isBiometricChecked",value).apply()
-
-    var useBiometric:Boolean
-        get() = sharedPreferences.getBoolean("useBiometric",true)
-        set(value) = sharedPreferences.edit().putBoolean("useBiometric",value).apply()
+    var useBiometric: Boolean
+        get() = sharedPreferences.getBoolean("useBiometric", true)
+        set(value) = sharedPreferences.edit().putBoolean("useBiometric", value).apply()
 
 }

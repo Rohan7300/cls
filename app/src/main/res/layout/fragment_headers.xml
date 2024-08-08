@@ -57,7 +57,6 @@
                     android:fontFamily="@font/inter_semibold"
                     android:gravity="center_horizontal|top"
                     android:letterSpacing="0.04"
-
                     android:elevation="30dp"
                     android:lineSpacingExtra="0.02dp"
                     android:text="@string/ana_carolin"

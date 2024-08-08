@@ -68,7 +68,7 @@ class WeeklyPerformanceActivity : AppCompatActivity() {
                         binding.placeHolderViewRight.visibility = View.GONE
                     }
                 }
-                binding.weekNoTV.text = "Week . ${crrWeek - i}"
+                binding.weekNoTV.text = "Week  ${crrWeek - i}"
             }
         }
         binding.next.setOnClickListener {
@@ -97,7 +97,7 @@ class WeeklyPerformanceActivity : AppCompatActivity() {
                     binding.placeHolderViewLeft.visibility = View.GONE
                     binding.placeHolderViewRight.visibility = View.VISIBLE
                 }
-                binding.weekNoTV.text = "Week . ${crrWeek - i}"
+                binding.weekNoTV.text = "Week  ${crrWeek - i}"
             }
         }
         loadingDialog.show()
@@ -120,8 +120,8 @@ class WeeklyPerformanceActivity : AppCompatActivity() {
                     binding.placeHolderViewRight.visibility = View.VISIBLE
                 }
                 crrYear = it.year
-                binding.weekNoTV.text = "Week . $crrWeek"
-                binding.weekNoTV.text = "Week . $crrWeek"
+                binding.weekNoTV.text = "Week  $crrWeek"
+                binding.weekNoTV.text = "Week  $crrWeek"
                 vm.GetDriverWeeklyRewardsInfo(prefs.clebUserId.toInt(), 0, crrYear, crrWeek)
             }
         }
@@ -141,23 +141,23 @@ class WeeklyPerformanceActivity : AppCompatActivity() {
                 dataList.add(RewardsModel("Status", it[0].StatusName.toString()))
                 dataList.add(RewardsModel("Total Score", it[0].RewardTotalScore.toString()))
                 dataList.add(RewardsModel("Delivered", it[0].RewardDelivered.toString()))
-                dataList.add(RewardsModel("DCR", it[0].RewardDCR.toString()))
+                dataList.add(RewardsModel("DCR", it[0].RewardDCR.toString()+"%"))
                 dataList.add(
                     RewardsModel(
                         "Concessions (DNR DPMO)",
                         it[0].RewardConcessions.toString()
                     )
                 )
-                dataList.add(RewardsModel("POD", it[0].RewardPOD.toString()))
-                dataList.add(RewardsModel("CC", it[0].RewardCC.toString()))
+                dataList.add(RewardsModel("POD", it[0].RewardPOD.toString()+"%"))
+                dataList.add(RewardsModel("CC", it[0].RewardCC.toString()+"%"))
                 if (it[0].RewardSC != null)
                     dataList.add(RewardsModel("Reward SC", it[0].RewardSC.toString()))
                 else
                     dataList.add(RewardsModel("Reward SC", "-"))
-                dataList.add(RewardsModel("PHR", it[0].RewardPHR.toString()))
+                dataList.add(RewardsModel("PHR", it[0].RewardPHR.toString()+"%"))
                 dataList.add(RewardsModel("CE", it[0].RewardCE.toString()))
                 if (it[0].RewardDEX != null)
-                    dataList.add(RewardsModel("DEX", it[0].RewardDEX.toString()))
+                    dataList.add(RewardsModel("DEX", it[0].RewardDEX.toString()+"%"))
                 else
                     dataList.add(RewardsModel("DEX", "-"))
                 dataList.add(RewardsModel("Focus Area", it[0].RewardFocusArea.toString()))
@@ -205,7 +205,7 @@ class WeeklyPerformanceActivity : AppCompatActivity() {
                         binding.placeHolderViewLeft.visibility = View.GONE
                         binding.placeHolderViewRight.visibility = View.GONE
                     }
-                    binding.weekNoTV.text = "Week . $selectedWeek"
+                    binding.weekNoTV.text = "Week  $selectedWeek"
                     loadingDialog.show()
                     isLoaded = false
                     vm.GetDriverWeeklyRewardsInfo(prefs.clebUserId.toInt(), 0, crrYear, crrWeek-i)

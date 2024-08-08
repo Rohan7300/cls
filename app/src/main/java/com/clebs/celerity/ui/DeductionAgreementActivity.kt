@@ -223,7 +223,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
                 )
             )
 
-            generateTicketInBackground(disputeComment)
+            generateTicketInBackground(disputeDesciption)
 
             viewmodel.liveDataUpdateDeducton.observe(this) {
                 viewmodel.MarkNotificationAsRead(notificationID)
@@ -238,7 +238,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
         }
     }
 
-    private fun generateTicketInBackground(RejectionComment: Any?) {
+    private fun generateTicketInBackground(RejectionComment: String) {
         var currDt = getCurrentDateTime()
         val request = SaveTicketDataRequestBody(
             AssignedToUserIDs = listOf(),

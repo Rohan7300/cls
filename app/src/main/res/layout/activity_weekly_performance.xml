@@ -47,6 +47,12 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
+            <View
+                android:layout_width="20dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/back_icon"
+                app:tint="@color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -186,7 +192,7 @@
                         android:fontFamily="@font/cq_sdk_poppins_bold"
                         android:gravity="center"
 
-                        android:text="Week ."
+                        android:text="Week "
                         android:textColor="@color/white"
                         android:textSize="13sp" />
                 </FrameLayout>

@@ -297,8 +297,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.GetDAVehicleExpiredDocuments(prefs.clebUserId.toInt())
             var expiredDocDialog = ExpiredDocDialog(prefs, this)
             viewModel.liveDataGetDAVehicleExpiredDocuments.observe(this) {
-                if (it != null) {
-                    prefs.saveExpiredDocuments(it)
+                if (it == null) {
+                    //prefs.saveExpiredDocuments(it)
                     expiredDocDialog.showDialog(supportFragmentManager)
                     expiredDocDialog.isCancelable = false
                 } else {

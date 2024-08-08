@@ -39,7 +39,7 @@ Place the Rectangle area as on Vehicle Reg plate as shown in the image and captu
     <string name="key_chain_confirmation_alert">Key Chain Confirmation Alert</string>
     <string name="keeping_you">"Keeping your vehicle safe and secure from theft of your vehicle or parcels is an important part of being a delivery driver. 90% of all vehicle thefts are when drivers leave their vehicle unattended unlocked or leave their keys in the vehicle. You as the Responsible Delivery Driver need to be aware of your responsibility and care of duty. Driver safety is important to us and we advise any driver that is threatened with violence for their vehicle and its contents to walk away from your vehicle and if your keys are taken to contact OSM immediately and contact the police and report the incident.\nPlease remember that mistakes mean £££ when not wearing your key chain. "</string>
     <string name="tick_to_ack">Tick to acknowledge that I have been instructed on keeping my vehicle safe and secure and that my Keychain will be used at all times while making deliveries.</string>
-    <string name="ana_carolin">Ana Carolina Souza Dos Santos</string>
+    <string name="ana_carolin"> </string>
     <string name="dxLoc">DMX4\n</string>
     <string name="vehicle_mil">Vehicle Mileage\n</string>
     <string name="previous_re">Previous Recorded Mileage</string>
