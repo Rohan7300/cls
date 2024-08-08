@@ -21,6 +21,7 @@ import android.util.Base64
 import android.util.Base64OutputStream
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.webkit.MimeTypeMap
@@ -35,6 +36,9 @@ import androidx.navigation.NavController
 import com.clebs.celerity_admin.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.sidesheet.SideSheetBehavior
+import com.google.android.material.sidesheet.SideSheetCallback
+import com.google.android.material.sidesheet.SideSheetDialog
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 
@@ -346,7 +350,28 @@ fun setupHalfHeightForlisting(bottomSheetDialog: BottomSheetDialog, context: Con
         }
     })
 }
+fun setupHalfHeightExpand( context: Context) {
+    val bottomSheet =
+        SideSheetDialog(context)
+    val behavior = SideSheetBehavior.from(bottomSheet as View)
+    val layoutParams = bottomSheet.layoutParams
 
+
+    bottomSheet.layoutParams = layoutParams
+
+    behavior.isDraggable = false
+    behavior.state=SideSheetBehavior.STATE_EXPANDED
+    behavior.addCallback(object : SideSheetCallback() {
+        override fun onStateChanged(sheet: View, newState: Int) {
+
+        }
+
+        override fun onSlide(sheet: View, slideOffset: Float) {
+
+        }
+
+    })
+}
 fun getWindowHeight(context: Context): Int {
     // Calculate window height for fullscreen use
     val displayMetrics = DisplayMetrics()

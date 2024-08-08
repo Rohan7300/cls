@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.clebs.celerity_admin.ui.CLSloction.ChangeVehicleFragment"
+        android:name="com.clebs.celerity_admin.ui.CLSOsmHomeFragment"
         android:label="Vehicle Allocation"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_c_l_s_osm_home" />
 
     <fragment
         android:id="@+id/nav_slideshow"

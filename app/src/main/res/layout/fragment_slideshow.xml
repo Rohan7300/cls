@@ -12,10 +12,11 @@
         android:id="@+id/llfilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+
         android:background="@drawable/shapeeditextnew"
+        android:backgroundTint="@color/maroon"
         android:orientation="horizontal"
-        android:padding="10dp"
+        android:padding="8dp"
         android:visibility="visible"
         android:weightSum="2">
 
@@ -29,26 +30,35 @@
                 android:id="@+id/tvdefects"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Show defects only"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="2dp"
+                android:layout_alignParentStart="true"
+                android:text="Show defected only"
                 android:textColor="@color/white"
-                android:textSize="10sp" />
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
             <CheckBox
+                android:id="@+id/showDefectCheckbox"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:id="@+id/showDefectCheckbox"
-                android:layout_margin="6dp"
-                android:layout_toEndOf="@+id/tvdefects"/>
+                android:background="@color/white"
+                android:backgroundTint="@color/white"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                android:layout_toEndOf="@+id/tvdefects" />
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rltwo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:id="@+id/rltwo"
-            android:padding="4dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:padding="4dp">
 
             <TextView
                 android:id="@+id/tvlocation"
@@ -57,28 +67,41 @@
                 android:layout_marginTop="3dp"
                 android:text="Choose location"
                 android:textColor="@color/white"
-                android:textSize="10sp" />
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tvlocname"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="4dp"
                 android:layout_marginTop="2dp"
+                android:layout_alignParentEnd="true"
                 android:layout_marginEnd="2dp"
-android:id="@+id/tvlocname"
                 android:layout_marginBottom="2dp"
                 android:layout_toEndOf="@+id/tvlocation"
-                android:alpha="0.5"
-                android:background="@drawable/shapeeditextnew"
-                android:backgroundTint="@color/light_grey"
+                android:alpha="0.9"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:background="@drawable/shape_green"
+                android:backgroundTint="@color/white"
                 android:gravity="center_horizontal"
+                android:padding="2dp"
+                android:singleLine="true"
                 android:text="All"
-           android:padding="2dp"
+                android:textColor="@color/black"
                 android:textSize="10sp" />
+
         </RelativeLayout>
+
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/white"
+        android:backgroundTint="@color/white" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"
@@ -147,7 +170,7 @@ android:id="@+id/tvlocname"
             android:gravity="center"
             android:text="_ _ _ _"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="12sp" />
 
         <ImageView
             android:id="@+id/next"

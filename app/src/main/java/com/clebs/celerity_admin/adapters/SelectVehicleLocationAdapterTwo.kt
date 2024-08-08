@@ -51,7 +51,7 @@ class SelectVehicleLocationAdapterTwo(
     }
 
     override fun getItemCount(): Int {
-        return data.size +1
+        return data.size
     }
 
     override fun onBindViewHolder(holder: SelectVehicleLocationAdapterViewHolder, position: Int) {

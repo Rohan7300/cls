@@ -7,18 +7,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.databinding.WeeklyDefectAdapterBinding
+import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModelItem
+import com.clebs.celerity_admin.network.ApiService
+import com.clebs.celerity_admin.network.RetrofitService
+import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.ui.ClSReports.WeeklyDefectsFragment
+import com.clebs.celerity_admin.viewModels.MainViewModel
 
 class WeeklyDefectAdapter(
     var context: Context,
     var data: ArrayList<WeeklyDefectChecksModelItem>,
     var listener: WeeklyDefectsClickListener
+
 ) :
     RecyclerView.Adapter<WeeklyDefectAdapter.WeeklyDefectViewHolder>() {
     lateinit var binding: WeeklyDefectAdapterBinding
+    private lateinit var mainViewModel: MainViewModel
 
     interface WeeklyDefectsClickListener {
         fun docClickAction(item: WeeklyDefectChecksModelItem)
@@ -26,24 +35,29 @@ class WeeklyDefectAdapter(
 
     inner class WeeklyDefectViewHolder(var binding: WeeklyDefectAdapterBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+
+
+
         fun bindView(item: WeeklyDefectChecksModelItem) {
+
             binding.tvReg.setText(item.vehRegNo)
             binding.tvDaName.setText(item.dAName)
             binding.tvDaLocationname.setText(item.locationName)
 
-            if (item.OsmName.isNotEmpty()){
+            if (item.OsmName.isNotEmpty()) {
                 binding.osmName.text = item.OsmName
-            }
-            else{
+            } else {
                 binding.osmName.setText("_ _ _ _")
             }
-            Log.e("dkfdkjfdkfjd", "bindView: "+item.OsmName )
-            if (item.VdhCheckIsApproved) {
 
+            Log.e("dkfdkjfdkfjd", "bindView: " + item.OsmName)
+            if (item.VdhCheckIsApproved) {
+                binding.txtchecks.setText("Checks completed by : ${item.OsmName}")
                 binding.viewfiles.backgroundTintList =
                     ContextCompat.getColorStateList(context, R.color.green)
                 binding.cards.strokeColor = ContextCompat.getColor(context, R.color.green)
-                binding.cards.strokeWidth=6
+                binding.cards.strokeWidth = 2
                 binding.osmCheck.setImageDrawable(
                     ContextCompat.getDrawable(
                         context,
@@ -51,11 +65,13 @@ class WeeklyDefectAdapter(
                     )
                 )
 
+
             } else {
+                binding.txtchecks.setText("Checks pending by OSM")
                 binding.viewfiles.backgroundTintList =
                     ContextCompat.getColorStateList(context, R.color.red)
-                binding.cards.strokeWidth=1
-                binding.cards.strokeColor = ContextCompat.getColor(context, R.color.black)
+                binding.cards.strokeWidth = 2
+                binding.cards.strokeColor = ContextCompat.getColor(context, R.color.red)
                 binding.osmCheck.setImageDrawable(
                     ContextCompat.getDrawable(
                         context,
@@ -63,6 +79,9 @@ class WeeklyDefectAdapter(
                     )
                 )
 
+            }
+            itemView.setOnClickListener {
+                listener.docClickAction(item)
             }
             binding.viewfiles.setOnClickListener {
                 listener.docClickAction(item)
@@ -87,6 +106,8 @@ class WeeklyDefectAdapter(
 
     override fun onBindViewHolder(holder: WeeklyDefectViewHolder, position: Int) {
         val item = data[position]
+
         holder.bindView(item)
     }
+
 }

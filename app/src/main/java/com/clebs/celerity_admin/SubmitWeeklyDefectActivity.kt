@@ -130,6 +130,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_submit_weekly_defect)
         loadingDialog = LoadingDialog(this)
         cqCode()
+        binding.pbs.visibility=View.VISIBLE
         binding.daTv.setText(currentWeeklyDefectItem!!.dAName)
         if (!prefs!!.currentWeeklyDefectItemVehRegNo.isNullOrBlank())
             binding.daReg.setText(prefs!!.currentWeeklyDefectItemVehRegNo)
@@ -151,9 +152,11 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         )
         vm.isinspectiondonelivedata.observe(this, Observer {
             if (it != null) {
+                binding.pbs.visibility=View.GONE
                 if (it.isInspectionDone) {
                     binding.llmain.visibility = View.VISIBLE
                     binding.llstart.visibility = View.VISIBLE
+
                     binding.tvInspection.setText("OSM Vehicle Inspection Completed")
                     binding.llstart.strokeColor = ContextCompat.getColor(this, R.color.green)
                     binding.tvInspection.setTextColor(ContextCompat.getColor(this, R.color.green))
@@ -167,7 +170,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     )
                 }
             } else {
-              //  binding.llmain.visibility = View.GONE
+                binding.llmain.visibility = View.GONE
                 binding.btStart.visibility = View.VISIBLE
                 binding.llstart.setStrokeColor(
                     ContextCompat.getColor(
@@ -837,7 +840,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         if (vdhDefChkImgTyreThreadDepthFrontNs.isNotBlank()) {
             "Upload Again".also { tyreDepthFrontImageUploadBtn.text = it }
             tyreDepthFrontImageFileName.text = shortenFileName(vdhDefChkImgTyreThreadDepthFrontNs)
-            tyreDepthFrontImageFileName.setTextColor(ContextCompat.getColor(this, R.color.blue_hex))
+            tyreDepthFrontImageFileName.setTextColor(ContextCompat.getColor(this, R.color.purple))
             tyreDepthFrontImageUploadBtn.backgroundTintList =
                 ContextCompat.getColorStateList(this, R.color.green)
 
@@ -852,7 +855,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         if (!vdhDefChkImgTyreThreadDepthFrontNs.isNullOrBlank()) {
             "Upload Again".also { tyreDepthFrontImageUploadBtn.text = it }
             tyreDepthFrontImageFileName.text = uriToFileName(vdhDefChkImgTyreThreadDepthFrontNs!!)
-            tyreDepthFrontImageFileName.setTextColor(ContextCompat.getColor(this, R.color.blue_hex))
+            tyreDepthFrontImageFileName.setTextColor(ContextCompat.getColor(this, R.color.purple))
             tyreDepthFrontImageUploadBtn.backgroundTintList =
                 ContextCompat.getColorStateList(this, R.color.greenBtn)
         }
@@ -873,7 +876,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         }
 
         tyreDepthFrontImageFileName.text = otherFiles
-        tyreDepthFrontImageFileName.setTextColor(ContextCompat.getColor(this, R.color.blue_hex))
+        tyreDepthFrontImageFileName.setTextColor(ContextCompat.getColor(this, R.color.purple))
         tyreDepthFrontImageUploadBtn.backgroundTintList =
             ContextCompat.getColorStateList(this, R.color.greenBtn)
     }

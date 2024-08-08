@@ -2,7 +2,6 @@ package com.clebs.celerity_admin
 
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.core.view.WindowCompat
@@ -75,7 +74,7 @@ class MyApplicationIntro :  AppIntro() {
 
         val i = Intent(
             this@MyApplicationIntro,
-            LoginActivity::class.java
+            LoginActivityTwo::class.java
         )
 
         startActivity(i)
@@ -86,7 +85,7 @@ class MyApplicationIntro :  AppIntro() {
         super.onDonePressed(currentFragment)
         val i = Intent(
             this@MyApplicationIntro,
-            LoginActivity::class.java
+            LoginActivityTwo::class.java
         )
 
         startActivity(i)

@@ -11,21 +11,18 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.clebs.celerity_admin.databinding.ActivityLoginBinding
+import com.clebs.celerity_admin.databinding.ActivityLoginTwoBinding
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.utils.Prefs
-import com.clebs.celerity_admin.utils.toast
 import com.clebs.celerity_admin.viewModels.MainViewModel
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivityTwo : AppCompatActivity() {
 
-    lateinit var ActivityLoginBinding: ActivityLoginBinding
+    lateinit var ActivityLoginBinding: ActivityLoginTwoBinding
     lateinit var mainViewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         val window = window
@@ -40,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
                 )
         window.statusBarColor = resources.getColor(R.color.transparent, null)
         super.onCreate(savedInstanceState)
-        ActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        ActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login_two)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
 
@@ -104,7 +101,7 @@ class LoginActivity : AppCompatActivity() {
                         Prefs.getInstance(applicationContext).accessToken = it.token
                         Prefs.getInstance(applicationContext).clebUserId = it.userID.toString()
                         val i = Intent(
-                            this@LoginActivity,
+                            this@LoginActivityTwo,
                             MainActivityTwo::class.java
                         )
 

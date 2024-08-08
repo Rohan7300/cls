@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cards"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
     android:layout_marginTop="10dp"
-    android:id="@+id/cards"
+    android:layout_marginEnd="8dp"
 
     android:orientation="vertical"
-   app:cardBackgroundColor="@color/very_very_light"
+    app:cardBackgroundColor="@color/very_very_light"
     app:cardCornerRadius="12dp"
     app:strokeColor="@color/black"
     app:strokeWidth="0.5dp">
@@ -31,6 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/very_very_light_red"
+                android:backgroundTint="@color/very_light_orange"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="2dp">
@@ -41,8 +42,8 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_weight="1"
-                    android:paddingTop="2dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingTop="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -56,8 +57,34 @@
                             android:letterSpacing="0.06"
                             android:text="DA : "
                             android:textColor="@color/text_color"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tvReg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="- - - - -"
+                            android:textAllCaps="true"
+                            android:textColor="@color/black"
+                            android:textSize="10sp" />
+
+                        <View
+                            android:layout_width="30dp"
+                            android:layout_height="1dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/cq_sdk_poppins_bold"
+                            android:letterSpacing="0.05"
+                            android:text="Reg No. "
+                            android:textColor="@color/text_color"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/tvDaName"
@@ -65,21 +92,17 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
                             android:text="- - - - -"
+                            android:textAllCaps="true"
                             android:textColor="@color/black"
                             android:textSize="11sp" />
-
-                        <View
-                            android:layout_width="wrap_content"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" />
-
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="4dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -89,7 +112,8 @@
                             android:text="OSM : "
                             android:textColor="@color/text_color"
                             android:textSize="13sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/osmName"
@@ -110,14 +134,14 @@
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/viewfiles"
-                    android:layout_width="40dp"
+                    android:layout_width="30dp"
 
-                    android:layout_height="40dp"
+                    android:layout_height="30dp"
                     android:layout_marginEnd="10dp"
                     android:backgroundTint="@color/white"
                     android:src="@drawable/checkss"
-                    app:fabSize="mini"
-                    app:maxImageSize="30dp"
+                    app:fabCustomSize="30dp"
+                    app:maxImageSize="20dp"
                     app:rippleColor="@color/maroon" />
 
 
@@ -140,8 +164,8 @@
                 <LinearLayout
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:gravity="start"
                     android:layout_marginStart="16dp"
+                    android:gravity="start"
                     android:orientation="vertical">
 
                     <TextView
@@ -155,7 +179,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvReg"
+                        android:id="@+id/tvRegs"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
@@ -174,9 +198,10 @@
             <LinearLayout
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:gravity="end"
                 android:layout_marginEnd="16dp"
-                android:orientation="vertical">
+                android:gravity="end"
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -202,33 +227,34 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="2dp"
+
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="2dp">
+            android:gravity="start"
+
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/txtchecks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="3dp"
                 android:layout_weight="1"
-android:id="@+id/txtchecks"
                 android:gravity="end"
-android:fontFamily="@font/poppins_semibold"
                 android:letterSpacing="0.02"
                 android:text="Checks completed by OSM?"
-                android:textColor="@color/grey_main"
-                android:textSize="11sp" />
+                android:textColor="@color/purple"
+                android:textSize="10sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/osmCheck"
-                android:layout_width="25dp"
-
-                android:layout_height="25dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/cancel" />
+
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

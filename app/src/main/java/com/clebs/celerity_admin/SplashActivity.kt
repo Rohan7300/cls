@@ -8,9 +8,19 @@ import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import com.clebs.celerity_admin.database.OfflineSyncDB
+import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.Prefs
 
 class SplashActivity : AppCompatActivity() {
+
+
+companion object{
+    var prefs: Prefs? = null
+    lateinit var instance: SplashActivity
+    var  offlineSyncDB: OfflineSyncDB?=null
+        private set
+}
     override fun onCreate(savedInstanceState: Bundle?) {
         val window = window
         val winParams = window.attributes
@@ -22,6 +32,9 @@ class SplashActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 )
+       instance = this@SplashActivity
+        SplashActivity.prefs = Prefs(applicationContext)
+        SplashActivity.offlineSyncDB = OfflineSyncDB(applicationContext)
         window.statusBarColor = resources.getColor(R.color.transparent, null)
         window.requestFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState)
@@ -29,16 +42,17 @@ class SplashActivity : AppCompatActivity() {
         val rotateAnimationtwo = AnimationUtils.loadAnimation(this, R.anim.slide_fade)
         val imageview = findViewById<ImageView>(R.id.ls)
         imageview.startAnimation(rotateAnimationtwo)
+
         android.os.Handler().postDelayed({
-            if (isLoggedIn()){
+            if (isLoggedIn()) {
                 navigateToHome()
-            }
-            else{
+            } else {
                 navigateToIntro()
             }
 
             finish()
         }, 2000)
+
     }
 
     fun navigateToIntro() {
@@ -56,7 +70,7 @@ class SplashActivity : AppCompatActivity() {
 
         val i = Intent(
             this@SplashActivity,
-            LoginActivity::class.java
+            LoginActivityTwo::class.java
         )
 
         startActivity(i)
@@ -70,6 +84,7 @@ class SplashActivity : AppCompatActivity() {
         startActivity(i)
 
     }
+
     private fun isLoggedIn(): Boolean {
         return Prefs.getInstance(applicationContext).getBoolean("isLoggedIn", false)
     }
