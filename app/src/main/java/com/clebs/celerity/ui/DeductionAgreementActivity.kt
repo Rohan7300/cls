@@ -20,6 +20,7 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.DeductionSignatureListener
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.bitmapToBase64
 import com.clebs.celerity.utils.convertDateFormat
@@ -57,7 +58,7 @@ class DeductionAgreementActivity : AppCompatActivity() {
         loadingDialog = LoadingDialog(this)
         loadingDialog.show()
         noInternetCheck(this, binding.nointernetLL, this)
-
+        DependencyProvider.handlingDeductionNotification = true
         viewmodel.liveDataDeductionAgreement.observe(this) {
             loadingDialog.dismiss()
             if (it != null) {
@@ -291,4 +292,5 @@ class DeductionAgreementActivity : AppCompatActivity() {
             this@DeductionAgreementActivity
         )
     }
+
 }

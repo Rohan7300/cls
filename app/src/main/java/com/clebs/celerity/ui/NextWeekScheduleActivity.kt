@@ -36,6 +36,7 @@ class NextWeekScheduleActivity : AppCompatActivity() {
             finish()
         }
         binding.prev.visibility = View.GONE
+        binding.placeholder1.visibility = View.VISIBLE
         binding.prev.setOnClickListener {
             if (isLoaded) {
                 if (i > 0) {
@@ -46,7 +47,9 @@ class NextWeekScheduleActivity : AppCompatActivity() {
                         prefs.clebUserId.toInt(), 0, crrYear, nxtWeek + i
                     )
                     binding.prev.visibility = View.GONE
+                    binding.placeholder1.visibility = View.VISIBLE
                     binding.next.visibility = View.VISIBLE
+                    binding.placeholder2.visibility = View.GONE
                 }
                 binding.weekNoTV.text = "Week ${nxtWeek + i}"
             }
@@ -61,7 +64,9 @@ class NextWeekScheduleActivity : AppCompatActivity() {
                         prefs.clebUserId.toInt(), 0, crrYear, nxtWeek + i
                     )
                     binding.prev.visibility = View.VISIBLE
+                    binding.placeholder1.visibility = View.GONE
                     binding.next.visibility = View.GONE
+                    binding.placeholder2.visibility = View.VISIBLE
                 }
                 binding.weekNoTV.text = "Week ${nxtWeek + i}"
             }

@@ -23,7 +23,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="15dp"
-                android:background="@color/very_light_orange">
+                android:gravity="center"
+                android:background="@color/maincolor">
 
                 <ImageView
                     android:id="@+id/imageViewBack"

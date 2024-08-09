@@ -30,6 +30,13 @@ object DependencyProvider {
     var currentUri: Uri? = null
     var insLevel:Int = 0
     var policyDocPDFURI:Uri? = null
+    var notificationWatcher:MutableLiveData<Int> = MutableLiveData<Int>().apply {
+        postValue(0)
+    }
+    var handlingDeductionNotification:Boolean = false
+    var handlingRotaNotification:Boolean = false
+    var handlingExpiredDialogNotification:Boolean = false
+
     var osData: OfflineSyncEntity = OfflineSyncEntity()
     var getCompanySignedDocs:GetCompanySignedDocumentListResponseItem? = null
     var getCompanySignedDocsClicked:Boolean = false

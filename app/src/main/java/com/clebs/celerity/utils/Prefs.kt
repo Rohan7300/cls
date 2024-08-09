@@ -479,13 +479,13 @@ class Prefs(context: Context) {
         editor.apply()
     }
 
-    fun isTicketRaisedToday():Boolean{
-        val isTicketRaisedToday = sharedPreferences.getBoolean("ticket_raised_today",false)
+    fun isTicketRaisedToday(): Boolean {
+        val isTicketRaisedToday = sharedPreferences.getBoolean("ticket_raised_today", false)
         if (isTicketRaisedToday) {
             val lastTicketRaisedDateTimeString =
                 sharedPreferences.getString("last_ticket_raised_datetime", "")
             val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-         //   Log.d("isInspectionDoneToday", "$currentDate \n$lastTicketRaisedDateTimeString")
+            //   Log.d("isInspectionDoneToday", "$currentDate \n$lastTicketRaisedDateTimeString")
 
             return lastTicketRaisedDateTimeString == currentDate
         } else {
@@ -531,6 +531,43 @@ class Prefs(context: Context) {
         if (isFaceMaskAdded) {
             editor.putString("last_fm_datetime", lastInspectionDateTime)
         }
+        editor.apply()
+    }
+
+    fun isWeeklyRotaApprovalCheckToday() :Boolean{
+        val isWeeklyRotaChecked = sharedPreferences.getBoolean("isWeeklyRotaChecked", false)
+        if (isWeeklyRotaChecked) {
+            val lastCheckDateTime = sharedPreferences.getString("last_rota_check_time", "")
+            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            return lastCheckDateTime == currentDate
+        }else {
+            return false
+        }
+    }
+
+    fun updateWeeklyRotaApprovalCheck(status:Boolean) {
+        val editor = sharedPreferences.edit()
+        val lastCheckDateTime = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        editor.putBoolean("isWeeklyRotaChecked", status)
+        editor.putString("last_rota_check_time", lastCheckDateTime)
+        editor.apply()
+    }
+    fun isPolicyCheckToday() :Boolean{
+        val isWeeklyRotaChecked = sharedPreferences.getBoolean("isPolicyChecked", false)
+        return if (isWeeklyRotaChecked) {
+            val lastCheckDateTime = sharedPreferences.getString("last_policy_check_time", "")
+            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            lastCheckDateTime == currentDate
+        }else {
+            false
+        }
+    }
+
+    fun updatePolicyCheckToday(status:Boolean) {
+        val editor = sharedPreferences.edit()
+        val lastCheckDateTime = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        editor.putBoolean("isPolicyChecked", status)
+        editor.putString("last_policy_check_time", lastCheckDateTime)
         editor.apply()
     }
 

@@ -51,7 +51,11 @@ import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.getMainVM
+import com.clebs.celerity.utils.DependencyProvider.handlingDeductionNotification
+import com.clebs.celerity.utils.DependencyProvider.handlingExpiredDialogNotification
+import com.clebs.celerity.utils.DependencyProvider.handlingRotaNotification
 import com.clebs.celerity.utils.DependencyProvider.isComingBackFromFaceScan
+import com.clebs.celerity.utils.DependencyProvider.notificationWatcher
 import com.clebs.celerity.utils.DependencyProvider.notify
 import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
 import com.clebs.celerity.utils.InspectionIncompleteDialog
@@ -297,8 +301,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.GetDAVehicleExpiredDocuments(prefs.clebUserId.toInt())
             var expiredDocDialog = ExpiredDocDialog(prefs, this)
             viewModel.liveDataGetDAVehicleExpiredDocuments.observe(this) {
-                if (it == null) {
-                    //prefs.saveExpiredDocuments(it)
+                if (it != null) {
+                    prefs.saveExpiredDocuments(it)
                     expiredDocDialog.showDialog(supportFragmentManager)
                     expiredDocDialog.isCancelable = false
                 } else {
@@ -306,24 +310,35 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
             }
 
+            notificationObserver()
+            viewModel.WeeklyRotaExistForDAApproval(Prefs.getInstance(this@HomeActivity).clebUserId.toInt())
             viewModel.liveDataDeductionAgreement.observe(this) {
                 if (it != null) {
-                    val intent = Intent(this@HomeActivity, DeductionAgreementActivity::class.java)
-                    intent.putExtra("actionID", it.DaDedAggrId)
-                    intent.putExtra("notificationID", it.NotificationId)
-                    startActivity(intent)
-                } else {
-                    viewModel.WeeklyRotaExistForDAApproval(Prefs.getInstance(this@HomeActivity).clebUserId.toInt())
-                }
-            }
-            viewModel.liveDataWeeklyRotaExistForDAApproval.observe(this) {
-                if (it != null) {
-                    it.Data[0].notNull {itx->
-                        val intent = Intent(this@HomeActivity, WeeklyRotaApprovalActivity::class.java)
-                        intent.putExtra("actionID", itx.LrnId)
-                        intent.putExtra("notificationID", itx.NotificationId)
+                    if(!handlingDeductionNotification){
+                        val intent = Intent(this@HomeActivity, DeductionAgreementActivity::class.java)
+                        intent.putExtra("actionID", it.DaDedAggrId)
+                        intent.putExtra("notificationID", it.NotificationId)
                         startActivity(intent)
                     }
+                } else {
+
+                }
+            }
+
+            viewModel.liveDataWeeklyRotaExistForDAApproval.observe(this) {
+                if (it != null) {
+                    it.Data[0].notNull { itx ->
+                        if(!handlingRotaNotification){
+                            val intent =
+                                Intent(this@HomeActivity, WeeklyRotaApprovalActivity::class.java)
+                            intent.putExtra("actionID", itx.LrnId)
+                            intent.putExtra("notificationID", itx.NotificationId)
+                            prefs.updateWeeklyRotaApprovalCheck(true)
+                            startActivity(intent)
+                        }
+                    }
+                } else {
+                    //prefs.updateWeeklyRotaApprovalCheck(false)
                 }
             }
 
@@ -663,8 +678,28 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
     }
 
+    private fun notificationObserver() {
+        notificationWatcher.observe(this) { nType ->
+            if (nType != 0) {
+                when (nType) {
+                    1 -> {
+                        viewModel.GetDAVehicleExpiredDocuments(prefs.clebUserId.toInt())
+                    }
+
+                    2 -> {
+                        viewModel.GetDeductionAgreement(prefs.clebUserId.toInt(), 0)
+                    }
+
+                    3 -> {
+                        viewModel.WeeklyRotaExistForDAApproval(Prefs.getInstance(this@HomeActivity).clebUserId.toInt())
+                    }
+                }
+            }
+        }
+    }
+
     private fun observers() {
-        viewModel.GetLatestAppVersion()
+
 
         viewModel.liveDataGetLatestAppVersion.observe(this) {
             val currentAppVersion = getCurrentAppVersion(this)
@@ -673,9 +708,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     val playStoreUrl =
                         "https://play.google.com/store/apps/details?id=com.clebs.celerity&hl=en"
                     showUpdateDialog(this, playStoreUrl)
+                } else {
+                    viewModel.GetDAVehicleExpiredDocuments(prefs.clebUserId.toInt())
                 }
-            } else
+            } else {
+                viewModel.GetDAVehicleExpiredDocuments(prefs.clebUserId.toInt())
                 showToast("Failed to fetch the latest app version", this@HomeActivity)
+            }
+
         }
 
         viewModel.vechileInformationLiveData.observe(this) {
@@ -789,11 +829,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             if (destinationFragment == "NotificationsFragment") {
 
                 if (actionToPerform == "Deductions" || actionToPerform == "Driver Deduction with Agreement" || actionToPerform == "DriverDeductionWithAgreement") {
-                    deductions(this, parseToInt(actionID), parseToInt(notificationID))
+                    if (!handlingDeductionNotification)
+                        deductions(this, parseToInt(actionID), parseToInt(notificationID))
                 } else if (actionToPerform == "Daily Location Rota" || actionToPerform == "Daily Rota Approval" || actionToPerform == "DailyRotaApproval") {
-                    if (getMainVM(this) != null) dailyRota(
-                        getMainVM(this), tokenUrl, this, this, parseToInt(notificationID)
-                    )
+                    if (getMainVM(this) != null)
+                        dailyRota(
+                            getMainVM(this), tokenUrl, this, this, parseToInt(notificationID)
+                        )
                     else {
                         ActivityHomeBinding.title.text = "Notifications"
                         navController.navigate(R.id.notifficationsFragment)
@@ -806,10 +848,12 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         "Your CLS Invoice is available for review."
                     )
                 } else if (actionToPerform == "Weekly Location Rota" || actionToPerform == "Weekly Rota Approval" || actionToPerform == "WeeklyRotaApproval") {
+                    if(!handlingRotaNotification)
                     weeklyLocationRota(
                         this, parseToInt(notificationID), parseToInt(actionID)
                     )
                 } else if (actionToPerform == "Expired Document" || actionToPerform == "ExpiredDocuments") {
+                    if(!handlingExpiredDialogNotification)
                     expiredDocuments(
                         getMainVM(this),
                         this,
@@ -993,7 +1037,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
     }
 
-    fun showAlertLogout() {
+    private fun showAlertLogout() {
         val factory = LayoutInflater.from(this)
         val view: View = factory.inflate(R.layout.logout_layout, null)
         val deleteDialog: AlertDialog = AlertDialog.Builder(this).create()
@@ -1141,8 +1185,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     )
                     if (firstrun) {
                         BirthdayDialog(prefs).showDialog(supportFragmentManager)
-                        //... Display the dialog message here ...
-                        // Save the state
                         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
                             .putBoolean("firstrun", false).apply()
                     }
@@ -1236,9 +1278,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             Prefs.getInstance(App.instance).clebUserId.toInt(), currentDate
         )
         viewModel.livedataGetVehicleInfobyDriverId.observe(this) {
-
             if (it != null) {
-
                 Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
                 if (Prefs.getInstance(App.instance).vmId == 0) {
                     Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()
@@ -1256,13 +1296,44 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     override fun onResume() {
         super.onResume()
         try {
+            handlingDeductionNotification = false
+            handlingRotaNotification = false
+            handlingExpiredDialogNotification = false
             if (oSyncViewModel != null || this::oSyncViewModel.isInitialized) {
                 oSyncViewModel.getData()
                 if (isComingBackFromFaceScan) {
                     navController.navigate(R.id.newCompleteTaskFragment)
                 }
             }
-            viewModel.GetDAVehicleExpiredDocuments(prefs.clebUserId.toInt())
+
+
+            viewModel.GetLatestAppVersion()
+            //if (!prefs.isPolicyCheckToday()) {
+            viewModel.getDriverSignatureInfo(prefs.clebUserId.toDouble())
+                .observe(this, Observer {
+                    if (it != null) {
+                        loadingDialog.dismiss()
+                        prefs.handbookId = it.handbookId
+                        prefs.updatePolicyCheckToday(true)
+                        if (it!!.isSignatureReq.equals(true) && (it.isAmazonSignatureReq || it.isOtherCompanySignatureReq)) {
+                            Prefs.getInstance(applicationContext)
+                                .saveBoolean("isSignatureReq", it.isSignatureReq)
+                            Prefs.getInstance(applicationContext)
+                                .saveBoolean("IsamazonSign", it.isAmazonSignatureReq)
+                            Prefs.getInstance(applicationContext)
+                                .saveBoolean("isother", it.isOtherCompanySignatureReq)
+
+
+                            val intent = Intent(this, PolicyDocsActivity::class.java)
+
+                            intent.putExtra("signature_required", "0")
+                            startActivity(intent)
+                            finish()
+                        }
+                    }
+                })
+            // }
+
         } catch (_: Exception) {
 
         }

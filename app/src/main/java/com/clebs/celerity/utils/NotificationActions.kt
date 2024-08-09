@@ -21,8 +21,12 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.VehicleExpiringDocuments
 import com.clebs.celerity.ui.WeeklyRotaApprovalActivity
 import com.clebs.celerity.utils.DependencyProvider.dailyRotaNotificationShowing
+import com.clebs.celerity.utils.DependencyProvider.handlingDeductionNotification
+import com.clebs.celerity.utils.DependencyProvider.handlingExpiredDialogNotification
+import com.clebs.celerity.utils.DependencyProvider.handlingRotaNotification
 
 fun deductions(context: Context, notificationActionId: Int, notificationId: Int) {
+    handlingDeductionNotification = true
     val intent = Intent(context, DeductionAgreementActivity::class.java)
     intent.putExtra("actionID", notificationActionId)
     intent.putExtra("notificationID", notificationId)
@@ -163,6 +167,7 @@ fun dailyRota(
 }
 
 fun invoiceReadyToView(notificationId: Int, fragmentManager: FragmentManager,notificationBody:String) {
+
     val dialog = InvoiceReadytoViewDialog.newInstance(
         getCurrentWeek().toString(),
         getCurrentYear().toString(),
@@ -173,6 +178,7 @@ fun invoiceReadyToView(notificationId: Int, fragmentManager: FragmentManager,not
 }
 
 fun weeklyLocationRota(context: Context, notificationId: Int, notificationActionId: Int) {
+    handlingRotaNotification = true
     val intent = Intent(context, WeeklyRotaApprovalActivity::class.java)
     intent.putExtra("actionID", notificationActionId)
     intent.putExtra("notificationID", notificationId)
@@ -186,6 +192,7 @@ fun expiredDocuments(
     fragmentManager: FragmentManager,
     notificationId: Int
 ) {
+    handlingExpiredDialogNotification = true
     val loadingDialog = LoadingDialog(context)
     val pref = Prefs.getInstance(context)
     loadingDialog.show()

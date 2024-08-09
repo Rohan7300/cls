@@ -15,6 +15,7 @@ import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.convertDateFormat
 import com.clebs.celerity.utils.noInternetCheck
@@ -68,6 +69,8 @@ class WeeklyRotaApprovalActivity : AppCompatActivity() {
                     getCurrentYear(),
                     getCurrentWeek()
                 )*/
+
+        DependencyProvider.handlingRotaNotification = true
         viewmodel.GetWeeklyLocationRotabyId(
             actionID
         )
@@ -88,7 +91,6 @@ class WeeklyRotaApprovalActivity : AppCompatActivity() {
                 showToast("Weekly Rota not exist for approval.", this)
                 viewmodel.MarkNotificationAsRead(notificationID)
             }
-
         }
 
         viewmodel.liveDataApproveWeeklyRota.observe(this) {
@@ -169,5 +171,7 @@ class WeeklyRotaApprovalActivity : AppCompatActivity() {
 
         }
     }
+
+
 
 }

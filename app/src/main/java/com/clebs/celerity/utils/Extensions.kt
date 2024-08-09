@@ -1109,7 +1109,7 @@ fun showUpdateDialog(context: Context, playStoreUrl: String) {
     builder.setPositiveButton("Update") { dialog, _ ->
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(playStoreUrl))
         context.startActivity(intent)
-        dialog.dismiss()
+        //dialog.dismiss()
     }
     builder.setCancelable(false)
     val dialog = builder.create()

@@ -45,7 +45,7 @@ class ExpiredDocDialog(val prefs: Prefs, val rvContext: Context) : DialogFragmen
         }*/
         raiseTicketBtn.setOnClickListener {
             if(prefs.isTicketRaisedToday()){
-                showToast("Ticket already raised today.",rvContext)
+                showToast("Ticket has been already raised. Please retry after 24 hours.",rvContext)
             }else{
                 blockCreateTicket = true
                 isComingToRaiseTicketforExpiredDocs = true

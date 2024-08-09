@@ -408,7 +408,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
         val currentDate = LocalDateTime.now()
         val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
-        val regexPattern = Regex("${x.reversed().take(3)}${y.take(3)}${formattedDate}")
+        val regexPattern = Regex("${x.takeLast(3)}${y.take(3)}${formattedDate}")
         prefs.inspectionID = regexPattern.toString().replace(" ", "")
         //inspectionID = regexPattern.toString().replace(" ","")
         Log.e(

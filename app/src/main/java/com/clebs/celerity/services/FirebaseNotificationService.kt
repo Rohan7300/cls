@@ -15,6 +15,7 @@ import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.SplashActivity
+import com.clebs.celerity.utils.DependencyProvider.notificationWatcher
 import com.clebs.celerity.utils.DependencyProvider.notify
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getDeviceID
@@ -96,7 +97,14 @@ class FirebaseNotificationService : FirebaseMessagingService() {
             Log.d(TAG, "tokenUrl : $tokenUrl")
             Log.d(TAG, "notificationId : $notificationId")
             if (!isNotificationShowing) {
-                if (notificationId != "0")
+
+                if (notificationId != "0") {
+                    if (actionToperform == "Deductions" || actionToperform == "Driver Deduction with Agreement" || actionToperform == "DriverDeductionWithAgreement")
+                        notificationWatcher.postValue(2)
+                 else if (actionToperform == "Weekly Location Rota" || actionToperform == "Weekly Rota Approval" || actionToperform == "WeeklyRotaApproval")
+                        notificationWatcher.postValue(3)
+                    else if (actionToperform == "Expired Document" || actionToperform == "ExpiredDocuments")
+                        notificationWatcher.postValue(1)
                     showCustomNotification(
                         title,
                         messageBody,
@@ -105,6 +113,7 @@ class FirebaseNotificationService : FirebaseMessagingService() {
                         tokenUrl,
                         notificationId
                     )
+                }
                 isNotificationShowing = true
             }
         }
