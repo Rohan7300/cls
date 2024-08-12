@@ -482,6 +482,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             prefs.Isfirst = false
             prefs.updateInspectionStatus(true)
             //SaveVehicleInspection(viewModel)
+            prefs.isInspectionIDFailedToUpload = false
             startUploadWithWorkManager(3, prefs, this)
             uploadStatus()
             showToast("Vehicle Inspection is successfully completed ", this)

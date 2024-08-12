@@ -653,6 +653,7 @@ class ImageUploadWorker(
                             prefs.isInspectionIDFailedToUpload = true
                         }else{
                             prefs.isInspectionIDFailedToUpload = false
+                            prefs.updateInspectionStatus(true)
                         }
                     }
                 }

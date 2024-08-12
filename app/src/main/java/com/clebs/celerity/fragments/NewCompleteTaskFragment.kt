@@ -77,6 +77,7 @@ import okhttp3.MultipartBody
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
@@ -412,6 +413,7 @@ class NewCompleteTaskFragment : Fragment() {
         }
 
         if(prefs.isInspectionIDFailedToUpload){
+            prefs.isInspectionIDFailedToUpload = false
             startUploadWithWorkManager(3, prefs, requireContext())
         }
     }
@@ -817,12 +819,12 @@ class NewCompleteTaskFragment : Fragment() {
 
 
         return try {
-            val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
-            val start = sdf.parse(startTime)
-            val end = sdf.parse(endTime)
+            val formatter = DateTimeFormatter.ofPattern("hh:mm a", Locale.getDefault())
+            val start = LocalTime.parse(startTime, formatter)
+            val end = LocalTime.parse(endTime, formatter)
 
             if (start != null && end != null) {
-                if(start.before(end))
+                if(start.isBefore(end))
                     true
                 else{
                     var errorString = "BreakTime CTE-01 : NewCompleteTaskFragment - chkTime\n ElseBlock: Start Time (${startTime}) more than End time ($endTime)"
@@ -845,8 +847,7 @@ class NewCompleteTaskFragment : Fragment() {
                     "$e\n${e.localizedMessage} $e"
             viewModel.TrackErrorLog(prefs.clebUserId.toInt(),errorString)
             Log.d("CTE","CheckTimeException3 ${e.localizedMessage} $e")
-          //Firebase.crashlytics.recordException(RuntimeException(e))
-            //Firebase.crashlytics.log("CheckTimeException3: $e  ${e.localizedMessage}")
+
             FirebaseCrashlytics.getInstance().log("CheckTimeException3: $e")
             FirebaseCrashlytics.getInstance().recordException(e)
             e.printStackTrace()

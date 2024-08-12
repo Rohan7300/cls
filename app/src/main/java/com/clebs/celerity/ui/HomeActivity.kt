@@ -1202,11 +1202,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     Prefs.getInstance(applicationContext).days = "0"
                 }
 
-                if (!it.IsVehicleInspectionDone) {
+/*                if (!it.IsVehicleInspectionDone) {
                     if (prefs.isInspectionDoneToday()) SaveVehicleInspection(viewModel)
                 } else {
                     prefs.updateInspectionStatus(true)
-                }
+                }*/
             }
         })
 

@@ -872,6 +872,7 @@ fun convertToDate(inputDate: String): String {
     }
 }
 
+
 fun convertToTime(inputDate: String): String {
     return try {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
