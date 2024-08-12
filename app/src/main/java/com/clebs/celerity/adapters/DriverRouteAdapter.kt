@@ -36,9 +36,19 @@ class DriverRouteAdapter(
         fun bind(item: GetDriverRouteInfoByDateResponseItem) {
             binding.routeNameTwo.text = item.RtName
             if (item.RtIsByod)
-                binding.byodIC.setColorFilter(ContextCompat.getColor(requireContext,R.color.green_new))
+                binding.byodIC.setColorFilter(
+                    ContextCompat.getColor(
+                        requireContext,
+                        R.color.green_new
+                    )
+                )
             else
-                binding.byodIC.setColorFilter(ContextCompat.getColor(requireContext,R.color.light_grey))
+                binding.byodIC.setColorFilter(
+                    ContextCompat.getColor(
+                        requireContext,
+                        R.color.light_grey
+                    )
+                )
             binding.delRouteIV.setOnClickListener {
                 loadingDialog()
                 mainViewModel.DeleteOnRouteDetails(item.RtId)

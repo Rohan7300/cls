@@ -17,7 +17,7 @@ android {
         applicationId = "com.clebs.celerity"
         minSdk = 27
         targetSdk = 34
-        versionCode = 5
+        versionCode = 7
         versionName = "1.0.5"
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
