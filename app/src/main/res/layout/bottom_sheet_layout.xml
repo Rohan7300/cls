@@ -250,6 +250,7 @@
                     android:layout_marginTop="10dp"
                     android:text="Allocated Vehicle : KM73 RCO\n
 Vehicle Location : Birmingham - DBI2"
+                    android:textSize="10sp"
                     android:visibility="gone"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/edt_layout_return" />
@@ -259,17 +260,18 @@ Vehicle Location : Birmingham - DBI2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
+
                     android:background="@drawable/shape_editext_main"
                     android:backgroundTint="@color/purple"
                     android:padding="8dp"
-                    android:text="BREAK DOWN"
+                    android:text="BREAK DOWN REQ."
                     android:textColor="@color/white"
-                    android:textSize="12sp"
+                    android:textSize="10sp"
                     android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="@+id/edt_layout_two"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@id/txt_info"
-                    app:layout_constraintTop_toBottomOf="@+id/edt_layout_two" />
+                    app:layout_constraintStart_toEndOf="@+id/txt_info"
+                    app:layout_constraintTop_toTopOf="@+id/txt_info" />
 
                 <LinearLayout
                     android:id="@+id/llmtwo"

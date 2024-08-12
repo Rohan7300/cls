@@ -35,6 +35,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.BreakDownActivity"
+            android:exported="false" />
+        <activity
             android:name=".VehicleCollectionListActivity"
             android:exported="false"
             android:label="@string/title_activity_vehicle_collection_list"
@@ -50,7 +53,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Celerity_admin.NoActionBar" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginActivityTwo"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -58,7 +61,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".SplashActivityTwo"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -87,5 +90,4 @@
                 tools:replace="android:resource" />
         </provider>
     </application>
-
 </manifest>

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
@@ -79,18 +81,19 @@ class VehicleCollectionListActivity : ComponentActivity() {
                         .background(Color.White, RoundedCornerShape(16.dp))
                         .padding(16.dp)
                 ) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.TopEnd
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        IconButton(onClick = onDismissRequest) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.xmark),
-                                contentDescription = "Cross"
-                            )
-                        }
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_filter_list_24),
+                            contentDescription = "Filter Icon",
+                            Modifier.size(width = 20.dp, height = 20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text("Filters", color = colorResource(R.color.orange))
                     }
-                    Text("Filters")
+                    Spacer(modifier = Modifier.height(10.dp))
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -101,7 +104,7 @@ class VehicleCollectionListActivity : ComponentActivity() {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RadioButton(selected = true, onClick = { /*TODO*/ })
+                        RadioButton(selected = false, onClick = { /*TODO*/ })
                         Text("Collect Vehicle")
 
                     }
@@ -111,16 +114,23 @@ class VehicleCollectionListActivity : ComponentActivity() {
                         RadioButton(selected = true, onClick = { /*TODO*/ })
                         Text("Return Vehicle")
                     }
-                    Button(
-                        onClick = onDismissRequest,
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = Color.Red
-                        )
+
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(
-                            text = "Dismiss",
-                            color = Color.White
-                        )
+                        TextButton(onClick = onDismissRequest) {
+                            Text(
+                                text = "Cancel",
+                                color = Color.Blue
+                            )
+                        }
+                        TextButton(onClick = onDismissRequest) {
+                            Text(
+                                text = "OK",
+                                color = Color.Blue
+                            )
+                        }
                     }
                 }
             }
@@ -224,15 +234,11 @@ class VehicleCollectionListActivity : ComponentActivity() {
     @Preview
     @Composable
     fun FilterPreview() {
-        setContent {
-            CLSOSMTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    FilterDialog(true) {}
-                }
-            }
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            FilterDialog(true) {}
         }
     }
 }

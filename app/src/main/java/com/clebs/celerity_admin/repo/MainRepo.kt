@@ -4,9 +4,12 @@ import android.util.Log
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
+import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
+import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
+import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
@@ -20,6 +23,7 @@ import com.clebs.celerity_admin.models.RepoInfoModel
 import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
 import com.clebs.celerity_admin.models.ResponseInspectionDone
 import com.clebs.celerity_admin.models.SaveInspectionRequestBody
+import com.clebs.celerity_admin.models.SaveVehicleBreakDownInspectionRequest
 import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
@@ -235,6 +239,27 @@ class MainRepo(private val ApiService: ApiService) {
     ): SimpleNetworkResponse<GetVehicleLocation> {
         return safeApiCall {
             ApiService.GetLocationListbyUserId(userID)
+        }
+    }
+    suspend fun GetAllVehicleInspectionList():SimpleNetworkResponse<GetAllVehicleInspectionListResponse>{
+        return safeApiCall {
+            ApiService.GetAllVehicleInspectionList()
+        }
+    }
+    suspend fun GetAllDriversInspectionList():SimpleNetworkResponse<GetAllDriversInspectionListResponse>{
+        return safeApiCall {
+            ApiService.GetAllDriversInspectionList()
+        }
+    }
+    suspend fun GetVehicleDamageWorkingStatus():SimpleNetworkResponse<GetVehicleDamageWorkingStatusResponse>{
+        return safeApiCall {
+            ApiService.GetVehicleDamageWorkingStatus()
+        }
+    }
+
+    suspend fun SaveVehicleBreakDownInspectionInfo(request: SaveVehicleBreakDownInspectionRequest):SimpleNetworkResponse<SucessStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.SaveVehicleBreakDownInspectionInfo(request)
         }
     }
 }

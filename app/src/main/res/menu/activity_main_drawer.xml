@@ -23,6 +23,10 @@
             android:id="@+id/vehicle_collection_list"
             android:icon="@drawable/gallery"
             android:title="Vehicle Collection List" />
+        <item
+            android:id="@+id/vehicle_breakdown"
+            android:icon="@drawable/gallery"
+            android:title="Break Down" />
         <!--        <item-->
         <!--            android:id="@+id/nav_weblogin"-->
         <!--            android:icon="@drawable/baseline_network_cell_24"-->

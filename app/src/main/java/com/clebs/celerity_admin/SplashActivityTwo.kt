@@ -9,15 +9,14 @@ import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import com.clebs.celerity_admin.database.OfflineSyncDB
-import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.Prefs
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivityTwo : AppCompatActivity() {
 
 
 companion object{
     var prefs: Prefs? = null
-    lateinit var instance: SplashActivity
+    //lateinit var instance: SplashActivityTwo
     var  offlineSyncDB: OfflineSyncDB?=null
         private set
 }
@@ -32,9 +31,8 @@ companion object{
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 )
-       instance = this@SplashActivity
-        SplashActivity.prefs = Prefs(applicationContext)
-        SplashActivity.offlineSyncDB = OfflineSyncDB(applicationContext)
+        SplashActivityTwo.prefs = Prefs(applicationContext)
+        SplashActivityTwo.offlineSyncDB = OfflineSyncDB(applicationContext)
         window.statusBarColor = resources.getColor(R.color.transparent, null)
         window.requestFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState)
@@ -58,7 +56,7 @@ companion object{
     fun navigateToIntro() {
         // Navigate to the login screen
         val i = Intent(
-            this@SplashActivity,
+            this@SplashActivityTwo,
             MyApplicationIntro::class.java
         )
 
@@ -69,7 +67,7 @@ companion object{
     fun navigateToLogin() {
 
         val i = Intent(
-            this@SplashActivity,
+            this@SplashActivityTwo,
             LoginActivityTwo::class.java
         )
 
@@ -78,7 +76,7 @@ companion object{
 
     fun navigateToHome() {
         val i = Intent(
-            this@SplashActivity, MainActivityTwo::class.java
+            this@SplashActivityTwo, MainActivityTwo::class.java
         )
 
         startActivity(i)
