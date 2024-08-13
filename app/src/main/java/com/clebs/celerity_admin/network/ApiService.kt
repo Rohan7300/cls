@@ -5,6 +5,7 @@ import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
 import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
+import com.clebs.celerity_admin.models.GetCurrentAllocatedDaResponse
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
@@ -149,12 +150,19 @@ interface ApiService {
 
     @GET("/api/VehAllocHistories/GetAllVehicleInspectionList")
     suspend fun GetAllVehicleInspectionList(): Response<GetAllVehicleInspectionListResponse>
+
     @GET("/api/VehAllocHistories/GetAllDriversInspectionList")
     suspend fun GetAllDriversInspectionList(): Response<GetAllDriversInspectionListResponse>
 
     @GET("/api/VehAllocHistories/GetVehicleDamageWorkingStatus")
-    suspend fun GetVehicleDamageWorkingStatus():Response<GetVehicleDamageWorkingStatusResponse>
+    suspend fun GetVehicleDamageWorkingStatus(): Response<GetVehicleDamageWorkingStatusResponse>
 
     @POST("/api/VehAllocHistories/SaveVehicleBreakDownInspectionInfo")
-    suspend fun SaveVehicleBreakDownInspectionInfo(@Body requestBody: SaveVehicleBreakDownInspectionRequest):Response<SucessStatusMsgResponse>
+    suspend fun SaveVehicleBreakDownInspectionInfo(@Body requestBody: SaveVehicleBreakDownInspectionRequest): Response<SucessStatusMsgResponse>
+
+    @GET("/api/VehAllocHistories/GetCurrentAllocatedDa/{vmId}")
+    suspend fun GetCurrentAllocatedDa(
+        @Path("vmId") vmId: String,
+        @Query("isVehReturned") isVehReturned: Boolean
+    ): Response<GetCurrentAllocatedDaResponse>
 }

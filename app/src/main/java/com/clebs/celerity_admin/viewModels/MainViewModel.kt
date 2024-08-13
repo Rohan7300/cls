@@ -10,6 +10,7 @@ import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
 import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
+import com.clebs.celerity_admin.models.GetCurrentAllocatedDaResponse
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
@@ -58,6 +59,7 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
     val DriverInspectionListLiveData:MutableLiveData<GetAllDriversInspectionListResponse?> = MutableLiveData()
     val VehicleDamageWorkingStatusLD:MutableLiveData<GetVehicleDamageWorkingStatusResponse?> = MutableLiveData()
     val SaveVehicleBreakDownInspectionLD:MutableLiveData<SucessStatusMsgResponse?> = MutableLiveData()
+    val GetCurrentAllocatedDaLD:MutableLiveData<GetCurrentAllocatedDaResponse?> = MutableLiveData()
     private val _clickEvent = MutableLiveData<Boolean>()
     val clickEvent: LiveData<Boolean> = _clickEvent
 
@@ -201,7 +203,7 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         return responseLiveData
     }
 
-    fun GetDDAmandateReturn(ddaid: String): MutableLiveData<GetReturnVmID?> {
+    fun GetDDAmandateReturn(ddaid: String,): MutableLiveData<GetReturnVmID?> {
         val responseLiveData = MutableLiveData<GetReturnVmID?>()
 
         viewModelScope.launch {
@@ -455,6 +457,15 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
                 SaveVehicleBreakDownInspectionLD.postValue(null)
             else
                 SaveVehicleBreakDownInspectionLD.postValue(response.body)
+        }
+    }
+    fun GetCurrentAllocatedDa(vmId: String, isVehReturned: Boolean){
+        viewModelScope.launch {
+            val response = repo.GetCurrentAllocatedDa(vmId,isVehReturned)
+            if(!response.isSuccessful || response.failed)
+                GetCurrentAllocatedDaLD.postValue(null)
+            else
+                GetCurrentAllocatedDaLD.postValue(response.body)
         }
     }
 }

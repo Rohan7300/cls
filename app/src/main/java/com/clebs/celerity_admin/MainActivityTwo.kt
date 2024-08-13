@@ -33,6 +33,7 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.BreakDownActivity
+import com.clebs.celerity_admin.ui.ReturnToDaActivity
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import com.google.android.material.navigation.NavigationView
@@ -286,6 +287,9 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
 
             R.id.vehicle_breakdown -> {
                 startActivity(Intent(this, BreakDownActivity::class.java))
+            }
+            R.id.return_to_da->{
+                startActivity(Intent(this,ReturnToDaActivity::class.java))
             }
         }
         return true

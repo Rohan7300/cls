@@ -35,6 +35,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.ReturnToDaActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.BreakDownActivity"
             android:exported="false" />
         <activity
@@ -90,4 +93,5 @@
                 tools:replace="android:resource" />
         </provider>
     </application>
+
 </manifest>

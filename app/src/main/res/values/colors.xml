@@ -44,4 +44,5 @@
     <color name="transparent">#00000000</color>
     <color name="darktransparent">#9F000000</color>
     <color name="purple">#8F54F8</color>
+    <color name="cardbg">#7B847D</color>
 </resources>

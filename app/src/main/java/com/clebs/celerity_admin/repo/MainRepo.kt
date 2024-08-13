@@ -6,6 +6,7 @@ import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
 import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
+import com.clebs.celerity_admin.models.GetCurrentAllocatedDaResponse
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
@@ -34,6 +35,7 @@ import com.clebs.celerity_admin.utils.DefectFileType
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 class MainRepo(private val ApiService: ApiService) {
@@ -260,6 +262,11 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun SaveVehicleBreakDownInspectionInfo(request: SaveVehicleBreakDownInspectionRequest):SimpleNetworkResponse<SucessStatusMsgResponse>{
         return safeApiCall {
             ApiService.SaveVehicleBreakDownInspectionInfo(request)
+        }
+    }
+    suspend fun GetCurrentAllocatedDa(vmId: String, isVehReturned: Boolean):SimpleNetworkResponse<GetCurrentAllocatedDaResponse>{
+        return safeApiCall {
+            ApiService.GetCurrentAllocatedDa(vmId,isVehReturned)
         }
     }
 }

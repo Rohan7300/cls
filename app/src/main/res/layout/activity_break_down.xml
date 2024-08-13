@@ -3,28 +3,17 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FFFAFA"
-        app:strokeColor="@color/text_color"
-        app:strokeWidth="1dp"
-        tools:context=".ui.BreakDownActivity">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:context=".ui.BreakDownActivity">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="1dp"
                 android:backgroundTint="#FFFAFA"
-                app:strokeColor="@color/text_color"
-                app:strokeWidth="1dp">
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -60,7 +49,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:layout_marginTop="20dp"
                         android:hint="Select Vehicle*"
@@ -82,7 +71,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:layout_marginTop="10dp"
                         android:hint="Select Driver*"
@@ -140,7 +129,7 @@
                         android:id="@+id/tilRequestType"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:layout_marginTop="10dp"
                         android:hint="Select Request Type *"
@@ -220,5 +209,4 @@
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 </layout>
