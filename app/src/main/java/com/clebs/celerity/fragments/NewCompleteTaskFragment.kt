@@ -810,16 +810,14 @@ class NewCompleteTaskFragment : Fragment() {
 
 
     private fun chkTime(edtBreakstart: TextView, edtBreakend: TextView): Boolean {
-        val startTime = edtBreakstart.text.toString()
-        val endTime = edtBreakend.text.toString()
-        print("starttime $startTime")
-        print("endtime $endTime")
+        val startTime = edtBreakstart.text.toString().lowercase(Locale.getDefault())
+        val endTime = edtBreakend.text.toString().lowercase(Locale.getDefault())
+        print("starttime $startTime\n")
+        print("endtime $endTime\n")
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
-        // Use 12-hour format with AM/PM
-
 
         return try {
-            val formatter = DateTimeFormatter.ofPattern("hh:mm a", Locale.getDefault())
+            val formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.UK)
             val start = LocalTime.parse(startTime, formatter)
             val end = LocalTime.parse(endTime, formatter)
 
