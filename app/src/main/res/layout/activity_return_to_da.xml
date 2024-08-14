@@ -53,7 +53,7 @@
                 layout="@layout/vehicle_information" />
 
             <include
-                android:id="@+id/addImagesButton"
+                android:id="@+id/layout_addImages"
                 layout="@layout/add_inspection_images"
                 />
         </LinearLayout>

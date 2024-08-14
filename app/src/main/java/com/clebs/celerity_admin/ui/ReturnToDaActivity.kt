@@ -25,12 +25,12 @@ class ReturnToDaActivity : AppCompatActivity() {
     lateinit var binding: ActivityReturnToDaBinding
     private lateinit var loadingDialog: LoadingDialog
     private lateinit var mainViewModel: MainViewModel
-    var selectedCompanyId: Int = -1
-    var selectedVehicleId: Int = -1
-    var selectedVehicleLocId: Int = -1
-    var selectedVehicleFuelId: Int = -1
-    var selectedVehicleOilLevelListId: Int = -1
-    var vehicleValid: Boolean = false
+    private var selectedCompanyId: Int = -1
+    private var selectedVehicleId: Int = -1
+    private var selectedVehicleLocId: Int = -1
+    private var selectedVehicleFuelId: Int = -1
+    private var selectedVehicleOilLevelListId: Int = -1
+    private var vehicleValid: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReturnToDaBinding.inflate(layoutInflater)
@@ -207,9 +207,9 @@ class ReturnToDaActivity : AppCompatActivity() {
             }
         }
     }
-    fun card2Update(){
+    private fun card2Update(){
         if(selectedVehicleLocId!=-1&&selectedVehicleFuelId!=-1&&selectedVehicleOilLevelListId!=-1){
-            updateCardLayout(5)
+            updateCardLayout(6)
         }
     }
 
@@ -219,6 +219,9 @@ class ReturnToDaActivity : AppCompatActivity() {
         }
         binding.layoutSelectVehicleInformation.headerVehicleInformation.setOnClickListener {
             updateCardLayout(1)
+        }
+        binding.layoutAddImages.headerAddInspectionImages.setOnClickListener {
+            updateCardLayout(5)
         }
     }
 
@@ -230,6 +233,13 @@ class ReturnToDaActivity : AppCompatActivity() {
                 binding.layoutSelectVehicleInformation.headerStatusIcon.setImageDrawable(
                     ContextCompat.getDrawable(this, R.drawable.dropdown)
                 )
+
+                binding.layoutAddImages.headerStatusIcon.setImageDrawable(
+                    ContextCompat.getDrawable(this,R.drawable.dropdown)
+                )
+
+                binding.layoutAddImages.bodyAddInspectionImages.isVisible = false
+                binding.layoutAddImages.headerAddInspectionImages.isClickable = false
             }
 
             0 -> {
@@ -271,6 +281,11 @@ class ReturnToDaActivity : AppCompatActivity() {
                 binding.layoutSelectVehicleInformation.headerStatusIcon.setImageDrawable(
                     ContextCompat.getDrawable(this, R.drawable.dropdown)
                 )
+                binding.layoutAddImages.headerStatusIcon.setImageDrawable(
+                    ContextCompat.getDrawable(this, R.drawable.dropdown)
+                )
+                binding.layoutAddImages.headerAddInspectionImages.isClickable = false
+                binding.layoutAddImages.bodyAddInspectionImages.isVisible = false
             }
 
             4 -> {
@@ -284,8 +299,31 @@ class ReturnToDaActivity : AppCompatActivity() {
                 binding.layoutSelectVehicleInformation.headerStatusIcon.setImageDrawable(
                     ContextCompat.getDrawable(this, R.drawable.dropup)
                 )
+                binding.layoutAddImages.headerStatusIcon.setImageDrawable(
+                    ContextCompat.getDrawable(this, R.drawable.dropdown)
+                )
+                if(selectedVehicleLocId!=-1&&selectedVehicleFuelId!=-1&&selectedVehicleOilLevelListId!=-1){
+                    binding.layoutAddImages.headerAddInspectionImages.isClickable = true
+                    binding.layoutAddImages.bodyAddInspectionImages.isVisible = true
+                }else{
+                    binding.layoutAddImages.headerAddInspectionImages.isClickable = false
+                    binding.layoutAddImages.bodyAddInspectionImages.isVisible = false
+                }
             }
             5->{
+                if(binding.layoutAddImages.bodyAddInspectionImages.isVisible){
+                    binding.layoutAddImages.bodyAddInspectionImages.isVisible = false
+                    binding.layoutAddImages.headerStatusIcon.setImageDrawable(
+                        ContextCompat.getDrawable(this, R.drawable.dropdown)
+                    )
+                }else{
+                    binding.layoutAddImages.bodyAddInspectionImages.isVisible = true
+                    binding.layoutAddImages.headerStatusIcon.setImageDrawable(
+                        ContextCompat.getDrawable(this, R.drawable.dropup)
+                    )
+                }
+            }
+            6->{
                 binding.layoutSelectVehicleOptions.errorText.visibility = View.GONE
                 binding.layoutSelectVehicleOptions.bodyVehicleOptions.isVisible = false
                 binding.layoutSelectVehicleInformation.headerVehicleInformation.isClickable = true
@@ -298,6 +336,9 @@ class ReturnToDaActivity : AppCompatActivity() {
                 binding.layoutSelectVehicleInformation.headerStatusIcon.setImageDrawable(
                     ContextCompat.getDrawable(this, R.drawable.dropdown)
                 )
+
+                binding.layoutAddImages.bodyAddInspectionImages.isVisible = true
+                binding.layoutAddImages.headerAddInspectionImages.isClickable = true
             }
         }
     }

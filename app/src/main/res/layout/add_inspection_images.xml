@@ -15,7 +15,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/headerSelectVehicleOptions"
+            android:id="@+id/headerAddInspectionImages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#CEEDC7"
@@ -37,7 +37,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/bodyVehicleOptions"
+            android:id="@+id/bodyAddInspectionImages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
