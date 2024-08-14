@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.ReturnToDaActivity">
 
@@ -35,13 +35,14 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="5dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="5dp">
 
             <include
                 android:id="@+id/layoutSelectVehicleOptions"
@@ -50,6 +51,11 @@
             <include
                 android:id="@+id/layoutSelectVehicleInformation"
                 layout="@layout/vehicle_information" />
+
+            <include
+                android:id="@+id/addImagesButton"
+                layout="@layout/add_inspection_images"
+                />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

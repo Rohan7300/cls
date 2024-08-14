@@ -189,19 +189,27 @@ class ReturnToDaActivity : AppCompatActivity() {
 
                             binding.layoutSelectVehicleInformation.spinnerSelectVehicleLocation -> {
                                 selectedVehicleLocId = ids[position]
+                                card2Update()
                             }
 
                             binding.layoutSelectVehicleInformation.spinnerVehicleFuelLevel -> {
                                 selectedVehicleFuelId = ids[position]
+                                card2Update()
                             }
 
                             binding.layoutSelectVehicleInformation.spinnerVehicleOilLevel -> {
                                 selectedVehicleOilLevelListId = ids[position]
+                                card2Update()
                             }
                         }
                     }
                 }
             }
+        }
+    }
+    fun card2Update(){
+        if(selectedVehicleLocId!=-1&&selectedVehicleFuelId!=-1&&selectedVehicleOilLevelListId!=-1){
+            updateCardLayout(5)
         }
     }
 
@@ -275,6 +283,20 @@ class ReturnToDaActivity : AppCompatActivity() {
                 binding.layoutSelectVehicleInformation.bodyVehicleInfo.isVisible = true
                 binding.layoutSelectVehicleInformation.headerStatusIcon.setImageDrawable(
                     ContextCompat.getDrawable(this, R.drawable.dropup)
+                )
+            }
+            5->{
+                binding.layoutSelectVehicleOptions.errorText.visibility = View.GONE
+                binding.layoutSelectVehicleOptions.bodyVehicleOptions.isVisible = false
+                binding.layoutSelectVehicleInformation.headerVehicleInformation.isClickable = true
+                binding.layoutSelectVehicleOptions.headerStatusIcon.setImageDrawable(
+                    ContextCompat.getDrawable(this, R.drawable.dropdown)
+                )
+
+                binding.layoutSelectVehicleInformation.headerVehicleInformation.isClickable = true
+                binding.layoutSelectVehicleInformation.bodyVehicleInfo.isVisible = false
+                binding.layoutSelectVehicleInformation.headerStatusIcon.setImageDrawable(
+                    ContextCompat.getDrawable(this, R.drawable.dropdown)
                 )
             }
         }
