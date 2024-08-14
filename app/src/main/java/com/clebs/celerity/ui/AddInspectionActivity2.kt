@@ -409,6 +409,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         val currentDate = LocalDateTime.now()
         val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
         val regexPattern = Regex("${x.takeLast(3)}${y.take(3)}${formattedDate}")
+
         prefs.inspectionID = regexPattern.toString().replace(" ", "")
         //inspectionID = regexPattern.toString().replace(" ","")
         Log.e(
@@ -478,6 +479,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
         if (tempCode == 200) {
             Log.d("hdhsdshdsdjshhsds", "200 $message")
+            Log.d("tempCode","200")
             prefs.saveBoolean("Inspection", true)
             prefs.Isfirst = false
             prefs.updateInspectionStatus(true)
@@ -496,8 +498,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     private fun openClsCapture() {
         if (!prefs.isInspectionDoneToday()) {
             loadingDialog.show()
-
-
+            Log.d("OpenClsCap","OXXXX")
             startInspection()
         } else if (prefs.addBlueUri == null && prefs.addBlueRequired) {
             val intent = Intent(this, ClsCaptureTwo::class.java)

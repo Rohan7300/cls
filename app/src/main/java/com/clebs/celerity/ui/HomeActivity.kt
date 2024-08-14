@@ -399,7 +399,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     }
 
                     if (doubleBackToExitPressedOnce) {
-                        finishAffinity()
+                        //finishAffinity()
+                        moveTaskToBack(true)
                     }
 
                     doubleBackToExitPressedOnce = true
@@ -1202,11 +1203,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     Prefs.getInstance(applicationContext).days = "0"
                 }
 
-/*                if (!it.IsVehicleInspectionDone) {
+                if (!it.IsVehicleInspectionDone) {//false
                     if (prefs.isInspectionDoneToday()) SaveVehicleInspection(viewModel)
                 } else {
                     prefs.updateInspectionStatus(true)
-                }*/
+                }
             }
         })
 
