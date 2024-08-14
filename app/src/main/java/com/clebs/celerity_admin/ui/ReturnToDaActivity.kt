@@ -330,7 +330,7 @@ class ReturnToDaActivity : AppCompatActivity() {
                 binding.layoutSelectVehicleOptions.headerStatusIcon.setImageDrawable(
                     ContextCompat.getDrawable(this, R.drawable.dropdown)
                 )
-
+`
                 binding.layoutSelectVehicleInformation.headerVehicleInformation.isClickable = true
                 binding.layoutSelectVehicleInformation.bodyVehicleInfo.isVisible = false
                 binding.layoutSelectVehicleInformation.headerStatusIcon.setImageDrawable(
