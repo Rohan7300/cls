@@ -3,216 +3,210 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".ui.BreakDownActivity">
-
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#FFFAFA">
+            android:orientation="vertical"
+            tools:context=".ui.BreakDownActivity">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/maroon"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <ImageView
-                    android:id="@+id/back"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/cq_sdk_back_icon" />
-
-                <TextView
-                    android:id="@+id/headings"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:gravity="center"
-
-                    android:letterSpacing="0.04"
-                    android:text="Add Vehicle BreakDown Request"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="20dp"
-                    android:hint="Select Vehicle*"
-                    android:textColorHint="@color/hintColor">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/vehicleListSpinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:importantForAutofill="no"
-                        android:inputType="none"
-                        android:padding="10dp"
-                        android:textColorHint="@color/hintColor"
-                        android:textSize="12sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="Select Driver*"
-                    android:textColorHint="@color/hintColor">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/spinnerDriverList"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:importantForAutofill="no"
-                        android:inputType="none"
-                        android:padding="10dp"
-                        android:textColorHint="@color/hintColor"
-                        android:textSize="12sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <FrameLayout
-                    android:id="@+id/flInspectionDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="10dp">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tvInspectionDate"
-                        style="@style/Widget.MaterialComponents.MaterialCalendar"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:clickable="false"
-                        android:hint="Inspection Date*"
-                        android:textColorHint="@color/hintColor"
-                        app:boxBackgroundMode="outline"
-                        app:boxStrokeColor="@color/blue_hex">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/aTvInspectionDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:backgroundTint="@color/white"
-                            android:clickable="false"
-                            android:drawableEnd="@drawable/cq_sdk_cq_sdk_calender_icon"
-                            android:importantForAutofill="no"
-                            android:inputType="none"
-                            android:padding="10dp"
-                            android:textColorHint="@color/hintColor"
-                            android:textSize="12sp" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-                </FrameLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilRequestType"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="Select Request Type *"
-                    android:textColorHint="@color/hintColor">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/selectedRequestType"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:importantForAutofill="no"
-                        android:inputType="none"
-                        android:padding="10dp"
-                        android:textColorHint="@color/hintColor"
-                        android:textSize="12sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvvehicleDamageWorking"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="5dp" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="20dp"
-                    android:hint="Comments"
-                    android:textColorHint="@color/hintColor">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/comment"
-                        android:layout_width="match_parent"
-                        android:layout_height="140dp"
-                        android:inputType="text"
-                        android:padding="14dp"
-                        android:textColorHint="@color/hintColor"
-                        android:textSize="14sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
+                android:backgroundTint="#FFFAFA"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:background="@color/maroon"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/cancelBtn"
-                        android:layout_width="wrap_content"
+
+                    <TextView
+                        android:id="@+id/headings"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="#806A6D"
-                        android:text="CANCEL"
-                        app:strokeColor="@color/orange"
-                        app:strokeWidth="0.5dp" />
-
-                    <View
-                        android:layout_width="wrap_content"
-                        android:layout_height="1dp"
-                        android:layout_weight="1" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/saveBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="#65B877"
-                        android:text="SAVE"
-                        app:strokeColor="@color/greenBtn"
-                        app:strokeWidth="0.5dp" />
+                        android:fontFamily="@font/poppins_semibold"
+                        android:gravity="center"
+                        android:letterSpacing="0.04"
+                        android:text="Add Vehicle BreakDown Request"
+                        android:textColor="#000000"
+                        android:textSize="16sp" />
                 </LinearLayout>
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="20dp"
+                        android:hint="Select Vehicle*"
+                        android:textColorHint="@color/hintColor">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/vehicleListSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:importantForAutofill="no"
+                            android:inputType="none"
+                            android:padding="14dp"
+                            android:textColorHint="@color/hintColor"
+                            android:textSize="14sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="10dp"
+                        android:hint="Select Driver*"
+                        android:textColorHint="@color/hintColor">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/spinnerDriverList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:importantForAutofill="no"
+                            android:inputType="none"
+                            android:padding="14dp"
+                            android:textColorHint="@color/hintColor"
+                            android:textSize="14sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <FrameLayout
+                        android:id="@+id/flInspectionDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="10dp">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tvInspectionDate"
+                            style="@style/Widget.MaterialComponents.MaterialCalendar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="false"
+                            android:hint="Inspection Date*"
+                            android:textColorHint="@color/hintColor"
+                            app:boxBackgroundMode="outline"
+                            app:boxStrokeColor="@color/blue_hex">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/aTvInspectionDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:backgroundTint="@color/white"
+                                android:clickable="false"
+                                android:drawableEnd="@drawable/cq_sdk_cq_sdk_calender_icon"
+                                android:importantForAutofill="no"
+                                android:inputType="none"
+                                android:padding="12dp"
+                                android:textColorHint="@color/hintColor"
+                                android:textSize="14sp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </FrameLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilRequestType"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="10dp"
+                        android:hint="Select Request Type *"
+                        android:textColorHint="@color/hintColor">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/selectedRequestType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:importantForAutofill="no"
+                            android:inputType="none"
+                            android:padding="14dp"
+                            android:textColorHint="@color/hintColor"
+                            android:textSize="14sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvvehicleDamageWorking"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="5dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:hint="Comments"
+                        android:textColorHint="@color/hintColor">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/comment"
+                            android:layout_width="match_parent"
+                            android:layout_height="140dp"
+                            android:inputType="text"
+                            android:padding="14dp"
+                            android:textColorHint="@color/hintColor"
+                            android:textSize="14sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/cancelBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#806A6D"
+                            android:text="CANCEL"
+                            app:strokeColor="@color/black"
+                            app:strokeWidth="2dp" />
+
+                        <View
+                            android:layout_width="wrap_content"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/saveBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#65B877"
+                            android:text="SAVE"
+                            app:strokeColor="@color/black"
+                            app:strokeWidth="2dp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
 </layout>

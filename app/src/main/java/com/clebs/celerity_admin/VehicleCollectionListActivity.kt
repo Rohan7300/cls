@@ -11,11 +11,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Checkbox
+import androidx.compose.material.RadioButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -23,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
@@ -75,12 +81,56 @@ class VehicleCollectionListActivity : ComponentActivity() {
                         .background(Color.White, RoundedCornerShape(16.dp))
                         .padding(16.dp)
                 ) {
-                    IconButton(onClick = onDismissRequest) {
-                        Icon(painter = painterResource(id = R.drawable.xmark), contentDescription = "Cross")
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_filter_list_24),
+                            contentDescription = "Filter Icon",
+                            Modifier.size(width = 20.dp, height = 20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text("Filters", color = colorResource(R.color.orange))
                     }
-                    Text("Filters")
-                    Button(onClick = onDismissRequest) {
-                        Text("Dismiss")
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(checked = false,
+                            onCheckedChange = {})
+                        Text("Show Completed Collections")
+                    }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = false, onClick = { /*TODO*/ })
+                        Text("Collect Vehicle")
+
+                    }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = true, onClick = { /*TODO*/ })
+                        Text("Return Vehicle")
+                    }
+
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        TextButton(onClick = onDismissRequest) {
+                            Text(
+                                text = "Cancel",
+                                color = Color.Blue
+                            )
+                        }
+                        TextButton(onClick = onDismissRequest) {
+                            Text(
+                                text = "OK",
+                                color = Color.Blue
+                            )
+                        }
                     }
                 }
             }
@@ -176,8 +226,19 @@ class VehicleCollectionListActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                //  VehicleCollectionList()
+                //VehicleCollectionList()
             }
+        }
+    }
+
+    @Preview
+    @Composable
+    fun FilterPreview() {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            FilterDialog(true) {}
         }
     }
 }

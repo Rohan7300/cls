@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_gallery">
+
+<!--    <fragment-->
+<!--        android:id="@+id/nav_home"-->
+<!--        android:name="com.clebs.celerity_admin.ui.home.HomeFragment"-->
+<!--        android:label="@string/menu_home"-->
+<!--        tools:layout="@layout/fragment_home" />-->
+
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="com.clebs.celerity_admin.ui.CLSOsmHomeFragment"
+        android:label="Vehicle Allocation"
+        tools:layout="@layout/fragment_c_l_s_osm_home" />
+
+    <fragment
+        android:id="@+id/nav_slideshow"
+        android:name="com.clebs.celerity_admin.ui.ClSReports.WeeklyDefectsFragment"
+        android:label="Weekly Defects Check"
+        tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/nav_weblogin"
+        android:name="com.clebs.celerity_admin.ui.CLSweb.WebFragment"
+        android:label="Contact"
+        tools:layout="@layout/fragment_web" />
+
+    <fragment
+        android:id="@+id/nav_changevehcilecommon"
+        android:name="com.clebs.celerity_admin.ui.CLSloction.ChangeVehicleFragment"
+        android:label="vehicleallocation"
+        tools:layout="@layout/fragment_gallery" />
+</navigation>

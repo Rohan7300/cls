@@ -27,10 +27,13 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.clebs.celerity_admin.database.CheckInspection
 import com.clebs.celerity_admin.databinding.ActivityMainTwoBinding
+import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.ui.BreakDownActivity
+import com.clebs.celerity_admin.ui.ReturnToDaActivity
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import com.google.android.material.navigation.NavigationView
@@ -44,7 +47,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var binding: ActivityMainTwoBinding
 
-    //    lateinit var loadingDialog: LoadingDialog
+    lateinit var loadingDialog: LoadingDialog
     private var saveClickCounter = 0
     lateinit var resumedialog: AlertDialog
 
@@ -65,7 +68,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
 
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
-//        loadingDialog = LoadingDialog(this)
+        loadingDialog = LoadingDialog(this)
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         setSupportActionBar(binding.appBarMainActivityTwo.toolbar)
@@ -73,7 +76,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         getSupportActionBar()?.setDisplayShowTitleEnabled(false)
         binding.appBarMainActivityTwo.toolbarTitle.setText("Vehicle Allocation")
         binding.navView.getHeaderView(0).findViewById<TextView>(R.id.textViewweb)
-            .setText("CLS OSM ID-" + Prefs.getInstance(SplashActivityTwo.instance).clebUserIds)
+            .setText("CLS OSM ID-" + Prefs.getInstance(this).clebUserId)
 //        binding.appBarMainActivityTwo.fab.setOnClickListener { view ->
 //            Snackbar.make(view, "Refreshing...", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show()
@@ -282,6 +285,12 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
                 startActivity(Intent(this, VehicleCollectionListActivity::class.java))
             }
 
+            R.id.vehicle_breakdown -> {
+                startActivity(Intent(this, BreakDownActivity::class.java))
+            }
+            R.id.return_to_da->{
+                startActivity(Intent(this,ReturnToDaActivity::class.java))
+            }
         }
         return true
     }

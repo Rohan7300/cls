@@ -3,9 +3,6 @@ package com.clebs.celerity_admin.network
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
-import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
-import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
-import com.clebs.celerity_admin.models.GetCurrentInsuranceInfo
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
@@ -28,7 +25,6 @@ import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
-import com.clebs.celerity_admin.models.basemodel.SimpleNetworkResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -149,21 +145,21 @@ interface ApiService {
     @GET("/api/WeeklyDefectSheet/GetLocationListbyUserId/{userId}")
     suspend fun GetLocationListbyUserId(@Path("userId") userId: Double): Response<GetVehicleLocation>
 
-    @GET("/api/VehAllocHistories/GetVehicleCurrentInsuranceInfo/{vmId}")
-    suspend fun GetVehicleCurrentInsuranceInfo(@Path("vmId") vmId: Int): Response<GetCurrentInsuranceInfo>
-
-    @GET("/api/VehAllocHistories/CreateNewVehicleReleaseTicket")
-    suspend fun CreateVehicleReleaseReq(
-        @Query("vmId") vmId: Double,
-        @Query("supervisorId") supervisorId: Double):Response<SucessStatusMsgResponse>
     @GET("/api/VehAllocHistories/GetAllVehicleInspectionList")
     suspend fun GetAllVehicleInspectionList(): Response<GetAllVehicleInspectionListResponse>
+
     @GET("/api/VehAllocHistories/GetAllDriversInspectionList")
     suspend fun GetAllDriversInspectionList(): Response<GetAllDriversInspectionListResponse>
 
     @GET("/api/VehAllocHistories/GetVehicleDamageWorkingStatus")
-    suspend fun GetVehicleDamageWorkingStatus():Response<GetVehicleDamageWorkingStatusResponse>
+    suspend fun GetVehicleDamageWorkingStatus(): Response<GetVehicleDamageWorkingStatusResponse>
 
     @POST("/api/VehAllocHistories/SaveVehicleBreakDownInspectionInfo")
-    suspend fun SaveVehicleBreakDownInspectionInfo(@Body requestBody: SaveVehicleBreakDownInspectionRequest):Response<SucessStatusMsgResponse>
+    suspend fun SaveVehicleBreakDownInspectionInfo(@Body requestBody: SaveVehicleBreakDownInspectionRequest): Response<SucessStatusMsgResponse>
+
+    @GET("/api/VehAllocHistories/GetCurrentAllocatedDa/{vmId}")
+    suspend fun GetCurrentAllocatedDa(
+        @Path("vmId") vmId: String,
+        @Query("isVehReturned") isVehReturned: Boolean
+    ): Response<GetCurrentAllocatedDaResponse>
 }

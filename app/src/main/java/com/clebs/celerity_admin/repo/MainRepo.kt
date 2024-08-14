@@ -6,7 +6,7 @@ import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
 import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
-import com.clebs.celerity_admin.models.GetCurrentInsuranceInfo
+import com.clebs.celerity_admin.models.GetCurrentAllocatedDaResponse
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
@@ -35,6 +35,8 @@ import com.clebs.celerity_admin.utils.DefectFileType
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Part
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 class MainRepo(private val ApiService: ApiService) {
     private inline fun <T> safeApiCall(apiCall: () -> Response<T>): SimpleNetworkResponse<T> {
@@ -234,28 +236,11 @@ class MainRepo(private val ApiService: ApiService) {
             ApiService.GetOtherDefectCheckImagesInDropBox(vdhDefectCheckId, fileType)
         }
     }
-
     suspend fun GetLocationListbyUserId(
-        userID: Double
+       userID: Double
     ): SimpleNetworkResponse<GetVehicleLocation> {
         return safeApiCall {
             ApiService.GetLocationListbyUserId(userID)
-        }
-    }
-
-    suspend fun GetVehicleCurrentInsuranceInfo(
-        vmId: Int
-    ): SimpleNetworkResponse<GetCurrentInsuranceInfo> {
-        return safeApiCall {
-            ApiService.GetVehicleCurrentInsuranceInfo(vmId)
-        }
-    }
-
-    suspend fun CreateVehicleReleaseReq(
-        vmId: Double,
-    supervisorid:Double): SimpleNetworkResponse<SucessStatusMsgResponse> {
-        return safeApiCall {
-            ApiService.CreateVehicleReleaseReq(vmId,supervisorid)
         }
     }
     suspend fun GetAllVehicleInspectionList():SimpleNetworkResponse<GetAllVehicleInspectionListResponse>{
@@ -277,6 +262,11 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun SaveVehicleBreakDownInspectionInfo(request: SaveVehicleBreakDownInspectionRequest):SimpleNetworkResponse<SucessStatusMsgResponse>{
         return safeApiCall {
             ApiService.SaveVehicleBreakDownInspectionInfo(request)
+        }
+    }
+    suspend fun GetCurrentAllocatedDa(vmId: String, isVehReturned: Boolean):SimpleNetworkResponse<GetCurrentAllocatedDaResponse>{
+        return safeApiCall {
+            ApiService.GetCurrentAllocatedDa(vmId,isVehReturned)
         }
     }
 }

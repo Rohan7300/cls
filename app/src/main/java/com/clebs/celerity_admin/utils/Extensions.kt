@@ -27,6 +27,7 @@ import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.annotation.Keep
+import androidx.core.content.ContextCompat
 
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -556,6 +557,7 @@ fun shortenFileName(originalName: String): String {
     }
 
 }
+
 fun showDatePickerDialog(context: Context, tv: TextView) {
     val calendar = Calendar.getInstance()
     val year = calendar.get(Calendar.YEAR)
@@ -571,9 +573,9 @@ fun showDatePickerDialog(context: Context, tv: TextView) {
                 set(Calendar.MILLISECOND, 0)
             }
 
-            selectedCalendar.set(Calendar.HOUR_OF_DAY, 23)
-            selectedCalendar.set(Calendar.MINUTE, 59)
-            selectedCalendar.set(Calendar.SECOND, 59)
+                selectedCalendar.set(Calendar.HOUR_OF_DAY, 23)
+                selectedCalendar.set(Calendar.MINUTE, 59)
+                selectedCalendar.set(Calendar.SECOND, 59)
 
 
             val date = String.format(
@@ -587,7 +589,7 @@ fun showDatePickerDialog(context: Context, tv: TextView) {
                 selectedCalendar.get(Calendar.SECOND)
             )
             VehInspectionDate = date
-            tv.text = convertDateFormat(date)
+                tv.text = convertDateFormat(date)
 
         },
         year,

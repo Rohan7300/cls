@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.clebs.celerity_admin.database.User
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
 import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
-import com.clebs.celerity_admin.models.GetCurrentInsuranceInfo
+import com.clebs.celerity_admin.models.GetCurrentAllocatedDaResponse
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
@@ -24,6 +25,7 @@ import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.OtherDefectCheckImagesInDropBoxResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
+import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
 import com.clebs.celerity_admin.models.ResponseInspectionDone
 import com.clebs.celerity_admin.models.SaveInspectionRequestBody
 import com.clebs.celerity_admin.models.SaveVehicleBreakDownInspectionRequest
@@ -53,19 +55,17 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         MutableLiveData()
     val GetLocationListbyUserIdLiveData: MutableLiveData<GetVehicleLocation?> =
         MutableLiveData()
-    private val _clickEvent = MutableLiveData<Boolean>()
-    val clickEvent: LiveData<Boolean> = _clickEvent
-    val GetVehicleCurrentInsuranceInfo: MutableLiveData<GetCurrentInsuranceInfo?> =
-        MutableLiveData()
-    val CreateVehicleReleaseReqlivedata: MutableLiveData<SucessStatusMsgResponse?> =
-        MutableLiveData()
-    fun setClickEvent(clicked: Boolean) {
-        _clickEvent.value = clicked
-    }
     val VehicleInspectionListLiveData:MutableLiveData<GetAllVehicleInspectionListResponse?> = MutableLiveData()
     val DriverInspectionListLiveData:MutableLiveData<GetAllDriversInspectionListResponse?> = MutableLiveData()
     val VehicleDamageWorkingStatusLD:MutableLiveData<GetVehicleDamageWorkingStatusResponse?> = MutableLiveData()
     val SaveVehicleBreakDownInspectionLD:MutableLiveData<SucessStatusMsgResponse?> = MutableLiveData()
+    val GetCurrentAllocatedDaLD:MutableLiveData<GetCurrentAllocatedDaResponse?> = MutableLiveData()
+    private val _clickEvent = MutableLiveData<Boolean>()
+    val clickEvent: LiveData<Boolean> = _clickEvent
+
+    fun setClickEvent(clicked: Boolean) {
+        _clickEvent.value = clicked
+    }
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
 
@@ -203,7 +203,7 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         return responseLiveData
     }
 
-    fun GetDDAmandateReturn(ddaid: String): MutableLiveData<GetReturnVmID?> {
+    fun GetDDAmandateReturn(ddaid: String,): MutableLiveData<GetReturnVmID?> {
         val responseLiveData = MutableLiveData<GetReturnVmID?>()
 
         viewModelScope.launch {
@@ -422,30 +422,6 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         }
     }
 
-    fun GetVehicleCurrentInsuranceInfo(
-        vmID: Int
-    ) {
-        viewModelScope.launch {
-            val response = repo.GetVehicleCurrentInsuranceInfo(vmID)
-            if (!response.isSuccessful || response.failed)
-                GetVehicleCurrentInsuranceInfo.postValue(null)
-            else
-                GetVehicleCurrentInsuranceInfo.postValue(response.body)
-        }
-    }
-
-    fun CreateVehicleReleaseReq(
-        vmID: Double,supervisor:Double
-    ) {
-        viewModelScope.launch {
-            val response = repo.CreateVehicleReleaseReq(vmID,supervisor)
-            if (!response.isSuccessful || response.failed)
-                CreateVehicleReleaseReqlivedata.postValue(null)
-            else
-                CreateVehicleReleaseReqlivedata.postValue(response.body)
-        }
-    }
-
     fun GetAllVehicleInspectionList(){
         viewModelScope.launch {
             val response = repo.GetAllVehicleInspectionList()
@@ -481,6 +457,15 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
                 SaveVehicleBreakDownInspectionLD.postValue(null)
             else
                 SaveVehicleBreakDownInspectionLD.postValue(response.body)
+        }
+    }
+    fun GetCurrentAllocatedDa(vmId: String, isVehReturned: Boolean){
+        viewModelScope.launch {
+            val response = repo.GetCurrentAllocatedDa(vmId,isVehReturned)
+            if(!response.isSuccessful || response.failed)
+                GetCurrentAllocatedDaLD.postValue(null)
+            else
+                GetCurrentAllocatedDaLD.postValue(response.body)
         }
     }
 }

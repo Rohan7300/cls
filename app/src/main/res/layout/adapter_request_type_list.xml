@@ -11,11 +11,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="4"
-        android:fontFamily="@font/poppins_semibold"
+        android:fontFamily="@font/poppins"
         android:letterSpacing="0.02"
         android:text="Request Type Name"
         android:textColor="#4A4A4A"
-        android:textSize="12sp" />
+        android:textSize="13sp" />
 
     <View
         android:layout_width="1dp"
@@ -33,7 +33,7 @@
             android:id="@+id/delRequestIV"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/baseline_delete_forever_24" />
+            android:src="@drawable/delete_ic_red" />
 
     </LinearLayout>
 </LinearLayout>

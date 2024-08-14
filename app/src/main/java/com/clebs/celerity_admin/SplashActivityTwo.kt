@@ -12,14 +12,14 @@ import com.clebs.celerity_admin.database.OfflineSyncDB
 import com.clebs.celerity_admin.utils.Prefs
 
 class SplashActivityTwo : AppCompatActivity() {
-    companion object {
-        var prefs: Prefs? = null
-        var offlineSyncDB: OfflineSyncDB? = null
-        lateinit var instance: SplashActivityTwo
-            private set
 
-    }
 
+companion object{
+    var prefs: Prefs? = null
+    //lateinit var instance: SplashActivityTwo
+    var  offlineSyncDB: OfflineSyncDB?=null
+        private set
+}
     override fun onCreate(savedInstanceState: Bundle?) {
         val window = window
         val winParams = window.attributes
@@ -31,9 +31,8 @@ class SplashActivityTwo : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 )
-        instance = this@SplashActivityTwo
-        prefs = Prefs(applicationContext)
-        offlineSyncDB = OfflineSyncDB(this@SplashActivityTwo)
+        SplashActivityTwo.prefs = Prefs(applicationContext)
+        SplashActivityTwo.offlineSyncDB = OfflineSyncDB(applicationContext)
         window.statusBarColor = resources.getColor(R.color.transparent, null)
         window.requestFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState)
