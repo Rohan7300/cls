@@ -18,9 +18,9 @@ import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -33,22 +33,19 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.clebs.celerity_admin.SplashActivityTwo.Companion.prefs
 import com.clebs.celerity_admin.database.DefectSheet
 import com.clebs.celerity_admin.database.IsInspectionDone
+
 import com.clebs.celerity_admin.databinding.ActivitySubmitWeeklyDefectBinding
-import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.models.SaveInspectionRequestBody
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
-import com.clebs.celerity_admin.ui.App
-import com.clebs.celerity_admin.ui.App.Companion.prefs
 import com.clebs.celerity_admin.utils.BackgroundUploadWorker
-import com.clebs.celerity_admin.utils.DefectFileType
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import com.clebs.celerity_admin.utils.Prefs
-import com.clebs.celerity_admin.utils.convertStringToList
 import com.clebs.celerity_admin.utils.radioButtonState
 import com.clebs.celerity_admin.utils.shortenFileName
 import com.clebs.celerity_admin.utils.showToast
@@ -77,7 +74,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
     private var selectedWindscreenWashingID: Int = 0
     private var selectedWindScreenConditionID: Int = 0
     private lateinit var oilListNames: List<String>
-    private lateinit var loadingDialog: LoadingDialog
+//    private lateinit var loadingDialog: LoadingDialog
     private var selectedFileUri: Uri? = null
     private lateinit var oilLevelIds: List<Int>
     private var imageMode = 0
@@ -128,9 +125,9 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         val mainRepo = MainRepo(apiService)
         vm = ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         binding = DataBindingUtil.setContentView(this, R.layout.activity_submit_weekly_defect)
-        loadingDialog = LoadingDialog(this)
+//        loadingDialog = LoadingDialog(this)
         cqCode()
-        binding.pbs.visibility=View.VISIBLE
+        binding.pbs.visibility = View.VISIBLE
         binding.daTv.setText(currentWeeklyDefectItem!!.dAName)
         if (!prefs!!.currentWeeklyDefectItemVehRegNo.isNullOrBlank())
             binding.daReg.setText(prefs!!.currentWeeklyDefectItemVehRegNo)
@@ -152,7 +149,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         )
         vm.isinspectiondonelivedata.observe(this, Observer {
             if (it != null) {
-                binding.pbs.visibility=View.GONE
+                binding.pbs.visibility = View.GONE
                 if (it.isInspectionDone) {
                     binding.llmain.visibility = View.VISIBLE
                     binding.llstart.visibility = View.VISIBLE
@@ -192,23 +189,23 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         vm.GetOtherDefectCheckImagesInDropBox(currentDefSheetID, "OtherPicOfParts")
 
         if (currentWeeklyDefectItem != null) {
-            loadingDialog.show()
+//            loadingDialog.show()
             vm.GetWeeklyDefectCheckImages(currentWeeklyDefectItem!!.vdhCheckId)
         }
 
-        dbDefectSheet = App.offlineSyncDB?.getDefectSheet(
+        dbDefectSheet = SplashActivityTwo.offlineSyncDB?.getDefectSheet(
             currentWeeklyDefectItem!!.vdhCheckId
         )
 
         if (dbDefectSheet == null) {
             lifecycleScope.launch {
-                App.offlineSyncDB?.insertOrUpdate(
+                SplashActivityTwo.offlineSyncDB?.insertOrUpdate(
                     DefectSheet(
                         id = currentWeeklyDefectItem!!.vdhCheckId
                     )
                 )
                 dbDefectSheet =
-                    App.offlineSyncDB?.getDefectSheet(currentWeeklyDefectItem!!.vdhCheckId)
+                    SplashActivityTwo.offlineSyncDB?.getDefectSheet(currentWeeklyDefectItem!!.vdhCheckId)
 
             }
         }
@@ -511,7 +508,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                     /*binding.signactioncheck.visibility = View.VISIBLE
                     binding.signaprrovecheck.visibility = View.VISIBLE*/
                     lifecycleScope.launch {
-                        App.offlineSyncDB?.insertOrUpdate(
+                        SplashActivityTwo.offlineSyncDB?.insertOrUpdate(
                             dbDefectSheet!!
                         )
                     }
@@ -547,7 +544,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
     private fun observers() {
         vm.lDGetWeeklyDefectCheckImages.observe(this) {
-            loadingDialog.dismiss()
+//            loadingDialog.dismiss()
             if (it != null) {
                 selectedOilLevelID = it.VdhDefChkImgOilLevelId
                 selectedEngineCoolantLevelID = it.EngineCoolantLevelId
@@ -1169,13 +1166,18 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         //prefs?.Isfirst=true
         startonetime = prefs?.Isfirst!!
         binding.btStart.setOnClickListener {
-            startInspection()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startInspection()
+            }
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun startInspection() {
         if (!prefs!!.currentWeeklyDefectItemVehRegNo.isNullOrBlank()) {
-            clientUniqueID()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                clientUniqueID()
+            }
 
 
             if (cqSDKInitializer.isCQSDKInitialized()) {
@@ -1183,7 +1185,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                 Log.e("sdkskdkdkskdkskd", "onCreateView " + inspectionreg)
 
                 try {
-                    loadingDialog.show()
+//                    loadingDialog.show()
                     cqSDKInitializer.startInspection(activity = this, clientAttrs = ClientAttrs(
                         userName = " ",
                         dealer = " ",
@@ -1216,13 +1218,13 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
                             Log.e("messsagesss", "startInspection: " + msg + code)
                             if (isStarted) {
-                                Prefs.getInstance(App.instance).Isfirst = false
-                                startonetime = Prefs.getInstance(App.instance).Isfirst
+                                Prefs.getInstance(SplashActivityTwo.instance).Isfirst = false
+                                startonetime = Prefs.getInstance(SplashActivityTwo.instance).Isfirst
                                 Log.d("CQSDKXX", "isStarted " + msg)
                             } else {
-                                loadingDialog.dismiss()
-                                Prefs.getInstance(App.instance).Isfirst = true
-                                startonetime = Prefs.getInstance(App.instance).Isfirst
+//                                loadingDialog.dismiss()
+                                Prefs.getInstance(SplashActivityTwo.instance).Isfirst = true
+                                startonetime = Prefs.getInstance(SplashActivityTwo.instance).Isfirst
                                 if (msg.equals("Online quote can not be created without internet")) {
                                     Toast.makeText(
                                         this, "Please Turn on the internet", Toast.LENGTH_SHORT
@@ -1255,14 +1257,15 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                             }
                         })
                 } catch (_: Exception) {
-                    loadingDialog.dismiss()
+//                    loadingDialog.dismiss()
                 }
             }
-        }else{
-            Toast.makeText(this,"Vehicle RegNo not found!!",Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Vehicle RegNo not found!!", Toast.LENGTH_SHORT).show()
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun clientUniqueID(): String {
         val x = "123456"
         val y = "123456"
@@ -1274,14 +1277,14 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
 
         inspectionID = regexPattern.toString()
-        Prefs.getInstance(App.instance).vehinspectionUniqueID = inspectionID
+        Prefs.getInstance(SplashActivityTwo.instance).vehinspectionUniqueID = inspectionID
         return regexPattern.toString()
         Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
     }
 
     override fun onResume() {
         super.onResume()
-        loadingDialog.dismiss()
+//        loadingDialog.dismiss()
         val message = intent?.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
             ?: "Could not identify status message"
         val tempCode =
@@ -1290,12 +1293,12 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         Log.e("tempcode", "onNewIntent: " + tempCode)
         if (tempCode == 200) {
             prefs!!.Isfirst = false
-            App.offlineSyncDB!!.insertinspectionInfo(
+            SplashActivityTwo.offlineSyncDB!!.insertinspectionInfo(
                 IsInspectionDone(
-                    InspectionDoneRegNo = Prefs.getInstance(App.instance).vehinspection.replace(
+                    InspectionDoneRegNo = Prefs.getInstance(SplashActivityTwo.instance).vehinspection.replace(
                         " ", ""
                     ),
-                    InspectionClientUniqueID = Prefs.getInstance(App.instance).vehinspectionUniqueID.replace(
+                    InspectionClientUniqueID = Prefs.getInstance(SplashActivityTwo.instance).vehinspectionUniqueID.replace(
                         " ", ""
                     )
                 )
@@ -1305,7 +1308,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             vm.SaveVehWeeklyDefectSheetInspectionInfo(
                 SaveInspectionRequestBody(
                     currentWeeklyDefectItem!!.vdhCheckId,
-                    Prefs.getInstance(App.instance).vehinspectionUniqueID,
+                    Prefs.getInstance(SplashActivityTwo.instance).vehinspectionUniqueID,
                     currentWeeklyDefectItem!!.vdhCheckDaId,
                     currentWeeklyDefectItem!!.vdhCheckVmId,
                     currentWeeklyDefectItem!!.vehWkCheckWeek,
@@ -1323,59 +1326,59 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         currentWeeklyDefectItem!!.vdhCheckId
                     )
                     //  Toast.makeText(this, "Inspection saved", Toast.LENGTH_SHORT).show()
-/*                    vm.isinspectiondonelivedata.observe(this, Observer {
-                        if (it != null) {
+                    /*                    vm.isinspectiondonelivedata.observe(this, Observer {
+                                            if (it != null) {
 
-                            if (it.isInspectionDone) {
+                                                if (it.isInspectionDone) {
 
-                                binding.llmain.visibility = View.VISIBLE
-                                binding.llstart.visibility = View.VISIBLE
-                                binding.tvInspection.setText("OSM Vehicle Inspection is done.")
-                                binding.llstart.strokeColor =
-                                    ContextCompat.getColor(this, R.color.green)
-                                binding.llstart.strokeWidth = 4
-                                binding.tvInspection.setTextColor(
-                                    ContextCompat.getColor(
-                                        this, R.color.green
-                                    )
-                                )
-                                binding.btStart.visibility = View.GONE
-                                binding.done.visibility = View.VISIBLE
-                                binding.done.setImageDrawable(
-                                    ContextCompat.getDrawable(
-                                        this@SubmitWeeklyDefectActivity,
-                                        R.drawable.donessss
-                                    )
-                                )
-                            }
-                        } else {
-                            binding.llmain.visibility = View.GONE
-                            binding.btStart.visibility = View.VISIBLE
-                            binding.llstart.strokeWidth = 2
-                            binding.llstart.setStrokeColor(
-                                ContextCompat.getColor(
-                                    this, R.color.very_very_light_red
-                                )
-                            )
-                            binding.tvInspection.setTextColor(
-                                ContextCompat.getColor(
-                                    this, R.color.text_color
-                                )
-                            )
-                            binding.tvInspection.setText("Start OSM Inspection *")
-                            binding.done.visibility = View.GONE
-                            binding.llstart.visibility = View.VISIBLE
-                        }
+                                                    binding.llmain.visibility = View.VISIBLE
+                                                    binding.llstart.visibility = View.VISIBLE
+                                                    binding.tvInspection.setText("OSM Vehicle Inspection is done.")
+                                                    binding.llstart.strokeColor =
+                                                        ContextCompat.getColor(this, R.color.green)
+                                                    binding.llstart.strokeWidth = 4
+                                                    binding.tvInspection.setTextColor(
+                                                        ContextCompat.getColor(
+                                                            this, R.color.green
+                                                        )
+                                                    )
+                                                    binding.btStart.visibility = View.GONE
+                                                    binding.done.visibility = View.VISIBLE
+                                                    binding.done.setImageDrawable(
+                                                        ContextCompat.getDrawable(
+                                                            this@SubmitWeeklyDefectActivity,
+                                                            R.drawable.donessss
+                                                        )
+                                                    )
+                                                }
+                                            } else {
+                                                binding.llmain.visibility = View.GONE
+                                                binding.btStart.visibility = View.VISIBLE
+                                                binding.llstart.strokeWidth = 2
+                                                binding.llstart.setStrokeColor(
+                                                    ContextCompat.getColor(
+                                                        this, R.color.very_very_light_red
+                                                    )
+                                                )
+                                                binding.tvInspection.setTextColor(
+                                                    ContextCompat.getColor(
+                                                        this, R.color.text_color
+                                                    )
+                                                )
+                                                binding.tvInspection.setText("Start OSM Inspection *")
+                                                binding.done.visibility = View.GONE
+                                                binding.llstart.visibility = View.VISIBLE
+                                            }
 
 
-                    })*/
+                                        })*/
 
                 }
             })
 
         } else {
-           /* Prefs.getInstance(App.instance).Isfirst = true
-            startonetime = Prefs.getInstance(App.instance).Isfirst*/
+            /* Prefs.getInstance(App.instance).Isfirst = true
+             startonetime = Prefs.getInstance(App.instance).Isfirst*/
 
             Log.d("hdhsdshdsdjshhsds", "else $tempCode $message")
         }

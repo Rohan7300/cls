@@ -12,17 +12,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.MainActivityTwo
 import com.clebs.celerity_admin.R
+import com.clebs.celerity_admin.SplashActivityTwo
 import com.clebs.celerity_admin.SubmitWeeklyDefectActivity
 import com.clebs.celerity_admin.adapters.SelectVehicleLocationAdapterTwo
 import com.clebs.celerity_admin.adapters.WeeklyDefectAdapter
 import com.clebs.celerity_admin.databinding.FragmentSlideshowBinding
-import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModelItem
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
-import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import com.clebs.celerity_admin.utils.OnItemClickRecyclerView
 import com.clebs.celerity_admin.utils.Prefs
@@ -48,7 +47,7 @@ class WeeklyDefectsFragment() : Fragment(),
     private var year: Int? = null
     lateinit var deleteDialogthree: SideSheetDialog
     private lateinit var WeeklyDefectAdapter: WeeklyDefectAdapter
-    private lateinit var loadingDialog: LoadingDialog
+//    private lateinit var loadingDialog: LoadingDialog
     private val binding get() = _binding!!
     var currentWeek = 0
     override fun onCreateView(
@@ -66,7 +65,7 @@ class WeeklyDefectsFragment() : Fragment(),
         WeeklyDefectAdapter = WeeklyDefectAdapter(requireContext(), ArrayList(), this)
         binding.rvList.adapter = WeeklyDefectAdapter
         selectVehcilelocationadapter = SelectVehicleLocationAdapterTwo(ArrayList(), this)
-        mainViewModel.GetLocationListbyUserId(Prefs.getInstance(App.instance).clebUserId.toDouble())
+        mainViewModel.GetLocationListbyUserId(Prefs.getInstance(SplashActivityTwo.instance).clebUserIds.toDouble())
         mainViewModel.GetLocationListbyUserIdLiveData.observe(viewLifecycleOwner, Observer {
             if (it != null) {
 
@@ -82,7 +81,7 @@ class WeeklyDefectsFragment() : Fragment(),
         binding.showDefectCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
             showDefectCheckboxValue = !isChecked
             if (isLoaded) {
-                loadingDialog.show()
+//                loadingDialog.show()
                 isLoaded = false
                 mainViewModel.GetWeeklyDefectChecks(
                     currentWeek.toDouble(),
@@ -95,7 +94,7 @@ class WeeklyDefectsFragment() : Fragment(),
             Log.e("checkchanged", "onCreateView: " + showDefectCheckboxValue)
         }
 
-        loadingDialog = (activity as MainActivityTwo).loadingDialog
+//        loadingDialog = (activity as MainActivityTwo).loadingDialog
         setPrevNextButton()
         val activity = requireActivity() as MainActivityTwo
         val view = activity.findViewById<View>(R.id.filter)
@@ -115,7 +114,7 @@ class WeeklyDefectsFragment() : Fragment(),
         binding.prev.setOnClickListener {
 
             if (isLoaded) {
-                loadingDialog.show()
+//                loadingDialog.show()
                 j -= 1
                 val y = week!! + j
                 binding.weekNoTV.text = "Week No. $y"
@@ -136,7 +135,7 @@ class WeeklyDefectsFragment() : Fragment(),
         binding.next.setOnClickListener {
 
             if (isLoaded) {
-                loadingDialog.show()
+//                loadingDialog.show()
                 j += 1
                 isLoaded = false
                 val x = week!! + j
@@ -158,16 +157,16 @@ class WeeklyDefectsFragment() : Fragment(),
     }
 
     private fun Observers() {
-        loadingDialog.show()
+//        loadingDialog.show()
         mainViewModel.GetCurrentWeekYear().observe(viewLifecycleOwner, Observer {
-            loadingDialog.dismiss()
+//            loadingDialog.dismiss()
             if (it != null) {
                 isLoaded = true
 
                 week = it.weekNO
                 year = it.year
                 binding.weekNoTV.text = "Week No. $week"
-                loadingDialog.show()
+//                loadingDialog.show()
                 currentWeek = week!!.toInt()
                 mainViewModel.GetWeeklyDefectChecks(
                     week!!.toDouble(),
@@ -180,7 +179,7 @@ class WeeklyDefectsFragment() : Fragment(),
             }
         })
         mainViewModel.lDGetWeeklyDefectChecks.observe(viewLifecycleOwner) {
-            loadingDialog.dismiss()
+//            loadingDialog.dismiss()
             isLoaded = true
             if (it != null) {
                 Log.e("dataass", "Observers: " + it)
@@ -266,7 +265,7 @@ class WeeklyDefectsFragment() : Fragment(),
         position: Int,
         itemclicked: String
     ) {
-        loadingDialog.show()
+//        loadingDialog.show()
         deleteDialogthree.dismiss()
         binding.tvlocname.setText(itemclicked)
         lmID = position.toDouble()

@@ -1,27 +1,19 @@
 package com.clebs.celerity_admin.ui.CLSweb
 
-import android.annotation.TargetApi
-import android.graphics.Bitmap
-import android.net.http.SslError
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.SslErrorHandler
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.clebs.celerity_admin.MainActivityTwo
+import com.clebs.celerity_admin.SplashActivityTwo
 import com.clebs.celerity_admin.databinding.FragmentWebBinding
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
-import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.viewModels.MainViewModel
 
@@ -63,7 +55,7 @@ class WebFragment : Fragment() {
         binding.web.visibility=View.GONE
         binding.pb.visibility=View.VISIBLE
         mainViewModel.GetemergencyContact(
-            Prefs.getInstance(App.instance).clebUserId.toString().toInt()
+            Prefs.getInstance(SplashActivityTwo.instance).clebUserIds.toString().toInt()
         ).observe(viewLifecycleOwner, Observer {
             if (it!=null){
 

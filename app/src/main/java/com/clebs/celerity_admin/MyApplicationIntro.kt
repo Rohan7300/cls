@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
 
-class MyApplicationIntro :  AppIntro() {
+class MyApplicationIntro : AppIntro() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -22,19 +22,18 @@ class MyApplicationIntro :  AppIntro() {
                 titleColorRes = R.color.black,
                 descriptionColorRes = R.color.black,
 
-            )
+                )
         )
         addSlide(
             AppIntroFragment.createInstance(
                 title = "THE GREAT STUFF WE OFFER",
-                description = "1. PALLET SERVICE \n 2. MAN DELIVERY\n 3.FIRST MILE/MIDDLE MILE/LAST MILE \n 4. SAME DAY & EXPRESS DELIVERY \n 5. WAREHOUSING \n 6. CUSTOMISED SOLUTIONS"
-,
+                description = "1. PALLET SERVICE \n 2. MAN DELIVERY\n 3.FIRST MILE/MIDDLE MILE/LAST MILE \n 4. SAME DAY & EXPRESS DELIVERY \n 5. WAREHOUSING \n 6. CUSTOMISED SOLUTIONS",
                 imageDrawable = R.drawable.we,
                 backgroundDrawable = R.drawable.back_three,
                 titleColorRes = R.color.black,
                 descriptionColorRes = R.color.black,
 
-            )
+                )
         )
 
         addSlide(
@@ -46,7 +45,7 @@ class MyApplicationIntro :  AppIntro() {
                 titleColorRes = R.color.black,
                 descriptionColorRes = R.color.black,
 
-            )
+                )
         )
         // Fade Transition
 

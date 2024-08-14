@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:layout_width="30dp"
+                android:id="@+id/pb"
+                android:visibility="gone"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/orange"/>
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:id="@+id/nested"
+                android:layout_height="wrap_content">
+                <com.google.android.material.card.MaterialCardView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginVertical="5dp"
+                    app:cardCornerRadius="10dp"
+                    app:strokeColor="@color/grey_main"
+                    app:strokeWidth="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <androidx.core.widget.NestedScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+
+
+
+                        </androidx.core.widget.NestedScrollView>
+                        <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            app:cardCornerRadius="10dp"
+                            app:strokeColor="@color/grey_main"
+                            app:strokeWidth="2dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:id="@+id/headerSelectVehicleOptions"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/orange"
+                                    android:orientation="horizontal"
+                                    android:padding="13dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+
+                                        android:text="1 . Select Vehicle Options"
+                                        android:textColor="@color/white"
+                                        android:textStyle="bold"/>
+
+                                    <ImageView
+                                        android:id="@+id/headerStatusIcon"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:src="@drawable/cq_sdk_down_arrow_thin" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/bodyVehicleOptions"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:visibility="visible"
+                                    android:orientation="vertical">
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginHorizontal="10dp"
+                                        android:layout_marginVertical="10dp"
+                                        android:hint="Select Company*"
+                                        android:textColorHint="@color/hintColor">
+
+                                        <Spinner
+                                            android:id="@+id/spinnerSelectCompany"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="4dp"
+                                            android:importantForAutofill="no"
+                                            android:inputType="none"
+                                            android:padding="12dp"
+                                            android:textColorHint="@color/hintColor"
+                                            android:textSize="13sp" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginHorizontal="10dp"
+                                        android:layout_marginVertical="10dp"
+                                        android:hint="Select DA*"
+                                        android:textColorHint="@color/hintColor">
+
+                                        <AutoCompleteTextView
+                                            android:id="@+id/spinnerSelectDA"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="4dp"
+                                            android:importantForAutofill="no"
+                                            android:inputType="none"
+                                            android:padding="12dp"
+                                            android:textColorHint="@color/hintColor"
+                                            android:textSize="13sp" />
+                                        <TextView
+                                            android:id="@+id/textview"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textColor="@color/red"
+                                            android:textSize="12sp"
+                                            android:visibility="gone" />
+
+                                        <TextView
+                                            android:id="@+id/textviewbreakdown"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textColor="@color/red"
+                                            android:textSize="12sp"
+                                            android:visibility="gone" />
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <TextView
+                                        android:id="@+id/errorText"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginHorizontal="10dp"
+                                        android:layout_marginVertical="10dp"
+                                        android:text="Direct returns to the supplier are not permitted. Please create a vehicle return request instead."
+                                        android:textColor="@color/red"
+                                        android:visibility="gone" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <LinearLayout
+                            android:id="@+id/headerVehicleInformation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/orange"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:padding="13dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="2. Vehicle Information"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/headerStatusIcontw"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/cq_sdk_down_arrow_thin" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/bodyVehicleInfo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginVertical="10dp"
+                                android:hint="Select Vehicle*"
+                                android:textColorHint="@color/hintColor">
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/spinnerSelectVehicle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:padding="12dp"
+                                    android:textColorHint="@color/hintColor"
+                                    android:textSize="13sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+                            <TextView
+                                android:id="@+id/txterror"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/red"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/txterrortwo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/red"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+                            <TextView
+                                android:id="@+id/tvRelease"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:background="@drawable/shape_editext_main"
+                                android:backgroundTint="@color/purple"
+                                android:padding="10dp"
+                                android:text="Release vehicle"
+                                android:textAllCaps="true"
+                                android:textColor="@color/white"
+                                android:textSize="10sp"
+                                android:visibility="gone"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                              android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:layout_marginTop="20dp"
+                                android:text="Previous Record Mileage: - - - -"
+                                android:textColor="@color/text_color" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginVertical="10dp"
+                                android:hint="Enter Vehicle Current Mileage"
+                                android:textColorHint="@color/hintColor">
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/atvVehicleCurrentMileage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:importantForAutofill="no"
+                                    android:inputType="numberDecimal"
+                                    android:padding="12dp"
+                                    android:textColorHint="@color/hintColor"
+                                    android:textSize="13sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginVertical="10dp"
+                                android:hint="Enter Add Blue Mileage"
+                                android:textColorHint="@color/hintColor">
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/atvAddBlueMileage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:importantForAutofill="no"
+                                    android:inputType="numberDecimal"
+                                    android:padding="12dp"
+                                    android:textColorHint="@color/hintColor"
+                                    android:textSize="13sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginVertical="10dp"
+                                android:hint="Select Veh Fuel Level"
+                                android:textColorHint="@color/hintColor">
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/spinnerVehicleFuelLevel"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:padding="12dp"
+                                    android:textColorHint="@color/hintColor"
+                                    android:textSize="13sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rv_vehicle_fuellevel"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:layout_marginTop="4dp"
+                                android:overScrollMode="never"
+                                android:visibility="gone"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginVertical="10dp"
+                                android:hint="Select Veh Oil Level"
+                                android:textColorHint="@color/hintColor">
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/spinnerVehicleOilLevel"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:padding="12dp"
+                                    android:textColorHint="@color/hintColor"
+                                    android:textSize="13sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rv_vehicle_oillevel"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:layout_marginTop="4dp"
+                                android:overScrollMode="never"
+                                android:visibility="gone"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/headeruploadVehicleInformation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/orange"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="10dp"
+                            android:padding="13dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="3. Upload pictures"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/headerStatusIconthree"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/cq_sdk_down_arrow_thin" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:visibility="gone"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+
+                                android:background="@drawable/shape_editext_main"
+                                android:backgroundTint="@color/orange"
+                                android:gravity="center"
+                                android:padding="10dp"
+                                android:text="Start Inspection"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/headeruploadVehicleInformationVanhire"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/orange"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:padding="13dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="4. Van hire"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/headerStatusIconfour"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/cq_sdk_down_arrow_thin" />
+                        </LinearLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:layout_margin="16dp">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/edt_layout"
+                                style="@style/LoginTextInputLayoutStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:hint="Select your DOB "
+                                app:hintTextColor="@color/black">
+
+                                <EditText
+                                    android:id="@+id/edt_company"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:padding="12dp"
+
+                                    android:textSize="13sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <!--                <TextView-->
+                            <!--                    android:layout_width="wrap_content"-->
+                            <!--                    android:layout_height="wrap_content"-->
+                            <!--                    android:id="@+id/tv_milegae"-->
+                            <!--                    android:text="Previous Recorded Mileage"-->
+                            <!--                    android:layout_marginTop="16dp"-->
+                            <!--                    android:textColor="@color/black"-->
+                            <!--                    app:layout_constraintStart_toStartOf="@+id/edt_layout"-->
+                            <!--                    app:layout_constraintTop_toBottomOf="@id/edt_layout" />-->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/edt_layout_two"
+                                style="@style/LoginTextInputLayoutStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="16dp"
+                                android:hint="Driver License Number"
+                                app:hintTextColor="@color/black"
+                                app:layout_constraintTop_toBottomOf="@id/edt_layout">
+
+                                <EditText
+                                    android:id="@+id/edt_mileage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:padding="12dp"
+
+                                    android:textSize="13sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/edt_layout_three"
+                                style="@style/LoginTextInputLayoutStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="16dp"
+                                android:hint="License Start Date"
+                                app:hintTextColor="@color/black"
+                                app:layout_constraintTop_toBottomOf="@id/edt_layout_two">
+
+                                <EditText
+                                    android:id="@+id/edt_blue"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:padding="12dp"
+
+                                    android:textSize="13sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/edt_layout_four"
+                                style="@style/LoginTextInputLayoutStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="16dp"
+                                android:hint="License End Date"
+                                app:hintTextColor="@color/black"
+                                app:layout_constraintTop_toBottomOf="@id/edt_layout_three">
+
+                                <EditText
+                                    android:id="@+id/edt_fuel"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:padding="12dp"
+
+                                    android:textSize="13sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lltick"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:orientation="horizontal"
+                                android:weightSum="2"
+                                app:layout_constraintTop_toBottomOf="@id/edt_layout_four">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <CheckBox
+                                        android:id="@+id/check"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginTop="8dp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="6dp"
+                                        android:text="Tick to confirm you have any Convictions."
+                                        android:textSize="11sp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <CheckBox
+                                        android:id="@+id/checktwo"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginTop="6dp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="6dp"
+                                        android:text="Tick to confirm you have any Accidents."
+                                        android:textSize="11sp" />
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/edt_layout_accidents"
+                                style="@style/LoginTextInputLayoutStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:hint="Convictions / Accidents details!"
+                                app:hintTextColor="@color/black"
+                                app:layout_constraintTop_toBottomOf="@id/lltick">
+
+                                <EditText
+                                    android:id="@+id/edt_accidents"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="60dp"
+                                    android:layout_marginTop="4dp"
+
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:padding="12dp"
+
+                                    android:textSize="13sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView
+                                android:id="@+id/hirevan"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:background="@drawable/shape_edittext"
+                                android:backgroundTint="@color/orange"
+                                android:drawablePadding="10dp"
+                                android:paddingStart="26dp"
+                                android:paddingTop="12dp"
+                                android:paddingEnd="26dp"
+                                android:paddingBottom="12dp"
+                                android:text="Van hire Agreement"
+                                android:textColor="@color/white"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                app:drawableRightCompat="@drawable/baseline_remove_red_eye_24"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/edt_layout_accidents" />
+
+                            <TextView
+                                android:id="@+id/vehiclesign"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:background="@drawable/shape_edittext"
+                                android:backgroundTint="@color/orange"
+                                android:drawablePadding="10dp"
+                                android:paddingStart="26dp"
+                                android:paddingTop="12dp"
+                                android:paddingEnd="26dp"
+                                android:paddingBottom="12dp"
+                                android:text="Vehicle Sign In"
+                                android:textColor="@color/white"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                app:drawableRightCompat="@drawable/baseline_remove_red_eye_24"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/hirevan" />
+
+                            <LinearLayout
+                                android:id="@+id/llthree"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:layout_weight="1"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/vehiclesign">
+
+                                <CheckBox
+                                    android:id="@+id/checkthree"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginTop="8dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginTop="8dp"
+                                    android:text="Tick to confirm you have read all information"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/edt_layout_additional"
+                                style="@style/LoginTextInputLayoutStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="10dp"
+                                android:hint="Additional Information"
+                                app:hintTextColor="@color/black"
+                                app:layout_constraintTop_toBottomOf="@id/llthree">
+
+                                <EditText
+                                    android:id="@+id/edt_additional"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="60dp"
+                                    android:layout_marginTop="4dp"
+
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:padding="12dp"
+
+                                    android:textSize="13sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <LinearLayout
+                                android:id="@+id/llfour"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:layout_weight="1"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/edt_layout_additional">
+
+                                <CheckBox
+                                    android:id="@+id/checkfour"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_marginTop="8dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="2dp"
+                                    android:layout_marginTop="8dp"
+                                    android:text="Tick to upload vehicle defect pictures"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/bt_startInspection"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:background="@drawable/shape_edittext"
+                                android:backgroundTint="#BE1E2D"
+                                android:drawablePadding="4dp"
+                                android:drawableRight="@drawable/baseline_file_upload_24"
+                                android:paddingStart="26dp"
+                                android:textStyle="bold"
+                                android:gravity="center_horizontal|center_vertical"
+                                android:paddingTop="12dp"
+                                android:paddingEnd="26dp"
+                                android:paddingBottom="12dp"
+                                android:text="Upload"
+                                android:textColor="@color/white"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/llfour" />
+                            <TextView
+                                android:id="@+id/bt_change"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:background="@drawable/shape_edittext"
+                                android:backgroundTint="@color/greenBtn"
+                                android:textStyle="bold"
+                                android:paddingStart="26dp"
+                                android:paddingTop="12dp"
+                                android:paddingEnd="26dp"
+                                android:paddingBottom="12dp"
+                                android:text="Change DA vehcile"
+                                android:textColor="@color/white"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/bt_startInspection" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+
+            </androidx.core.widget.NestedScrollView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</layout>
+

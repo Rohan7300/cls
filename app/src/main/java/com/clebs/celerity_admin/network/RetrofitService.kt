@@ -3,14 +3,14 @@ package com.clebs.celerity_admin.network
 
 import android.annotation.SuppressLint
 import android.util.Log
+import com.clebs.celerity_admin.LoginActivityTwo
+import com.clebs.celerity_admin.SplashActivityTwo
 
-import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.Prefs
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.security.SecureRandom
@@ -109,7 +109,7 @@ object RetrofitService {
     }
 
     private fun provideHeaderInterceptor(): Interceptor {
-        val applicationContext = App.instance
+        val applicationContext = SplashActivityTwo.instance
         try {
             return Interceptor { chain ->
                 val accessToken: String = Prefs.getInstance(applicationContext).accessToken

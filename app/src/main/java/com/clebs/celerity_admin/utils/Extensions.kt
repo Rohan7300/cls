@@ -34,6 +34,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import com.clebs.celerity_admin.R
+import com.clebs.celerity_admin.utils.DependencyClass.VehInspectionDate
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.sidesheet.SideSheetBehavior
@@ -554,4 +555,55 @@ fun shortenFileName(originalName: String): String {
         originalName
     }
 
+}
+fun showDatePickerDialog(context: Context, tv: TextView) {
+    val calendar = Calendar.getInstance()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _, selectedYear, selectedMonth, selectedDayOfMonth ->
+
+            val selectedCalendar = Calendar.getInstance().apply {
+                set(selectedYear, selectedMonth, selectedDayOfMonth, 0, 0, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+
+            selectedCalendar.set(Calendar.HOUR_OF_DAY, 23)
+            selectedCalendar.set(Calendar.MINUTE, 59)
+            selectedCalendar.set(Calendar.SECOND, 59)
+
+
+            val date = String.format(
+                Locale.getDefault(),
+                "%04d-%02d-%02dT%02d:%02d:%02d",
+                selectedCalendar.get(Calendar.YEAR),
+                selectedCalendar.get(Calendar.MONTH) + 1,
+                selectedCalendar.get(Calendar.DAY_OF_MONTH),
+                selectedCalendar.get(Calendar.HOUR_OF_DAY),
+                selectedCalendar.get(Calendar.MINUTE),
+                selectedCalendar.get(Calendar.SECOND)
+            )
+            VehInspectionDate = date
+            tv.text = convertDateFormat(date)
+
+        },
+        year,
+        month,
+        dayOfMonth
+    )
+    datePickerDialog.show()
+}
+
+fun convertDateFormat(inputDate: String): String {
+    try {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val date = inputFormat.parse(inputDate)
+        return outputFormat.format(date!!)
+    } catch (_: Exception) {
+        return " "
+    }
 }

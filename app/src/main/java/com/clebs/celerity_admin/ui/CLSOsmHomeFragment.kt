@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.databinding.FragmentCLSOsmHomeBinding
 import com.clebs.celerity_admin.databinding.FragmentGalleryBinding
@@ -27,13 +28,30 @@ class CLSOsmHomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCLSOsmHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.head.isSelected = true
+        binding.cardone.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("change_DA", "changeda")
+
+            findNavController().navigate(R.id.nav_changevehcilecommon, bundle)
+        }
+        binding.rl.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("change_DA", "changeda")
+
+            findNavController().navigate(R.id.nav_changevehcilecommon, bundle)
+        }
+        binding.imageView8.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("change_DA", "changeda")
+
+            findNavController().navigate(R.id.nav_changevehcilecommon, bundle)
+        }
         return root
     }
 

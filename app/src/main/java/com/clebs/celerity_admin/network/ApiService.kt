@@ -3,9 +3,13 @@ package com.clebs.celerity_admin.network
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
+import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
+import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
+import com.clebs.celerity_admin.models.GetCurrentInsuranceInfo
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
+import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
@@ -19,10 +23,12 @@ import com.clebs.celerity_admin.models.RepoInfoModel
 import com.clebs.celerity_admin.models.ResponseInspectionDone
 import com.clebs.celerity_admin.models.SaveInspectionRequestBody
 import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
+import com.clebs.celerity_admin.models.SaveVehicleBreakDownInspectionRequest
 import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
+import com.clebs.celerity_admin.models.basemodel.SimpleNetworkResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -141,5 +147,23 @@ interface ApiService {
     ): Response<OtherDefectCheckImagesInDropBoxResponse>
 
     @GET("/api/WeeklyDefectSheet/GetLocationListbyUserId/{userId}")
-    suspend fun GetLocationListbyUserId( @Path("userId") userId: Double): Response<GetVehicleLocation>
+    suspend fun GetLocationListbyUserId(@Path("userId") userId: Double): Response<GetVehicleLocation>
+
+    @GET("/api/VehAllocHistories/GetVehicleCurrentInsuranceInfo/{vmId}")
+    suspend fun GetVehicleCurrentInsuranceInfo(@Path("vmId") vmId: Int): Response<GetCurrentInsuranceInfo>
+
+    @GET("/api/VehAllocHistories/CreateNewVehicleReleaseTicket")
+    suspend fun CreateVehicleReleaseReq(
+        @Query("vmId") vmId: Double,
+        @Query("supervisorId") supervisorId: Double):Response<SucessStatusMsgResponse>
+    @GET("/api/VehAllocHistories/GetAllVehicleInspectionList")
+    suspend fun GetAllVehicleInspectionList(): Response<GetAllVehicleInspectionListResponse>
+    @GET("/api/VehAllocHistories/GetAllDriversInspectionList")
+    suspend fun GetAllDriversInspectionList(): Response<GetAllDriversInspectionListResponse>
+
+    @GET("/api/VehAllocHistories/GetVehicleDamageWorkingStatus")
+    suspend fun GetVehicleDamageWorkingStatus():Response<GetVehicleDamageWorkingStatusResponse>
+
+    @POST("/api/VehAllocHistories/SaveVehicleBreakDownInspectionInfo")
+    suspend fun SaveVehicleBreakDownInspectionInfo(@Body requestBody: SaveVehicleBreakDownInspectionRequest):Response<SucessStatusMsgResponse>
 }

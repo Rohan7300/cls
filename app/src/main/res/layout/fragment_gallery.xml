@@ -15,184 +15,6 @@
         android:layout_height="wrap_content"
         android:background="@color/home_blue">
 
-        <LinearLayout
-            android:id="@+id/llhh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="4dp">
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbarDefaultDelayBeforeFade="5000"
-                android:scrollbars="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:layout_margin="10dp">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-
-                        android:orientation="horizontal">
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/imgchangevehicle_allocation"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="10dp"
-                            android:src="@drawable/img_round"
-                            app:civ_border_width="1dp"
-
-                            app:layout_constraintStart_toStartOf="parent"
-
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/imgchange"
-                            android:layout_width="29dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/vehicleallocation"
-                            android:tint="@color/black"
-                            app:layout_constraintBottom_toBottomOf="@+id/imgchangevehicle_allocation"
-                            app:layout_constraintEnd_toEndOf="@+id/imgchangevehicle_allocation"
-                            app:layout_constraintStart_toStartOf="@+id/imgchangevehicle_allocation"
-                            app:layout_constraintTop_toTopOf="@id/imgchangevehicle_allocation" />
-
-                        <TextView
-
-                            android:id="@+id/tvchange"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:text="Change allocation"
-                            android:textColor="@color/black"
-                            android:textSize="10sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="@+id/imgchangevehicle_allocation"
-                            app:layout_constraintStart_toStartOf="@+id/imgchangevehicle_allocation"
-                            app:layout_constraintTop_toBottomOf="@id/imgchangevehicle_allocation" />
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/imgchangevehicle_return"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:layout_marginStart="20dp"
-                            android:src="@drawable/img_round"
-                            app:civ_border_width="1dp"
-                            app:layout_constraintStart_toEndOf="@+id/imgchangevehicle_allocation"
-                            app:layout_constraintTop_toTopOf="@+id/imgchangevehicle_allocation" />
-
-                        <ImageView
-                            android:id="@+id/imgchange_imgchangevehicle_return"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-
-                            android:src="@drawable/lease"
-                            app:layout_constraintBottom_toBottomOf="@+id/imgchangevehicle_return"
-                            app:layout_constraintEnd_toEndOf="@+id/imgchangevehicle_return"
-                            app:layout_constraintStart_toStartOf="@+id/imgchangevehicle_return"
-                            app:layout_constraintTop_toTopOf="@id/imgchangevehicle_return" />
-
-                        <TextView
-
-                            android:id="@+id/tvchange_return"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:text="Return vehicle"
-                            android:textColor="@color/black"
-                            android:textSize="10sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="@+id/imgchangevehicle_return"
-                            app:layout_constraintStart_toStartOf="@+id/imgchangevehicle_return"
-                            app:layout_constraintTop_toBottomOf="@id/imgchangevehicle_return" />
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/imgchangevehicle_collection"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:layout_marginStart="20dp"
-                            android:src="@drawable/img_round"
-                            app:civ_border_width="1dp"
-                            app:layout_constraintStart_toEndOf="@+id/imgchangevehicle_return"
-                            app:layout_constraintTop_toTopOf="@+id/imgchangevehicle_return" />
-
-                        <ImageView
-                            android:id="@+id/imgchange_collection"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-
-                            android:src="@drawable/carss"
-                            app:layout_constraintBottom_toBottomOf="@+id/imgchangevehicle_collection"
-                            app:layout_constraintEnd_toEndOf="@+id/imgchangevehicle_collection"
-                            app:layout_constraintStart_toStartOf="@+id/imgchangevehicle_collection"
-                            app:layout_constraintTop_toTopOf="@id/imgchangevehicle_collection" />
-
-                        <TextView
-
-                            android:id="@+id/tvchange_collection"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:text="Collection request"
-                            android:textColor="@color/black"
-                            android:textSize="10sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="@+id/imgchangevehicle_collection"
-                            app:layout_constraintStart_toStartOf="@+id/imgchangevehicle_collection"
-                            app:layout_constraintTop_toBottomOf="@id/imgchangevehicle_collection" />
-
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/imgchangevehicle_transfer"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:layout_marginStart="20dp"
-                            android:src="@drawable/img_round"
-                            app:civ_border_width="1dp"
-                            app:layout_constraintStart_toEndOf="@+id/imgchangevehicle_collection"
-                            app:layout_constraintTop_toTopOf="@+id/imgchangevehicle_collection" />
-
-                        <ImageView
-                            android:id="@+id/imgchange_transfer"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-
-                            android:src="@drawable/transferda"
-                            app:layout_constraintBottom_toBottomOf="@+id/imgchangevehicle_transfer"
-                            app:layout_constraintEnd_toEndOf="@+id/imgchangevehicle_transfer"
-                            app:layout_constraintStart_toStartOf="@+id/imgchangevehicle_transfer"
-                            app:layout_constraintTop_toTopOf="@id/imgchangevehicle_transfer" />
-
-                        <TextView
-
-                            android:id="@+id/tvchange_transfer"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:text="Transfer Assign DA"
-                            android:textColor="@color/black"
-                            android:textSize="10sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="@+id/imgchangevehicle_transfer"
-                            app:layout_constraintStart_toStartOf="@+id/imgchangevehicle_transfer"
-                            app:layout_constraintTop_toBottomOf="@id/imgchangevehicle_transfer" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </LinearLayout>
-
-
-            </HorizontalScrollView>
-
-        </LinearLayout>
 
         <ProgressBar
             android:id="@+id/pb2"
@@ -241,10 +63,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-android:alpha="0.2"
+
             android:orientation="horizontal"
             android:weightSum="2"
-            app:layout_constraintTop_toBottomOf="@id/llhh">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -256,9 +78,9 @@ android:alpha="0.2"
                     android:id="@+id/textView3"
                     android:layout_width="130dp"
                     android:layout_height="wrap_content"
-android:alpha="0.5"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/img_round_1"
+
+                    android:src="@drawable/img_round"
                     app:civ_border_width="1dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -282,7 +104,7 @@ android:alpha="0.5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="48dp"
-android:alpha="0.5"
+                    android:alpha="0.5"
                     android:text="Options"
                     android:textColor="@color/black"
                     android:textSize="14sp"
@@ -318,11 +140,11 @@ android:alpha="0.5"
                     android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:alpha="0.5"
                     android:src="@drawable/img_round_1"
                     app:civ_border_width="1dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView

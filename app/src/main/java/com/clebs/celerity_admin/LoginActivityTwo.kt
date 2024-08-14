@@ -24,6 +24,9 @@ class LoginActivityTwo : AppCompatActivity() {
 
     lateinit var ActivityLoginBinding: ActivityLoginTwoBinding
     lateinit var mainViewModel: MainViewModel
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val window = window
         val winParams = window.attributes
@@ -47,6 +50,8 @@ class LoginActivityTwo : AppCompatActivity() {
 
 
         var isPasswordVisible = false
+
+
         ActivityLoginBinding.passIcon.setOnClickListener {
             val cursorPosition = ActivityLoginBinding.edtPass.selectionEnd
             if (!isPasswordVisible) {
@@ -99,7 +104,7 @@ class LoginActivityTwo : AppCompatActivity() {
                         setLoggedIn(true)
                         Toast.makeText(LoginActivity@this, "Login successfully", Toast.LENGTH_SHORT).show()
                         Prefs.getInstance(applicationContext).accessToken = it.token
-                        Prefs.getInstance(applicationContext).clebUserId = it.userID.toString()
+                        Prefs.getInstance(applicationContext).clebUserIds = it.userID.toString()
                         val i = Intent(
                             this@LoginActivityTwo,
                             MainActivityTwo::class.java

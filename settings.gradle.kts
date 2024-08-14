@@ -18,4 +18,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "CLS OSM"
 include(":app")
- 
+include(":mylibrary")

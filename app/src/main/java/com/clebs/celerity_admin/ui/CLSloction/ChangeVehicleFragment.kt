@@ -2,6 +2,7 @@ package com.clebs.celerity_admin.ui.CLSloction
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -33,6 +35,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.MainActivityTwo
 import com.clebs.celerity_admin.R
+import com.clebs.celerity_admin.SplashActivityTwo
 import com.clebs.celerity_admin.adapters.CompanyListAdapter
 import com.clebs.celerity_admin.adapters.DriverListAdapter
 import com.clebs.celerity_admin.adapters.FuelLevelAdapter
@@ -50,13 +53,12 @@ import com.clebs.celerity_admin.models.VehicleReturnModelListItem
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
-import com.clebs.celerity_admin.ui.App
+import com.clebs.celerity_admin.ui.BreakDownActivity
 import com.clebs.celerity_admin.utils.OnItemClickRecyclerView
 import com.clebs.celerity_admin.utils.OnReturnVehicle
 import com.clebs.celerity_admin.utils.Onclick
 import com.clebs.celerity_admin.utils.OnclickDriver
 import com.clebs.celerity_admin.utils.Prefs
-import com.clebs.celerity_admin.utils.setupFullHeight
 import com.clebs.celerity_admin.utils.setupHalfHeight
 import com.clebs.celerity_admin.utils.setupHalfHeightForlisting
 import com.clebs.celerity_admin.viewModels.MainViewModel
@@ -86,6 +88,12 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
     private lateinit var inspectionID: String
     var time = String()
 
+    var DOB = String()
+    var licensestart = String()
+    var licenseEnd = String()
+    var licenseNo = String()
+    var vehiclelocation = String()
+
     private lateinit var regexPattern: Regex
     var companynames: String? = null
     private var datextinputlayout: TextInputLayout? = null
@@ -99,6 +107,10 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
     private var requesttypetext: EditText? = null
     private var DA_id = String()
     private var checkChMessage: String? = null
+    private var checkChMessagetwo: String? = null
+    private var vehicleLocation: String? = null
+    private var DriverHomeDepotId: Int? = null
+    private var vehLmId: Int? = null
     var spinnerposition: Int? = -1
     private var returbDA_wmID = String()
     lateinit var deleteDialog: AlertDialog
@@ -136,6 +148,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
     lateinit var llmthree: LinearLayout
     private var list = ArrayList<CompanyListResponseItem>()
     private var listnew = ArrayList<GetVehicleRequestTypeItem>()
+    var current_screen = String()
 
     lateinit var FuellevelAdapter: FuelLevelAdapter
     lateinit var OillevelAdapter: VehicleOilLevelAdapter
@@ -150,6 +163,11 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
     private var radioButtonnotworthy: RadioButton? = null
     private var daname: EditText? = null
     private var edt: EditText? = null
+    private var edt_select_vehicle: EditText? = null
+    private var txterror: TextView? = null
+    private var txterrortwo: TextView? = null
+    private var errortext = String()
+    private var tvrelease: TextView? = null
     private var edttwo: EditText? = null
     private var edtthree: EditText? = null
     private var edtcurrentmileage: EditText? = null
@@ -166,6 +184,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
     private val itemstwo = ArrayList<VehicleReturnModelListItem>()
     lateinit var mainViewModel: MainViewModel
     lateinit var attachmentAdapter: CompanyListAdapter
+    private var isBreakDown: Boolean? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -195,35 +214,26 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
         FuellevelAdapter = FuelLevelAdapter(ArrayList(), this)
         OillevelAdapter = VehicleOilLevelAdapter(ArrayList(), this)
-
-
-
-        isfirst = Prefs.getInstance(requireContext()).Isfirst
-        binding.imgchangevehicleAllocation.setOnClickListener {
-
-            EditableTrue(binding.textView3)
-setFullAlpha(binding.ll1)
-            setFullAlpha(binding.linearLayout3)
-            binding.textView3.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.img_round))
-            changeBackgroundImage(binding.imgchangevehicleTransfer)
-            setFullAlpha(binding.textView3)
-            setHalfAlpha(binding.imgchangevehicleTransfer)
-            changeBackgroundImage(binding.imgchangevehicleCollection)
-            setHalfAlpha(binding.imgchangevehicleCollection)
-            changeBackgroundImage(binding.imgchangevehicleReturn)
-            setHalfAlpha(binding.imgchangevehicleReturn)
-
+        val bundle = Bundle()
+        current_screen = arguments?.getString("change_DA").toString()
+        Log.e(
+            "lkjfdkjfdfuidfiuodfoicurerentscrteemn", "onCreateViewCurrentScreen: " + current_screen
+        )
+        if (current_screen.isNotEmpty()) {
+            binding.textView3.performClick()
         }
 
+        isfirst = Prefs.getInstance(requireContext()).Isfirst
+
         binding.pb2.visibility = View.VISIBLE
-        binding.constmain.alpha = 0.5f
+//        binding.constmain.alpha = 0.5f
         EditableFalse(binding.textView5)
-        EditableFalse(binding.textView3)
+//        EditableFalse(binding.textView3)
         EditableFalse(binding.textView5)
         Observers()
         Thread {
             GlobalScope.launch {
-                if (!App.offlineSyncDB!!.isUserTableEmpty()) {
+                if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmpty()) {
                     binding.checkone.visibility = View.VISIBLE
                     binding.textView4.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -243,7 +253,7 @@ setFullAlpha(binding.ll1)
                     )
                     binding.consttwo.alpha = 0.5f
                 }
-                if (!App.offlineSyncDB!!.isUserTableEmptyInformation()) {
+                if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmptyInformation()) {
 
                     binding.checktwo.visibility = View.VISIBLE
 
@@ -383,9 +393,11 @@ setFullAlpha(binding.ll1)
         mainViewModel.GetVehicleListing().observe(viewLifecycleOwner, Observer {
 
             if (it != null) {
+
                 binding.pb2.visibility = View.GONE
                 itemstwo.addAll(it)
                 binding.constmain.alpha = 1f
+
                 ReturnVehicleAdapter.data.addAll(it)
                 ReturnVehicleAdapter.notifyDataSetChanged()
             } else {
@@ -440,19 +452,51 @@ setFullAlpha(binding.ll1)
 
         mainViewModel.GetDDAmandate(DA_id).observe(viewLifecycleOwner, Observer {
             if (it != null) {
+                checkChMessage = it.vehicleInfo.chMessage
+                checkChMessagetwo = it.vehicleInfo.OnRoadVehicleAssignedToThisDriverMessage
+
+                if (it.vehicleInfo.dOB.isNotEmpty()) {
+                    DOB = it.vehicleInfo.dOB
+                }
+                if (it.vehicleInfo.lisenceNumber.isNotEmpty()){
+                    licenseNo=it.vehicleInfo.lisenceNumber
+                }
+                if (it.vehicleInfo.lisanceStartDate.isNotEmpty()){
+                    licensestart=it.vehicleInfo.lisanceStartDate
+                }
+                if (it.vehicleInfo.lisanceEnddate.isNotEmpty()){
+                    licenseEnd=it.vehicleInfo.lisanceEnddate
+                }
                 if (!it.vehicleInfo.chMessage.isNullOrEmpty()) {
 
+                    DriverHomeDepotId = it.vehicleInfo.DriverHomeDepotId
                     textView.setText(it.vehicleInfo.chMessage)
+                    textviewbreakdwon.visibility = View.GONE
                     textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                } else if (it.vehicleInfo.chMessage.isNullOrEmpty() && it.vehicleInfo.IsOnRoadVehicleAssignedToThisDriver) {
                     textviewbreakdwon.visibility = View.VISIBLE
+                    textviewbreakdwon.setOnClickListener {
 
+                        val intent = Intent(requireContext(), BreakDownActivity::class.java)
+                        startActivity(intent)
+                    }
+                    textView.setText(it.vehicleInfo.OnRoadVehicleAssignedToThisDriverMessage)
+                    textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                } else {
+                    textviewbreakdwon.visibility = View.GONE
+                    vehicleLocation = it.vehicleInfo.vehicleLocation
+                    textView.setText("Allocated Vehicle: " + it.vehicleInfo.currentVehicleRegNo + "\n" + "Vehicle location: " + it.vehicleInfo.vehicleLocation)
+                    textView.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.text_color
+                        )
+                    )
+                    Prefs.getInstance(SplashActivityTwo.instance).VmID =
+                        it.vehicleInfo.vmRegId.toString()
+                    relativelayout?.visibility = View.GONE
+                    linearLayout?.visibility = View.GONE
                 }
-                textviewbreakdwon.visibility = View.GONE
-                textView.setText("Allocated Vehicle: " + it.vehicleInfo.currentVehicleRegNo + "\n" + "Vehicle location: " + it.vehicleInfo.vehicleLocation)
-                textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_color))
-                Prefs.getInstance(App.instance).VmID = it.vehicleInfo.vmRegId.toString()
-                relativelayout?.visibility = View.GONE
-                linearLayout?.visibility = View.GONE
+
             }
 
         })
@@ -474,8 +518,71 @@ setFullAlpha(binding.ll1)
 
     }
 
+    fun GetVehicleCurrentInsuranceInfo() {
+
+        mainViewModel.GetVehicleCurrentInsuranceInfo(
+            Prefs.getInstance(SplashActivityTwo.instance).vmIdReturnveh.toInt()
+        )
+        mainViewModel.GetVehicleCurrentInsuranceInfo.observe(this, Observer {
+            if (it != null) {
+                vehLmId = it.vehicleInfo.vehLmId
+
+                if (it.vehicleInfo.motAndRoadExist) {
+                    errortext = it.vehicleInfo.motAndRoad
+                }
+                if (!it.vehicleInfo.vehLmId.equals(DriverHomeDepotId)) {
+                    if (it.vehicleInfo.motAndRoad.equals(
+                            "This vehicle is not Available to Allocate."
+                        )
+                    ) {
+                        tvrelease?.visibility = View.VISIBLE
+                        txterrortwo?.visibility = View.VISIBLE
+                        txterrortwo?.text = it.vehicleInfo.motAndRoad
+                        txterror?.visibility = View.GONE
+                        tvrelease?.setOnClickListener {
+                            showAlertRelease()
+                        }
+                    } else {
+                        tvrelease?.visibility = View.GONE
+                        txterror?.visibility = View.VISIBLE
+                        txterrortwo?.text = it.vehicleInfo.motAndRoad
+                        txterror?.visibility = View.VISIBLE
+                        txterror?.setText("Vehicle is not on the drivers location, please make a request to transfer the vehicle to driver's location first.")
+                    }
+
+
+                } else if (it.vehicleInfo.motAndRoad.isNotEmpty() && it.vehicleInfo.vehLmId.equals(
+                        DriverHomeDepotId
+                    )
+                ) {
+                    tvrelease?.visibility = View.GONE
+                    txterror?.visibility = View.GONE
+                    txterrortwo?.visibility = View.VISIBLE
+                    txterrortwo?.text = (it.vehicleInfo.motAndRoad)
+
+
+                } else if (!it.vehicleInfo.vehLmId.equals(DriverHomeDepotId) && it.vehicleInfo.motAndRoad.isNotEmpty()) {
+                    tvrelease?.visibility = View.GONE
+                    txterror?.visibility = View.VISIBLE
+                    txterrortwo?.visibility = View.VISIBLE
+                    txterrortwo?.text = (it.vehicleInfo.motAndRoad)
+                } else {
+                    txterror?.visibility = View.GONE
+                    tvrelease?.visibility = View.GONE
+                    txterrortwo?.visibility = View.GONE
+                }
+
+
+            }
+
+
+        })
+
+
+    }
+
     fun getRepoInfoModel() {
-        mainViewModel.GetRepoInfoModel(Prefs.getInstance(App.instance).vmIdReturnveh.toString())
+        mainViewModel.GetRepoInfoModel(Prefs.getInstance(SplashActivityTwo.instance).vmIdReturnveh.toString())
             .observe(viewLifecycleOwner, Observer {
                 relativelayout?.visibility = View.VISIBLE
                 linearLayout?.visibility = View.VISIBLE
@@ -543,6 +650,7 @@ setFullAlpha(binding.ll1)
     }
 
     override fun onDestroyView() {
+
         super.onDestroyView()
         _binding = null
     }
@@ -580,7 +688,18 @@ setFullAlpha(binding.ll1)
         rv_select_type = showSheet.findViewById(R.id.rv_select_type)
         requesttypetext = showSheet.findViewById(R.id.edt)
         EditableFalse(requesttypetext!!)
+        Log.e(
+            "cxfjkdkjfdkjfjdfdjfhjdfjhdfjdhfdfhdgdejh",
+            "selectVehicleOptionsDAlist: " + current_screen
+        )
 
+        if (current_screen.isNotEmpty()) {
+            if (current_screen == "changeda") {
+                datextinputlayout?.visibility = View.VISIBLE
+                daname?.visibility = View.VISIBLE
+
+            }
+        }
         requesttypetext!!.setOnClickListener {
             if (saveClickCounterfive++ == 0) {
 
@@ -644,7 +763,7 @@ setFullAlpha(binding.ll1)
                 spinnerposition = position
                 companynames = parent?.selectedItem.toString()
                 spinner?.visibility = View.VISIBLE
-                llms.visibility = View.VISIBLE
+//                llms.visibility = View.VISIBLE
                 Log.e("slevhdsd", "onItemSelected: " + companynames)
             }
 
@@ -686,17 +805,20 @@ setFullAlpha(binding.ll1)
         val imageView: ImageView = showSheet.findViewById(R.id.cancleIV)
         val textView: TextView = showSheet.findViewById(R.id.bt_change)
         textView.setOnClickListener {
-
-//            bottomSheetDialog.dismiss()
-            if (radioButtonDA?.isChecked == false && radioButtonreturn?.isChecked == false) {
+            if (!checkChMessage.isNullOrEmpty()) {
                 Toast.makeText(
-                    requireContext(),
-                    "Please select from options change DA / return Vehicle",
-                    Toast.LENGTH_SHORT
+                    requireContext(), "Please select other DA to proceed", Toast.LENGTH_SHORT
                 ).show()
-            } else if (radioButtonDA!!.isChecked && daname?.text!!.isEmpty()) {
+
+            } else if (!checkChMessagetwo.isNullOrEmpty()) {
+                Toast.makeText(
+                    requireContext(), "Please select other DA to proceed", Toast.LENGTH_SHORT
+                ).show()
+            }
+//            bottomSheetDialog.dismiss()
+            else if (current_screen.equals("changeda") && daname?.text!!.isEmpty()) {
                 Toast.makeText(requireContext(), "Please select DA name", Toast.LENGTH_SHORT).show()
-            } else if (radioButtonreturn!!.isChecked && returnvehiclename?.text!!.isEmpty()) {
+            } else if (current_screen.equals("returnveh") && returnvehiclename?.text!!.isEmpty()) {
                 Toast.makeText(
                     requireContext(), "Please select Vehicle to return", Toast.LENGTH_SHORT
                 ).show()
@@ -705,11 +827,11 @@ setFullAlpha(binding.ll1)
 
                 GlobalScope.launch {
                     Log.e("sdffncmnxmv", "selectVehicleOptions: ")
-                    if (App.offlineSyncDB!!.isUserTableEmpty()) {
+                    if (SplashActivityTwo.offlineSyncDB!!.isUserTableEmpty()) {
                         // The users table is empty, you can perform some initial setup here
-                        if (radioButtonDA!!.isChecked && daname?.text!!.isNotEmpty()) {
+                        if (current_screen.equals("changeda") && daname?.text!!.isNotEmpty()) {
                             lifecycleScope.launch {
-                                App.offlineSyncDB!!.insert(
+                                SplashActivityTwo.offlineSyncDB!!.insert(
                                     User(
                                         0,
                                         companynames!!.toString(),
@@ -723,9 +845,9 @@ setFullAlpha(binding.ll1)
                                 )
                             }
 
-                        } else if (radioButtonreturn!!.isChecked) {
+                        } else if (current_screen.equals("returnveh") && returnvehiclename!!.text.isNotEmpty()) {
                             lifecycleScope.launch {
-                                App.offlineSyncDB!!.insert(
+                                SplashActivityTwo.offlineSyncDB!!.insert(
                                     User(
                                         1,
                                         companynames!!.toString(),
@@ -744,10 +866,10 @@ setFullAlpha(binding.ll1)
                     } else {
 
                         Log.e("djfdfhdjhfdjh", "selectVehicleOptions: ")
-                        App.offlineSyncDB!!.deleteUserTable()
-                        if (radioButtonDA!!.isChecked && daname?.text!!.isNotEmpty()) {
+                        SplashActivityTwo.offlineSyncDB!!.deleteUserTable()
+                        if (current_screen.equals("changeda") && daname?.text!!.isNotEmpty()) {
                             lifecycleScope.launch {
-                                App.offlineSyncDB!!.insert(
+                                SplashActivityTwo.offlineSyncDB!!.insert(
                                     User(
                                         0,
                                         companynames!!.toString(),
@@ -760,9 +882,9 @@ setFullAlpha(binding.ll1)
                                 )
                             }
 
-                        } else if (radioButtonreturn!!.isChecked) {
+                        } else if (current_screen.equals("returnveh") && returnvehiclename!!.text.isNotEmpty()) {
                             lifecycleScope.launch {
-                                App.offlineSyncDB!!.insert(
+                                SplashActivityTwo.offlineSyncDB!!.insert(
                                     User(
                                         1,
                                         companynames!!.toString(),
@@ -775,9 +897,9 @@ setFullAlpha(binding.ll1)
                                 )
                             }
 
-                        } else if (radioButtonreturn!!.isChecked) {
+                        } else if (current_screen.equals("returnveh") && returnvehiclename!!.text.isNotEmpty()) {
                             lifecycleScope.launch {
-                                App.offlineSyncDB!!.insert(
+                                SplashActivityTwo.offlineSyncDB!!.insert(
                                     User(
                                         2,
                                         companynames!!.toString(),
@@ -842,10 +964,15 @@ setFullAlpha(binding.ll1)
         val imageView: ImageView = showSheet.findViewById(R.id.cancleIV)
         val bt_change: TextView = showSheet.findViewById(R.id.bt_change)
         edt = showSheet.findViewById(R.id.edt_company)
+        edt_select_vehicle = showSheet.findViewById(R.id.edt_select_vehicle)
+        txterror = showSheet.findViewById(R.id.txterror)
+        txterrortwo = showSheet.findViewById(R.id.txterrortwo)
+        tvrelease = showSheet.findViewById(R.id.tvRelease)
         edttwo = showSheet.findViewById(R.id.edt_fuel)
         edtthree = showSheet.findViewById(R.id.edt_oil)
         edtcurrentmileage = showSheet.findViewById(R.id.edt_mileage)
         edtaddblue = showSheet.findViewById(R.id.edt_blue)
+
         rv_locatio = showSheet.findViewById(R.id.rv_vehicle_location)
         rv_fuel = showSheet.findViewById(R.id.rv_vehicle_fuellevel)
         rv_oil = showSheet.findViewById(R.id.rv_vehicle_oillevel)
@@ -869,9 +996,15 @@ setFullAlpha(binding.ll1)
         edtthree?.isFocusable = false
         edtthree?.isFocusableInTouchMode = false
 
-
+        edt_select_vehicle?.isEnabled = true
+        edt_select_vehicle?.isClickable = true
+        edt_select_vehicle?.isFocusable = false
+        edt_select_vehicle?.isFocusableInTouchMode = false
         updateUI()
+        edt_select_vehicle?.setOnClickListener {
 
+            ShowReturnVehicleList()
+        }
         edttwo?.setOnClickListener {
 
             rv_fuel?.visibility = View.VISIBLE
@@ -886,13 +1019,19 @@ setFullAlpha(binding.ll1)
         }
 
         edt?.setOnClickListener {
+            if (current_screen.equals("changeda")) {
+                rv_locatio?.visibility = View.GONE
+                edt?.setText(vehicleLocation)
 
-            rv_locatio?.visibility = View.VISIBLE
+            } else {
+                rv_locatio?.visibility = View.VISIBLE
+            }
+
             rv_fuel?.visibility = View.GONE
             rv_oil?.visibility = View.GONE
         }
 
-        mainViewModel.GetlastMileageInfo(Prefs.getInstance(App.instance).vmIdReturnveh)
+        mainViewModel.GetlastMileageInfo(Prefs.getInstance(SplashActivityTwo.instance).vmIdReturnveh)
             .observe(viewLifecycleOwner, Observer {
                 Log.e("kdkjfjdkffdfkdjfkd", "selectVehicleInformation: " + it)
                 if (it != null) {
@@ -913,6 +1052,22 @@ setFullAlpha(binding.ll1)
                 Toast.makeText(
                     requireContext(), "Please enter vehicle location", Toast.LENGTH_SHORT
                 ).show()
+
+
+            } else if (!vehLmId!!.equals(DriverHomeDepotId)) {
+                Toast.makeText(
+                    requireContext(), "Please select other vehicle to proceed", Toast.LENGTH_SHORT
+                ).show()
+
+            } else if (vehLmId!!.equals(DriverHomeDepotId) && txterrortwo?.text!!.isNotEmpty() && !errortext.equals(
+                    "This Vehicle is not insured."
+                ) && !errortext.contains("Road Tax is expired") && !errortext.contains("MOT is expired")
+            ) {
+                Toast.makeText(
+                    requireContext(), "Please select other vehicle to proceed", Toast.LENGTH_SHORT
+                ).show()
+
+
             } else if (edtmilegae?.text.toString().isEmpty()) {
                 Toast.makeText(requireContext(), "Please enter vehicle Mileage", Toast.LENGTH_SHORT)
                     .show()
@@ -931,12 +1086,23 @@ setFullAlpha(binding.ll1)
                 ).show()
             } else {
                 GlobalScope.launch {
+                    bottomSheetDialog.dismiss()
+                    binding.checktwo.visibility = View.VISIBLE
+                    binding.textView6.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(), R.drawable.img_round
+                        )
+                    )
+                    binding.constthree.alpha = 1f
+                    EditableTrue(binding.textView6)
+
+                    uploadVehiclePicture()
                     Log.e("sdffncmnxmv", "selectVehicleOptions: ")
-                    if (App.offlineSyncDB!!.isUserTableEmptyInformation()) {
+                    if (SplashActivityTwo.offlineSyncDB!!.isUserTableEmptyInformation()) {
                         // The users table is empty, you can perform some initial setup here
 
                         lifecycleScope.launch {
-                            App.offlineSyncDB!!.insertinfo(
+                            SplashActivityTwo.offlineSyncDB!!.insertinfo(
                                 VehicleInformation(
                                     0,
                                     edt?.text.toString(),
@@ -953,10 +1119,10 @@ setFullAlpha(binding.ll1)
                     } else {
 
                         Log.e("djfdfhdjhfdjh", "selectVehicleOptions: ")
-                        App.offlineSyncDB!!.deleteTableInfos()
+                        SplashActivityTwo.offlineSyncDB!!.deleteTableInfos()
 
                         lifecycleScope.launch {
-                            App.offlineSyncDB!!.insertinfo(
+                            SplashActivityTwo.offlineSyncDB!!.insertinfo(
                                 VehicleInformation(
                                     1,
                                     edt?.text.toString(),
@@ -975,17 +1141,7 @@ setFullAlpha(binding.ll1)
 
 
             }
-            bottomSheetDialog.dismiss()
-            binding.checktwo.visibility = View.VISIBLE
-            binding.textView6.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(), R.drawable.img_round
-                )
-            )
-            binding.constthree.alpha = 1f
-            EditableTrue(binding.textView6)
 
-            uploadVehiclePicture()
 
         }
         bottomSheetDialog.setContentView(showSheet)
@@ -1018,9 +1174,9 @@ setFullAlpha(binding.ll1)
         linearLayout = showSheet.findViewById(R.id.llmthree)
 
         lifecycleScope.launch {
-            if (!App.offlineSyncDB!!.isUploadPicturesIsEmpty()) {
+            if (!SplashActivityTwo.offlineSyncDB!!.isUploadPicturesIsEmpty()) {
 
-                if (!App.offlineSyncDB!!.getAllUsers().get(0).changeDAvechile) {
+                if (!SplashActivityTwo.offlineSyncDB!!.getAllUsers().get(0).changeDAvechile) {
                     getRepoInfoModel()
                 }
                 setFullAlpha(relativelayout!!)
@@ -1101,6 +1257,18 @@ setFullAlpha(binding.ll1)
         textinputthree = showSheet.findViewById(R.id.edt_blue)
         textinputfour = showSheet.findViewById(R.id.edt_fuel)
 
+        if (DOB.isNotEmpty()){
+            textinput?.setText(DOB)
+        }
+        if (licenseNo.isNotEmpty()){
+            textinputtwo?.setText(licenseNo)
+        }
+        if (licensestart.isNotEmpty()){
+            textinputthree?.setText(licensestart)
+        }
+        if (licenseEnd.isNotEmpty()){
+            textinputfour?.setText(licenseEnd)
+        }
         EditableFalse(textinput!!)
         EditableFalse(textinputtwo!!)
         EditableFalse(textinputthree!!)
@@ -1331,30 +1499,30 @@ setFullAlpha(binding.ll1)
 
         when (view.id) {
             R.id.rbReTraining -> {
-                if (checked) {
-                    radioButtonreturn?.isChecked = false
-                    datextinputlayout?.visibility = View.VISIBLE
-                    textView.visibility = View.GONE
-                    llmtwo.visibility = View.GONE
-                    llmthree.visibility = View.GONE
-                    radioButtonworthy?.isChecked = false
-                    radioButtonnotworthy?.isChecked = false
-                    requesttype?.visibility = View.GONE
-
-                    returnvehiclename?.setText("")
-                    returntextinputlayout?.visibility = View.GONE
-
-                }
+//                if (checked) {
+//                    radioButtonreturn?.isChecked = false
+////                    datextinputlayout?.visibility = View.VISIBLE
+//                    textView.visibility = View.GONE
+//                    llmtwo.visibility = View.GONE
+//                    llmthree.visibility = View.GONE
+//                    radioButtonworthy?.isChecked = false
+//                    radioButtonnotworthy?.isChecked = false
+//                    requesttype?.visibility = View.GONE
+//
+//                    returnvehiclename?.setText("")
+//                    returntextinputlayout?.visibility = View.GONE
+//
+//                }
             }
 
             R.id.rbTraining -> {
-                if (checked) {
-                    daname?.setText("")
-                    textView.visibility = View.GONE
-                    radioButtonDA?.isChecked = false
-                    datextinputlayout?.visibility = View.GONE
-                    returntextinputlayout?.visibility = View.VISIBLE
-                }
+//                if (checked) {
+//                    daname?.setText("")
+//                    textView.visibility = View.GONE
+//                    radioButtonDA?.isChecked = false
+//                    datextinputlayout?.visibility = View.GONE
+//                    returntextinputlayout?.visibility = View.VISIBLE
+//                }
             }
 
             R.id.roadworthy -> {
@@ -1404,7 +1572,7 @@ setFullAlpha(binding.ll1)
         }
         list.adapter = ReturnVehicleAdapter
 
-
+        ReturnVehicleAdapter.notifyDataSetChanged()
 
         deleteDialogthree.setOnKeyListener { _, keyCode, _ ->
             if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -1462,9 +1630,10 @@ setFullAlpha(binding.ll1)
 
     override fun onItemClick(item: VehicleReturnModelListItem) {
         returnvehiclename?.setText(item.vehicleRegNo)
+        edt_select_vehicle?.setText(item.vehicleRegNo)
 
-        Prefs.getInstance(App.instance).vmIdReturnveh = item.vehicleId.toString()
-
+        Prefs.getInstance(SplashActivityTwo.instance).vmIdReturnveh = item.vehicleId.toString()
+        GetVehicleCurrentInsuranceInfo()
         returbDA_wmID = item.vehicleId.toString()
         binding.pb2.visibility = View.VISIBLE
         getDDAreturnALlocation()
@@ -1560,10 +1729,10 @@ setFullAlpha(binding.ll1)
     fun updates() {
         Thread {
             GlobalScope.launch {
-                if (!App.offlineSyncDB!!.isUserTableEmpty()) {
+                if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmpty()) {
 
                     Thread {
-                        val user = App.offlineSyncDB!!.getAllUsers()
+                        val user = SplashActivityTwo.offlineSyncDB!!.getAllUsers()
                         if (user[0].changeDAvechile) {
                             spinner?.setSelection(user.get(0).spinnerposition)
                             radioButtonDA!!.isChecked = user.get(0).changeDAvechile
@@ -1594,7 +1763,8 @@ setFullAlpha(binding.ll1)
 
 
                         Log.e(
-                            "dkjjdkfjkdjkfjkd", "onCreateView: " + App.offlineSyncDB!!.getAllUsers()
+                            "dkjjdkfjkdjkfjkd",
+                            "onCreateView: " + SplashActivityTwo.offlineSyncDB!!.getAllUsers()
                         )
                         //Do your database´s operations here
                     }.start()
@@ -1609,10 +1779,10 @@ setFullAlpha(binding.ll1)
     fun updateUI() {
         Thread {
             GlobalScope.launch {
-                if (!App.offlineSyncDB!!.isUserTableEmptyInformation()) {
+                if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmptyInformation()) {
 
                     Thread {
-                        val user = App.offlineSyncDB!!.getAllUsersinfo()
+                        val user = SplashActivityTwo.offlineSyncDB!!.getAllUsersinfo()
                         edt?.setText(user.get(0).vehiclelocation)
                         edtaddblue?.setText(user.get(0).blueleve)
                         edtcurrentmileage?.setText(user.get(0).currentVehicleMileage)
@@ -1622,7 +1792,8 @@ setFullAlpha(binding.ll1)
 
 
                         Log.e(
-                            "dkjjdkfjkdjkfjkd", "onCreateView: " + App.offlineSyncDB!!.getAllUsers()
+                            "dkjjdkfjkdjkfjkd",
+                            "onCreateView: " + SplashActivityTwo.offlineSyncDB!!.getAllUsers()
                         )
                         //Do your database´s operations here
                     }.start()
@@ -1638,7 +1809,7 @@ setFullAlpha(binding.ll1)
 
         Thread {
             GlobalScope.launch {
-                if (!App.offlineSyncDB!!.isUserTableEmpty()) {
+                if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmpty()) {
                     binding.checkone.visibility = View.VISIBLE
                     binding.textView4.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -1659,7 +1830,7 @@ setFullAlpha(binding.ll1)
                     binding.consttwo.alpha = 0.5f
                     EditableFalse(binding.textView4)
                 }
-                if (!App.offlineSyncDB!!.isUserTableEmptyInformation()) {
+                if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmptyInformation()) {
 
                     binding.checktwo.visibility = View.VISIBLE
                     binding.textView6.setImageDrawable(
@@ -1697,10 +1868,59 @@ setFullAlpha(binding.ll1)
 
         view.setImageDrawable(
             ContextCompat.getDrawable(
-                requireContext(),
-                R.drawable.img_round_1
+                requireContext(), R.drawable.img_round_1
             )
         )
     }
 
+    fun showAlertRelease() {
+        val factory = LayoutInflater.from(requireContext())
+        val view: View = factory.inflate(R.layout.release_dialog, null)
+        val deleteDialog: androidx.appcompat.app.AlertDialog =
+            androidx.appcompat.app.AlertDialog.Builder(requireContext()).create()
+        /*        val imageView: ImageView = view.findViewById(R.id.ic_cross_orange)
+                imageView.setOnClickListener {
+                    deleteDialog.dismiss()
+                }*/
+        val btone: Button = view.findViewById(R.id.bt_no)
+        val bttwo: Button = view.findViewById(R.id.bt_yes)
+
+        btone.setOnClickListener {
+            deleteDialog.dismiss()
+        }
+
+        bttwo.setOnClickListener {
+
+            mainViewModel.CreateVehicleReleaseReq(
+                Prefs.getInstance(SplashActivityTwo.instance).vmIdReturnveh.toDouble(),
+                Prefs.getInstance(SplashActivityTwo.instance).clebUserIds.toDouble()
+            )
+            mainViewModel.CreateVehicleReleaseReqlivedata.observe(requireActivity(), Observer {
+                if (it != null) {
+
+                    if (it.Status == "200") {
+
+                        Toast.makeText(
+                            requireContext(),
+                            "Release request is created",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+
+            })
+            deleteDialog.dismiss()
+        }
+        deleteDialog.setView(view)
+        deleteDialog.setCanceledOnTouchOutside(false)
+        deleteDialog.setCancelable(false)
+        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        try {
+            deleteDialog.show()
+        } catch (_: Exception) {
+
+        }
+
+    }
 }

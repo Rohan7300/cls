@@ -4,13 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.clebs.celerity_admin.database.User
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
+import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
+import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
+import com.clebs.celerity_admin.models.GetCurrentInsuranceInfo
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
+import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
@@ -21,9 +24,9 @@ import com.clebs.celerity_admin.models.LoginRequest
 import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.OtherDefectCheckImagesInDropBoxResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
-import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
 import com.clebs.celerity_admin.models.ResponseInspectionDone
 import com.clebs.celerity_admin.models.SaveInspectionRequestBody
+import com.clebs.celerity_admin.models.SaveVehicleBreakDownInspectionRequest
 import com.clebs.celerity_admin.models.SucessStatusMsgResponse
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
@@ -52,10 +55,17 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         MutableLiveData()
     private val _clickEvent = MutableLiveData<Boolean>()
     val clickEvent: LiveData<Boolean> = _clickEvent
-
+    val GetVehicleCurrentInsuranceInfo: MutableLiveData<GetCurrentInsuranceInfo?> =
+        MutableLiveData()
+    val CreateVehicleReleaseReqlivedata: MutableLiveData<SucessStatusMsgResponse?> =
+        MutableLiveData()
     fun setClickEvent(clicked: Boolean) {
         _clickEvent.value = clicked
     }
+    val VehicleInspectionListLiveData:MutableLiveData<GetAllVehicleInspectionListResponse?> = MutableLiveData()
+    val DriverInspectionListLiveData:MutableLiveData<GetAllDriversInspectionListResponse?> = MutableLiveData()
+    val VehicleDamageWorkingStatusLD:MutableLiveData<GetVehicleDamageWorkingStatusResponse?> = MutableLiveData()
+    val SaveVehicleBreakDownInspectionLD:MutableLiveData<SucessStatusMsgResponse?> = MutableLiveData()
     fun loginUser(requestModel: LoginRequest): MutableLiveData<LoginResponse?> {
         val responseLiveData = MutableLiveData<LoginResponse?>()
 
@@ -409,6 +419,68 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
                 GetLocationListbyUserIdLiveData.postValue(null)
             else
                 GetLocationListbyUserIdLiveData.postValue(response.body)
+        }
+    }
+
+    fun GetVehicleCurrentInsuranceInfo(
+        vmID: Int
+    ) {
+        viewModelScope.launch {
+            val response = repo.GetVehicleCurrentInsuranceInfo(vmID)
+            if (!response.isSuccessful || response.failed)
+                GetVehicleCurrentInsuranceInfo.postValue(null)
+            else
+                GetVehicleCurrentInsuranceInfo.postValue(response.body)
+        }
+    }
+
+    fun CreateVehicleReleaseReq(
+        vmID: Double,supervisor:Double
+    ) {
+        viewModelScope.launch {
+            val response = repo.CreateVehicleReleaseReq(vmID,supervisor)
+            if (!response.isSuccessful || response.failed)
+                CreateVehicleReleaseReqlivedata.postValue(null)
+            else
+                CreateVehicleReleaseReqlivedata.postValue(response.body)
+        }
+    }
+
+    fun GetAllVehicleInspectionList(){
+        viewModelScope.launch {
+            val response = repo.GetAllVehicleInspectionList()
+            if(!response.isSuccessful || response.failed)
+                VehicleInspectionListLiveData.postValue(null)
+            else
+                VehicleInspectionListLiveData.postValue(response.body)
+        }
+    }
+    fun GetAllDriversInspectionList(){
+        viewModelScope.launch {
+            val response = repo.GetAllDriversInspectionList()
+            if(!response.isSuccessful || response.failed)
+                DriverInspectionListLiveData.postValue(null)
+            else
+                DriverInspectionListLiveData.postValue(response.body)
+        }
+    }
+    fun GetVehicleDamageWorkingStatus(){
+        viewModelScope.launch {
+            val response = repo.GetVehicleDamageWorkingStatus()
+            if(!response.isSuccessful || response.failed)
+                VehicleDamageWorkingStatusLD.postValue(null)
+            else
+                VehicleDamageWorkingStatusLD.postValue(response.body)
+        }
+    }
+
+    fun SaveVehicleBreakDownInspectionInfo(request: SaveVehicleBreakDownInspectionRequest){
+        viewModelScope.launch {
+            val response = repo.SaveVehicleBreakDownInspectionInfo(request)
+            if(!response.isSuccessful || response.failed)
+                SaveVehicleBreakDownInspectionLD.postValue(null)
+            else
+                SaveVehicleBreakDownInspectionLD.postValue(response.body)
         }
     }
 }

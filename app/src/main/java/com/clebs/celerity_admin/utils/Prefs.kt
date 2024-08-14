@@ -234,12 +234,12 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putString(USER_ACCESS_TOKEN, value).apply()
         }
-    var clebUserId: String
+    var clebUserIds: String
         get() {
-            return sharedPreferences.getString("clebUserId", " ") ?: " "
+            return sharedPreferences.getString("clebUserIds", " ") ?: " "
         }
         set(value) {
-            sharedPreferences.edit().putString("clebUserId", value).apply()
+            sharedPreferences.edit().putString("clebUserIds", value).apply()
         }
     var days: String
         get() {

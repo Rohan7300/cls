@@ -8,11 +8,12 @@ import androidx.core.net.toUri
 import androidx.work.ListenableWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.clebs.celerity_admin.SplashActivityTwo
 import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
-import com.clebs.celerity_admin.ui.App
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -39,7 +40,7 @@ class BackgroundUploadWorker(
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         GlobalScope.launch {
-            val dbDefectSheet = App.offlineSyncDB?.getDefectSheet(
+            val dbDefectSheet = SplashActivityTwo.offlineSyncDB?.getDefectSheet(
                 DependencyClass.currentWeeklyDefectItem!!.vdhCheckId
             )
             if (dbDefectSheet != null) {
@@ -56,7 +57,7 @@ class BackgroundUploadWorker(
                         TyreThreadDepthFrontOSVal = 0,
                         TyreThreadDepthRearNSVal = 0,
                         TyreThreadDepthRearOSVal = 0,
-                        UserId = Prefs.getInstance(applicationContext).clebUserId.toInt(),
+                        UserId = Prefs.getInstance(applicationContext).clebUserIds.toInt(),
                         VdhAdminComment = "",
                         VdhBrakeFluidLevelId = dbDefectSheet.brakeFluidLevelID,
                         VdhCheckId = dbDefectSheet.id,
