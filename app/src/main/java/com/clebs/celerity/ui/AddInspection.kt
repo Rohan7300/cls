@@ -173,7 +173,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
             currentDateTime
         )
         loadingDialog.show()
-        clientUniqueID()
+        //clientUniqueID()
 
 
         binding.ivUploadImage.setOnClickListener {
@@ -307,7 +307,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
             if (it != null) {
                 if (it.Message == "200") {
                     prefs.saveBoolean("Inspection", true)
-                    prefs.updateInspectionStatus(true)
+                    //prefs.updateInspectionStatus(true)
                     showToast("Inspection id Generated", this)
                 }
             }
@@ -394,7 +394,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
 
         val currentDate = LocalDateTime.now()
         val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
-        var regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
+        val regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
 //        prefs.inspectionID = regexPattern.toString()
         return regexPattern.toString()
     }
@@ -413,7 +413,7 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
     }
 
     private fun generateInspectionID() {
-        prefs.updateInspectionStatus(true)
+//        prefs.updateInspectionStatus(true)
 
         val currentDate =
             SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(

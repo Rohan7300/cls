@@ -53,6 +53,8 @@ import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.ui.AddInspectionActivity2
 import com.clebs.celerity.ui.FaceScanActivity
 import com.clebs.celerity.utils.DependencyProvider
+import com.clebs.celerity.utils.DependencyProvider.brkEndTime
+import com.clebs.celerity.utils.DependencyProvider.brkStartTime
 import com.clebs.celerity.utils.DependencyProvider.currentUri
 import com.clebs.celerity.utils.DependencyProvider.osData
 import com.clebs.celerity.utils.Prefs
@@ -98,7 +100,7 @@ class NewCompleteTaskFragment : Fragment() {
     private var clockedouttime = String()
     private var isInspectionDoneToday: Boolean = false
     lateinit var ivX: ImageView
-    var clockedInClicked = false
+    private var clockedInClicked = false
     private var codeX = 0
     private var uploadInProgress = false
     private var requestCode: Int = 0
@@ -248,7 +250,7 @@ class NewCompleteTaskFragment : Fragment() {
             anim.start()
         }
 
-        clientUniqueID()
+        //clientUniqueID()
 
         mbinding.rlcomtwoClock.setOnClickListener {
             showDialog()
@@ -817,11 +819,14 @@ class NewCompleteTaskFragment : Fragment() {
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
         return try {
-            val formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.UK)
+           /* val formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.UK)
             val start = LocalTime.parse(startTime, formatter)
-            val end = LocalTime.parse(endTime, formatter)
+            val end = LocalTime.parse(endTime, formatter)*/
 
-            if (start != null && end != null) {
+            val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+            val start = LocalTime.parse(brkStartTime, timeFormatter)
+            val end = LocalTime.parse(brkEndTime, timeFormatter)
+            if (brkStartTime.isNotEmpty() && brkEndTime.isNotEmpty()) {
                 if(start.isBefore(end))
                     true
                 else{
@@ -887,22 +892,22 @@ class NewCompleteTaskFragment : Fragment() {
 
         dialogBinding.edtBreakstart.setOnClickListener {
             b1 = false
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart,1)
         }
 
         dialogBinding.icBreakstart.setOnClickListener {
             b1 = false
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart,1)
         }
 
         dialogBinding.edtBreakend.setOnClickListener {
             b2 = false
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend,2)
         }
 
         dialogBinding.icBreakend.setOnClickListener {
             b2 = false
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend,2)
         }
 
         dialogBinding.timeTvNext.setOnClickListener {

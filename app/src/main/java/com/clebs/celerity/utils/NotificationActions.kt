@@ -199,7 +199,7 @@ fun expiredDocuments(
     viewModel.GetDAVehicleExpiredDocuments(pref.clebUserId.toInt())
     viewModel.liveDataGetDAVehicleExpiredDocuments.observe(viewLifecycleOwner) {
         loadingDialog.dismiss()
-        val dialog = ExpiredDocDialog(pref, context)
+        val dialog = ExpiredDocDialog()
         viewModel.MarkNotificationAsRead(notificationId)
         if (it != null) {
             pref.saveExpiredDocuments(it)

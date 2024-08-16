@@ -20,15 +20,15 @@ import com.clebs.celerity.utils.ShowToast
 import com.clebs.celerity.utils.showToast
 import com.google.android.material.button.MaterialButton
 
-class ExpiredDocDialog(val prefs: Prefs, val rvContext: Context) : DialogFragment() {
+class ExpiredDocDialog: DialogFragment() {
 
+    private lateinit var rvContext: Context
     var data: GetDAVehicleExpiredDocumentsResponse? = null
-    lateinit var expiredRV: RecyclerView
+    private lateinit var expiredRV: RecyclerView
+    lateinit var prefs:Prefs
 
     companion object {
         const val TAG = "ExpiredDocuments"
-
-
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -43,6 +43,8 @@ class ExpiredDocDialog(val prefs: Prefs, val rvContext: Context) : DialogFragmen
 /*        if(prefs.isTicketRaisedToday()){
             raiseTicketBtn.isEnabled = false
         }*/
+
+        prefs = Prefs(rvContext)
         raiseTicketBtn.setOnClickListener {
             if(prefs.isTicketRaisedToday()){
                 showToast("Ticket has been already raised. Please retry after 24 hours.",rvContext)
@@ -78,5 +80,10 @@ class ExpiredDocDialog(val prefs: Prefs, val rvContext: Context) : DialogFragmen
             expiredRV.adapter = adapter
             expiredRV.layoutManager = LinearLayoutManager(rvContext)
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        rvContext = context
     }
 }

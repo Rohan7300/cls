@@ -22,39 +22,43 @@ object DependencyProvider {
     private var viewModelInstance: MainViewModel? = null
     private var apiService: ApiService? = null
     private var mainRepo: MainRepo? = null
-    private var oSyncRepo:OSyncRepo?=null
-    var dailyRotaNotificationShowing:Boolean = false
-    var isComingBackFromCLSCapture:Boolean = false
-    var isComingBackFromFaceScan:Boolean = false
-    var isComingFromPolicyNotification:Boolean = false
+    private var oSyncRepo: OSyncRepo? = null
+    var dailyRotaNotificationShowing: Boolean = false
+    var isComingBackFromCLSCapture: Boolean = false
+    var isComingBackFromFaceScan: Boolean = false
+    var isComingFromPolicyNotification: Boolean = false
     var currentUri: Uri? = null
-    var insLevel:Int = 0
-    var policyDocPDFURI:Uri? = null
-    var notificationWatcher:MutableLiveData<Int> = MutableLiveData<Int>().apply {
+    var insLevel: Int = 0
+    var policyDocPDFURI: Uri? = null
+    var notificationWatcher: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
     }
-    var handlingDeductionNotification:Boolean = false
-    var handlingRotaNotification:Boolean = false
-    var handlingExpiredDialogNotification:Boolean = false
+
+    var handlingDeductionNotification: Boolean = false
+    var handlingRotaNotification: Boolean = false
+    var handlingExpiredDialogNotification: Boolean = false
 
     var osData: OfflineSyncEntity = OfflineSyncEntity()
-    var getCompanySignedDocs:GetCompanySignedDocumentListResponseItem? = null
-    var getCompanySignedDocsClicked:Boolean = false
+    var getCompanySignedDocs: GetCompanySignedDocumentListResponseItem? = null
+    var getCompanySignedDocsClicked: Boolean = false
     var currentDeductionHistory: GetDriverDeductionHistoryResponse? = null
-    var brkStart:String = ""
-    var brkEnd:String = ""
-    var isComingToRaiseTicketforExpiredDocs:Boolean = false
-    var blockCreateTicket:Boolean = false
-    var notify:MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply {
+    var brkStart: String = ""
+    var brkEnd: String = ""
+    var isComingToRaiseTicketforExpiredDocs: Boolean = false
+    var blockCreateTicket: Boolean = false
+    var notify: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply {
         postValue(false)
     }
-    var comingFromViewTickets:Boolean = false
+    var comingFromViewTickets: Boolean = false
+    var brkStartTime: String = ""
+    var brkEndTime: String = ""
+
     fun getMainVM(owner: ViewModelStoreOwner): MainViewModel {
 
-            viewModelInstance = ViewModelProvider(
-                owner,
-                MyViewModelFactory(getMainRepo())
-            )[MainViewModel::class.java]
+        viewModelInstance = ViewModelProvider(
+            owner,
+            MyViewModelFactory(getMainRepo())
+        )[MainViewModel::class.java]
 
         return viewModelInstance!!
     }
@@ -71,8 +75,8 @@ object DependencyProvider {
         return mainRepo!!
     }
 
-    fun offlineSyncRepo(context: Context):OSyncRepo{
-        if(oSyncRepo==null)
+    fun offlineSyncRepo(context: Context): OSyncRepo {
+        if (oSyncRepo == null)
             oSyncRepo = OSyncRepo(OfflineSyncDB.invoke(context))
         return oSyncRepo!!
     }

@@ -920,22 +920,22 @@ class CompleteTaskFragment : Fragment() {
 
         dialogBinding.edtBreakstart.setOnClickListener {
             b1 = false
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
+            ////showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
         }
 
         dialogBinding.icBreakstart.setOnClickListener {
             b1 = false
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
+            //showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart)
         }
 
         dialogBinding.edtBreakend.setOnClickListener {
             b2 = false
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
+            //showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
         }
 
         dialogBinding.icBreakend.setOnClickListener {
             b2 = false
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
+            //showTimePickerDialog(requireContext(), dialogBinding.edtBreakend)
         }
 
         dialogBinding.timeTvNext.setOnClickListener {

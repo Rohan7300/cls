@@ -442,6 +442,8 @@ class Prefs(context: Context) {
         return gson.fromJson(data, InvoiceXX::class.java) ?: null
     }
 
+
+
     fun saveInvoiceX(item: InvoiceXX) {
         val editor = sharedPreferences.edit()
         val gson = Gson()
@@ -752,5 +754,9 @@ class Prefs(context: Context) {
     var useBiometric: Boolean
         get() = sharedPreferences.getBoolean("useBiometric", true)
         set(value) = sharedPreferences.edit().putBoolean("useBiometric", value).apply()
+
+    var inspectionDateTime:String?
+        get() = sharedPreferences.getString("inspectionDateTime","0")
+        set(value) = sharedPreferences.edit().putString("inspectionDateTime",value).apply()
 
 }

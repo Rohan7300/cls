@@ -299,7 +299,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             }
 
             viewModel.GetDAVehicleExpiredDocuments(prefs.clebUserId.toInt())
-            var expiredDocDialog = ExpiredDocDialog(prefs, this)
+            val expiredDocDialog = ExpiredDocDialog()
             viewModel.liveDataGetDAVehicleExpiredDocuments.observe(this) {
                 if (it != null) {
                     prefs.saveExpiredDocuments(it)
@@ -1203,11 +1203,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     Prefs.getInstance(applicationContext).days = "0"
                 }
 
-                if (!it.IsVehicleInspectionDone) {//false
+/*                if (!it.IsVehicleInspectionDone) {
                     if (prefs.isInspectionDoneToday()) SaveVehicleInspection(viewModel)
                 } else {
                     prefs.updateInspectionStatus(true)
-                }
+                }*/
             }
         })
 

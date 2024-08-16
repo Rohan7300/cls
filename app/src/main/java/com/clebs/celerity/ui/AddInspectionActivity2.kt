@@ -61,6 +61,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
+import java.util.Locale
 import java.util.TimeZone
 
 
@@ -485,6 +486,10 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             prefs.updateInspectionStatus(true)
             //SaveVehicleInspection(viewModel)
             prefs.isInspectionIDFailedToUpload = false
+
+            prefs.inspectionDateTime = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
+                    Date()
+                )
             startUploadWithWorkManager(3, prefs, this)
             uploadStatus()
             showToast("Vehicle Inspection is successfully completed ", this)

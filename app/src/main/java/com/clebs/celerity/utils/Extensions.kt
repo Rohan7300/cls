@@ -66,7 +66,9 @@ import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.App.Companion.showToastX
 import com.clebs.celerity.ui.LoginActivity
 import com.clebs.celerity.utils.DependencyProvider.brkEnd
+import com.clebs.celerity.utils.DependencyProvider.brkEndTime
 import com.clebs.celerity.utils.DependencyProvider.brkStart
+import com.clebs.celerity.utils.DependencyProvider.brkStartTime
 import com.google.android.material.snackbar.Snackbar
 import java.io.*
 import java.text.SimpleDateFormat
@@ -470,7 +472,7 @@ fun bitmapToBase64(bitmap: Bitmap): String {
     }
 }*/
 
-fun showTimePickerDialog(context: Context, tv: TextView) {
+fun showTimePickerDialog(context: Context, tv: TextView,mode:Int) {
 
     val calendar = Calendar.getInstance()
     val hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -479,6 +481,10 @@ fun showTimePickerDialog(context: Context, tv: TextView) {
     val timePickerDialog = TimePickerDialog(
         context,
         { _, selectedHour, selectedMinute ->
+            if(mode==1)
+                brkStartTime = String.format("%02d:%02d", selectedHour, selectedMinute)
+            else
+                brkEndTime =  String.format("%02d:%02d", selectedHour, selectedMinute)
 
             val formattedTime: String = when {
                 selectedHour == 0 -> {

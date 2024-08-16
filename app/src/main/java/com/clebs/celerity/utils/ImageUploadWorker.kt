@@ -629,10 +629,7 @@ class ImageUploadWorker(
                     }
 
                     3->{
-                        val currentDate =
-                            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
-                                Date()
-                            )
+
 
                         val currentLoction = Prefs.getInstance(App.instance).currLocationId
                         val workingLocation = Prefs.getInstance(App.instance).workLocationId
@@ -643,7 +640,7 @@ class ImageUploadWorker(
                         }
                         val response = mainRepo.SaveVehicleInspectionInfo(SaveVehicleInspectionInfo(
                             prefs.clebUserId.toInt(),
-                            currentDate,
+                            prefs.inspectionDateTime?:"Date error",
                             prefs.inspectionID.replace(" ",""),
                             locationID,
                             prefs.vmId
