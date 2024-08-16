@@ -48,6 +48,7 @@ import com.clebs.celerity_admin.utils.BackgroundUploadWorker
 import com.clebs.celerity_admin.utils.DefectFileType
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import com.clebs.celerity_admin.utils.Prefs
+import com.clebs.celerity_admin.utils.clientUniqueID
 import com.clebs.celerity_admin.utils.convertStringToList
 import com.clebs.celerity_admin.utils.radioButtonState
 import com.clebs.celerity_admin.utils.shortenFileName
@@ -1180,7 +1181,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
             if (cqSDKInitializer.isCQSDKInitialized()) {
 
-                Log.e("sdkskdkdkskdkskd", "onCreateView " + inspectionreg)
+                //Log.e("sdkskdkdkskdkskd", "onCreateView $inspectionreg")
 
                 try {
                     loadingDialog.show()
@@ -1188,7 +1189,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
                         userName = " ",
                         dealer = " ",
                         dealerIdentifier = " ",
-                        client_unique_id = inspectionID
+                        client_unique_id = Prefs.getInstance(App.instance).vehinspectionUniqueID
 
                         //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
                     ), inputDetails = InputDetails(
@@ -1263,21 +1264,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
         }
     }
 
-    private fun clientUniqueID(): String {
-        val x = "123456"
-        val y = "123456"
-        // example string
-        val currentDate = LocalDateTime.now()
-        val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
 
-        regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
-
-
-        inspectionID = regexPattern.toString()
-        Prefs.getInstance(App.instance).vehinspectionUniqueID = inspectionID
-        return regexPattern.toString()
-        Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
-    }
 
     override fun onResume() {
         super.onResume()

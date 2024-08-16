@@ -35,6 +35,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import com.clebs.celerity_admin.R
+import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.DependencyClass.VehInspectionDate
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -51,6 +52,8 @@ import java.io.*
 import java.net.InetAddress
 import java.net.NetworkInterface
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.regex.Pattern
 
@@ -557,7 +560,21 @@ fun shortenFileName(originalName: String): String {
     }
 
 }
+fun clientUniqueID(): String {
+    val x = "123456"
+    val y = "123456"
+    // example string
+    val currentDate = LocalDateTime.now()
+    val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
 
+    val regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
+
+
+    val  inspectionID = regexPattern.toString()
+    Prefs.getInstance(App.instance).vehinspectionUniqueID = inspectionID
+    return regexPattern.toString()
+    Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
+}
 fun showDatePickerDialog(context: Context, tv: TextView) {
     val calendar = Calendar.getInstance()
     val year = calendar.get(Calendar.YEAR)

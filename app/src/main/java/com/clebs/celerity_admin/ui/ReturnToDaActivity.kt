@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -18,8 +19,17 @@ import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponseItem
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.utils.Prefs
+import com.clebs.celerity_admin.utils.clientUniqueID
 import com.clebs.celerity_admin.utils.observeOnce
+import com.clebs.celerity_admin.utils.showToast
 import com.clebs.celerity_admin.viewModels.MainViewModel
+import io.clearquote.assessment.cq_sdk.CQSDKInitializer
+import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
+import io.clearquote.assessment.cq_sdk.models.CustomerDetails
+import io.clearquote.assessment.cq_sdk.models.InputDetails
+import io.clearquote.assessment.cq_sdk.models.UserFlowParams
+import io.clearquote.assessment.cq_sdk.models.VehicleDetails
 
 class ReturnToDaActivity : AppCompatActivity() {
     lateinit var binding: ActivityReturnToDaBinding
@@ -31,6 +41,9 @@ class ReturnToDaActivity : AppCompatActivity() {
     private var selectedVehicleFuelId: Int = -1
     private var selectedVehicleOilLevelListId: Int = -1
     private var vehicleValid: Boolean = false
+    private var crrRegNo: String = ""
+    private var cqOpened = false
+    private lateinit var cqSDKInitializer: CQSDKInitializer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReturnToDaBinding.inflate(layoutInflater)
@@ -38,12 +51,9 @@ class ReturnToDaActivity : AppCompatActivity() {
         val mainRepo = MainRepo(apiService)
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
+        cqSDKInitializer = CQSDKInitializer(this)
         loadingDialog = LoadingDialog(this)
         setContentView(binding.root)
-
-        binding.back.setOnClickListener {
-            finish()
-        }
         clickListeners()
         mainViewModel.GetAllVehicleInspectionList()
         observers()
@@ -72,17 +82,20 @@ class ReturnToDaActivity : AppCompatActivity() {
             if (it != null) {
                 val vehicleNameList = arrayListOf<String>()
                 val vehicleIdList = arrayListOf<Int>()
+                val vehicleRegNoList = arrayListOf<String>()
                 it.map { vehicleList ->
-                    if (vehicleList.VehicleName != null && vehicleList.VehicleId != null) {
+                    if (vehicleList.VehicleName != null && vehicleList.VehicleId != null && vehicleList.VehicleRegNo != null) {
                         vehicleNameList.add(vehicleList.VehicleName)
                         vehicleIdList.add(vehicleList.VehicleId)
+                        vehicleRegNoList.add(vehicleList.VehicleRegNo)
                     }
                 }
 
                 setSpinner(
                     binding.layoutSelectVehicleOptions.spinnerSelectVehicle,
                     vehicleNameList,
-                    vehicleIdList
+                    vehicleIdList,
+                    vehicleRegNoList
                 )
             }
         }
@@ -147,6 +160,7 @@ class ReturnToDaActivity : AppCompatActivity() {
                         it.VehicleInfo.AllowReturnSupplier!!
                     updateCardLayout(3)
                 } else {
+
                     vehicleValid = true
                     if (selectedCompanyId != -1) {
                         updateCardLayout(4)
@@ -157,7 +171,10 @@ class ReturnToDaActivity : AppCompatActivity() {
     }
 
     private fun setSpinner(
-        spinner: AutoCompleteTextView, items: List<String>, ids: List<Int>
+        spinner: AutoCompleteTextView,
+        items: List<String>,
+        ids: List<Int>,
+        regNos: List<String>? = listOf()
     ) {
         val itemsList = mutableListOf<String>()
         Log.d("ID", "$ids")
@@ -175,8 +192,8 @@ class ReturnToDaActivity : AppCompatActivity() {
                         when (spinner) {
                             binding.layoutSelectVehicleOptions.spinnerSelectCompany -> {
                                 selectedCompanyId = ids[position]
-                                if (vehicleValid)
-                                    updateCardLayout(4)
+
+                                if (vehicleValid) updateCardLayout(4)
                             }
 
                             binding.layoutSelectVehicleOptions.spinnerSelectVehicle -> {
@@ -185,6 +202,8 @@ class ReturnToDaActivity : AppCompatActivity() {
                                 mainViewModel.GetCurrentAllocatedDa(
                                     selectedVehicleId.toString(), true
                                 )
+                                if (!regNos.isNullOrEmpty())
+                                    crrRegNo = regNos[position]
                             }
 
                             binding.layoutSelectVehicleInformation.spinnerSelectVehicleLocation -> {
@@ -207,13 +226,17 @@ class ReturnToDaActivity : AppCompatActivity() {
             }
         }
     }
-    private fun card2Update(){
-        if(selectedVehicleLocId!=-1&&selectedVehicleFuelId!=-1&&selectedVehicleOilLevelListId!=-1){
+
+    private fun card2Update() {
+        if (selectedVehicleLocId != -1 && selectedVehicleFuelId != -1 && selectedVehicleOilLevelListId != -1) {
             updateCardLayout(6)
         }
     }
 
     private fun clickListeners() {
+        binding.back.setOnClickListener {
+            finish()
+        }
         binding.layoutSelectVehicleOptions.headerSelectVehicleOptions.setOnClickListener {
             updateCardLayout(0)
         }
@@ -222,6 +245,9 @@ class ReturnToDaActivity : AppCompatActivity() {
         }
         binding.layoutAddImages.headerAddInspectionImages.setOnClickListener {
             updateCardLayout(5)
+        }
+        binding.layoutAddImages.addImagesBtn.setOnClickListener {
+            startInspection()
         }
     }
 
@@ -234,12 +260,18 @@ class ReturnToDaActivity : AppCompatActivity() {
                     ContextCompat.getDrawable(this, R.drawable.dropdown)
                 )
 
-                binding.layoutAddImages.headerStatusIcon.setImageDrawable(
-                    ContextCompat.getDrawable(this,R.drawable.dropdown)
-                )
 
                 binding.layoutAddImages.bodyAddInspectionImages.isVisible = false
                 binding.layoutAddImages.headerAddInspectionImages.isClickable = false
+                binding.layoutAddImages.headerStatusIcon.setImageDrawable(
+                    ContextCompat.getDrawable(this, R.drawable.dropdown)
+                )
+
+                binding.layoutReturnVehicle.body.isVisible = false
+                binding.layoutReturnVehicle.headerReturnVehicle.isClickable = false
+                binding.layoutReturnVehicle.headerStatusIcon.setImageDrawable(
+                    ContextCompat.getDrawable(this, R.drawable.dropdown)
+                )
             }
 
             0 -> {
@@ -302,35 +334,36 @@ class ReturnToDaActivity : AppCompatActivity() {
                 binding.layoutAddImages.headerStatusIcon.setImageDrawable(
                     ContextCompat.getDrawable(this, R.drawable.dropdown)
                 )
-                if(selectedVehicleLocId!=-1&&selectedVehicleFuelId!=-1&&selectedVehicleOilLevelListId!=-1){
+                if (selectedVehicleLocId != -1 && selectedVehicleFuelId != -1 && selectedVehicleOilLevelListId != -1) {
                     binding.layoutAddImages.headerAddInspectionImages.isClickable = true
                     binding.layoutAddImages.bodyAddInspectionImages.isVisible = true
-                }else{
+                } else {
                     binding.layoutAddImages.headerAddInspectionImages.isClickable = false
                     binding.layoutAddImages.bodyAddInspectionImages.isVisible = false
                 }
             }
-            5->{
-                if(binding.layoutAddImages.bodyAddInspectionImages.isVisible){
+
+            5 -> {
+                if (binding.layoutAddImages.bodyAddInspectionImages.isVisible) {
                     binding.layoutAddImages.bodyAddInspectionImages.isVisible = false
                     binding.layoutAddImages.headerStatusIcon.setImageDrawable(
                         ContextCompat.getDrawable(this, R.drawable.dropdown)
                     )
-                }else{
+                } else {
                     binding.layoutAddImages.bodyAddInspectionImages.isVisible = true
                     binding.layoutAddImages.headerStatusIcon.setImageDrawable(
                         ContextCompat.getDrawable(this, R.drawable.dropup)
                     )
                 }
             }
-            6->{
+
+            6 -> {
                 binding.layoutSelectVehicleOptions.errorText.visibility = View.GONE
                 binding.layoutSelectVehicleOptions.bodyVehicleOptions.isVisible = false
                 binding.layoutSelectVehicleInformation.headerVehicleInformation.isClickable = true
                 binding.layoutSelectVehicleOptions.headerStatusIcon.setImageDrawable(
                     ContextCompat.getDrawable(this, R.drawable.dropdown)
                 )
-`
                 binding.layoutSelectVehicleInformation.headerVehicleInformation.isClickable = true
                 binding.layoutSelectVehicleInformation.bodyVehicleInfo.isVisible = false
                 binding.layoutSelectVehicleInformation.headerStatusIcon.setImageDrawable(
@@ -340,6 +373,146 @@ class ReturnToDaActivity : AppCompatActivity() {
                 binding.layoutAddImages.bodyAddInspectionImages.isVisible = true
                 binding.layoutAddImages.headerAddInspectionImages.isClickable = true
             }
+
+            7->{
+                if(binding.layoutReturnVehicle.body.isVisible){
+
+                    binding.layoutReturnVehicle.body.isVisible = false
+                    binding.layoutReturnVehicle.headerStatusIcon.setImageDrawable(
+                        ContextCompat.getDrawable(this,R.drawable.dropdown)
+                    )
+                }else{
+                    binding.layoutReturnVehicle.body.isVisible = true
+                    binding.layoutReturnVehicle.headerStatusIcon.setImageDrawable(
+                        ContextCompat.getDrawable(this,R.drawable.dropup)
+                    )
+                }
+            }
+
+            8->{
+                binding.layoutSelectVehicleOptions.errorText.visibility = View.GONE
+                binding.layoutSelectVehicleOptions.bodyVehicleOptions.isVisible = false
+                binding.layoutSelectVehicleInformation.headerVehicleInformation.isClickable = true
+                binding.layoutSelectVehicleOptions.headerStatusIcon.setImageDrawable(
+                    ContextCompat.getDrawable(this, R.drawable.dropdown)
+                )
+                binding.layoutSelectVehicleInformation.headerVehicleInformation.isClickable = true
+                binding.layoutSelectVehicleInformation.bodyVehicleInfo.isVisible = false
+                binding.layoutSelectVehicleInformation.headerStatusIcon.setImageDrawable(
+                    ContextCompat.getDrawable(this, R.drawable.dropdown)
+                )
+
+                binding.layoutAddImages.bodyAddInspectionImages.isVisible = false
+                binding.layoutAddImages.headerAddInspectionImages.isClickable = true
+                binding.layoutAddImages.headerStatusIcon.setImageDrawable(
+                    ContextCompat.getDrawable(this, R.drawable.dropdown)
+                )
+
+                binding.layoutReturnVehicle.headerReturnVehicle.isClickable = true
+                binding.layoutReturnVehicle.body.isVisible = true
+                binding.layoutReturnVehicle.headerStatusIcon.setImageDrawable(
+                    ContextCompat.getDrawable(this,R.drawable.dropup)
+                )
+            }
+        }
+    }
+
+    companion object {
+        const val TAG = "ReturnToDaActivity"
+    }
+
+    private fun startInspection() {
+        if (crrRegNo.isNotBlank()) {
+            clientUniqueID()
+            if (cqSDKInitializer.isCQSDKInitialized()) {
+                try {
+                    cqOpened = true
+                    loadingDialog.show()
+                    cqSDKInitializer.startInspection(activity = this, clientAttrs = ClientAttrs(
+                        userName = " ",
+                        dealer = " ",
+                        dealerIdentifier = " ",
+                        client_unique_id = App.prefs!!.vehinspectionUniqueID
+
+                        //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                    ), inputDetails = InputDetails(
+                        vehicleDetails = VehicleDetails(
+                            regNumber = crrRegNo.replace(
+                                " ", ""
+                            ), //if sent, user can't edit
+                            make = "Van", //if sent, user can't edit
+                            model = "Any Model", //if sent, user can't edit
+                            bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
+                        ), customerDetails = CustomerDetails(
+                            name = "", //if sent, user can't edit
+                            email = "", //if sent, user can't edit
+                            dialCode = "", //if sent, user can't edit
+                            phoneNumber = "", //if sent, user can't edit
+                        )
+                    ), userFlowParams = UserFlowParams(
+                        isOffline = Prefs.getInstance(App.instance).returnInspectionFirstTime!!, // true, Offline quote will be created | false, online quote will be created | null, online
+
+                        skipInputPage = true, // true, Inspection will be started with camera page | false, Inspection will be started
+
+                    ),
+
+                        result = { isStarted, msg, code ->
+
+                            Log.e(TAG, "startInspection: $msg $code")
+                            if (isStarted) {
+                                Prefs.getInstance(App.instance).returnInspectionFirstTime = false
+                                Log.d(TAG, "isStarted $msg")
+                            } else {
+                                loadingDialog.dismiss()
+                                if (msg == "Online quote can not be created without internet") {
+                                    showToast(
+                                        "Please Turn on the internet", this@ReturnToDaActivity
+                                    )
+                                    Log.d(TAG, "CQ: Not isStarted1  $msg")
+                                } else if (msg == "Sufficient data not available to create an offline quote") {
+                                    Prefs.getInstance(App.instance).returnInspectionFirstTime = true
+                                    showToast(
+                                        "Please Turn on the internet & grant required permissions.",
+                                        this@ReturnToDaActivity
+                                    )
+                                    Log.d(TAG, "CQSDKXX : Not isStarted2  $msg")
+                                } else if (msg == "Unable to download setting updates, Please check internet") {
+                                    showToast(
+                                        "Please Turn on the internet", this@ReturnToDaActivity
+                                    )
+                                    Log.d(TAG, "CQSDKXX : Not isStarted3  $msg")
+                                } else if (msg == "Vehicle not in fleet list") {
+                                    showToast(
+                                        "Vehicle not in fleet list", this@ReturnToDaActivity
+                                    )
+                                    Log.d(TAG, "CQSDKXX : Not isStarted4  $msg")
+                                }
+                                Log.d(TAG, "CQSDKXX : Not isStarted5 $msg")
+                            }
+                            if (msg == "Success") {
+                                Log.d(TAG, "CQSDKXX : Success $msg")
+                            } else {
+
+                                Log.d(TAG, "CQSDKXX : Not Success $msg")
+                            }
+                            if (!isStarted) {
+                                Log.e(TAG,"started inspection : onCreateView: $msg $isStarted")
+                            }
+                        })
+                } catch (_: Exception) {
+                    loadingDialog.dismiss()
+                }
+            }
+        } else {
+            Toast.makeText(this, "Vehicle RegNo not found!!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(cqOpened){
+            updateCardLayout(8)
+            //cqOpened = false
         }
     }
 }

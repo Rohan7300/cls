@@ -183,6 +183,13 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putBoolean("Isfirsts", value ?: false).apply()
         }
+    var returnInspectionFirstTime: Boolean?
+        get() {
+            return sharedPreferences.getBoolean("returnInspectionFirstTime", false)
+        }
+        set(value) {
+            sharedPreferences.edit().putBoolean("returnInspectionFirstTime", value ?: false).apply()
+        }
 
     var currentWeeklyDefectItemVehRegNo:String?
         get() = sharedPreferences.getString("currentWeeklyDefectItemVehRegNo",null)
