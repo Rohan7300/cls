@@ -249,6 +249,12 @@ class ReturnToDaActivity : AppCompatActivity() {
         binding.layoutAddImages.addImagesBtn.setOnClickListener {
             startInspection()
         }
+        binding.layoutReturnVehicle.rbRoadWorthy.set
+
+        }
+        binding.layoutReturnVehicle.rbNotRoadWorthy.setOnClickListener {
+
+        }
     }
 
     private fun updateCardLayout(cardToShow: Int) {
@@ -422,11 +428,12 @@ class ReturnToDaActivity : AppCompatActivity() {
     }
 
     private fun startInspection() {
+        cqOpened = true
         if (crrRegNo.isNotBlank()) {
             clientUniqueID()
             if (cqSDKInitializer.isCQSDKInitialized()) {
                 try {
-                    cqOpened = true
+
                     loadingDialog.show()
                     cqSDKInitializer.startInspection(activity = this, clientAttrs = ClientAttrs(
                         userName = " ",
@@ -510,6 +517,7 @@ class ReturnToDaActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        loadingDialog.dismiss()
         if(cqOpened){
             updateCardLayout(8)
             //cqOpened = false

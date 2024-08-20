@@ -42,26 +42,72 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-                <RadioGroup
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rbRoadWorthy"
+                    android:layout_marginEnd="20dp"
+                    android:text="Road worthy" />
+
+                <RadioButton
+                    android:id="@+id/rbNotRoadWorthy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Not Road worthy" />
+            </RadioGroup>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"
+                android:hint="Select Request Type"
+                android:textColorHint="@color/hintColor">
+
+                <AutoCompleteTextView
+                    android:id="@+id/spinnerRequestType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="10dp"
-                    android:gravity="center"
-                    >
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Road worthy"
-                        android:layout_marginEnd="20dp"
-                        />
+                    android:layout_marginTop="4dp"
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    android:padding="12dp"
+                    android:textColorHint="@color/hintColor"
+                    android:textSize="13sp" />
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Road worthy"
-                        />
-                </RadioGroup>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:gravity="center">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/returnVehicleBtn"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#D4DFD4"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="10dp"
+                    android:text="Return Vehicle"
+                    android:textColor="@color/cardbg"
+                    app:cornerRadius="12sp"
+                    app:icon="@drawable/steeringwheel"
+                    app:iconSize="25dp"
+                    app:iconTint="@color/cardbg"
+                    app:strokeColor="@color/cardbg"
+                    app:strokeWidth="1dp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
