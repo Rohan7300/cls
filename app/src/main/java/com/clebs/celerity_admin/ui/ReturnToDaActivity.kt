@@ -1,5 +1,6 @@
 package com.clebs.celerity_admin.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -40,6 +41,9 @@ class ReturnToDaActivity : AppCompatActivity() {
     private var selectedVehicleLocId: Int = -1
     private var selectedVehicleFuelId: Int = -1
     private var selectedVehicleOilLevelListId: Int = -1
+    private var selectedRequestTypeId: Int = -1
+    private var isRbRoadWorthySelected: Boolean = false
+    private var isRbNotRoadWorthy: Boolean = false
     private var vehicleValid: Boolean = false
     private var crrRegNo: String = ""
     private var cqOpened = false
@@ -49,6 +53,8 @@ class ReturnToDaActivity : AppCompatActivity() {
         binding = ActivityReturnToDaBinding.inflate(layoutInflater)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
+        window.statusBarColor = resources.getColor(R.color.commentbg, null)
+
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         cqSDKInitializer = CQSDKInitializer(this)
@@ -150,7 +156,23 @@ class ReturnToDaActivity : AppCompatActivity() {
                 )
             }
         }
-
+        mainViewModel.GetVehicleDamageWorkingStatus()
+        mainViewModel.VehicleDamageWorkingStatusLD.observe(this) {
+            if (it != null) {
+                val workingStatusIds = arrayListOf<Int>()
+                val workingStatusNames = arrayListOf<String>()
+                it.map { requestTypes ->
+                    if (requestTypes.Id != null && !requestTypes.Name.isNullOrEmpty()) {
+                        workingStatusIds.add(requestTypes.Id)
+                        workingStatusNames.add(requestTypes.Name)
+                    }
+                }
+                setSpinner(
+                    binding.layoutReturnVehicle.spinnerRequestType,
+                    workingStatusNames, workingStatusIds
+                )
+            }
+        }
         mainViewModel.GetCurrentAllocatedDaLD.observe(this) {
             loadingDialog.dismiss()
             vehicleValid = false
@@ -220,6 +242,10 @@ class ReturnToDaActivity : AppCompatActivity() {
                                 selectedVehicleOilLevelListId = ids[position]
                                 card2Update()
                             }
+
+                            binding.layoutReturnVehicle.spinnerRequestType -> {
+                                selectedRequestTypeId = ids[position]
+                            }
                         }
                     }
                 }
@@ -249,12 +275,37 @@ class ReturnToDaActivity : AppCompatActivity() {
         binding.layoutAddImages.addImagesBtn.setOnClickListener {
             startInspection()
         }
-        binding.layoutReturnVehicle.rbRoadWorthy.set
-
+        binding.layoutReturnVehicle.rbRoadWorthy.setOnClickListener {
+            if (binding.layoutReturnVehicle.rbRoadWorthy.isChecked) {
+                updateCardLayout(9)
+                isRbRoadWorthySelected = true
+                isRbNotRoadWorthy = false
+            }
         }
         binding.layoutReturnVehicle.rbNotRoadWorthy.setOnClickListener {
-
+            if (binding.layoutReturnVehicle.rbNotRoadWorthy.isChecked) {
+                updateCardLayout(10)
+                isRbNotRoadWorthy = true
+                isRbRoadWorthySelected = false
+            }
         }
+        binding.layoutReturnVehicle.returnVehicleBtn.setOnClickListener {
+            if (isRbRoadWorthySelected) {
+                returnVehicle()
+            } else if (isRbNotRoadWorthy) {
+                if (selectedRequestTypeId == -1) {
+                    showToast("Please select request type first!!", this@ReturnToDaActivity)
+                } else {
+                    returnVehicle()
+                }
+            } else {
+                showToast("Please select road worthiness first!!", this@ReturnToDaActivity)
+            }
+        }
+    }
+
+    private fun returnVehicle() {
+        startActivity(Intent(this,VanHireReturnAgreementActivity::class.java))
     }
 
     private fun updateCardLayout(cardToShow: Int) {
@@ -380,22 +431,22 @@ class ReturnToDaActivity : AppCompatActivity() {
                 binding.layoutAddImages.headerAddInspectionImages.isClickable = true
             }
 
-            7->{
-                if(binding.layoutReturnVehicle.body.isVisible){
+            7 -> {
+                if (binding.layoutReturnVehicle.body.isVisible) {
 
                     binding.layoutReturnVehicle.body.isVisible = false
                     binding.layoutReturnVehicle.headerStatusIcon.setImageDrawable(
-                        ContextCompat.getDrawable(this,R.drawable.dropdown)
+                        ContextCompat.getDrawable(this, R.drawable.dropdown)
                     )
-                }else{
+                } else {
                     binding.layoutReturnVehicle.body.isVisible = true
                     binding.layoutReturnVehicle.headerStatusIcon.setImageDrawable(
-                        ContextCompat.getDrawable(this,R.drawable.dropup)
+                        ContextCompat.getDrawable(this, R.drawable.dropup)
                     )
                 }
             }
 
-            8->{
+            8 -> {
                 binding.layoutSelectVehicleOptions.errorText.visibility = View.GONE
                 binding.layoutSelectVehicleOptions.bodyVehicleOptions.isVisible = false
                 binding.layoutSelectVehicleInformation.headerVehicleInformation.isClickable = true
@@ -417,8 +468,21 @@ class ReturnToDaActivity : AppCompatActivity() {
                 binding.layoutReturnVehicle.headerReturnVehicle.isClickable = true
                 binding.layoutReturnVehicle.body.isVisible = true
                 binding.layoutReturnVehicle.headerStatusIcon.setImageDrawable(
-                    ContextCompat.getDrawable(this,R.drawable.dropup)
+                    ContextCompat.getDrawable(this, R.drawable.dropup)
                 )
+            }
+
+            9 -> {
+                updateCardLayout(8)
+                binding.layoutReturnVehicle.tilSpinnerRequestType.visibility = View.GONE
+                binding.layoutReturnVehicle.returnVehicleBtn.visibility = View.VISIBLE
+            }
+
+            10 -> {
+                updateCardLayout(8)
+                binding.layoutReturnVehicle.tilSpinnerRequestType.visibility = View.VISIBLE
+                binding.layoutReturnVehicle.returnVehicleBtn.visibility = View.VISIBLE
+
             }
         }
     }
@@ -503,7 +567,7 @@ class ReturnToDaActivity : AppCompatActivity() {
                                 Log.d(TAG, "CQSDKXX : Not Success $msg")
                             }
                             if (!isStarted) {
-                                Log.e(TAG,"started inspection : onCreateView: $msg $isStarted")
+                                Log.e(TAG, "started inspection : onCreateView: $msg $isStarted")
                             }
                         })
                 } catch (_: Exception) {
@@ -518,7 +582,7 @@ class ReturnToDaActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         loadingDialog.dismiss()
-        if(cqOpened){
+        if (cqOpened) {
             updateCardLayout(8)
             //cqOpened = false
         }

@@ -18,7 +18,7 @@
             android:id="@+id/headerSelectVehicleOptions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#CEEDC7"
+            android:background="@color/cardHeader"
             android:orientation="horizontal"
             android:padding="13dp">
 

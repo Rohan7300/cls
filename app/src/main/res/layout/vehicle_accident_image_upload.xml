@@ -15,7 +15,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/headerAddInspectionImages"
+            android:id="@+id/headerSelectVehicleOptions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/cardHeader"
@@ -26,40 +26,38 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="3 . Upload Vehicle Pictures"
+                android:text="Vehicle Accident Image :"
                 android:textColor="@color/black" />
 
-            <ImageView
-                android:id="@+id/headerStatusIcon"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/dropup" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/bodyAddInspectionImages"
+            android:id="@+id/bodyVehicleOptions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
+            android:padding="13dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="11sp"
+                android:text="Upload Vehicle Accident Pictures : "
+                android:textColor="@color/black" />
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/cardHeader"
-                android:id="@+id/addImagesBtn"
                 android:fontFamily="@font/poppins_semibold"
                 android:padding="10dp"
-                android:text="Add Images"
+                android:text="Browse"
+                android:textSize="12sp"
                 android:textColor="@color/cardbg"
-                app:cornerRadius="12sp"
-                app:icon="@drawable/imagegallery"
-                app:iconSize="25dp"
+                app:cornerRadius="10sp"
+                app:icon="@drawable/file"
+                app:iconSize="20dp"
                 app:iconTint="@color/cardbg"
                 app:strokeColor="@color/cardbg"
                 app:strokeWidth="1dp" />
-
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

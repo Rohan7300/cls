@@ -107,9 +107,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         lifecycleScope.launch {
 
             if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmpty()) {
-
                 resumeDialog()
-
             }
         }
 
