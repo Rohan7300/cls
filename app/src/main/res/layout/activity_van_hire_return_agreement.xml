@@ -258,6 +258,9 @@
                 android:layout_marginVertical="10dp"
                 android:fontFamily="@font/poppins"
                 android:text="Tick to Upload Vehicle Defect Images !" />
+            <include
+                layout="@layout/vehicle_accident_image_upload"
+                />
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
