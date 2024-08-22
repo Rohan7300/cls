@@ -91,7 +91,7 @@ class ReturnToDaActivity : AppCompatActivity() {
                 val vehicleRegNoList = arrayListOf<String>()
                 it.map { vehicleList ->
                     if (vehicleList.VehicleName != null && vehicleList.VehicleId != null && vehicleList.VehicleRegNo != null) {
-                        vehicleNameList.add(vehicleList.VehicleName)
+                        vehicleNameList.add(vehicleList.VehicleRegNo)
                         vehicleIdList.add(vehicleList.VehicleId)
                         vehicleRegNoList.add(vehicleList.VehicleRegNo)
                     }

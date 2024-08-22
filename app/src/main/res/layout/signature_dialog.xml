@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="5dp"
+    app:strokeColor="@color/cardbg"
+    app:strokeWidth="2dp">
+<LinearLayout
+    android:id="@+id/signH"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#D2D2D2"
+        android:padding="15dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Sign here"
+        android:textColor="@color/cardbg"
+        android:textSize="15sp" />
+
+
+    <LinearLayout
+        android:id="@+id/r4"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/dashed_boundry"
+        android:orientation="horizontal">
+
+        <include
+            android:id="@+id/paintView"
+            layout="@layout/paint_view_layout" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/RetryLay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginHorizontal="15dp"
+        android:background="@drawable/boundry"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/reImg"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/reload"
+            app:tint="@color/black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/reImg"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Retry"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/r4"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="1"
+
+        android:orientation="vertical"
+        android:padding="3dp">
+
+        <TextView
+            android:id="@+id/cl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/cancel_button"
+            android:ems="4"
+            android:fontFamily="@font/poppins_semibold"
+            android:padding="9dp"
+            android:text="Cancel"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/cardHeader"
+            android:fontFamily="@font/poppins_semibold"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="12dp"
+            android:layout_marginHorizontal="10dp"
+            android:text="Change DA Vehicle"
+            android:textColor="@color/cardbg"
+            android:textSize="14sp"
+            app:cornerRadius="10sp"
+            app:icon="@drawable/check"
+            app:iconSize="20dp"
+            app:iconGravity="end"
+            app:iconTint="#5FE15B"
+            app:strokeColor="#82A28D"
+            app:strokeWidth="2dp" />
+    </LinearLayout>
+
+</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

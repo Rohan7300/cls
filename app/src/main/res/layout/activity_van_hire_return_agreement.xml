@@ -64,23 +64,28 @@
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:id="@+id/tilSelectDOB"
+                style="@style/Widget.MaterialComponents.MaterialCalendar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginVertical="10dp"
+                android:clickable="false"
                 android:hint="Select Your DOB*"
-                android:textColorHint="@color/hintColor">
+                android:textColorHint="@color/hintColor"
+                app:boxBackgroundMode="outline">
 
                 <AutoCompleteTextView
-                    android:id="@+id/spinnerSelectVehicleLocation"
+                    android:id="@+id/atvDOB"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:backgroundTint="@color/white"
+                    android:clickable="false"
+                    android:drawableEnd="@drawable/cq_sdk_cq_sdk_calender_icon"
                     android:importantForAutofill="no"
                     android:inputType="none"
-                    android:padding="12dp"
+                    android:padding="10dp"
                     android:textColorHint="@color/hintColor"
-                    android:textSize="13sp" />
+                    android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -116,6 +121,7 @@
                 app:boxBackgroundMode="outline">
 
                 <AutoCompleteTextView
+                    android:id="@+id/aTvLicenseStartDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/white"
@@ -140,7 +146,7 @@
                 app:boxBackgroundMode="outline">
 
                 <AutoCompleteTextView
-                    android:id="@+id/aTvInspectionDate"
+                    android:id="@+id/aTvLicenseEndDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/white"
@@ -155,6 +161,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <CheckBox
+                android:id="@+id/checkboxConvictions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
@@ -162,6 +169,7 @@
                 android:text="Tick to Confirm If You Have Any Convictions?" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilConvictions"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
@@ -204,8 +212,8 @@
                     android:fontFamily="@font/poppins_semibold"
                     android:padding="10dp"
                     android:text="Van Hire Aggreement"
-                    android:textSize="12sp"
                     android:textColor="@color/cardbg"
+                    android:textSize="12sp"
                     app:cornerRadius="10sp"
                     app:icon="@drawable/eye"
                     app:iconSize="20dp"
@@ -217,20 +225,47 @@
                     android:id="@+id/returnVehicleBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:backgroundTint="@color/cardHeader"
                     android:fontFamily="@font/poppins_semibold"
                     android:padding="10dp"
-                    android:layout_marginTop="5dp"
                     android:text="Vehicle Sign Out"
                     android:textColor="@color/cardbg"
-                    app:cornerRadius="10sp"
                     android:textSize="12sp"
+                    app:cornerRadius="10sp"
                     app:icon="@drawable/eye"
                     app:iconSize="20dp"
                     app:iconTint="@color/cardbg"
                     app:strokeColor="@color/cardbg"
                     app:strokeWidth="1dp" />
             </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/checkboxUploadVehicleDefectImages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/poppins"
+                android:text="Tick to Upload Vehicle Defect Images !" />
+
+            <LinearLayout
+                android:id="@+id/layoutUploadVehicleAccidentImages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include
+                    android:id="@+id/vehicleAccidentalImageLayout"
+                    layout="@layout/vehicle_accident_image_upload" />
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/checkBoxProceed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/poppins"
+                android:text="Tick to Confirm You Have Read All Information." />
+
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -252,22 +287,6 @@
                     android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:fontFamily="@font/poppins"
-                android:text="Tick to Upload Vehicle Defect Images !" />
-            <include
-                layout="@layout/vehicle_accident_image_upload"
-                />
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:fontFamily="@font/poppins"
-                android:text="Tick to Confirm You Have Read All Information." />
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
