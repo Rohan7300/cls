@@ -7,6 +7,7 @@ import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
 import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
 import com.clebs.celerity_admin.models.GetCurrentAllocatedDaResponse
+import com.clebs.celerity_admin.models.GetReturnVehicleListResponse
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
@@ -23,6 +24,7 @@ import com.clebs.celerity_admin.models.OtherDefectCheckImagesInDropBoxResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
 import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
 import com.clebs.celerity_admin.models.ResponseInspectionDone
+import com.clebs.celerity_admin.models.ReturnVehicleToDepoRequest
 import com.clebs.celerity_admin.models.SaveInspectionRequestBody
 import com.clebs.celerity_admin.models.SaveVehicleBreakDownInspectionRequest
 import com.clebs.celerity_admin.models.SucessStatusMsgResponse
@@ -33,6 +35,7 @@ import com.clebs.celerity_admin.models.basemodel.SimpleNetworkResponse
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.utils.DefectFileType
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -236,37 +239,67 @@ class MainRepo(private val ApiService: ApiService) {
             ApiService.GetOtherDefectCheckImagesInDropBox(vdhDefectCheckId, fileType)
         }
     }
+
     suspend fun GetLocationListbyUserId(
-       userID: Double
+        userID: Double
     ): SimpleNetworkResponse<GetVehicleLocation> {
         return safeApiCall {
             ApiService.GetLocationListbyUserId(userID)
         }
     }
-    suspend fun GetAllVehicleInspectionList():SimpleNetworkResponse<GetAllVehicleInspectionListResponse>{
+
+    suspend fun GetAllVehicleInspectionList(): SimpleNetworkResponse<GetAllVehicleInspectionListResponse> {
         return safeApiCall {
             ApiService.GetAllVehicleInspectionList()
         }
     }
-    suspend fun GetAllDriversInspectionList():SimpleNetworkResponse<GetAllDriversInspectionListResponse>{
+
+    suspend fun GetAllDriversInspectionList(): SimpleNetworkResponse<GetAllDriversInspectionListResponse> {
         return safeApiCall {
             ApiService.GetAllDriversInspectionList()
         }
     }
-    suspend fun GetVehicleDamageWorkingStatus():SimpleNetworkResponse<GetVehicleDamageWorkingStatusResponse>{
+
+    suspend fun GetVehicleDamageWorkingStatus(): SimpleNetworkResponse<GetVehicleDamageWorkingStatusResponse> {
         return safeApiCall {
             ApiService.GetVehicleDamageWorkingStatus()
         }
     }
 
-    suspend fun SaveVehicleBreakDownInspectionInfo(request: SaveVehicleBreakDownInspectionRequest):SimpleNetworkResponse<SucessStatusMsgResponse>{
+    suspend fun SaveVehicleBreakDownInspectionInfo(request: SaveVehicleBreakDownInspectionRequest): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
             ApiService.SaveVehicleBreakDownInspectionInfo(request)
         }
     }
-    suspend fun GetCurrentAllocatedDa(vmId: String, isVehReturned: Boolean):SimpleNetworkResponse<GetCurrentAllocatedDaResponse>{
+
+    suspend fun GetCurrentAllocatedDa(
+        vmId: String,
+        isVehReturned: Boolean
+    ): SimpleNetworkResponse<GetCurrentAllocatedDaResponse> {
         return safeApiCall {
-            ApiService.GetCurrentAllocatedDa(vmId,isVehReturned)
+            ApiService.GetCurrentAllocatedDa(vmId, isVehReturned)
+        }
+    }
+
+    suspend fun GetReturnVehicleList(): SimpleNetworkResponse<GetReturnVehicleListResponse> {
+        return safeApiCall {
+            ApiService.GetReturnVehicleList()
+        }
+    }
+
+    suspend fun DownloadVehicleHireAgreementPDF():SimpleNetworkResponse<ResponseBody>{
+        return safeApiCall {
+            ApiService.DownloadVehicleHireAgreementPDF()
+        }
+    }
+    suspend fun DownloadVehicleSignOutHireAgreementPDF():SimpleNetworkResponse<ResponseBody>{
+        return safeApiCall {
+            ApiService.DownloadVehicleSignOutHireAgreementPDF()
+        }
+    }
+    suspend fun ReturnVehicleToDepo(request: ReturnVehicleToDepoRequest):SimpleNetworkResponse<SucessStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.ReturnVehicleToDepo(request)
         }
     }
 }

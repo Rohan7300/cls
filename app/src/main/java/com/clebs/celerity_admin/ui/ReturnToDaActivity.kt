@@ -20,6 +20,14 @@ import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponseItem
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.utils.DependencyClass.addBlueMileage
+import com.clebs.celerity_admin.utils.DependencyClass.crrSelectedVehicleType
+import com.clebs.celerity_admin.utils.DependencyClass.selectedCompanyId
+import com.clebs.celerity_admin.utils.DependencyClass.selectedRequestTypeId
+import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleFuelId
+import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleId
+import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleLocId
+import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleOilLevelListId
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.clientUniqueID
 import com.clebs.celerity_admin.utils.observeOnce
@@ -36,12 +44,8 @@ class ReturnToDaActivity : AppCompatActivity() {
     lateinit var binding: ActivityReturnToDaBinding
     private lateinit var loadingDialog: LoadingDialog
     private lateinit var mainViewModel: MainViewModel
-    private var selectedCompanyId: Int = -1
-    private var selectedVehicleId: Int = -1
-    private var selectedVehicleLocId: Int = -1
-    private var selectedVehicleFuelId: Int = -1
-    private var selectedVehicleOilLevelListId: Int = -1
-    private var selectedRequestTypeId: Int = -1
+
+    lateinit var prefs:Prefs
     private var isRbRoadWorthySelected: Boolean = false
     private var isRbNotRoadWorthy: Boolean = false
     private var vehicleValid: Boolean = false
@@ -54,19 +58,43 @@ class ReturnToDaActivity : AppCompatActivity() {
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         window.statusBarColor = resources.getColor(R.color.commentbg, null)
-
+        prefs = Prefs.getInstance(this)
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         cqSDKInitializer = CQSDKInitializer(this)
         loadingDialog = LoadingDialog(this)
         setContentView(binding.root)
         clickListeners()
-        mainViewModel.GetAllVehicleInspectionList()
+        //mainViewModel.GetAllVehicleInspectionList()
+        loadingDialog.show()
+        mainViewModel.GetReturnVehicleList()
         observers()
         updateCardLayout(-1)
     }
 
     private fun observers() {
+        mainViewModel.LDGetReturnVehicleList.observe(this){
+            loadingDialog.dismiss()
+            if(it!=null){
+                val vehicleNameList = arrayListOf<String>()
+                val vehicleIdList = arrayListOf<Int>()
+                val vehicleRegNoList = arrayListOf<String>()
+                it.map { vehicleList ->
+                    if (vehicleList.VehicleName != null && vehicleList.VehicleId != null && vehicleList.VehicleRegNo != null) {
+                        vehicleNameList.add(vehicleList.VehicleRegNo)
+                        vehicleIdList.add(vehicleList.VehicleId)
+                        vehicleRegNoList.add(vehicleList.VehicleType)
+                    }
+                }
+
+                setSpinner(
+                    binding.layoutSelectVehicleOptions.spinnerSelectVehicle,
+                    vehicleNameList,
+                    vehicleIdList,
+                    vehicleRegNoList
+                )
+            }
+        }
         mainViewModel.GetCompanyListing().observe(this) {
             if (it != null) {
                 val companyNames = arrayListOf<String>()
@@ -84,7 +112,7 @@ class ReturnToDaActivity : AppCompatActivity() {
                 )
             }
         }
-        mainViewModel.VehicleInspectionListLiveData.observe(this) {
+        /*mainViewModel.VehicleInspectionListLiveData.observe(this) {
             if (it != null) {
                 val vehicleNameList = arrayListOf<String>()
                 val vehicleIdList = arrayListOf<Int>()
@@ -104,7 +132,7 @@ class ReturnToDaActivity : AppCompatActivity() {
                     vehicleRegNoList
                 )
             }
-        }
+        }*/
         mainViewModel.GetVehicleLocationListing().observe(this) {
             if (it != null) {
                 val locationIds = arrayListOf<Int>()
@@ -182,7 +210,7 @@ class ReturnToDaActivity : AppCompatActivity() {
                         it.VehicleInfo.AllowReturnSupplier!!
                     updateCardLayout(3)
                 } else {
-
+                    prefs.saveCurrentVehicleInfo(it.VehicleInfo)
                     vehicleValid = true
                     if (selectedCompanyId != -1) {
                         updateCardLayout(4)
@@ -224,8 +252,9 @@ class ReturnToDaActivity : AppCompatActivity() {
                                 mainViewModel.GetCurrentAllocatedDa(
                                     selectedVehicleId.toString(), true
                                 )
+                                crrRegNo = items[position]
                                 if (!regNos.isNullOrEmpty())
-                                    crrRegNo = regNos[position]
+                                    crrSelectedVehicleType = regNos[position]
                             }
 
                             binding.layoutSelectVehicleInformation.spinnerSelectVehicleLocation -> {
@@ -305,6 +334,7 @@ class ReturnToDaActivity : AppCompatActivity() {
     }
 
     private fun returnVehicle() {
+        addBlueMileage = binding.layoutSelectVehicleInformation.atvAddBlueMileage.text.toString().toInt()
         startActivity(Intent(this,VanHireReturnAgreementActivity::class.java))
     }
 
@@ -316,7 +346,6 @@ class ReturnToDaActivity : AppCompatActivity() {
                 binding.layoutSelectVehicleInformation.headerStatusIcon.setImageDrawable(
                     ContextCompat.getDrawable(this, R.drawable.dropdown)
                 )
-
 
                 binding.layoutAddImages.bodyAddInspectionImages.isVisible = false
                 binding.layoutAddImages.headerAddInspectionImages.isClickable = false

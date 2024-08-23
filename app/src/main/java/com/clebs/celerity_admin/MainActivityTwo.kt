@@ -34,6 +34,7 @@ import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.BreakDownActivity
 import com.clebs.celerity_admin.ui.ReturnToDaActivity
+import com.clebs.celerity_admin.ui.VanHireReturnAgreementActivity
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import com.google.android.material.navigation.NavigationView
@@ -104,12 +105,14 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         navView.setupWithNavController(navController)
 
         navView.setNavigationItemSelectedListener(this)
+/*
         lifecycleScope.launch {
 
             if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmpty()) {
                 resumeDialog()
             }
         }
+*/
 
         cqSDKInitializer = CQSDKInitializer(this)
         if (!cqSDKInitializer.isCQSDKInitialized()) {
@@ -287,6 +290,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
                 startActivity(Intent(this, BreakDownActivity::class.java))
             }
             R.id.return_to_da->{
+                //startActivity(Intent(this,VanHireReturnAgreementActivity::class.java))
                 startActivity(Intent(this,ReturnToDaActivity::class.java))
             }
         }

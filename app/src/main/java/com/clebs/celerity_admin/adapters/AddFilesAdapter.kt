@@ -1,17 +1,18 @@
 package com.clebs.celerity_admin.adapters
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.databinding.AdapterRequestTypeListBinding
+import com.clebs.celerity_admin.utils.generateUniqueFilename
 
-class AddFilesAdapter(var data: MutableList<String>) :
+class AddFilesAdapter(var data: MutableList<Uri>) :
     RecyclerView.Adapter<AddFilesAdapter.AddFileViewHolder>() {
-    inner class AddFileViewHolder(binding: AdapterRequestTypeListBinding) :
+    inner class AddFileViewHolder(var binding: AdapterRequestTypeListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: String) {
-
+        fun bind(item: Uri) {
+            binding.requstName.text = generateUniqueFilename()
         }
     }
 

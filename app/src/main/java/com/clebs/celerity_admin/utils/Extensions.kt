@@ -28,6 +28,7 @@ import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.annotation.Keep
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -625,5 +626,25 @@ fun convertDateFormat(inputDate: String): String {
     } catch (_: Exception) {
         return " "
     }
+}
+fun generateUniqueFilename(): String {
+    val currentDateTime = LocalDateTime.now()
+    val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
+    val uniqueFilename = currentDateTime.format(formatter)
+    return uniqueFilename
+}
+
+fun getFileUri(file: File,context: Context): Uri {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+    } else {
+        Uri.fromFile(file)
+    }
+}
+fun bitmapToBase64(bitmap: Bitmap): String {
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+    val byteArray = byteArrayOutputStream.toByteArray()
+    return Base64.encodeToString(byteArray, Base64.DEFAULT)
 }
 

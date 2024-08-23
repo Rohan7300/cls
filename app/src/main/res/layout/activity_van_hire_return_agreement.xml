@@ -58,9 +58,10 @@
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:id="@+id/vanType"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
-                    android:text="Small Van - ₤220" />
+                    android:text="" />
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -98,7 +99,7 @@
                 android:textColorHint="@color/hintColor">
 
                 <AutoCompleteTextView
-                    android:id="@+id/atvVehicleCurrentMileage"
+                    android:id="@+id/atvLicenseNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -180,11 +181,12 @@
                 app:boxBackgroundMode="outline">
 
                 <AutoCompleteTextView
+                    android:id="@+id/atvConAccident"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/white"
                     android:importantForAutofill="no"
-                    android:inputType="none"
+                    android:inputType="text"
                     android:padding="10dp"
                     android:textColorHint="@color/hintColor"
                     android:textSize="14sp" />
@@ -192,6 +194,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <CheckBox
+                android:id="@+id/checkBoxTickToConfirmAccidents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
@@ -206,6 +209,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/vanHireAgreementBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/cardHeader"
@@ -222,7 +226,7 @@
                     app:strokeWidth="1dp" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/returnVehicleBtn"
+                    android:id="@+id/vehicleSignOutBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -281,7 +285,7 @@
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/white"
                     android:importantForAutofill="no"
-                    android:inputType="none"
+                    android:inputType="text"
                     android:padding="10dp"
                     android:textColorHint="@color/hintColor"
                     android:textSize="14sp" />

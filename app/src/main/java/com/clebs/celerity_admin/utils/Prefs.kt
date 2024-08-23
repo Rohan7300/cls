@@ -3,6 +3,7 @@ package com.clebs.celerity_admin.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.clebs.celerity_admin.models.VehicleInfoXXXX
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -191,9 +192,10 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putBoolean("returnInspectionFirstTime", value ?: false).apply()
         }
 
-    var currentWeeklyDefectItemVehRegNo:String?
-        get() = sharedPreferences.getString("currentWeeklyDefectItemVehRegNo",null)
-        set(value) = sharedPreferences.edit().putString("currentWeeklyDefectItemVehRegNo",value).apply()
+    var currentWeeklyDefectItemVehRegNo: String?
+        get() = sharedPreferences.getString("currentWeeklyDefectItemVehRegNo", null)
+        set(value) = sharedPreferences.edit().putString("currentWeeklyDefectItemVehRegNo", value)
+            .apply()
 
     var quesID: Int
         get() = sharedPreferences.getInt("quesID", 0)
@@ -416,14 +418,29 @@ class Prefs(context: Context) {
             return false
         }
     }
+
     fun saveWorkRequestId(workRequestId: String) {
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString("lastWorkRequestId", workRequestId)
         editor.apply()
     }
 
-    fun getWorkRequestId():String?{
+    fun getWorkRequestId(): String? {
         return sharedPreferences.getString("lastWorkRequestId", null)
+    }
+
+    fun saveCurrentVehicleInfo(info: VehicleInfoXXXX) {
+        val editor = sharedPreferences.edit()
+        val gson = Gson()
+        val json = gson.toJson(info)
+        editor.putString("saveCurrentVehicleInfo", json)
+        editor.apply()
+    }
+
+    fun getCurrentVehicleInfo(): VehicleInfoXXXX? {
+        val gson = Gson()
+        val data = sharedPreferences.getString("saveCurrentVehicleInfo", null)
+        return gson.fromJson(data, VehicleInfoXXXX::class.java) ?: null
     }
 
 }
