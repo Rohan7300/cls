@@ -79,7 +79,7 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
     lateinit var prefs: Prefs
     private lateinit var loadingDialog: LoadingDialog
     private lateinit var mainViewModel: MainViewModel
-    lateinit var vehicleInfoXXXX: VehicleInfoXXXX\
+    private lateinit var vehicleInfoXXXX: VehicleInfoXXXX
     private var REQUEST_STORAGE_PERMISSION_CODE = 101
     val adapter = AddFilesAdapter(mutableListOf())
     private lateinit var filePart: MultipartBody.Part
@@ -269,7 +269,7 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
             override fun onSignatureSaved(bitmap: Bitmap) {
                 if (checkAll()) {
                     val bse64 = "data:image/png;base64," + bitmapToBase64(bitmap)
-                    mainViewModel.ReturnVehicleToDepo(
+                  /*  mainViewModel.ReturnVehicleToDepo(
                         ReturnVehicleToDepoRequest(
                             Signature1 = bse64,
                             DriverId = vehicleInfoXXXX.DaId,
@@ -307,7 +307,7 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
                             VehType = ,
                             supervisorId = prefs.clebUserId.toInt()
                         )
-                    )
+                    )*/
                 }
             }
         })

@@ -45,7 +45,7 @@ class ReturnToDaActivity : AppCompatActivity() {
     private lateinit var loadingDialog: LoadingDialog
     private lateinit var mainViewModel: MainViewModel
 
-    lateinit var prefs:Prefs
+    lateinit var prefs: Prefs
     private var isRbRoadWorthySelected: Boolean = false
     private var isRbNotRoadWorthy: Boolean = false
     private var vehicleValid: Boolean = false
@@ -73,9 +73,9 @@ class ReturnToDaActivity : AppCompatActivity() {
     }
 
     private fun observers() {
-        mainViewModel.LDGetReturnVehicleList.observe(this){
+        mainViewModel.LDGetReturnVehicleList.observe(this) {
             loadingDialog.dismiss()
-            if(it!=null){
+            if (it != null) {
                 val vehicleNameList = arrayListOf<String>()
                 val vehicleIdList = arrayListOf<Int>()
                 val vehicleRegNoList = arrayListOf<String>()
@@ -334,8 +334,10 @@ class ReturnToDaActivity : AppCompatActivity() {
     }
 
     private fun returnVehicle() {
-        addBlueMileage = binding.layoutSelectVehicleInformation.atvAddBlueMileage.text.toString().toInt()
-        startActivity(Intent(this,VanHireReturnAgreementActivity::class.java))
+        if (!binding.layoutSelectVehicleInformation.atvAddBlueMileage.text.isNullOrEmpty())
+            addBlueMileage =
+                binding.layoutSelectVehicleInformation.atvAddBlueMileage.text.toString().toInt()
+        startActivity(Intent(this, VanHireReturnAgreementActivity::class.java))
     }
 
     private fun updateCardLayout(cardToShow: Int) {
