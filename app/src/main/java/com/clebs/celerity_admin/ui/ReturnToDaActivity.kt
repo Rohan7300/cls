@@ -21,12 +21,14 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.utils.DependencyClass.addBlueMileage
+import com.clebs.celerity_admin.utils.DependencyClass.crrMileage
 import com.clebs.celerity_admin.utils.DependencyClass.crrSelectedVehicleType
 import com.clebs.celerity_admin.utils.DependencyClass.selectedCompanyId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedRequestTypeId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleFuelId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleLocId
+import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleLocationName
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleOilLevelListId
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.clientUniqueID
@@ -78,12 +80,16 @@ class ReturnToDaActivity : AppCompatActivity() {
             if (it != null) {
                 val vehicleNameList = arrayListOf<String>()
                 val vehicleIdList = arrayListOf<Int>()
+                val locationIdList = arrayListOf<Int>()
+                val locationNameList = arrayListOf<String>()
                 val vehicleRegNoList = arrayListOf<String>()
                 it.map { vehicleList ->
                     if (vehicleList.VehicleName != null && vehicleList.VehicleId != null && vehicleList.VehicleRegNo != null) {
                         vehicleNameList.add(vehicleList.VehicleRegNo)
                         vehicleIdList.add(vehicleList.VehicleId)
                         vehicleRegNoList.add(vehicleList.VehicleType)
+                        locationIdList.add(vehicleList.LocationId)
+                        locationNameList.add(vehicleList.LocationName)
                     }
                 }
 
@@ -91,7 +97,9 @@ class ReturnToDaActivity : AppCompatActivity() {
                     binding.layoutSelectVehicleOptions.spinnerSelectVehicle,
                     vehicleNameList,
                     vehicleIdList,
-                    vehicleRegNoList
+                    vehicleRegNoList,
+                    locationIdList,
+                    locationNameList
                 )
             }
         }
@@ -133,23 +141,23 @@ class ReturnToDaActivity : AppCompatActivity() {
                 )
             }
         }*/
-        mainViewModel.GetVehicleLocationListing().observe(this) {
-            if (it != null) {
-                val locationIds = arrayListOf<Int>()
-                val locationNames = arrayListOf<String>()
-                it.map { locations ->
-                    if (locations.locId != null && locations.locationName != null) {
-                        locationIds.add(locations.locId)
-                        locationNames.add(locations.locationName)
+        /*        mainViewModel.GetVehicleLocationListing().observe(this) {
+                    if (it != null) {
+                        val locationIds = arrayListOf<Int>()
+                        val locationNames = arrayListOf<String>()
+                        it.map { locations ->
+                            if (locations.locId != null && locations.locationName != null) {
+                                locationIds.add(locations.locId)
+                                locationNames.add(locations.locationName)
+                            }
+                        }
+                        setSpinner(
+                            binding.layoutSelectVehicleInformation.spinnerSelectVehicleLocation,
+                            locationNames,
+                            locationIds
+                        )
                     }
-                }
-                setSpinner(
-                    binding.layoutSelectVehicleInformation.spinnerSelectVehicleLocation,
-                    locationNames,
-                    locationIds
-                )
-            }
-        }
+                }*/
         mainViewModel.GetVehiclefuelListing().observeOnce(this) {
             if (it != null) {
                 val fuelIds = arrayListOf<Int>()
@@ -224,7 +232,9 @@ class ReturnToDaActivity : AppCompatActivity() {
         spinner: AutoCompleteTextView,
         items: List<String>,
         ids: List<Int>,
-        regNos: List<String>? = listOf()
+        regNos: List<String>? = listOf(),
+        locationIds: List<Int>? = listOf(),
+        locationNames: List<String>? = listOf()
     ) {
         val itemsList = mutableListOf<String>()
         Log.d("ID", "$ids")
@@ -242,7 +252,6 @@ class ReturnToDaActivity : AppCompatActivity() {
                         when (spinner) {
                             binding.layoutSelectVehicleOptions.spinnerSelectCompany -> {
                                 selectedCompanyId = ids[position]
-
                                 if (vehicleValid) updateCardLayout(4)
                             }
 
@@ -252,15 +261,19 @@ class ReturnToDaActivity : AppCompatActivity() {
                                 mainViewModel.GetCurrentAllocatedDa(
                                     selectedVehicleId.toString(), true
                                 )
+                                selectedVehicleLocId = locationIds!![position]
+                                selectedVehicleLocationName = locationNames!![position]
+                                binding.layoutSelectVehicleInformation.vehicleLocation.text =
+                                    locationNames[position]
                                 crrRegNo = items[position]
                                 if (!regNos.isNullOrEmpty())
                                     crrSelectedVehicleType = regNos[position]
                             }
 
-                            binding.layoutSelectVehicleInformation.spinnerSelectVehicleLocation -> {
-                                selectedVehicleLocId = ids[position]
-                                card2Update()
-                            }
+                            /*            binding.layoutSelectVehicleInformation.spinnerSelectVehicleLocation -> {
+                                            selectedVehicleLocId = ids[position]
+                                            card2Update()
+                                        }*/
 
                             binding.layoutSelectVehicleInformation.spinnerVehicleFuelLevel -> {
                                 selectedVehicleFuelId = ids[position]
@@ -336,7 +349,19 @@ class ReturnToDaActivity : AppCompatActivity() {
     private fun returnVehicle() {
         if (!binding.layoutSelectVehicleInformation.atvAddBlueMileage.text.isNullOrEmpty())
             addBlueMileage =
-                binding.layoutSelectVehicleInformation.atvAddBlueMileage.text.toString().toInt()
+                binding.layoutSelectVehicleInformation.atvAddBlueMileage.text.toString()
+        else {
+            showToast("Please add current Add Blue Mileage", this)
+            return
+        }
+        if (!binding.layoutSelectVehicleInformation.atvVehicleCurrentMileage.text.isNullOrEmpty())
+            crrMileage =
+                binding.layoutSelectVehicleInformation.atvVehicleCurrentMileage.text.toString()
+                    .toInt()
+        else {
+            showToast("Please add current Mileage", this)
+            return
+        }
         startActivity(Intent(this, VanHireReturnAgreementActivity::class.java))
     }
 

@@ -31,7 +31,7 @@
         <item
             android:id="@+id/return_to_da"
             android:icon="@drawable/turndown"
-            android:title="Return to DA"
+            android:title="Return to Depot"
             />
 
         <!--        <item-->

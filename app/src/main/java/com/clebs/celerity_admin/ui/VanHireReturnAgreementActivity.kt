@@ -34,6 +34,8 @@ import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.utils.DependencyClass
 import com.clebs.celerity_admin.utils.DependencyClass.addBlueMileage
 import com.clebs.celerity_admin.utils.DependencyClass.crrMileage
+import com.clebs.celerity_admin.utils.DependencyClass.selectedCompanyId
+import com.clebs.celerity_admin.utils.DependencyClass.selectedRequestTypeId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleFuelId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleLocId
@@ -269,45 +271,68 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
             override fun onSignatureSaved(bitmap: Bitmap) {
                 if (checkAll()) {
                     val bse64 = "data:image/png;base64," + bitmapToBase64(bitmap)
-                  /*  mainViewModel.ReturnVehicleToDepo(
+                    mainViewModel.ReturnVehicleToDepo(
                         ReturnVehicleToDepoRequest(
-                            Signature1 = bse64,
-                            DriverId = vehicleInfoXXXX.DaId,
                             AccidentsChk = binding.checkBoxTickToConfirmAccidents.isChecked,
-                            AddBlueMileage = addBlueMileage.toString(),
-                            ChangeVehCount = 1,
+                            AccidentsChk2 = false,
+                            AccidentsChk3 = false,
+                            AddBlueMileage = addBlueMileage!!,
+                            ChangeVehCount = 0,
                             ConOrAcciComment = binding.atvConAccident.text.toString(),
+                            ConOrAcciComment2 = "",
+                            ConOrAcciComment3 = "",
                             ConvictionsChk = binding.checkboxConvictions.isChecked,
-                            DOB = vehicleInfoXXXX.DOB,
-                            IsDAVehReturned =,
-                            IsVehAllocDaLeft =,
-                            IsVehAllocInOurGarage =,
-                            IsVehAllocIsDamaged =,
-                            IsVehReturnToDepo =true,
-                            IsVehReturned =,
-                            IsVehReturntoSupplier =,
-                            IsVehRoadWorthy =,
-                            IsVehicleMultiAlloc =,
-                            LicenseEndDate =binding.aTvLicenseEndDate.text.toString(),
-                            LicenseNo =binding.atvLicenseNumber.text.toString(),
-                            LicenseStartDate =binding.aTvLicenseStartDate.text.toString(),
-                            NewVmId =0,
-                            OldVmId =selectedVehicleId,
-                            ParentCompanyId =,
-                            RequestTypeIds =,
-                            SecondUserAllocPosition =,
-                            ThirdUserAllocPosition =,
-                            VehAllocComments =,
-                            VehAllocGarageStartDate =,
-                            VehAllocStatusId =,
-                            VehCurrentFuelLevelId =selectedVehicleFuelId,
-                            VehCurrentMileage =crrMileage.toString(),
-                            VehCurrentOILLevelId =selectedVehicleOilLevelListId,
-                            VehSelectedLocationId =selectedVehicleLocId,
-                            VehType = ,
-                            supervisorId = prefs.clebUserId.toInt()
+                            ConvictionsChk2 = false,
+                            ConvictionsChk3 = false,
+                            DOB = binding.atvDOB.text.toString(),
+                            DOB2 = "",
+                            DOB3 = "",
+                            DriverId = prefs.getCurrentVehicleInfo()!!.DaId,
+                            ExistingFirstUsrId = 0,
+                            ExistingSecondUsrId = 0,
+                            ExistingThirdUsrId = 0,
+                            FirstUserAllocPosition = 0,
+                            FirstUsrId = 0,
+                            IsDAVehReturned = true,
+                            IsVehAllocDaLeft = null,
+                            IsVehAllocInOurGarage = null,
+                            IsVehAllocIsDamaged = null,
+                            IsVehReturnToDepo = true,
+                            IsVehReturned = true,
+                            IsVehReturntoSupplier = false,
+                            IsVehRoadWorthy = true,
+                            IsVehicleMultiAlloc = false,
+                            LicenseEndDate = binding.aTvLicenseEndDate.text.toString(),
+                            LicenseEndDate2 = "",
+                            LicenseEndDate3 = "",
+                            LicenseNo = binding.atvLicenseNumber.text.toString(),
+                            LicenseNo2 = "",
+                            LicenseNo3 = "",
+                            LicenseStartDate = binding.aTvLicenseStartDate.text.toString(),
+                            LicenseStartDate2 = "",
+                            LicenseStartDate3 = "",
+                            NewVmId = 0,
+                            OldVmId = selectedVehicleId,
+                            ParentCompanyId = selectedCompanyId,
+                            RequestTypeIds = listOf(selectedRequestTypeId),
+                            SecondUserAllocPosition = 0,
+                            SecondUsrId = 0,
+                            Signature1 = bse64,
+                            Signature2 = "",
+                            Signature3 = "",
+                            ThirdUserAllocPosition = 0,
+                            ThirdUsrId = 0,
+                            VehAllocComments =if(binding.vehicleAlocComment.text!=null)binding.vehicleAlocComment.text.toString() else prefs.getCurrentVehicleInfo()!!.Comments?:"",
+                            VehAllocGarageStartDate = null,
+                            VehAllocStatusId = null,
+                            VehCurrentFuelLevelId = 0,
+                            VehCurrentMileage = crrMileage.toString(),
+                            VehCurrentOILLevelId = selectedVehicleOilLevelListId,
+                            VehSelectedLocationId = selectedVehicleLocId,
+                            VehType = DependencyClass.crrSelectedVehicleType!!,
+                            supervisorId = prefs.currLocationId,
                         )
-                    )*/
+                    )
                 }
             }
         })

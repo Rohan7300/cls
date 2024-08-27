@@ -12,6 +12,7 @@ object DependencyClass {
     var selectedVehicleFuelId: Int = -1
     var selectedVehicleOilLevelListId: Int = -1
     var selectedRequestTypeId: Int = -1
-    var addBlueMileage: Int = 0
+    var addBlueMileage: String? = "0"
+    var selectedVehicleLocationName:String = ""
     var crrMileage: Int = 0
 }

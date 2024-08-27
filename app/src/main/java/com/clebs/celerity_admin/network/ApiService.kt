@@ -177,7 +177,7 @@ interface ApiService {
     @GET("/api/HtmlToPDF/DownloadVehicleSignOutHireAgreementPDF")
     suspend fun DownloadVehicleSignOutHireAgreementPDF():Response<ResponseBody>
 
-    @GET("/api/VehAllocHistories/ReturnVehicleToDepo")
+    @POST("/api/VehAllocHistories/ReturnVehicleToDepo")
     suspend fun ReturnVehicleToDepo(
         @Body request:ReturnVehicleToDepoRequest
     ):Response<SucessStatusMsgResponse>
