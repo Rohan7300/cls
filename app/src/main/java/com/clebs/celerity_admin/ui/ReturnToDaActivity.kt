@@ -295,6 +295,7 @@ class ReturnToDaActivity : AppCompatActivity() {
         }
     }
 
+
     private fun card2Update() {
         if (selectedVehicleLocId != -1 && selectedVehicleFuelId != -1 && selectedVehicleOilLevelListId != -1) {
             updateCardLayout(6)

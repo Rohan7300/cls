@@ -44,6 +44,7 @@ import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.SignatureDialog
 import com.clebs.celerity_admin.utils.SignatureDialogListener
 import com.clebs.celerity_admin.utils.bitmapToBase64
+import com.clebs.celerity_admin.utils.contains
 import com.clebs.celerity_admin.utils.getFileUri
 import com.clebs.celerity_admin.utils.getMimeType
 import com.clebs.celerity_admin.utils.showDatePickerDialog
@@ -233,9 +234,13 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
         }
 
     fun upload() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-        resultLauncher.launch(intent)
+/*        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        //intent.type = "image/*"
+        resultLauncher.launch(intent)*/
+
+ */
+        val imageTakerActivityIntent  =Intent(this,ImageCaptureActivity::class.java)
+        resultLauncher.launch(imageTakerActivityIntent)
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -270,6 +275,12 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
         dialog.setSignatureListener(object : SignatureDialogListener {
             override fun onSignatureSaved(bitmap: Bitmap) {
                 if (checkAll()) {
+                    var vehType = ""
+                    if (DependencyClass.crrSelectedVehicleType!!.contains("SMALL VAN")) {
+                        vehType = "SV"
+                    } else if (DependencyClass.crrSelectedVehicleType!!.contains("LARGE VAN")) {
+                        vehType = "LV"
+                    }
                     val bse64 = "data:image/png;base64," + bitmapToBase64(bitmap)
                     mainViewModel.ReturnVehicleToDepo(
                         ReturnVehicleToDepoRequest(
@@ -322,15 +333,16 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
                             Signature3 = "",
                             ThirdUserAllocPosition = 0,
                             ThirdUsrId = 0,
-                            VehAllocComments =if(binding.vehicleAlocComment.text!=null)binding.vehicleAlocComment.text.toString() else prefs.getCurrentVehicleInfo()!!.Comments?:"",
+                            VehAllocComments = if (binding.vehicleAlocComment.text != null) binding.vehicleAlocComment.text.toString() else prefs.getCurrentVehicleInfo()!!.Comments
+                                ?: "",
                             VehAllocGarageStartDate = null,
                             VehAllocStatusId = null,
-                            VehCurrentFuelLevelId = 0,
+                            VehCurrentFuelLevelId = selectedVehicleFuelId,
                             VehCurrentMileage = crrMileage.toString(),
                             VehCurrentOILLevelId = selectedVehicleOilLevelListId,
                             VehSelectedLocationId = selectedVehicleLocId,
-                            VehType = DependencyClass.crrSelectedVehicleType!!,
-                            supervisorId = prefs.currLocationId,
+                            VehType = vehType,
+                            supervisorId = prefs.clebUserId.toInt(),
                         )
                     )
                 }
