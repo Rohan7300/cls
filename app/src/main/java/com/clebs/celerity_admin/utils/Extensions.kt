@@ -35,6 +35,11 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.DependencyClass.VehInspectionDate
@@ -646,5 +651,19 @@ fun bitmapToBase64(bitmap: Bitmap): String {
     bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
     val byteArray = byteArrayOutputStream.toByteArray()
     return Base64.encodeToString(byteArray, Base64.DEFAULT)
+}
+
+fun createBackgroundUploadRequest(inputData: Data,context: Context,case:Int){
+    Prefs.getInstance(context).backgroundUploadCase=case
+    val constraints =
+        Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+    val uploadWorkRequest =
+        OneTimeWorkRequestBuilder<BackgroundUploadWorker>().setInputData(inputData)
+            .setConstraints(constraints).build()
+
+
+    val workManager = WorkManager.getInstance(context)
+    val workRequestId = uploadWorkRequest.id
+    workManager.enqueue(uploadWorkRequest)
 }
 

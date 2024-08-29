@@ -12,6 +12,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.AdapterViewFlipper
@@ -19,8 +20,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.Data
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.adapters.AddFilesAdapter
 import com.clebs.celerity_admin.databinding.ActivityVanHireReturnAgreementBinding
@@ -45,6 +48,7 @@ import com.clebs.celerity_admin.utils.SignatureDialog
 import com.clebs.celerity_admin.utils.SignatureDialogListener
 import com.clebs.celerity_admin.utils.bitmapToBase64
 import com.clebs.celerity_admin.utils.contains
+import com.clebs.celerity_admin.utils.createBackgroundUploadRequest
 import com.clebs.celerity_admin.utils.getFileUri
 import com.clebs.celerity_admin.utils.getMimeType
 import com.clebs.celerity_admin.utils.showDatePickerDialog
@@ -78,7 +82,7 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
     }
 
     lateinit var binding: ActivityVanHireReturnAgreementBinding
-    private var selectedFileUri: MutableList<Uri>? = mutableListOf()
+    private var selectedFileUri: MutableList<String>? = mutableListOf()
     lateinit var prefs: Prefs
     private lateinit var loadingDialog: LoadingDialog
     private lateinit var mainViewModel: MainViewModel
@@ -170,7 +174,10 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
                 showSignatureDialog()
         }
         binding.vehicleAccidentalImageLayout.browseBtn.setOnClickListener {
+            if(!prefs.isAccidentImageUploading)
             browseFiles()
+            else
+                showToast("Please wait other images are uploading!!",this)
         }
         binding.vanHireAgreementBtn.setOnClickListener {
             loadingDialog.show()
@@ -195,10 +202,9 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
                 data?.data?.let {
-                    selectedFileUri!!.add(it)
-                    adapter.data = selectedFileUri as MutableList<Uri>
+                    //selectedFileUri!!.add(it)
+                    adapter.data = selectedFileUri!!
                     adapter.notifyItemInserted(selectedFileUri!!.size)
-                    val mimeType = getMimeType(it)?.toMediaTypeOrNull()
                     val tmpFile = createTempFile("temp", null, cacheDir).apply {
                         deleteOnExit()
                     }
@@ -212,24 +218,30 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
                         }
                     }
 
-                    val fileExtension = getMimeType(it)?.let { mimeType ->
-                        MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
-                    }
-
-                    val requestBody = tmpFile.asRequestBody(mimeType)
-                    filePart = MultipartBody.Part.createFormData(
-                        "UploadTicketDoc",
-                        it.lastPathSegment + "." + (fileExtension ?: "jpg"),
-                        requestBody
-                    )
-
                     /*                        showDialog()
                                             uploadWithAttachement = true
                                             saveTicket()*/
                 }
-            } else {
+            }else if(result.resultCode == 10){
+                val data: Intent? = result.data
+                val outputUri = data?.getStringExtra("outputUri")
+                if (outputUri != null) {
+                    selectedFileUri!!.add(outputUri)
+                    adapter.data = selectedFileUri!!
+                    adapter.notifyItemInserted(selectedFileUri!!.size)
+                    prefs.saveSelectedFileUris(selectedFileUri!!)
+                    prefs.backgroundUploadCase = 2
+                    val inputData = Data.Builder().putInt("defectSheetID", 0)
+                        .putInt("defectSheetUserId", 0).build()
+                    createBackgroundUploadRequest(inputData,this@VanHireReturnAgreementActivity,2)
+                    Log.d("ImageCaptureXX", "Output URI: $outputUri")
+                }else{
+                    showToast("Failed to fetch image!!", this)
+                }
+            }
+            else {
                 finish()
-                showToast("Attachment not selected!!", this)
+                showToast("Failed!!", this)
             }
         }
 

@@ -1,6 +1,10 @@
 package com.clebs.celerity_admin.ui
 
+import android.Manifest
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +12,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -51,6 +56,17 @@ class ReturnToDaActivity : AppCompatActivity() {
     private var isRbRoadWorthySelected: Boolean = false
     private var isRbNotRoadWorthy: Boolean = false
     private var vehicleValid: Boolean = false
+    var imageUploadLevel: Int = 0
+    private val REQUIRED_PERMISSIONS =
+        mutableListOf(
+            Manifest.permission.CAMERA
+        ).apply {
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                add(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        }.toTypedArray()
     private var crrRegNo: String = ""
     private var cqOpened = false
     private lateinit var cqSDKInitializer: CQSDKInitializer
@@ -345,7 +361,102 @@ class ReturnToDaActivity : AppCompatActivity() {
                 showToast("Please select road worthiness first!!", this@ReturnToDaActivity)
             }
         }
+
+        binding.layoutAddImages.addSpareWheelImageBtn.setOnClickListener {
+            imageUploadLevel = 1
+            openCamera()
+        }
+        binding.layoutAddImages.addVehicleInteriorImageBtn.setOnClickListener {
+            imageUploadLevel = 2
+            openCamera()
+        }
+        binding.layoutAddImages.addLoadingInteriorImageBtn.setOnClickListener {
+            imageUploadLevel = 3
+            openCamera()
+        }
+        binding.layoutAddImages.addToolsPictureImageBtn.setOnClickListener {
+            imageUploadLevel = 4
+            openCamera()
+        }
+        binding.layoutAddImages.addVinNumberImageBtn.setOnClickListener {
+            imageUploadLevel = 5
+            openCamera()
+        }
     }
+
+    private fun openCamera() {
+        if (allPermissionsGranted()) {
+            launchCamera()
+        } else {
+            requestPermissions()
+        }
+    }
+
+    private fun launchCamera() {
+        val imageTakerActivityIntent = Intent(this, ImageCaptureActivity::class.java)
+        resultLauncher.launch(imageTakerActivityIntent)
+    }
+
+    private val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == 10) {
+                val data: Intent? = result.data
+                val outputUri = data?.getStringExtra("outputUri")
+                if (outputUri != null) {
+                    when(imageUploadLevel){
+                        0->{
+                          //  binding.layoutAddImages.addVinNumberImageBtn.icon = ContextCompat.getDrawable(this,R.drawable.baseline_check_24)
+                        }
+                        1->{
+                            binding.layoutAddImages.addSpareWheelImageBtn.icon = ContextCompat.getDrawable(this,R.drawable.baseline_check_24)
+                        }
+                        2->{
+                            binding.layoutAddImages.addVehicleInteriorImageBtn.icon = ContextCompat.getDrawable(this,R.drawable.baseline_check_24)
+                        }
+                        3->{
+                            binding.layoutAddImages.addLoadingInteriorImageBtn.icon = ContextCompat.getDrawable(this,R.drawable.baseline_check_24)
+                        }
+                        4->{
+                            binding.layoutAddImages.addToolsPictureImageBtn.icon = ContextCompat.getDrawable(this,R.drawable.baseline_check_24)
+                        }
+                        5->{
+                            binding.layoutAddImages.addVinNumberImageBtn.icon = ContextCompat.getDrawable(this,R.drawable.baseline_check_24)
+                        }
+                    }
+                } else {
+                    showToast("Failed to fetch image!!", this)
+                }
+            } else {
+                showToast("Failed!!", this)
+            }
+        }
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            this, it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestPermissions() {
+        activityResultLauncher.launch(REQUIRED_PERMISSIONS)
+    }
+
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        )
+        { permissions ->
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in REQUIRED_PERMISSIONS && !it.value)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                showToast("Permission denied", this)
+            } else {
+                launchCamera()
+            }
+        }
 
     private fun returnVehicle() {
         if (!binding.layoutSelectVehicleInformation.atvAddBlueMileage.text.isNullOrEmpty())

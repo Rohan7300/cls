@@ -25,6 +25,7 @@
     <color name="blue_hex">#77dfd8</color>
     <color name="commentbg">#E16150</color>
     <color name="cardHeader">#E9E9E5</color>
+    <color name="cardHeader2">#797776</color>
     <color name="darkcommentbg">#A6BBDC</color>
     <color name="hintColor">#676C74</color>
     <color name="grey_main">#676C74</color>
@@ -46,4 +47,5 @@
     <color name="darktransparent">#9F000000</color>
     <color name="purple">#8F54F8</color>
     <color name="cardbg">#7B847D</color>
+    <color name="greyLight">#BABBBB</color>
 </resources>

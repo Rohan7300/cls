@@ -302,4 +302,13 @@ class MainRepo(private val ApiService: ApiService) {
             ApiService.ReturnVehicleToDepo(request)
         }
     }
+    suspend fun UploadVehAccidentPictureFile(
+        userID: Int,
+        date: String,
+        image:MultipartBody.Part
+    ):SimpleNetworkResponse<SucessStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.UploadVehAccidentPictureFile(userID,date,image)
+        }
+    }
 }

@@ -84,20 +84,19 @@ class ImageCaptureActivity : AppCompatActivity() {
                 put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
             }
         }
-        val outputOptions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-            ImageCapture.OutputFileOptions
-                .Builder(
-                    this.contentResolver,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    contentValues
-                ).build()
-        else
-            ImageCapture.OutputFileOptions
-                .Builder(
-                    this.contentResolver,
-                    MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
-                    contentValues
-                ).build()
+        val outputOptions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ImageCapture.OutputFileOptions.Builder(
+                this.contentResolver,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                contentValues
+            ).build()
+        } else {
+            ImageCapture.OutputFileOptions.Builder(
+                this.contentResolver,
+                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
+                contentValues
+            ).build()
+        }
         imageCapture.takePicture(
             outputOptions, ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
@@ -111,13 +110,13 @@ class ImageCaptureActivity : AppCompatActivity() {
                     loadingDialog.dismiss()
                     val resultIntent = Intent()
                     resultIntent.putExtra("outputUri", output.savedUri.toString())
-                    setResult(Activity.RESULT_OK, resultIntent)
+                    setResult(10, resultIntent)
                     finish()
                 }
             }
         )
     } catch (e: Exception) {
-        println("Photo capture failed: ${e.message}")
+        println("Photo capture failed: Catch: ${e.message}")
     }
 
     companion object {

@@ -522,4 +522,5 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
                 LDReturnVehicleToDepo.postValue(response.body)
         }
     }
+
 }

@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.databinding.AdapterRequestTypeListBinding
 import com.clebs.celerity_admin.utils.generateUniqueFilename
 
-class AddFilesAdapter(var data: MutableList<Uri>) :
+class AddFilesAdapter(var data: MutableList<String>) :
     RecyclerView.Adapter<AddFilesAdapter.AddFileViewHolder>() {
     inner class AddFileViewHolder(var binding: AdapterRequestTypeListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Uri) {
+        fun bind(item: String) {
             binding.requstName.text = generateUniqueFilename()
         }
     }

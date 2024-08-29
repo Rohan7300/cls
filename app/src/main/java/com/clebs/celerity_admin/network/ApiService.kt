@@ -181,4 +181,12 @@ interface ApiService {
     suspend fun ReturnVehicleToDepo(
         @Body request:ReturnVehicleToDepoRequest
     ):Response<SucessStatusMsgResponse>
+
+    @Multipart
+    @POST("/api/Vehicle/UploadVehAccidentPictureFile")
+    suspend fun UploadVehAccidentPictureFile(
+        @Query("userId") userId: Int,
+        @Query("date") date: String,
+        @Part image:MultipartBody.Part
+    ):Response<SucessStatusMsgResponse>
 }
