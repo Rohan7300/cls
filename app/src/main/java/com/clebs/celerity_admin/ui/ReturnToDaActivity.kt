@@ -409,9 +409,11 @@ class ReturnToDaActivity : AppCompatActivity() {
                         }
                         1->{
                             binding.layoutAddImages.addSpareWheelImageBtn.icon = ContextCompat.getDrawable(this,R.drawable.baseline_check_24)
+                            binding.layoutAddImages.addSpareWheelImageBtn.iconTint = ContextCompat.getColorStateList(this,R.color.green)
                         }
                         2->{
                             binding.layoutAddImages.addVehicleInteriorImageBtn.icon = ContextCompat.getDrawable(this,R.drawable.baseline_check_24)
+                            binding.layoutAddImages.addSpareWheelImageBtn.iconTint = ContextCompat.getColorStateList(this,R.color.green)
                         }
                         3->{
                             binding.layoutAddImages.addLoadingInteriorImageBtn.icon = ContextCompat.getDrawable(this,R.drawable.baseline_check_24)
@@ -421,6 +423,8 @@ class ReturnToDaActivity : AppCompatActivity() {
                         }
                         5->{
                             binding.layoutAddImages.addVinNumberImageBtn.icon = ContextCompat.getDrawable(this,R.drawable.baseline_check_24)
+                        }else->{
+                            showToast("Invalid Option",this@ReturnToDaActivity)
                         }
                     }
                 } else {

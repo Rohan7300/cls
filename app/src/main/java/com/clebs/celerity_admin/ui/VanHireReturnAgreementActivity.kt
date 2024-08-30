@@ -142,6 +142,7 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
                 binding.atvDOB.performClick()
             }
         }
+
         binding.aTvLicenseStartDate.setOnClickListener {
             showDatePickerDialog(this, binding.aTvLicenseStartDate)
         }
