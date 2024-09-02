@@ -37,5 +37,7 @@ data class VehicleInfo(
     @SerializedName("IsOnRoadVehicleAssignedToThisDriver")
     val IsOnRoadVehicleAssignedToThisDriver:Boolean,
     @SerializedName("OnRoadVehicleAssignedToThisDriverMessage")
-    val OnRoadVehicleAssignedToThisDriverMessage:String
+    val OnRoadVehicleAssignedToThisDriverMessage:String,
+    @SerializedName("DriverHomeDepotId")
+    val DriverHomeDepotId:Int
 )

@@ -7,6 +7,7 @@ import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
 import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
 import com.clebs.celerity_admin.models.GetCurrentAllocatedDaResponse
+import com.clebs.celerity_admin.models.GetCurrentInsuranceInfo
 import com.clebs.celerity_admin.models.GetReturnVehicleListResponse
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
@@ -309,6 +310,22 @@ class MainRepo(private val ApiService: ApiService) {
     ):SimpleNetworkResponse<SucessStatusMsgResponse>{
         return safeApiCall {
             ApiService.UploadVehAccidentPictureFile(userID,date,image)
+        }
+    }
+
+    suspend fun GetVehicleCurrentInsuranceInfo(
+        vmId: Int
+    ): SimpleNetworkResponse<GetCurrentInsuranceInfo> {
+        return safeApiCall {
+            ApiService.GetVehicleCurrentInsuranceInfo(vmId)
+        }
+    }
+
+    suspend fun CreateVehicleReleaseReq(
+        vmId: Double,
+        supervisorid:Double): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.CreateVehicleReleaseReq(vmId,supervisorid)
         }
     }
 }

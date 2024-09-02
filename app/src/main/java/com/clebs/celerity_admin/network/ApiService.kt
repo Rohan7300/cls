@@ -6,6 +6,7 @@ import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
 import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
 import com.clebs.celerity_admin.models.GetCurrentAllocatedDaResponse
+import com.clebs.celerity_admin.models.GetCurrentInsuranceInfo
 import com.clebs.celerity_admin.models.GetReturnVehicleListResponse
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
@@ -189,4 +190,12 @@ interface ApiService {
         @Query("date") date: String,
         @Part image:MultipartBody.Part
     ):Response<SucessStatusMsgResponse>
+
+    @GET("/api/VehAllocHistories/GetVehicleCurrentInsuranceInfo/{vmId}")
+    suspend fun GetVehicleCurrentInsuranceInfo(@Path("vmId") vmId: Int): Response<GetCurrentInsuranceInfo>
+
+    @GET("/api/VehAllocHistories/CreateNewVehicleReleaseTicket")
+    suspend fun CreateVehicleReleaseReq(
+        @Query("vmId") vmId: Double,
+        @Query("supervisorId") supervisorId: Double):Response<SucessStatusMsgResponse>
 }
