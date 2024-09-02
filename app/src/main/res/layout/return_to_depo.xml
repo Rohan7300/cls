@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tilSpinnerRequestType"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="10dp"
                 android:hint="Select Request Type"
@@ -86,7 +86,12 @@
                     android:textSize="13sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
+<androidx.recyclerview.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/selectRequestTypeRV"
+    android:layout_margin="10dp"
+    />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
