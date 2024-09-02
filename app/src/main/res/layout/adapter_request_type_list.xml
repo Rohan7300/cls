@@ -33,7 +33,7 @@
             android:id="@+id/delRequestIV"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/delete_ic_red" />
+            android:src="@drawable/fileupload" />
 
     </LinearLayout>
 </LinearLayout>

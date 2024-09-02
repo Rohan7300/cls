@@ -774,13 +774,11 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
 
             mainViewModel.CreateVehicleReleaseReq(
                 Prefs.getInstance(App.instance).vmIdReturnveh.toDouble(),
-                Prefs.getInstance(App.instance).clebUserIds.toDouble()
+                Prefs.getInstance(App.instance).clebUserId.toDouble()
             )
             mainViewModel.CreateVehicleReleaseReqlivedata.observe(requireActivity(), Observer {
                 if (it != null) {
-
                     if (it.Status == "200") {
-
                         Toast.makeText(
                             requireContext(), "Release request is created", Toast.LENGTH_SHORT
                         ).show()

@@ -7,6 +7,7 @@ import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
 import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
 import com.clebs.celerity_admin.models.GetCurrentAllocatedDaResponse
 import com.clebs.celerity_admin.models.GetCurrentInsuranceInfo
+import com.clebs.celerity_admin.models.GetReturnVehicleListResponse
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
@@ -22,6 +23,7 @@ import com.clebs.celerity_admin.models.LoginResponse
 import com.clebs.celerity_admin.models.OtherDefectCheckImagesInDropBoxResponse
 import com.clebs.celerity_admin.models.RepoInfoModel
 import com.clebs.celerity_admin.models.ResponseInspectionDone
+import com.clebs.celerity_admin.models.ReturnVehicleToDepoRequest
 import com.clebs.celerity_admin.models.SaveInspectionRequestBody
 import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
 import com.clebs.celerity_admin.models.SaveVehicleBreakDownInspectionRequest
@@ -30,6 +32,7 @@ import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -166,6 +169,28 @@ interface ApiService {
         @Path("vmId") vmId: String,
         @Query("isVehReturned") isVehReturned: Boolean
     ): Response<GetCurrentAllocatedDaResponse>
+
+    @GET("/api/VehAllocHistories/GetReturnVehicleList")
+    suspend fun GetReturnVehicleList():Response<GetReturnVehicleListResponse>
+
+    @GET("/api/HtmlToPDF/DownloadVehicleHireAgreementPDF")
+    suspend fun DownloadVehicleHireAgreementPDF():Response<ResponseBody>
+    @GET("/api/HtmlToPDF/DownloadVehicleSignOutHireAgreementPDF")
+    suspend fun DownloadVehicleSignOutHireAgreementPDF():Response<ResponseBody>
+
+    @POST("/api/VehAllocHistories/ReturnVehicleToDepo")
+    suspend fun ReturnVehicleToDepo(
+        @Body request:ReturnVehicleToDepoRequest
+    ):Response<SucessStatusMsgResponse>
+
+    @Multipart
+    @POST("/api/Vehicle/UploadVehAccidentPictureFile")
+    suspend fun UploadVehAccidentPictureFile(
+        @Query("userId") userId: Int,
+        @Query("date") date: String,
+        @Part image:MultipartBody.Part
+    ):Response<SucessStatusMsgResponse>
+
     @GET("/api/VehAllocHistories/GetVehicleCurrentInsuranceInfo/{vmId}")
     suspend fun GetVehicleCurrentInsuranceInfo(@Path("vmId") vmId: Int): Response<GetCurrentInsuranceInfo>
 

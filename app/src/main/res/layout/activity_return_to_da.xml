@@ -10,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/maroon"
+        android:background="@color/commentbg"
+        android:gravity="center"
         android:orientation="horizontal"
         android:padding="20dp">
 
@@ -27,7 +28,7 @@
             android:fontFamily="@font/poppins_semibold"
             android:gravity="center"
             android:letterSpacing="0.04"
-            android:text="Return Vehicle To DA"
+            android:text="Return Vehicle To Depot"
             android:textColor="#000000"
             android:textSize="16sp" />
     </LinearLayout>
@@ -53,8 +54,12 @@
                 layout="@layout/vehicle_information" />
 
             <include
-                android:id="@+id/addImagesButton"
+                android:id="@+id/layout_addImages"
                 layout="@layout/add_inspection_images"
+                />
+            <include
+                android:id="@+id/layout_returnVehicle"
+                layout="@layout/return_to_depo"
                 />
         </LinearLayout>
     </ScrollView>

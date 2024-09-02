@@ -15,7 +15,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/headerSelectVehicleOptions"
+            android:id="@+id/headerReturnVehicle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/cardHeader"
@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="1 . Select Vehicle Options"
+                android:text="4. Return Vehicle"
                 android:textColor="@color/black" />
 
             <ImageView
@@ -37,65 +37,84 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/bodyVehicleOptions"
+            android:id="@+id/body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rbRoadWorthy"
+                    android:layout_marginEnd="20dp"
+                    android:text="Road worthy" />
+
+                <RadioButton
+                    android:id="@+id/rbNotRoadWorthy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Not Road worthy" />
+            </RadioGroup>
+
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/tilSpinnerRequestType"
+                android:visibility="visible"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="10dp"
-                android:hint="Select Company*"
+                android:hint="Select Request Type"
                 android:textColorHint="@color/hintColor">
 
                 <AutoCompleteTextView
-                    android:id="@+id/spinnerSelectCompany"
+                    android:id="@+id/spinnerRequestType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:importantForAutofill="no"
-                    android:inputType="none"
+                    android:inputType="numberDecimal"
                     android:padding="12dp"
                     android:textColorHint="@color/hintColor"
                     android:textSize="13sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+<androidx.recyclerview.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/selectRequestTypeRV"
+    android:layout_margin="10dp"
+    />
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="10dp"
-                android:hint="Select Vehicle to Return*"
-                android:textColorHint="@color/hintColor">
+                android:gravity="center">
 
-                <AutoCompleteTextView
-                    android:id="@+id/spinnerSelectVehicle"
-                    android:layout_width="match_parent"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/returnVehicleBtn"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:importantForAutofill="no"
-                    android:inputType="none"
-                    android:padding="12dp"
-                    android:textColorHint="@color/hintColor"
-                    android:textSize="13sp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="10dp"
-                android:textColor="@color/red"
-                android:visibility="gone"
-                android:id="@+id/errorText"
-                android:text="Direct returns to the supplier are not permitted. Please create a vehicle return request instead."
-                />
+                    android:backgroundTint="@color/cardHeader"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="10dp"
+                    android:text="Return Vehicle"
+                    android:textColor="@color/cardbg"
+                    app:cornerRadius="12sp"
+                    app:icon="@drawable/steeringwheel"
+                    app:iconSize="25dp"
+                    app:iconTint="@color/cardbg"
+                    app:strokeColor="@color/cardbg"
+                    app:strokeWidth="1dp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

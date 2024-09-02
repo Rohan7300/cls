@@ -18,7 +18,7 @@
             android:id="@+id/headerVehicleInformation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#CEEDC7"
+            android:background="@color/cardHeader"
             android:orientation="horizontal"
             android:padding="13dp">
 
@@ -42,27 +42,31 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="10dp"
-                android:hint="Select Vehicle Location*"
+                android:orientation="horizontal"
+                android:hint="Vehicle Location*"
                 android:textColorHint="@color/hintColor">
 
-                <AutoCompleteTextView
-                    android:id="@+id/spinnerSelectVehicleLocation"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:importantForAutofill="no"
                     android:inputType="none"
                     android:padding="12dp"
-                    android:textColorHint="@color/hintColor"
+                    android:text="Vehicle Location - "
+                    android:textSize="13sp" />
+                <TextView
+                    android:id="@+id/vehicleLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:text="Vehicle Location - "
                     android:textSize="13sp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"

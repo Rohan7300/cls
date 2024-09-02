@@ -2,7 +2,9 @@ package com.clebs.celerity_admin.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
 import android.util.Log
+import com.clebs.celerity_admin.models.VehicleInfoXXXX
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -13,6 +15,7 @@ import java.util.Stack
 
 
 class Prefs(context: Context) {
+
 
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -167,7 +170,9 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putString("dob", value).apply()
         }
-
+    var isAccidentImageUploading: Boolean
+        get() = sharedPreferences.getBoolean("isAccidentImageUploading",false)
+        set(value) = sharedPreferences.edit().putBoolean("isAccidentImageUploading",value).apply()
     var isBirthdayCardShown: Boolean?
         get() {
             return sharedPreferences.getBoolean("isBirthdayCardShown", false)
@@ -183,10 +188,18 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putBoolean("Isfirsts", value ?: false).apply()
         }
+    var returnInspectionFirstTime: Boolean?
+        get() {
+            return sharedPreferences.getBoolean("returnInspectionFirstTime", false)
+        }
+        set(value) {
+            sharedPreferences.edit().putBoolean("returnInspectionFirstTime", value ?: false).apply()
+        }
 
-    var currentWeeklyDefectItemVehRegNo:String?
-        get() = sharedPreferences.getString("currentWeeklyDefectItemVehRegNo",null)
-        set(value) = sharedPreferences.edit().putString("currentWeeklyDefectItemVehRegNo",value).apply()
+    var currentWeeklyDefectItemVehRegNo: String?
+        get() = sharedPreferences.getString("currentWeeklyDefectItemVehRegNo", null)
+        set(value) = sharedPreferences.edit().putString("currentWeeklyDefectItemVehRegNo", value)
+            .apply()
 
     var quesID: Int
         get() = sharedPreferences.getInt("quesID", 0)
@@ -311,6 +324,21 @@ class Prefs(context: Context) {
         return sharedPreferences.getInt("last_screen_id", 0)
     }
 
+    var backgroundUploadCase:Int
+        get() = sharedPreferences.getInt("backUploadCase",1)
+        set(value) = sharedPreferences.edit().putInt("backUploadCase",value).apply()
+
+    var accidentImagePos:Int
+        get() = sharedPreferences.getInt("accidentImagePos",0)
+        set(value) = sharedPreferences.edit().putInt("accidentImagePos",value).apply()
+    fun saveSelectedFileUris(selectedFileUris: MutableList<String>) {
+        sharedPreferences.edit().putStringSet("selectedFileUris", selectedFileUris.toSet()).apply()
+    }
+
+    fun getSelectedFileUris(): MutableList<String> {
+        val uriStrings = sharedPreferences.getStringSet("selectedFileUris", setOf())
+        return uriStrings?.map { it }?.toMutableList() ?: mutableListOf()
+    }
     fun saveBoolean(key: String?, value: Boolean?) {
         sharedPreferences.edit().putBoolean(key, value!!).apply()
         sharedPreferences.edit().apply()
@@ -409,14 +437,29 @@ class Prefs(context: Context) {
             return false
         }
     }
+
     fun saveWorkRequestId(workRequestId: String) {
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString("lastWorkRequestId", workRequestId)
         editor.apply()
     }
 
-    fun getWorkRequestId():String?{
+    fun getWorkRequestId(): String? {
         return sharedPreferences.getString("lastWorkRequestId", null)
+    }
+
+    fun saveCurrentVehicleInfo(info: VehicleInfoXXXX) {
+        val editor = sharedPreferences.edit()
+        val gson = Gson()
+        val json = gson.toJson(info)
+        editor.putString("saveCurrentVehicleInfo", json)
+        editor.apply()
+    }
+
+    fun getCurrentVehicleInfo(): VehicleInfoXXXX? {
+        val gson = Gson()
+        val data = sharedPreferences.getString("saveCurrentVehicleInfo", null)
+        return gson.fromJson(data, VehicleInfoXXXX::class.java) ?: null
     }
 
 }

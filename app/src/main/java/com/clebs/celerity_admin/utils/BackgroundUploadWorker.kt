@@ -8,12 +8,11 @@ import androidx.core.net.toUri
 import androidx.work.ListenableWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.clebs.celerity_admin.SplashActivityTwo
 import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
-
+import com.clebs.celerity_admin.ui.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -39,178 +38,199 @@ class BackgroundUploadWorker(
         val defectSheetUserId = inputData.getInt("defectSheetUserId", 0)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
+        val prefs = Prefs.getInstance(appContext)
         GlobalScope.launch {
-            val dbDefectSheet = SplashActivityTwo.offlineSyncDB?.getDefectSheet(
-                DependencyClass.currentWeeklyDefectItem!!.vdhCheckId
-            )
-            if (dbDefectSheet != null) {
-                val response = mainRepo.SaveDefectSheetWeeklyOSMCheck(
-                    SaveDefectSheetWeeklyOSMCheckRequest(
-                        Comment = dbDefectSheet.comment ?: "",
-                        PowerSteering = dbDefectSheet.powerSteeringCheck,
-                        PowerSteeringLiquid = dbDefectSheet.powerSteeringCheck,
-                        TyrePressureFrontNS = getRadioButtonState(dbDefectSheet.tyrePressureFrontNSRB),
-                        TyrePressureFrontOS = getRadioButtonState(dbDefectSheet.tyrePressureFrontOSRB),
-                        TyrePressureRearNS = getRadioButtonState(dbDefectSheet.tyrePressureRearNSRB),
-                        TyrePressureRearOS = getRadioButtonState(dbDefectSheet.tyrePressureRearOSRB),
-                        TyreThreadDepthFrontNSVal = 0,
-                        TyreThreadDepthFrontOSVal = 0,
-                        TyreThreadDepthRearNSVal = 0,
-                        TyreThreadDepthRearOSVal = 0,
-                        UserId = Prefs.getInstance(applicationContext).clebUserIds.toInt(),
-                        VdhAdminComment = "",
-                        VdhBrakeFluidLevelId = dbDefectSheet.brakeFluidLevelID,
-                        VdhCheckId = dbDefectSheet.id,
-                        VdhDefChkImgOilLevelId = dbDefectSheet.oilLevelID,
-                        VdhEngineCoolantLevelId = dbDefectSheet.engineCoolantLevelID,
-                        VdhWindScreenConditionId = dbDefectSheet.windScreenConditionId,
-                        VdhWindowScreenWashingLiquidId = dbDefectSheet.windScreenWashingLevelId,
-                        WeeklyActionCheck = dbDefectSheet.WeeklyActionCheck,
-                        WeeklyApproveCheck = dbDefectSheet.WeeklyApproveCheck,
-                        WindowScreenState = false,
-                        WindscreenWashingLiquid = false
-                    )
+            if(prefs.backgroundUploadCase==1){
+                val dbDefectSheet = App.offlineSyncDB?.getDefectSheet(
+                    DependencyClass.currentWeeklyDefectItem!!.vdhCheckId
                 )
-                if (response.isSuccessful || response.failed) {
-                    if (dbDefectSheet.tyreDepthFrontNSImage != null && dbDefectSheet.uploadTyreDepthFrontNSImage) {
+                if (dbDefectSheet != null) {
+                    val response = mainRepo.SaveDefectSheetWeeklyOSMCheck(
+                        SaveDefectSheetWeeklyOSMCheckRequest(
+                            Comment = dbDefectSheet.comment ?: "",
+                            PowerSteering = dbDefectSheet.powerSteeringCheck,
+                            PowerSteeringLiquid = dbDefectSheet.powerSteeringCheck,
+                            TyrePressureFrontNS = getRadioButtonState(dbDefectSheet.tyrePressureFrontNSRB),
+                            TyrePressureFrontOS = getRadioButtonState(dbDefectSheet.tyrePressureFrontOSRB),
+                            TyrePressureRearNS = getRadioButtonState(dbDefectSheet.tyrePressureRearNSRB),
+                            TyrePressureRearOS = getRadioButtonState(dbDefectSheet.tyrePressureRearOSRB),
+                            TyreThreadDepthFrontNSVal = 0,
+                            TyreThreadDepthFrontOSVal = 0,
+                            TyreThreadDepthRearNSVal = 0,
+                            TyreThreadDepthRearOSVal = 0,
+                            UserId = Prefs.getInstance(applicationContext).clebUserId.toInt(),
+                            VdhAdminComment = "",
+                            VdhBrakeFluidLevelId = dbDefectSheet.brakeFluidLevelID,
+                            VdhCheckId = dbDefectSheet.id,
+                            VdhDefChkImgOilLevelId = dbDefectSheet.oilLevelID,
+                            VdhEngineCoolantLevelId = dbDefectSheet.engineCoolantLevelID,
+                            VdhWindScreenConditionId = dbDefectSheet.windScreenConditionId,
+                            VdhWindowScreenWashingLiquidId = dbDefectSheet.windScreenWashingLevelId,
+                            WeeklyActionCheck = dbDefectSheet.WeeklyActionCheck,
+                            WeeklyApproveCheck = dbDefectSheet.WeeklyApproveCheck,
+                            WindowScreenState = false,
+                            WindscreenWashingLiquid = false
+                        )
+                    )
+                    if (response.isSuccessful || response.failed) {
+                        if (dbDefectSheet.tyreDepthFrontNSImage != null && dbDefectSheet.uploadTyreDepthFrontNSImage) {
 
-                        val partBody = createMultipartPart(
-                            dbDefectSheet.tyreDepthFrontNSImage!!,
-                            "uploadVehOSMDefectChkFile",
-                            appContext
-                        )
-                        mainRepo.UploadVehOSMDefectChkFile(
-                            dbDefectSheet.id,
-                            DefectFileType.TyrethreaddepthFrontNS,
-                            dateToday(),
-                            partBody
-                        )
-                    }
-                    if (dbDefectSheet.tyreDepthRearNSImage != null && dbDefectSheet.uploadTyreDepthRearNSImage) {
-                        val partBody = createMultipartPart(
-                            dbDefectSheet.tyreDepthRearNSImage!!,
-                            "uploadVehOSMDefectChkFile",
-                            appContext
-                        )
-                        mainRepo.UploadVehOSMDefectChkFile(
-                            dbDefectSheet.id,
-                            DefectFileType.TyrethreaddepthRearNS,
-                            dateToday(),
-                            partBody
-                        )
-
-                    }
-                    if (dbDefectSheet.tyreDepthRearOSImage != null && dbDefectSheet.uploadTyreDepthRearOSImage) {
-                        val partBody = createMultipartPart(
-                            dbDefectSheet.tyreDepthRearOSImage!!,
-                            "uploadVehOSMDefectChkFile",
-                            appContext
-                        )
-                        mainRepo.UploadVehOSMDefectChkFile(
-                            dbDefectSheet.id,
-                            DefectFileType.TyrethreaddepthRearOS,
-                            dateToday(),
-                            partBody
-                        )
-
-
-                    }
-                    if (dbDefectSheet.tyreDepthFrontOSImage != null && dbDefectSheet.uploadTyreDepthFrontOSImage) {
-                        val partBody = createMultipartPart(
-                            dbDefectSheet.tyreDepthFrontOSImage!!,
-                            "uploadVehOSMDefectChkFile",
-                            appContext
-                        )
-                        mainRepo.UploadVehOSMDefectChkFile(
-                            dbDefectSheet.id,
-                            DefectFileType.TyrethreaddepthFrontOS,
-                            dateToday(),
-                            partBody
-                        )
-
-                    }
-                    if (dbDefectSheet.addBlueLevelImage != null && dbDefectSheet.uploadAddBlueLevelImage) {
-                        val partBody = createMultipartPart(
-                            dbDefectSheet.addBlueLevelImage!!,
-                            "uploadVehOSMDefectChkFile",
-                            appContext
-                        )
-                        mainRepo.UploadVehOSMDefectChkFile(
-                            dbDefectSheet.id, DefectFileType.AddBlueLevel, dateToday(), partBody
-                        )
-
-                    }
-
-                    if (dbDefectSheet.engineLevelImage != null && dbDefectSheet.uploadEngineLevelImage) {
-                        val partBody = createMultipartPart(
-                            dbDefectSheet.engineLevelImage!!,
-                            "uploadVehOSMDefectChkFile",
-                            appContext
-                        )
-                        mainRepo.UploadVehOSMDefectChkFile(
-                            dbDefectSheet.id, DefectFileType.EngineOilLevel, dateToday(), partBody
-                        )
-
-
-                    }
-                    if (dbDefectSheet.nsWingMirrorImage != null && dbDefectSheet.uploadNSWingMirrorImage) {
-                        val partBody = createMultipartPart(
-                            dbDefectSheet.nsWingMirrorImage!!,
-                            "uploadVehOSMDefectChkFile",
-                            appContext
-                        )
-                        mainRepo.UploadVehOSMDefectChkFile(
-                            dbDefectSheet.id, DefectFileType.NSWingMirror, dateToday(), partBody
-                        )
-                    }
-                    if (dbDefectSheet.osWingMirrorImage != null && dbDefectSheet.uploadOSWingMirrorImage) {
-                        val partBody = createMultipartPart(
-                            dbDefectSheet.osWingMirrorImage!!,
-                            "uploadVehOSMDefectChkFile",
-                            appContext
-                        )
-                        mainRepo.UploadVehOSMDefectChkFile(
-                            dbDefectSheet.id, DefectFileType.OSWingMirror, dateToday(), partBody
-                        )
-                    }
-                    if (dbDefectSheet.threeSixtyVideo != null && dbDefectSheet.uploadThreeSixtyVideo) {
-
-                        val partBody = createVideoMultipart(
-                            dbDefectSheet.threeSixtyVideo!!,
-                            "UploadVan360Video",
-                            appContext
-                        )
-                        mainRepo.Uploadvideo360(
-                            dbDefectSheet.id,
-                            dateToday(),
-                            partBody
-                        )
-
-                    }
-                    if (dbDefectSheet.otherImages != null && dbDefectSheet.uploadOtherImages) {
-                        for (imageUri in convertStringToList(dbDefectSheet.otherImages!!)) {
                             val partBody = createMultipartPart(
-                                imageUri, "uploadOtherPictureOfPartsFile", appContext
+                                dbDefectSheet.tyreDepthFrontNSImage!!,
+                                "uploadVehOSMDefectChkFile",
+                                appContext
                             )
-                            val response = withContext(Dispatchers.IO) {
-                                mainRepo.UploadOtherPictureOfPartsFile(
-                                    dbDefectSheet.id,
-                                    DefectFileType.OtherPicOfParts,
-                                    dateToday(),
-                                    partBody
+                            mainRepo.UploadVehOSMDefectChkFile(
+                                dbDefectSheet.id,
+                                DefectFileType.TyrethreaddepthFrontNS,
+                                dateToday(),
+                                partBody
+                            )
+                        }
+                        if (dbDefectSheet.tyreDepthRearNSImage != null && dbDefectSheet.uploadTyreDepthRearNSImage) {
+                            val partBody = createMultipartPart(
+                                dbDefectSheet.tyreDepthRearNSImage!!,
+                                "uploadVehOSMDefectChkFile",
+                                appContext
+                            )
+                            mainRepo.UploadVehOSMDefectChkFile(
+                                dbDefectSheet.id,
+                                DefectFileType.TyrethreaddepthRearNS,
+                                dateToday(),
+                                partBody
+                            )
+
+                        }
+                        if (dbDefectSheet.tyreDepthRearOSImage != null && dbDefectSheet.uploadTyreDepthRearOSImage) {
+                            val partBody = createMultipartPart(
+                                dbDefectSheet.tyreDepthRearOSImage!!,
+                                "uploadVehOSMDefectChkFile",
+                                appContext
+                            )
+                            mainRepo.UploadVehOSMDefectChkFile(
+                                dbDefectSheet.id,
+                                DefectFileType.TyrethreaddepthRearOS,
+                                dateToday(),
+                                partBody
+                            )
+
+
+                        }
+                        if (dbDefectSheet.tyreDepthFrontOSImage != null && dbDefectSheet.uploadTyreDepthFrontOSImage) {
+                            val partBody = createMultipartPart(
+                                dbDefectSheet.tyreDepthFrontOSImage!!,
+                                "uploadVehOSMDefectChkFile",
+                                appContext
+                            )
+                            mainRepo.UploadVehOSMDefectChkFile(
+                                dbDefectSheet.id,
+                                DefectFileType.TyrethreaddepthFrontOS,
+                                dateToday(),
+                                partBody
+                            )
+
+                        }
+                        if (dbDefectSheet.addBlueLevelImage != null && dbDefectSheet.uploadAddBlueLevelImage) {
+                            val partBody = createMultipartPart(
+                                dbDefectSheet.addBlueLevelImage!!,
+                                "uploadVehOSMDefectChkFile",
+                                appContext
+                            )
+                            mainRepo.UploadVehOSMDefectChkFile(
+                                dbDefectSheet.id, DefectFileType.AddBlueLevel, dateToday(), partBody
+                            )
+
+                        }
+
+                        if (dbDefectSheet.engineLevelImage != null && dbDefectSheet.uploadEngineLevelImage) {
+                            val partBody = createMultipartPart(
+                                dbDefectSheet.engineLevelImage!!,
+                                "uploadVehOSMDefectChkFile",
+                                appContext
+                            )
+                            mainRepo.UploadVehOSMDefectChkFile(
+                                dbDefectSheet.id, DefectFileType.EngineOilLevel, dateToday(), partBody
+                            )
+
+
+                        }
+                        if (dbDefectSheet.nsWingMirrorImage != null && dbDefectSheet.uploadNSWingMirrorImage) {
+                            val partBody = createMultipartPart(
+                                dbDefectSheet.nsWingMirrorImage!!,
+                                "uploadVehOSMDefectChkFile",
+                                appContext
+                            )
+                            mainRepo.UploadVehOSMDefectChkFile(
+                                dbDefectSheet.id, DefectFileType.NSWingMirror, dateToday(), partBody
+                            )
+                        }
+                        if (dbDefectSheet.osWingMirrorImage != null && dbDefectSheet.uploadOSWingMirrorImage) {
+                            val partBody = createMultipartPart(
+                                dbDefectSheet.osWingMirrorImage!!,
+                                "uploadVehOSMDefectChkFile",
+                                appContext
+                            )
+                            mainRepo.UploadVehOSMDefectChkFile(
+                                dbDefectSheet.id, DefectFileType.OSWingMirror, dateToday(), partBody
+                            )
+                        }
+                        if (dbDefectSheet.threeSixtyVideo != null && dbDefectSheet.uploadThreeSixtyVideo) {
+
+                            val partBody = createVideoMultipart(
+                                dbDefectSheet.threeSixtyVideo!!,
+                                "UploadVan360Video",
+                                appContext
+                            )
+                            mainRepo.Uploadvideo360(
+                                dbDefectSheet.id,
+                                dateToday(),
+                                partBody
+                            )
+
+                        }
+                        if (dbDefectSheet.otherImages != null && dbDefectSheet.uploadOtherImages) {
+                            for (imageUri in convertStringToList(dbDefectSheet.otherImages!!)) {
+                                val partBody = createMultipartPart(
+                                    imageUri, "uploadOtherPictureOfPartsFile", appContext
                                 )
-                            }
-                            if (response.isSuccessful) {
-                                println("Upload successful for $imageUri")
-                            } else {
-                                println("Upload failed for $imageUri")
+                                val response = withContext(Dispatchers.IO) {
+                                    mainRepo.UploadOtherPictureOfPartsFile(
+                                        dbDefectSheet.id,
+                                        DefectFileType.OtherPicOfParts,
+                                        dateToday(),
+                                        partBody
+                                    )
+                                }
+                                if (response.isSuccessful) {
+                                    println("Upload successful for $imageUri")
+                                } else {
+                                    println("Upload failed for $imageUri")
+                                }
                             }
                         }
                     }
                 }
             }
-
-
+            else if(prefs.backgroundUploadCase==2){
+                if(prefs.getSelectedFileUris().size>0){
+                    val crrPointer = prefs.accidentImagePos
+                    val partBody = createMultipartPart(
+                      prefs.getSelectedFileUris()[crrPointer],
+                        "uploadVehOSMDefectChkFile",
+                        appContext
+                    )
+                    prefs.isAccidentImageUploading = true
+                    val response = withContext(Dispatchers.IO) {
+                        mainRepo.UploadVehAccidentPictureFile(
+                            prefs.clebUserId.toInt(),
+                            dateToday(),
+                            partBody
+                        )
+                    }
+                    prefs.isAccidentImageUploading = false
+                    prefs.accidentImagePos = crrPointer+1
+                }
+            }
         }
 
         return Result.success()

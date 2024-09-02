@@ -5,11 +5,11 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/nav_gallery">
 
-    <!--    <fragment-->
-    <!--        android:id="@+id/nav_home"-->
-    <!--        android:name="com.clebs.celerity_admin.ui.home.HomeFragment"-->
-    <!--        android:label="@string/menu_home"-->
-    <!--        tools:layout="@layout/fragment_home" />-->
+<!--    <fragment-->
+<!--        android:id="@+id/nav_home"-->
+<!--        android:name="com.clebs.celerity_admin.ui.home.HomeFragment"-->
+<!--        android:label="@string/menu_home"-->
+<!--        tools:layout="@layout/fragment_home" />-->
 
     <fragment
         android:id="@+id/nav_gallery"
@@ -27,10 +27,10 @@
         android:name="com.clebs.celerity_admin.ui.CLSweb.WebFragment"
         android:label="Contact"
         tools:layout="@layout/fragment_web" />
-
     <fragment
         android:id="@+id/nav_changevehcilecommon"
         android:name="com.clebs.celerity_admin.ui.ChangeVehicleFragmentTwo"
         android:label="vehicleallocation"
         tools:layout="@layout/fragment_change_vehicle_two" />
+
 </navigation>

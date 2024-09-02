@@ -12,13 +12,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#F6FAFA"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/headerSelectVehicleOptions"
+            android:id="@+id/headerAddInspectionImages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#CEEDC7"
+            android:background="@color/cardHeader"
             android:orientation="horizontal"
             android:padding="13dp">
 
@@ -37,7 +38,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/bodyVehicleOptions"
+            android:id="@+id/bodyAddInspectionImages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
@@ -47,11 +48,11 @@
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#D4DFD4"
+                android:backgroundTint="@color/cardHeader"
                 android:id="@+id/addImagesBtn"
                 android:fontFamily="@font/poppins_semibold"
                 android:padding="10dp"
-                android:text="Add Images"
+                android:text="Vehicle Inspection"
                 android:textColor="@color/cardbg"
                 app:cornerRadius="12sp"
                 app:icon="@drawable/imagegallery"
@@ -59,7 +60,131 @@
                 app:iconTint="@color/cardbg"
                 app:strokeColor="@color/cardbg"
                 app:strokeWidth="1dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Other Images"
+                android:fontFamily="@font/poppins_semibold"
+                android:layout_marginTop="10dp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:orientation="horizontal">
 
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/greyLight"
+                    android:id="@+id/addSpareWheelImageBtn"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="10dp"
+                    android:text="Spare Wheel"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:textColor="@color/white"
+                    app:cornerRadius="10sp"
+                    android:textSize="11sp"
+                    app:icon="@drawable/imagegallery"
+                    app:iconSize="25dp"
+                    app:iconGravity="top"
+                    app:iconTint="@color/white"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="4dp" />
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/greyLight"
+                    android:id="@+id/addVehicleInteriorImageBtn"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="10dp"
+                    android:textSize="11sp"
+                    android:text="Vehicle Interior"
+                    android:textColor="@color/white"
+                    app:cornerRadius="10sp"
+                    app:icon="@drawable/imagegallery"
+                    app:iconSize="25dp"
+                    app:iconGravity="top"
+                    app:iconTint="@color/white"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="4dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/greyLight"
+                    android:id="@+id/addLoadingInteriorImageBtn"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="10dp"
+                    android:text="Loading Interior"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:textColor="@color/white"
+                    app:cornerRadius="12sp"
+                    android:textSize="11sp"
+                    app:icon="@drawable/imagegallery"
+                    app:iconSize="25dp"
+                    app:iconGravity="top"
+                    app:iconTint="@color/white"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="4dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/greyLight"
+                    android:id="@+id/addToolsPictureImageBtn"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="15dp"
+                    android:textSize="11sp"
+                    android:text="Tools Picture"
+                    android:textColor="@color/white"
+                    app:cornerRadius="20sp"
+                    app:icon="@drawable/imagegallery"
+                    app:iconSize="25dp"
+                    app:iconTint="@color/white"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="4dp" />
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/greyLight"
+                    android:id="@+id/addVinNumberImageBtn"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:text="Vin Number"
+                    android:textSize="11sp"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="15dp"
+                    android:textColor="@color/white"
+                    app:cornerRadius="20sp"
+                    app:icon="@drawable/imagegallery"
+                    app:iconSize="25dp"
+                    app:iconTint="@color/white"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="4dp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

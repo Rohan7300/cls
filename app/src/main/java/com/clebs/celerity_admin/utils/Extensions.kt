@@ -28,13 +28,20 @@ import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.annotation.Keep
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.clebs.celerity_admin.R
+import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.DependencyClass.VehInspectionDate
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -51,6 +58,8 @@ import java.io.*
 import java.net.InetAddress
 import java.net.NetworkInterface
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.regex.Pattern
 
@@ -557,7 +566,21 @@ fun shortenFileName(originalName: String): String {
     }
 
 }
+fun clientUniqueID(): String {
+    val x = "123456"
+    val y = "123456"
+    // example string
+    val currentDate = LocalDateTime.now()
+    val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
 
+    val regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
+
+
+    val  inspectionID = regexPattern.toString()
+    Prefs.getInstance(App.instance).vehinspectionUniqueID = inspectionID
+    return regexPattern.toString()
+    Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
+}
 fun showDatePickerDialog(context: Context, tv: TextView) {
     val calendar = Calendar.getInstance()
     val year = calendar.get(Calendar.YEAR)
@@ -609,3 +632,38 @@ fun convertDateFormat(inputDate: String): String {
         return " "
     }
 }
+fun generateUniqueFilename(): String {
+    val currentDateTime = LocalDateTime.now()
+    val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
+    val uniqueFilename = currentDateTime.format(formatter)
+    return uniqueFilename
+}
+
+fun getFileUri(file: File,context: Context): Uri {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+    } else {
+        Uri.fromFile(file)
+    }
+}
+fun bitmapToBase64(bitmap: Bitmap): String {
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+    val byteArray = byteArrayOutputStream.toByteArray()
+    return Base64.encodeToString(byteArray, Base64.DEFAULT)
+}
+
+fun createBackgroundUploadRequest(inputData: Data,context: Context,case:Int){
+    Prefs.getInstance(context).backgroundUploadCase=case
+    val constraints =
+        Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+    val uploadWorkRequest =
+        OneTimeWorkRequestBuilder<BackgroundUploadWorker>().setInputData(inputData)
+            .setConstraints(constraints).build()
+
+
+    val workManager = WorkManager.getInstance(context)
+    val workRequestId = uploadWorkRequest.id
+    workManager.enqueue(uploadWorkRequest)
+}
+

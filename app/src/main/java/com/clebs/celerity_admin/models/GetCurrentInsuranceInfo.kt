@@ -7,5 +7,5 @@ data class GetCurrentInsuranceInfo(
     @SerializedName("Status")
     val status: String,
     @SerializedName("VehicleInfo")
-    val vehicleInfo: VehicleInfoXXXX
+    val vehicleInfo: VehicleInfo5X
 )

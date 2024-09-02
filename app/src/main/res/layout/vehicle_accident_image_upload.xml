@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="5dp"
+    app:cardCornerRadius="10dp"
+    app:strokeColor="@color/cardbg"
+    app:strokeWidth="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/headerSelectVehicleOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cardHeader"
+            android:orientation="horizontal"
+            android:padding="13dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Vehicle Accident Image :"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bodyVehicleOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="13dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="11sp"
+                android:text="Upload Vehicle Accident \nPictures : "
+                android:textColor="@color/black" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/browseBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/cardHeader"
+                android:fontFamily="@font/poppins_semibold"
+                android:padding="12dp"
+                android:text="Take Photo"
+                android:textColor="@color/cardbg"
+                android:textSize="12sp"
+                app:cornerRadius="10sp"
+                app:icon="@drawable/file"
+                app:iconSize="25dp"
+                app:iconTint="@color/cardbg"
+                app:strokeColor="@color/cardbg"
+                app:strokeWidth="1dp" />
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:id="@+id/fileListRV"
+            />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
