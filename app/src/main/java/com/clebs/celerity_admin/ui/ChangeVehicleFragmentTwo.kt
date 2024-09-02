@@ -27,6 +27,7 @@ import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.SplashActivityTwo
 import com.clebs.celerity_admin.adapters.CompanyListAdapter
 import com.clebs.celerity_admin.adapters.DriverListAdapter
+import com.clebs.celerity_admin.adapters.FinalCompanyListAdapter
 import com.clebs.celerity_admin.adapters.FuelLevelAdapter
 import com.clebs.celerity_admin.adapters.ReturnVehicleAdapter
 import com.clebs.celerity_admin.adapters.SelectVehicleLocationAdapter
@@ -47,6 +48,14 @@ import com.clebs.celerity_admin.utils.Onclick
 import com.clebs.celerity_admin.utils.OnclickDriver
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.viewModels.MainViewModel
+import io.clearquote.assessment.cq_sdk.CQSDKInitializer
+import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
+import io.clearquote.assessment.cq_sdk.models.CustomerDetails
+import io.clearquote.assessment.cq_sdk.models.InputDetails
+import io.clearquote.assessment.cq_sdk.models.UserFlowParams
+import io.clearquote.assessment.cq_sdk.models.VehicleDetails
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,9 +73,12 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
     lateinit var mainViewModel: MainViewModel
     lateinit var attachmentAdapter: CompanyListAdapter
     lateinit var deleteDialog: AlertDialog
+
     lateinit var deleteDialogtwo: AlertDialog
     private var errortext = String()
+    private lateinit var cqSDKInitializer: CQSDKInitializer
     private var vehLmId: Int? = null
+    private lateinit var inspectionID: String
     lateinit var deleteDialogthree: AlertDialog
     private var checkChMessage: String? = null
     private var checkChMessagetwo: String? = null
@@ -78,6 +90,7 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
     var licenseEnd = String()
     var licenseNo = String()
     var vehiclelocation = String()
+    private var startboolean: Boolean? = false
     var DA_id = String()
     var spinner: Spinner? = null
     private var list = ArrayList<CompanyListResponseItem>()
@@ -104,7 +117,7 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
         val root: View = binding.root
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
-
+        cqSDKInitializer = CQSDKInitializer(requireContext())
 
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
@@ -119,18 +132,28 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
         binding.rvVehicleFuellevel.adapter = FuellevelAdapter
         binding.rvVehicleOillevel.adapter = OillevelAdapter
         Observers()
-        val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, list.map {
 
-                it.name
-            })
-        binding.spinnerSelectCompany.adapter = adapter
+        EditableFalse(binding.edtCompanys)
+        EditableFalse(binding.spinnerSelectDA)
+        EditableFalse(binding.spinnerSelectVehicle)
+        EditableFalse(binding.spinnerVehicleFuelLevel)
+        EditableFalse(binding.spinnerVehicleOilLevel)
+        EditableFalse(binding.edtCompany)
+        EditableFalse(binding.edtMileage)
+        EditableFalse(binding.edtFuel)
+        binding.sp1.adapter = FinalCompanyListAdapter(
+            list, this
+        )
+        if (startboolean!!) {
+            binding.headeruploadVehicleInformationVanhire.visibility = View.VISIBLE
+            binding.constmain.visibility = View.VISIBLE
 
-        binding.spinnerSelectCompany?.setOnClickListener {
+        }
+        binding.edtCompanys.setOnClickListener {
 //            showcompanylistdialog()
 
 
-            spinner?.performClick()
+            binding.sp1.visibility = View.VISIBLE
 
 
         }
@@ -159,19 +182,28 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
 
             ShowReturnVehicleList()
         }
+        binding.spinnerVehicleFuelLevel.setOnClickListener {
 
+            binding.rvVehicleFuellevel.visibility = View.VISIBLE
+        }
 
+        binding.spinnerVehicleOilLevel.setOnClickListener {
+            binding.rvVehicleOillevel.visibility = View.VISIBLE
+        }
+        if (binding.spinnerVehicleFuelLevel.text.isNotEmpty()) {
+            binding.llstartinspection.visibility = View.VISIBLE
+        }
         return root
     }
 
     fun Observers() {
-        binding.pb.visibility=View.VISIBLE
-        binding.nested.alpha=0.5f
+        binding.pb.visibility = View.VISIBLE
+        binding.nested.alpha = 0.5f
         mainViewModel.GetCompanyListing().observe(viewLifecycleOwner, Observer {
             Log.e("dkfdjkfjkdfjdresponse", "onCreateView: " + it)
             if (it != null) {
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
 //                attachmentAdapter.data.addAll(it)
                 list.clear()
                 list.addAll(it)
@@ -179,28 +211,29 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                 attachmentAdapter.notifyDataSetChanged()
             } else {
 
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
             }
 
 
         })
-        binding.pb.visibility=View.VISIBLE
-        binding.nested.alpha=0.5f
+        binding.pb.visibility = View.VISIBLE
+        binding.nested.alpha = 0.5f
         mainViewModel.GetDriverListing().observe(viewLifecycleOwner, Observer {
             if (it != null) {
+
                 items.addAll(it)
                 DriverListAdapter.data.addAll(it)
                 DriverListAdapter.notifyDataSetChanged()
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
             } else {
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
             }
         })
-        binding.pb.visibility=View.VISIBLE
-        binding.nested.alpha=0.5f
+        binding.pb.visibility = View.VISIBLE
+        binding.nested.alpha = 0.5f
         mainViewModel.GetVehicleListing().observe(viewLifecycleOwner, Observer {
 
             if (it != null) {
@@ -208,66 +241,66 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
 
                 ReturnVehicleAdapter.data.addAll(it)
                 ReturnVehicleAdapter.notifyDataSetChanged()
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
             } else {
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
             }
         })
-        binding.pb.visibility=View.VISIBLE
-        binding.nested.alpha=0.5f
+        binding.pb.visibility = View.VISIBLE
+        binding.nested.alpha = 0.5f
         mainViewModel.GetVehicleLocationListing().observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
                 selectVehcilelocationadapter.data.addAll(it)
                 selectVehcilelocationadapter.notifyDataSetChanged()
             } else {
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
             }
         })
-        binding.pb.visibility=View.VISIBLE
-        binding.nested.alpha=0.5f
+        binding.pb.visibility = View.VISIBLE
+        binding.nested.alpha = 0.5f
         mainViewModel.GetVehiclefuelListing().observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
                 FuellevelAdapter.data.addAll(it)
 
                 FuellevelAdapter.notifyDataSetChanged()
 
 
             } else {
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
             }
 
         })
-        binding.pb.visibility=View.VISIBLE
-        binding.nested.alpha=0.5f
+        binding.pb.visibility = View.VISIBLE
+        binding.nested.alpha = 0.5f
         mainViewModel.GetVehicleOilListing().observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
                 OillevelAdapter.data.addAll(it)
                 OillevelAdapter.notifyDataSetChanged()
 
 
             } else {
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
             }
 
         })
-        binding.pb.visibility=View.VISIBLE
-        binding.nested.alpha=0.5f
+        binding.pb.visibility = View.VISIBLE
+        binding.nested.alpha = 0.5f
         mainViewModel.GetVehicleRequestTypeList().observe(viewLifecycleOwner, Observer {
 
             if (it != null) {
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
 
                 attachmentAdapter.data.addAll(it)
                 listnew.clear()
@@ -275,8 +308,8 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
 
                 attachmentAdapter.notifyDataSetChanged()
             } else {
-                binding.pb.visibility=View.GONE
-                binding.nested.alpha=1f
+                binding.pb.visibility = View.GONE
+                binding.nested.alpha = 1f
 
             }
         })
@@ -318,16 +351,54 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
     override fun OnItemClickRecyclerViewClicks(
         recyclerViewId: Int, position: Int, itemclicked: String
     ) {
+        when (recyclerViewId) {
+            R.id.sp1 -> {
+                binding.edtCompanys.setText(itemclicked)
+                binding.sp1.visibility = View.GONE
+                // Handle item click event for RecyclerView1
+            }
 
+            R.id.rv_vehicle_fuellevel -> {
+
+                binding.spinnerVehicleFuelLevel?.setText(itemclicked)
+                binding.rvVehicleFuellevel?.visibility = View.GONE
+            }
+
+            R.id.rv_vehicle_oillevel -> {
+                binding.spinnerVehicleOilLevel?.setText(itemclicked)
+                binding.rvVehicleOillevel.visibility = View.GONE
+
+
+                if (binding.spinnerSelectVehicle.text.isNotEmpty() && binding.atvVehicleCurrentMileage.text.isNotEmpty() && binding.spinnerVehicleFuelLevel.text.isNotEmpty() && binding.atvAddBlueMileage.text.isNotEmpty() && binding.spinnerVehicleOilLevel.text.isNotEmpty()) {
+
+                    binding.llstartinspection.visibility = View.VISIBLE
+                    binding.headeruploadVehicleInformationVanhire.visibility = View.VISIBLE
+                    binding.starts.setOnClickListener {
+                        startInspection()
+
+                    }
+                    binding.headerVehicleInformation.setBackgroundColor(requireContext().getColor(R.color.green))
+                } else {
+                    binding.llstartinspection.visibility = View.GONE
+                    binding.headeruploadVehicleInformationVanhire.visibility = View.GONE
+                    binding.headerVehicleInformation.setBackgroundColor(requireContext().getColor(R.color.orange))
+                }
+            }
+//                 R.id.recyclerView2 -> {
+//                     // Handle item click event for RecyclerView2
+//                 }
+//                 // Add more conditions for additional RecyclerViews
+        }
     }
 
     override fun onItemClick(item: VehicleReturnModelListItem) {
-        binding.spinnerSelectVehicle.setText(item.vehicleRegNo)
 
-        Prefs.getInstance(SplashActivityTwo.instance).vmIdReturnveh = item.vehicleId.toString()
-        GetVehicleCurrentInsuranceInfo()
+        Prefs.getInstance(App.instance).vmIdReturnveh = item.vehicleId.toString()
+
         returbDA_wmID = item.vehicleId.toString()
+        GetVehicleCurrentInsuranceInfo()
 
+        binding.spinnerSelectVehicle.setText(item.vehicleRegNo)
 //        llmtwo.visibility = View.VISIBLE
 //        llmthree.visibility = View.VISIBLE
         deleteDialogthree.dismiss()
@@ -339,10 +410,12 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
 
     override fun onItemClick(item: DriverListResponseModelItem) {
         binding.spinnerSelectDA.setText(item.name)
-
         DA_id = item.id.toString()
 
         getDDAMandate()
+
+
+
 
 
         deleteDialogtwo.dismiss()
@@ -478,8 +551,8 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
 
     fun EditableFalse(view: View) {
 
-        view.isEnabled = false
-        view.isClickable = false
+        view.isEnabled = true
+        view.isClickable = true
         view.isFocusable = false
         view.isFocusableInTouchMode = false
     }
@@ -527,6 +600,7 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                 if (!it.vehicleInfo.chMessage.isNullOrEmpty()) {
 
                     DriverHomeDepotId = it.vehicleInfo.DriverHomeDepotId
+                    binding.textview.visibility = View.VISIBLE
                     binding.textview.setText(it.vehicleInfo.chMessage)
                     binding.textviewbreakdown.visibility = View.GONE
                     binding.textview.setTextColor(
@@ -537,10 +611,11 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                 } else if (it.vehicleInfo.chMessage.isNullOrEmpty() && it.vehicleInfo.IsOnRoadVehicleAssignedToThisDriver) {
                     binding.textviewbreakdown.visibility = View.VISIBLE
                     binding.textviewbreakdown.setOnClickListener {
-
+                        binding.textview.visibility = View.VISIBLE
                         val intent = Intent(requireContext(), BreakDownActivity::class.java)
                         startActivity(intent)
                     }
+                    binding.textview.visibility = View.VISIBLE
                     binding.textview.setText(it.vehicleInfo.OnRoadVehicleAssignedToThisDriverMessage)
                     binding.textview.setTextColor(
                         ContextCompat.getColor(
@@ -548,6 +623,7 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                         )
                     )
                 } else {
+                    binding.textview.visibility = View.VISIBLE
                     binding.textviewbreakdown.visibility = View.GONE
                     vehicleLocation = it.vehicleInfo.vehicleLocation
                     binding.textview.setText("Allocated Vehicle: " + it.vehicleInfo.currentVehicleRegNo + "\n" + "Vehicle location: " + it.vehicleInfo.vehicleLocation)
@@ -556,10 +632,29 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                             requireContext(), R.color.text_color
                         )
                     )
-                    Prefs.getInstance(SplashActivityTwo.instance).VmID =
-                        it.vehicleInfo.vmRegId.toString()
+                    Prefs.getInstance(App.instance).VmID = it.vehicleInfo.vmRegId.toString()
 //                    relativelayout?.visibility = View.GONE
 //                    linearLayout?.visibility = View.GONE
+                }
+
+                if (checkChMessage!!.isNotEmpty() || checkChMessagetwo!!.isNotEmpty()) {
+                    binding.headerVehicleInformation.visibility = View.GONE
+                    binding.bodyVehicleInfo.visibility = View.GONE
+                    binding.headerSelectVehicleOptions.setBackgroundColor(
+                        requireContext().getColor(
+                            R.color.orange
+                        )
+                    )
+
+                } else {
+                    binding.headerVehicleInformation.visibility = View.VISIBLE
+                    binding.bodyVehicleInfo.visibility = View.VISIBLE
+                    binding.headerSelectVehicleOptions.setBackgroundColor(
+                        requireContext().getColor(
+                            R.color.green
+                        )
+                    )
+
                 }
 
             }
@@ -570,16 +665,17 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
     fun GetVehicleCurrentInsuranceInfo() {
 
         mainViewModel.GetVehicleCurrentInsuranceInfo(
-            Prefs.getInstance(SplashActivityTwo.instance).vmIdReturnveh.toInt()
+            Prefs.getInstance(App.instance).vmIdReturnveh.toInt()
         )
         mainViewModel.GetVehicleCurrentInsuranceInfo.observe(this, Observer {
             if (it != null) {
                 vehLmId = it.vehicleInfo.vehLmId
 
-                if (it.vehicleInfo.motAndRoadExist) {
-                    errortext = it.vehicleInfo.motAndRoad
-                }
+
+                errortext = it.vehicleInfo.motAndRoad
+
                 if (!it.vehicleInfo.vehLmId.equals(DriverHomeDepotId)) {
+
                     if (it.vehicleInfo.motAndRoad.equals(
                             "This vehicle is not Available to Allocate."
                         )
@@ -588,15 +684,24 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                         binding.txterrortwo?.visibility = View.VISIBLE
                         binding.txterrortwo?.text = it.vehicleInfo.motAndRoad
                         binding.txterror?.visibility = View.GONE
+                        binding.llselectvehiclesub.visibility = View.GONE
                         binding.tvRelease?.setOnClickListener {
                             showAlertRelease()
                         }
-                    } else {
+                    } else if (it.vehicleInfo.motAndRoad.isNotEmpty()) {
                         binding.tvRelease.visibility = View.GONE
                         binding.txterror?.visibility = View.VISIBLE
                         binding.txterrortwo?.text = it.vehicleInfo.motAndRoad
+                        binding.llselectvehiclesub.visibility = View.GONE
                         binding.txterror?.visibility = View.VISIBLE
                         binding.txterror?.setText("Vehicle is not on the drivers location, please make a request to transfer the vehicle to driver's location first.")
+                    } else {
+                        binding.txterror.visibility = View.GONE
+                        binding.tvRelease.visibility = View.GONE
+                        binding.txterrortwo.visibility = View.GONE
+                        binding.txterrortwo.setText("")
+                        binding.txterror.setText("")
+                        binding.llselectvehiclesub.visibility = View.VISIBLE
                     }
 
 
@@ -608,6 +713,7 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                     binding.txterror.visibility = View.GONE
                     binding.txterrortwo.visibility = View.VISIBLE
                     binding.txterrortwo.text = (it.vehicleInfo.motAndRoad)
+                    binding.llselectvehiclesub.visibility = View.GONE
 
 
                 } else if (!it.vehicleInfo.vehLmId.equals(DriverHomeDepotId) && it.vehicleInfo.motAndRoad.isNotEmpty()) {
@@ -615,12 +721,31 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                     binding.txterror?.visibility = View.VISIBLE
                     binding.txterrortwo?.visibility = View.VISIBLE
                     binding.txterrortwo?.text = (it.vehicleInfo.motAndRoad)
+                    binding.llselectvehiclesub.visibility = View.GONE
                 } else {
                     binding.txterror.visibility = View.GONE
                     binding.tvRelease.visibility = View.GONE
                     binding.txterrortwo.visibility = View.GONE
+                    binding.llselectvehiclesub.visibility = View.VISIBLE
                 }
-
+//            if (!vehLmId!!.equals(DriverHomeDepotId)) {
+//
+//                binding.llselectvehiclesub.visibility=View.GONE
+//
+//                } else if (vehLmId!!.equals(DriverHomeDepotId) && !it.vehicleInfo.motAndRoad.contains(
+//                        "This Vehicle is not insured."
+//                    ) || ! it.vehicleInfo.motAndRoad.contains("Road Tax is expired") || ! it.vehicleInfo.motAndRoad.contains("MOT is expired")
+//                ) {
+//
+//                binding.llselectvehiclesub.visibility=View.GONE
+//
+//                }
+//                else if (vehLmId!!.equals(DriverHomeDepotId) && it.vehicleInfo.motAndRoad.isEmpty()){
+//                binding.llselectvehiclesub.visibility=View.VISIBLE
+//                }
+//                else{
+//                binding.llselectvehiclesub.visibility=View.VISIBLE
+//                }
 
             }
 
@@ -648,8 +773,8 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
         bttwo.setOnClickListener {
 
             mainViewModel.CreateVehicleReleaseReq(
-                Prefs.getInstance(SplashActivityTwo.instance).vmIdReturnveh.toDouble(),
-                Prefs.getInstance(SplashActivityTwo.instance).clebUserIds.toDouble()
+                Prefs.getInstance(App.instance).vmIdReturnveh.toDouble(),
+                Prefs.getInstance(App.instance).clebUserIds.toDouble()
             )
             mainViewModel.CreateVehicleReleaseReqlivedata.observe(requireActivity(), Observer {
                 if (it != null) {
@@ -676,5 +801,88 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
 
         }
 
+    }
+
+    private fun startInspection() {
+        binding.pbs.visibility = View.VISIBLE
+        startboolean = true
+        clientUniqueID()
+//        if (isAllImageUploaded) {
+//            mbinding.tvNext.visibility = View.VISIBLE
+//        }
+        binding.headeruploadVehicleInformationVanhire.visibility = View.VISIBLE
+        binding.constmain.visibility = View.VISIBLE
+//      if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
+
+
+        if (cqSDKInitializer.isCQSDKInitialized()) {
+
+//            var vmReg = Prefs.getInstance(App.instance).scannedVmRegNo ?: ""
+//            Log.e(
+//                "totyototyotoytroitroi",
+//                "startInspection: " + inspectionID + "VmReg ${Prefs.getInstance(App.instance).vmRegNo}"
+//            )
+//            if (vmReg.isEmpty()) {
+//                vmReg = Prefs.getInstance(App.instance).vmRegNo
+//            }
+            Log.e("sdkskdkdkskdkskd", "onCreateView: ")
+
+            try {
+                cqSDKInitializer.startInspection(activity = requireActivity(),
+                    clientAttrs = ClientAttrs(
+                        userName = " ",
+                        dealer = " ",
+                        dealerIdentifier = " ",
+                        client_unique_id = inspectionID
+
+                        //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
+                    ),
+                    inputDetails = InputDetails(
+                        vehicleDetails = VehicleDetails(
+                            regNumber = "ND22YFL", //if sent, user can't edit
+                            make = "Van", //if sent, user can't edit
+                            model = "Any Model", //if sent, user can't edit
+                            bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
+                        ), customerDetails = CustomerDetails(
+                            name = "", //if sent, user can't edit
+                            email = "", //if sent, user can't edit
+                            dialCode = "", //if sent, user can't edit
+                            phoneNumber = "", //if sent, user can't edit
+                        )
+                    ),
+                    userFlowParams = UserFlowParams(
+                        isOffline = false, // true, Offline quote will be created | false, online quote will be created | null, online
+
+                        skipInputPage = true, // true, Inspection will be started with camera page | false, Inspection will be started
+
+                    ),
+
+                    result = { isStarted, msg, code ->
+                        if (isStarted) {
+                            binding.pbs.visibility = View.GONE
+                        }
+                        Log.e("messsagesss", "startInspection: " + msg + code)
+
+                    })
+            } catch (_: Exception) {
+
+                binding.pbs.visibility = View.GONE
+            }
+        }
+
+    }
+
+    fun clientUniqueID(): String {
+        val x = "123456"
+        val y = "123456"
+        // example string
+        val currentDate = LocalDateTime.now()
+        val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
+
+        val regexPattern: Regex
+        regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
+        inspectionID = regexPattern.toString()
+        return regexPattern.toString()
+        Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
     }
 }

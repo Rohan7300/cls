@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import com.clebs.celerity_admin.LoginActivityTwo
 import com.clebs.celerity_admin.SplashActivityTwo
+import com.clebs.celerity_admin.ui.App
 
 import com.clebs.celerity_admin.utils.Prefs
 import okhttp3.Interceptor
@@ -109,7 +110,7 @@ object RetrofitService {
     }
 
     private fun provideHeaderInterceptor(): Interceptor {
-        val applicationContext = SplashActivityTwo.instance
+        val applicationContext = App.instance
         try {
             return Interceptor { chain ->
                 val accessToken: String = Prefs.getInstance(applicationContext).accessToken

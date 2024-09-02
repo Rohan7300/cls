@@ -1,10 +1,7 @@
 plugins {
-    id ("kotlin-android")
-    id ("kotlin-kapt")
-    id ("com.android.library")
-    id ("kotlin-parcelize")
+    id("com.android.application")
     id("org.jetbrains.kotlin.android")
-
+    id("kotlin-kapt")
 }
 
 android {
@@ -12,12 +9,12 @@ android {
     compileSdk = 34
 
     defaultConfig {
-
-        minSdk =  23
+        applicationId = "com.clebs.celerity_admin"
+        minSdk = 26
         targetSdk = 34
-//        versionCode = 1
-//        versionName = "1.0"
-        multiDexEnabled = true
+        versionCode = 1
+        versionName = "0.1.0"
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -66,6 +63,7 @@ android {
     }
 
     dependencies {
+
         implementation("androidx.core:core-ktx:1.13.1")
         implementation("androidx.appcompat:appcompat:1.6.1")
         implementation("com.github.clearquotetech:cq-android-sdk:2.2.2")

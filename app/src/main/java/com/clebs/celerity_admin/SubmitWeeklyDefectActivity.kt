@@ -43,6 +43,7 @@ import com.clebs.celerity_admin.models.SaveInspectionRequestBody
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.BackgroundUploadWorker
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import com.clebs.celerity_admin.utils.Prefs
@@ -1218,13 +1219,13 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
                             Log.e("messsagesss", "startInspection: " + msg + code)
                             if (isStarted) {
-                                Prefs.getInstance(SplashActivityTwo.instance).Isfirst = false
-                                startonetime = Prefs.getInstance(SplashActivityTwo.instance).Isfirst
+                                Prefs.getInstance(App.instance).Isfirst = false
+                                startonetime = Prefs.getInstance(App.instance).Isfirst
                                 Log.d("CQSDKXX", "isStarted " + msg)
                             } else {
 //                                loadingDialog.dismiss()
-                                Prefs.getInstance(SplashActivityTwo.instance).Isfirst = true
-                                startonetime = Prefs.getInstance(SplashActivityTwo.instance).Isfirst
+                                Prefs.getInstance(App.instance).Isfirst = true
+                                startonetime = Prefs.getInstance(App.instance).Isfirst
                                 if (msg.equals("Online quote can not be created without internet")) {
                                     Toast.makeText(
                                         this, "Please Turn on the internet", Toast.LENGTH_SHORT
@@ -1277,7 +1278,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
 
 
         inspectionID = regexPattern.toString()
-        Prefs.getInstance(SplashActivityTwo.instance).vehinspectionUniqueID = inspectionID
+        Prefs.getInstance(App.instance).vehinspectionUniqueID = inspectionID
         return regexPattern.toString()
         Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
     }
@@ -1295,10 +1296,10 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             prefs!!.Isfirst = false
             SplashActivityTwo.offlineSyncDB!!.insertinspectionInfo(
                 IsInspectionDone(
-                    InspectionDoneRegNo = Prefs.getInstance(SplashActivityTwo.instance).vehinspection.replace(
+                    InspectionDoneRegNo = Prefs.getInstance(App.instance).vehinspection.replace(
                         " ", ""
                     ),
-                    InspectionClientUniqueID = Prefs.getInstance(SplashActivityTwo.instance).vehinspectionUniqueID.replace(
+                    InspectionClientUniqueID = Prefs.getInstance(App.instance).vehinspectionUniqueID.replace(
                         " ", ""
                     )
                 )
@@ -1308,7 +1309,7 @@ class SubmitWeeklyDefectActivity : AppCompatActivity() {
             vm.SaveVehWeeklyDefectSheetInspectionInfo(
                 SaveInspectionRequestBody(
                     currentWeeklyDefectItem!!.vdhCheckId,
-                    Prefs.getInstance(SplashActivityTwo.instance).vehinspectionUniqueID,
+                    Prefs.getInstance(App.instance).vehinspectionUniqueID,
                     currentWeeklyDefectItem!!.vdhCheckDaId,
                     currentWeeklyDefectItem!!.vdhCheckVmId,
                     currentWeeklyDefectItem!!.vehWkCheckWeek,

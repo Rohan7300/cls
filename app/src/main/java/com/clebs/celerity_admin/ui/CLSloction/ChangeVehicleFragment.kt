@@ -35,7 +35,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.MainActivityTwo
 import com.clebs.celerity_admin.R
-import com.clebs.celerity_admin.SplashActivityTwo
 import com.clebs.celerity_admin.adapters.CompanyListAdapter
 import com.clebs.celerity_admin.adapters.DriverListAdapter
 import com.clebs.celerity_admin.adapters.FuelLevelAdapter
@@ -53,6 +52,7 @@ import com.clebs.celerity_admin.models.VehicleReturnModelListItem
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.ui.BreakDownActivity
 import com.clebs.celerity_admin.utils.OnItemClickRecyclerView
 import com.clebs.celerity_admin.utils.OnReturnVehicle
@@ -233,7 +233,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
         Observers()
         Thread {
             GlobalScope.launch {
-                if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmpty()) {
+                if (!App.offlineSyncDB!!.isUserTableEmpty()) {
                     binding.checkone.visibility = View.VISIBLE
                     binding.textView4.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -253,7 +253,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                     )
                     binding.consttwo.alpha = 0.5f
                 }
-                if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmptyInformation()) {
+                if (!App.offlineSyncDB!!.isUserTableEmptyInformation()) {
 
                     binding.checktwo.visibility = View.VISIBLE
 
@@ -491,7 +491,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                             requireContext(), R.color.text_color
                         )
                     )
-                    Prefs.getInstance(SplashActivityTwo.instance).VmID =
+                    Prefs.getInstance(App.instance).VmID =
                         it.vehicleInfo.vmRegId.toString()
                     relativelayout?.visibility = View.GONE
                     linearLayout?.visibility = View.GONE
@@ -521,7 +521,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
     fun GetVehicleCurrentInsuranceInfo() {
 
         mainViewModel.GetVehicleCurrentInsuranceInfo(
-            Prefs.getInstance(SplashActivityTwo.instance).vmIdReturnveh.toInt()
+            Prefs.getInstance(App.instance).vmIdReturnveh.toInt()
         )
         mainViewModel.GetVehicleCurrentInsuranceInfo.observe(this, Observer {
             if (it != null) {
@@ -582,7 +582,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
     }
 
     fun getRepoInfoModel() {
-        mainViewModel.GetRepoInfoModel(Prefs.getInstance(SplashActivityTwo.instance).vmIdReturnveh.toString())
+        mainViewModel.GetRepoInfoModel(Prefs.getInstance(App.instance).vmIdReturnveh.toString())
             .observe(viewLifecycleOwner, Observer {
                 relativelayout?.visibility = View.VISIBLE
                 linearLayout?.visibility = View.VISIBLE
@@ -827,11 +827,11 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
                 GlobalScope.launch {
                     Log.e("sdffncmnxmv", "selectVehicleOptions: ")
-                    if (SplashActivityTwo.offlineSyncDB!!.isUserTableEmpty()) {
+                    if (App.offlineSyncDB!!.isUserTableEmpty()) {
                         // The users table is empty, you can perform some initial setup here
                         if (current_screen.equals("changeda") && daname?.text!!.isNotEmpty()) {
                             lifecycleScope.launch {
-                                SplashActivityTwo.offlineSyncDB!!.insert(
+                                App.offlineSyncDB!!.insert(
                                     User(
                                         0,
                                         companynames!!.toString(),
@@ -847,7 +847,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
                         } else if (current_screen.equals("returnveh") && returnvehiclename!!.text.isNotEmpty()) {
                             lifecycleScope.launch {
-                                SplashActivityTwo.offlineSyncDB!!.insert(
+                                App.offlineSyncDB!!.insert(
                                     User(
                                         1,
                                         companynames!!.toString(),
@@ -866,10 +866,10 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                     } else {
 
                         Log.e("djfdfhdjhfdjh", "selectVehicleOptions: ")
-                        SplashActivityTwo.offlineSyncDB!!.deleteUserTable()
+                        App.offlineSyncDB!!.deleteUserTable()
                         if (current_screen.equals("changeda") && daname?.text!!.isNotEmpty()) {
                             lifecycleScope.launch {
-                                SplashActivityTwo.offlineSyncDB!!.insert(
+                                App.offlineSyncDB!!.insert(
                                     User(
                                         0,
                                         companynames!!.toString(),
@@ -884,7 +884,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
                         } else if (current_screen.equals("returnveh") && returnvehiclename!!.text.isNotEmpty()) {
                             lifecycleScope.launch {
-                                SplashActivityTwo.offlineSyncDB!!.insert(
+                                App.offlineSyncDB!!.insert(
                                     User(
                                         1,
                                         companynames!!.toString(),
@@ -899,7 +899,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
                         } else if (current_screen.equals("returnveh") && returnvehiclename!!.text.isNotEmpty()) {
                             lifecycleScope.launch {
-                                SplashActivityTwo.offlineSyncDB!!.insert(
+                                App.offlineSyncDB!!.insert(
                                     User(
                                         2,
                                         companynames!!.toString(),
@@ -1031,7 +1031,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
             rv_oil?.visibility = View.GONE
         }
 
-        mainViewModel.GetlastMileageInfo(Prefs.getInstance(SplashActivityTwo.instance).vmIdReturnveh)
+        mainViewModel.GetlastMileageInfo(Prefs.getInstance(App.instance).vmIdReturnveh)
             .observe(viewLifecycleOwner, Observer {
                 Log.e("kdkjfjdkffdfkdjfkd", "selectVehicleInformation: " + it)
                 if (it != null) {
@@ -1098,11 +1098,11 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
                     uploadVehiclePicture()
                     Log.e("sdffncmnxmv", "selectVehicleOptions: ")
-                    if (SplashActivityTwo.offlineSyncDB!!.isUserTableEmptyInformation()) {
+                    if (App.offlineSyncDB!!.isUserTableEmptyInformation()) {
                         // The users table is empty, you can perform some initial setup here
 
                         lifecycleScope.launch {
-                            SplashActivityTwo.offlineSyncDB!!.insertinfo(
+                            App.offlineSyncDB!!.insertinfo(
                                 VehicleInformation(
                                     0,
                                     edt?.text.toString(),
@@ -1119,10 +1119,10 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                     } else {
 
                         Log.e("djfdfhdjhfdjh", "selectVehicleOptions: ")
-                        SplashActivityTwo.offlineSyncDB!!.deleteTableInfos()
+                        App.offlineSyncDB!!.deleteTableInfos()
 
                         lifecycleScope.launch {
-                            SplashActivityTwo.offlineSyncDB!!.insertinfo(
+                            App.offlineSyncDB!!.insertinfo(
                                 VehicleInformation(
                                     1,
                                     edt?.text.toString(),
@@ -1174,9 +1174,9 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
         linearLayout = showSheet.findViewById(R.id.llmthree)
 
         lifecycleScope.launch {
-            if (!SplashActivityTwo.offlineSyncDB!!.isUploadPicturesIsEmpty()) {
+            if (!App.offlineSyncDB!!.isUploadPicturesIsEmpty()) {
 
-                if (!SplashActivityTwo.offlineSyncDB!!.getAllUsers().get(0).changeDAvechile) {
+                if (!App.offlineSyncDB!!.getAllUsers().get(0).changeDAvechile) {
                     getRepoInfoModel()
                 }
                 setFullAlpha(relativelayout!!)
@@ -1632,7 +1632,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
         returnvehiclename?.setText(item.vehicleRegNo)
         edt_select_vehicle?.setText(item.vehicleRegNo)
 
-        Prefs.getInstance(SplashActivityTwo.instance).vmIdReturnveh = item.vehicleId.toString()
+        Prefs.getInstance(App.instance).vmIdReturnveh = item.vehicleId.toString()
         GetVehicleCurrentInsuranceInfo()
         returbDA_wmID = item.vehicleId.toString()
         binding.pb2.visibility = View.VISIBLE
@@ -1729,10 +1729,10 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
     fun updates() {
         Thread {
             GlobalScope.launch {
-                if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmpty()) {
+                if (!App.offlineSyncDB!!.isUserTableEmpty()) {
 
                     Thread {
-                        val user = SplashActivityTwo.offlineSyncDB!!.getAllUsers()
+                        val user = App.offlineSyncDB!!.getAllUsers()
                         if (user[0].changeDAvechile) {
                             spinner?.setSelection(user.get(0).spinnerposition)
                             radioButtonDA!!.isChecked = user.get(0).changeDAvechile
@@ -1764,7 +1764,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
                         Log.e(
                             "dkjjdkfjkdjkfjkd",
-                            "onCreateView: " + SplashActivityTwo.offlineSyncDB!!.getAllUsers()
+                            "onCreateView: " + App.offlineSyncDB!!.getAllUsers()
                         )
                         //Do your database´s operations here
                     }.start()
@@ -1779,10 +1779,10 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
     fun updateUI() {
         Thread {
             GlobalScope.launch {
-                if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmptyInformation()) {
+                if (!App.offlineSyncDB!!.isUserTableEmptyInformation()) {
 
                     Thread {
-                        val user = SplashActivityTwo.offlineSyncDB!!.getAllUsersinfo()
+                        val user = App.offlineSyncDB!!.getAllUsersinfo()
                         edt?.setText(user.get(0).vehiclelocation)
                         edtaddblue?.setText(user.get(0).blueleve)
                         edtcurrentmileage?.setText(user.get(0).currentVehicleMileage)
@@ -1793,7 +1793,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
                         Log.e(
                             "dkjjdkfjkdjkfjkd",
-                            "onCreateView: " + SplashActivityTwo.offlineSyncDB!!.getAllUsers()
+                            "onCreateView: " + App.offlineSyncDB!!.getAllUsers()
                         )
                         //Do your database´s operations here
                     }.start()
@@ -1809,7 +1809,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
         Thread {
             GlobalScope.launch {
-                if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmpty()) {
+                if (!App.offlineSyncDB!!.isUserTableEmpty()) {
                     binding.checkone.visibility = View.VISIBLE
                     binding.textView4.setImageDrawable(
                         ContextCompat.getDrawable(
@@ -1830,7 +1830,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
                     binding.consttwo.alpha = 0.5f
                     EditableFalse(binding.textView4)
                 }
-                if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmptyInformation()) {
+                if (!App.offlineSyncDB!!.isUserTableEmptyInformation()) {
 
                     binding.checktwo.visibility = View.VISIBLE
                     binding.textView6.setImageDrawable(
@@ -1892,8 +1892,8 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
         bttwo.setOnClickListener {
 
             mainViewModel.CreateVehicleReleaseReq(
-                Prefs.getInstance(SplashActivityTwo.instance).vmIdReturnveh.toDouble(),
-                Prefs.getInstance(SplashActivityTwo.instance).clebUserIds.toDouble()
+                Prefs.getInstance(App.instance).vmIdReturnveh.toDouble(),
+                Prefs.getInstance(App.instance).clebUserIds.toDouble()
             )
             mainViewModel.CreateVehicleReleaseReqlivedata.observe(requireActivity(), Observer {
                 if (it != null) {

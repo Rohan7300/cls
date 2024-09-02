@@ -14,6 +14,7 @@ import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.viewModels.MainViewModel
 
@@ -55,7 +56,7 @@ class WebFragment : Fragment() {
         binding.web.visibility=View.GONE
         binding.pb.visibility=View.VISIBLE
         mainViewModel.GetemergencyContact(
-            Prefs.getInstance(SplashActivityTwo.instance).clebUserIds.toString().toInt()
+            Prefs.getInstance(App.instance).clebUserIds.toString().toInt()
         ).observe(viewLifecycleOwner, Observer {
             if (it!=null){
 

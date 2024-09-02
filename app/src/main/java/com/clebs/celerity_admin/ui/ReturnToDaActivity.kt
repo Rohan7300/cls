@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.adapters.RequestTypeListAdapter
 import com.clebs.celerity_admin.databinding.ActivityReturnToDaBinding
-import com.clebs.celerity_admin.dialogs.LoadingDialog
+
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponseItem
 import com.clebs.celerity_admin.network.ApiService
@@ -23,7 +23,7 @@ import com.clebs.celerity_admin.viewModels.MainViewModel
 
 class ReturnToDaActivity : AppCompatActivity() {
     lateinit var binding: ActivityReturnToDaBinding
-    private lateinit var loadingDialog: LoadingDialog
+//    private lateinit var loadingDialog: LoadingDialog
     private lateinit var mainViewModel: MainViewModel
     var selectedCompanyId: Int = -1
     var selectedVehicleId: Int = -1
@@ -38,7 +38,7 @@ class ReturnToDaActivity : AppCompatActivity() {
         val mainRepo = MainRepo(apiService)
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
-        loadingDialog = LoadingDialog(this)
+//        loadingDialog = LoadingDialog(this)
         setContentView(binding.root)
 
         binding.back.setOnClickListener {
@@ -138,22 +138,22 @@ class ReturnToDaActivity : AppCompatActivity() {
             }
         }
 
-        mainViewModel.GetCurrentAllocatedDaLD.observe(this) {
-            loadingDialog.dismiss()
-            vehicleValid = false
-            if (it != null) {
-                if (it.VehicleInfo.AllowReturnSupplier != null) {
-                    binding.layoutSelectVehicleOptions.errorText.text =
-                        it.VehicleInfo.AllowReturnSupplier!!
-                    updateCardLayout(3)
-                } else {
-                    vehicleValid = true
-                    if (selectedCompanyId != -1) {
-                        updateCardLayout(4)
-                    }
-                }
-            }
-        }
+//        mainViewModel.GetCurrentAllocatedDaLD.observe(this) {
+//
+//            vehicleValid = false
+//            if (it != null) {
+//                if (it.VehicleInfo.AllowReturnSupplier != null) {
+//                    binding.layoutSelectVehicleOptions.errorText.text =
+//                        it.VehicleInfo.AllowReturnSupplier!!
+//                    updateCardLayout(3)
+//                } else {
+//                    vehicleValid = true
+//                    if (selectedCompanyId != -1) {
+//                        updateCardLayout(4)
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun setSpinner(
@@ -181,7 +181,7 @@ class ReturnToDaActivity : AppCompatActivity() {
 
                             binding.layoutSelectVehicleOptions.spinnerSelectVehicle -> {
                                 selectedVehicleId = ids[position]
-                                loadingDialog.show()
+
                                 mainViewModel.GetCurrentAllocatedDa(
                                     selectedVehicleId.toString(), true
                                 )

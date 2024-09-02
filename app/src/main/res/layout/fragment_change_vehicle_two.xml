@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -11,17 +12,19 @@
             android:orientation="vertical">
 
             <ProgressBar
-                android:layout_width="30dp"
                 android:id="@+id/pb"
-                android:visibility="gone"
+                android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="10dp"
                 android:layout_gravity="center"
-                android:indeterminateTint="@color/orange"/>
+                android:layout_marginTop="10dp"
+                android:indeterminateTint="@color/orange"
+                android:visibility="gone" />
+
             <androidx.core.widget.NestedScrollView
-                android:layout_width="match_parent"
                 android:id="@+id/nested"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <com.google.android.material.card.MaterialCardView
 
                     android:layout_width="match_parent"
@@ -36,16 +39,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <androidx.core.widget.NestedScrollView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
 
-
-
                         </androidx.core.widget.NestedScrollView>
-                        <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-                            xmlns:app="http://schemas.android.com/apk/res-auto"
+
+                        <com.google.android.material.card.MaterialCardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
 
@@ -73,7 +75,7 @@
 
                                         android:text="1 . Select Vehicle Options"
                                         android:textColor="@color/white"
-                                        android:textStyle="bold"/>
+                                        android:textStyle="bold" />
 
                                     <ImageView
                                         android:id="@+id/headerStatusIcon"
@@ -86,33 +88,56 @@
                                     android:id="@+id/bodyVehicleOptions"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:visibility="visible"
-                                    android:orientation="vertical">
+                                    android:orientation="vertical"
+                                    android:visibility="visible">
 
-                                    <com.google.android.material.textfield.TextInputLayout
-                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                    <androidx.constraintlayout.widget.ConstraintLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginHorizontal="10dp"
-                                        android:layout_marginVertical="10dp"
-                                        android:hint="Select Company*"
-                                        android:textColorHint="@color/hintColor">
+                                        android:layout_margin="10dp">
 
-                                        <Spinner
-                                            android:id="@+id/spinnerSelectCompany"
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:id="@+id/edt_layouts"
+                                            style="@style/LoginTextInputLayoutStyle"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginTop="10dp"
+                                            android:hint="Select company *"
+                                            app:expandedHintEnabled="false"
+                                            app:hintAnimationEnabled="true"
+                                            app:hintTextColor="@color/black">
+
+                                            <EditText
+                                                android:id="@+id/edt_companys"
+                                                style="@style/LoginTextInputLayoutStyle"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="4dp"
+                                                android:editable="false"
+                                                android:importantForAutofill="no"
+                                                android:inputType="text"
+                                                android:padding="12dp"
+                                                android:textSize="13sp" />
+
+
+                                        </com.google.android.material.textfield.TextInputLayout>
+
+                                        <androidx.recyclerview.widget.RecyclerView
+                                            android:id="@+id/sp1"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginTop="4dp"
-                                            android:importantForAutofill="no"
-                                            android:inputType="none"
-                                            android:padding="12dp"
-                                            android:textColorHint="@color/hintColor"
-                                            android:textSize="13sp" />
+                                            android:layout_marginStart="10dp"
+                                            android:layout_marginTop="16dp"
+                                            android:layout_marginEnd="10dp"
+                                            android:visibility="gone"
+                                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                            app:layout_constraintStart_toStartOf="@+id/edt_layouts"
+                                            app:layout_constraintTop_toBottomOf="@+id/edt_layouts" />
+                                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                                    </com.google.android.material.textfield.TextInputLayout>
 
                                     <com.google.android.material.textfield.TextInputLayout
-                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                        style="@style/LoginTextInputLayoutStyle"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginHorizontal="10dp"
@@ -120,7 +145,7 @@
                                         android:hint="Select DA*"
                                         android:textColorHint="@color/hintColor">
 
-                                        <AutoCompleteTextView
+                                        <EditText
                                             android:id="@+id/spinnerSelectDA"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
@@ -130,6 +155,7 @@
                                             android:padding="12dp"
                                             android:textColorHint="@color/hintColor"
                                             android:textSize="13sp" />
+
                                         <TextView
                                             android:id="@+id/textview"
                                             android:layout_width="wrap_content"
@@ -152,7 +178,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginHorizontal="10dp"
-                                        android:layout_marginVertical="10dp"
+                                        android:layout_marginVertical="16dp"
                                         android:text="Direct returns to the supplier are not permitted. Please create a vehicle return request instead."
                                         android:textColor="@color/red"
                                         android:visibility="gone" />
@@ -164,10 +190,11 @@
                             android:id="@+id/headerVehicleInformation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/orange"
                             android:layout_marginTop="10dp"
+                            android:background="@color/orange"
                             android:orientation="horizontal"
-                            android:padding="13dp">
+                            android:padding="13dp"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -188,11 +215,11 @@
                             android:id="@+id/bodyVehicleInfo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="visible"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <com.google.android.material.textfield.TextInputLayout
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                style="@style/LoginTextInputLayoutStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="10dp"
@@ -200,7 +227,7 @@
                                 android:hint="Select Vehicle*"
                                 android:textColorHint="@color/hintColor">
 
-                                <AutoCompleteTextView
+                                <EditText
                                     android:id="@+id/spinnerSelectVehicle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -212,10 +239,12 @@
                                     android:textSize="13sp" />
 
                             </com.google.android.material.textfield.TextInputLayout>
+
                             <TextView
                                 android:id="@+id/txterror"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_margin="13dp"
                                 android:textColor="@color/red"
                                 android:textSize="12sp"
                                 android:visibility="gone" />
@@ -224,14 +253,17 @@
                                 android:id="@+id/txterrortwo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_margin="13dp"
                                 android:textColor="@color/red"
                                 android:textSize="12sp"
                                 android:visibility="gone" />
+
                             <TextView
                                 android:id="@+id/tvRelease"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="10dp"
                                 android:background="@drawable/shape_editext_main"
                                 android:backgroundTint="@color/purple"
                                 android:padding="10dp"
@@ -239,129 +271,149 @@
                                 android:textAllCaps="true"
                                 android:textColor="@color/white"
                                 android:textSize="10sp"
-                                android:visibility="gone"
-                                />
+                                android:visibility="gone" />
+
                             <TextView
+                                android:id="@+id/milegaetext"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                              android:layout_marginStart="10dp"
-                                android:layout_weight="1"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginTop="20dp"
+                                android:layout_weight="1"
                                 android:text="Previous Record Mileage: - - - -"
                                 android:textColor="@color/text_color" />
 
-                            <com.google.android.material.textfield.TextInputLayout
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            <LinearLayout
+                                android:id="@+id/llselectvehiclesub"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="10dp"
-                                android:layout_marginVertical="10dp"
-                                android:hint="Enter Vehicle Current Mileage"
-                                android:textColorHint="@color/hintColor">
+                                android:orientation="vertical">
 
-                                <AutoCompleteTextView
-                                    android:id="@+id/atvVehicleCurrentMileage"
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/LoginTextInputLayoutStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    android:importantForAutofill="no"
-                                    android:inputType="numberDecimal"
-                                    android:padding="12dp"
-                                    android:textColorHint="@color/hintColor"
-                                    android:textSize="13sp" />
+                                    android:layout_marginHorizontal="10dp"
+                                    android:layout_marginVertical="10dp"
+                                    android:hint="Enter Vehicle Current Mileage"
+                                    android:textColorHint="@color/hintColor">
 
-                            </com.google.android.material.textfield.TextInputLayout>
+                                    <EditText
+                                        android:id="@+id/atvVehicleCurrentMileage"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:importantForAutofill="no"
+                                        android:inputType="numberDecimal"
+                                        android:padding="12dp"
+                                        android:textColorHint="@color/hintColor"
+                                        android:textSize="13sp" />
 
-                            <com.google.android.material.textfield.TextInputLayout
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="10dp"
-                                android:layout_marginVertical="10dp"
-                                android:hint="Enter Add Blue Mileage"
-                                android:textColorHint="@color/hintColor">
+                                </com.google.android.material.textfield.TextInputLayout>
 
-                                <AutoCompleteTextView
-                                    android:id="@+id/atvAddBlueMileage"
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    android:importantForAutofill="no"
-                                    android:inputType="numberDecimal"
-                                    android:padding="12dp"
-                                    android:textColorHint="@color/hintColor"
-                                    android:textSize="13sp" />
+                                    android:layout_marginHorizontal="10dp"
+                                    android:layout_marginVertical="10dp"
+                                    android:hint="Enter Add Blue Mileage"
+                                    android:textColorHint="@color/hintColor">
 
-                            </com.google.android.material.textfield.TextInputLayout>
+                                    <EditText
+                                        android:id="@+id/atvAddBlueMileage"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:importantForAutofill="no"
+                                        android:inputType="numberDecimal"
+                                        android:padding="12dp"
+                                        android:textColorHint="@color/hintColor"
+                                        android:textSize="13sp" />
 
-                            <com.google.android.material.textfield.TextInputLayout
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="10dp"
-                                android:layout_marginVertical="10dp"
-                                android:hint="Select Veh Fuel Level"
-                                android:textColorHint="@color/hintColor">
+                                </com.google.android.material.textfield.TextInputLayout>
 
-                                <AutoCompleteTextView
-                                    android:id="@+id/spinnerVehicleFuelLevel"
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/LoginTextInputLayoutStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    android:importantForAutofill="no"
-                                    android:inputType="none"
-                                    android:padding="12dp"
-                                    android:textColorHint="@color/hintColor"
-                                    android:textSize="13sp" />
+                                    android:layout_marginHorizontal="10dp"
+                                    android:layout_marginVertical="10dp"
+                                    android:hint="Select Veh Fuel Level"
+                                    android:textColorHint="@color/hintColor">
 
-                            </com.google.android.material.textfield.TextInputLayout>
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/rv_vehicle_fuellevel"
-                                android:layout_width="match_parent"
-                                android:layout_height="100dp"
-                                android:layout_marginTop="4dp"
-                                android:overScrollMode="never"
-                                android:visibility="gone"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-                            <com.google.android.material.textfield.TextInputLayout
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="10dp"
-                                android:layout_marginVertical="10dp"
-                                android:hint="Select Veh Oil Level"
-                                android:textColorHint="@color/hintColor">
+                                    <EditText
+                                        android:id="@+id/spinnerVehicleFuelLevel"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:editable="false"
+                                        android:importantForAutofill="no"
+                                        android:inputType="none"
+                                        android:padding="12dp"
+                                        android:textColorHint="@color/hintColor"
+                                        android:textSize="13sp" />
 
-                                <AutoCompleteTextView
-                                    android:id="@+id/spinnerVehicleOilLevel"
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rv_vehicle_fuellevel"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="100dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginTop="16dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:overScrollMode="never"
+                                    android:visibility="gone"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/LoginTextInputLayoutStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    android:importantForAutofill="no"
-                                    android:inputType="none"
-                                    android:padding="12dp"
-                                    android:textColorHint="@color/hintColor"
-                                    android:textSize="13sp" />
+                                    android:layout_marginHorizontal="10dp"
+                                    android:layout_marginVertical="10dp"
+                                    android:hint="Select Veh Oil Level"
+                                    android:textColorHint="@color/hintColor">
 
-                            </com.google.android.material.textfield.TextInputLayout>
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/rv_vehicle_oillevel"
-                                android:layout_width="match_parent"
-                                android:layout_height="100dp"
-                                android:layout_marginTop="4dp"
-                                android:overScrollMode="never"
-                                android:visibility="gone"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                                    <EditText
+                                        android:id="@+id/spinnerVehicleOilLevel"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="4dp"
+                                        android:editable="false"
+                                        android:importantForAutofill="no"
+                                        android:inputType="none"
+                                        android:padding="12dp"
+                                        android:textColorHint="@color/hintColor"
+                                        android:textSize="13sp" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rv_vehicle_oillevel"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="100dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginTop="16dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:overScrollMode="never"
+                                    android:visibility="gone"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                            </LinearLayout>
+
                         </LinearLayout>
+
 
                         <LinearLayout
                             android:id="@+id/headeruploadVehicleInformation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:background="@color/orange"
                             android:orientation="horizontal"
-                            android:layout_marginTop="10dp"
-                            android:padding="13dp">
+                            android:padding="13dp"
+                            android:visibility="visible">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -379,35 +431,47 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/llstartinspection"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:visibility="gone"
                             android:layout_marginTop="10dp"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:padding="40dp"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-
                                 android:background="@drawable/shape_editext_main"
                                 android:backgroundTint="@color/orange"
+                                android:drawableRight="@drawable/baseline_camera_24"
                                 android:gravity="center"
+                                android:id="@+id/starts"
                                 android:padding="10dp"
                                 android:text="Start Inspection"
                                 android:textColor="@color/white"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
+                            <ProgressBar
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/pbs"
+                                android:visibility="gone"
+                                android:layout_gravity="center"
+                                android:indeterminateTint="@color/orange"/>
                         </LinearLayout>
+
                         <LinearLayout
                             android:id="@+id/headeruploadVehicleInformationVanhire"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/orange"
                             android:layout_marginTop="10dp"
+                            android:background="@color/orange"
                             android:orientation="horizontal"
-                            android:padding="13dp">
+                            android:padding="13dp"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -425,10 +489,11 @@
                         </LinearLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constmain"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            android:layout_margin="16dp">
+                            android:layout_margin="16dp"
+                            android:visibility="gone">
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/edt_layout"
@@ -727,18 +792,19 @@
                                 android:layout_marginTop="20dp"
                                 android:background="@drawable/shape_edittext"
                                 android:backgroundTint="#BE1E2D"
-                                android:drawablePadding="4dp"
                                 android:drawableRight="@drawable/baseline_file_upload_24"
-                                android:paddingStart="26dp"
-                                android:textStyle="bold"
+                                android:drawablePadding="4dp"
                                 android:gravity="center_horizontal|center_vertical"
+                                android:paddingStart="26dp"
                                 android:paddingTop="12dp"
                                 android:paddingEnd="26dp"
                                 android:paddingBottom="12dp"
                                 android:text="Upload"
                                 android:textColor="@color/white"
+                                android:textStyle="bold"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/llfour" />
+
                             <TextView
                                 android:id="@+id/bt_change"
                                 android:layout_width="wrap_content"
@@ -746,13 +812,13 @@
                                 android:layout_marginTop="20dp"
                                 android:background="@drawable/shape_edittext"
                                 android:backgroundTint="@color/greenBtn"
-                                android:textStyle="bold"
                                 android:paddingStart="26dp"
                                 android:paddingTop="12dp"
                                 android:paddingEnd="26dp"
                                 android:paddingBottom="12dp"
                                 android:text="Change DA vehcile"
                                 android:textColor="@color/white"
+                                android:textStyle="bold"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/bt_startInspection" />

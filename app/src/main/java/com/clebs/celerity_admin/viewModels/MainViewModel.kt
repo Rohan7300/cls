@@ -11,6 +11,7 @@ import com.clebs.celerity_admin.models.DriverListResponseModel
 import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
 import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
 import com.clebs.celerity_admin.models.GetCurrentAllocatedDaResponse
+import com.clebs.celerity_admin.models.GetCurrentInsuranceInfo
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
@@ -62,7 +63,10 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
     val GetCurrentAllocatedDaLD:MutableLiveData<GetCurrentAllocatedDaResponse?> = MutableLiveData()
     private val _clickEvent = MutableLiveData<Boolean>()
     val clickEvent: LiveData<Boolean> = _clickEvent
-
+    val GetVehicleCurrentInsuranceInfo: MutableLiveData<GetCurrentInsuranceInfo?> =
+        MutableLiveData()
+    val CreateVehicleReleaseReqlivedata: MutableLiveData<SucessStatusMsgResponse?> =
+        MutableLiveData()
     fun setClickEvent(clicked: Boolean) {
         _clickEvent.value = clicked
     }
@@ -468,4 +472,28 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
                 GetCurrentAllocatedDaLD.postValue(response.body)
         }
     }
+    fun GetVehicleCurrentInsuranceInfo(
+        vmID: Int
+    ) {
+        viewModelScope.launch {
+            val response = repo.GetVehicleCurrentInsuranceInfo(vmID)
+            if (!response.isSuccessful || response.failed)
+                GetVehicleCurrentInsuranceInfo.postValue(null)
+            else
+                GetVehicleCurrentInsuranceInfo.postValue(response.body)
+        }
+    }
+
+    fun CreateVehicleReleaseReq(
+        vmID: Double,supervisor:Double
+    ) {
+        viewModelScope.launch {
+            val response = repo.CreateVehicleReleaseReq(vmID,supervisor)
+            if (!response.isSuccessful || response.failed)
+                CreateVehicleReleaseReqlivedata.postValue(null)
+            else
+                CreateVehicleReleaseReqlivedata.postValue(response.body)
+        }
+    }
+
 }

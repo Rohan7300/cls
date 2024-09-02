@@ -3,6 +3,10 @@ package com.clebs.celerity_admin.network
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
+import com.clebs.celerity_admin.models.GetAllDriversInspectionListResponse
+import com.clebs.celerity_admin.models.GetAllVehicleInspectionListResponse
+import com.clebs.celerity_admin.models.GetCurrentAllocatedDaResponse
+import com.clebs.celerity_admin.models.GetCurrentInsuranceInfo
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
@@ -162,4 +166,11 @@ interface ApiService {
         @Path("vmId") vmId: String,
         @Query("isVehReturned") isVehReturned: Boolean
     ): Response<GetCurrentAllocatedDaResponse>
+    @GET("/api/VehAllocHistories/GetVehicleCurrentInsuranceInfo/{vmId}")
+    suspend fun GetVehicleCurrentInsuranceInfo(@Path("vmId") vmId: Int): Response<GetCurrentInsuranceInfo>
+
+    @GET("/api/VehAllocHistories/CreateNewVehicleReleaseTicket")
+    suspend fun CreateVehicleReleaseReq(
+        @Query("vmId") vmId: Double,
+        @Query("supervisorId") supervisorId: Double):Response<SucessStatusMsgResponse>
 }

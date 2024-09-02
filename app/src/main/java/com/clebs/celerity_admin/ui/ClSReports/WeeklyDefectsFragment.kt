@@ -22,6 +22,7 @@ import com.clebs.celerity_admin.models.WeeklyDefectChecksModelItem
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.DependencyClass.currentWeeklyDefectItem
 import com.clebs.celerity_admin.utils.OnItemClickRecyclerView
 import com.clebs.celerity_admin.utils.Prefs
@@ -65,7 +66,7 @@ class WeeklyDefectsFragment() : Fragment(),
         WeeklyDefectAdapter = WeeklyDefectAdapter(requireContext(), ArrayList(), this)
         binding.rvList.adapter = WeeklyDefectAdapter
         selectVehcilelocationadapter = SelectVehicleLocationAdapterTwo(ArrayList(), this)
-        mainViewModel.GetLocationListbyUserId(Prefs.getInstance(SplashActivityTwo.instance).clebUserIds.toDouble())
+        mainViewModel.GetLocationListbyUserId(Prefs.getInstance(App.instance).clebUserIds.toDouble())
         mainViewModel.GetLocationListbyUserIdLiveData.observe(viewLifecycleOwner, Observer {
             if (it != null) {
 
