@@ -62,16 +62,22 @@ class InvoicesFragment : Fragment() {
                     prefs.thridPartyAcess = it.IsThirdPartyChargeAccessAllowed
                     if (it.IsThirdPartyChargeAccessAllowed) {
                         binding.otherinvoices.visibility = View.VISIBLE
-
                     } else {
                         binding.otherinvoices.visibility = View.GONE
                     }
 
                     showDialog()
-                    viewModel.GetVehicleInformation(
-                        Prefs.getInstance(requireContext()).clebUserId.toInt(),
-                        getVRegNo(prefs)
-                    )
+                    if (prefs.currLocationName.isNotEmpty()) {
+                        binding.headerTop.dxLoc.text = prefs.currLocationName ?: ""
+                    } else if (prefs.workLocationName.isNotEmpty()) {
+                        binding.headerTop.dxLoc.text =
+                            prefs.workLocationName ?: ""
+                    } else {
+                        viewModel.GetVehicleInformation(
+                            Prefs.getInstance(requireContext()).clebUserId.toInt(),
+                            getVRegNo(prefs)
+                        )
+                    }
                 }
                 if (it.workinglocation != null) {
                     prefs.workLocationName = it.workinglocation
@@ -84,8 +90,6 @@ class InvoicesFragment : Fragment() {
                 binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
                 binding.headerTop.dxReg.text =
                     getVRegNo(prefs = Prefs.getInstance(requireContext()))
-
-
 
                 if (binding.headerTop.dxReg.text.isEmpty())
                     binding.headerTop.strikedxRegNo.visibility = View.VISIBLE

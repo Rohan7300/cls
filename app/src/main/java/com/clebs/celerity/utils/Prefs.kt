@@ -307,12 +307,20 @@ class Prefs(context: Context) {
     }
 
     fun setLastVisitedScreenId(context: Context, screenId: Int) {
-        sharedPreferences.edit().putInt("last_screen_id", screenId).apply()
+        val editor = sharedPreferences.edit()
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        editor.putString("last_screen_set_dt",currentDate)
+        editor.putInt("last_screen_id", screenId)
+        editor.apply()
     }
 
     // Function to retrieve the last visited screen ID
     fun getLastVisitedScreenId(context: Context): Int {
-        return sharedPreferences.getInt("last_screen_id", 0)
+        val savedDate = sharedPreferences.getString("last_screen_set_dt",null)
+        return if(isToday(savedDate))
+        sharedPreferences.getInt("last_screen_id", 0)
+        else
+            0
     }
 
     fun saveBoolean(key: String?, value: Boolean?) {

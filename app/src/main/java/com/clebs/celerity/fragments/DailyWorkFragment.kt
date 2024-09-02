@@ -475,6 +475,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                     MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
                     contentValues
                 ).build()
+
         imageCapture.takePicture(
             outputOptions, ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
@@ -538,8 +539,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                     )
                 )
                 try {
-                    val response =
-                        apiService.getNumberPlateDetails(
+                    val response = apiService.getNumberPlateDetails(
                             token = "TOKEN $API_TOKEN",
                             imagePart = imageFilePart
                         )
@@ -607,10 +607,10 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
     fun getVichleinformation() {
         Prefs.getInstance(App.instance).scannedVmRegNo = vrn
-        Log.e(TAG, "getVichleinformationVRN: "+vrn )
+        Log.e(TAG, "VRN: $vrn")
         (activity as HomeActivity).GetDriversBasicInformation()
-        mainViewModel.getVichelinformationResponse(
-            Prefs.getInstance(App.instance).clebUserId.toString().toDouble(), 0.toDouble(), vrn
+        mainViewModel.getVehicleInformationResponse(
+            Prefs.getInstance(App.instance).clebUserId.toDouble(), vrn
         ).observe(requireActivity(), Observer {
             if (it != null) {
                 Prefs.getInstance(App.instance)

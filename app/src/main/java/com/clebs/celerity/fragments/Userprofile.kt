@@ -693,7 +693,7 @@ class Userprofile : Fragment() {
             if (it != null) {
                 isedit = false
                 mbinding.save.visibility = View.GONE
-                if (it.Status.equals("200")) {
+                if (it.Status == "200") {
                     val newColor = resources.getColor(R.color.very_light_grey_two)
                     mbinding.emailtext.backgroundTintList = ColorStateList.valueOf(newColor)
                     mbinding.passtext.backgroundTintList = ColorStateList.valueOf(newColor)

@@ -111,8 +111,9 @@ interface ApiService {
     @GET("/api/Vehicle/GetVehicleInformation")
     suspend fun getVehicleInformation(
         @Query("userId") userId: Double,
-        @Query("lmId") lmId: Double,
-        @Query("vehRegNo") vehRegNo: String
+        @Query("vmId") vmId: Double,
+        @Query("vehRegNo") vehRegNo: String,
+        @Query("ScanVeh") ScanVeh:Boolean
     ): Response<GetVechileInformationResponse>
 
 
@@ -168,15 +169,9 @@ interface ApiService {
 
     @POST("/api/Vehicle/SaveVehDefectSheet")
     suspend fun SaveVehDefectSheet(@Body body: SaveVechileDefectSheetRequest): Response<SaveVehDefectSheetResponse>
-
-    @GET("/api/Vehicle/GetVehicleInformation")
-    suspend fun GetVehicleInformation(
-        @Query("userId") userId: Int, @Query("vehRegNo") vehRegNo: String = ""
-    ): Response<GetVechileInformationResponse>
-
     @GET("/api/DailyWorks/GetVehicleImageUploadedInfo/{userId}")
     suspend fun GetVehicleImageUploadInfo(
-        @Path("userId") userId: Int, @Query("vmId") vmId: Int, @Query("date") date: String
+        @Path("userId") userId: Int, @Query("vmId") vmId: Int   , @Query("date") date: String
     ): Response<GetVehicleImageUploadInfoResponse>
 
     @Multipart

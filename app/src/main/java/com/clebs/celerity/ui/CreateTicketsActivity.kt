@@ -75,8 +75,6 @@ class CreateTicketsActivity : AppCompatActivity() {
                     add(Manifest.permission.READ_MEDIA_IMAGES)
                 }
             }.toTypedArray()
-
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -403,7 +401,6 @@ class CreateTicketsActivity : AppCompatActivity() {
 
     private fun requestPermissions() {
         activityResultLauncher.launch(REQUIRED_PERMISSIONS)
-
     }
 
     private val activityResultLauncher =

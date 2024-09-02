@@ -262,15 +262,15 @@ class MainViewModel(
 
     }
 
-    fun getVichelinformationResponse(
+    //scan
+    fun getVehicleInformationResponse(
         userID: Double,
-        LmID: Double,
-        VechileRegistrationno: String
+        vechileRegistrationNo: String
     ): MutableLiveData<GetVechileInformationResponse?> {
         val responseLiveData = MutableLiveData<GetVechileInformationResponse?>()
 
         viewModelScope.launch {
-            val response = repo.getVechileinformation(userID, LmID, VechileRegistrationno)
+            val response = repo.getVehicleinformation(userID, 0.0, vechileRegistrationNo,false)
             if (response.failed)
                 responseLiveData.postValue(null)
             if (!response.isSuccessful)
@@ -417,9 +417,9 @@ class MainViewModel(
         }
     }
 
-    fun GetVehicleInformation(userID: Int, vehRegNo: String) {
+    fun GetVehicleInformation(userID: Int,vmId: Double) {
         viewModelScope.launch {
-            var response = repo.GetVehicleInformation(userID, vehRegNo)
+            val response = repo.getVehicleinformation(userID.toDouble(),vmId, "",false)
             if (response.failed)
                 vechileInformationLiveData.postValue(null)
             if (!response.isSuccessful)
@@ -455,7 +455,7 @@ class MainViewModel(
 
     fun GetDailyWorkInfoById(userID: Int) {
         viewModelScope.launch {
-            var response = repo.GetDailyWorkInfobyId(userID)
+            val response = repo.GetDailyWorkInfobyId(userID)
             if (response.failed)
                 livedataDailyWorkInfoByIdResponse.postValue(null)
             if (!response.isSuccessful)

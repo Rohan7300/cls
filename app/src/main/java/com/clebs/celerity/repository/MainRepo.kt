@@ -158,17 +158,14 @@ class MainRepo(private val ApiService: ApiService) {
         }
     }
 
-    suspend fun getVechileinformation(
+    suspend fun getVehicleinformation(
         userID: Double,
-        LmID: Double,
-        VechileRegistrationno: String
+        vmId: Double,
+        vehRegNo: String="",
+        ScanVeh:Boolean = false
     ): SimpleNetworkResponse<GetVechileInformationResponse> {
-        /*val response = ApiService.getVehicleInformation(userID, LmID, VechileRegistrationno)
-        if (response.isSuccessful) {
-            return response.body()
-        }*/
         return safeApiCall {
-            ApiService.getVehicleInformation(userID, LmID, VechileRegistrationno)
+            ApiService.getVehicleInformation(userID, vmId, vehRegNo,ScanVeh)
         }
     }
 
@@ -258,18 +255,6 @@ class MainRepo(private val ApiService: ApiService) {
         }*/
         return safeApiCall {
             ApiService.SaveVehDefectSheet(vehicleDefectSheetInfoResponse)
-        }
-    }
-
-    suspend fun GetVehicleInformation(
-        userID: Int,
-        vehRegNo: String
-    ): SimpleNetworkResponse<GetVechileInformationResponse> {
-        /*      val response = ApiService.GetVehicleInformation(userID, vehRegNo)
-              if (response.isSuccessful)
-                  return response.body()*/
-        return safeApiCall {
-            ApiService.GetVehicleInformation(userID, vehRegNo)
         }
     }
 

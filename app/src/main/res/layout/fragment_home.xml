@@ -51,8 +51,7 @@
                 android:lineHeight="26sp"
                 android:lineSpacingExtra="4sp"
                 android:maxLines="2"
-                android:text="Marian Ionut Malasincu
-Marian Ionut Malasincu"
+                android:text=""
                 android:textColor="#343131"
                 android:textSize="20sp" />
 
@@ -307,10 +306,8 @@ android:id="@+id/llmainHome"
                 <com.ncorti.slidetoact.SlideToActView
                     android:id="@+id/slideact"
                     android:layout_width="match_parent"
-
                     android:layout_height="wrap_content"
                     app:animation_duration="250"
-
                     app:area_margin="1dp"
                     app:bounce_on_start="true"
                     app:icon_margin="24dp"
