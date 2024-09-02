@@ -331,6 +331,23 @@ class Prefs(context: Context) {
     var accidentImagePos:Int
         get() = sharedPreferences.getInt("accidentImagePos",0)
         set(value) = sharedPreferences.edit().putInt("accidentImagePos",value).apply()
+
+    var spareWheelUri:String?
+        get() = sharedPreferences.getString("spareWheelUri",null)
+        set(value) = sharedPreferences.edit().putString("spareWheelUri",value).apply()
+    var vehicleInteriorPicture:String?
+        get() = sharedPreferences.getString("vehicleInteriorPicture",null)
+        set(value) = sharedPreferences.edit().putString("vehicleInteriorPicture",value).apply()
+    var loadingInteriorPicture:String?
+        get() = sharedPreferences.getString("loadingInteriorPicture",null)
+        set(value) = sharedPreferences.edit().putString("loadingInteriorPicture",value).apply()
+    var toolsPicture:String?
+        get() = sharedPreferences.getString("toolsPicture",null)
+        set(value) = sharedPreferences.edit().putString("toolsPicture",value).apply()
+
+    var crrDriverId:Int
+        get() = sharedPreferences.getInt("crrDriverId",0)
+        set(value) = sharedPreferences.edit().putInt("crrDriverId",value).apply()
     fun saveSelectedFileUris(selectedFileUris: MutableList<String>) {
         sharedPreferences.edit().putStringSet("selectedFileUris", selectedFileUris.toSet()).apply()
     }

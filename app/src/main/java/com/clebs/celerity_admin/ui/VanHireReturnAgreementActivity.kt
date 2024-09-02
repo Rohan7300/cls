@@ -37,6 +37,7 @@ import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.utils.DependencyClass
 import com.clebs.celerity_admin.utils.DependencyClass.addBlueMileage
 import com.clebs.celerity_admin.utils.DependencyClass.crrMileage
+import com.clebs.celerity_admin.utils.DependencyClass.requestTypeList
 import com.clebs.celerity_admin.utils.DependencyClass.selectedCompanyId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedRequestTypeId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleFuelId
@@ -94,6 +95,7 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityVanHireReturnAgreementBinding.inflate(layoutInflater)
         loadingDialog = LoadingDialog(this)
+
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
         window.statusBarColor = resources.getColor(R.color.commentbg, null)
@@ -102,6 +104,7 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
         setContentView(binding.root)
         clickListeners()
         prefs = Prefs.getInstance(this)
+        prefs.accidentImagePos = 0
         vehicleInfoXXXX = prefs.getCurrentVehicleInfo()!!
         vehicleInfoXXXX.let {
             binding.atvDOB.setText(it.DOB)
@@ -338,7 +341,7 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
                             NewVmId = 0,
                             OldVmId = selectedVehicleId,
                             ParentCompanyId = selectedCompanyId,
-                            RequestTypeIds = listOf(selectedRequestTypeId),
+                            RequestTypeIds = requestTypeList.map { it.Id },
                             SecondUserAllocPosition = 0,
                             SecondUsrId = 0,
                             Signature1 = bse64,

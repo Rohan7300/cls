@@ -16,7 +16,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity_admin.R
+import com.clebs.celerity_admin.adapters.DeleteCallback
 import com.clebs.celerity_admin.adapters.RequestTypeListAdapter
 import com.clebs.celerity_admin.databinding.ActivityReturnToDaBinding
 import com.clebs.celerity_admin.dialogs.LoadingDialog
@@ -28,6 +30,7 @@ import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.utils.DependencyClass.addBlueMileage
 import com.clebs.celerity_admin.utils.DependencyClass.crrMileage
 import com.clebs.celerity_admin.utils.DependencyClass.crrSelectedVehicleType
+import com.clebs.celerity_admin.utils.DependencyClass.requestTypeList
 import com.clebs.celerity_admin.utils.DependencyClass.selectedCompanyId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedRequestTypeId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleFuelId
@@ -47,7 +50,7 @@ import io.clearquote.assessment.cq_sdk.models.InputDetails
 import io.clearquote.assessment.cq_sdk.models.UserFlowParams
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
 
-class ReturnToDaActivity : AppCompatActivity() {
+class ReturnToDaActivity : AppCompatActivity(), DeleteCallback {
     lateinit var binding: ActivityReturnToDaBinding
     private lateinit var loadingDialog: LoadingDialog
     private lateinit var mainViewModel: MainViewModel
@@ -57,6 +60,8 @@ class ReturnToDaActivity : AppCompatActivity() {
     private var isRbNotRoadWorthy: Boolean = false
     private var vehicleValid: Boolean = false
     var imageUploadLevel: Int = 0
+    lateinit var listAdapter: RequestTypeListAdapter
+
     private val REQUIRED_PERMISSIONS =
         mutableListOf(
             Manifest.permission.CAMERA
@@ -75,6 +80,9 @@ class ReturnToDaActivity : AppCompatActivity() {
         binding = ActivityReturnToDaBinding.inflate(layoutInflater)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
+        if(requestTypeList.size>0){
+            requestTypeList.clear()
+        }
         window.statusBarColor = resources.getColor(R.color.commentbg, null)
         prefs = Prefs.getInstance(this)
         mainViewModel =
@@ -86,6 +94,9 @@ class ReturnToDaActivity : AppCompatActivity() {
         //mainViewModel.GetAllVehicleInspectionList()
         loadingDialog.show()
         mainViewModel.GetReturnVehicleList()
+        listAdapter = RequestTypeListAdapter(this@ReturnToDaActivity)
+        binding.layoutReturnVehicle.selectRequestTypeRV.adapter = listAdapter
+        binding.layoutReturnVehicle.selectRequestTypeRV.layoutManager = LinearLayoutManager(this)
         observers()
         updateCardLayout(-1)
     }
@@ -303,6 +314,16 @@ class ReturnToDaActivity : AppCompatActivity() {
 
                             binding.layoutReturnVehicle.spinnerRequestType -> {
                                 selectedRequestTypeId = ids[position]
+                                requestTypeList.add(
+                                    GetVehicleDamageWorkingStatusResponseItem(
+                                        ids[position],
+                                        items[position]
+                                    )
+                                )
+                                Log.d("RequestTypeList","$requestTypeList")
+                                listAdapter.saveData(requestTypeList)
+                                listAdapter.notifyItemInserted(listAdapter.itemCount)
+
                             }
                         }
                     }
@@ -647,14 +668,15 @@ class ReturnToDaActivity : AppCompatActivity() {
             9 -> {
                 updateCardLayout(8)
                 binding.layoutReturnVehicle.tilSpinnerRequestType.visibility = View.GONE
+                binding.layoutReturnVehicle.selectRequestTypeRV.visibility = View.GONE
                 binding.layoutReturnVehicle.returnVehicleBtn.visibility = View.VISIBLE
             }
 
             10 -> {
                 updateCardLayout(8)
                 binding.layoutReturnVehicle.tilSpinnerRequestType.visibility = View.VISIBLE
+                binding.layoutReturnVehicle.selectRequestTypeRV.visibility = View.VISIBLE
                 binding.layoutReturnVehicle.returnVehicleBtn.visibility = View.VISIBLE
-
             }
         }
     }
@@ -758,5 +780,11 @@ class ReturnToDaActivity : AppCompatActivity() {
             updateCardLayout(8)
             //cqOpened = false
         }
+    }
+
+    override fun onDelete(item: GetVehicleDamageWorkingStatusResponseItem, position: Int) {
+        requestTypeList.remove(item)
+        listAdapter.notifyItemRemoved(position)
+        listAdapter.saveData(requestTypeList)
     }
 }

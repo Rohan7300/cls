@@ -328,4 +328,36 @@ class MainRepo(private val ApiService: ApiService) {
             ApiService.CreateVehicleReleaseReq(vmId,supervisorid)
         }
     }
+    suspend fun UploadVehSpearWheelPictureFile(
+        supervisorId:Int,
+        daId: Int,
+        date:String): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.UploadVehSpearWheelPictureFile(supervisorId,daId,date)
+        }
+    }
+    suspend fun UploadVehInterierPictureFile(
+        supervisorId:Int,
+        daId: Int,
+        date:String): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.UploadVehInterierPictureFile(supervisorId,daId,date)
+        }
+    }
+    suspend fun UploadVehLoadingInteriorPictureFile(
+        supervisorId:Int,
+        daId: Int,
+        date:String): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.UploadVehLoadingInteriorPictureFile(supervisorId,daId,date)
+        }
+    }
+    suspend fun UploadVehToolsPictureFile(
+        supervisorId:Int,
+        daId: Int,
+        date:String): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.UploadVehToolsPictureFile(supervisorId,daId,date)
+        }
+    }
 }

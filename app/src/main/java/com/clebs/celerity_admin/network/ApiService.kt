@@ -198,4 +198,30 @@ interface ApiService {
     suspend fun CreateVehicleReleaseReq(
         @Query("vmId") vmId: Double,
         @Query("supervisorId") supervisorId: Double):Response<SucessStatusMsgResponse>
+
+    @POST("/api/Vehicle/UploadVehSpearWheelPictureFile")
+    suspend fun UploadVehSpearWheelPictureFile(
+        @Query("supervisorId") supervisorId:Int,
+        @Query("driverId") driverId:Int,
+        @Query("date") date:String
+    ):Response<SucessStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehInterierPictureFile")
+    suspend fun UploadVehInterierPictureFile(
+        @Query("supervisorId") supervisorId:Int,
+        @Query("driverId") driverId:Int,
+        @Query("date") date:String
+    ):Response<SucessStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehLoadingInteriorPictureFile")
+    suspend fun UploadVehLoadingInteriorPictureFile(
+        @Query("supervisorId") supervisorId:Int,
+        @Query("driverId") driverId:Int,
+        @Query("date") date:String
+    ):Response<SucessStatusMsgResponse>
+    @POST("/api/Vehicle/UploadVehToolsPictureFile")
+    suspend fun UploadVehToolsPictureFile(
+        @Query("supervisorId") supervisorId:Int,
+        @Query("driverId") driverId:Int,
+        @Query("date") date:String
+    ):Response<SucessStatusMsgResponse>
+
 }

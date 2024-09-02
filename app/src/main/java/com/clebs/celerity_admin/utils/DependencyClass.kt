@@ -1,5 +1,7 @@
 package com.clebs.celerity_admin.utils
 
+import androidx.lifecycle.MutableLiveData
+import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponseItem
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModelItem
 
 object DependencyClass {
@@ -15,4 +17,7 @@ object DependencyClass {
     var addBlueMileage: String? = "0"
     var selectedVehicleLocationName:String = ""
     var crrMileage: Int = 0
+    var requestTypeList =
+        arrayListOf<GetVehicleDamageWorkingStatusResponseItem>()
+    var accidentImagePos:MutableLiveData<Int> = MutableLiveData()
 }

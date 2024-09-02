@@ -216,7 +216,7 @@ class BackgroundUploadWorker(
                     val crrPointer = prefs.accidentImagePos
                     val partBody = createMultipartPart(
                       prefs.getSelectedFileUris()[crrPointer],
-                        "uploadVehOSMDefectChkFile",
+                        "uploadVehicleAccidentImage",
                         appContext
                     )
                     prefs.isAccidentImageUploading = true
@@ -229,6 +229,42 @@ class BackgroundUploadWorker(
                     }
                     prefs.isAccidentImageUploading = false
                     prefs.accidentImagePos = crrPointer+1
+
+                }
+            }else if(prefs.backgroundUploadCase==3&&!prefs.spareWheelUri.isNullOrEmpty()){
+                val response = withContext(Dispatchers.IO){
+                    mainRepo.UploadVehSpearWheelPictureFile(
+                        prefs.clebUserId.toInt(),
+                        prefs.crrDriverId,
+                        dateToday()
+                    )
+                }
+            }
+            else if(prefs.backgroundUploadCase==4&&!prefs.vehicleInteriorPicture.isNullOrEmpty()){
+                val response = withContext(Dispatchers.IO){
+                    mainRepo.UploadVehInterierPictureFile(
+                        prefs.clebUserId.toInt(),
+                        prefs.crrDriverId,
+                        dateToday()
+                    )
+                }
+            }
+            else if(prefs.backgroundUploadCase==5&&prefs.loadingInteriorPicture.isNullOrEmpty()){
+                val response = withContext(Dispatchers.IO){
+                    mainRepo.UploadVehLoadingInteriorPictureFile(
+                        prefs.clebUserId.toInt(),
+                        prefs.crrDriverId,
+                        dateToday()
+                    )
+                }
+            }
+            else if(prefs.backgroundUploadCase==6&&prefs.toolsPicture.isNullOrEmpty()){
+                val response = withContext(Dispatchers.IO){
+                    mainRepo.UploadVehToolsPictureFile(
+                        prefs.clebUserId.toInt(),
+                        prefs.crrDriverId,
+                        dateToday()
+                    )
                 }
             }
         }
