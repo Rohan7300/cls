@@ -234,10 +234,6 @@ class CompleteTaskFragment : Fragment() {
                 (activity as HomeActivity).GetDriversBasicInformation()
                 showDialog()
 
-                viewModel.GetVehicleInfobyDriverId(
-                    Prefs.getInstance(App.instance).clebUserId.toInt(),
-                    currentDate
-                )
                 observers()
                 setVisibiltyLevel()
             }
@@ -444,7 +440,7 @@ class CompleteTaskFragment : Fragment() {
         viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner) {
             if (it != null) {
                 scannedvrn = it.vmRegNo
-                Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
+                //Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
                 if (it.vmId!=null&&Prefs.getInstance(App.instance).vmId==0) {
                     Prefs.getInstance(App.instance).vmId = it.vmId.toInt()
                 }

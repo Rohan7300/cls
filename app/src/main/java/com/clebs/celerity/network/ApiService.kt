@@ -74,6 +74,7 @@ import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
 import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
+import com.clebs.celerity.models.response.GetVehBreakDownInspectionInfobyDriverResponse
 import com.clebs.celerity.models.response.GetVehicleAdvancePaymentAgreementResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -963,5 +964,9 @@ interface ApiService {
         @Query("message") message:String
     ):Response<SimpleStatusMsgResponse>
 
+    @GET("/api/VehAllocHistories/GetVehBreakDownInspectionInfobyDriver/{driverId}")
+    suspend fun GetVehBreakDownInspectionInfobyDriver(
+        @Query("driverId") driverId:Int
+    ):Response<GetVehBreakDownInspectionInfobyDriverResponse>
 }
 

@@ -57,37 +57,21 @@ class InvoicesFragment : Fragment() {
         ).observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
-                it.vmRegNo?.let { it1 ->
-                    prefs.vmRegNo = it.vmRegNo
-                    prefs.thridPartyAcess = it.IsThirdPartyChargeAccessAllowed
-                    if (it.IsThirdPartyChargeAccessAllowed) {
-                        binding.otherinvoices.visibility = View.VISIBLE
-                    } else {
-                        binding.otherinvoices.visibility = View.GONE
-                    }
-
-                    showDialog()
-                    if (prefs.currLocationName.isNotEmpty()) {
-                        binding.headerTop.dxLoc.text = prefs.currLocationName ?: ""
-                    } else if (prefs.workLocationName.isNotEmpty()) {
-                        binding.headerTop.dxLoc.text =
-                            prefs.workLocationName ?: ""
-                    } else {
-                        viewModel.GetVehicleInformation(
-                            Prefs.getInstance(requireContext()).clebUserId.toInt(),
-                            getVRegNo(prefs)
-                        )
-                    }
+                prefs.thridPartyAcess = it.IsThirdPartyChargeAccessAllowed
+                if (it.IsThirdPartyChargeAccessAllowed) {
+                    binding.otherinvoices.visibility = View.VISIBLE
+                } else {
+                    binding.otherinvoices.visibility = View.GONE
                 }
+
+
                 if (it.workinglocation != null) {
                     prefs.workLocationName = it.workinglocation
                 }
                 if (it.currentlocation != null) {
                     prefs.currLocationName = it.currentlocation
                 }
-
-
-                binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+                setDxLoc()
                 binding.headerTop.dxReg.text =
                     getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
@@ -95,12 +79,6 @@ class InvoicesFragment : Fragment() {
                     binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
                 else
                     binding.headerTop.strikedxRegNo.visibility = View.GONE
-
-                if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "")
-                    binding.headerTop.strikedxLoc.visibility = View.VISIBLE
-                else
-                    binding.headerTop.strikedxLoc.visibility = View.GONE
-
             }
         }
     }
@@ -116,32 +94,16 @@ class InvoicesFragment : Fragment() {
         else
             binding.headerTop.strikedxRegNo.visibility = View.GONE
 
-        if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "")
-            binding.headerTop.strikedxLoc.visibility = View.VISIBLE
-        else
-            binding.headerTop.strikedxLoc.visibility = View.GONE
+            setDxLoc()
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             hideDialog()
 
-            if (prefs.currLocationName.isNotEmpty()) {
-                binding.headerTop.dxLoc.text = prefs.currLocationName ?: ""
-            } else if (prefs.workLocationName.isNotEmpty()) {
-                binding.headerTop.dxLoc.text =
-                    prefs.workLocationName ?: ""
-            } else {
-                if (it != null) {
-                    binding.headerTop.dxLoc.text = it.locationName ?: ""
-                }
-            }
             if (binding.headerTop.dxReg.text.isEmpty())
                 binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
             else
                 binding.headerTop.strikedxRegNo.visibility = View.GONE
-            if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "")
-                binding.headerTop.strikedxLoc.visibility = View.VISIBLE
-            else
-                binding.headerTop.strikedxLoc.visibility = View.GONE
+            setDxLoc()
 
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
                 binding.headerTop.anaCarolin.text = name
@@ -150,5 +112,12 @@ class InvoicesFragment : Fragment() {
         }
     }
 
+    private fun setDxLoc() {
+        binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "")
+            binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxLoc.visibility = View.GONE
+    }
 
 }

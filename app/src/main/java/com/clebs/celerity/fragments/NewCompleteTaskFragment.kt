@@ -227,15 +227,15 @@ class NewCompleteTaskFragment : Fragment() {
                 (activity as HomeActivity).GetDriversBasicInformation()
                 showDialog()
 
-                viewModel.GetVehicleInfobyDriverId(
-                    Prefs.getInstance(App.instance).clebUserId.toInt(),
-                    currentDate
-                )
 
                 observers()
             }
         }
 
+        viewModel.GetVehicleInfobyDriverId(
+            Prefs.getInstance(App.instance).clebUserId.toInt(),
+            currentDate
+        )
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.newCompleteTaskFragment)
 
         if (mbinding.startinspection.isVisible) {
@@ -399,7 +399,12 @@ class NewCompleteTaskFragment : Fragment() {
         (activity as HomeActivity).showDialogtwo()
 
         Handler(Looper.getMainLooper()).postDelayed({
-            (activity as HomeActivity).hidedialogtwo()
+            try {
+                (activity as HomeActivity).hidedialogtwo()
+            }catch (_:Exception){
+
+            }
+
             mbinding.mainCompleteTask.visibility = View.VISIBLE
             mbinding.searchLayout.visibility = View.GONE
         }, 5000)
@@ -414,7 +419,7 @@ class NewCompleteTaskFragment : Fragment() {
             mbinding.startinspection.visibility = View.VISIBLE
         }
 
-        if(prefs.isInspectionIDFailedToUpload){
+        if (prefs.isInspectionIDFailedToUpload) {
             prefs.isInspectionIDFailedToUpload = false
             startUploadWithWorkManager(3, prefs, requireContext())
         }
@@ -425,7 +430,6 @@ class NewCompleteTaskFragment : Fragment() {
             mbinding.headerTop.anaCarolin.text = name
         }
 
-        mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
         mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
         mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
@@ -439,10 +443,6 @@ class NewCompleteTaskFragment : Fragment() {
         else
             mbinding.headerTop.strikedxRegNo.visibility = View.GONE
 
-        if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "" || mbinding.headerTop.dxLoc.text == "Not Allocated")
-            mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
-        else
-            mbinding.headerTop.strikedxLoc.visibility = View.GONE
 
         viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -454,38 +454,26 @@ class NewCompleteTaskFragment : Fragment() {
             }
         }
 
+        mbinding.headerTop.dxReg.text =
+            getVRegNo(prefs = Prefs.getInstance(requireContext()))
+        if (mbinding.headerTop.dxReg.text.isEmpty())
+            mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        else
+            mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+
+        setDxLoc()
+
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+            mbinding.headerTop.anaCarolin.text = name
+        }
+
+        mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
             hideDialog()
             if (it != null) {
-                if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
-                    mbinding.headerTop.dxLoc.text =
-                        Prefs.getInstance(requireContext()).currLocationName ?: ""
-                } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
-                    mbinding.headerTop.dxLoc.text =
-                        Prefs.getInstance(requireContext()).workLocationName ?: ""
-                } else {
-                    mbinding.headerTop.dxLoc.text = it.locationName ?: ""
-                }
-
                 if (it.vmId != 0)
                     Prefs.getInstance(requireContext()).vmId = it.vmId
-
-                mbinding.headerTop.dxReg.text =
-                    getVRegNo(prefs = Prefs.getInstance(requireContext()))
-                if (mbinding.headerTop.dxReg.text.isEmpty())
-                    mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
-                else
-                    mbinding.headerTop.strikedxRegNo.visibility = View.GONE
-                if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "")
-                    mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
-                else
-                    mbinding.headerTop.strikedxLoc.visibility = View.GONE
             }
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-                mbinding.headerTop.anaCarolin.text = name
-            }
-
-            mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
         }
 
 
@@ -819,37 +807,43 @@ class NewCompleteTaskFragment : Fragment() {
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
         return try {
-           /* val formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.UK)
-            val start = LocalTime.parse(startTime, formatter)
-            val end = LocalTime.parse(endTime, formatter)*/
+            /* val formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.UK)
+             val start = LocalTime.parse(startTime, formatter)
+             val end = LocalTime.parse(endTime, formatter)*/
 
             val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
             val start = LocalTime.parse(brkStartTime, timeFormatter)
             val end = LocalTime.parse(brkEndTime, timeFormatter)
             if (brkStartTime.isNotEmpty() && brkEndTime.isNotEmpty()) {
-                if(start.isBefore(end))
+                if (start.isBefore(end))
                     true
-                else{
-                    var errorString = "BreakTime CTE-01 : NewCompleteTaskFragment - chkTime\n ElseBlock: Start Time (${startTime}) more than End time ($endTime)"
-                    viewModel.TrackErrorLog(prefs.clebUserId.toInt(),errorString)
-                    Log.d("CTE","Start Time more than end time")
-                    FirebaseCrashlytics.getInstance().log("CheckTimeException Start Time more than end time")
-                    FirebaseCrashlytics.getInstance().recordException(RuntimeException("CTE1: Start Time more than end time"))
+                else {
+                    var errorString =
+                        "BreakTime CTE-01 : NewCompleteTaskFragment - chkTime\n ElseBlock: Start Time (${startTime}) more than End time ($endTime)"
+                    viewModel.TrackErrorLog(prefs.clebUserId.toInt(), errorString)
+                    Log.d("CTE", "Start Time more than end time")
+                    FirebaseCrashlytics.getInstance()
+                        .log("CheckTimeException Start Time more than end time")
+                    FirebaseCrashlytics.getInstance()
+                        .recordException(RuntimeException("CTE1: Start Time more than end time"))
                     false
                 }
             } else {
-                var errorString = "BreakTime CTE-02 : NewCompleteTaskFragment - chkTime\n ElseBlock2: Start Time (${startTime}) OR End Time (${endTime} null"
-                Log.d("CTE","Start Time end time null")
-                viewModel.TrackErrorLog(prefs.clebUserId.toInt(),errorString)
+                var errorString =
+                    "BreakTime CTE-02 : NewCompleteTaskFragment - chkTime\n ElseBlock2: Start Time (${startTime}) OR End Time (${endTime} null"
+                Log.d("CTE", "Start Time end time null")
+                viewModel.TrackErrorLog(prefs.clebUserId.toInt(), errorString)
                 FirebaseCrashlytics.getInstance().log("CheckTimeException Start Time end time null")
-                FirebaseCrashlytics.getInstance().recordException(RuntimeException("CTE2: Start Time end time null"))
+                FirebaseCrashlytics.getInstance()
+                    .recordException(RuntimeException("CTE2: Start Time end time null"))
                 false
             }
         } catch (e: Exception) {
-            var errorString = "BreakTime CTE-03 : NewCompleteTaskFragment - chkTime\n CatchBlock: Start Time (${startTime}) : EndTime (${endTime}\n" +
-                    "$e\n${e.localizedMessage} $e"
-            viewModel.TrackErrorLog(prefs.clebUserId.toInt(),errorString)
-            Log.d("CTE","CheckTimeException3 ${e.localizedMessage} $e")
+            var errorString =
+                "BreakTime CTE-03 : NewCompleteTaskFragment - chkTime\n CatchBlock: Start Time (${startTime}) : EndTime (${endTime}\n" +
+                        "$e\n${e.localizedMessage} $e"
+            viewModel.TrackErrorLog(prefs.clebUserId.toInt(), errorString)
+            Log.d("CTE", "CheckTimeException3 ${e.localizedMessage} $e")
 
             FirebaseCrashlytics.getInstance().log("CheckTimeException3: $e")
             FirebaseCrashlytics.getInstance().recordException(e)
@@ -892,22 +886,22 @@ class NewCompleteTaskFragment : Fragment() {
 
         dialogBinding.edtBreakstart.setOnClickListener {
             b1 = false
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart,1)
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart, 1)
         }
 
         dialogBinding.icBreakstart.setOnClickListener {
             b1 = false
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart,1)
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakstart, 1)
         }
 
         dialogBinding.edtBreakend.setOnClickListener {
             b2 = false
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend,2)
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend, 2)
         }
 
         dialogBinding.icBreakend.setOnClickListener {
             b2 = false
-            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend,2)
+            showTimePickerDialog(requireContext(), dialogBinding.edtBreakend, 2)
         }
 
         dialogBinding.timeTvNext.setOnClickListener {
@@ -1096,18 +1090,18 @@ class NewCompleteTaskFragment : Fragment() {
         }
     }
 
-    fun clientUniqueID(): String {
-        val x = Prefs.getInstance(App.instance).clebUserId.toString()
-        val y = Prefs.getInstance(App.instance).scannedVmRegNo
-        // example string
-        val currentDate = LocalDateTime.now()
-        val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
+    /*    fun clientUniqueID(): String {
+            val x = Prefs.getInstance(App.instance).clebUserId.toString()
+            val y = Prefs.getInstance(App.instance).scannedVmRegNo
+            // example string
+            val currentDate = LocalDateTime.now()
+            val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
 
-        regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
-        inspectionID = regexPattern.toString()
-        return regexPattern.toString()
-        Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
-    }
+            regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
+            inspectionID = regexPattern.toString()
+            return regexPattern.toString()
+            Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
+        }*/
 
 
     private fun visibiltyControlls() {
@@ -1435,5 +1429,11 @@ class NewCompleteTaskFragment : Fragment() {
         }
     }
 
-
+    private fun setDxLoc() {
+        mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "")
+            mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
+        else
+            mbinding.headerTop.strikedxLoc.visibility = View.GONE
+    }
 }

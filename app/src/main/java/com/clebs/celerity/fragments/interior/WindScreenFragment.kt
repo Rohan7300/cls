@@ -56,7 +56,7 @@ class WindScreenFragment : Fragment() {
     var imageEntity = ImageEntity()
     private lateinit var photoFile: File
     var timeStamp = "FileWindDefect"
-    lateinit var bubbleShowCase:BubbleShowCase
+    lateinit var bubbleShowCase: BubbleShowCase
     private lateinit var photoURI: Uri
     lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
@@ -75,7 +75,7 @@ class WindScreenFragment : Fragment() {
 
         val vm_id = arguments?.get("vm_mileage")
         Log.e("vmvmvmv", "onCreateView: $vm_id")
-      bubbleShowCase = BubbleShowCaseBuilder(requireActivity())//Activity instance
+        bubbleShowCase = BubbleShowCaseBuilder(requireActivity())//Activity instance
             .title("Wind screen") //Any title for the bubble view
             .description("Provide Vehicle information") //More detailed description
             .arrowPosition(BubbleShowCase.ArrowPosition.TOP)
@@ -168,55 +168,38 @@ class WindScreenFragment : Fragment() {
                         Prefs.getInstance(requireContext()).workLocationName ?: ""
                 }*/
 
-        mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
-        mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
+        mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
         if (mbinding.headerTop.dxReg.text.isEmpty()) mbinding.headerTop.strikedxRegNo.visibility =
             View.VISIBLE
         else mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+
+        setDxLoc()
 
         if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "" || mbinding.headerTop.dxLoc.text == "Not Allocated") mbinding.headerTop.strikedxLoc.visibility =
             View.VISIBLE
         else mbinding.headerTop.strikedxLoc.visibility = View.GONE
 
-        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-
-            if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
-                mbinding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).currLocationName ?: ""
-            } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
-                mbinding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).workLocationName ?: ""
-            } else {
-                if (it != null) {
-                    mbinding.headerTop.dxLoc.text = it.locationName ?: ""
-                    if (it.vmId != 0) Prefs.getInstance(requireContext()).vmId = it.vmId
-                }
-            }
-            if (it != null) {
-                Prefs.getInstance(requireContext()).vmRegNo = it.vmRegNo ?: ""
-                if (it.vmId != 0) Prefs.getInstance(requireContext()).vmId = it.vmId
-            }
-            mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
-
-            if (mbinding.headerTop.dxReg.text.isEmpty()) mbinding.headerTop.strikedxRegNo.visibility =
-                View.VISIBLE
-            else mbinding.headerTop.strikedxRegNo.visibility = View.GONE
-            if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "" || mbinding.headerTop.dxLoc.text == "Not Allocated") mbinding.headerTop.strikedxLoc.visibility =
-                View.VISIBLE
-            else mbinding.headerTop.strikedxLoc.visibility = View.GONE
-
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-                mbinding.headerTop.anaCarolin.text = name
-            }
-            mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+            mbinding.headerTop.anaCarolin.text = name
         }
+        mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
+        if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
+            mbinding.headerTop.dxLoc.text =
+                Prefs.getInstance(requireContext()).currLocationName ?: ""
+        } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
+            mbinding.headerTop.dxLoc.text =
+                Prefs.getInstance(requireContext()).workLocationName ?: ""
+        } else {
+
+        }
+        setDxLoc()
 
         mbinding.root.setOnKeyListener { v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN) {
                 try {
                     bubbleShowCase.dismiss()
-                }catch (_:Exception){
+                } catch (_: Exception) {
 
                 }
                 true
@@ -246,16 +229,18 @@ class WindScreenFragment : Fragment() {
             edtMil2()
         }
 
-        (activity as HomeActivity).onBackPressedDispatcher.addCallback(requireActivity(), object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                try {
-                    mbinding.headerTop.dxLoc.performClick()
-                    mbinding.lln.performClick()
-                    DependencyProvider.comingFromViewTickets = true
-                } catch (_: Exception) {
+        (activity as HomeActivity).onBackPressedDispatcher.addCallback(
+            requireActivity(),
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    try {
+                        mbinding.headerTop.dxLoc.performClick()
+                        mbinding.lln.performClick()
+                        DependencyProvider.comingFromViewTickets = true
+                    } catch (_: Exception) {
+                    }
                 }
-            }
-        })
+            })
 
         mbinding.run {
             edtDefect.doAfterTextChanged {
@@ -518,8 +503,17 @@ class WindScreenFragment : Fragment() {
         super.onPause()
         try {
             bubbleShowCase.dismiss()
-        }catch (_:Exception){
+        } catch (_: Exception) {
 
         }
     }
+
+    private fun setDxLoc() {
+        mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "" || mbinding.headerTop.dxLoc.text == "Not Allocated")
+            mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
+        else
+            mbinding.headerTop.strikedxLoc.visibility = View.GONE
+    }
+
 }

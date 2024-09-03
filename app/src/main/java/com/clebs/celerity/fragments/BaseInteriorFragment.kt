@@ -59,6 +59,7 @@ abstract class BaseInteriorFragment : Fragment() {
     lateinit var dxLoc: TextView
     lateinit var dxReg: TextView
     lateinit var dxm5: TextView
+    lateinit var strikedxLoc: LinearLayout
     lateinit var ana_carolin: TextView
     lateinit var ivX: ImageView
 
@@ -88,13 +89,13 @@ abstract class BaseInteriorFragment : Fragment() {
         ana_carolin = view.findViewById(R.id.ana_carolin)
         loadingDialog = (activity as HomeActivity).loadingDialog
         val strikedxRegNo = view.findViewById<LinearLayout>(R.id.strikedxRegNo)
-        val strikedxLoc = view.findViewById<LinearLayout>(R.id.strikedxLoc)
+        strikedxLoc = view.findViewById<LinearLayout>(R.id.strikedxLoc)
         imageView = ImageView(requireContext()) as ImageView
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
             .also { name -> ana_carolin.text = name }
         dxm5.text = (activity as HomeActivity).date
 
-        dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        setDxLoc()
         dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
         if (dxReg.text.isEmpty() || dxReg.text == "")
@@ -102,40 +103,17 @@ abstract class BaseInteriorFragment : Fragment() {
         else
             strikedxRegNo.visibility = View.GONE
 
-        if (dxLoc.text.isEmpty() || dxLoc.text == "" || dxLoc.text == "Not Allocated")
-            strikedxLoc.visibility = View.VISIBLE
-        else
-            strikedxLoc.visibility = View.GONE
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-            dxLoc.text = it?.locationName ?: ""
-            dxReg.text = it?.vmRegNo ?: ""
 
+           // dxReg.text = it?.vmRegNo ?: ""
 
-            if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
-                dxLoc.text =
-                    Prefs.getInstance(requireContext()).currLocationName ?: ""
-            } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
-                dxLoc.text =
-                    Prefs.getInstance(requireContext()).workLocationName ?: ""
-            } else {
-                if (it != null) {
-                    dxLoc.text = it.locationName ?: ""
-                }
-            }
             if (it != null) {
-                if (it.vmId != 0&&Prefs.getInstance(requireContext()).vmId == 0)
+                if (it.vmId != 0 && Prefs.getInstance(requireContext()).vmId == 0)
                     Prefs.getInstance(requireContext()).vmId = it.vmId
             }
 
-            if (dxReg.text.isEmpty() || dxReg.text == "")
-                strikedxRegNo.visibility = View.VISIBLE
-            else
-                strikedxRegNo.visibility = View.GONE
-            if (dxLoc.text.isEmpty() || dxLoc.text == "" || dxLoc.text == "Not Allocated")
-                strikedxLoc.visibility = View.VISIBLE
-            else
-                strikedxLoc.visibility = View.GONE
+            setDxLoc()
 
             "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
                 .also { name -> ana_carolin.text = name }
@@ -238,21 +216,21 @@ abstract class BaseInteriorFragment : Fragment() {
         }
 
     private fun showPictureDialog(iv: ImageView) {
-/*        val storageDir =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        if (!storageDir.exists()) {
-            storageDir.mkdirs()
-        }
-        var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val m_intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val uniqueFileName = "Defect_$timeStamp.jpg"
-        Log.d("BaseInterior", "UniqueFileName1 $uniqueFileName")
-        photoFile = File(storageDir, uniqueFileName)
-        photoURI = getFileUri(photoFile, (activity as HomeActivity))
-        m_intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-        */
+        /*        val storageDir =
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                if (!storageDir.exists()) {
+                    storageDir.mkdirs()
+                }
+                var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+                val m_intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                val uniqueFileName = "Defect_$timeStamp.jpg"
+                Log.d("BaseInterior", "UniqueFileName1 $uniqueFileName")
+                photoFile = File(storageDir, uniqueFileName)
+                photoURI = getFileUri(photoFile, (activity as HomeActivity))
+                m_intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                */
         imageView = iv
-        val imageTakerActivityIntent  =Intent(requireContext(),ImageTakerActivity::class.java)
+        val imageTakerActivityIntent = Intent(requireContext(), ImageTakerActivity::class.java)
         resultLauncher.launch(imageTakerActivityIntent)
     }
 
@@ -261,7 +239,7 @@ abstract class BaseInteriorFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 try {
                     val data = result.data
-                    if(data!=null){
+                    if (data != null) {
                         val outputUri = data.getStringExtra("outputUri")
                         if (outputUri != null) {
                             photoURI = outputUri.toUri()
@@ -491,5 +469,13 @@ abstract class BaseInteriorFragment : Fragment() {
                 .highlightMode(BubbleShowCase.HighlightMode.VIEW_SURFACE) //View to point out
                 .show()
         }
+    }
+
+    private fun setDxLoc() {
+        dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        if (dxLoc.text.isEmpty() || dxLoc.text == "")
+            strikedxLoc.visibility = View.VISIBLE
+        else
+            strikedxLoc.visibility = View.GONE
     }
 }

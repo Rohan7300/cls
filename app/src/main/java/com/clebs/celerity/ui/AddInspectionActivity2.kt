@@ -354,7 +354,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             if (it != null) {
                 viewModel.GetVehicleImageUploadInfo(
                     prefs.clebUserId.toInt(),
-                    prefs.baseVmID.toInt(),
+                    prefs.vmId.toInt(),
                     getCurrentDateTime()
                 )
             }

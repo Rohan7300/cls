@@ -218,12 +218,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 osData.isIni = true
             }
         }
-
-        // create menu items;
-
-        // create menu items;
-
-
         cqSDKInitializer()
         clebuserID = prefs.clebUserId.toInt()
         val navHostFragment =
@@ -258,8 +252,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
             observers()
             viewModel.GetNotificationListByUserId(prefs.clebUserId.toInt())
-            GetDriversBasicInformation()
-            getscannednumbervehicleinfo()
+
+            getScannedNumberVehicleInfo()
             if (ninetydaysBoolean?.equals(true) == true) {
                 showAlertChangePasword90dys()
             }
@@ -1152,18 +1146,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 if (it.workingLocationId != null) prefs.workLocationId = it.workingLocationId
                 if (it.currentLocationId != null) prefs.currLocationId = it.currentLocationId
                 try {
-                    it.vmRegNo?.let { it1 ->
-                        prefs.vmRegNo = it1
-                    }
                     viewModel.GetVehicleInformation(
-                        prefs.clebUserId.toInt(), getVRegNo(prefs)
+                        prefs.clebUserId.toInt(), prefs.vmId.toDouble()
                     )
                     if (it.currentlocation != null) prefs.currLocationName = it.currentlocation
                     if (it.workinglocation != null) prefs.workLocationName = it.workinglocation
                     prefs.lmid = it.lmID
                     lmId = it.lmID
 
-                    if (it.vmID != null) prefs.baseVmID = it.vmID.toString()
                 } catch (e: Exception) {
                     Log.d("sds", e.toString())
                 }
@@ -1274,7 +1264,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         isChangesSaved = true
     }
 
-    fun getscannednumbervehicleinfo() {
+    private fun getScannedNumberVehicleInfo() {
         viewModel.GetVehicleInfobyDriverId(
             Prefs.getInstance(App.instance).clebUserId.toInt(), currentDate
         )
@@ -1285,6 +1275,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()
                 }
             }
+            GetDriversBasicInformation()
         }
     }
 

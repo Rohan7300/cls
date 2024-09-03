@@ -18,7 +18,6 @@ import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.dialogs.NoInternetDialog
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentDateTime
-import com.clebs.celerity.utils.getVRegNo
 import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.showErrorDialog
 import com.clebs.celerity.utils.startUploadWithWorkManager
@@ -147,7 +146,7 @@ class SpareWheelFragment : BaseInteriorFragment() {
     }
 
     override fun saveNnext() {
-        var userId = Prefs.getInstance(requireContext()).clebUserId.toInt()
+        val userId = Prefs.getInstance(requireContext()).clebUserId.toInt()
         if (isNetworkActive) {
             showDialog()
             if (defectView) {
@@ -258,12 +257,12 @@ class SpareWheelFragment : BaseInteriorFragment() {
                     if (prefs.scannedVmRegNo.isNotEmpty() && !secondTry) {
                         showDialog()
                         secondTry = true
-                        viewModel.GetVehicleInformation(prefs.clebUserId.toInt(), getVRegNo(prefs))
+                        viewModel.GetVehicleInformation(prefs.clebUserId.toInt(), Prefs.getInstance(App.instance).vmId.toDouble() )
                     }
                 }
             }
 
-            viewModel.GetVehicleInformation(prefs.clebUserId.toInt(), getVRegNo(prefs))
+            viewModel.GetVehicleInformation(prefs.clebUserId.toInt(), prefs.vmId.toDouble())
             viewModel.SaveVehDefectSheetResponseLiveData.observe(viewLifecycleOwner) {
                 hideDialog()
                 if (it != null) {

@@ -51,6 +51,7 @@ class HomeFragment : Fragment() {
             hideDialog()
             if (it != null) {
                 mbinding.llmainHome.alpha=1f
+                mbinding.marianIonu.text = "${it.firstName} ${it.lastName}"
                 if (it.currentlocation != null) {
                     mbinding.location.text = it.currentlocation
                     mbinding.away.text = it.currentlocation
@@ -70,10 +71,6 @@ class HomeFragment : Fragment() {
                 mbinding.truckNumber.text = it.vmRegNo
                 mbinding.ticketNumber.text = it.userID.toString()
             }
-        }
-
-        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-            hideDialog()
         }
 
         BubbleShowCaseBuilder(requireActivity()) //Activity instance

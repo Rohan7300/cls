@@ -139,7 +139,6 @@ class UpdateOnRoadHoursFragment : Fragment() {
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
             binding.headerTop.anaCarolin.text = name
         }
-        binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
         binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
 
@@ -147,52 +146,27 @@ class UpdateOnRoadHoursFragment : Fragment() {
             binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
         else
             binding.headerTop.strikedxRegNo.visibility = View.GONE
-        if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
-            binding.headerTop.strikedxLoc.visibility = View.VISIBLE
-        else
-            binding.headerTop.strikedxLoc.visibility = View.GONE
         binding.headerTop.dxm5.text = (activity as HomeActivity).date
 
-        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
-            if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
-                binding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).currLocationName ?: ""
-            } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
-                binding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).workLocationName ?: ""
-            } else {
-                if (it != null) {
-                    binding.headerTop.dxLoc.text = it.locationName ?: ""
-                }
-            }
 
-            if (it != null) {
-                prefs.vmRegNo = it.vmRegNo ?: ""
-                if (it.vmId != 0)
-                    Prefs.getInstance(requireContext()).vmId = it.vmId
-                if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
-                    binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
-                else
-                    binding.headerTop.strikedxRegNo.visibility = View.GONE
-                if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
-                    binding.headerTop.strikedxLoc.visibility = View.VISIBLE
-                else
-                    binding.headerTop.strikedxLoc.visibility = View.GONE
-            }
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-                binding.headerTop.anaCarolin.text = name
-            }
-            binding.headerTop.dxm5.text = (activity as HomeActivity).date
+
+        if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
+            binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxRegNo.visibility = View.GONE
+        setDxLoc()
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+            binding.headerTop.anaCarolin.text = name
         }
+        binding.headerTop.dxm5.text = (activity as HomeActivity).date
         inputListeners()
         viewModel.GetDailyWorkInfoById(prefs.clebUserId.toInt())
         binding.onRoadHoursSave.setOnClickListener {
             parcelsDelivered = binding.edtParcels.text.toString()
             totalMileage = binding.edtMileage.text.toString()
-            numberbroghtbac=binding.parcelsBroughtBack.text.toString()
-            if (numberbroghtbac.isEmpty()){
-                numberbroghtbac="0"
+            numberbroghtbac = binding.parcelsBroughtBack.text.toString()
+            if (numberbroghtbac.isEmpty()) {
+                numberbroghtbac = "0"
             }
             if (parcelsDelivered.isEmpty())
                 parcelsDelivered = "0"
@@ -289,20 +263,8 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 Prefs.getInstance(App.instance).clebUserId.toDouble()
             ).observe(viewLifecycleOwner) {
                 if (it != null) {
-                    if (it.vmID != null && prefs.vmId == 0)
-                        prefs.baseVmID = it.vmID.toString()
-                    it.vmRegNo?.let { it1 ->
-                        prefs.vmRegNo = it1
-                        viewModel.GetVehicleInformation(
-                            Prefs.getInstance(requireContext()).clebUserId.toInt(),
-                            getVRegNo(prefs)
-                        )
-                    }
                     prefs.workLocationName = it.workinglocation
                     prefs.currLocationName = it.currentlocation
-
-                    binding.headerTop.dxLoc.text =
-                        getLoc(prefs = Prefs.getInstance(requireContext()))
                     binding.headerTop.dxReg.text =
                         getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
@@ -310,10 +272,8 @@ class UpdateOnRoadHoursFragment : Fragment() {
                         binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
                     else
                         binding.headerTop.strikedxRegNo.visibility = View.GONE
-                    if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
-                        binding.headerTop.strikedxLoc.visibility = View.VISIBLE
-                    else
-                        binding.headerTop.strikedxLoc.visibility = View.GONE
+
+                    setDxLoc()
                 }
             }
 
@@ -413,5 +373,13 @@ class UpdateOnRoadHoursFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun setDxLoc() {
+        binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "")
+            binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxLoc.visibility = View.GONE
     }
 }

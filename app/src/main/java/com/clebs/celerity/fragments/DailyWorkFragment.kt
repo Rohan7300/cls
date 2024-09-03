@@ -613,6 +613,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
             Prefs.getInstance(App.instance).clebUserId.toDouble(), vrn
         ).observe(requireActivity(), Observer {
             if (it != null) {
+                Prefs.getInstance(App.instance).vmId = it.vmId
                 Prefs.getInstance(App.instance)
                     .save("vehicleLastMillage", it.vehicleLastMillage.toString())
                 mbinding.rectange.visibility = View.GONE
@@ -654,10 +655,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                     loadingDialog.dismiss()
                 }
             }
-
         })
-
-
     }
 
     fun showAlert() {

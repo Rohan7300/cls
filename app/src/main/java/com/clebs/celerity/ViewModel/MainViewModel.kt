@@ -270,7 +270,7 @@ class MainViewModel(
         val responseLiveData = MutableLiveData<GetVechileInformationResponse?>()
 
         viewModelScope.launch {
-            val response = repo.getVehicleinformation(userID, 0.0, vechileRegistrationNo,false)
+            val response = repo.getVehicleinformation(userID, 0.0, vechileRegistrationNo,true)
             if (response.failed)
                 responseLiveData.postValue(null)
             if (!response.isSuccessful)

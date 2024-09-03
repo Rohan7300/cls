@@ -115,7 +115,7 @@ class OnRoadHoursFragment : Fragment() {
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
             binding.headerTop.anaCarolin.text = name
         }
-        binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+
         binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
         if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
@@ -123,48 +123,42 @@ class OnRoadHoursFragment : Fragment() {
         else
             binding.headerTop.strikedxRegNo.visibility = View.GONE
 
-        if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
-            binding.headerTop.strikedxLoc.visibility = View.VISIBLE
-        else
-            binding.headerTop.strikedxLoc.visibility = View.GONE
+setDxLoc()
         binding.headerTop.dxm5.text = (activity as HomeActivity).date
 
-        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-            loadingDialog.cancel()
-            if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
-                binding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).currLocationName ?: ""
-            } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
-                binding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).workLocationName ?: ""
-            } else {
-                if (it != null) {
-                    binding.headerTop.dxLoc.text = it.locationName ?: ""
-                }
+/*        if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
+            binding.headerTop.dxLoc.text =
+                Prefs.getInstance(requireContext()).currLocationName ?: ""
+        } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
+            binding.headerTop.dxLoc.text =
+                Prefs.getInstance(requireContext()).workLocationName ?: ""
+        } else {
+            try {
+                viewModel.GetVehicleInformation(
+                    prefs.clebUserId.toInt(),
+                    prefs.vmId.toDouble()
+                )
+            } catch (e: Exception) {
+                Log.e("GetVehicleInformation Exception", "$e")
             }
-            if (it != null) {
-                prefs.vmRegNo = it.vmRegNo ?: ""
-            }
+        }*/
 
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-                binding.headerTop.anaCarolin.text = name
-            }
-            binding.headerTop.dxm5.text = (activity as HomeActivity).date
-            binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
-            binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
-
-
-            if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
-                binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
-            else
-                binding.headerTop.strikedxRegNo.visibility = View.GONE
-
-            if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "" || binding.headerTop.dxLoc.text == "Not Allocated")
-                binding.headerTop.strikedxLoc.visibility = View.VISIBLE
-            else
-                binding.headerTop.strikedxLoc.visibility = View.GONE
-            binding.headerTop.dxm5.text = (activity as HomeActivity).date
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+            binding.headerTop.anaCarolin.text = name
         }
+        binding.headerTop.dxm5.text = (activity as HomeActivity).date
+        binding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
+
+
+        if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
+            binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxRegNo.visibility = View.GONE
+
+      setDxLoc()
+        binding.headerTop.dxm5.text = (activity as HomeActivity).date
+
+
         inputListeners()
         viewModel.GetDailyWorkInfoById(prefs.clebUserId.toInt())
         binding.cancel.setOnClickListener {
@@ -252,11 +246,14 @@ class OnRoadHoursFragment : Fragment() {
 
     private fun vehicleInfoSection() {
         if (prefs.getLocationID() == 0) {
+            viewModel.GetVehicleInformation(
+                prefs.clebUserId.toInt(),
+                prefs.vmId.toDouble()
+            )
             viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
                 if (it != null) {
                     prefs.saveLocationID(it.vmLocId)
                     locID = it.vmLocId
-
                     locationSection()
                 }
             }
@@ -266,23 +263,10 @@ class OnRoadHoursFragment : Fragment() {
                 if (it != null) {
                     if (it.vmID != null && prefs.vmId == 0)
                         prefs.vmId = it.vmID
-                    if (it.vmRegNo != null) {
-                        prefs.vmRegNo = it.vmRegNo!!
-
                         if (it.workingLocationId != null)
                             prefs.workLocationId = it.workingLocationId
                         if (it.currentLocationId != null)
                             prefs.currLocationId = it.currentLocationId
-
-                        try {
-                            viewModel.GetVehicleInformation(
-                                prefs.clebUserId.toInt(),
-                                getVRegNo(prefs)
-                            )
-                        } catch (e: Exception) {
-                            Log.e("GetVehicleInformation Exception", "$e")
-                        }
-                    }
                 }
             }
             /*
@@ -413,5 +397,13 @@ class OnRoadHoursFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun setDxLoc() {
+        binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "")
+            binding.headerTop.strikedxLoc.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxLoc.visibility = View.GONE
     }
 }

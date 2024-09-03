@@ -49,7 +49,9 @@ class VechileMileageFragment : Fragment() {
             append("${Prefs.getInstance(App.instance).vehicleLastMileage} ")
             append("Miles")
         }
-        mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+
+        setDxLoc()
+
         mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
@@ -61,10 +63,7 @@ class VechileMileageFragment : Fragment() {
         else
             mbinding.headerTop.strikedxRegNo.visibility = View.GONE
 
-        if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text==""||mbinding.headerTop.dxLoc.text=="Not Allocated")
-            mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
-        else
-            mbinding.headerTop.strikedxLoc.visibility = View.GONE
+
 
         viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) { it ->
             it?.let {
@@ -75,30 +74,14 @@ class VechileMileageFragment : Fragment() {
                     append("${it.vehicleLastMillage} ")
                     append("Miles")
                 }
+                setDxLoc()
                 mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
-            }
-
-            if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
-                mbinding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).currLocationName ?: ""
-            } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
-                mbinding.headerTop.dxLoc.text =
-                    Prefs.getInstance(requireContext()).workLocationName ?: ""
-            } else {
-                if (it != null) {
-                    mbinding.headerTop.dxLoc.text = it.locationName ?: ""
-                }
             }
 
             if(mbinding.headerTop.dxReg.text.isEmpty()||mbinding.headerTop.dxReg.text=="")
                 mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
             else
                 mbinding.headerTop.strikedxRegNo.visibility = View.GONE
-            if(mbinding.headerTop.dxLoc.text.isEmpty()||mbinding.headerTop.dxLoc.text==""||mbinding.headerTop.dxLoc.text=="Not Allocated")
-                mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
-            else
-                mbinding.headerTop.strikedxLoc.visibility = View.GONE
-
         }
 
         mbinding.edtMilvm.doAfterTextChanged { edtMilText ->
@@ -136,5 +119,13 @@ class VechileMileageFragment : Fragment() {
             bundle.putString("vm_mileage",mbinding.edtMilvm.text.toString())
             navigateTo(R.id.windScreenFragment,requireContext(),findNavController())
         }
+    }
+
+    private fun setDxLoc() {
+        mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "")
+            mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
+        else
+            mbinding.headerTop.strikedxLoc.visibility = View.GONE
     }
 }
