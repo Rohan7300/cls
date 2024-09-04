@@ -79,6 +79,7 @@ import com.clebs.celerity.utils.isVersionNewer
 import com.clebs.celerity.utils.logOSEntity
 import com.clebs.celerity.utils.parseToInt
 import com.clebs.celerity.utils.showBirthdayCard
+import com.clebs.celerity.utils.showBreakDownDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.showUpdateDialog
 import com.clebs.celerity.utils.startUploadWithWorkManager
@@ -308,21 +309,29 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.WeeklyRotaExistForDAApproval(Prefs.getInstance(this@HomeActivity).clebUserId.toInt())
             viewModel.liveDataDeductionAgreement.observe(this) {
                 if (it != null) {
-                    if(!handlingDeductionNotification){
-                        val intent = Intent(this@HomeActivity, DeductionAgreementActivity::class.java)
+                    if (!handlingDeductionNotification) {
+                        val intent =
+                            Intent(this@HomeActivity, DeductionAgreementActivity::class.java)
                         intent.putExtra("actionID", it.DaDedAggrId)
                         intent.putExtra("notificationID", it.NotificationId)
                         startActivity(intent)
                     }
                 } else {
+                    viewModel.GetVehBreakDownInspectionInfobyDriver(prefs.clebUserId.toInt())
+                }
+            }
 
+            viewModel.liveDataVehBreakDownInspectionInfobyDriverResponse.observe(this){
+                if(it!=null){
+                    /*if(it.size>0)
+                    showBreakDownDialog(fragmentManager)*/
                 }
             }
 
             viewModel.liveDataWeeklyRotaExistForDAApproval.observe(this) {
                 if (it != null) {
                     it.Data[0].notNull { itx ->
-                        if(!handlingRotaNotification){
+                        if (!handlingRotaNotification) {
                             val intent =
                                 Intent(this@HomeActivity, WeeklyRotaApprovalActivity::class.java)
                             intent.putExtra("actionID", itx.LrnId)
@@ -843,19 +852,19 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         "Your CLS Invoice is available for review."
                     )
                 } else if (actionToPerform == "Weekly Location Rota" || actionToPerform == "Weekly Rota Approval" || actionToPerform == "WeeklyRotaApproval") {
-                    if(!handlingRotaNotification)
-                    weeklyLocationRota(
-                        this, parseToInt(notificationID), parseToInt(actionID)
-                    )
+                    if (!handlingRotaNotification)
+                        weeklyLocationRota(
+                            this, parseToInt(notificationID), parseToInt(actionID)
+                        )
                 } else if (actionToPerform == "Expired Document" || actionToPerform == "ExpiredDocuments") {
-                    if(!handlingExpiredDialogNotification)
-                    expiredDocuments(
-                        getMainVM(this),
-                        this,
-                        this,
-                        supportFragmentManager,
-                        parseToInt(notificationID)
-                    )
+                    if (!handlingExpiredDialogNotification)
+                        expiredDocuments(
+                            getMainVM(this),
+                            this,
+                            this,
+                            supportFragmentManager,
+                            parseToInt(notificationID)
+                        )
                 } else if (actionToPerform.equals("Vehicle Advance Payment Aggrement") || actionToPerform.equals(
                         "Vehicle Advance Payment Agreement"
                     )
@@ -1193,11 +1202,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     Prefs.getInstance(applicationContext).days = "0"
                 }
 
-/*                if (!it.IsVehicleInspectionDone) {
-                    if (prefs.isInspectionDoneToday()) SaveVehicleInspection(viewModel)
-                } else {
-                    prefs.updateInspectionStatus(true)
-                }*/
+                /*                if (!it.IsVehicleInspectionDone) {
+                                    if (prefs.isInspectionDoneToday()) SaveVehicleInspection(viewModel)
+                                } else {
+                                    prefs.updateInspectionStatus(true)
+                                }*/
             }
         })
 

@@ -966,7 +966,7 @@ interface ApiService {
 
     @GET("/api/VehAllocHistories/GetVehBreakDownInspectionInfobyDriver/{driverId}")
     suspend fun GetVehBreakDownInspectionInfobyDriver(
-        @Query("driverId") driverId:Int
+        @Path("driverId") driverId:Int
     ):Response<GetVehBreakDownInspectionInfobyDriverResponse>
 }
 
