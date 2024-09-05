@@ -308,8 +308,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.WeeklyRotaExistForDAApproval(Prefs.getInstance(this@HomeActivity).clebUserId.toInt())
             viewModel.liveDataDeductionAgreement.observe(this) {
                 if (it != null) {
-                    if(!handlingDeductionNotification){
-                        val intent = Intent(this@HomeActivity, DeductionAgreementActivity::class.java)
+                    if (!handlingDeductionNotification) {
+                        val intent =
+                            Intent(this@HomeActivity, DeductionAgreementActivity::class.java)
                         intent.putExtra("actionID", it.DaDedAggrId)
                         intent.putExtra("notificationID", it.NotificationId)
                         startActivity(intent)
@@ -322,7 +323,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.liveDataWeeklyRotaExistForDAApproval.observe(this) {
                 if (it != null) {
                     it.Data[0].notNull { itx ->
-                        if(!handlingRotaNotification){
+                        if (!handlingRotaNotification) {
                             val intent =
                                 Intent(this@HomeActivity, WeeklyRotaApprovalActivity::class.java)
                             intent.putExtra("actionID", itx.LrnId)
@@ -843,19 +844,19 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         "Your CLS Invoice is available for review."
                     )
                 } else if (actionToPerform == "Weekly Location Rota" || actionToPerform == "Weekly Rota Approval" || actionToPerform == "WeeklyRotaApproval") {
-                    if(!handlingRotaNotification)
-                    weeklyLocationRota(
-                        this, parseToInt(notificationID), parseToInt(actionID)
-                    )
+                    if (!handlingRotaNotification)
+                        weeklyLocationRota(
+                            this, parseToInt(notificationID), parseToInt(actionID)
+                        )
                 } else if (actionToPerform == "Expired Document" || actionToPerform == "ExpiredDocuments") {
-                    if(!handlingExpiredDialogNotification)
-                    expiredDocuments(
-                        getMainVM(this),
-                        this,
-                        this,
-                        supportFragmentManager,
-                        parseToInt(notificationID)
-                    )
+                    if (!handlingExpiredDialogNotification)
+                        expiredDocuments(
+                            getMainVM(this),
+                            this,
+                            this,
+                            supportFragmentManager,
+                            parseToInt(notificationID)
+                        )
                 } else if (actionToPerform.equals("Vehicle Advance Payment Aggrement") || actionToPerform.equals(
                         "Vehicle Advance Payment Agreement"
                     )
@@ -889,7 +890,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                     navController.navigate(R.id.notifficationsFragment)
                                     return*/
                 return
-            } else if (destinationFragment == "CompleteTask") {
+            }
+            else if (destinationFragment == "CompleteTask") {
                 navController.navigate(R.id.newCompleteTaskFragment)
             } else if (destinationFragment == "ThirdPartyAcess") {
                 try {
@@ -1048,7 +1050,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         bttwo.setOnClickListener {
-
+            oSyncViewModel
             val intent = Intent(this, LoginActivity::class.java)
             intent.putExtra("logout", "0")
             intent.putExtra("downloadCQ", Prefs.getInstance(App.instance).isFirst)
@@ -1193,11 +1195,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     Prefs.getInstance(applicationContext).days = "0"
                 }
 
-/*                if (!it.IsVehicleInspectionDone) {
-                    if (prefs.isInspectionDoneToday()) SaveVehicleInspection(viewModel)
-                } else {
-                    prefs.updateInspectionStatus(true)
-                }*/
+                /*                if (!it.IsVehicleInspectionDone) {
+                                    if (prefs.isInspectionDoneToday()) SaveVehicleInspection(viewModel)
+                                } else {
+                                    prefs.updateInspectionStatus(true)
+                                }*/
             }
         })
 

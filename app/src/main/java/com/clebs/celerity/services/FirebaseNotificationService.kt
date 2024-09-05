@@ -50,15 +50,15 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         Log.d(TAG, "FCMMessage Data6 ${message.sentTime} ")
         val title = message.notification?.title ?: "Notification Title"
         val messageBody = message.notification?.body ?: "Notification Message"
-        val actionToperform = message.data["alertType"] ?: "undefined"
+        val actionToperform = message.data["AlertType"] ?: "undefined"
         var actionID = "0.0"
         var tokenUrl = ""
         var notificationId = "0"
-        if (message.data["actionId"] != null) {
-            actionID = message.data["actionId"].toString()
+        if (message.data["ActionId"] != null) {
+            actionID = message.data["ActionId"].toString()
         }
-        if (message.data["url"] != null) {
-            tokenUrl = message.data["url"].toString()
+        if (message.data["Url"] != null) {
+            tokenUrl = message.data["Url"].toString()
         }
         if (message.data["notificationId"] != null) {
             notificationId = message.data["notificationId"].toString()
@@ -83,11 +83,11 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         isNotificationShowing = false
         Log.d("TAG", "NewIntent : ${intent!!.extras}")
         if (intent != null) {
-            val messageBody = intent.extras!!.getString("body") ?: "Notification Message"
-            val title = intent.extras!!.getString("title") ?: "Notification Title"
-            val actionID = intent.extras!!.getString("actionId") ?: "0.0"
-            val actionToperform = intent.extras!!.getString("alertType") ?: "undefined"
-            val tokenUrl = intent.extras!!.getString("gcm.notification.url") ?: "undefined"
+            val messageBody = intent.extras!!.getString("gcm.notification.body") ?: "Notification Message"
+            val title = intent.extras!!.getString("gcm.notification.title") ?: "Notification Title"
+            val actionID = intent.extras!!.getString("ActionId") ?: "0.0"
+            val actionToperform = intent.extras!!.getString("AlertType") ?: "undefined"
+            val tokenUrl = intent.extras!!.getString("Url") ?: "undefined"
             val notificationId = intent.extras!!.getString("notificationId") ?: "0"
 
             Log.d(TAG, "message : $messageBody")
@@ -245,7 +245,10 @@ class FirebaseNotificationService : FirebaseMessagingService() {
             "ThirdPartyAccessRequestNotification" -> remoteViews.setTextViewText(
                 R.id.title,
                 "Third Party Access Request Notification"
-            )
+            ) else ->remoteViews.setTextViewText(
+            R.id.title,
+            title
+        )
         }
 //        remoteViews.setTextViewText(R.id.title, title)
         remoteViews.setTextViewText(R.id.descriptionXX, message)

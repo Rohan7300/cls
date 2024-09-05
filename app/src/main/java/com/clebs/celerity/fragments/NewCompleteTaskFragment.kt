@@ -287,6 +287,7 @@ class NewCompleteTaskFragment : Fragment() {
         }
         mbinding.startinspection.setOnClickListener {
             val intent = Intent(requireContext(), AddInspectionActivity2::class.java)
+//            osData.isClockedInToday = false
             startActivity(intent)
         }
         mbinding.ivOilLevel.setOnClickListener {
@@ -501,7 +502,7 @@ class NewCompleteTaskFragment : Fragment() {
             if (it != null) {
                 if (it.ClockedInTime != null) {
                     clockedinTime = it.ClockedInTime.toString()
-                    mbinding.tvClockedIN.text = it.ClockedInTime.toString()
+                    mbinding.tvClockedINX.text = it.ClockedInTime.toString()
                     isClockedIn = true
                     osData.isClockedInToday = true
 

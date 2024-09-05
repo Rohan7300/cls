@@ -157,7 +157,7 @@
                                 android:textSize="14sp" />
 
                             <TextView
-                                android:id="@+id/tv_ClockedIN"
+                                android:id="@+id/tv_ClockedINX"
                                 android:layout_width="wrap_content"
                                 android:layout_height="25dp"
                                 android:layout_alignParentRight="true"

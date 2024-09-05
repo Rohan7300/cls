@@ -71,6 +71,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -84,6 +85,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
     private lateinit var loadingDialog: LoadingDialog
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var outputDirectory: File
 
     private var isFrontCamera = false
 
@@ -268,7 +270,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 //                    Manifest.permission.READ_MEDIA_VIDEO,
 //                    Manifest.permission.READ_MEDIA_AUDIO,
 
-                    ).onAccepted {
+                ).onAccepted {
                     mbinding.rectange.visibility = View.VISIBLE
                     mbinding.ivTakePhoto.visibility = View.VISIBLE
                     mbinding.rectangle4.visibility = View.GONE
@@ -293,7 +295,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 //                    Manifest.permission.READ_EXTERNAL_STORAGE,
 //                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
 
-                    ).onAccepted {
+                ).onAccepted {
                     mbinding.rectange.visibility = View.VISIBLE
                     mbinding.ivTakePhoto.visibility = View.VISIBLE
                     mbinding.rectangle4.visibility = View.GONE
@@ -437,7 +439,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 //    }
 
     @SuppressLint("NewApi")
-    private fun takePhoto() = try {
+    private fun takePhoto() {
 //        mbinding.pb.visibility = View.VISIBLE
         try {
             loadingDialog.show()
@@ -461,6 +463,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
             }
         }
+
         val outputOptions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
             ImageCapture.OutputFileOptions
                 .Builder(
@@ -468,20 +471,25 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     contentValues
                 ).build()
-        else
+        else {
+            outputDirectory = getOutputDirectory()
+            val file = createFile(
+                outputDirectory,
+                "yyyy-MM-dd-HH-mm-ss-SSS",
+                ".jpg"
+            )
             ImageCapture.OutputFileOptions
-                .Builder(
-                    requireContext().contentResolver,
-                    MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
-                    contentValues
-                ).build()
+                .Builder(file).build()
+        }
+
 
         imageCapture.takePicture(
             outputOptions, ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
                     Log.d(TAG, "Photo capture failed")
-                    println("Photo capture failed")
+                    println("Photo capture failed $exc\n ${exc.stackTrace}\n ${exc.localizedMessage}")
+                    showToast("Photo capture failed", requireContext())
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
@@ -494,13 +502,33 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 }
             }
         )
-    } catch (e: Exception) {
-        if (loadingDialog.isShowing) {
-            loadingDialog.dismiss()
-        }
-        Log.d(TAG, "Photo capture failed: ${e.message}")
-        println("Photo capture failed: ${e.message}")
     }
+
+    fun createFile(baseFolder: File, format: String, extension: String) =
+        File(
+            baseFolder, SimpleDateFormat(format, Locale.US)
+                .format(System.currentTimeMillis()) + extension
+        )
+
+    private fun getOutputDirectory(): File {
+        val mediaDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            requireActivity().externalMediaDirs.firstOrNull()?.let {
+                File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+            }
+        } else {
+            requireActivity().getExternalFilesDir(null)?.let {
+                File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+            }
+        }
+        return if (mediaDir != null && mediaDir.exists()) mediaDir else requireActivity().filesDir
+    }
+    /*  } catch (e: Exception) {
+          if (loadingDialog.isShowing) {
+              loadingDialog.dismiss()
+          }
+          Log.d(TAG, "Photo capture failed: ${e.message}")
+          println("Photo capture failed: ${e.message}")
+      }*/
 
     fun getImageBitmapFromUri(context: Context, uri: Uri): Bitmap? {
         var bitmap: Bitmap? = null
@@ -540,19 +568,21 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 )
                 try {
                     val response = apiService.getNumberPlateDetails(
-                            token = "TOKEN $API_TOKEN",
-                            imagePart = imageFilePart
-                        )
+                        token = "TOKEN $API_TOKEN",
+                        imagePart = imageFilePart
+                    )
                     if (response.isSuccessful && response.body() != null) {
                         if ((response.body()?.results?.size ?: 0) > 0) {
                             withContext(Dispatchers.Main) {
 
                                 // Set variables for vehicle data.
                                 vrn = response.body()?.results?.get(0)?.plate.toString().uppercase()
-                                countryCode = response.body()?.results?.get(0)?.region?.code.toString()
-                                    .uppercase()
-                                vehicleType = response.body()?.results?.get(0)?.vehicle?.type.toString()
-                                    .uppercase()
+                                countryCode =
+                                    response.body()?.results?.get(0)?.region?.code.toString()
+                                        .uppercase()
+                                vehicleType =
+                                    response.body()?.results?.get(0)?.vehicle?.type.toString()
+                                        .uppercase()
 
                                 score = response.body()?.results?.get(0)?.score.toString()
 
@@ -583,13 +613,12 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                                 loadingDialog.dismiss()
                             }
                         }
-                    }
-                    else {
+                    } else {
                         if (loadingDialog.isShowing) {
                             loadingDialog.dismiss()
                         }
                     }
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     loadingDialog.dismiss()
                     showScanErrorDialog(
                         this@DailyWorkFragment,
@@ -598,7 +627,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                         "I/O error, Connection reset by peer",
                         requireContext()
                     )
-                    Log.d("DailyWException","DailyWorkNetworkException $e")
+                    Log.d("DailyWException", "DailyWorkNetworkException $e")
                 }
             }
         }

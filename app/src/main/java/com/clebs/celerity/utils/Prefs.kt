@@ -265,7 +265,7 @@ class Prefs(context: Context) {
         }
     var clebUserId: String
         get() {
-            return sharedPreferences.getString("clebUserId", " ") ?: " "
+            return sharedPreferences.getString("clebUserId", "0") ?: "0"
         }
         set(value) {
             sharedPreferences.edit().putString("clebUserId", value).apply()
