@@ -61,13 +61,13 @@ import java.util.Locale
 class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
 
     private val TAG = "ObjectDetection"
-
+    private lateinit var outputDirectory: File
     private var _fragmentCameraBinding: FragmentCameraBinding? = null
 
     private lateinit var fragmentCameraBinding: FragmentCameraBinding
     private var imageCapture: ImageCapture? = null
 
-    private lateinit var outputDirectory: File
+
     private lateinit var objectDetectorHelper: ObjectDetectorHelper
     private lateinit var bitmapBuffer: Bitmap
     var bitmapBuffer2: Bitmap? = null
@@ -176,8 +176,7 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         contentValues
                     ).build()
-            else
-            {
+            else{
                 outputDirectory = getOutputDirectory()
                 val file = createFile(
                     outputDirectory,
@@ -513,7 +512,6 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
         super.onDestroy()
         objectDetectorHelper.clearObjectDetector()
     }
-
     private fun getOutputDirectory(): File {
         val mediaDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             requireActivity().externalMediaDirs.firstOrNull()?.let {
@@ -531,5 +529,4 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
             baseFolder, SimpleDateFormat(format, Locale.US)
                 .format(System.currentTimeMillis()) + extension
         )
-
 }

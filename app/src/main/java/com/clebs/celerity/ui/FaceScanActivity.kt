@@ -52,7 +52,7 @@ class FaceScanActivity : AppCompatActivity(),ObjectDetectorHelper.DetectorListen
     lateinit var binding: ActivityFaceScanBinding
     private var imageCapture: ImageCapture? = null
 
-    private lateinit var outputDirectory: File
+
     private lateinit var objectDetectorHelper: ObjectDetectorHelper
     lateinit var oSyncViewModel: OSyncViewModel
     private lateinit var bitmapBuffer: Bitmap
@@ -61,6 +61,7 @@ class FaceScanActivity : AppCompatActivity(),ObjectDetectorHelper.DetectorListen
     private var camera: Camera? = null
     private var cameraProvider: ProcessCameraProvider? = null
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var outputDirectory: File
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -113,8 +114,6 @@ class FaceScanActivity : AppCompatActivity(),ObjectDetectorHelper.DetectorListen
                         ImageCapture.OutputFileOptions
                             .Builder(file).build()
                     }
-
-
                     imageCapture.takePicture(
                         outputOptions, ContextCompat.getMainExecutor(this),
                         object : ImageCapture.OnImageSavedCallback {

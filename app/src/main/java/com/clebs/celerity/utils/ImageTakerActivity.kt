@@ -92,8 +92,7 @@ class ImageTakerActivity : AppCompatActivity() {
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     contentValues
                 ).build()
-        else
-        {
+        else{
             outputDirectory = getOutputDirectory()
             val file = createFile(
                 outputDirectory,
@@ -103,8 +102,6 @@ class ImageTakerActivity : AppCompatActivity() {
             ImageCapture.OutputFileOptions
                 .Builder(file).build()
         }
-
-
         imageCapture.takePicture(
             outputOptions, ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
