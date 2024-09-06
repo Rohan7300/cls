@@ -1200,6 +1200,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                 } else {
                                     prefs.updateInspectionStatus(true)
                                 }*/
+                if(it.IsVehicleInspectionDone){
+                    prefs.updateInspectionStatus(true)
+                }
             }
         })
 
