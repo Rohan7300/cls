@@ -9,24 +9,22 @@
         <include
             android:id="@+id/headerTop"
             layout="@layout/loginlayout" />
+
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nest"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/nest"
             android:background="@drawable/background_curve_white"
             android:overScrollMode="never"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                >
+                android:layout_height="match_parent">
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-
                     android:background="#E15F24"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -75,18 +73,18 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_user"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="16dp"
                     android:background="@drawable/shape_edittext"
+                    android:cursorVisible="true"
                     android:fontFamily="@font/poppins"
                     android:hint="Enter your Email/Username"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="10dp"
                     android:singleLine="true"
                     android:textColor="@color/text_color"
-                    android:cursorVisible="true"
                     android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.21"
@@ -98,9 +96,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:textSize="11sp"
                     android:text="Please enter Email/Username"
                     android:textColor="@color/red"
+                    android:textSize="11sp"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="@id/edt_user"
                     app:layout_constraintTop_toBottomOf="@+id/edt_user" />
@@ -120,58 +118,57 @@
                     app:layout_constraintTop_toBottomOf="@id/text_error" />
 
                 <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_pass"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginTop="8dp"
                     android:id="@+id/edtpasslayoutFL"
-                    >
-                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/edtpasslayout"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
-                    app:hintAnimationEnabled="false"
-                    app:hintEnabled="false"
-                    app:expandedHintEnabled="false"
-                    app:boxStrokeColor="#FFF"
-                    app:boxBackgroundColor="#FFF"
-                    >
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_pass">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edt_pass"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/edtpasslayout"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:paddingTop="10dp"
-                        android:background="@drawable/shape_edittext"
-                        android:fontFamily="@font/poppins"
-                        android:hint="@string/enter_password"
-                        android:inputType="textPassword"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:singleLine="true"
-                        android:textColor="@color/text_color"
-                        android:textSize="13sp" />
+                        android:layout_height="wrap_content"
+                        app:boxBackgroundColor="#FFF"
+                        app:boxStrokeColor="#FFF"
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="0dp"
+                        app:expandedHintEnabled="false"
+                        app:hintAnimationEnabled="false"
+                        app:hintEnabled="false">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edt_pass"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:background="@drawable/shape_edittext"
+                            android:fontFamily="@font/poppins"
+                            android:hint="@string/enter_password"
+                            android:inputType="textPassword"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="10dp"
+                            android:singleLine="true"
+                            android:textColor="@color/text_color"
+                            android:textSize="13sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:paddingTop="10dp"
                         android:gravity="right"
-                        >
+                        android:paddingStart="8dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="8dp">
+
                         <ImageView
-                            android:layout_width="30dp"
                             android:id="@+id/passIcon"
+                            android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:padding="5dp"
                             android:src="@drawable/hidden2"
@@ -184,12 +181,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
+                    android:layout_marginEnd="16dp"
                     android:text="Please enter password"
                     android:textColor="@color/red"
                     android:textSize="11sp"
                     android:visibility="gone"
-                    android:layout_marginEnd="16dp"
-                 app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/edtpasslayoutFL" />
 
                 <ProgressBar
@@ -202,31 +199,32 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/text_error_two" />
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textColor="@color/white"
-    android:textSize="15sp"
-    android:id="@+id/bt_login"
-    android:textAllCaps="true"
-    android:backgroundTint="@color/orange"
-    android:layout_margin="60dp"
-    android:padding="10dp"
-    android:background="@drawable/shape_expand"
-    android:text="@string/LOGIN"
-    android:gravity="center_horizontal"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/text_error_two"
-    android:fontFamily="@font/inter_bold"/>
-<!--                <ImageView-->
-<!--                    android:id="@+id/bt_login"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="47dp"-->
-<!--                    android:layout_marginTop="80dp"-->
-<!--                    android:layout_marginBottom="80dp"-->
-<!--                    android:src="@drawable/button"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/text_error_two" />-->
+
+                <TextView
+                    android:id="@+id/bt_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="60dp"
+                    android:background="@drawable/shape_expand"
+                    android:backgroundTint="@color/orange"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center_horizontal"
+                    android:padding="10dp"
+                    android:text="@string/LOGIN"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_error_two" />
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/bt_login"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="47dp"-->
+                <!--                    android:layout_marginTop="80dp"-->
+                <!--                    android:layout_marginBottom="80dp"-->
+                <!--                    android:src="@drawable/button"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                    app:layout_constraintTop_toBottomOf="@id/text_error_two" />-->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>

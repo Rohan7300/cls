@@ -69,6 +69,7 @@ import com.clebs.celerity.models.response.GetRouteLocationInfoResponse
 import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
 import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
+import com.clebs.celerity.models.response.GetVehBreakDownInspectionInfobyDriverResponse
 import com.clebs.celerity.models.response.GetVehicleAdvancePaymentAgreementResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -1771,6 +1772,13 @@ class MainRepo(private val ApiService: ApiService) {
     ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
         return safeApiCall {
             ApiService.TrackErrorLog(userID,message)
+        }
+    }
+    suspend fun GetVehBreakDownInspectionInfobyDriver(
+        userID: Int
+    ):SimpleNetworkResponse<GetVehBreakDownInspectionInfobyDriverResponse>{
+        return safeApiCall {
+            ApiService.GetVehBreakDownInspectionInfobyDriver(userID)
         }
     }
 }

@@ -58,6 +58,7 @@ import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.DialogvehicleadvancepaymentBinding
 import com.clebs.celerity.databinding.TokenExpiredDialogBinding
+import com.clebs.celerity.dialogs.BreakDownDialog
 import com.clebs.celerity.dialogs.ErrorDialog
 import com.clebs.celerity.dialogs.ScanErrorDialog
 import com.clebs.celerity.fragments.DailyWorkFragment
@@ -413,15 +414,15 @@ fun navigateTo(fragmentId: Int, context: Context, navController: NavController) 
 
 fun showToast(msg: String, context: Context) {
     try {
-        showToastX!!.show(context,msg)
+        showToastX!!.show(context, msg)
         //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     } catch (e: Exception) {
         Log.d("ToastException", e.message.toString())
     }
 }
 
-fun showSnackBar(msg:String,view: View){
-    Snackbar.make(view,msg, Snackbar.LENGTH_SHORT).show()
+fun showSnackBar(msg: String, view: View) {
+    Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show()
 }
 
 fun Bitmap.toRequestBody(): okhttp3.RequestBody {
@@ -472,7 +473,7 @@ fun bitmapToBase64(bitmap: Bitmap): String {
     }
 }*/
 
-fun showTimePickerDialog(context: Context, tv: TextView,mode:Int) {
+fun showTimePickerDialog(context: Context, tv: TextView, mode: Int) {
 
     val calendar = Calendar.getInstance()
     val hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -481,10 +482,10 @@ fun showTimePickerDialog(context: Context, tv: TextView,mode:Int) {
     val timePickerDialog = TimePickerDialog(
         context,
         { _, selectedHour, selectedMinute ->
-            if(mode==1)
+            if (mode == 1)
                 brkStartTime = String.format("%02d:%02d", selectedHour, selectedMinute)
             else
-                brkEndTime =  String.format("%02d:%02d", selectedHour, selectedMinute)
+                brkEndTime = String.format("%02d:%02d", selectedHour, selectedMinute)
 
             val formattedTime: String = when {
                 selectedHour == 0 -> {
@@ -696,15 +697,15 @@ fun showScanErrorDialog(
         val scanDialog: ScanErrorDialog = ScanErrorDialog.newInstance(msg, code)
         scanDialog.setListener(dailyWorkFragment)
         scanDialog.show(fragmentManager, ScanErrorDialog.TAG)
-    }catch (_:Exception){
-        showToast(msg,context)
+    } catch (_: Exception) {
+        showToast(msg, context)
     }
 }
 
 
 fun getCurrentDateTime(): String {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-   // dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+    // dateFormat.timeZone = TimeZone.getTimeZone("UTC")
     return dateFormat.format(Date())
 }
 
@@ -743,8 +744,9 @@ fun getLocID(prefs: Prefs): Int {
 }
 
 fun checkIfInspectionFailed(osData: OfflineSyncEntity): Boolean {
-    return  osData.isoillevelImageFailed || osData.isaddblueImageFailed
+    return osData.isoillevelImageFailed || osData.isaddblueImageFailed
 }
+
 fun checkIfInspectionFailed2(osData: OfflineSyncEntity): Boolean {
     return osData.isoillevelImageFailed || osData.isaddblueImageFailed
 }
@@ -819,7 +821,7 @@ fun startUploadWithWorkManager(
     WorkManager.getInstance(context).enqueue(uploadWorkRequest)
 }
 
-fun SaveVehicleInspection(viewModel:MainViewModel){
+fun SaveVehicleInspection(viewModel: MainViewModel) {
     val currentDate =
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
             Date()
@@ -836,13 +838,16 @@ fun SaveVehicleInspection(viewModel:MainViewModel){
         SaveVehicleInspectionInfo(
             Prefs.getInstance(App.instance).clebUserId.toInt(),
             currentDate,
-            Prefs.getInstance(App.instance).inspectionID.replace(" ",""),
+            Prefs.getInstance(App.instance).inspectionID.replace(" ", ""),
             locationID,
             Prefs.getInstance(App.instance).vmId
         )
     )
 
-    Log.e("sdkskffjdapiisnpection", "SaveVehicleInspection: "+Prefs.getInstance(App.instance).inspectionID )
+    Log.e(
+        "sdkskffjdapiisnpection",
+        "SaveVehicleInspection: " + Prefs.getInstance(App.instance).inspectionID
+    )
 }
 
 
@@ -891,7 +896,7 @@ fun convertToTime(inputDate: String): String {
             val outputFormat = SimpleDateFormat("hh:mm", Locale.getDefault())
             val date = inputFormat.parse(inputDate)
             outputFormat.format(date!!)
-        }catch (_:Exception){
+        } catch (_: Exception) {
             " -- : -- "
         }
     }
@@ -1059,11 +1064,11 @@ fun isTokenExpired(prefs: Prefs): Boolean {
     return currentDateTime >= expirationDateTime
 }
 
-fun dateToday():String{
+fun dateToday(): String {
     return SimpleDateFormat("yyyy-MM-dd").format(Date())
 }
 
-fun checkTokenExpirationAndLogout(context: Activity,prefs: Prefs) {
+fun checkTokenExpirationAndLogout(context: Activity, prefs: Prefs) {
     if (isTokenExpired(prefs)) {
         val tokenExpiredDialog = AlertDialog.Builder(context).create()
         val tokenExpiredDialogBinding =
@@ -1092,13 +1097,13 @@ fun roundOffValues(value: String): String {
         val number = value.toDoubleOrNull() ?: 0.0
         val roundedNumber = kotlin.math.round(number).toInt()
         roundOffValue = String.format("%.2f", number)
-    }catch (_:Exception){
+    } catch (_: Exception) {
         return value
     }
     return roundOffValue
 }
 
-fun noInternetCheck(context: Context,ll:LinearLayout,viewLifecycleOwner: LifecycleOwner){
+fun noInternetCheck(context: Context, ll: LinearLayout, viewLifecycleOwner: LifecycleOwner) {
     val networkManager = NetworkManager(context)
     networkManager.observe(viewLifecycleOwner) {
         if (it) {
@@ -1139,4 +1144,10 @@ fun isVersionNewer(currentVersion: String, latestVersion: String): Boolean {
         }
     }
     return false
+}
+
+fun showBreakDownDialog(fragmentManager: FragmentManager) {
+    val breakDownDialog = BreakDownDialog()
+    breakDownDialog.showDialog(fragmentManager)
+    breakDownDialog.isCancelable = false
 }
