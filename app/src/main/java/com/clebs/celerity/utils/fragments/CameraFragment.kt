@@ -53,6 +53,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 import org.tensorflow.lite.task.vision.detector.Detection
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -60,7 +61,7 @@ import java.util.Locale
 class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
 
     private val TAG = "ObjectDetection"
-
+    private lateinit var outputDirectory: File
     private var _fragmentCameraBinding: FragmentCameraBinding? = null
 
     private lateinit var fragmentCameraBinding: FragmentCameraBinding
@@ -175,13 +176,16 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         contentValues
                     ).build()
-            else
+            else{
+                outputDirectory = getOutputDirectory()
+                val file = createFile(
+                    outputDirectory,
+                    "yyyy-MM-dd-HH-mm-ss-SSS",
+                    ".jpg"
+                )
                 ImageCapture.OutputFileOptions
-                    .Builder(
-                        requireContext().contentResolver,
-                        MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
-                        contentValues
-                    ).build()
+                    .Builder(file).build()
+            }
             imageCapture.takePicture(
                 outputOptions, ContextCompat.getMainExecutor(requireContext()),
                 object : ImageCapture.OnImageSavedCallback {
@@ -508,5 +512,21 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
         super.onDestroy()
         objectDetectorHelper.clearObjectDetector()
     }
-
+    private fun getOutputDirectory(): File {
+        val mediaDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            requireActivity().externalMediaDirs.firstOrNull()?.let {
+                File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+            }
+        } else {
+            requireActivity().getExternalFilesDir(null)?.let {
+                File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+            }
+        }
+        return if (mediaDir != null && mediaDir.exists()) mediaDir else requireActivity().filesDir
+    }
+    fun createFile(baseFolder: File, format: String, extension: String) =
+        File(
+            baseFolder, SimpleDateFormat(format, Locale.US)
+                .format(System.currentTimeMillis()) + extension
+        )
 }

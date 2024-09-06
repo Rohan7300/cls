@@ -20,6 +20,7 @@ import androidx.databinding.DataBindingUtil
 import com.clebs.celerity.R
 import com.clebs.celerity.databinding.ActivityImageTakerBinding
 import com.clebs.celerity.dialogs.LoadingDialog
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -31,6 +32,7 @@ class ImageTakerActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     lateinit var loadingDialog: LoadingDialog
     private var imageCapture: ImageCapture? = null
+    private lateinit var outputDirectory: File
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_image_taker)
@@ -90,13 +92,16 @@ class ImageTakerActivity : AppCompatActivity() {
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     contentValues
                 ).build()
-        else
+        else{
+            outputDirectory = getOutputDirectory()
+            val file = createFile(
+                outputDirectory,
+                "yyyy-MM-dd-HH-mm-ss-SSS",
+                ".jpg"
+            )
             ImageCapture.OutputFileOptions
-                .Builder(
-                    this.contentResolver,
-                    MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
-                    contentValues
-                ).build()
+                .Builder(file).build()
+        }
         imageCapture.takePicture(
             outputOptions, ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
@@ -122,4 +127,22 @@ class ImageTakerActivity : AppCompatActivity() {
     companion object {
         private const val FileNameFormat = "yyyy-MM-dd-HH-mm-ss-SSS"
     }
+
+    private fun getOutputDirectory(): File {
+        val mediaDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            externalMediaDirs.firstOrNull()?.let {
+                File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+            }
+        } else {
+            getExternalFilesDir(null)?.let {
+                File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+            }
+        }
+        return if (mediaDir != null && mediaDir.exists()) mediaDir else filesDir
+    }
+    fun createFile(baseFolder: File, format: String, extension: String) =
+        File(
+            baseFolder, SimpleDateFormat(format, Locale.US)
+                .format(System.currentTimeMillis()) + extension
+        )
 }

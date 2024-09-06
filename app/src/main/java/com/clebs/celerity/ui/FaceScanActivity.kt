@@ -36,6 +36,7 @@ import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 import org.jetbrains.anko.runOnUiThread
 import org.tensorflow.lite.task.vision.detector.Detection
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -60,6 +61,7 @@ class FaceScanActivity : AppCompatActivity(),ObjectDetectorHelper.DetectorListen
     private var camera: Camera? = null
     private var cameraProvider: ProcessCameraProvider? = null
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var outputDirectory: File
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -102,13 +104,16 @@ class FaceScanActivity : AppCompatActivity(),ObjectDetectorHelper.DetectorListen
                                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                                 contentValues
                             ).build()
-                    else
+                    else{
+                        outputDirectory = getOutputDirectory()
+                        val file = createFile(
+                            outputDirectory,
+                            "yyyy-MM-dd-HH-mm-ss-SSS",
+                            ".jpg"
+                        )
                         ImageCapture.OutputFileOptions
-                            .Builder(
-                                contentResolver,
-                                MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
-                                contentValues
-                            ).build()
+                            .Builder(file).build()
+                    }
                     imageCapture.takePicture(
                         outputOptions, ContextCompat.getMainExecutor(this),
                         object : ImageCapture.OnImageSavedCallback {
@@ -278,5 +283,21 @@ class FaceScanActivity : AppCompatActivity(),ObjectDetectorHelper.DetectorListen
         // Pass Bitmap and rotation to the object detector helper for processing and detection
         objectDetectorHelper.detect(bitmapBuffer, imageRotation)
     }
-
+    private fun getOutputDirectory(): File {
+        val mediaDir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            externalMediaDirs.firstOrNull()?.let {
+                File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+            }
+        } else {
+            getExternalFilesDir(null)?.let {
+                File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+            }
+        }
+        return if (mediaDir != null && mediaDir.exists()) mediaDir else filesDir
+    }
+    fun createFile(baseFolder: File, format: String, extension: String) =
+        File(
+            baseFolder, SimpleDateFormat(format, Locale.US)
+                .format(System.currentTimeMillis()) + extension
+        )
 }
