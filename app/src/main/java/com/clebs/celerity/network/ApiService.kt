@@ -91,6 +91,8 @@ import com.clebs.celerity.models.response.VehicleExpiringDocumentsResponse
 import com.clebs.celerity.models.response.WeeklyLocationRotabyIdResponse
 import com.clebs.celerity.models.response.WeeklyRotaExistForDAApprovalResponse
 import com.clebs.celerity.models.response.WeeklyRotaExistForDAApprovalResponseNew
+import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
+import com.clebs.celerity_admin.models.GetvehicleOilLevelList
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -968,5 +970,11 @@ interface ApiService {
     suspend fun GetVehBreakDownInspectionInfobyDriver(
         @Path("driverId") driverId:Int
     ):Response<GetVehBreakDownInspectionInfobyDriverResponse>
+
+    @GET("/api/VehAllocHistories/GetVehFuelLevelList")
+    suspend fun GetVehicleFuelList(): Response<GetVehicleFuelLevelList>
+
+    @GET("/api/VehAllocHistories/GetVehOilLevelList")
+    suspend fun GetVehicleOilList(): Response<GetvehicleOilLevelList>
 }
 

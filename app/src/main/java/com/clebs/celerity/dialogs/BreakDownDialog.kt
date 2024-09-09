@@ -2,11 +2,14 @@ package com.clebs.celerity.dialogs
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.clebs.celerity.R
+import com.clebs.celerity.ui.BreakDownInspectionActivity
+import com.google.android.material.button.MaterialButton
 
 class BreakDownDialog :DialogFragment(){
 
@@ -21,6 +24,9 @@ class BreakDownDialog :DialogFragment(){
         dialog.window?.apply {
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
             setBackgroundDrawableResource(R.color.semi_transparent_color)
+        }
+        dialog.findViewById<MaterialButton>(R.id.raiseTicket).setOnClickListener {
+            dialogContext.startActivity(Intent(dialogContext,BreakDownInspectionActivity::class.java))
         }
         return dialog
     }

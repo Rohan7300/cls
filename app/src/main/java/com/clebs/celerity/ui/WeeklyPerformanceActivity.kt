@@ -20,13 +20,13 @@ import kotlin.math.abs
 
 class WeeklyPerformanceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWeeklyPerformanceBinding
-    lateinit var tableViewAdapter: TableViewAdapter
-    lateinit var vm: MainViewModel
+    private lateinit var tableViewAdapter: TableViewAdapter
+    private lateinit var vm: MainViewModel
     lateinit var prefs: Prefs
-    var crrWeek = 0
-    var crrYear = 0
+    private var crrWeek = 0
+    private var crrYear = 0
     var week = 0
-    var isLoaded: Boolean = false
+    private var isLoaded: Boolean = false
     var i = 0
     lateinit var loadingDialog: LoadingDialog
     override fun onCreate(savedInstanceState: Bundle?) {

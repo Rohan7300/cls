@@ -50,6 +50,7 @@ import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.DependencyProvider
+import com.clebs.celerity.utils.DependencyProvider.currentBreakDownItemforInspection
 import com.clebs.celerity.utils.DependencyProvider.getMainVM
 import com.clebs.celerity.utils.DependencyProvider.handlingDeductionNotification
 import com.clebs.celerity.utils.DependencyProvider.handlingExpiredDialogNotification
@@ -79,6 +80,7 @@ import com.clebs.celerity.utils.isVersionNewer
 import com.clebs.celerity.utils.logOSEntity
 import com.clebs.celerity.utils.parseToInt
 import com.clebs.celerity.utils.showBirthdayCard
+import com.clebs.celerity.utils.showBreakDownDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.showUpdateDialog
 import com.clebs.celerity.utils.startUploadWithWorkManager
@@ -316,7 +318,15 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                         startActivity(intent)
                     }
                 } else {
-
+                    viewModel.GetVehBreakDownInspectionInfobyDriver(prefs.clebUserId.toInt())
+                }
+            }
+            viewModel.liveDataVehBreakDownInspectionInfobyDriverResponse.observe(this){
+                if(it!=null){
+                    if(it.size>0){
+                        showBreakDownDialog(fragmentManager)
+                        currentBreakDownItemforInspection = it[0]
+                    }
                 }
             }
 

@@ -14,6 +14,7 @@ import com.clebs.celerity.database.OfflineSyncDB
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.models.response.GetCompanySignedDocumentListResponseItem
 import com.clebs.celerity.models.response.GetDriverDeductionHistoryResponse
+import com.clebs.celerity.models.response.GetVehBreakDownInspectionInfobyDriverResponseItem
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
@@ -32,6 +33,11 @@ object DependencyProvider {
     var policyDocPDFURI: Uri? = null
     var notificationWatcher: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
+    }
+
+    lateinit var currentBreakDownItemforInspection: GetVehBreakDownInspectionInfobyDriverResponseItem
+    fun isBreakDownItemInitialize():Boolean{
+        return ::currentBreakDownItemforInspection.isInitialized
     }
 
     var handlingDeductionNotification: Boolean = false

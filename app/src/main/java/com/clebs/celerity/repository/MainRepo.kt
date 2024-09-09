@@ -89,6 +89,8 @@ import com.clebs.celerity.models.response.WeeklyRotaExistForDAApprovalResponse
 import com.clebs.celerity.models.response.WeeklyRotaExistForDAApprovalResponseNew
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.utils.DBImages
+import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
+import com.clebs.celerity_admin.models.GetvehicleOilLevelList
 import com.google.gson.Gson
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
@@ -1779,6 +1781,16 @@ class MainRepo(private val ApiService: ApiService) {
     ):SimpleNetworkResponse<GetVehBreakDownInspectionInfobyDriverResponse>{
         return safeApiCall {
             ApiService.GetVehBreakDownInspectionInfobyDriver(userID)
+        }
+    }
+    suspend fun GetVehicleFuelList(): SimpleNetworkResponse<GetVehicleFuelLevelList> {
+        return safeApiCall {
+            ApiService.GetVehicleFuelList()
+        }
+    }
+    suspend fun GetVehicleOilList(): SimpleNetworkResponse<GetvehicleOilLevelList> {
+        return safeApiCall {
+            ApiService.GetVehicleOilList()
         }
     }
 }

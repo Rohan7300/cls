@@ -96,6 +96,8 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.utils.DBImages
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
+import com.clebs.celerity_admin.models.GetvehicleOilLevelList
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -2060,5 +2062,37 @@ class MainViewModel(
                 liveDataUploadVehicleDefectImages.postValue(response.body)
         }
     }*/
+    fun GetVehiclefuelListing(): MutableLiveData<GetVehicleFuelLevelList?> {
+        val responseLiveData = MutableLiveData<GetVehicleFuelLevelList?>()
+
+        viewModelScope.launch {
+            val response = repo.GetVehicleFuelList()
+            if (response.failed) {
+                responseLiveData.postValue(null)
+            }
+            if (!response.isSuccessful) {
+                responseLiveData.postValue(null)
+            } else {
+                responseLiveData.postValue(response.body)
+            }
+        }
+        return responseLiveData
+    }
+    fun GetVehicleOilListing(): MutableLiveData<GetvehicleOilLevelList?> {
+        val responseLiveData = MutableLiveData<GetvehicleOilLevelList?>()
+
+        viewModelScope.launch {
+            val response = repo.GetVehicleOilList()
+            if (response.failed) {
+                responseLiveData.postValue(null)
+            }
+            if (!response.isSuccessful) {
+                responseLiveData.postValue(null)
+            } else {
+                responseLiveData.postValue(response.body)
+            }
+        }
+        return responseLiveData
+    }
 
 }

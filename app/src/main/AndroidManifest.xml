@@ -101,7 +101,6 @@
         <activity
             android:name=".ui.AddInspection"
             android:exported="true">
-
             <!--
                 <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -110,6 +109,9 @@
             </intent-filter>
             -->
         </activity>
+        <activity
+            android:name=".ui.BreakDownInspectionActivity"
+            android:exported="false"/>
 
         <uses-library
             android:name="org.apache.http.legacy"
