@@ -75,6 +75,7 @@ import com.clebs.celerity.models.response.GetTicketCommentListNewResponse
 import com.clebs.celerity.models.response.GetTicketCommentListResponse
 import com.clebs.celerity.models.response.GetUserTicketDocumentsResponse
 import com.clebs.celerity.models.response.GetUserTicketsResponse
+import com.clebs.celerity.models.response.GetVehBreakDownInspectionInfobyDriverResponse
 import com.clebs.celerity.models.response.GetVehicleAdvancePaymentAgreementResponse
 import com.clebs.celerity.models.response.GetVehicleDefectSheetInfoResponse
 import com.clebs.celerity.models.response.GetVehicleImageUploadInfoResponse
@@ -200,7 +201,7 @@ class MainViewModel(
     val liveDataDownloadTrucksServiceLevelAgreementPolicy = MutableLiveData<ResponseBody?>()
     val liveDataGetDriverInvoiceList = MutableLiveData<GetDriverInvoiceListResponse?>()
     val liveDataGetThirdPartyInvoiceList = MutableLiveData<GetDriverInvoiceListResponse?>()
-
+    val liveDataVehBreakDownInspectionInfobyDriverResponse = MutableLiveData<GetVehBreakDownInspectionInfobyDriverResponse?>()
     val liveDataGetDriverOtherCompaniesPolicy =
         MutableLiveData<GetDriverOtherCompaniesPolicyResponse?>()
     val liveDataDownloadDriverOtherCompaniesPolicy =
@@ -2033,6 +2034,17 @@ class MainViewModel(
         }
     }
 
+    fun GetVehBreakDownInspectionInfobyDriver(
+        userID: Int
+    ){
+        viewModelScope.launch {
+            val response = repo.GetVehBreakDownInspectionInfobyDriver(userID)
+            if (response.failed || !response.isSuccessful)
+                liveDataVehBreakDownInspectionInfobyDriverResponse.postValue(null)
+            else
+                liveDataVehBreakDownInspectionInfobyDriverResponse.postValue(response.body)
+        }
+    }
     /*fun UploadVehicleDefectImages(
         userID: Int,
         vmId: Int,

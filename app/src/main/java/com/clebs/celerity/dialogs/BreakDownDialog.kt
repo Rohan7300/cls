@@ -32,5 +32,14 @@ class BreakDownDialog :DialogFragment(){
     }
 
     fun hideDialog(){
+        if(dialog!=null){
+            if(dialog!!.isShowing)
+                dismiss()
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        dialogContext = context
     }
 }
