@@ -1,6 +1,7 @@
 package com.clebs.celerity.network
 
 import com.clebs.celerity.models.CashFlowPieChartResponse
+import com.clebs.celerity.models.CompleteDriverVehicleBreakDownInspectionRequest
 import com.clebs.celerity.models.DownloadDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
@@ -976,5 +977,10 @@ interface ApiService {
 
     @GET("/api/VehAllocHistories/GetVehOilLevelList")
     suspend fun GetVehicleOilList(): Response<GetvehicleOilLevelList>
+
+    @POST("/api/VehAllocHistories/CompleteDriverVehicleBreakDownInspection")
+    suspend fun CompleteDriverVehicleBreakDownInspection(
+        @Body body:CompleteDriverVehicleBreakDownInspectionRequest
+    ):Response<SimpleStatusMsgResponse>
 }
 

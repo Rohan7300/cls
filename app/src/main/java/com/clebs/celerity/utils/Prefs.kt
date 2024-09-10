@@ -780,4 +780,39 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getString("inspectionDateTime","0")
         set(value) = sharedPreferences.edit().putString("inspectionDateTime",value).apply()
 
+    var breakDownSpareWheelUri:String?
+        get() = sharedPreferences.getString("breakDownSpareWheelUri","")
+        set(value) = sharedPreferences.edit().putString("breakDownSpareWheelUri",value).apply()
+
+    var breakDownVehicleInteriorUri:String?
+        get() = sharedPreferences.getString("breakdownVehicleInteriorUri","")
+        set(value) = sharedPreferences.edit().putString("breakdownVehicleInteriorUri",value).apply()
+
+    var breakDownLoadingInteriorUri:String?
+        get() = sharedPreferences.getString("breakDownLoadingInteriorUri","")
+        set(value) = sharedPreferences.edit().putString("breakDownLoadingInteriorUri",value).apply()
+
+    var breakDownToolsPictureUri:String?
+        get() = sharedPreferences.getString("breakDownToolsPicture","")
+        set(value) =sharedPreferences.edit().putString("breakDownToolsPicture",value).apply()
+
+    var breakDownVinNumberPictureUri:String?
+        get() = sharedPreferences.getString("breakDownVinNumberPictureUri","")
+        set(value) = sharedPreferences.edit().putString("breakDownVinNumberPictureUri",value).apply()
+
+    var breakDownVehicleCurrentMileage:Int
+        get() = sharedPreferences.getInt("breakDownVehicleCurrentMileage",0)
+        set(value) = sharedPreferences.edit().putInt("breakDownVehicleCurrentMileage",value).apply()
+
+    var breakDownAddBlueMileage:Int
+        get() = sharedPreferences.getInt("breakDownAddBlueMileage",0)
+        set(value) = sharedPreferences.edit().putInt("breakDownAddBlueMileage",value).apply()
+
+    var breakDownFuelLevelId:Int
+        get() = sharedPreferences.getInt("breakDownFuelLevelId",0)
+        set(value) = sharedPreferences.edit().putInt("breakDownFuelLevelId",value).apply()
+
+    var breakDownVehOilLevelId:Int
+        get() = sharedPreferences.getInt("breakDownVehOilLevelId",0)
+        set(value) = sharedPreferences.edit().putInt("breakDownVehOilLevelId",value).apply()
 }

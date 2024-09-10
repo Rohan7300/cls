@@ -1,9 +1,7 @@
 package com.clebs.celerity.utils
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -34,6 +32,7 @@ object DependencyProvider {
     var notificationWatcher: MutableLiveData<Int> = MutableLiveData<Int>().apply {
         postValue(0)
     }
+    var breakDownInspectionImageStage:Int = 0
 
     lateinit var currentBreakDownItemforInspection: GetVehBreakDownInspectionInfobyDriverResponseItem
     fun isBreakDownItemInitialize():Boolean{

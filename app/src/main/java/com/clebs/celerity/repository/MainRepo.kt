@@ -3,6 +3,7 @@ package com.clebs.celerity.repository
 import android.util.Log
 import com.clebs.celerity.dialogs.VehicleAdvancePaymentDialog
 import com.clebs.celerity.models.CashFlowPieChartResponse
+import com.clebs.celerity.models.CompleteDriverVehicleBreakDownInspectionRequest
 import com.clebs.celerity.models.DownloadDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
@@ -1791,6 +1792,11 @@ class MainRepo(private val ApiService: ApiService) {
     suspend fun GetVehicleOilList(): SimpleNetworkResponse<GetvehicleOilLevelList> {
         return safeApiCall {
             ApiService.GetVehicleOilList()
+        }
+    }
+    suspend fun CompleteDriverVehicleBreakDownInspection(body: CompleteDriverVehicleBreakDownInspectionRequest): SimpleNetworkResponse<SimpleStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.CompleteDriverVehicleBreakDownInspection(body)
         }
     }
 }

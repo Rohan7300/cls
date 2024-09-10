@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.clebs.celerity.models.CashFlowPieChartResponse
 import com.clebs.celerity.models.CashFlowPieChartResponseItem
+import com.clebs.celerity.models.CompleteDriverVehicleBreakDownInspectionRequest
 import com.clebs.celerity.models.DownloadDriverOtherCompaniesPolicyResponse
 import com.clebs.celerity.models.GetLastWeekScore
 import com.clebs.celerity.models.GetWeekYear
@@ -2083,6 +2084,22 @@ class MainViewModel(
 
         viewModelScope.launch {
             val response = repo.GetVehicleOilList()
+            if (response.failed) {
+                responseLiveData.postValue(null)
+            }
+            if (!response.isSuccessful) {
+                responseLiveData.postValue(null)
+            } else {
+                responseLiveData.postValue(response.body)
+            }
+        }
+        return responseLiveData
+    }
+    fun CompleteDriverVehicleBreakDownInspection(body: CompleteDriverVehicleBreakDownInspectionRequest): MutableLiveData<SimpleStatusMsgResponse?> {
+        val responseLiveData = MutableLiveData<SimpleStatusMsgResponse?>()
+
+        viewModelScope.launch {
+            val response = repo.CompleteDriverVehicleBreakDownInspection(body)
             if (response.failed) {
                 responseLiveData.postValue(null)
             }
