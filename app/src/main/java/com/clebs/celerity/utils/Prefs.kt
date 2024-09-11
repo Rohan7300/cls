@@ -191,6 +191,14 @@ class Prefs(context: Context) {
             sharedPreferences.edit().putInt("currLocationId", value).apply()
         }
 
+    var currBreakDownInspectionId: Int
+        get() {
+            return sharedPreferences.getInt("currBreakDownInspectionId", 0)
+        }
+        set(value) {
+            sharedPreferences.edit().putInt("currBreakDownInspectionId", value).apply()
+        }
+
     var workLocationId: Int
         get() {
             return sharedPreferences.getInt("workLocationId", 0)
@@ -784,6 +792,9 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getString("breakDownSpareWheelUri","")
         set(value) = sharedPreferences.edit().putString("breakDownSpareWheelUri",value).apply()
 
+    var isBreakDownImagesAreUploading:Boolean
+        get() = sharedPreferences.getBoolean("isBreakDownImagesAreUploading", false)
+        set(value) = sharedPreferences.edit().putBoolean("isBreakDownImagesAreUploading", value).apply()
     var breakDownVehicleInteriorUri:String?
         get() = sharedPreferences.getString("breakdownVehicleInteriorUri","")
         set(value) = sharedPreferences.edit().putString("breakdownVehicleInteriorUri",value).apply()

@@ -9,6 +9,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.clebs.celerity.R
 import com.clebs.celerity.ui.BreakDownInspectionActivity
+import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.showToast
 import com.google.android.material.button.MaterialButton
 
 class BreakDownDialog :DialogFragment(){
@@ -26,6 +28,9 @@ class BreakDownDialog :DialogFragment(){
             setBackgroundDrawableResource(R.color.semi_transparent_color)
         }
         dialog.findViewById<MaterialButton>(R.id.raiseTicket).setOnClickListener {
+            if(Prefs.getInstance(dialogContext).isBreakDownImagesAreUploading){
+                showToast("Please wait!! Last Inspection Images are Uploading.",dialogContext)
+            }else
             dialogContext.startActivity(Intent(dialogContext,BreakDownInspectionActivity::class.java))
         }
         return dialog

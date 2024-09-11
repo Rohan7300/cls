@@ -11,5 +11,7 @@ data class CompleteDriverVehicleBreakDownInspectionRequest(
     val SupervisorId: Int,
     val VehCurrentMileage: String,
     val VehInspectionDoneById: Int,
-    val VehInspectionDoneOn: String
+    val VehInspectionDoneOn: String,
+    val ClientRefId:String,
+    val VmId:Int
 )

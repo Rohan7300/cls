@@ -982,5 +982,43 @@ interface ApiService {
     suspend fun CompleteDriverVehicleBreakDownInspection(
         @Body body:CompleteDriverVehicleBreakDownInspectionRequest
     ):Response<SimpleStatusMsgResponse>
+
+    @Multipart
+    @POST("/api/Vehicle/UploadDAVehBreakDownInpectionSpearWheelPictureFile")
+    suspend fun UploadDAVehBreakDownInpectionSpearWheelPictureFile(
+        @Query("vehBreakdownInspId") vehBreakdownInspId:Int,
+        @Query("supervisorId") supervisorId:Int,
+        @Part image:MultipartBody.Part
+    ):Response<SimpleStatusMsgResponse>
+    @Multipart
+    @POST("/api/Vehicle/UploadDAVehBreakDownInpectionInteriorPictureFile")
+    suspend fun UploadDAVehBreakDownInpectionInteriorPictureFile(
+        @Query("vehBreakdownInspId") vehBreakdownInspId:Int,
+        @Query("supervisorId") supervisorId:Int,
+        @Part image:MultipartBody.Part
+    ):Response<SimpleStatusMsgResponse>
+    @Multipart
+    @POST("/api/Vehicle/UploadDAVehBreakDownInpectionLoadingInteriorPictureFile")
+    suspend fun UploadDAVehBreakDownInpectionLoadingInteriorPictureFile(
+        @Query("vehBreakdownInspId") vehBreakdownInspId:Int,
+        @Query("supervisorId") supervisorId:Int,
+        @Part image:MultipartBody.Part
+    ):Response<SimpleStatusMsgResponse>
+    @Multipart
+    @POST("/api/Vehicle/UploadDAVehBreakDownInpectionToolsPictureFile")
+    suspend fun UploadDAVehBreakDownInpectionToolsPictureFile(
+        @Query("vehBreakdownInspId") vehBreakdownInspId:Int,
+        @Query("supervisorId") supervisorId:Int,
+        @Part image:MultipartBody.Part
+    ):Response<SimpleStatusMsgResponse>
+    @Multipart
+    @POST("/api/Vehicle/UploadDAVehBreakDownInpectionVinNoPictureFile")
+    suspend fun UploadDAVehBreakDownInpectionVinNoPictureFile(
+        @Query("vehBreakdownInspId") vehBreakdownInspId:Int,
+        @Query("supervisorId") supervisorId:Int,
+        @Part image:MultipartBody.Part
+    ):Response<SimpleStatusMsgResponse>
+
+
 }
 

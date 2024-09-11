@@ -1799,4 +1799,54 @@ class MainRepo(private val ApiService: ApiService) {
             ApiService.CompleteDriverVehicleBreakDownInspection(body)
         }
     }
+
+    suspend fun UploadDAVehBreakDownInpectionSpearWheelPictureFile(
+        vehBreakdownInspId:Int,
+        supervisorId:Int,
+        image:MultipartBody.Part
+    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.UploadDAVehBreakDownInpectionSpearWheelPictureFile(vehBreakdownInspId,supervisorId,image)
+        }
+    }
+
+    suspend fun UploadDAVehBreakDownInpectionInteriorPictureFile(
+        vehBreakdownInspId:Int,
+        supervisorId:Int,
+        image:MultipartBody.Part
+    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.UploadDAVehBreakDownInpectionInteriorPictureFile(vehBreakdownInspId,supervisorId,image)
+        }
+    }
+
+    suspend fun UploadDAVehBreakDownInpectionLoadingInteriorPictureFile(
+        vehBreakdownInspId:Int,
+        supervisorId:Int,
+        image:MultipartBody.Part
+    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.UploadDAVehBreakDownInpectionLoadingInteriorPictureFile(vehBreakdownInspId,supervisorId,image)
+        }
+    }
+
+    suspend fun UploadDAVehBreakDownInpectionToolsPictureFile(
+        vehBreakdownInspId:Int,
+        supervisorId:Int,
+        image:MultipartBody.Part
+    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.UploadDAVehBreakDownInpectionToolsPictureFile(vehBreakdownInspId,supervisorId,image)
+        }
+    }
+
+    suspend fun UploadDAVehBreakDownInpectionVinNoPictureFile(
+        vehBreakdownInspId:Int,
+        supervisorId:Int,
+        image:MultipartBody.Part
+    ):SimpleNetworkResponse<SimpleStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.UploadDAVehBreakDownInpectionVinNoPictureFile(vehBreakdownInspId,supervisorId,image)
+        }
+    }
 }

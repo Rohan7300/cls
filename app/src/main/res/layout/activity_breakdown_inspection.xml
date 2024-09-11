@@ -4,12 +4,12 @@
     <data>
 
     </data>
-<ScrollView
-    android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    >
+
+    <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,326 +44,395 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/bodyVehicleInfo"
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="10dp"
-                    android:hint="Enter Vehicle Current Mileage"
-                    android:textColorHint="@color/hintColor">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/atvVehicleCurrentMileage"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:importantForAutofill="no"
-                        android:inputType="numberDecimal"
-                        android:padding="12dp"
-                        android:textColorHint="@color/hintColor"
-                        android:textSize="13sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="10dp"
-                    android:hint="Enter Add Blue Mileage"
-                    android:textColorHint="@color/hintColor">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/atvAddBlueMileage"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:importantForAutofill="no"
-                        android:inputType="numberDecimal"
-                        android:padding="12dp"
-                        android:textColorHint="@color/hintColor"
-                        android:textSize="13sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="10dp"
-                    android:hint="Select Veh Fuel Level"
-                    android:textColorHint="@color/hintColor">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/spinnerVehicleFuelLevel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:importantForAutofill="no"
-                        android:inputType="none"
-                        android:padding="12dp"
-                        android:textColorHint="@color/hintColor"
-                        android:textSize="13sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="10dp"
-                    android:hint="Select Veh Oil Level"
-                    android:textColorHint="@color/hintColor">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/spinnerVehicleOilLevel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:importantForAutofill="no"
-                        android:inputType="none"
-                        android:padding="12dp"
-                        android:textColorHint="@color/hintColor"
-                        android:textSize="13sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#F6FAFA"
-                android:orientation="vertical">
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="5dp"
+                app:cardCornerRadius="10dp"
+                app:strokeColor="@color/light_grey"
+                app:strokeWidth="2dp">
 
                 <LinearLayout
-                    android:id="@+id/headerAddInspectionImages"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/light_grey"
-                    android:orientation="horizontal"
-                    android:padding="13dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Upload Vehicle Pictures"
-                        android:textColor="@color/text_color" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/bodyAddInspectionImages"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:gravity="center"
                     android:orientation="vertical">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/startinspectionBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/medium_orange"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:padding="12dp"
-                        android:text="Vehicle Inspection"
-                        android:textColor="@color/text_color"
-                        app:cornerRadius="12sp"
-                        app:iconSize="25dp"
-                        app:strokeColor="@color/white"
-                        app:strokeWidth="3dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:padding="5dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Add Other Images" />
-
                     <LinearLayout
+                        android:id="@+id/headVehicleInformation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:background="#36A9ABAF"
-                        android:orientation="horizontal">
+                        android:background="@color/light_grey"
+                        android:orientation="horizontal"
+                        android:padding="13dp">
 
-                        <LinearLayout
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="left"
-                            android:orientation="vertical"
-                            >
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="Vehicle Information"
+                            android:textColor="@color/text_color" />
 
-                            <LinearLayout
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/bodyVehicleInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="10dp"
+                            android:hint="Enter Vehicle Current Mileage"
+                            android:textColorHint="@color/hintColor">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/atvVehicleCurrentMileage"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:orientation="horizontal">
+                                android:layout_marginTop="4dp"
+                                android:importantForAutofill="no"
+                                android:inputType="numberDecimal"
+                                android:padding="12dp"
+                                android:textColorHint="@color/hintColor"
+                                android:textSize="13sp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_semibold"
-                                    android:padding="10dp"
-                                    android:layout_weight="1"
-                                    android:text="Spare Wheel"
-                                    android:textColor="@color/text_color"
-                                    android:textSize="12sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                                <ImageView
-                                    android:id="@+id/indicatorSpareWheel"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:src="@drawable/warning2"
-                                    />
-                            </LinearLayout>
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="10dp"
+                            android:hint="Enter Add Blue Mileage"
+                            android:textColorHint="@color/hintColor">
 
-                            <LinearLayout
+                            <AutoCompleteTextView
+                                android:id="@+id/atvAddBlueMileage"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:orientation="horizontal">
+                                android:layout_marginTop="4dp"
+                                android:importantForAutofill="no"
+                                android:inputType="numberDecimal"
+                                android:padding="12dp"
+                                android:textColorHint="@color/hintColor"
+                                android:textSize="13sp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_semibold"
-                                    android:padding="10dp"
-                                    android:layout_weight="1"
-                                    android:text="Vehicle Interior"
-                                    android:textColor="@color/text_color"
-                                    android:textSize="12sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="10dp"
+                            android:hint="Select Veh Fuel Level"
+                            android:textColorHint="@color/hintColor">
 
-                                <ImageView
-                                    android:id="@+id/indicatorVehicleInterior"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:src="@drawable/warning2"
-                                    />
-                            </LinearLayout>
-
-                            <LinearLayout
+                            <AutoCompleteTextView
+                                android:id="@+id/spinnerVehicleFuelLevel"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:orientation="horizontal">
+                                android:layout_marginTop="4dp"
+                                android:importantForAutofill="no"
+                                android:inputType="none"
+                                android:padding="12dp"
+                                android:textColorHint="@color/hintColor"
+                                android:textSize="13sp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_semibold"
-                                    android:padding="10dp"
-                                    android:layout_weight="1"
-                                    android:text="Loading Interior"
-                                    android:textColor="@color/text_color"
-                                    android:textSize="12sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                                <ImageView
-                                    android:id="@+id/indicatorLoadingInterior"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:src="@drawable/warning2"
-                                    />
-                            </LinearLayout>
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="10dp"
+                            android:hint="Select Veh Oil Level"
+                            android:textColorHint="@color/hintColor">
 
-                            <LinearLayout
+                            <AutoCompleteTextView
+                                android:id="@+id/spinnerVehicleOilLevel"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:orientation="horizontal">
+                                android:layout_marginTop="4dp"
+                                android:importantForAutofill="no"
+                                android:inputType="none"
+                                android:padding="12dp"
+                                android:textColorHint="@color/hintColor"
+                                android:textSize="13sp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_semibold"
-                                    android:padding="10dp"
-                                    android:layout_weight="1"
-                                    android:text="Tools Picture"
-                                    android:textColor="@color/text_color"
-                                    android:textSize="12sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:gravity="right">
 
-                                <ImageView
-                                    android:id="@+id/indicatorToolsPicture"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:src="@drawable/warning2"
-                                    />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/nextBtn"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/poppins_semibold"
-                                    android:padding="10dp"
-                                    android:text="Vin Number"
-                                    android:layout_weight="1"
-                                    android:textColor="@color/text_color"
-                                    android:textSize="12sp" />
-
-
-                                <ImageView
-                                    android:id="@+id/indicatorVinNumber"
-                                    android:layout_width="15dp"
-                                    android:layout_height="15dp"
-                                    android:src="@drawable/warning2"
-                                    />
-                            </LinearLayout>
+                                android:layout_marginHorizontal="5dp"
+                                android:backgroundTint="#A8E8BF"
+                                android:fontFamily="@font/poppins_semibold"
+                                android:padding="12dp"
+                                android:text="Next"
+                                android:textColor="@color/black"
+                                android:textSize="12sp"
+                                app:cornerRadius="10sp"
+                                app:strokeColor="@color/white"
+                                app:strokeWidth="4dp" />
                         </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                        <View
-                            android:layout_width="0.2dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginVertical="15dp"
-                            android:background="@color/text_color" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="5dp"
+                app:cardCornerRadius="10dp"
+                android:id="@+id/secondCard"
+                app:strokeColor="@color/light_grey"
+                app:strokeWidth="2dp">
 
-                        <View
-                            android:layout_width="30dp"
-                            android:layout_height="0.5dp"
-                            android:layout_marginVertical="5dp"
-                            android:background="@drawable/dotted"
-                            android:backgroundTint="@color/text_color" />
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/addImagesBtn"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#F6FAFA"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:id="@+id/headerAddInspectionImages"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/light_grey"
+                        android:orientation="horizontal"
+                        android:padding="13dp">
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="Upload Vehicle Pictures"
+                            android:textColor="@color/text_color" />
+
+                    </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/secondLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#F6FAFA"
+                    android:orientation="vertical">
+
+
+
+                    <LinearLayout
+                        android:id="@+id/bodyAddInspectionImages"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/startinspectionBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:backgroundTint="@color/medium_orange"
                             android:fontFamily="@font/poppins_semibold"
                             android:padding="12dp"
-                            android:text="Add Image"
-                            android:textColor="@color/white"
-                            android:textSize="12sp"
-                            app:cornerRadius="10sp"
+                            android:text="Vehicle Inspection"
+                            android:textColor="@color/text_color"
+                            app:cornerRadius="12sp"
+                            app:iconSize="25dp"
                             app:strokeColor="@color/white"
-                            app:strokeWidth="4dp" />
+                            app:strokeWidth="3dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:padding="5dp"
+                            android:text="Add Other Images" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#36A9ABAF"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="left"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:fontFamily="@font/poppins_semibold"
+                                        android:padding="10dp"
+                                        android:text="Spare Wheel"
+                                        android:textColor="@color/text_color"
+                                        android:textSize="12sp" />
+
+                                    <ImageView
+                                        android:id="@+id/indicatorSpareWheel"
+                                        android:layout_width="15dp"
+                                        android:layout_height="15dp"
+                                        android:src="@drawable/warning2" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:fontFamily="@font/poppins_semibold"
+                                        android:padding="10dp"
+                                        android:text="Vehicle Interior"
+                                        android:textColor="@color/text_color"
+                                        android:textSize="12sp" />
+
+
+                                    <ImageView
+                                        android:id="@+id/indicatorVehicleInterior"
+                                        android:layout_width="15dp"
+                                        android:layout_height="15dp"
+                                        android:src="@drawable/warning2" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:fontFamily="@font/poppins_semibold"
+                                        android:padding="10dp"
+                                        android:text="Loading Interior"
+                                        android:textColor="@color/text_color"
+                                        android:textSize="12sp" />
+
+                                    <ImageView
+                                        android:id="@+id/indicatorLoadingInterior"
+                                        android:layout_width="15dp"
+                                        android:layout_height="15dp"
+                                        android:src="@drawable/warning2" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:fontFamily="@font/poppins_semibold"
+                                        android:padding="10dp"
+                                        android:text="Tools Picture"
+                                        android:textColor="@color/text_color"
+                                        android:textSize="12sp" />
+
+
+                                    <ImageView
+                                        android:id="@+id/indicatorToolsPicture"
+                                        android:layout_width="15dp"
+                                        android:layout_height="15dp"
+                                        android:src="@drawable/warning2" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:fontFamily="@font/poppins_semibold"
+                                        android:padding="10dp"
+                                        android:text="Vin Number"
+                                        android:textColor="@color/text_color"
+                                        android:textSize="12sp" />
+
+
+                                    <ImageView
+                                        android:id="@+id/indicatorVinNumber"
+                                        android:layout_width="15dp"
+                                        android:layout_height="15dp"
+                                        android:src="@drawable/warning2" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="0.2dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginVertical="15dp"
+                                android:layout_marginStart="10dp"
+                                android:background="@color/text_color" />
+
+                            <View
+                                android:layout_width="30dp"
+                                android:layout_height="0.5dp"
+                                android:layout_marginVertical="5dp"
+                                android:background="@drawable/dotted"
+                                android:backgroundTint="@color/text_color" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/addImagesBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="5dp"
+                                android:backgroundTint="@color/medium_orange"
+                                android:fontFamily="@font/poppins_semibold"
+                                android:padding="12dp"
+                                android:text="Add Image"
+                                android:textColor="@color/white"
+                                android:textSize="12sp"
+                                app:cornerRadius="10sp"
+                                app:strokeColor="@color/white"
+                                app:strokeWidth="4dp" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/submitBtn"
                 android:layout_width="wrap_content"
@@ -381,5 +450,5 @@
                 app:strokeColor="@color/black"
                 app:strokeWidth="0.5dp" />
         </LinearLayout>
-</ScrollView>
+    </ScrollView>
 </layout>

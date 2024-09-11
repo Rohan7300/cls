@@ -7,13 +7,16 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import com.clebs.celerity.R
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.ActivityBreakdownInspectionBinding
@@ -26,13 +29,20 @@ import com.clebs.celerity.utils.DependencyProvider.isBreakDownItemInitialize
 import com.clebs.celerity.utils.ImageTakerActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.clientUniqueIDForBreakDown
+import com.clebs.celerity.utils.dateOnFullFormat
+import com.clebs.celerity.utils.dateToday
 import com.clebs.celerity.utils.showToast
+import com.clebs.celerity.utils.startUploadWithWorkManager
+import com.clebs.celerity.utils.visible
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.datasources.remote.network.datamodels.createQuoteApi.payload.ClientAttrs
 import io.clearquote.assessment.cq_sdk.models.CustomerDetails
 import io.clearquote.assessment.cq_sdk.models.InputDetails
 import io.clearquote.assessment.cq_sdk.models.UserFlowParams
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.Date
 
 class BreakDownInspectionActivity : AppCompatActivity() {
     lateinit var binding: ActivityBreakdownInspectionBinding
@@ -42,10 +52,8 @@ class BreakDownInspectionActivity : AppCompatActivity() {
     private var cqOpened = false
     private var crrRegNo: String = ""
     private var isVehInspectionDone = false
-    var currentMileage = 0
-    var addBlueMilege = 0
-    var breakDownFuelLevelId = -1
-    var breakDownVehOilLevelId = -1
+    private var breakDownFuelLevelId = -1
+    private var breakDownVehOilLevelId = -1
 
     private lateinit var cqSDKInitializer: CQSDKInitializer
 
@@ -72,6 +80,7 @@ class BreakDownInspectionActivity : AppCompatActivity() {
         prefs = Prefs.getInstance(this)
         loadingDialog = LoadingDialog(this)
         crrRegNo = prefs.scannedVmRegNo
+
         if (!isBreakDownItemInitialize()) {
             showToast("BreakDown Data is not received", this)
         } else {
@@ -84,9 +93,9 @@ class BreakDownInspectionActivity : AppCompatActivity() {
             }
         }
         cqSDKInitializer = CQSDKInitializer(this)
-
+        uiOne()
         clickListeners()
-
+        prefs.currBreakDownInspectionId = currentBreakDownItemforInspection.VehInspId
         loadingDialog.show()
         vm.GetVehiclefuelListing().observe(this) {
             loadingDialog.dismiss()
@@ -126,6 +135,17 @@ class BreakDownInspectionActivity : AppCompatActivity() {
         }
     }
 
+    fun uiOne(){
+        binding.bodyVehicleInfo.visibility = View.VISIBLE
+        binding.submitBtn.visibility = View.GONE
+        binding.secondLayout.visibility = View.GONE
+        binding.secondCard.visibility = View.GONE
+    }
+    fun uiSecond(){
+        binding.bodyVehicleInfo.visibility = View.GONE
+        binding.submitBtn.visibility = View.VISIBLE
+        binding.secondCard.visibility = View.VISIBLE
+    }
     fun clickListeners() {
         binding.startinspectionBtn.setOnClickListener {
             isVehInspectionDone = true
@@ -136,21 +156,48 @@ class BreakDownInspectionActivity : AppCompatActivity() {
         }
         binding.submitBtn.setOnClickListener {
             if (validate()) {
-                var request = CompleteDriverVehicleBreakDownInspectionRequest(
-                    AddBlueMileage = addBlueMilege,
+                loadingDialog.show()
+                val request = CompleteDriverVehicleBreakDownInspectionRequest(
+                    AddBlueMileage = binding.atvAddBlueMileage.text.toString(),
                     DaVehImgId = 0,
                     DriverId = prefs.clebUserId.toInt(),
                     FuelLevelId = breakDownFuelLevelId,
-                    InspectionId,
-                    IsVehBreakDownInspectionDone,
-                    OilLevelId,
-                    SupervisorId,
-                    VehCurrentMileage,
-                    VehInspectionDoneById = prefs.inspectionIDForBreakDown,
-                    VehInspectionDoneOn
+                    InspectionId = currentBreakDownItemforInspection.VehInspId,
+                    IsVehBreakDownInspectionDone = true,
+                    OilLevelId = breakDownVehOilLevelId,
+                    SupervisorId = 0,
+                    VehCurrentMileage = binding.atvVehicleCurrentMileage.text.toString(),
+                    VehInspectionDoneById = prefs.clebUserId.toInt(),
+                    VehInspectionDoneOn = dateOnFullFormat(),
+                    ClientRefId = prefs.inspectionIDForBreakDown,
+                    VmId = currentBreakDownItemforInspection.VehInspVmId
                 )
-                vm.CompleteDriverVehicleBreakDownInspection(
+                vm.CompleteDriverVehicleBreakDownInspection(request).observe(this) {
+                    if (it != null) {
+                        showToast("Inspection Completed", this@BreakDownInspectionActivity)
+                        startUploadWithWorkManager(4, prefs, this@BreakDownInspectionActivity)
+                        lifecycleScope.launch {
+                            delay(20000)
+                        }
+                        loadingDialog.dismiss()
+                        finish()
+                    } else {
+                        loadingDialog.dismiss()
+                        showToast("Inspection Failed to submit", this@BreakDownInspectionActivity)
+                    }
+                }
             }
+        }
+        binding.headVehicleInformation.setOnClickListener {
+            binding.bodyVehicleInfo.isVisible = !binding.bodyVehicleInfo.isVisible
+        }
+        binding.headerAddInspectionImages.setOnClickListener {
+            binding.secondLayout.isVisible = !binding.secondLayout.isVisible
+        }
+        binding.nextBtn.setOnClickListener {
+            //if(validate())
+                uiSecond()
+
         }
     }
 
@@ -187,6 +234,28 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                 showToast("Please add all the Vehicle Pictures", this)
                 return false
             }
+        }
+
+        return true
+    }
+
+    private fun validateOne(): Boolean {
+
+        if (binding.atvVehicleCurrentMileage.text.isNullOrBlank()) {
+            showToast("Add Vehicle Mileage Before Submitting!!", this)
+            return false
+        }
+        if (binding.atvAddBlueMileage.text.isNullOrBlank()) {
+            showToast("Add Vehicle Add Blue Mileage Before Submitting", this)
+            return false
+        }
+        if (breakDownFuelLevelId == -1) {
+            showToast("Select Veh Fuel Level Before Submitting!!", this)
+            return false
+        }
+        if (breakDownVehOilLevelId == -1) {
+            showToast("Select Veh Oil Level Before Submitting!!", this)
+            return false
         }
 
         return true
@@ -263,13 +332,13 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                     ),
 
                         result = { isStarted, msg, code ->
-
+                            loadingDialog.dismiss()
                             Log.e(TAG, "startInspection: $msg $code")
                             if (isStarted) {
                                 Prefs.getInstance(App.instance).returnInspectionFirstTime = false
                                 Log.d(TAG, "isStarted $msg")
                             } else {
-                                loadingDialog.dismiss()
+
                                 if (msg == "Online quote can not be created without internet") {
                                     showToast(
                                         "Please Turn on the internet", this
@@ -400,7 +469,7 @@ class BreakDownInspectionActivity : AppCompatActivity() {
             }
         }
 
-    fun updateImageUi() {
+    private fun updateImageUi() {
         val drawable =
             ContextCompat.getDrawable(this@BreakDownInspectionActivity, R.drawable.warning2)
         val yesDrawable =

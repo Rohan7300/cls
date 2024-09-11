@@ -81,6 +81,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.text.ParseException
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
@@ -1067,7 +1068,9 @@ fun isTokenExpired(prefs: Prefs): Boolean {
 fun dateToday(): String {
     return SimpleDateFormat("yyyy-MM-dd").format(Date())
 }
-
+fun dateOnFullFormat():String{
+    return ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT)
+}
 fun checkTokenExpirationAndLogout(context: Activity, prefs: Prefs) {
     if (isTokenExpired(prefs)) {
         val tokenExpiredDialog = AlertDialog.Builder(context).create()

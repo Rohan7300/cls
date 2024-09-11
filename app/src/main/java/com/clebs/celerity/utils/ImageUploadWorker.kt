@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -652,6 +653,80 @@ class ImageUploadWorker(
                             prefs.isInspectionIDFailedToUpload = false
                             prefs.updateInspectionStatus(true)
                         }
+                    }
+                    4->{
+                        prefs.isBreakDownImagesAreUploading = true
+                        if (!prefs.breakDownSpareWheelUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
+                            val partBody = createMultipartPart(
+                                prefs.breakDownSpareWheelUri!!, "uploadDAVehBreakDownInpectionSpearWheelPictureFile",
+                                appContext
+                            )
+                            Log.d("breakDownSpareWheelUri","Uploading>> ${prefs.breakDownSpareWheelUri}")
+                            val response = withContext(Dispatchers.IO){
+                                mainRepo.UploadDAVehBreakDownInpectionSpearWheelPictureFile(
+                                    prefs.currBreakDownInspectionId,
+                                    0,
+                                    partBody
+                                )
+                            }
+                        }
+                        if (!prefs.breakDownVehicleInteriorUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
+                            val partBody = createMultipartPart(
+                                prefs.breakDownVehicleInteriorUri!!, "uploadDAVehBreakDownInpectionInteriorPictureFile",
+                                appContext
+                            )
+                            Log.d("breakDownVehicleInteriorUri","Uploading>> ${prefs.breakDownVehicleInteriorUri}")
+                            val response = withContext(Dispatchers.IO){
+                                mainRepo.UploadDAVehBreakDownInpectionInteriorPictureFile(
+                                    prefs.currBreakDownInspectionId,
+                                    0,
+                                    partBody
+                                )
+                            }
+                        }
+                        if (!prefs.breakDownLoadingInteriorUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
+                            val partBody = createMultipartPart(
+                                prefs.breakDownLoadingInteriorUri!!, "uploadDAVehBreakDownInpectionLoadingInteriorPictureFile",
+                                appContext
+                            )
+                            Log.d("breakDownLoadingInteriorUri","Uploading>> ${prefs.breakDownLoadingInteriorUri}")
+                            val response = withContext(Dispatchers.IO){
+                                mainRepo.UploadDAVehBreakDownInpectionLoadingInteriorPictureFile(
+                                    prefs.currBreakDownInspectionId,
+                                    0,
+                                    partBody
+                                )
+                            }
+                        }
+                        if (!prefs.breakDownToolsPictureUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
+                            val partBody = createMultipartPart(
+                                prefs.breakDownToolsPictureUri!!, "uploadDAVehBreakDownInpectionToolsPictureFile",
+                                appContext
+                            )
+                            Log.d("breakDownToolsPictureUri","Uploading>> ${prefs.breakDownToolsPictureUri}")
+                            val response = withContext(Dispatchers.IO){
+                                mainRepo.UploadDAVehBreakDownInpectionToolsPictureFile(
+                                    prefs.currBreakDownInspectionId,
+                                    0,
+                                    partBody
+                                )
+                            }
+                        }
+                        if (!prefs.breakDownVinNumberPictureUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
+                            val partBody = createMultipartPart(
+                                prefs.breakDownVinNumberPictureUri!!, "uploadDAVehBreakDownInpectionVinNoPictureFile",
+                                appContext
+                            )
+                            Log.d("breakDownToolsPictureUri","Uploading>> ${prefs.breakDownVinNumberPictureUri}")
+                            val response = withContext(Dispatchers.IO){
+                                mainRepo.UploadDAVehBreakDownInpectionVinNoPictureFile(
+                                    prefs.currBreakDownInspectionId,
+                                    0,
+                                    partBody
+                                )
+                            }
+                        }
+                        prefs.isBreakDownImagesAreUploading = false
                     }
                 }
 
