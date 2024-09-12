@@ -210,6 +210,9 @@ fun expiredDocuments(
     }
 }
 
+fun breakDown(viewModel:MainViewModel,prefs: Prefs){
+    viewModel.GetVehBreakDownInspectionInfobyDriver(prefs.clebUserId.toInt())
+}
 fun showAdvancePaymentDialog(
     amount: String,
     date: String,

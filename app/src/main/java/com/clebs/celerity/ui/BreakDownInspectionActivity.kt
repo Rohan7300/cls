@@ -40,8 +40,10 @@ import io.clearquote.assessment.cq_sdk.models.CustomerDetails
 import io.clearquote.assessment.cq_sdk.models.InputDetails
 import io.clearquote.assessment.cq_sdk.models.UserFlowParams
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
+import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.Date
 
 class BreakDownInspectionActivity : AppCompatActivity() {
@@ -54,11 +56,12 @@ class BreakDownInspectionActivity : AppCompatActivity() {
     private var isVehInspectionDone = false
     private var breakDownFuelLevelId = -1
     private var breakDownVehOilLevelId = -1
-
+    private var sdkKey = ""
     private lateinit var cqSDKInitializer: CQSDKInitializer
 
     companion object {
         var TAG = "BreakInspectionActivity"
+
     }
 
     private val REQUIRED_PERMISSIONS =
@@ -74,13 +77,15 @@ class BreakDownInspectionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sdkKey = ContextCompat.getString(this, R.string.cqsdk_osm_key)
+        cqSDKInitializer()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_breakdown_inspection)
         breakDownInspectionImageStage = 0
         vm = DependencyProvider.getMainVM(this)
         prefs = Prefs.getInstance(this)
         loadingDialog = LoadingDialog(this)
         crrRegNo = prefs.scannedVmRegNo
-
+        prefs.isBreakDownGenerated = true
         if (!isBreakDownItemInitialize()) {
             showToast("BreakDown Data is not received", this)
         } else {
@@ -135,20 +140,24 @@ class BreakDownInspectionActivity : AppCompatActivity() {
         }
     }
 
-    fun uiOne(){
+    fun uiOne() {
         binding.bodyVehicleInfo.visibility = View.VISIBLE
         binding.submitBtn.visibility = View.GONE
         binding.secondLayout.visibility = View.GONE
         binding.secondCard.visibility = View.GONE
     }
-    fun uiSecond(){
+
+    fun uiSecond() {
         binding.bodyVehicleInfo.visibility = View.GONE
         binding.submitBtn.visibility = View.VISIBLE
         binding.secondCard.visibility = View.VISIBLE
+        binding.secondLayout.visibility = View.VISIBLE
     }
+
     fun clickListeners() {
         binding.startinspectionBtn.setOnClickListener {
             isVehInspectionDone = true
+            prefs.isBreakDownInspectionDone=true
             startInspection()
         }
         binding.addImagesBtn.setOnClickListener {
@@ -175,12 +184,15 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                 vm.CompleteDriverVehicleBreakDownInspection(request).observe(this) {
                     if (it != null) {
                         showToast("Inspection Completed", this@BreakDownInspectionActivity)
+                        prefs.storeBreakDownInspectionTime()
                         startUploadWithWorkManager(4, prefs, this@BreakDownInspectionActivity)
                         lifecycleScope.launch {
                             delay(20000)
+
+                            loadingDialog.dismiss()
+                            finish()
                         }
-                        loadingDialog.dismiss()
-                        finish()
+
                     } else {
                         loadingDialog.dismiss()
                         showToast("Inspection Failed to submit", this@BreakDownInspectionActivity)
@@ -190,12 +202,42 @@ class BreakDownInspectionActivity : AppCompatActivity() {
         }
         binding.headVehicleInformation.setOnClickListener {
             binding.bodyVehicleInfo.isVisible = !binding.bodyVehicleInfo.isVisible
+            if (binding.bodyVehicleInfo.isVisible) {
+                binding.headerOneIcon.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.dropup
+                    )
+                )
+            } else {
+                binding.headerOneIcon.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.dropdown
+                    )
+                )
+            }
         }
         binding.headerAddInspectionImages.setOnClickListener {
             binding.secondLayout.isVisible = !binding.secondLayout.isVisible
+            if (binding.secondLayout.isVisible) {
+                binding.headerTwoIcon.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.dropup
+                    )
+                )
+            } else {
+                binding.headerTwoIcon.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.dropdown
+                    )
+                )
+            }
         }
         binding.nextBtn.setOnClickListener {
-            //if(validate())
+            if (validateOne())
                 uiSecond()
 
         }
@@ -242,19 +284,19 @@ class BreakDownInspectionActivity : AppCompatActivity() {
     private fun validateOne(): Boolean {
 
         if (binding.atvVehicleCurrentMileage.text.isNullOrBlank()) {
-            showToast("Add Vehicle Mileage Before Submitting!!", this)
+            showToast("Add Vehicle Mileage Before Next Step!!", this)
             return false
         }
         if (binding.atvAddBlueMileage.text.isNullOrBlank()) {
-            showToast("Add Vehicle Add Blue Mileage Before Submitting", this)
+            showToast("Add Vehicle Add Blue Mileage Before Next Step", this)
             return false
         }
         if (breakDownFuelLevelId == -1) {
-            showToast("Select Veh Fuel Level Before Submitting!!", this)
+            showToast("Select Veh Fuel Level Before Next Step!!", this)
             return false
         }
         if (breakDownVehOilLevelId == -1) {
-            showToast("Select Veh Oil Level Before Submitting!!", this)
+            showToast("Select Veh Oil Level Before Next Step!!", this)
             return false
         }
 
@@ -312,9 +354,10 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                         //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
                     ), inputDetails = InputDetails(
                         vehicleDetails = VehicleDetails(
-                            regNumber = crrRegNo.replace(
-                                " ", ""
-                            ), //if sent, user can't edit
+                            /*           regNumber = crrRegNo.replace(
+                                           " ", ""
+                                       ),*/ //if sent, user can't edit
+                            regNumber = "ND22YFL",
                             make = "Van", //if sent, user can't edit
                             model = "Any Model", //if sent, user can't edit
                             bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
@@ -325,7 +368,7 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                             phoneNumber = "", //if sent, user can't edit
                         )
                     ), userFlowParams = UserFlowParams(
-                        isOffline = Prefs.getInstance(App.instance).returnInspectionFirstTime!!, // true, Offline quote will be created | false, online quote will be created | null, online
+                        isOffline = false, // true, Offline quote will be created | false, online quote will be created | null, online
 
                         skipInputPage = true, // true, Inspection will be started with camera page | false, Inspection will be started
 
@@ -531,5 +574,21 @@ class BreakDownInspectionActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun cqSDKInitializer() {
+        cqSDKInitializer = CQSDKInitializer(this)
+        cqSDKInitializer.triggerOfflineSync()
+        if (!cqSDKInitializer.isCQSDKInitialized()) {
+        Log.e("OSMSDK intialized", "cqSDKInitializer: ")
+        cqSDKInitializer.initSDK(
+            sdkKey = sdkKey, result = { isInitialized, code, _ ->
+                if (isInitialized && code == PublicConstants.sdkInitializationSuccessCode) {
+                    Prefs.getInstance(applicationContext).saveOSMCQSdkKey(sdkKey)
+                } else {
+                    showToast("OSMSDK: Error initializing SDK", this)
+                }
+            })
+        }
     }
 }

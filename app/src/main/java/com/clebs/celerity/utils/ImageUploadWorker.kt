@@ -669,6 +669,7 @@ class ImageUploadWorker(
                                     partBody
                                 )
                             }
+                            prefs.breakDownSpareWheelUri = ""
                         }
                         if (!prefs.breakDownVehicleInteriorUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
                             val partBody = createMultipartPart(
@@ -683,6 +684,7 @@ class ImageUploadWorker(
                                     partBody
                                 )
                             }
+                            prefs.breakDownVehicleInteriorUri = ""
                         }
                         if (!prefs.breakDownLoadingInteriorUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
                             val partBody = createMultipartPart(
@@ -697,6 +699,7 @@ class ImageUploadWorker(
                                     partBody
                                 )
                             }
+                            prefs.breakDownLoadingInteriorUri = ""
                         }
                         if (!prefs.breakDownToolsPictureUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
                             val partBody = createMultipartPart(
@@ -711,6 +714,7 @@ class ImageUploadWorker(
                                     partBody
                                 )
                             }
+                            prefs.breakDownToolsPictureUri=""
                         }
                         if (!prefs.breakDownVinNumberPictureUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
                             val partBody = createMultipartPart(
@@ -725,6 +729,7 @@ class ImageUploadWorker(
                                     partBody
                                 )
                             }
+                            prefs.breakDownVinNumberPictureUri = ""
                         }
                         prefs.isBreakDownImagesAreUploading = false
                     }

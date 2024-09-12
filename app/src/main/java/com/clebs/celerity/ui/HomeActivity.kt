@@ -321,12 +321,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     viewModel.GetVehBreakDownInspectionInfobyDriver(prefs.clebUserId.toInt())
                 }
             }
-            viewModel.liveDataVehBreakDownInspectionInfobyDriverResponse.observe(this){
-                if(it!=null){
-                    if(it.size>0){
-                        showBreakDownDialog(fragmentManager)
+            viewModel.liveDataVehBreakDownInspectionInfobyDriverResponse.observe(this) {
+                if (it != null) {
+                    if (it.size > 0) {
+                        //showBreakDownDialog(fragmentManager)
                         currentBreakDownItemforInspection = it[0]
                     }
+                } else {
+
                 }
             }
 
@@ -885,6 +887,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     vehicleExpiringDocuments(this, parseToInt(notificationID))
                 } else if (actionToPerform == "ThirdPartyAccessRequestNotification") {
                     navController.navigate(R.id.profileFragment)
+                } else if (actionToPerform == "VehicleBreakDownInspectionNotification") {
+                    viewModel.GetVehBreakDownInspectionInfobyDriver(prefs.clebUserId.toInt())
                 } else {
                     ActivityHomeBinding.title.text = "Notifications"
                     navController.navigate(R.id.notifficationsFragment)
@@ -900,8 +904,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                     navController.navigate(R.id.notifficationsFragment)
                                     return*/
                 return
-            }
-            else if (destinationFragment == "CompleteTask") {
+            } else if (destinationFragment == "CompleteTask") {
                 navController.navigate(R.id.newCompleteTaskFragment)
             } else if (destinationFragment == "ThirdPartyAcess") {
                 try {
@@ -1102,8 +1105,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private fun cqSDKInitializer() {
         cqSDKInitializer = CQSDKInitializer(this)
         cqSDKInitializer.triggerOfflineSync()
-        if (!cqSDKInitializer.isCQSDKInitialized()) {
-            Log.e("intialized", "cqSDKInitializer: ")
+        if (!cqSDKInitializer.isCQSDKInitialized()||(prefs.isBreakDownGenerated&&prefs.isBreakDownInspectionDone)) {
+            prefs.isBreakDownGenerated = false
+            prefs.isBreakDownInspectionDone = false
+            Log.e("Initialized", "cqSDKInitializer: ")
             cqSDKInitializer.initSDK(sdkKey = sdkkey, result = { isInitialized, code, _ ->
                 if (isInitialized && code == PublicConstants.sdkInitializationSuccessCode) {
                     Prefs.getInstance(applicationContext).saveCQSdkKey(sdkkey)
@@ -1210,7 +1215,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                 } else {
                                     prefs.updateInspectionStatus(true)
                                 }*/
-                if(it.IsVehicleInspectionDone){
+                if (it.IsVehicleInspectionDone) {
                     prefs.updateInspectionStatus(true)
                 }
             }

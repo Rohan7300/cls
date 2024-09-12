@@ -64,6 +64,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/light_grey"
                         android:orientation="horizontal"
+                        android:gravity="center"
                         android:padding="13dp">
 
                         <TextView
@@ -73,6 +74,11 @@
                             android:fontFamily="@font/poppins_semibold"
                             android:text="Vehicle Information"
                             android:textColor="@color/text_color" />
+                        <ImageView
+                            android:id="@+id/headerOneIcon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/dropup" />
 
                     </LinearLayout>
 
@@ -225,7 +231,11 @@
                             android:fontFamily="@font/poppins_semibold"
                             android:text="Upload Vehicle Pictures"
                             android:textColor="@color/text_color" />
-
+                        <ImageView
+                            android:id="@+id/headerTwoIcon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/dropup" />
                     </LinearLayout>
                 <LinearLayout
                     android:id="@+id/secondLayout"

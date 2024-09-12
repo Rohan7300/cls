@@ -14,6 +14,7 @@ Place the Rectangle area as on Vehicle Reg plate as shown in the image and captu
     <string name="alt_bottom_sheet_thread_button_plus">Increase the number of threads used</string>
     <string name="label_interence_time">Inference Time</string>
     <string name="label_fps">Frames per Second</string>
+    <string name="cqsdk_osm_key">ab8c0110-9529-4e2c-a1d4-d810636bccf3.eu</string>
     <string name="label_confidence_threshold">Threshold</string>
     <string name="label_max_results">Max Results</string>
     <string name="open_nav">Open Navigation Drawer</string>

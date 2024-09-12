@@ -25,6 +25,7 @@ import com.clebs.celerity.models.requests.ApproveDaDailyRotaRequest
 import com.clebs.celerity.models.response.NotificationResponseItem
 import com.clebs.celerity.utils.DependencyProvider.dailyRotaNotificationShowing
 import com.clebs.celerity.utils.Prefs
+import com.clebs.celerity.utils.breakDown
 import com.clebs.celerity.utils.deductions
 import com.clebs.celerity.utils.expiredDocuments
 import com.clebs.celerity.utils.expiringDocument
@@ -89,6 +90,7 @@ class NotificationAdapter(
                 "InvoiceReadyToReview" -> binding.title.setText("Invoice Ready To Review")
                 "DriverDeductionWithAgreement" -> binding.title.setText("Driver Deduction With Agreement")
                 "ThirdPartyAccessRequestNotification" -> binding.title.setText("Third Party Access Request Notification")
+                "VehicleBreakDownInspectionNotification" -> binding.title.setText("Complete BreakDown Vehicle Inspection")
             }
 //            binding.title.text = item.NotificationTitle
             Log.e("jhdjsfhjfdjnotification", "bind: " + item.NotificationTitle)
@@ -232,7 +234,8 @@ class NotificationAdapter(
                                               //dialog.showDialog(fragmentManager)
                                           }
                                       }*/
-                } else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement") ||
+                }
+                else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement") ||
                     item.ActionToPerform.equals("Vehicle Advance Payment Agreement")
                 ) {
                     /*                    vehicleAdvancePaymentAgreement(
@@ -263,19 +266,26 @@ class NotificationAdapter(
                             showToast("Failed to fetch data", context)
                         }
                     }
-                } else if (item.ActionToPerform.equals("Expiring Document") ||
+                }
+                else if (item.ActionToPerform.equals("Expiring Document") ||
                     item.ActionToPerform.equals("UserExpiringDocuments")
                 ) {
                     expiringDocument(context, item.NotificationId)
                     /*                val intent = Intent(context, ExpiringDocumentsActivity::class.java)
                                     intent.putExtra("notificationID", item.NotificationId)
                                     context.startActivity(intent)*/
-                } else if (item.ActionToPerform == "VehicleExpiringDocuments") {
+                }
+                else if (item.ActionToPerform == "VehicleExpiringDocuments") {
                     vehicleExpiringDocuments(context, item.NotificationId)
-                } else if (item.ActionToPerform == "ThirdPartyAccessRequestNotification") {
+                }
+                else if (item.ActionToPerform == "ThirdPartyAccessRequestNotification") {
                     viewModel.MarkNotificationAsRead(item.NotificationId)
                     navController.navigate(R.id.profileFragment)
-                } else {
+                }
+                else if(item.ActionToPerform =="VehicleBreakDownInspectionNotification"){
+                    breakDown(viewModel,pref)
+                }
+                else {
                     //viewModel.MarkNotificationAsRead(item.NotificationId)
                     viewModel.MarkNotificationAsRead(item.NotificationId)
                     callback.refresh()

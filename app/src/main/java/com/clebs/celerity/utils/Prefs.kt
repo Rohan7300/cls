@@ -330,16 +330,16 @@ class Prefs(context: Context) {
     fun setLastVisitedScreenId(context: Context, screenId: Int) {
         val editor = sharedPreferences.edit()
         val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-        editor.putString("last_screen_set_dt",currentDate)
+        editor.putString("last_screen_set_dt", currentDate)
         editor.putInt("last_screen_id", screenId)
         editor.apply()
     }
 
     // Function to retrieve the last visited screen ID
     fun getLastVisitedScreenId(context: Context): Int {
-        val savedDate = sharedPreferences.getString("last_screen_set_dt",null)
-        return if(isToday(savedDate))
-        sharedPreferences.getInt("last_screen_id", 0)
+        val savedDate = sharedPreferences.getString("last_screen_set_dt", null)
+        return if (isToday(savedDate))
+            sharedPreferences.getInt("last_screen_id", 0)
         else
             0
     }
@@ -405,7 +405,37 @@ class Prefs(context: Context) {
         editor.apply()
     }
 
-    /*    fun saveSignatureInfo(jsonInfo:String){
+    fun saveOSMCQSdkKey(key: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("CQ_OSM_KEY", key)
+        editor.apply()
+    }
+
+    fun storeBreakDownInspectionTime() {
+        val editor = sharedPreferences.edit()
+        val now = System.currentTimeMillis()
+        editor.putLong("last_press", now).apply()
+    }
+
+    fun isBreakDownInspectionAllowed(): Boolean {
+        val now = System.currentTimeMillis()
+
+        val lastPress = sharedPreferences.getLong("last_press", 0)
+
+        return now - lastPress >= 5 * 60 * 1000
+    }
+
+
+    var isBreakDownInspectionDone:Boolean
+        get() = sharedPreferences.getBoolean("isBreakDownInspectionDone",false)
+        set(value) = sharedPreferences.edit().putBoolean("isBreakDownInspectionDone",value).apply()
+
+    var isBreakDownGenerated:Boolean
+        get() = sharedPreferences.getBoolean("isBreakDownGenerated",false)
+        set(value) = sharedPreferences.edit().putBoolean("isBreakDownGenerated",value).apply()
+
+    /*
+    fun saveSignatureInfo(jsonInfo:String){
             val editor = sharedPreferences.edit()
             editor.putString("SignaturInfo",jsonInfo)
             editor.apply()
@@ -413,7 +443,8 @@ class Prefs(context: Context) {
 
         fun getSignaturInfo():String?{
             return sharedPreferences.getString("SignaturInfo",null)
-        }*/
+        }
+        */
 
     fun saveDriverRouteInfoByDate(data: GetDriverRouteInfoByDateResponseItem?) {
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
@@ -470,7 +501,6 @@ class Prefs(context: Context) {
         val data = sharedPreferences.getString("CurrInvoice", null)
         return gson.fromJson(data, InvoiceXX::class.java) ?: null
     }
-
 
 
     fun saveInvoiceX(item: InvoiceXX) {
@@ -565,36 +595,37 @@ class Prefs(context: Context) {
         editor.apply()
     }
 
-    fun isWeeklyRotaApprovalCheckToday() :Boolean{
+    fun isWeeklyRotaApprovalCheckToday(): Boolean {
         val isWeeklyRotaChecked = sharedPreferences.getBoolean("isWeeklyRotaChecked", false)
         if (isWeeklyRotaChecked) {
             val lastCheckDateTime = sharedPreferences.getString("last_rota_check_time", "")
             val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             return lastCheckDateTime == currentDate
-        }else {
+        } else {
             return false
         }
     }
 
-    fun updateWeeklyRotaApprovalCheck(status:Boolean) {
+    fun updateWeeklyRotaApprovalCheck(status: Boolean) {
         val editor = sharedPreferences.edit()
         val lastCheckDateTime = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         editor.putBoolean("isWeeklyRotaChecked", status)
         editor.putString("last_rota_check_time", lastCheckDateTime)
         editor.apply()
     }
-    fun isPolicyCheckToday() :Boolean{
+
+    fun isPolicyCheckToday(): Boolean {
         val isWeeklyRotaChecked = sharedPreferences.getBoolean("isPolicyChecked", false)
         return if (isWeeklyRotaChecked) {
             val lastCheckDateTime = sharedPreferences.getString("last_policy_check_time", "")
             val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             lastCheckDateTime == currentDate
-        }else {
+        } else {
             false
         }
     }
 
-    fun updatePolicyCheckToday(status:Boolean) {
+    fun updatePolicyCheckToday(status: Boolean) {
         val editor = sharedPreferences.edit()
         val lastCheckDateTime = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         editor.putBoolean("isPolicyChecked", status)
@@ -784,46 +815,51 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getBoolean("useBiometric", true)
         set(value) = sharedPreferences.edit().putBoolean("useBiometric", value).apply()
 
-    var inspectionDateTime:String?
-        get() = sharedPreferences.getString("inspectionDateTime","0")
-        set(value) = sharedPreferences.edit().putString("inspectionDateTime",value).apply()
+    var inspectionDateTime: String?
+        get() = sharedPreferences.getString("inspectionDateTime", "0")
+        set(value) = sharedPreferences.edit().putString("inspectionDateTime", value).apply()
 
-    var breakDownSpareWheelUri:String?
-        get() = sharedPreferences.getString("breakDownSpareWheelUri","")
-        set(value) = sharedPreferences.edit().putString("breakDownSpareWheelUri",value).apply()
+    var breakDownSpareWheelUri: String?
+        get() = sharedPreferences.getString("breakDownSpareWheelUri", "")
+        set(value) = sharedPreferences.edit().putString("breakDownSpareWheelUri", value).apply()
 
-    var isBreakDownImagesAreUploading:Boolean
+    var isBreakDownImagesAreUploading: Boolean
         get() = sharedPreferences.getBoolean("isBreakDownImagesAreUploading", false)
-        set(value) = sharedPreferences.edit().putBoolean("isBreakDownImagesAreUploading", value).apply()
-    var breakDownVehicleInteriorUri:String?
-        get() = sharedPreferences.getString("breakdownVehicleInteriorUri","")
-        set(value) = sharedPreferences.edit().putString("breakdownVehicleInteriorUri",value).apply()
+        set(value) = sharedPreferences.edit().putBoolean("isBreakDownImagesAreUploading", value)
+            .apply()
+    var breakDownVehicleInteriorUri: String?
+        get() = sharedPreferences.getString("breakdownVehicleInteriorUri", "")
+        set(value) = sharedPreferences.edit().putString("breakdownVehicleInteriorUri", value)
+            .apply()
 
-    var breakDownLoadingInteriorUri:String?
-        get() = sharedPreferences.getString("breakDownLoadingInteriorUri","")
-        set(value) = sharedPreferences.edit().putString("breakDownLoadingInteriorUri",value).apply()
+    var breakDownLoadingInteriorUri: String?
+        get() = sharedPreferences.getString("breakDownLoadingInteriorUri", "")
+        set(value) = sharedPreferences.edit().putString("breakDownLoadingInteriorUri", value)
+            .apply()
 
-    var breakDownToolsPictureUri:String?
-        get() = sharedPreferences.getString("breakDownToolsPicture","")
-        set(value) =sharedPreferences.edit().putString("breakDownToolsPicture",value).apply()
+    var breakDownToolsPictureUri: String?
+        get() = sharedPreferences.getString("breakDownToolsPicture", "")
+        set(value) = sharedPreferences.edit().putString("breakDownToolsPicture", value).apply()
 
-    var breakDownVinNumberPictureUri:String?
-        get() = sharedPreferences.getString("breakDownVinNumberPictureUri","")
-        set(value) = sharedPreferences.edit().putString("breakDownVinNumberPictureUri",value).apply()
+    var breakDownVinNumberPictureUri: String?
+        get() = sharedPreferences.getString("breakDownVinNumberPictureUri", "")
+        set(value) = sharedPreferences.edit().putString("breakDownVinNumberPictureUri", value)
+            .apply()
 
-    var breakDownVehicleCurrentMileage:Int
-        get() = sharedPreferences.getInt("breakDownVehicleCurrentMileage",0)
-        set(value) = sharedPreferences.edit().putInt("breakDownVehicleCurrentMileage",value).apply()
+    var breakDownVehicleCurrentMileage: Int
+        get() = sharedPreferences.getInt("breakDownVehicleCurrentMileage", 0)
+        set(value) = sharedPreferences.edit().putInt("breakDownVehicleCurrentMileage", value)
+            .apply()
 
-    var breakDownAddBlueMileage:Int
-        get() = sharedPreferences.getInt("breakDownAddBlueMileage",0)
-        set(value) = sharedPreferences.edit().putInt("breakDownAddBlueMileage",value).apply()
+    var breakDownAddBlueMileage: Int
+        get() = sharedPreferences.getInt("breakDownAddBlueMileage", 0)
+        set(value) = sharedPreferences.edit().putInt("breakDownAddBlueMileage", value).apply()
 
-    var breakDownFuelLevelId:Int
-        get() = sharedPreferences.getInt("breakDownFuelLevelId",0)
-        set(value) = sharedPreferences.edit().putInt("breakDownFuelLevelId",value).apply()
+    var breakDownFuelLevelId: Int
+        get() = sharedPreferences.getInt("breakDownFuelLevelId", 0)
+        set(value) = sharedPreferences.edit().putInt("breakDownFuelLevelId", value).apply()
 
-    var breakDownVehOilLevelId:Int
-        get() = sharedPreferences.getInt("breakDownVehOilLevelId",0)
-        set(value) = sharedPreferences.edit().putInt("breakDownVehOilLevelId",value).apply()
+    var breakDownVehOilLevelId: Int
+        get() = sharedPreferences.getInt("breakDownVehOilLevelId", 0)
+        set(value) = sharedPreferences.edit().putInt("breakDownVehOilLevelId", value).apply()
 }

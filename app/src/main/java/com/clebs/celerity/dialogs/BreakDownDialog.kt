@@ -13,10 +13,11 @@ import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.showToast
 import com.google.android.material.button.MaterialButton
 
-class BreakDownDialog :DialogFragment(){
+class BreakDownDialog : DialogFragment() {
 
     private lateinit var dialogContext: Context
-    companion object{
+
+    companion object {
         const val TAG = "BreakdownDialog"
     }
 
@@ -24,27 +25,35 @@ class BreakDownDialog :DialogFragment(){
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setContentView(R.layout.break_down_dialog)
         dialog.window?.apply {
-            setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             setBackgroundDrawableResource(R.color.semi_transparent_color)
         }
         dialog.findViewById<MaterialButton>(R.id.raiseTicket).setOnClickListener {
-            if(Prefs.getInstance(dialogContext).isBreakDownImagesAreUploading){
-                showToast("Please wait!! Last Inspection Images are Uploading.",dialogContext)
-            }else
-            dialogContext.startActivity(Intent(dialogContext,BreakDownInspectionActivity::class.java))
+            if (Prefs.getInstance(dialogContext).isBreakDownImagesAreUploading && !Prefs.getInstance(
+                    dialogContext
+                ).isBreakDownInspectionAllowed()
+            ) {
+                showToast("Please wait!! Last Inspection Images are Uploading.", dialogContext)
+            } else
+                dialogContext.startActivity(
+                    Intent(
+                        dialogContext,
+                        BreakDownInspectionActivity::class.java
+                    )
+                )
         }
         return dialog
     }
 
-    fun showDialog(fragmentManager: FragmentManager){
+    fun showDialog(fragmentManager: FragmentManager) {
         val fragment = fragmentManager.findFragmentByTag(TAG)
-        if(!isVisible&&fragment==null)
-            show(fragmentManager,TAG)
+        if (!isVisible && fragment == null)
+            show(fragmentManager, TAG)
     }
 
-    fun hideDialog(){
-        if(dialog!=null){
-            if(dialog!!.isShowing)
+    fun hideDialog() {
+        if (dialog != null) {
+            if (dialog!!.isShowing)
                 dismiss()
         }
     }
