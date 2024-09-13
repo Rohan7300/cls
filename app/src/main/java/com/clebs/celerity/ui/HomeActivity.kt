@@ -43,6 +43,7 @@ import com.clebs.celerity.database.ImagesRepo
 import com.clebs.celerity.database.OfflineSyncEntity
 import com.clebs.celerity.databinding.ActivityHomeBinding
 import com.clebs.celerity.dialogs.BirthdayDialog
+import com.clebs.celerity.dialogs.BreakDownDialog
 import com.clebs.celerity.dialogs.ExpiredDocDialog
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.dialogs.NoInternetDialog
@@ -64,7 +65,6 @@ import com.clebs.celerity.utils.InspectionIncompleteListener
 import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.SaveChangesCallback
-import com.clebs.celerity.utils.SaveVehicleInspection
 import com.clebs.celerity.utils.checkIfInspectionFailed
 import com.clebs.celerity.utils.checkTokenExpirationAndLogout
 import com.clebs.celerity.utils.dailyRota
@@ -75,6 +75,7 @@ import com.clebs.celerity.utils.expiringDocument
 import com.clebs.celerity.utils.getCurrentAppVersion
 import com.clebs.celerity.utils.getDeviceID
 import com.clebs.celerity.utils.getVRegNo
+import com.clebs.celerity.utils.hideBreakDownDialog
 import com.clebs.celerity.utils.invoiceReadyToView
 import com.clebs.celerity.utils.isVersionNewer
 import com.clebs.celerity.utils.logOSEntity
@@ -127,6 +128,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(
         Date()
     )
+    private lateinit var breakDownDialog: BreakDownDialog
     private var ninetydaysBoolean: Boolean? = null
     var lastName = ""
     var isLeadDriver = false
@@ -324,11 +326,17 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             viewModel.liveDataVehBreakDownInspectionInfobyDriverResponse.observe(this) {
                 if (it != null) {
                     if (it.size > 0) {
-                        //showBreakDownDialog(fragmentManager)
+                        breakDownDialog = showBreakDownDialog(fragmentManager)
                         currentBreakDownItemforInspection = it[0]
+                    } else {
+                        Log.d("BreakDownDialog","Dismiss")
+                        if (::breakDownDialog.isInitialized)
+                            hideBreakDownDialog(breakDownDialog)
                     }
                 } else {
-
+                    Log.d("BreakDownDialog","Dismiss")
+                    if (::breakDownDialog.isInitialized)
+                        hideBreakDownDialog(breakDownDialog)
                 }
             }
 
@@ -1105,7 +1113,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     private fun cqSDKInitializer() {
         cqSDKInitializer = CQSDKInitializer(this)
         cqSDKInitializer.triggerOfflineSync()
-        if (!cqSDKInitializer.isCQSDKInitialized()||(prefs.isBreakDownGenerated&&prefs.isBreakDownInspectionDone)) {
+        if (!cqSDKInitializer.isCQSDKInitialized() || (prefs.isBreakDownGenerated && prefs.isBreakDownInspectionDone)) {
+            Prefs.getInstance(App.instance).returnInspectionFirstTime = true
             prefs.isBreakDownGenerated = false
             prefs.isBreakDownInspectionDone = false
             Log.e("Initialized", "cqSDKInitializer: ")
@@ -1232,9 +1241,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val textView = view.findViewById<TextView>(R.id.keeping_you)
         val button: TextView = view.findViewById(R.id.save)
         if (isApiResponseTrue && trueCount >= 2 && isChangesSaved) {
-            textView.setText("You have not updated your profile for 90 days, please update it.")
+            textView.text = "You have not updated your profile for 90 days, please update it."
         } else {
-            textView.setText(" Please update your information in case if you find it incorrect.")
+            textView.text = " Please update your information in case if you find it incorrect."
         }
         button.setOnClickListener {
             navController.navigate(R.id.profileFragment)

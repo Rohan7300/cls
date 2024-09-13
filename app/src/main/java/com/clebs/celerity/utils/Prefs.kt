@@ -113,6 +113,7 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putBoolean("returnInspectionFirstTime", value ?: false).apply()
         }
+
     var baseVmID: String
         get() {
             return sharedPreferences.getString("vm_ID", "") ?: ""

@@ -78,11 +78,11 @@ class BreakDownInspectionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sdkKey = ContextCompat.getString(this, R.string.cqsdk_osm_key)
-        cqSDKInitializer()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_breakdown_inspection)
         breakDownInspectionImageStage = 0
         vm = DependencyProvider.getMainVM(this)
         prefs = Prefs.getInstance(this)
+        cqSDKInitializer()
         loadingDialog = LoadingDialog(this)
         crrRegNo = prefs.scannedVmRegNo
         prefs.isBreakDownGenerated = true
@@ -368,10 +368,8 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                             phoneNumber = "", //if sent, user can't edit
                         )
                     ), userFlowParams = UserFlowParams(
-                        isOffline = false, // true, Offline quote will be created | false, online quote will be created | null, online
-
+                        isOffline =  !Prefs.getInstance(App.instance).returnInspectionFirstTime!!,
                         skipInputPage = true, // true, Inspection will be started with camera page | false, Inspection will be started
-
                     ),
 
                         result = { isStarted, msg, code ->
@@ -578,8 +576,9 @@ class BreakDownInspectionActivity : AppCompatActivity() {
 
     private fun cqSDKInitializer() {
         cqSDKInitializer = CQSDKInitializer(this)
+        prefs.Isfirst = true
         cqSDKInitializer.triggerOfflineSync()
-        if (!cqSDKInitializer.isCQSDKInitialized()) {
+
         Log.e("OSMSDK intialized", "cqSDKInitializer: ")
         cqSDKInitializer.initSDK(
             sdkKey = sdkKey, result = { isInitialized, code, _ ->
@@ -589,6 +588,5 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                     showToast("OSMSDK: Error initializing SDK", this)
                 }
             })
-        }
     }
 }

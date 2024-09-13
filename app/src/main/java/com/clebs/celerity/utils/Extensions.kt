@@ -1149,10 +1149,17 @@ fun isVersionNewer(currentVersion: String, latestVersion: String): Boolean {
     return false
 }
 
-fun showBreakDownDialog(fragmentManager: FragmentManager) {
+fun showBreakDownDialog(fragmentManager: FragmentManager):BreakDownDialog {
     val breakDownDialog = BreakDownDialog()
     breakDownDialog.showDialog(fragmentManager)
     breakDownDialog.isCancelable = false
+    return breakDownDialog
+}
+fun hideBreakDownDialog(breakDownDialog: BreakDownDialog?){
+    if(breakDownDialog!=null){
+        if(breakDownDialog.isVisible)
+            breakDownDialog.dismiss()
+    }
 }
 
 

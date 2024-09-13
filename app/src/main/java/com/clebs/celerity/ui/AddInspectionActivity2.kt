@@ -40,7 +40,6 @@ import com.clebs.celerity.utils.DependencyProvider.insLevel
 import com.clebs.celerity.utils.DependencyProvider.isComingBackFromCLSCapture
 import com.clebs.celerity.utils.DependencyProvider.offlineSyncRepo
 import com.clebs.celerity.utils.Prefs
-import com.clebs.celerity.utils.SaveVehicleInspection
 import com.clebs.celerity.utils.checkIfInspectionFailed
 import com.clebs.celerity.utils.checkIfInspectionFailed2
 import com.clebs.celerity.utils.getCurrentDateTime
