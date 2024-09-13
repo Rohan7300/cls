@@ -11,6 +11,7 @@
 
         <item
             android:id="@+id/nav_slideshow"
+            android:iconTint="@color/text_color"
             android:icon="@drawable/baseline_next_week_24"
             android:title="Weekly Defect Checks" />
 
@@ -21,8 +22,13 @@
 
         <item
             android:id="@+id/vehicle_collection_list"
-            android:icon="@drawable/gallery"
+            android:icon="@drawable/book"
             android:title="Vehicle Collection List" />
+        <item
+            android:id="@+id/return_vehicle_list"
+            android:icon="@drawable/list"
+            android:title="Return Vehicle List"
+            />
         <item
             android:id="@+id/vehicle_breakdown"
             android:icon="@drawable/gallery"
@@ -30,9 +36,10 @@
 
         <item
             android:id="@+id/return_to_da"
-            android:icon="@drawable/turndown"
+            android:icon="@drawable/undo"
             android:title="Return to Depot"
             />
+
 
         <!--        <item-->
         <!--            android:id="@+id/nav_weblogin"-->

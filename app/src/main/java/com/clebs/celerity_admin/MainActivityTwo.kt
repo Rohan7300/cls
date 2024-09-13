@@ -34,6 +34,7 @@ import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.BreakDownActivity
 import com.clebs.celerity_admin.ui.ReturnToDaActivity
+import com.clebs.celerity_admin.ui.ReturnVehicleListActivity
 import com.clebs.celerity_admin.ui.VanHireReturnAgreementActivity
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.viewModels.MainViewModel
@@ -292,6 +293,10 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
             R.id.return_to_da->{
                 //startActivity(Intent(this,VanHireReturnAgreementActivity::class.java))
                 startActivity(Intent(this,ReturnToDaActivity::class.java))
+            }
+            R.id.return_vehicle_list->{
+                //startActivity(Intent(this,VanHireReturnAgreementActivity::class.java))
+                startActivity(Intent(this,ReturnVehicleListActivity::class.java))
             }
         }
         return true

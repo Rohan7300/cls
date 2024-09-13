@@ -1,6 +1,5 @@
-package com.clebs.celerity_admin
+package com.clebs.celerity_admin.ui
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.RadioButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -28,8 +26,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -58,11 +54,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
-import com.clebs.celerity_admin.ui.theme.CLSOSMTheme
+import com.clebs.celerity_admin.R
+import com.clebs.celerity_admin.ui.ui.theme.CLSOSMTheme
 import com.clebs.celerity_admin.utils.ListItemX
 
-class VehicleCollectionListActivity : ComponentActivity() {
-
+class ReturnVehicleListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.statusBarColor = ContextCompat.getColor(this, R.color.orange)
@@ -70,14 +66,16 @@ class VehicleCollectionListActivity : ComponentActivity() {
             var showDialog by remember {
                 mutableStateOf(false)
             }
-            CLSOSMTheme {
+            com.clebs.celerity_admin.ui.theme.CLSOSMTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Column {
                         VehicleCollectionList(dialogOpen = { showDialog = true })
-                        FilterDialog(showDialog = showDialog, onDismissRequest = { showDialog = false })
+                        FilterDialog(
+                            showDialog = showDialog,
+                            onDismissRequest = { showDialog = false })
                         val data = listOf<String>("a", "b", "c", "d")
 
                         LazyColumn(Modifier.fillMaxSize()) {
@@ -282,7 +280,7 @@ class VehicleCollectionListActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun Preview() {
-        CLSOSMTheme {
+        com.clebs.celerity_admin.ui.theme.CLSOSMTheme {
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
@@ -303,7 +301,3 @@ class VehicleCollectionListActivity : ComponentActivity() {
         }
     }
 }
-
-
-
-

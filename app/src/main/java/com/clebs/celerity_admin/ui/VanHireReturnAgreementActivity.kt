@@ -341,7 +341,7 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
                             NewVmId = 0,
                             OldVmId = selectedVehicleId,
                             ParentCompanyId = selectedCompanyId,
-                            RequestTypeIds = requestTypeList.map { it.Id },
+                            RequestTypeIds = requestTypeList.map { it.Id!! },
                             SecondUserAllocPosition = 0,
                             SecondUsrId = 0,
                             Signature1 = bse64,

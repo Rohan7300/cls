@@ -24,13 +24,13 @@
         android:theme="@style/NavigationTheme"
         app:drawerLayoutCornerSize="10dp"
         app:headerLayout="@layout/nav_header_main_activity_two"
-        app:itemBackground="@color/very_very_light"
+        app:itemBackground="@color/home_blue"
         app:itemHorizontalPadding="12dp"
         app:itemIconPadding="12dp"
         app:itemIconSize="18dp"
         app:itemIconTint="@color/black"
         app:itemRippleColor="@color/red"
         app:itemShapeInsetStart="12dp"
-        app:itemTextColor="@color/black"
+        app:itemTextColor="#5D5959"
         app:menu="@menu/activity_main_drawer" />
 </androidx.drawerlayout.widget.DrawerLayout>

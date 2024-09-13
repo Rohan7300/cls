@@ -87,7 +87,7 @@ class BreakDownActivity : AppCompatActivity(), DeleteCallback {
                 InspectionId = 0,
                 SuperVisorId = Prefs.getInstance(this@BreakDownActivity).clebUserId.toInt(),
                 VehInspectionDate = VehInspectionDate!!,
-                VehRequestTypeIds = vehicleDamageWorkingStatusList.map { it.Id },
+                VehRequestTypeIds = vehicleDamageWorkingStatusList.map { it.Id!! },
                 VmId = selectedVehicleId
             )
         )
@@ -114,11 +114,13 @@ class BreakDownActivity : AppCompatActivity(), DeleteCallback {
         mainViewModel.VehicleInspectionListLiveData.observe(this) {
             loadingDialog.dismiss()
             if (it != null) {
-                val vehicleNameList = it.map { vehicleList ->
-                    vehicleList.VehicleName
-                }
-                val vehicleIdList = it.map { vehicleList ->
-                    vehicleList.VehicleId
+                val vehicleNameList = arrayListOf<String>()
+                val vehicleIdList = arrayListOf<Int>()
+                it.map { vehicleList ->
+                    if (!vehicleList.VehicleName.isNullOrBlank() && vehicleList.VehicleId != null) {
+                        vehicleNameList.add(vehicleList.VehicleName)
+                        vehicleIdList.add(vehicleList.VehicleId)
+                    }
                 }
                 setSpinner(
                     binding.vehicleListSpinner,
@@ -130,11 +132,13 @@ class BreakDownActivity : AppCompatActivity(), DeleteCallback {
 
         mainViewModel.DriverInspectionListLiveData.observe(this) {
             if (it != null) {
-                val driverNameList = it.map { driverList ->
-                    driverList.Name
-                }
-                val driverIdList = it.map { driverIdList ->
-                    driverIdList.Id
+                val driverNameList = arrayListOf<String>()
+                val driverIdList = arrayListOf<Int>()
+                it.map { driverList ->
+                    if (!driverList.Name.isNullOrBlank() && driverList.Id != null) {
+                        driverNameList.add(driverList.Name)
+                        driverIdList.add(driverList.Id)
+                    }
                 }
                 setSpinner(
                     binding.spinnerDriverList,
@@ -146,10 +150,16 @@ class BreakDownActivity : AppCompatActivity(), DeleteCallback {
 
         mainViewModel.VehicleDamageWorkingStatusLD.observe(this) {
             if (it != null) {
-                val damageStatusName = it.map { damages ->
-                    damages.Name
+                val damageStatusName = arrayListOf<String>()
+                val damageStatusID = arrayListOf<Int>()
+                it.map { damages ->
+                    if (!damages.Name.isNullOrBlank() && damages.Id != null)
+                        damageStatusName.add(damages.Name)
+                    damageStatusID.add(damages.Id!!)
                 }
-                val damageStatusID = it.map { damages ->
+
+
+                it.map { damages ->
                     damages.Id
                 }
                 setSpinner(
@@ -218,7 +228,7 @@ class BreakDownActivity : AppCompatActivity(), DeleteCallback {
         }
     }
 
-    override fun onDelete(item: GetVehicleDamageWorkingStatusResponseItem,position:Int) {
+    override fun onDelete(item: GetVehicleDamageWorkingStatusResponseItem, position: Int) {
         vehicleDamageWorkingStatusList.remove(item)
         listAdapter.notifyItemRemoved(position)
         listAdapter.saveData(vehicleDamageWorkingStatusList)
