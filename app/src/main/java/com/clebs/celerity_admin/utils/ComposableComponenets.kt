@@ -1,6 +1,7 @@
 package com.clebs.celerity_admin.utils
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -29,12 +31,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.clebs.celerity_admin.R
 
-@Preview
 @Composable
 fun ListItemX(modifier: Modifier = Modifier) {
     var expanded by remember {
+        mutableStateOf(false)
+    }
+    var showDialog by remember {
         mutableStateOf(false)
     }
     Card(
@@ -130,7 +135,8 @@ fun ListItemX(modifier: Modifier = Modifier) {
                 Column {
                     Row(
                     ) {
-                        Text(text = "Instructed Location \t",
+                        Text(
+                            text = "Instructed Location \t",
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -140,7 +146,8 @@ fun ListItemX(modifier: Modifier = Modifier) {
                     Spacer(modifier = Modifier.height(5.dp))
                     Row(
                     ) {
-                        Text(text = "Hire Company Address \t",
+                        Text(
+                            text = "Hire Company Address \t",
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -151,8 +158,9 @@ fun ListItemX(modifier: Modifier = Modifier) {
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(modifier = Modifier.padding(horizontal = 15.dp)) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally)  {
-                        Text(text = "Start Date : \t",
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "Start Date : \t",
                             fontSize = 10.sp,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -164,10 +172,12 @@ fun ListItemX(modifier: Modifier = Modifier) {
                             .weight(1f)
                             .height(5.dp)
                     )
-                    Column(horizontalAlignment = Alignment.CenterHorizontally)  {
-                        Text(text = "End Date : \t",
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "End Date : \t",
                             fontSize = 10.sp,
-                            fontWeight = FontWeight.SemiBold)
+                            fontWeight = FontWeight.SemiBold
+                        )
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(text = "31-Aug-2024\t", fontSize = 11.sp)
                     }
@@ -194,7 +204,8 @@ fun ListItemX(modifier: Modifier = Modifier) {
                     Spacer(modifier = Modifier.height(5.dp))
                     Row(
                     ) {
-                        Text(text = "Collection Location \t",
+                        Text(
+                            text = "Collection Location \t",
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -222,6 +233,163 @@ fun ListItemX(modifier: Modifier = Modifier) {
                             contentDescription = "Back Button",
                             modifier = Modifier.size(25.dp)
                         )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ReturnCollectionListItem(modifier: Modifier = Modifier) {
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+        border = BorderStroke(1.dp, colorResource(id = R.color.cardbg)),
+        elevation = CardDefaults.cardElevation(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(id = R.color.white)
+        )
+    ) {
+        Column(
+            modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "Hire Company : ",
+                    fontSize = 10.sp,
+                    color = colorResource(id = R.color.orange),
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+                Text(
+                    text = "CLS Test Supplier",
+                    fontSize = 12.sp,
+                    modifier = Modifier.weight(1f)
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+                IconButton(onClick = { expanded = !expanded }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.eye),
+                        tint = Color.Black,
+                        contentDescription = "View Button",
+                        modifier = Modifier.size(25.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                IconButton(onClick = { expanded = !expanded }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.cancel),
+                        tint = Color.Black,
+                        contentDescription = "Cross Button",
+                        modifier = Modifier.size(25.dp)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Row {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "No of Vehicles",
+                        fontSize = 10.sp, color = colorResource(id = R.color.orange),
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(text = "2", fontSize = 12.sp)
+                }
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Return Request Date",
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = colorResource(id = R.color.orange)
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(text = "23-Aug-2024", fontSize = 12.sp)
+                }
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Returned Count",
+                        fontSize = 10.sp,
+                        color = colorResource(id = R.color.orange),
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(text = "1", fontSize = 12.sp)
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Column {
+                Spacer(modifier = Modifier.height(5.dp))
+                Row(
+                ) {
+                    Text(
+                        text = "Hire Company Address \t",
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(text = "Carr wood Road, Castleford, WF10 4SB", fontSize = 12.sp)
+                }
+
+            }
+            Spacer(modifier = Modifier.height(5.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(verticalArrangement = Arrangement.Center) {
+                    Row(
+                    ) {
+                        Text(
+                            text = "Return Location \t",
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Text(text = "Carr wood Road, Castleford, WF10 4SB", fontSize = 11.sp)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ComDialogVehicleCollection(showDialog: Boolean, onDismissRequest: () -> Unit) {
+    if (showDialog) {
+        Dialog(onDismissRequest = onDismissRequest) {
+            Column(
+                verticalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.background(Color.White, RoundedCornerShape(16.dp))
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Row {
+                        Text(text = "View")
+                        Spacer(modifier = Modifier.width(10.dp))
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.eye),
+                                contentDescription = "View Button",
+                                tint = Color.Black,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    }
                 }
             }
         }

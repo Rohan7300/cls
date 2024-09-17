@@ -57,6 +57,7 @@ import androidx.core.content.ContextCompat
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.ui.ui.theme.CLSOSMTheme
 import com.clebs.celerity_admin.utils.ListItemX
+import com.clebs.celerity_admin.utils.ReturnCollectionListItem
 
 class ReturnVehicleListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +81,7 @@ class ReturnVehicleListActivity : ComponentActivity() {
 
                         LazyColumn(Modifier.fillMaxSize()) {
                             items(data.size) {
-                                ListItemX()
+                                ReturnCollectionListItem()
                             }
                         }
                     }
@@ -219,7 +220,7 @@ class ReturnVehicleListActivity : ComponentActivity() {
                     )
                 }
                 Text(
-                    text = "Vehicle Collection List",
+                    text = "Return Vehicle List",
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(color = colorResource(id = R.color.orange)),
