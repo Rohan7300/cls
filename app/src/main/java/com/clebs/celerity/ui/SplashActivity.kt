@@ -141,6 +141,8 @@ class SplashActivity : AppCompatActivity() {
                 dialog.showDialog(fragmentManager)
             }
         }
+        showToast("VDHVMID - ${Prefs.getInstance(App.instance).vmId}", this)
+        Log.d("VDHVMID","SplashScreen - ${Prefs.getInstance(App.instance).vmId}")
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             askNotificationPermission()

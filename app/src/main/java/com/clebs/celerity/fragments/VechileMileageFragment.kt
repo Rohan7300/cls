@@ -69,8 +69,8 @@ class VechileMileageFragment : Fragment() {
             it?.let {
                 Prefs.getInstance(App.instance).vehicleLastMileage = it.vehicleLastMillage
                 mbinding.miles.text = buildString {
-                    if(it.vmId!=0)
-                        Prefs.getInstance(requireContext()).vmId = it.vmId
+                  /*  if(it.vmId!=0)
+                        Prefs.getInstance(requireContext()).vmId = it.vmId*/
                     append("${it.vehicleLastMillage} ")
                     append("Miles")
                 }

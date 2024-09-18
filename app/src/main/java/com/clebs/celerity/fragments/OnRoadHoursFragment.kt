@@ -74,12 +74,12 @@ class OnRoadHoursFragment : Fragment() {
                 showToast("Please add route name.", requireContext())
             else if (selectedRouteType.isNullOrEmpty())
                 showToast("Please select route type.", requireContext())
-            else if(parcelsDelivered.isEmpty())
+            else if (parcelsDelivered.isEmpty())
                 showToast("Please add parcels delivered.", requireContext())
-            else if(totalMileage.isEmpty())
-                showToast("Please add total mileage.",requireContext())
+            else if (totalMileage.isEmpty())
+                showToast("Please add total mileage.", requireContext())
             else
-                showToast("Please fill all fields.",requireContext())
+                showToast("Please fill all fields.", requireContext())
 
             return -1
         }
@@ -123,25 +123,25 @@ class OnRoadHoursFragment : Fragment() {
         else
             binding.headerTop.strikedxRegNo.visibility = View.GONE
 
-setDxLoc()
+        setDxLoc()
         binding.headerTop.dxm5.text = (activity as HomeActivity).date
 
-/*        if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
-            binding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).currLocationName ?: ""
-        } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
-            binding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).workLocationName ?: ""
-        } else {
-            try {
-                viewModel.GetVehicleInformation(
-                    prefs.clebUserId.toInt(),
-                    prefs.vmId.toDouble()
-                )
-            } catch (e: Exception) {
-                Log.e("GetVehicleInformation Exception", "$e")
-            }
-        }*/
+        /*        if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
+                    binding.headerTop.dxLoc.text =
+                        Prefs.getInstance(requireContext()).currLocationName ?: ""
+                } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
+                    binding.headerTop.dxLoc.text =
+                        Prefs.getInstance(requireContext()).workLocationName ?: ""
+                } else {
+                    try {
+                        viewModel.GetVehicleInformation(
+                            prefs.clebUserId.toInt(),
+                            prefs.vmId.toDouble()
+                        )
+                    } catch (e: Exception) {
+                        Log.e("GetVehicleInformation Exception", "$e")
+                    }
+                }*/
 
         "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
             binding.headerTop.anaCarolin.text = name
@@ -155,7 +155,7 @@ setDxLoc()
         else
             binding.headerTop.strikedxRegNo.visibility = View.GONE
 
-      setDxLoc()
+        setDxLoc()
         binding.headerTop.dxm5.text = (activity as HomeActivity).date
 
 
@@ -176,7 +176,7 @@ setDxLoc()
                 parcelsDelivered = "0"
             if (totalMileage.isEmpty())
                 totalMileage = "0"
-            if (chkNotNullInputs()==1)
+            if (chkNotNullInputs() == 1)
                 sendData()
 
         }
@@ -208,7 +208,6 @@ setDxLoc()
                 RtLocationId = locationID,
                 RtName = routeName!!,
                 RtNoOfParcelsDelivered = parcelsDelivered?.toLongOrNull() ?: 0,
-
                 RtNoParcelsbroughtback = numberbroghtbac.toInt(),
                 RtUsrId = prefs.clebUserId.toInt(),
                 VehicleId = prefs.vmId
@@ -263,10 +262,10 @@ setDxLoc()
                 if (it != null) {
                     if (it.vmID != null && prefs.vmId == 0)
                         prefs.vmId = it.vmID
-                        if (it.workingLocationId != null)
-                            prefs.workLocationId = it.workingLocationId
-                        if (it.currentLocationId != null)
-                            prefs.currLocationId = it.currentLocationId
+                    if (it.workingLocationId != null)
+                        prefs.workLocationId = it.workingLocationId
+                    if (it.currentLocationId != null)
+                        prefs.currLocationId = it.currentLocationId
                 }
             }
             /*

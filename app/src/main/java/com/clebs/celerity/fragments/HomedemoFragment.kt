@@ -89,7 +89,6 @@ class HomedemoFragment : Fragment() {
     ): View? {
         if (!this::mbinding.isInitialized) {
             mbinding = FragmentHomedemoBinding.inflate(inflater, container, false)
-
         }
 
 

@@ -257,7 +257,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             observers()
             viewModel.GetNotificationListByUserId(prefs.clebUserId.toInt())
 
-            getScannedNumberVehicleInfo()
+
             if (ninetydaysBoolean?.equals(true) == true) {
                 showAlertChangePasword90dys()
             }
@@ -282,6 +282,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                             }
                         }
                     } else {
+                        getScannedNumberVehicleInfo()
                         navController.navigate(R.id.newCompleteTaskFragment)
                     }
                 } else {
@@ -1172,9 +1173,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 if (it.workingLocationId != null) prefs.workLocationId = it.workingLocationId
                 if (it.currentLocationId != null) prefs.currLocationId = it.currentLocationId
                 try {
-                    viewModel.GetVehicleInformation(
-                        prefs.clebUserId.toInt(), prefs.vmId.toDouble()
-                    )
+
                     if (it.currentlocation != null) prefs.currLocationName = it.currentlocation
                     if (it.workinglocation != null) prefs.workLocationName = it.workinglocation
                     prefs.lmid = it.lmID
@@ -1299,10 +1298,14 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         )
         viewModel.livedataGetVehicleInfobyDriverId.observe(this) {
             if (it != null) {
+
                 Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
                 if (Prefs.getInstance(App.instance).vmId == 0) {
                     Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()
                 }
+                viewModel.GetVehicleInformation(
+                    prefs.clebUserId.toInt(), prefs.vmId.toDouble()
+                )
             }
             GetDriversBasicInformation()
         }

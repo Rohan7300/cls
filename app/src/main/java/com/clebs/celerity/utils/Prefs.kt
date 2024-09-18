@@ -69,6 +69,12 @@ class Prefs(context: Context) {
     var vmId: Int
         get() = sharedPreferences.getInt("vmIdx", 0)
         set(value) = sharedPreferences.edit().putInt("vmIdx", value).apply()
+    var VdhLmId: Int
+        get() = sharedPreferences.getInt("VdhLmId", 0)
+        set(value) = sharedPreferences.edit().putInt("VdhLmId", value).apply()
+    var VdhOdoMeterReading: Int
+        get() = sharedPreferences.getInt("VdhOdoMeterReading", 0)
+        set(value) = sharedPreferences.edit().putInt("VdhOdoMeterReading", value).apply()
 
     var scannedVmRegNo: String
         get() {

@@ -149,7 +149,10 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
         mainViewModel.setLastVisitedScreenId(requireContext(), R.id.dailyWorkFragment)
 
         showToolTip()
-
+        Prefs.getInstance(App.instance).vmId = 63958
+        showToast("VDHVMID Before - ${Prefs.getInstance(App.instance).vmId}", requireContext())
+        Log.d("VDHVMID","Before DailyWork - ${Prefs.getInstance(App.instance).vmId}")
+        Log.d("VMIDX", "BeforScan ${Prefs.getInstance(App.instance).vmId}")
         mbinding.rectangle4.setOnClickListener {
             if (allPermissionsGranted()) {
                 mbinding.rectange.visibility = View.VISIBLE
@@ -160,10 +163,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
             } else {
                 requestpermissions()
             }
-
-
         }
-
 
 
         return mbinding.root
@@ -589,6 +589,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                                 bounding = response.body()?.results?.get(0)?.box.toString()
 
                                 Log.d(TAG, response.body()?.results.toString())
+                                Prefs.getInstance(App.instance).scannedVmRegNo = vrn
                                 getVichleinformation()
 
                             }
@@ -634,25 +635,30 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
     }
 
 
-    fun getVichleinformation() {
-        Prefs.getInstance(App.instance).scannedVmRegNo = vrn
+    private fun getVichleinformation() {
+
         Log.e(TAG, "VRN: $vrn")
-        (activity as HomeActivity).GetDriversBasicInformation()
+        //(activity as HomeActivity).GetDriversBasicInformation()
         mainViewModel.getVehicleInformationResponse(
             Prefs.getInstance(App.instance).clebUserId.toDouble(), vrn
         ).observe(requireActivity(), Observer {
             if (it != null) {
                 Prefs.getInstance(App.instance).vmId = it.vmId
+                Prefs.getInstance(App.instance).VdhLmId  =it.vmLocId
+                Prefs.getInstance(App.instance).saveLocationID(it.vmLocId)
                 Prefs.getInstance(App.instance)
                     .save("vehicleLastMillage", it.vehicleLastMillage.toString())
+                Prefs.getInstance(App.instance).VdhOdoMeterReading = it.vehicleLastMillage
                 mbinding.rectange.visibility = View.GONE
                 mbinding.ivTakePhoto.visibility = View.GONE
+                Prefs.getInstance(App.instance).save("lm", it.vmLocId.toString())
                 mbinding.rectangle4.visibility = View.VISIBLE
 //                mbinding.imageView5.visibility = View.VISIBLE
                 if (txt.isNotEmpty()) {
                     Prefs.getInstance(App.instance).save("vrn", txt)
                 }
-
+                showToast("VDHVMID After - ${Prefs.getInstance(App.instance).vmId}", requireContext())
+                Log.d("VDHVMID","After DailyWork - ${Prefs.getInstance(App.instance).vmId}")
                 mbinding.pb.visibility = View.GONE
                 showLog(
                     "TAG------->",

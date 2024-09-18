@@ -1,6 +1,7 @@
 package com.clebs.celerity.fragments.exterior
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getCurrentDateTime
 import com.clebs.celerity.utils.setImageView
 import com.clebs.celerity.utils.showErrorDialog
+import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.startUploadWithWorkManager
 
 class SpareWheelFragment : BaseInteriorFragment() {
@@ -166,103 +168,103 @@ class SpareWheelFragment : BaseInteriorFragment() {
             }
             var isApiCallInProgress = false
             VdhDaId = userId
-            viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+            /*            viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
                 hideDialog()
-                if (it != null) {
-                    if (!isApiCallInProgress) {
-                        isApiCallInProgress = true
-                        VdhVmId = it.vmId
+                if (it != null) {*/
+            //if (!isApiCallInProgress) {
+            isApiCallInProgress = true
+            // VdhVmId = it.vmId
+            /*
                         if (it.vmId != 0)
-                            Prefs.getInstance(requireContext()).vmId = it.vmId
-                        if (it.vmId != null && Prefs.getInstance(App.instance).vmId == 0)
-                            Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()
-                        Prefs.getInstance(App.instance).save("lm", it.vmLocId.toString())
-                        VdhLmId = it.vmLocId
-                        VdhOdoMeterReading =
-                            Prefs.getInstance(requireContext()).vehicleLastMileage
-                                ?: it.vehicleLastMillage
+                            Prefs.getInstance(requireContext()).vmId = it.vmId*/
+            /*       if (it.vmId != null && Prefs.getInstance(App.instance).vmId == 0)
+                            Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()*/
 
-                        prefs.saveLocationID(it.vmLocId)
+            //VdhLmId = it.vmLocId
+            VdhOdoMeterReading =
+                Prefs.getInstance(requireContext()).vehicleLastMileage
+                    ?: Prefs.getInstance(App.instance).VdhOdoMeterReading
 
-                        val request = SaveVechileDefectSheetRequest(
-                            weekNo = 0,
-                            yearNo = 0,
-                            vdhVmId = VdhVmId,
-                            vdhLmId = VdhLmId,
-                            VdhDate = getCurrentDateTime(),
-                            vdhDaId = userId,
-                            vdhOdoMeterReading = VdhOdoMeterReading,
-                            vdhComments = "TEST",
-                            vdhPocIsaction = true,
-                            vdhBrakes = dOrf(imageEntity.dfNameBrakedEbsAbs),
-                            vdhBrakesComment = imageEntity.dfNameBrakedEbsAbs!!,
-                            vdhCabSecurityInterior = dOrf(imageEntity.dfNameCabSecurityInterior),
-                            vdhCabSecurityInteriorComment = imageEntity.dfNameCabSecurityInterior!!,
-                            vdhFuelAdBlueLevel = dOrf(imageEntity.dfNameFuelAdBlueLevel),
-                            vdhFuelAdBlueLevelComment = imageEntity.dfNameFuelAdBlueLevel!!,
-                            vdhExcessiveEngineExhaustSmoke = dOrf(imageEntity.dfNameExcessiveEngExhaustSmoke),
-                            vdhExcessiveEngineExhaustSmokeComment = imageEntity.dfNameExcessiveEngExhaustSmoke!!,
-                            vdhIndicatorsSideRepeaters = dOrf(imageEntity.dfNameIndicatorsSideRepeaters),
-                            vdhIndicatorsSideRepeatersComment = imageEntity.dfNameIndicatorsSideRepeaters!!,
-                            vdhHornReverseBeeper = dOrf(imageEntity.dfNameHornReverseBeeper),
-                            vdhHornReverseBeeperComment = imageEntity.dfNameHornReverseBeeper!!,
-                            vdhLights = dOrf(imageEntity.dfNameFogLights),
-                            vdhLightsComment = imageEntity.dfNameFogLights!!,
-                            vdhMirrors = dOrf(imageEntity.dfNameMirrors),
-                            vdhMirrorsComment = imageEntity.dfNameMirrors!!,
-                            vdhOilFuelCoolantLeaks = dOrf(imageEntity.dfNameOilFuelCoolantLeaks),
-                            vdhOilFuelCoolantLeaksComment = imageEntity.dfNameOilFuelCoolantLeaks!!,
-                            vdhReflectorsMarkers = dOrf(imageEntity.dfNameReflectorsMarkers),
-                            vdhReflectorsMarkersComment = imageEntity.dfNameReflectorsMarkers!!,
-                            vdhRegistrationPlates = dOrf(imageEntity.dfNameRegistrationNumberPlates),
-                            vdhRegistrationPlatesComment = imageEntity.dfNameRegistrationNumberPlates!!,
-                            vdhSeatBelt = dOrf(imageEntity.dfNameSeatBelt),
-                            vdhSeatBeltComment = imageEntity.dfNameSeatBelt!!,
-                            vdhSpareWheel = dOrf(imageEntity.dfNameSpareWheel),
-                            vdhSpareWheelComment = imageEntity.dfNameSpareWheel!!,
-                            vdhSteering = dOrf(imageEntity.dfNameSteeringControl),
-                            vdhSteeringComment = imageEntity.dfNameSteeringControl!!,
-                            vdhTyresWheels = dOrf(imageEntity.dfNameTyreConditionThreadDepth),
-                            vdhTyresWheelsComment = imageEntity.dfNameTyreConditionThreadDepth!!,
-                            vdhVehFront = dOrf(imageEntity.dfNameBodyDamageFront),
-                            vdhVehFrontComment = imageEntity.dfNameBodyDamageFront!!,
-                            vdhVehNearSide = dOrf(imageEntity.dfNameBodyDamageNearSide),
-                            vdhVehNearSideComment = imageEntity.dfNameBodyDamageNearSide!!,
-                            vdhVehOffside = dOrf(imageEntity.dfNameBodyDamageOffside),
-                            vdhVehOffsideComment = imageEntity.dfNameBodyDamageOffside!!,
-                            vdhVehRear = dOrf(imageEntity.dfNameBodyDamageRear),
-                            vdhVehRearComment = imageEntity.dfNameBodyDamageRear!!,
-                            vdhVehicleLockingSystem = dOrf(imageEntity.dfNameVehicleLockingSystem),
-                            vdhVehicleLockingSystemComment = imageEntity.dfNameVehicleLockingSystem!!,
-                            vdhWarningServiceLights = dOrf(imageEntity.dfNameWarningServiceLights),
-                            vdhWarningServiceLightsComment = imageEntity.dfNameWarningServiceLights!!,
-                            vdhWheelsWheelFixings = dOrf(imageEntity.dfNameWheelFixings),
-                            vdhWheelsWheelFixingsComment = imageEntity.dfNameWheelFixings!!,
-                            vdhWindowsGlassVisibility = dOrf(imageEntity.dfNameWindowGlass),
-                            vdhWindowsGlassVisibilityComment = imageEntity.dfNameWindowGlass!!,
-                            vdhWindscreen = dOrf(imageEntity.dfNameWindScreen),
-                            vdhWindscreenComment = imageEntity.dfNameWindScreen!!,
-                            vdhWipersWashers = dOrf(imageEntity.dfNameWipersWashers),
-                            vdhWipersWashersComment = imageEntity.dfNameWipersWashers!!,
-                            vdhFuelOilLeaks = dOrf(imageEntity.dfNameOilCoolantLevel),
-                            vdhFuelOilLeaksComment = imageEntity.dfNameOilCoolantLevel!!,
-                            vdhIsDefected = isDefected,
-                        )
-                        if (isDefected) {
-                            startUploadWithWorkManager(2, prefs, requireContext(), VdhLmId, VdhVmId)
-                        }
-                        (activity as HomeActivity).viewModel.SaveVehDefectSheet(request)
-                    }
-                } else {
-                    if (prefs.scannedVmRegNo.isNotEmpty() && !secondTry) {
-                        showDialog()
-                        secondTry = true
-                        viewModel.GetVehicleInformation(prefs.clebUserId.toInt(), Prefs.getInstance(App.instance).vmId.toDouble() )
-                    }
-                }
+
+/*            showToast(
+                "VmId - ${Prefs.getInstance(App.instance).vmId}  VdhVmId - $VdhVmId",
+                requireContext()
+            )*/
+            Log.d("VDHVMID", "SpareWheel - ${Prefs.getInstance(App.instance).vmId}")
+            val request = SaveVechileDefectSheetRequest(
+                weekNo = 0,
+                yearNo = 0,
+                vdhVmId = Prefs.getInstance(App.instance).vmId,
+                vdhLmId = Prefs.getInstance(App.instance).VdhLmId,
+                VdhDate = getCurrentDateTime(),
+                vdhDaId = userId,
+                vdhOdoMeterReading = VdhOdoMeterReading,
+                vdhComments = "TEST",
+                vdhPocIsaction = true,
+                vdhBrakes = dOrf(imageEntity.dfNameBrakedEbsAbs),
+                vdhBrakesComment = imageEntity.dfNameBrakedEbsAbs!!,
+                vdhCabSecurityInterior = dOrf(imageEntity.dfNameCabSecurityInterior),
+                vdhCabSecurityInteriorComment = imageEntity.dfNameCabSecurityInterior!!,
+                vdhFuelAdBlueLevel = dOrf(imageEntity.dfNameFuelAdBlueLevel),
+                vdhFuelAdBlueLevelComment = imageEntity.dfNameFuelAdBlueLevel!!,
+                vdhExcessiveEngineExhaustSmoke = dOrf(imageEntity.dfNameExcessiveEngExhaustSmoke),
+                vdhExcessiveEngineExhaustSmokeComment = imageEntity.dfNameExcessiveEngExhaustSmoke!!,
+                vdhIndicatorsSideRepeaters = dOrf(imageEntity.dfNameIndicatorsSideRepeaters),
+                vdhIndicatorsSideRepeatersComment = imageEntity.dfNameIndicatorsSideRepeaters!!,
+                vdhHornReverseBeeper = dOrf(imageEntity.dfNameHornReverseBeeper),
+                vdhHornReverseBeeperComment = imageEntity.dfNameHornReverseBeeper!!,
+                vdhLights = dOrf(imageEntity.dfNameFogLights),
+                vdhLightsComment = imageEntity.dfNameFogLights!!,
+                vdhMirrors = dOrf(imageEntity.dfNameMirrors),
+                vdhMirrorsComment = imageEntity.dfNameMirrors!!,
+                vdhOilFuelCoolantLeaks = dOrf(imageEntity.dfNameOilFuelCoolantLeaks),
+                vdhOilFuelCoolantLeaksComment = imageEntity.dfNameOilFuelCoolantLeaks!!,
+                vdhReflectorsMarkers = dOrf(imageEntity.dfNameReflectorsMarkers),
+                vdhReflectorsMarkersComment = imageEntity.dfNameReflectorsMarkers!!,
+                vdhRegistrationPlates = dOrf(imageEntity.dfNameRegistrationNumberPlates),
+                vdhRegistrationPlatesComment = imageEntity.dfNameRegistrationNumberPlates!!,
+                vdhSeatBelt = dOrf(imageEntity.dfNameSeatBelt),
+                vdhSeatBeltComment = imageEntity.dfNameSeatBelt!!,
+                vdhSpareWheel = dOrf(imageEntity.dfNameSpareWheel),
+                vdhSpareWheelComment = imageEntity.dfNameSpareWheel!!,
+                vdhSteering = dOrf(imageEntity.dfNameSteeringControl),
+                vdhSteeringComment = imageEntity.dfNameSteeringControl!!,
+                vdhTyresWheels = dOrf(imageEntity.dfNameTyreConditionThreadDepth),
+                vdhTyresWheelsComment = imageEntity.dfNameTyreConditionThreadDepth!!,
+                vdhVehFront = dOrf(imageEntity.dfNameBodyDamageFront),
+                vdhVehFrontComment = imageEntity.dfNameBodyDamageFront!!,
+                vdhVehNearSide = dOrf(imageEntity.dfNameBodyDamageNearSide),
+                vdhVehNearSideComment = imageEntity.dfNameBodyDamageNearSide!!,
+                vdhVehOffside = dOrf(imageEntity.dfNameBodyDamageOffside),
+                vdhVehOffsideComment = imageEntity.dfNameBodyDamageOffside!!,
+                vdhVehRear = dOrf(imageEntity.dfNameBodyDamageRear),
+                vdhVehRearComment = imageEntity.dfNameBodyDamageRear!!,
+                vdhVehicleLockingSystem = dOrf(imageEntity.dfNameVehicleLockingSystem),
+                vdhVehicleLockingSystemComment = imageEntity.dfNameVehicleLockingSystem!!,
+                vdhWarningServiceLights = dOrf(imageEntity.dfNameWarningServiceLights),
+                vdhWarningServiceLightsComment = imageEntity.dfNameWarningServiceLights!!,
+                vdhWheelsWheelFixings = dOrf(imageEntity.dfNameWheelFixings),
+                vdhWheelsWheelFixingsComment = imageEntity.dfNameWheelFixings!!,
+                vdhWindowsGlassVisibility = dOrf(imageEntity.dfNameWindowGlass),
+                vdhWindowsGlassVisibilityComment = imageEntity.dfNameWindowGlass!!,
+                vdhWindscreen = dOrf(imageEntity.dfNameWindScreen),
+                vdhWindscreenComment = imageEntity.dfNameWindScreen!!,
+                vdhWipersWashers = dOrf(imageEntity.dfNameWipersWashers),
+                vdhWipersWashersComment = imageEntity.dfNameWipersWashers!!,
+                vdhFuelOilLeaks = dOrf(imageEntity.dfNameOilCoolantLevel),
+                vdhFuelOilLeaksComment = imageEntity.dfNameOilCoolantLevel!!,
+                vdhIsDefected = isDefected,
+            )
+            if (isDefected) {
+                startUploadWithWorkManager(
+                    2,
+                    prefs,
+                    requireContext(),
+                    Prefs.getInstance(App.instance).VdhLmId,
+                    Prefs.getInstance(App.instance).vmId
+                )
             }
-
-            viewModel.GetVehicleInformation(prefs.clebUserId.toInt(), prefs.vmId.toDouble())
+            (activity as HomeActivity).viewModel.SaveVehDefectSheet(request)
             viewModel.SaveVehDefectSheetResponseLiveData.observe(viewLifecycleOwner) {
                 hideDialog()
                 if (it != null) {
@@ -274,7 +276,28 @@ class SpareWheelFragment : BaseInteriorFragment() {
                     showErrorDialog(fragmentManager, "SPW-01", "Failed to Save")
                 }
             }
-        } else {
+            /*
+}
+} else {
+                    if (prefs.scannedVmRegNo.isNotEmpty() && !secondTry) {
+                        showDialog()
+                        secondTry = true
+                        viewModel.GetVehicleInformation(
+                            prefs.clebUserId.toInt(),
+                            prefs.vmId.toDouble()
+                        )
+                    }
+                }*/
+        }
+
+        /*          if (prefs.vmId != 0)
+                viewModel.GetVehicleInformation(prefs.clebUserId.toInt(), prefs.vmId.toDouble())
+            else
+                showToast("VMID is null!!",requireContext())*/
+
+
+
+        else {
             val dialog = NoInternetDialog()
             dialog.showDialog(fragmentManager)
         }

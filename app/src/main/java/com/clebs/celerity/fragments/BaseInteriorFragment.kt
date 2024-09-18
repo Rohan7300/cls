@@ -27,6 +27,7 @@ import com.clebs.celerity.ViewModel.ImageViewModel
 import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.utils.ImageTakerActivity
 import com.clebs.celerity.utils.Prefs
@@ -104,21 +105,20 @@ abstract class BaseInteriorFragment : Fragment() {
             strikedxRegNo.visibility = View.GONE
 
 
-        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-
+/*        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
            // dxReg.text = it?.vmRegNo ?: ""
-
             if (it != null) {
-                if (it.vmId != 0 && Prefs.getInstance(requireContext()).vmId == 0)
+                if (it.vmId != 0 && Prefs.getInstance(requireContext()).vmId == 0) {
                     Prefs.getInstance(requireContext()).vmId = it.vmId
+                    showToast("VDHVMID Defects - ${Prefs.getInstance(requireContext()).vmId}", requireContext())
+                    Log.d("VDHVMID","Defects - ${Prefs.getInstance(requireContext()).vmId}")
+                }
             }
-
-            setDxLoc()
-
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-                .also { name -> ana_carolin.text = name }
-            dxm5.text = (activity as HomeActivity).date
-        }
+        }*/
+        setDxLoc()
+        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
+            .also { name -> ana_carolin.text = name }
+        dxm5.text = (activity as HomeActivity).date
 //        var tooltip = (activity as HomeActivity).tooltips
 //        if (findNavController().currentDestination?.id==R.id.windowsGlassFragment){
 //            Log.e("dkjfdkfkjdfjkdjkfdkj1", "onViewCreated: ", )

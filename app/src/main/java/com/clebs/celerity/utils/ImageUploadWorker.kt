@@ -155,11 +155,18 @@ class ImageUploadWorker(
                                 prefs.addBlueUri!!, "uploadVehicleAddBlueImage",
                                 appContext
                             )
-                            val addBlueResponse = mainRepo.uploadVehicleImage(
-                                clebUserId, partBody, 7, currentDateTime
-                            )
-                            if (!addBlueResponse.isSuccessful)
+                            val addBlueResponse = withContext(Dispatchers.IO){
+                                mainRepo.uploadVehicleImage(
+                                    clebUserId, partBody, 7, currentDateTime
+                                )
+                            }
+                            if (!addBlueResponse.isSuccessful||addBlueResponse.failed)
                                 data.isaddblueImageFailed = true
+                            else
+                            {
+                                prefs.addBlueUri = null
+                                prefs.addBlueRequired = false
+                            }
                         }
 
                         //if (data.oillevelImage != null&&data.isoilLevelImageRequired) {
@@ -168,11 +175,17 @@ class ImageUploadWorker(
                                 prefs.oilLevelUri!!, "uploadVehicleOilLevelImage",
                                 appContext
                             )
-                            val oilLevelResponse = mainRepo.uploadVehicleImage(
-                                clebUserId, partBody, 5, currentDateTime
-                            )
-                            if (!oilLevelResponse.isSuccessful)
+                            val oilLevelResponse = withContext(Dispatchers.IO){
+                                mainRepo.uploadVehicleImage(
+                                    clebUserId, partBody, 5, currentDateTime
+                                )
+                            }
+                            if (!oilLevelResponse.isSuccessful||oilLevelResponse.failed)
                                 data.isoillevelImageFailed = true
+                            else{
+                                prefs.oilLevelRequired= false
+                                prefs.oilLevelUri = null
+                            }
                         }
 
                         //if (data.faceMaskImage != null&&data.isfaceMaskImageRequired) {
@@ -181,14 +194,21 @@ class ImageUploadWorker(
                                 prefs.faceMaskUri!!, "uploadFaceMaskImage",
                                 appContext
                             )
-                            val selfieeRes = mainRepo.uploadVehicleImage(
-                                clebUserId,
-                                partBody,
-                                0,
-                                currentDateTime
-                            )
-                            if (!selfieeRes.isSuccessful)
+                            val selfieeRes = withContext(Dispatchers.IO){
+                                mainRepo.uploadVehicleImage(
+                                    clebUserId,
+                                    partBody,
+                                    0,
+                                    currentDateTime
+                                )
+                            }
+                            if (!selfieeRes.isSuccessful||selfieeRes.failed)
                                 data.isfaceMaskImageFailed = true
+                            else{
+                                prefs.faceMaskUri = null
+
+                            }
+
                         }
                     }
 
@@ -630,8 +650,6 @@ class ImageUploadWorker(
                     }
 
                     3->{
-
-
                         val currentLoction = Prefs.getInstance(App.instance).currLocationId
                         val workingLocation = Prefs.getInstance(App.instance).workLocationId
                         val locationID: Int = if (workingLocation != 0) {
