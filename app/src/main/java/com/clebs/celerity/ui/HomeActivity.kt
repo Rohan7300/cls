@@ -16,7 +16,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.AUTOFILL_TYPE_NONE
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
@@ -47,6 +46,7 @@ import com.clebs.celerity.dialogs.BreakDownDialog
 import com.clebs.celerity.dialogs.ExpiredDocDialog
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.dialogs.NoInternetDialog
+import com.clebs.celerity.fragments.NewCompleteTaskFragment
 import com.clebs.celerity.network.ApiService
 import com.clebs.celerity.network.RetrofitService
 import com.clebs.celerity.repository.MainRepo
@@ -56,6 +56,8 @@ import com.clebs.celerity.utils.DependencyProvider.getMainVM
 import com.clebs.celerity.utils.DependencyProvider.handlingDeductionNotification
 import com.clebs.celerity.utils.DependencyProvider.handlingExpiredDialogNotification
 import com.clebs.celerity.utils.DependencyProvider.handlingRotaNotification
+import com.clebs.celerity.utils.DependencyProvider.headerName
+import com.clebs.celerity.utils.DependencyProvider.isComingBackFromBreakDownActivity
 import com.clebs.celerity.utils.DependencyProvider.isComingBackFromFaceScan
 import com.clebs.celerity.utils.DependencyProvider.notificationWatcher
 import com.clebs.celerity.utils.DependencyProvider.notify
@@ -74,8 +76,6 @@ import com.clebs.celerity.utils.expiredDocuments
 import com.clebs.celerity.utils.expiringDocument
 import com.clebs.celerity.utils.getCurrentAppVersion
 import com.clebs.celerity.utils.getDeviceID
-import com.clebs.celerity.utils.getVRegNo
-import com.clebs.celerity.utils.hideBreakDownDialog
 import com.clebs.celerity.utils.invoiceReadyToView
 import com.clebs.celerity.utils.isVersionNewer
 import com.clebs.celerity.utils.logOSEntity
@@ -84,11 +84,9 @@ import com.clebs.celerity.utils.showBirthdayCard
 import com.clebs.celerity.utils.showBreakDownDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.showUpdateDialog
-import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.vehicleExpiringDocuments
 import com.clebs.celerity.utils.weeklyLocationRota
-import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -120,7 +118,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     lateinit var fragmentManager: FragmentManager
     lateinit var internetDialog: NoInternetDialog
     var isNetworkActive: Boolean = true
-    private var sdkkey = ""
+
     var clebuserID: Int = 0
     var firstName = ""
     lateinit var osData: OfflineSyncEntity
@@ -183,7 +181,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         prefs = Prefs.getInstance(this)
         checkTokenExpirationAndLogout(this, prefs)
         loadingDialog = LoadingDialog(this)
-        sdkkey = "09f36b6e-deee-40f6-894b-553d4c592bcb.eu"
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             window.decorView.importantForAutofill =
                 View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS;
@@ -196,6 +194,8 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         } catch (_: Exception) {
 
         }
+
+        breakDownDialog = BreakDownDialog()
 
         val osRepo = offlineSyncRepo(this)
         oSyncViewModel = ViewModelProvider(
@@ -222,7 +222,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 osData.isIni = true
             }
         }
-        cqSDKInitializer()
+
         clebuserID = prefs.clebUserId.toInt()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_fragment) as NavHostFragment
@@ -260,6 +260,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
             if (ninetydaysBoolean?.equals(true) == true) {
                 showAlertChangePasword90dys()
+            }
+            GetDriversBasicInformation()
+            if(prefs.scannedVmRegNo.isNullOrBlank()){
+                getScannedNumberVehicleInfo()
             }
 
             viewModel.getVehicleDefectSheetInfoLiveData.observe(this) {
@@ -324,20 +328,20 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     viewModel.GetVehBreakDownInspectionInfobyDriver(prefs.clebUserId.toInt())
                 }
             }
+            breakDownDialog = BreakDownDialog()
             viewModel.liveDataVehBreakDownInspectionInfobyDriverResponse.observe(this) {
                 if (it != null) {
                     if (it.size > 0) {
-                        breakDownDialog = showBreakDownDialog(fragmentManager)
+
+                        showBreakDownDialog(breakDownDialog,fragmentManager)
                         currentBreakDownItemforInspection = it[0]
                     } else {
-                        Log.d("BreakDownDialog","Dismiss")
-                        if (::breakDownDialog.isInitialized)
-                            hideBreakDownDialog(breakDownDialog)
+                        Log.d("BreakDownDialog", "Dismiss")
+                            breakDownDialog.hideDialog()
                     }
                 } else {
-                    Log.d("BreakDownDialog","Dismiss")
-                    if (::breakDownDialog.isInitialized)
-                        hideBreakDownDialog(breakDownDialog)
+                    Log.d("BreakDownDialog", "Dismiss")
+                        breakDownDialog.hideDialog()
                 }
             }
 
@@ -1111,23 +1115,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         )
     }*/
 
-    private fun cqSDKInitializer() {
-        cqSDKInitializer = CQSDKInitializer(this)
-        cqSDKInitializer.triggerOfflineSync()
-        if (!cqSDKInitializer.isCQSDKInitialized() || (prefs.isBreakDownGenerated && prefs.isBreakDownInspectionDone)) {
-            Prefs.getInstance(App.instance).returnInspectionFirstTime = true
-            prefs.isBreakDownGenerated = false
-            prefs.isBreakDownInspectionDone = false
-            Log.e("Initialized", "cqSDKInitializer: ")
-            cqSDKInitializer.initSDK(sdkKey = sdkkey, result = { isInitialized, code, _ ->
-                if (isInitialized && code == PublicConstants.sdkInitializationSuccessCode) {
-                    Prefs.getInstance(applicationContext).saveCQSdkKey(sdkkey)
-                } else {
-                    showToast("Error initializing SDK", this)
-                }
-            })
-        }
-    }
+
 
 
     fun hideDialog() {
@@ -1160,6 +1148,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         val today = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("dd/MM")
         date = today.format(formatter)
+        prefs.headerDate = date
         showDialog()
         viewModel.GetDriversBasicInformation(
             Prefs.getInstance(App.instance).clebUserId.toDouble()
@@ -1178,7 +1167,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     if (it.workinglocation != null) prefs.workLocationName = it.workinglocation
                     prefs.lmid = it.lmID
                     lmId = it.lmID
-
                 } catch (e: Exception) {
                     Log.d("sds", e.toString())
                 }
@@ -1187,10 +1175,11 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 firstName = it.firstName
                 lastName = it.lastName
                 prefs.userName = "$firstName $lastName"
+                headerName.postValue("$firstName $lastName")
                 val headerView: View = ActivityHomeBinding.navView.getHeaderView(0)
                 val navHeaderName =
                     headerView.findViewById<TextView>(com.clebs.celerity.R.id.navHeaderName)
-                navHeaderName.text = "Celerity - " + prefs.userName
+                navHeaderName.text = "Celerity - ${prefs.userName}"
                 isLeadDriver = it.IsLeadDriver
                 ninetydaysBoolean = it.IsUsrProfileUpdateReqin90days
                 isApiResponseTrue = it.IsUsrProfileUpdateReqin90days
@@ -1225,6 +1214,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                                 }*/
                 if (it.IsVehicleInspectionDone) {
                     prefs.updateInspectionStatus(true)
+                }
+                try {
+                    val fragment: NewCompleteTaskFragment =
+                        getFragmentManager().findFragmentById(R.id.newCompleteTaskFragment) as NewCompleteTaskFragment
+                        fragment.setHeader()
+                } catch (_: Exception) {
+
                 }
             }
         })
@@ -1301,7 +1297,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                 Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
                 if (Prefs.getInstance(App.instance).vmId == 0) {
-                    Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()
+                    Prefs.getInstance(App.instance).vmId = it.vmId
                 }
                 viewModel.GetVehicleInformation(
                     prefs.clebUserId.toInt(), prefs.vmId.toDouble()
@@ -1330,6 +1326,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
             }
 
+      /*      if(isComingBackFromBreakDownActivity){
+                viewModel.GetVehBreakDownInspectionInfobyDriver(prefs.clebUserId.toInt())
+                isComingBackFromBreakDownActivity = false
+            }*/
 
             viewModel.GetLatestAppVersion()
             //if (!prefs.isPolicyCheckToday()) {

@@ -11,6 +11,7 @@ import com.clebs.celerity.ViewModel.MainViewModel
 import com.clebs.celerity.databinding.FragmentInvoicesBinding
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getLoc
 import com.clebs.celerity.utils.getVRegNo
@@ -71,53 +72,69 @@ class InvoicesFragment : Fragment() {
                 if (it.currentlocation != null) {
                     prefs.currLocationName = it.currentlocation
                 }
-                setDxLoc()
-                binding.headerTop.dxReg.text =
-                    getVRegNo(prefs = Prefs.getInstance(requireContext()))
 
-                if (binding.headerTop.dxReg.text.isEmpty())
-                    binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
-                else
-                    binding.headerTop.strikedxRegNo.visibility = View.GONE
+                /*               setDxLoc()
+                               binding.headerTop.dxReg.text =
+                                   getVRegNo(prefs = Prefs.getInstance(requireContext()))
+
+                               if (binding.headerTop.dxReg.text.isEmpty())
+                                   binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+                               else
+                                   binding.headerTop.strikedxRegNo.visibility = View.GONE*/
             }
         }
     }
 
     private fun observers() {
-        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-            binding.headerTop.anaCarolin.text = name
-        }
-        binding.headerTop.dxm5.text = (activity as HomeActivity).date
+        setHeader()
+        /*        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+                    binding.headerTop.anaCarolin.text = name
+                }
+                binding.headerTop.dxm5.text = (activity as HomeActivity).date
 
-        if (binding.headerTop.dxReg.text.isEmpty())
-            binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
-        else
-            binding.headerTop.strikedxRegNo.visibility = View.GONE
+                if (binding.headerTop.dxReg.text.isEmpty())
+                    binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+                else
+                    binding.headerTop.strikedxRegNo.visibility = View.GONE
 
-            setDxLoc()
+                    setDxLoc()*/
 
-        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-            hideDialog()
+        /*        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
+                    hideDialog()
 
-            if (binding.headerTop.dxReg.text.isEmpty())
-                binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
-            else
-                binding.headerTop.strikedxRegNo.visibility = View.GONE
-            setDxLoc()
+                    if (binding.headerTop.dxReg.text.isEmpty())
+                        binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+                    else
+                        binding.headerTop.strikedxRegNo.visibility = View.GONE
+                    setDxLoc()
 
-            "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-                binding.headerTop.anaCarolin.text = name
-            }
-            binding.headerTop.dxm5.text = (activity as HomeActivity).date
-        }
+                    "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
+                        binding.headerTop.anaCarolin.text = name
+                    }
+                    binding.headerTop.dxm5.text = (activity as HomeActivity).date*/
+
     }
 
-    private fun setDxLoc() {
-        binding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+    private fun setDxLoc(loc: String) {
+        binding.headerTop.dxLoc.text = loc
         if (binding.headerTop.dxLoc.text.isEmpty() || binding.headerTop.dxLoc.text == "")
             binding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else
             binding.headerTop.strikedxLoc.visibility = View.GONE
     }
 
+    private fun setHeader() {
+        val prefs = Prefs.getInstance(requireContext())
+
+        binding.headerTop.anaCarolin.text = prefs.userName
+        binding.headerTop.dxm5.text = prefs.headerDate
+        setDxLoc(getLoc(prefs))
+
+        binding.headerTop.dxReg.text = getVRegNo(prefs = prefs)
+        if (binding.headerTop.dxReg.text.isEmpty() || binding.headerTop.dxReg.text == "")
+            binding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        else
+            binding.headerTop.strikedxRegNo.visibility = View.GONE
+
+    }
 }

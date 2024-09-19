@@ -427,11 +427,8 @@ class NewCompleteTaskFragment : Fragment() {
     }
 
     private fun observers() {
-        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-            mbinding.headerTop.anaCarolin.text = name
-        }
+        setHeader()
 
-        mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
         val isLeadDriver = (activity as HomeActivity).isLeadDriver
         if (!isLeadDriver) {
             mbinding.rideAlong.visibility = View.GONE
@@ -439,50 +436,15 @@ class NewCompleteTaskFragment : Fragment() {
 
         viewModel.livedataGetVehicleInfobyDriverId.observe(viewLifecycleOwner) {
             if (it != null) {
-                if (mbinding.headerTop.anaCarolin.text.isEmpty()) {
-                    mbinding.headerTop.anaCarolin.text = prefs.userName
-                }
                 scannedvrn = it.vmRegNo
                 Prefs.getInstance(App.instance).scannedVmRegNo = it.vmRegNo
-
-                if (mbinding.headerTop.dxReg.text.isEmpty() || mbinding.headerTop.dxReg.text == "")
-                    mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
-                else
-                    mbinding.headerTop.strikedxRegNo.visibility = View.GONE
-
-                mbinding.headerTop.dxReg.text =
-                    getVRegNo(prefs = Prefs.getInstance(requireContext()))
-                /*
-                if (Prefs.getInstance(App.instance).vmId == 0 && it.vmId != null) {
-                                    Prefs.getInstance(App.instance).vmId = it.vmId.toString().toInt()
-                                }
-                               */
+                Prefs.getInstance(App.instance).vmId = it.vmId
+                setHeader()
             }
         }
 
-        mbinding.headerTop.dxReg.text =
-            getVRegNo(prefs = Prefs.getInstance(requireContext()))
-        if (mbinding.headerTop.dxReg.text.isEmpty())
-            mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
-        else
-            mbinding.headerTop.strikedxRegNo.visibility = View.GONE
 
-        setDxLoc()
-
-        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-            mbinding.headerTop.anaCarolin.text = name
-        }
-
-        mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
         hideDialog()
-        /*        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
-
-                    if (it != null) {
-                        if (it.vmId != 0)
-                            Prefs.getInstance(requireContext()).vmId = it.vmId
-                    }
-                }*/
-
 
         viewModel.livedataSaveBreakTime.observe(viewLifecycleOwner) {
             hideDialog()
@@ -785,6 +747,20 @@ class NewCompleteTaskFragment : Fragment() {
                 }
             }
         }
+
+    }
+
+     fun setHeader() {
+        val prefs = Prefs.getInstance(requireContext())
+        mbinding.headerTop.anaCarolin.text = prefs.userName
+        mbinding.headerTop.dxm5.text = prefs.headerDate
+        setDxLoc(getLoc(prefs))
+        mbinding.headerTop.dxReg.text = getVRegNo(prefs = prefs)
+
+        if (mbinding.headerTop.dxReg.text.isEmpty() || mbinding.headerTop.dxReg.text == "")
+            mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        else
+            mbinding.headerTop.strikedxRegNo.visibility = View.GONE
 
     }
 
@@ -1436,8 +1412,8 @@ class NewCompleteTaskFragment : Fragment() {
         }
     }
 
-    private fun setDxLoc() {
-        mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+    private fun setDxLoc(loc:String) {
+        mbinding.headerTop.dxLoc.text = loc
         if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "")
             mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else

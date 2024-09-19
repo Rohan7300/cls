@@ -26,6 +26,7 @@ import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.DependencyProvider.breakDownInspectionImageStage
 import com.clebs.celerity.utils.DependencyProvider.currentBreakDownItemforInspection
 import com.clebs.celerity.utils.DependencyProvider.isBreakDownItemInitialize
+import com.clebs.celerity.utils.DependencyProvider.isComingBackFromBreakDownActivity
 import com.clebs.celerity.utils.ImageTakerActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.clientUniqueIDForBreakDown
@@ -157,7 +158,7 @@ class BreakDownInspectionActivity : AppCompatActivity() {
     fun clickListeners() {
         binding.startinspectionBtn.setOnClickListener {
             isVehInspectionDone = true
-            prefs.isBreakDownInspectionDone=true
+            prefs.isBreakDownInspectionDone = true
             startInspection()
         }
         binding.addImagesBtn.setOnClickListener {
@@ -190,6 +191,7 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                             delay(20000)
 
                             loadingDialog.dismiss()
+                            isComingBackFromBreakDownActivity = true
                             finish()
                         }
 
@@ -338,7 +340,7 @@ class BreakDownInspectionActivity : AppCompatActivity() {
 
     private fun startInspection() {
         cqOpened = true
-
+        Log.d("ISOFFLine", "${!Prefs.getInstance(App.instance).returnInspectionFirstTime!!}")
         if (crrRegNo.isNotBlank()) {
             clientUniqueIDForBreakDown()
             if (cqSDKInitializer.isCQSDKInitialized()) {
@@ -368,7 +370,7 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                             phoneNumber = "", //if sent, user can't edit
                         )
                     ), userFlowParams = UserFlowParams(
-                        isOffline =  !Prefs.getInstance(App.instance).returnInspectionFirstTime!!,
+                        isOffline = !Prefs.getInstance(App.instance).returnInspectionFirstTime!!,
                         skipInputPage = true, // true, Inspection will be started with camera page | false, Inspection will be started
                     ),
 

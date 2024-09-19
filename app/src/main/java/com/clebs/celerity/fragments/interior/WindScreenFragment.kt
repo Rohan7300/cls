@@ -156,44 +156,8 @@ class WindScreenFragment : Fragment() {
             }
         }
         timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-            mbinding.headerTop.anaCarolin.text = name
-        }
-        mbinding.headerTop.dxm5.text = (activity as HomeActivity).date/*
-                if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
-                    mbinding.headerTop.dxLoc.text =
-                        Prefs.getInstance(requireContext()).currLocationName ?: ""
-                } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
-                    mbinding.headerTop.dxLoc.text =
-                        Prefs.getInstance(requireContext()).workLocationName ?: ""
-                }*/
 
-
-        mbinding.headerTop.dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
-        if (mbinding.headerTop.dxReg.text.isEmpty()) mbinding.headerTop.strikedxRegNo.visibility =
-            View.VISIBLE
-        else mbinding.headerTop.strikedxRegNo.visibility = View.GONE
-
-        setDxLoc()
-
-        if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "" || mbinding.headerTop.dxLoc.text == "Not Allocated") mbinding.headerTop.strikedxLoc.visibility =
-            View.VISIBLE
-        else mbinding.headerTop.strikedxLoc.visibility = View.GONE
-
-        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}".also { name ->
-            mbinding.headerTop.anaCarolin.text = name
-        }
-        mbinding.headerTop.dxm5.text = (activity as HomeActivity).date
-        if (Prefs.getInstance(requireContext()).currLocationName.isNotEmpty()) {
-            mbinding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).currLocationName ?: ""
-        } else if (Prefs.getInstance(requireContext()).workLocationName.isNotEmpty()) {
-            mbinding.headerTop.dxLoc.text =
-                Prefs.getInstance(requireContext()).workLocationName ?: ""
-        } else {
-
-        }
-        setDxLoc()
+        setHeader()
 
         mbinding.root.setOnKeyListener { v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN) {
@@ -507,9 +471,24 @@ class WindScreenFragment : Fragment() {
 
         }
     }
+    private fun setHeader() {
+        val prefs = Prefs.getInstance(requireContext())
 
-    private fun setDxLoc() {
-        mbinding.headerTop.dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+        setDxLoc(getLoc(prefs))
+        mbinding.headerTop.anaCarolin.text = prefs.userName
+        mbinding.headerTop.dxm5.text = prefs.headerDate
+        setDxLoc(getLoc(prefs))
+        mbinding.headerTop.dxReg.text = getVRegNo(prefs = prefs)
+
+        if (mbinding.headerTop.dxReg.text.isEmpty() || mbinding.headerTop.dxReg.text == "")
+            mbinding.headerTop.strikedxRegNo.visibility = View.VISIBLE
+        else
+            mbinding.headerTop.strikedxRegNo.visibility = View.GONE
+
+    }
+
+    private fun setDxLoc(loc:String) {
+        mbinding.headerTop.dxLoc.text = loc
         if (mbinding.headerTop.dxLoc.text.isEmpty() || mbinding.headerTop.dxLoc.text == "" || mbinding.headerTop.dxLoc.text == "Not Allocated")
             mbinding.headerTop.strikedxLoc.visibility = View.VISIBLE
         else

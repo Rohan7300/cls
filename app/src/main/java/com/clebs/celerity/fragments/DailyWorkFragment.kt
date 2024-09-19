@@ -636,7 +636,6 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
 
     private fun getVichleinformation() {
-
         Log.e(TAG, "VRN: $vrn")
         //(activity as HomeActivity).GetDriversBasicInformation()
         mainViewModel.getVehicleInformationResponse(

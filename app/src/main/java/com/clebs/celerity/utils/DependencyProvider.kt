@@ -41,7 +41,11 @@ object DependencyProvider {
 
     var handlingDeductionNotification: Boolean = false
     var handlingRotaNotification: Boolean = false
+    var isComingBackFromBreakDownActivity = false
     var handlingExpiredDialogNotification: Boolean = false
+    var headerName = MutableLiveData<String>().apply{
+        postValue("")
+    }
 
     var osData: OfflineSyncEntity = OfflineSyncEntity()
     var getCompanySignedDocs: GetCompanySignedDocumentListResponseItem? = null

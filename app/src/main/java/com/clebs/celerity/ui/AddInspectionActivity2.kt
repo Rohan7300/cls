@@ -71,6 +71,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     lateinit var loadingDialog: LoadingDialog
     private var b64ImageList = mutableListOf<String>()
     var i = 0
+    private var sdkkey = ""
     lateinit var fragmentManager: FragmentManager
     private var startonetime: Boolean? = true
     private var allImagesUploaded: Boolean = false
@@ -107,10 +108,10 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         backgroundUploadDialog.setListener(this)
         cqSDKInitializer = CQSDKInitializer(this)
         cqSDKInitializer.triggerOfflineSync()
-
+        cqSDKInitializer()
         initPreviewView()
         noInternetCheck(this, binding.nointernetLL, this)
-
+        sdkkey = ContextCompat.getString(this,R.string.cqsdk_driver_key)
         startonetime = prefs.Isfirst!!
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -748,6 +749,22 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             }
         }
     }
-
+    private fun cqSDKInitializer() {
+        cqSDKInitializer = CQSDKInitializer(this)
+        cqSDKInitializer.triggerOfflineSync()
+        if (!cqSDKInitializer.isCQSDKInitialized() || (prefs.isBreakDownGenerated && prefs.isBreakDownInspectionDone)) {
+            Prefs.getInstance(App.instance).returnInspectionFirstTime = true
+            prefs.isBreakDownGenerated = false
+            prefs.isBreakDownInspectionDone = false
+            Log.e("Initialized", "cqSDKInitializer: ")
+            cqSDKInitializer.initSDK(sdkKey = sdkkey, result = { isInitialized, code, _ ->
+                if (isInitialized && code == PublicConstants.sdkInitializationSuccessCode) {
+                    Prefs.getInstance(applicationContext).saveCQSdkKey(sdkkey)
+                } else {
+                    showToast("Error initializing SDK", this)
+                }
+            })
+        }
+    }
 
 }

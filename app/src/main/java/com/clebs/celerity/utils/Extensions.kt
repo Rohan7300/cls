@@ -724,10 +724,7 @@ fun convertDateFormat(inputDate: String, inputFormat: String, outputFormat: Stri
 }
 
 fun getVRegNo(prefs: Prefs): String {
-    return if (prefs.scannedVmRegNo.isEmpty()) {
-        prefs.vmRegNo
-    } else
-        prefs.scannedVmRegNo
+    return prefs.scannedVmRegNo
 }
 
 fun getLoc(prefs: Prefs): String {
@@ -1068,9 +1065,11 @@ fun isTokenExpired(prefs: Prefs): Boolean {
 fun dateToday(): String {
     return SimpleDateFormat("yyyy-MM-dd").format(Date())
 }
-fun dateOnFullFormat():String{
+
+fun dateOnFullFormat(): String {
     return ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT)
 }
+
 fun checkTokenExpirationAndLogout(context: Activity, prefs: Prefs) {
     if (isTokenExpired(prefs)) {
         val tokenExpiredDialog = AlertDialog.Builder(context).create()
@@ -1149,18 +1148,14 @@ fun isVersionNewer(currentVersion: String, latestVersion: String): Boolean {
     return false
 }
 
-fun showBreakDownDialog(fragmentManager: FragmentManager):BreakDownDialog {
-    val breakDownDialog = BreakDownDialog()
+fun showBreakDownDialog(breakDownDialog: BreakDownDialog?,fragmentManager: FragmentManager) {
+if(breakDownDialog!=null) {
     breakDownDialog.showDialog(fragmentManager)
     breakDownDialog.isCancelable = false
-    return breakDownDialog
 }
-fun hideBreakDownDialog(breakDownDialog: BreakDownDialog?){
-    if(breakDownDialog!=null){
-        if(breakDownDialog.isVisible)
-            breakDownDialog.dismiss()
-    }
 }
+
+
 
 
 fun clientUniqueIDForBreakDown() {
@@ -1173,7 +1168,7 @@ fun clientUniqueIDForBreakDown() {
     val regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
 
 
-    val  inspectionID = regexPattern.toString()
+    val inspectionID = regexPattern.toString()
     Prefs.getInstance(App.instance).inspectionIDForBreakDown = inspectionID
     Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
 }

@@ -34,13 +34,15 @@ class BreakDownDialog : DialogFragment() {
                 ).isBreakDownInspectionAllowed()
             ) {
                 showToast("Please wait!! Last Inspection Images are Uploading.", dialogContext)
-            } else
+            } else {
                 dialogContext.startActivity(
                     Intent(
                         dialogContext,
                         BreakDownInspectionActivity::class.java
                     )
                 )
+                hideDialog()
+            }
         }
         return dialog
     }

@@ -72,6 +72,10 @@ class Prefs(context: Context) {
     var VdhLmId: Int
         get() = sharedPreferences.getInt("VdhLmId", 0)
         set(value) = sharedPreferences.edit().putInt("VdhLmId", value).apply()
+
+    var headerDate: String
+        get() = sharedPreferences.getString("headerDate", "")?:""
+        set(value) = sharedPreferences.edit().putString("headerDate", value).apply()
     var VdhOdoMeterReading: Int
         get() = sharedPreferences.getInt("VdhOdoMeterReading", 0)
         set(value) = sharedPreferences.edit().putInt("VdhOdoMeterReading", value).apply()

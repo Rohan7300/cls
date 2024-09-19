@@ -29,6 +29,7 @@ import com.clebs.celerity.database.ImageEntity
 import com.clebs.celerity.dialogs.LoadingDialog
 import com.clebs.celerity.ui.App
 import com.clebs.celerity.ui.HomeActivity
+import com.clebs.celerity.utils.DependencyProvider
 import com.clebs.celerity.utils.ImageTakerActivity
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.getLoc
@@ -56,6 +57,7 @@ abstract class BaseInteriorFragment : Fragment() {
     var defectName: String? = null
     var imageEntity = ImageEntity()
     lateinit var prefs: Prefs
+    lateinit var strikedxRegNo:LinearLayout
     lateinit var fragmentStack: Stack<Int>
     lateinit var dxLoc: TextView
     lateinit var dxReg: TextView
@@ -89,20 +91,11 @@ abstract class BaseInteriorFragment : Fragment() {
         dxm5 = view.findViewById(R.id.dxm5)
         ana_carolin = view.findViewById(R.id.ana_carolin)
         loadingDialog = (activity as HomeActivity).loadingDialog
-        val strikedxRegNo = view.findViewById<LinearLayout>(R.id.strikedxRegNo)
+        strikedxRegNo = view.findViewById<LinearLayout>(R.id.strikedxRegNo)
         strikedxLoc = view.findViewById<LinearLayout>(R.id.strikedxLoc)
         imageView = ImageView(requireContext()) as ImageView
-        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-            .also { name -> ana_carolin.text = name }
-        dxm5.text = (activity as HomeActivity).date
 
-        setDxLoc()
-        dxReg.text = getVRegNo(prefs = Prefs.getInstance(requireContext()))
-
-        if (dxReg.text.isEmpty() || dxReg.text == "")
-            strikedxRegNo.visibility = View.VISIBLE
-        else
-            strikedxRegNo.visibility = View.GONE
+        setHeader()
 
 
 /*        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
@@ -115,10 +108,7 @@ abstract class BaseInteriorFragment : Fragment() {
                 }
             }
         }*/
-        setDxLoc()
-        "${(activity as HomeActivity).firstName} ${(activity as HomeActivity).lastName}"
-            .also { name -> ana_carolin.text = name }
-        dxm5.text = (activity as HomeActivity).date
+
 //        var tooltip = (activity as HomeActivity).tooltips
 //        if (findNavController().currentDestination?.id==R.id.windowsGlassFragment){
 //            Log.e("dkjfdkfkjdfjkdjkfdkj1", "onViewCreated: ", )
@@ -471,11 +461,25 @@ abstract class BaseInteriorFragment : Fragment() {
         }
     }
 
-    private fun setDxLoc() {
-        dxLoc.text = getLoc(prefs = Prefs.getInstance(requireContext()))
+    private fun setDxLoc(loc:String) {
+        dxLoc.text =loc
         if (dxLoc.text.isEmpty() || dxLoc.text == "")
             strikedxLoc.visibility = View.VISIBLE
         else
             strikedxLoc.visibility = View.GONE
+    }
+    private fun setHeader() {
+        val prefs = Prefs.getInstance(requireContext())
+        setDxLoc(getLoc(prefs))
+        ana_carolin.text = prefs.userName
+        dxm5.text = prefs.headerDate
+        setDxLoc(getLoc(prefs))
+        dxReg.text = getVRegNo(prefs = prefs)
+
+        if (dxReg.text.isEmpty() || dxReg.text == "")
+            strikedxRegNo.visibility = View.VISIBLE
+        else
+            strikedxRegNo.visibility = View.GONE
+
     }
 }
