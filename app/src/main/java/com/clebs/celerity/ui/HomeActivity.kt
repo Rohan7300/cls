@@ -262,7 +262,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 showAlertChangePasword90dys()
             }
             GetDriversBasicInformation()
-            if(prefs.scannedVmRegNo.isNullOrBlank()){
+            if (prefs.scannedVmRegNo.isNullOrBlank()) {
                 getScannedNumberVehicleInfo()
             }
 
@@ -333,15 +333,15 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 if (it != null) {
                     if (it.size > 0) {
 
-                        showBreakDownDialog(breakDownDialog,fragmentManager)
+                        showBreakDownDialog(breakDownDialog, fragmentManager)
                         currentBreakDownItemforInspection = it[0]
                     } else {
                         Log.d("BreakDownDialog", "Dismiss")
-                            breakDownDialog.hideDialog()
+                        breakDownDialog.hideDialog()
                     }
                 } else {
                     Log.d("BreakDownDialog", "Dismiss")
-                        breakDownDialog.hideDialog()
+                    breakDownDialog.hideDialog()
                 }
             }
 
@@ -1116,8 +1116,6 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }*/
 
 
-
-
     fun hideDialog() {
         apiCount--
         if (apiCount <= 0) {
@@ -1218,7 +1216,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 try {
                     val fragment: NewCompleteTaskFragment =
                         getFragmentManager().findFragmentById(R.id.newCompleteTaskFragment) as NewCompleteTaskFragment
-                        fragment.setHeader()
+                    fragment.setHeader()
                 } catch (_: Exception) {
 
                 }
@@ -1326,10 +1324,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
             }
 
-      /*      if(isComingBackFromBreakDownActivity){
-                viewModel.GetVehBreakDownInspectionInfobyDriver(prefs.clebUserId.toInt())
-                isComingBackFromBreakDownActivity = false
-            }*/
+            /*      if(isComingBackFromBreakDownActivity){
+                      viewModel.GetVehBreakDownInspectionInfobyDriver(prefs.clebUserId.toInt())
+                      isComingBackFromBreakDownActivity = false
+                  }*/
 
             viewModel.GetLatestAppVersion()
             //if (!prefs.isPolicyCheckToday()) {

@@ -61,96 +61,8 @@ class ImageUploadWorker(
                     0 -> {
                         val data = osRepo.getData(clebUserId, todayDate)
                         logOSEntity("ImageWorker", data)
-
-/*                        if (data.dashboardImage != null&&data.isDashboardImageRequired) {
-                            val partBody = createMultipartPart(
-                                data.dashboardImage!!, "uploadVehicleDashBoardImage",
-                                appContext
-                            )
-                            val dashresponse =
-                                mainRepo.uploadVehicleImage(
-                                    clebUserId,
-                                    partBody,
-                                    1,
-                                    currentDateTime
-                                )
-                            if (!dashresponse.isSuccessful) {
-                                data.isdashboardUploadedFailed = true
-                            }
-                        }
-
-                        if (data.frontImage != null&&data.isFrontImageRequired) {
-                            val partBody = createMultipartPart(
-                                data.frontImage!!, "uploadVehicleFrontImage",
-                                appContext
-                            )
-                            val frontresponse =
-                                mainRepo.uploadVehicleImage(
-                                    clebUserId,
-                                    partBody,
-                                    2,
-                                    currentDateTime
-                                )
-                            if (!frontresponse.isSuccessful) {
-                                data.isfrontImageFailed = true
-                            }
-                        }
-
-                        if (data.nearSideImage != null&&data.isnearImageRequired) {
-                            val partBody = createMultipartPart(
-                                data.nearSideImage!!, "uploadVehicleNearSideImage",
-                                appContext
-                            )
-
-                            val nearResponse =
-                                mainRepo.uploadVehicleImage(
-                                    clebUserId,
-                                    partBody,
-                                    3,
-                                    currentDateTime
-                                )
-                            if (!nearResponse.isSuccessful) {
-                                data.isnearSideFailed = true
-                            }
-                        }
-
-                        if (data.rearSideImage != null&&data.isRearImageRequired) {
-                            val partBody = createMultipartPart(
-                                data.rearSideImage!!, "uploadVehicleRearImage",
-                                appContext
-                            )
-                            val rearResponse =
-                                mainRepo.uploadVehicleImage(
-                                    clebUserId,
-                                    partBody,
-                                    4,
-                                    currentDateTime
-                                )
-                            if (!rearResponse.isSuccessful) {
-                                data.isrearSideFailed = true
-                            }
-                        }
-
-                        if (data.offSideImage != null&&data.isOffsideImageRequired) {
-                            val partBody = createMultipartPart(
-                                data.offSideImage!!, "uploadVehicleOffSideImage",
-                                appContext
-                            )
-
-                            val offsideResponse =
-                                mainRepo.uploadVehicleImage(
-                                    clebUserId,
-                                    partBody,
-                                    6,
-                                    currentDateTime
-                                )
-                            if (!offsideResponse.isSuccessful) {
-                                data.isoffSideFailed = true
-                            }
-                        }*/
-
-                        //if (data.addblueImage != null&&data.isaddBlueImageRequired) {
-                        if (prefs.addBlueUri!=null) {
+                    prefs.currentImageUploading = true
+                     if (prefs.addBlueUri!=null) {
                             val partBody = createMultipartPart(
                                 prefs.addBlueUri!!, "uploadVehicleAddBlueImage",
                                 appContext
@@ -210,6 +122,7 @@ class ImageUploadWorker(
                             }
 
                         }
+                        prefs.currentImageUploading = false
                     }
 
                     1 -> {

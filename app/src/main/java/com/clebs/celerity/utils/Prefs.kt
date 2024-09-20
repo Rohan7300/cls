@@ -441,9 +441,12 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getBoolean("isBreakDownInspectionDone",false)
         set(value) = sharedPreferences.edit().putBoolean("isBreakDownInspectionDone",value).apply()
 
-    var isBreakDownGenerated:Boolean
-        get() = sharedPreferences.getBoolean("isBreakDownGenerated",false)
-        set(value) = sharedPreferences.edit().putBoolean("isBreakDownGenerated",value).apply()
+    var isMainInspectionInitialized:Boolean
+        get() = sharedPreferences.getBoolean("isMainInspectionInitialized",false)
+        set(value) = sharedPreferences.edit().putBoolean("isMainInspectionInitialized",value).apply()
+    var isBreakDownInspectionInit:Boolean
+        get() = sharedPreferences.getBoolean("isBreakDownInspectionInit",false)
+        set(value) = sharedPreferences.edit().putBoolean("isBreakDownInspectionInit",value).apply()
 
     /*
     fun saveSignatureInfo(jsonInfo:String){
@@ -795,6 +798,9 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getString("VmCreatedDate", null)
         set(value) = sharedPreferences.edit().putString("VmCreatedDate", value).apply()
 
+    var currentImageUploading:Boolean
+        get() = sharedPreferences.getBoolean("currentImageUploading", false)
+        set(value) = sharedPreferences.edit().putBoolean("currentImageUploading", value).apply()
 
     var destinationFragment: String?
         get() = sharedPreferences.getString("destinationFragment", "HomeFragment")

@@ -767,11 +767,13 @@ class NewCompleteTaskFragment : Fragment() {
     private fun backgroundImageSync() {
         uploadInProgress = true
 
-        startUploadWithWorkManager(
-            0,
-            Prefs.getInstance(requireContext()),
-            requireContext()
-        )
+        if(!prefs.currentImageUploading){
+            startUploadWithWorkManager(
+                0,
+                Prefs.getInstance(requireContext()),
+                requireContext()
+            )
+        }
         inspectionstarted = true
         if (osData.faceMaskImage != null) {
             osData.isImagesUploadedToday = true

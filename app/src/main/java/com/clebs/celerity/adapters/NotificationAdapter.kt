@@ -283,6 +283,8 @@ class NotificationAdapter(
                     navController.navigate(R.id.profileFragment)
                 }
                 else if(item.ActionToPerform =="VehicleBreakDownInspectionNotification"){
+                    viewModel.MarkNotificationAsRead(item.NotificationId)
+                    callback.refresh()
                     breakDown(viewModel,pref)
                 }
                 else {

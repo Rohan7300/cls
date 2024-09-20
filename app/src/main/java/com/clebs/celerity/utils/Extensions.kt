@@ -1158,17 +1158,14 @@ if(breakDownDialog!=null) {
 
 
 
-fun clientUniqueIDForBreakDown() {
-    val x = "123456"
-    val y = "123456"
-    // example string
+fun clientUniqueIDForBreakDown(userId:String,regNoForInspection:String) {
     val currentDate = LocalDateTime.now()
     val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("ddHHmmss"))
 
-    val regexPattern = Regex("${x.take(3)}${y.take(3)}${formattedDate}")
+    val regexPattern = Regex("${userId.reversed().take(3)}${regNoForInspection.take(3)}${formattedDate}")
 
 
     val inspectionID = regexPattern.toString()
     Prefs.getInstance(App.instance).inspectionIDForBreakDown = inspectionID
-    Log.e("resistrationvrnpatterhn", "clientUniqueID: " + inspectionID)
+    Log.e("clientUniqueIDForBreakDown", "clientUniqueID: " + inspectionID)
 }

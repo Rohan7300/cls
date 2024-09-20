@@ -106,12 +106,14 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         loadingDialog = LoadingDialog(this)
         backgroundUploadDialog = BackgroundUploadDialog()
         backgroundUploadDialog.setListener(this)
-        cqSDKInitializer = CQSDKInitializer(this)
-        cqSDKInitializer.triggerOfflineSync()
+        sdkkey = ContextCompat.getString(this,R.string.cqsdk_driver_key)
         cqSDKInitializer()
+/*        cqSDKInitializer = CQSDKInitializer(this)
+        cqSDKInitializer.triggerOfflineSync()*/
+
         initPreviewView()
         noInternetCheck(this, binding.nointernetLL, this)
-        sdkkey = ContextCompat.getString(this,R.string.cqsdk_driver_key)
+
         startonetime = prefs.Isfirst!!
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -752,10 +754,11 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     private fun cqSDKInitializer() {
         cqSDKInitializer = CQSDKInitializer(this)
         cqSDKInitializer.triggerOfflineSync()
-        if (!cqSDKInitializer.isCQSDKInitialized() || (prefs.isBreakDownGenerated && prefs.isBreakDownInspectionDone)) {
-            Prefs.getInstance(App.instance).returnInspectionFirstTime = true
-            prefs.isBreakDownGenerated = false
+        Prefs.getInstance(App.instance).returnInspectionFirstTime = true
+        if (!cqSDKInitializer.isCQSDKInitialized() || !prefs.isMainInspectionInitialized||prefs.isBreakDownInspectionInit) {
+            prefs.isMainInspectionInitialized = true
             prefs.isBreakDownInspectionDone = false
+            prefs.isBreakDownInspectionInit = false
             Log.e("Initialized", "cqSDKInitializer: ")
             cqSDKInitializer.initSDK(sdkKey = sdkkey, result = { isInitialized, code, _ ->
                 if (isInitialized && code == PublicConstants.sdkInitializationSuccessCode) {
