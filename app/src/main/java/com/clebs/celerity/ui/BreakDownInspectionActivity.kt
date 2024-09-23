@@ -62,6 +62,7 @@ class BreakDownInspectionActivity : AppCompatActivity() {
     private var isVehInspectionDone = false
     private var breakDownFuelLevelId = -1
     private var breakDownVehOilLevelId = -1
+    var breakDownSpareWheelUri:String = ""
     private var sdkKey = ""
     private lateinit var cqSDKInitializer: CQSDKInitializer
     var regNoForInspection = ""
@@ -263,8 +264,10 @@ class BreakDownInspectionActivity : AppCompatActivity() {
             }
         }
         binding.nextBtn.setOnClickListener {
-            if (validateOne())
+            if (validateOne()&& !isVehInspectionDone)
                 uiSecond()
+            else
+                uiThird()
 
         }
     }
@@ -276,7 +279,7 @@ class BreakDownInspectionActivity : AppCompatActivity() {
             return false
         }
         if (binding.atvAddBlueMileage.text.isNullOrBlank()) {
-            showToast("Add Vehicle Add Blue Mileage Before Submitting", this)
+            showToast("Add Vehicle AdBlue Mileage Before Submitting", this)
             return false
         }
         if (breakDownFuelLevelId == -1) {
@@ -293,10 +296,10 @@ class BreakDownInspectionActivity : AppCompatActivity() {
         }
         listOf(
             prefs.breakDownSpareWheelUri,
-            prefs.breakDownLoadingInteriorUri,
+            prefs.breakDownVehicleInteriorUri,
             prefs.breakDownLoadingInteriorUri,
             prefs.breakDownToolsPictureUri,
-            prefs.breakDownToolsPictureUri
+            prefs.breakDownVinNumberPictureUri
         ).forEach {
             if (it.isNullOrBlank()) {
                 showToast("Please add all the Vehicle Pictures", this)
@@ -326,10 +329,10 @@ class BreakDownInspectionActivity : AppCompatActivity() {
         }
         listOf(
             prefs.breakDownSpareWheelUri,
-            prefs.breakDownLoadingInteriorUri,
+            prefs.breakDownVehicleInteriorUri,
             prefs.breakDownLoadingInteriorUri,
             prefs.breakDownToolsPictureUri,
-            prefs.breakDownToolsPictureUri
+            prefs.breakDownVinNumberPictureUri
         ).forEach {
             if (it.isNullOrBlank()) {
                 return false
@@ -344,7 +347,7 @@ class BreakDownInspectionActivity : AppCompatActivity() {
             return false
         }
         if (binding.atvAddBlueMileage.text.isNullOrBlank()) {
-            showToast("Add Vehicle Add Blue Mileage Before Next Step", this)
+            showToast("Add Vehicle AdBlue Mileage Before Next Step", this)
             return false
         }
         if (breakDownFuelLevelId == -1) {
@@ -409,7 +412,8 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                         //drivers ID +vechile iD + TOdays date dd// mm //yy::tt,mm
                     ), inputDetails = InputDetails(
                         vehicleDetails = VehicleDetails(
-                            regNumber = regNoForInspection,
+                            regNumber = "ND22YFL",
+                            //regNumber = regNoForInspection,
                             make = "Van", //if sent, user can't edit
                             model = "Any Model", //if sent, user can't edit
                             bodyStyle = "Van"  // if sent, user can't edit - Van, Boxvan, Sedan, SUV, Hatch, Pickup [case sensitive]
@@ -427,7 +431,7 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                             loadingDialog.dismiss()
                             Log.e(TAG, "startInspection: $msg $code")
                             if (isStarted) {
-                                uiThird()
+                               //uiThird()
                                 Prefs.getInstance(App.instance).returnInspectionFirstTime = false
                                 Log.d(TAG, "isStarted $msg")
                             } else {
@@ -509,25 +513,21 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                             breakDownInspectionImageStage = 2
                             updateImageUi()
                         }
-
                         2 -> {
                             prefs.breakDownLoadingInteriorUri = outputUri
                             breakDownInspectionImageStage = 3
                             updateImageUi()
                         }
-
                         3 -> {
                             prefs.breakDownToolsPictureUri = outputUri
                             breakDownInspectionImageStage = 4
                             updateImageUi()
                         }
-
                         4 -> {
                             prefs.breakDownVinNumberPictureUri = outputUri
                             breakDownInspectionImageStage = 5
                             updateImageUi()
                         }
-
                     }
                 } else {
                     showToast("Failed to fetch image!!", this)
@@ -648,9 +648,9 @@ class BreakDownInspectionActivity : AppCompatActivity() {
         }
     }
 
-
-    override fun onResume() {
-        super.onResume()
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.d("ONResume","${intent!!.extras}")
         val message =
             intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
                 ?: "Could not identify status message"
@@ -670,6 +670,32 @@ class BreakDownInspectionActivity : AppCompatActivity() {
         if(validateWithoutToast()){
             binding.submitBtn.visibility = View.VISIBLE
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+/*        Log.d("ONResume","${intent.extras}")
+        val message =
+            intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
+                ?: "Could not identify status message"
+        val tempCode =
+            intent.getIntExtra(PublicConstants.quoteCreationFlowStatusCodeKeyInIntent, -1)
+
+        if (tempCode == 200) {
+            uiThird()
+            Log.d("BreakDownONResume", "200 $message")
+            isVehInspectionDone = true
+            prefs.isBreakDownInspectionDone = true
+            showToast("Vehicle Inspection is successfully completed ", this)
+        } else {
+
+            Log.d("BreakDownONResume", "else $tempCode $message")
+        }
+   */
+        if(validateWithoutToast()){
+            binding.submitBtn.visibility = View.VISIBLE
+        }
+
     }
 
     override fun onBackPressed() {

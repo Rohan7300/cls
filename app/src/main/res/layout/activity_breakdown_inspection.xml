@@ -117,7 +117,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="10dp"
                             android:layout_marginVertical="10dp"
-                            android:hint="Enter Add Blue Mileage"
+                            android:hint="Enter AdBlue Mileage"
                             android:textColorHint="@color/hintColor">
 
                             <AutoCompleteTextView
@@ -282,7 +282,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="10dp"
                                     android:fontFamily="@font/poppins_semibold"
-                                    android:padding="5dp"
+                                    android:paddingVertical="5dp"
+                                    android:paddingHorizontal="10dp"
                                     android:text="Add Other Images" />
 
                                 <LinearLayout

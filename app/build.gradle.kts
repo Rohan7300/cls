@@ -17,8 +17,8 @@ android {
         applicationId = "com.clebs.celerity"
         minSdk = 27
         targetSdk = 34
-        versionCode = 9
-        versionName = "1.0.7"
+        versionCode = 10
+        versionName = "1.0.8"
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

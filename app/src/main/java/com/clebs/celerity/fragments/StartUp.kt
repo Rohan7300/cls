@@ -59,8 +59,8 @@ class StartUp : Fragment() {
                 if (it != null) {
                     viewModel.currentViewPage.postValue(1)
                     pref.quesID = it.QuestionId
-                    if(pref.qStage<1)
-                    pref.qStage = 1
+                    if (pref.qStage < 1)
+                        pref.qStage = 1
                 }
             }
         }
@@ -73,20 +73,20 @@ class StartUp : Fragment() {
 /*            if (pref.qStage < 1 || pref.quesID == 1) {
                 showToast("Please complete previous assessment first", requireContext())
             } else {*/
-                val allQuestionsSelected = adapter.areAllQuestionsSelected()
-                val comment =
-                    if (binding.startupComment.text.isNullOrEmpty()) " " else binding.startupComment.text
-                if (allQuestionsSelected && !binding.startupComment.text.isNullOrEmpty()) {
-                    val selectedOptions = questions.map { it.selectedOption }
-                    if (comment != null) {
-                        saveStartupApi(selectedOptions, comment)
-                    }
-                } else {
-                    if (binding.startupComment.text.isNullOrEmpty())
-                        showToast("Please add comment before submitting", requireContext())
-                    else
-                        showToast("Please select answer to all questions.", requireContext())
+            val allQuestionsSelected = adapter.areAllQuestionsSelected()
+            val comment =
+                if (binding.startupComment.text.isNullOrEmpty()) " " else binding.startupComment.text
+            if (allQuestionsSelected && !binding.startupComment.text.isNullOrEmpty()) {
+                val selectedOptions = questions.map { it.selectedOption }
+                if (comment != null) {
+                    saveStartupApi(selectedOptions, comment)
                 }
+            } else {
+                if (binding.startupComment.text.isNullOrEmpty())
+                    showToast("Please add comment before submitting", requireContext())
+                else
+                    showToast("Please select answer to all questions.", requireContext())
+            }
             //}
         }
     }
