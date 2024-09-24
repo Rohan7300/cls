@@ -596,7 +596,7 @@ class ImageUploadWorker(
                             val response = withContext(Dispatchers.IO){
                                 mainRepo.UploadDAVehBreakDownInpectionSpearWheelPictureFile(
                                     prefs.currBreakDownInspectionId,
-                                    0,
+                                    prefs.breakDownSuperVisorID!!,
                                     partBody
                                 )
                             }
@@ -611,7 +611,7 @@ class ImageUploadWorker(
                             val response = withContext(Dispatchers.IO){
                                 mainRepo.UploadDAVehBreakDownInpectionInteriorPictureFile(
                                     prefs.currBreakDownInspectionId,
-                                    0,
+                                    prefs.breakDownSuperVisorID!!,
                                     partBody
                                 )
                             }
@@ -626,7 +626,7 @@ class ImageUploadWorker(
                             val response = withContext(Dispatchers.IO){
                                 mainRepo.UploadDAVehBreakDownInpectionLoadingInteriorPictureFile(
                                     prefs.currBreakDownInspectionId,
-                                    0,
+                                    prefs.breakDownSuperVisorID!!,
                                     partBody
                                 )
                             }
@@ -641,7 +641,7 @@ class ImageUploadWorker(
                             val response = withContext(Dispatchers.IO){
                                 mainRepo.UploadDAVehBreakDownInpectionToolsPictureFile(
                                     prefs.currBreakDownInspectionId,
-                                    0,
+                                    prefs.breakDownSuperVisorID!!,
                                     partBody
                                 )
                             }
@@ -656,7 +656,7 @@ class ImageUploadWorker(
                             val response = withContext(Dispatchers.IO){
                                 mainRepo.UploadDAVehBreakDownInpectionVinNoPictureFile(
                                     prefs.currBreakDownInspectionId,
-                                    0,
+                                    prefs.breakDownSuperVisorID!!,
                                     partBody
                                 )
                             }

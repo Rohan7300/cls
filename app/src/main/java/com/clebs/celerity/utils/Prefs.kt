@@ -840,6 +840,10 @@ class Prefs(context: Context) {
         get() = sharedPreferences.getString("breakDownSpareWheelUri", "")
         set(value) = sharedPreferences.edit().putString("breakDownSpareWheelUri", value).apply()
 
+    var breakDownSuperVisorID: Int?
+        get() = sharedPreferences.getInt("breakDownSuperVisorID", 0)
+        set(value) = sharedPreferences.edit().putInt("breakDownSuperVisorID", value!!).apply()
+
     var isBreakDownImagesAreUploading: Boolean
         get() = sharedPreferences.getBoolean("isBreakDownImagesAreUploading", false)
         set(value) = sharedPreferences.edit().putBoolean("isBreakDownImagesAreUploading", value)

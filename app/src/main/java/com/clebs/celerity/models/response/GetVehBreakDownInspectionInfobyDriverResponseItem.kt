@@ -25,5 +25,6 @@ data class GetVehBreakDownInspectionInfobyDriverResponseItem(
     val VehInspRequestedbyName: String,
     val VehInspVmId: Int,
     val VehMileage: Any,
-    val VmRegNo: String
+    val VmRegNo: String,
+    val NotificationId:Int
 )
