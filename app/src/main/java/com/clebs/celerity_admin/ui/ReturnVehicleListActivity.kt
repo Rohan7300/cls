@@ -201,7 +201,7 @@ class ReturnVehicleListActivity : ComponentActivity() {
     fun VehicleCollectionList(dialogOpen: () -> Unit) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(1.dp),
+            verticalArrangement = Arrangement.spacedBy(0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
@@ -261,8 +261,9 @@ class ReturnVehicleListActivity : ComponentActivity() {
                         Icon(
                             painter = painterResource(id = R.drawable.search2),
                             contentDescription = "Search",
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(15.dp)
                         )
+                        Spacer(modifier = Modifier.width(5.dp))
                     }
                 }
                 Spacer(modifier = Modifier.width(8.dp))
