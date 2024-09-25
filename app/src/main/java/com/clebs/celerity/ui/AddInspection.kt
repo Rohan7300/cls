@@ -560,8 +560,8 @@ class AddInspection : AppCompatActivity(), BackgroundUploadDialogListener {
             binding.tvUploadType.text = "Offside Image"
             binding.uploadBtnText.text = "Upload Offside Image"
         } else if (osData.addblueImage == null && osData.isaddBlueImageRequired) {
-            binding.tvUploadType.text = "Add Blue Level Image"
-            binding.uploadBtnText.text = "Upload Add Blue Level Image"
+            binding.tvUploadType.text = "AdBlue Level Image"
+            binding.uploadBtnText.text = "Upload AdBlue Level Image"
         } else if (osData.oillevelImage == null && osData.isoilLevelImageRequired) {
             binding.tvUploadType.text = "Oil Level Image"
             binding.uploadBtnText.text = "Upload Oil Level Image"

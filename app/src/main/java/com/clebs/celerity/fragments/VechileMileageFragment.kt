@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
@@ -69,7 +70,12 @@ class VechileMileageFragment : Fragment() {
              mbinding.headerTop.strikedxRegNo.visibility = View.GONE*/
 
         setHeader()
-
+/*        val dispatcher = requireActivity().onBackPressedDispatcher
+        dispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                (activity as HomeActivity).onBackPressed()
+            }
+        })*/
         mbinding.miles.text = buildString {
             append("${Prefs.getInstance(App.instance).VdhOdoMeterReading} ")
             append("Miles")

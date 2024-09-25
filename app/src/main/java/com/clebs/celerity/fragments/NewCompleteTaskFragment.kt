@@ -23,6 +23,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -178,7 +179,12 @@ class NewCompleteTaskFragment : Fragment() {
         mbinding.downIvsBreak.setOnClickListener(clickListener)
         mbinding.parentBreak.setOnClickListener(clickListener)
 
-
+        val dispatcher = requireActivity().onBackPressedDispatcher
+        dispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                (activity as HomeActivity).onBackPressed()
+            }
+        })
         mbinding.h1.setOnClickListener {
             if (mbinding.breakH2.isVisible) {
                 mbinding.breakH2.visibility = View.GONE

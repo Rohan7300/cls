@@ -675,8 +675,8 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             binding.tvUploadType.text = "Start Full Inspection"
             binding.uploadBtnText.text = "Full Vehicle Inspection"
         } else if (prefs.addBlueUri == null && prefs.addBlueRequired) {
-            binding.tvUploadType.text = "Add Blue Level Image"
-            binding.uploadBtnText.text = "Upload Add Blue Level Image"
+            binding.tvUploadType.text = "AdBlue Level Image"
+            binding.uploadBtnText.text = "Upload AdBlue Level Image"
         } else if (prefs.oilLevelUri == null && prefs.oilLevelRequired) {
             binding.tvUploadType.text = "Oil Level Image"
             binding.uploadBtnText.text = "Upload Oil Level Image"

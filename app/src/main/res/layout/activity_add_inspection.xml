@@ -280,7 +280,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/poppins_semibold"
-                        android:text="Add Blue Level"
+                        android:text="AdBlue Level"
                         android:textColor="@color/white" />
 
                     <ImageView

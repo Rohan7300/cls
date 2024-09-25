@@ -150,7 +150,8 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
 
         showToolTip()
         Prefs.getInstance(App.instance).vmId = 63958
-        showToast("VDHVMID Before - ${Prefs.getInstance(App.instance).vmId}", requireContext())
+        Prefs.getInstance(App.instance).scannedVmRegNo = ""
+        //showToast("VDHVMID Before - ${Prefs.getInstance(App.instance).vmId}", requireContext())
         Log.d("VDHVMID","Before DailyWork - ${Prefs.getInstance(App.instance).vmId}")
         Log.d("VMIDX", "BeforScan ${Prefs.getInstance(App.instance).vmId}")
         mbinding.rectangle4.setOnClickListener {
@@ -589,9 +590,8 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                                 bounding = response.body()?.results?.get(0)?.box.toString()
 
                                 Log.d(TAG, response.body()?.results.toString())
-                                Prefs.getInstance(App.instance).scannedVmRegNo = vrn
-                                getVichleinformation()
 
+                                getVichleinformation()
                             }
                         } else {
                             showScanErrorDialog(
@@ -642,6 +642,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
             Prefs.getInstance(App.instance).clebUserId.toDouble(), vrn
         ).observe(requireActivity(), Observer {
             if (it != null) {
+                Prefs.getInstance(App.instance).scannedVmRegNo = vrn
                 Prefs.getInstance(App.instance).vmId = it.vmId
                 Prefs.getInstance(App.instance).VdhLmId  =it.vmLocId
                 Prefs.getInstance(App.instance).saveLocationID(it.vmLocId)
@@ -656,7 +657,7 @@ class DailyWorkFragment : Fragment(), ScanErrorDialogListener {
                 if (txt.isNotEmpty()) {
                     Prefs.getInstance(App.instance).save("vrn", txt)
                 }
-                showToast("VDHVMID After - ${Prefs.getInstance(App.instance).vmId}", requireContext())
+               // showToast("VDHVMID After - ${Prefs.getInstance(App.instance).vmId}", requireContext())
                 Log.d("VDHVMID","After DailyWork - ${Prefs.getInstance(App.instance).vmId}")
                 mbinding.pb.visibility = View.GONE
                 showLog(

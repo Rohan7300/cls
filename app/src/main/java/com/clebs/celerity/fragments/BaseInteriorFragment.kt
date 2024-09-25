@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -96,7 +97,12 @@ abstract class BaseInteriorFragment : Fragment() {
         imageView = ImageView(requireContext()) as ImageView
 
         setHeader()
-
+        val dispatcher = requireActivity().onBackPressedDispatcher
+        dispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                (activity as HomeActivity).onBackPressed()
+            }
+        })
 
 /*        viewModel.vechileInformationLiveData.observe(viewLifecycleOwner) {
            // dxReg.text = it?.vmRegNo ?: ""
@@ -482,4 +488,6 @@ abstract class BaseInteriorFragment : Fragment() {
             strikedxRegNo.visibility = View.GONE
 
     }
+
+
 }

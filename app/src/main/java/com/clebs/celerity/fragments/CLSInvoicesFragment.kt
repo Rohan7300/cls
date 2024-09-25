@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
@@ -70,6 +71,12 @@ class CLSInvoicesFragment : Fragment(), PermissionCallback {
         binding.selectYearET.setText(selectedYear.toString())
         observers()
         showYearPickerNew()
+        val dispatcher = requireActivity().onBackPressedDispatcher
+        dispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                (activity as HomeActivity).onBackPressed()
+            }
+        })
         viewModel.GetDriverInvoiceList(prefs.clebUserId.toInt(), selectedYear, 0)
 
         return binding.root

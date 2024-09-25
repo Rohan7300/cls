@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.clebs.celerity.R
@@ -44,6 +45,12 @@ class InvoicesFragment : Fragment() {
         binding.otherinvoices.setOnClickListener {
             findNavController().navigate(R.id.CLSThirdPartyFragment)
         }
+        val dispatcher = requireActivity().onBackPressedDispatcher
+        dispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                (activity as HomeActivity).onBackPressed()
+            }
+        })
         binding.otherinvoices.visibility = View.GONE
         showDialog()
         GetDriversBasicInformation()

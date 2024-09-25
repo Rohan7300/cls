@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -89,7 +90,12 @@ class CLSThirdPartyFragment : Fragment(), PermissionCallback {
         showYearPickerNew()
         showDialog()
         observers()
-
+        val dispatcher = requireActivity().onBackPressedDispatcher
+        dispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                (activity as HomeActivity).onBackPressed()
+            }
+        })
         viewModel.GetThirdPartyInvoiceList(prefs.clebUserId.toInt(), selectedYear, 0)
 
         return binding.root

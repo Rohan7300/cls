@@ -127,7 +127,7 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
                   fragmentCameraBinding.dashboardStatusIV.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_offtwo))
           }
           5->{
-              fragmentCameraBinding.focusTxt.text= "Focus Camera on Add Blue Level Meter"
+              fragmentCameraBinding.focusTxt.text= "Focus Camera on AdBlue Level Meter"
               fragmentCameraBinding.dashboardStatusIV.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ins_addblue))
           }
           6->{

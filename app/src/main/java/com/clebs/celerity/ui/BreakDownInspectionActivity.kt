@@ -67,13 +67,13 @@ class BreakDownInspectionActivity : AppCompatActivity() {
     private var breakDownFuelLevelId = -1
     private var breakDownVehOilLevelId = -1
     var breakDownSpareWheelUri: String = ""
-    var breakDownVehicleInteriorUri:String = ""
-    var breakDownLoadingInteriorUri:String = ""
-    var breakDownToolsPictureUri:String = ""
+    var breakDownVehicleInteriorUri: String = ""
+    var breakDownLoadingInteriorUri: String = ""
+    var breakDownToolsPictureUri: String = ""
     var breakDownVinNumberPictureUri = ""
     private var sdkKey = ""
     private lateinit var cqSDKInitializer: CQSDKInitializer
-    var regNoForInspection = ""
+    private var regNoForInspection = ""
 
     companion object {
         var TAG = "BreakInspectionActivity"
@@ -104,17 +104,32 @@ class BreakDownInspectionActivity : AppCompatActivity() {
         loadingDialog = LoadingDialog(this)
         viewmodel = getMainVM(this)
         crrRegNo = prefs.scannedVmRegNo
+
         if (!isBreakDownItemInitialize()) {
             showToast("BreakDown Data is not received", this)
         } else {
-            if (currentBreakDownItemforInspection.VmRegNo != prefs.scannedVmRegNo) {
+  /*          if (currentBreakDownItemforInspection.VmRegNo.replace(
+                    " ",
+                    ""
+                ) != prefs.scannedVmRegNo.replace(" ", "")
+            ) {
                 showToast(
                     "Scanned RegNo is different from BreakDown Vehicle Inspection RegNo",
                     this
                 )
-                crrRegNo = currentBreakDownItemforInspection.VmRegNo
-            }
+
+            }*/
+            crrRegNo = currentBreakDownItemforInspection.VmRegNo
         }
+        if (currentBreakDownItemforInspection.VmRegNo.isBlank())
+            binding.vehicleForInspectionTV.text ="--- ---"
+        else
+            binding.vehicleForInspectionTV.text = currentBreakDownItemforInspection.VmRegNo
+
+        if (prefs.scannedVmRegNo.isBlank())
+            binding.vehicleScannedTV.text = "--- ---"
+        else
+            binding.vehicleScannedTV.text = prefs.scannedVmRegNo
 
         dismissNotification(currentBreakDownItemforInspection.NotificationId)
         regNoForInspection = currentBreakDownItemforInspection.VmRegNo.replace(" ", "")
@@ -286,11 +301,18 @@ class BreakDownInspectionActivity : AppCompatActivity() {
             }
         }
         binding.nextBtn.setOnClickListener {
-            if (validateOne() && !isVehInspectionDone)
-                uiSecond()
-            else
+            if(validateWithoutToast()){
                 uiThird()
-
+                binding.addImagesBtn.visibility = View.GONE
+                binding.submitBtn.visibility = View.VISIBLE
+            }
+            else if (validateOne()){
+                if(!isVehInspectionDone){
+                    uiSecond()
+                }else{
+                    uiThird()
+                }
+            }
         }
     }
 
@@ -732,6 +754,7 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                 }
            */
         if (validateWithoutToast()) {
+            binding.addImagesBtn.visibility = View.GONE
             binding.submitBtn.visibility = View.VISIBLE
         }
 

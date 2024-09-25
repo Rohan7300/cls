@@ -43,7 +43,58 @@
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:orientation="horizontal"
+                >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="11sp"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Inspection For Vehicle"
+                android:textColor="@color/text_color" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:id="@+id/vehicleForInspectionTV"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="XXXX"
+                    android:textColor="@color/text_color" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="11sp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Vehicle Scanned"
+                    android:textColor="@color/text_color" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/vehicleScannedTV"
+                    android:layout_weight="1"
+                    android:textSize="13sp"
+                    android:gravity="center"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="XXXX"
+                    android:textColor="@color/text_color" />
+            </LinearLayout>
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,6 +155,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:importantForAutofill="no"
+                                android:maxLength="6"
                                 android:inputType="numberDecimal"
                                 android:padding="12dp"
                                 android:textColorHint="@color/hintColor"
@@ -128,6 +180,7 @@
                                 android:importantForAutofill="no"
                                 android:inputType="numberDecimal"
                                 android:padding="12dp"
+                                android:maxLength="5"
                                 android:textColorHint="@color/hintColor"
                                 android:textSize="13sp" />
 

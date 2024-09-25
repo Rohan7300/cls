@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity.R
@@ -54,7 +55,12 @@ class UserTicketsFragment : Fragment() {
         viewModel.GetUserTickets(prefs.clebUserId.toInt())
 
         deleteDialog = AlertDialog.Builder(requireContext()).create()
-
+        val dispatcher = requireActivity().onBackPressedDispatcher
+        dispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                (activity as HomeActivity).onBackPressed()
+            }
+        })
         deleteDailogBinding =
             DialogSortFiltersBinding.inflate(LayoutInflater.from(requireContext()))
 

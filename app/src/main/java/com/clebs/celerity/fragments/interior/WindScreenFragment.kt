@@ -119,7 +119,12 @@ class WindScreenFragment : Fragment() {
 
         bubbleShowCase.finishSequence()
 
-
+        val dispatcher = requireActivity().onBackPressedDispatcher
+        dispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                (activity as HomeActivity).onBackPressed()
+            }
+        })
         viewModel = (activity as HomeActivity).viewModel
         viewModel.setLastVisitedScreenId(requireActivity(), R.id.windScreenFragment)
         mbinding.tvNext.visibility = View.GONE
