@@ -34,6 +34,7 @@ import com.clebs.celerity.utils.DependencyProvider.getMainVM
 import com.clebs.celerity.utils.DependencyProvider.isBreakDownItemInitialize
 import com.clebs.celerity.utils.DependencyProvider.isComingBackFromBreakDownActivity
 import com.clebs.celerity.utils.ImageTakerActivity
+import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.clientUniqueIDForBreakDown
 import com.clebs.celerity.utils.dateOnFullFormat
@@ -61,11 +62,13 @@ class BreakDownInspectionActivity : AppCompatActivity() {
     lateinit var loadingDialog: LoadingDialog
     lateinit var prefs: Prefs
     private var cqOpened = false
+    var isNetworkActive: Boolean = true
     lateinit var viewmodel: MainViewModel
     private var crrRegNo: String = ""
     private var isVehInspectionDone = false
     private var breakDownFuelLevelId = -1
     private var breakDownVehOilLevelId = -1
+    lateinit var networkManager: NetworkManager
     var breakDownSpareWheelUri: String = ""
     var breakDownVehicleInteriorUri: String = ""
     var breakDownLoadingInteriorUri: String = ""
@@ -104,6 +107,16 @@ class BreakDownInspectionActivity : AppCompatActivity() {
         loadingDialog = LoadingDialog(this)
         viewmodel = getMainVM(this)
         crrRegNo = prefs.scannedVmRegNo
+        networkManager = NetworkManager(this)
+        networkManager.observe(this) {
+            isNetworkActive = if (it) {
+                binding.nointernetLL.visibility = View.GONE
+                true
+            } else {
+                binding.nointernetLL.visibility = View.VISIBLE
+                false
+            }
+        }
 
         if (!isBreakDownItemInitialize()) {
             showToast("BreakDown Data is not received", this)

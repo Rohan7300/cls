@@ -118,6 +118,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     lateinit var fragmentManager: FragmentManager
     lateinit var internetDialog: NoInternetDialog
     var isNetworkActive: Boolean = true
+    var updateMsgShown = false
 
     var clebuserID: Int = 0
     var firstName = ""
@@ -734,7 +735,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
             } else {
                 viewModel.GetDAVehicleExpiredDocuments(prefs.clebUserId.toInt())
-                showToast("Failed to fetch the latest app version", this@HomeActivity)
+                if(!updateMsgShown) {
+                    showToast("Failed to fetch the latest app version", this@HomeActivity)
+                    updateMsgShown = true
+                }
             }
 
         }
