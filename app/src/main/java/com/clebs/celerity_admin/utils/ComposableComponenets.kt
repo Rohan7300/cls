@@ -1,21 +1,29 @@
 package com.clebs.celerity_admin.utils
 
+import android.graphics.fonts.Font
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -272,7 +281,7 @@ fun ReturnCollectionListItem(modifier: Modifier = Modifier) {
                     fontSize = 12.sp,
                     modifier = Modifier.weight(1f)
                 )
-                Spacer(modifier = Modifier.width(5.dp))
+/*                Spacer(modifier = Modifier.width(5.dp))
                 IconButton(onClick = { expanded = !expanded }) {
                     Icon(
                         painter = painterResource(id = R.drawable.eye),
@@ -289,7 +298,7 @@ fun ReturnCollectionListItem(modifier: Modifier = Modifier) {
                         contentDescription = "Cross Button",
                         modifier = Modifier.size(25.dp)
                     )
-                }
+                }*/
             }
             Spacer(modifier = Modifier.height(10.dp))
             Row {
@@ -362,6 +371,36 @@ fun ReturnCollectionListItem(modifier: Modifier = Modifier) {
                     }
                 }
             }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End) {
+                Button(
+                    onClick = { /* Not Ready button click handler */ },
+                    colors = ButtonDefaults.buttonColors(colorResource(id = R.color.red_light)),
+                    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 12.dp)
+                ) {
+                    Text(
+                        text = "NOT READY",
+                        color = Color.White,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Button(
+                    onClick = { /* Return button click handler */ },
+                    colors = ButtonDefaults.buttonColors(colorResource(id = R.color.greenBtn)),
+                    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 12.dp)
+                ) {
+                    Text(
+                        text = "RETURN",
+                        color = Color.White,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
         }
     }
 }
@@ -394,4 +433,40 @@ fun ComDialogVehicleCollection(showDialog: Boolean, onDismissRequest: () -> Unit
             }
         }
     }
+}
+
+@Composable
+fun LoadingDialogComposable(
+    showDialog: Boolean
+) {
+    if (showDialog) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+        ) {
+            Card(
+                modifier = Modifier
+                    .size(150.dp)
+                    .align(Alignment.Center),
+                elevation = CardDefaults.cardElevation(10.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    //CircularProgressIndicator(modifier = Modifier.size(40.dp))
+                    Text("Loading...")
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun Preview(){
+    ReturnCollectionListItem()
 }

@@ -3,6 +3,7 @@ package com.clebs.celerity_admin.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.clebs.celerity_admin.database.User
 import com.clebs.celerity_admin.models.CompanyListResponse
@@ -20,6 +21,7 @@ import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
+import com.clebs.celerity_admin.models.GetVehicleReturnHistoryResponse
 import com.clebs.celerity_admin.models.GetWeeklyDefectCheckImagesResponse
 import com.clebs.celerity_admin.models.GetvehicleOilLevelList
 import com.clebs.celerity_admin.models.LastMileageInfo
@@ -550,6 +552,19 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
             else
                 CreateVehicleReleaseReqlivedata.postValue(response.body)
         }
+    }
+
+    fun GetVehicleReturnHistory(
+        superVisorId:Int,
+        includeReturned:Boolean
+    ):MutableLiveData<GetVehicleReturnHistoryResponse?>{
+        return liveData{
+            val response = repo.GetVehicleReturnHistory(superVisorId,includeReturned)
+            if(!response.isSuccessful || response.failed)
+                emit( null)
+            else
+                emit(response.body)
+        } as MutableLiveData<GetVehicleReturnHistoryResponse?>
     }
 
 }

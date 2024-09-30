@@ -16,6 +16,7 @@ import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
+import com.clebs.celerity_admin.models.GetVehicleReturnHistoryResponse
 import com.clebs.celerity_admin.models.GetWeeklyDefectCheckImagesResponse
 import com.clebs.celerity_admin.models.GetvehicleOilLevelList
 import com.clebs.celerity_admin.models.LastMileageInfo
@@ -358,6 +359,18 @@ class MainRepo(private val ApiService: ApiService) {
         date:String): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
             ApiService.UploadVehToolsPictureFile(supervisorId,daId,date)
+        }
+    }
+
+    suspend fun GetVehicleReturnHistory(
+        supervisorId:Int,
+        includeReturned:Boolean
+    ):SimpleNetworkResponse<GetVehicleReturnHistoryResponse>{
+        return safeApiCall {
+            ApiService.GetVehicleReturnHistory(
+                supervisorId,
+                includeReturned
+            )
         }
     }
 }

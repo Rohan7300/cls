@@ -36,6 +36,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -54,15 +55,31 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity_admin.R
+import com.clebs.celerity_admin.dialogs.LoadingDialog
+import com.clebs.celerity_admin.factory.MyViewModelFactory
+import com.clebs.celerity_admin.network.ApiService
+import com.clebs.celerity_admin.network.RetrofitService
+import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.ui.theme.CLSOSMTheme
 import com.clebs.celerity_admin.utils.ListItemX
+import com.clebs.celerity_admin.utils.LoadingDialogComposable
+import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.ReturnCollectionListItem
+import com.clebs.celerity_admin.viewModels.MainViewModel
 
 class ReturnVehicleListActivity : ComponentActivity() {
+    private lateinit var mainViewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.statusBarColor = ContextCompat.getColor(this, R.color.orange)
+        val prefs = Prefs.getInstance(this)
+        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+        val mainRepo = MainRepo(apiService)
+
+        mainViewModel =
+            ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         setContent {
             var showDialog by remember {
                 mutableStateOf(false)
@@ -77,16 +94,30 @@ class ReturnVehicleListActivity : ComponentActivity() {
                         FilterDialog(
                             showDialog = showDialog,
                             onDismissRequest = { showDialog = false })
-                        val data = listOf<String>("a", "b", "c", "d")
-
-                        LazyColumn(Modifier.fillMaxSize()) {
-                            items(data.size) {
-                                ReturnCollectionListItem()
-                            }
-                        }
+                        VehicleReturnList(mainViewModel,prefs)
                     }
                 }
             }
+        }
+    }
+
+    @Composable
+    fun VehicleReturnList(viewModel: MainViewModel, prefs: Prefs) {
+        LoadingDialogComposable(true)
+        val vehReturnHistory by viewModel.GetVehicleReturnHistory(
+            prefs.clebUserId.toInt(),
+            true
+        ).observeAsState(initial = null)
+
+        vehReturnHistory?.let {history->
+            LazyColumn(Modifier.fillMaxSize()) {
+                items(history!!.size) {
+                    ReturnCollectionListItem()
+                }
+            }
+        }?:run{
+
+            Text("No Data Available")
         }
     }
 
@@ -161,10 +192,10 @@ class ReturnVehicleListActivity : ComponentActivity() {
                             }
                         }
                     }
-/*                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(selected = false, onClick = { *//*TODO*//* })
+                    /*                    Row(
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            RadioButton(selected = false, onClick = { *//*TODO*//* })
                         Text("Collect Vehicle")
 
                     }
@@ -287,6 +318,7 @@ class ReturnVehicleListActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
+
                 //VehicleCollectionList()
             }
         }
