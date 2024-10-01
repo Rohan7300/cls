@@ -33,6 +33,7 @@ import com.clebs.celerity.repository.MainRepo
 import com.clebs.celerity.utils.BackgroundUploadDialog
 import com.clebs.celerity.utils.BackgroundUploadDialogListener
 import com.clebs.celerity.dialogs.LoadingDialog
+import com.clebs.celerity.models.requests.SaveVehicleInspectionTrackHistoryInfoRequest
 import com.clebs.celerity.utils.ClsCapture
 import com.clebs.celerity.utils.ClsCaptureTwo
 import com.clebs.celerity.utils.DependencyProvider.currentUri
@@ -72,6 +73,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     private var b64ImageList = mutableListOf<String>()
     var i = 0
     private var sdkkey = ""
+    private var imageUploadStarted: Boolean = false
     lateinit var fragmentManager: FragmentManager
     private var startonetime: Boolean? = true
     private var allImagesUploaded: Boolean = false
@@ -106,10 +108,10 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         loadingDialog = LoadingDialog(this)
         backgroundUploadDialog = BackgroundUploadDialog()
         backgroundUploadDialog.setListener(this)
-        sdkkey = ContextCompat.getString(this,R.string.cqsdk_driver_key)
+        sdkkey = ContextCompat.getString(this, R.string.cqsdk_driver_key)
         cqSDKInitializer()
-/*        cqSDKInitializer = CQSDKInitializer(this)
-        cqSDKInitializer.triggerOfflineSync()*/
+        /*        cqSDKInitializer = CQSDKInitializer(this)
+                cqSDKInitializer.triggerOfflineSync()*/
 
         initPreviewView()
         noInternetCheck(this, binding.nointernetLL, this)
@@ -405,7 +407,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         uploadStatus()
     }
 
-    private fun clientUniqueID(): String {
+    private fun clientUniqueID() {
         val x = Prefs.getInstance(App.instance).clebUserId.toString()
         val y = Prefs.getInstance(App.instance).scannedVmRegNo.replace(" ", "")
 
@@ -419,8 +421,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             "kjfdjkfhdjfjdhfdjclientuniqueidfunction",
             "clientUniqueID: ------" + prefs.inspectionID.replace(" ", "")
         )
-
-        return regexPattern.toString()
     }
 
     override fun onSaveClick() {
@@ -482,14 +482,15 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
         if (tempCode == 200) {
             Log.d("hdhsdshdsdjshhsds", "200 $message")
-            Log.d("tempCode","200")
+            Log.d("tempCode", "200")
             prefs.saveBoolean("Inspection", true)
             prefs.Isfirst = false
             prefs.updateInspectionStatus(true)
             //SaveVehicleInspection(viewModel)
             prefs.isInspectionIDFailedToUpload = false
 
-            prefs.inspectionDateTime = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
+            prefs.inspectionDateTime =
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
                     Date()
                 )
             startUploadWithWorkManager(3, prefs, this)
@@ -505,7 +506,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     private fun openClsCapture() {
         if (!prefs.isInspectionDoneToday()) {
             loadingDialog.show()
-            Log.d("OpenClsCap","OXXXX")
+            Log.d("OpenClsCap", "OXXXX")
             startInspection()
         } else if (prefs.addBlueUri == null && prefs.addBlueRequired) {
             val intent = Intent(this, ClsCaptureTwo::class.java)
@@ -532,7 +533,39 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             Log.e("sdkskdkdkskdkskd", "onCreateView: ")
 
             try {
-                startInspectionMain()
+                clientUniqueID()
+                val currentDate =
+                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
+                        Date()
+                    )
+                val currentLocation = Prefs.getInstance(App.instance).currLocationId
+                val workingLocation = Prefs.getInstance(App.instance).workLocationId
+                val locationID: Int = if (workingLocation != 0) {
+                    workingLocation
+                } else {
+                    currentLocation
+                }
+                val request = SaveVehicleInspectionTrackHistoryInfoRequest(
+                    ClientUniqueId = prefs.inspectionID,
+                    DriverId = prefs.clebUserId.toInt(),
+                    InspectionDate = currentDate,
+                    InspectionType = "DaVehInspection",
+                    LmId = locationID,
+                    VmId = Prefs.getInstance(App.instance).vmId
+                )
+                loadingDialog.show()
+                viewModel.saveVehicleInspectionTrackHistoryInfo(request)
+                    .observe(this@AddInspectionActivity2) {
+                        loadingDialog.dismiss()
+                        if (it != null) {
+                            prefs.normalInspectionHistoryId = it.HistoryId
+                            startInspectionMain()
+
+                        } else {
+                            showToast("Offline Mode", this)
+                        }
+                    }
+
 
 //                if (!startonetime!!)
 //                    showToast("Offline Mode", this)
@@ -573,12 +606,11 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     }
 
     private fun startInspectionMain() {
-        var model =
-            clientUniqueID()
         Log.d("CLSInspection", "Name : CLS" + Prefs.getInstance(applicationContext).clebUserId)
         Log.d("CLSInspection", "VehicleModel: ${prefs.VehicleModel}")
         Log.d("CLSInspection", "VehicleBodyStyle ${prefs.VehicleBodyStyle}")
         Log.d("CLSInspection", "InspectionID: ${prefs.inspectionID.replace(" ", "")}")
+        Log.d("CLSInspection", "Offline: $startonetime")
         cqSDKInitializer.startInspection(activity = this,
             clientAttrs = ClientAttrs(
                 userName = " ",
@@ -630,16 +662,15 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                     } else if (msg.equals("Unable to download setting updates, Please check internet")) {
                         showToast("Please Turn on the internet", this)
                         Log.d("CQSDKXX", "Not isStarted3  " + msg)
-                    }
-                    else   if (msg.equals("Vehicle not in fleet list")){
+                    } else if (msg.equals("Vehicle not in fleet list")) {
                         showToast("Vehicle not in fleet list.", this)
-                    }else{
+                    } else {
                         showToast("Please Retry", this)
                         Log.d("CQSDKXX", "Not isStarted3  " + msg)
                     }
-/*                    else   if (msg.equals("Vehicle not in fleet list")){
-                        Toast.makeText(this, "Missing vehicle parameters. “Null” argument detected. Contact Transport /IT department.", Toast.LENGTH_SHORT).show()
-                    }*/
+                    /*                    else   if (msg.equals("Vehicle not in fleet list")){
+                                            Toast.makeText(this, "Missing vehicle parameters. “Null” argument detected. Contact Transport /IT department.", Toast.LENGTH_SHORT).show()
+                                        }*/
                     Log.d("CQSDKXX", "Not isStarted4  " + msg)
                 }
                 if (msg == "Success") {
@@ -650,10 +681,10 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                 }
                 if (!isStarted) {
                     Log.e("startedinspection", "onCreateView: $msg$isStarted")
-                   /* if (msg.equals("Vehicle not in fleet list")){
-                        Toast.makeText(this, "Missing vehicle parameters. “Null” argument detected. Contact Transport /IT department.", Toast.LENGTH_SHORT).show()
-                    }*/
-                    if (msg.equals("Vehicle not in fleet list")){
+                    /* if (msg.equals("Vehicle not in fleet list")){
+                         Toast.makeText(this, "Missing vehicle parameters. “Null” argument detected. Contact Transport /IT department.", Toast.LENGTH_SHORT).show()
+                     }*/
+                    if (msg.equals("Vehicle not in fleet list")) {
                         showToast("Vehicle not in fleet list.", this)
                         //showToast("Please Retry", this)
                         Log.d("CQSDKXX", "Not isStarted3  " + msg)
@@ -705,8 +736,11 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
              osData.isoillevelImageFailed = false
             }
              */
+            if (!imageUploadStarted){
+                startUploadWithWorkManager(0, prefs, this)
+                imageUploadStarted = true
+            }
 
-            startUploadWithWorkManager(0, prefs, this)
             binding.tvUploadMainTV.isEnabled = false
             binding.ivUploadImage.isEnabled = false
             binding.uploadBtnText.text = "Inspection Completed"
@@ -734,7 +768,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             Pair(null to !prefs.isInspectionDoneToday(), binding.fullvehicleInspection),
             Pair(prefs.addBlueUri to prefs.addBlueRequired, binding.addBlueIV),
             Pair(prefs.oilLevelUri to prefs.oilLevelRequired, binding.oilLevelIV)
-
         )
 
         val drawable = ContextCompat.getDrawable(this, R.drawable.ic_yes2)
@@ -751,11 +784,12 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             }
         }
     }
+
     private fun cqSDKInitializer() {
         cqSDKInitializer = CQSDKInitializer(this)
         cqSDKInitializer.triggerOfflineSync()
         Prefs.getInstance(App.instance).returnInspectionFirstTime = true
-        if (!cqSDKInitializer.isCQSDKInitialized() || !prefs.isMainInspectionInitialized||prefs.isBreakDownInspectionInit) {
+        if (!cqSDKInitializer.isCQSDKInitialized() || !prefs.isMainInspectionInitialized || prefs.isBreakDownInspectionInit) {
             prefs.isMainInspectionInitialized = true
             prefs.isBreakDownInspectionDone = false
             prefs.isBreakDownInspectionInit = false

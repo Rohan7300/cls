@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.clebs.celerity.models.CashFlowPieChartResponse
 import com.clebs.celerity.models.CashFlowPieChartResponseItem
@@ -33,6 +34,7 @@ import com.clebs.celerity.models.requests.SaveQuestionareStartupRequestNew
 import com.clebs.celerity.models.requests.SaveTicketDataRequestBody
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
+import com.clebs.celerity.models.requests.SaveVehicleInspectionTrackHistoryInfoRequest
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
 import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
 import com.clebs.celerity.models.requests.UpdateDeductioRequest
@@ -87,6 +89,7 @@ import com.clebs.celerity.models.response.SaveCommentResponse
 import com.clebs.celerity.models.response.SaveDeviceInformationRequest
 import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
+import com.clebs.celerity.models.response.SaveVehicleInspectionTrackHistoryInfoResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.models.response.VehicleExpiringDocumentsResponse
@@ -2110,6 +2113,16 @@ class MainViewModel(
             }
         }
         return responseLiveData
+    }
+
+    fun saveVehicleInspectionTrackHistoryInfo(request: SaveVehicleInspectionTrackHistoryInfoRequest):MutableLiveData<SaveVehicleInspectionTrackHistoryInfoResponse?>{
+        return liveData {
+            val response = repo.SaveVehicleInspectionTrackHistoryInfo(request)
+            if(!response.isSuccessful||response.failed)
+                emit(null)
+            else
+                emit(response.body)
+        } as MutableLiveData<SaveVehicleInspectionTrackHistoryInfoResponse?>
     }
 
 }

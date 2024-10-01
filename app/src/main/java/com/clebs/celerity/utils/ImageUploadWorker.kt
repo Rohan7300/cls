@@ -118,7 +118,6 @@ class ImageUploadWorker(
                                 data.isfaceMaskImageFailed = true
                             else{
                                 prefs.faceMaskUri = null
-
                             }
 
                         }
@@ -571,11 +570,12 @@ class ImageUploadWorker(
                             currentLoction
                         }
                         val response = mainRepo.SaveVehicleInspectionInfo(SaveVehicleInspectionInfo(
-                            prefs.clebUserId.toInt(),
-                            prefs.inspectionDateTime?:"Date error",
-                            prefs.inspectionID.replace(" ",""),
-                            locationID,
-                            prefs.vmId
+                            driverId = prefs.clebUserId.toInt(),
+                            inspectionDate = prefs.inspectionDateTime?:"Date error",
+                            inspectionId = prefs.inspectionID.replace(" ",""),
+                            inspectionLmId =locationID,
+                            inspectionVmId = prefs.vmId,
+                            HistoryId = prefs.normalInspectionHistoryId
                         ))
 
                         if(!response.isSuccessful||response.failed){

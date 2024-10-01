@@ -31,6 +31,7 @@ import com.clebs.celerity.models.requests.SaveQuestionareStartupRequestNew
 import com.clebs.celerity.models.requests.SaveTicketDataRequestBody
 import com.clebs.celerity.models.requests.SaveVechileDefectSheetRequest
 import com.clebs.celerity.models.requests.SaveVehicleInspectionInfo
+import com.clebs.celerity.models.requests.SaveVehicleInspectionTrackHistoryInfoRequest
 import com.clebs.celerity.models.requests.SubmitFinalQuestionairebyLeadDriverRequest
 import com.clebs.celerity.models.requests.SubmitRideAlongDriverFeedbackRequest
 import com.clebs.celerity.models.requests.UpdateDeductioRequest
@@ -86,6 +87,7 @@ import com.clebs.celerity.models.response.SaveCommentResponse
 import com.clebs.celerity.models.response.SaveDeviceInformationRequest
 import com.clebs.celerity.models.response.SaveTicketResponse
 import com.clebs.celerity.models.response.SaveVehDefectSheetResponse
+import com.clebs.celerity.models.response.SaveVehicleInspectionTrackHistoryInfoResponse
 import com.clebs.celerity.models.response.SimpleQuestionResponse
 import com.clebs.celerity.models.response.SimpleStatusMsgResponse
 import com.clebs.celerity.models.response.VehicleExpiringDocumentsResponse
@@ -1019,6 +1021,9 @@ interface ApiService {
         @Part image:MultipartBody.Part
     ):Response<SimpleStatusMsgResponse>
 
-
+    @POST("/api/Vehicle/SaveVehicleInspectionTrackHistoryInfo")
+    suspend fun SaveVehicleInspectionTrackHistoryInfo(
+        @Body request:SaveVehicleInspectionTrackHistoryInfoRequest
+    ):Response<SaveVehicleInspectionTrackHistoryInfoResponse>
 }
 

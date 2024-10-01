@@ -64,7 +64,7 @@ class Prefs(context: Context) {
             return sharedPreferences.getBoolean("Isfirst", true)
         }
         set(value) {
-            sharedPreferences.edit().putBoolean("Isfirst", value ?: false).apply()
+            sharedPreferences.edit().putBoolean("Isfirst", value ?: true).apply()
         }
     var vmId: Int
         get() = sharedPreferences.getInt("vmIdx", 0)
@@ -72,6 +72,10 @@ class Prefs(context: Context) {
     var VdhLmId: Int
         get() = sharedPreferences.getInt("VdhLmId", 0)
         set(value) = sharedPreferences.edit().putInt("VdhLmId", value).apply()
+
+    var normalInspectionHistoryId:Int
+        get() = sharedPreferences.getInt("normalInspectionHistoryId",0)
+        set(value) = sharedPreferences.edit().putInt("normalInspectionHistoryId",value).apply()
 
     var headerDate: String
         get() = sharedPreferences.getString("headerDate", "")?:""

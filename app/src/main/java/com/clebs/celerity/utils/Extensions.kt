@@ -819,7 +819,7 @@ fun startUploadWithWorkManager(
     WorkManager.getInstance(context).enqueue(uploadWorkRequest)
 }
 
-fun SaveVehicleInspection(viewModel: MainViewModel) {
+/*fun SaveVehicleInspection(viewModel: MainViewModel) {
     val currentDate =
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(
             Date()
@@ -846,7 +846,7 @@ fun SaveVehicleInspection(viewModel: MainViewModel) {
         "sdkskffjdapiisnpection",
         "SaveVehicleInspection: " + Prefs.getInstance(App.instance).inspectionID
     )
-}
+}*/
 
 
 fun getCurrentWeek(): Int {
