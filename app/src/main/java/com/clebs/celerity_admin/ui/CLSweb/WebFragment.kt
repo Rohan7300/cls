@@ -56,7 +56,7 @@ class WebFragment : Fragment() {
         binding.web.visibility=View.GONE
         binding.pb.visibility=View.VISIBLE
         mainViewModel.GetemergencyContact(
-            Prefs.getInstance(App.instance).clebUserIds.toString().toInt()
+            Prefs.getInstance(App.instance).clebUserId.toString().toInt()
         ).observe(viewLifecycleOwner, Observer {
             if (it!=null){
 

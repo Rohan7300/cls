@@ -33,6 +33,7 @@ import com.clebs.celerity_admin.models.ReturnVehicleToDepoRequest
 import com.clebs.celerity_admin.models.SaveInspectionRequestBody
 import com.clebs.celerity_admin.models.SaveVehicleBreakDownInspectionRequest
 import com.clebs.celerity_admin.models.SucessStatusMsgResponse
+import com.clebs.celerity_admin.models.VehicleAllocateTODARequestBody
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
@@ -76,6 +77,7 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
         MutableLiveData()
     val CreateVehicleReleaseReqlivedata: MutableLiveData<SucessStatusMsgResponse?> =
         MutableLiveData()
+    val CHangeAllocatedDAVehicle: MutableLiveData<SucessStatusMsgResponse?> = MutableLiveData()
     private val _clickEvent = MutableLiveData<Boolean>()
     val clickEvent: LiveData<Boolean> = _clickEvent
 
@@ -551,5 +553,13 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
                 CreateVehicleReleaseReqlivedata.postValue(response.body)
         }
     }
-
+    fun ChangeALlocatedDAvehicle(request: VehicleAllocateTODARequestBody) {
+        viewModelScope.launch {
+            val response = repo.CreateVehicleReleaseReq(request)
+            if (!response.isSuccessful || response.failed)
+                CHangeAllocatedDAVehicle.postValue(null)
+            else
+                CHangeAllocatedDAVehicle.postValue(response.body)
+        }
+    }
 }

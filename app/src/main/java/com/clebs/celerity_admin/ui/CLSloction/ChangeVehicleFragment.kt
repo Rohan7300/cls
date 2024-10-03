@@ -1645,7 +1645,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
 
     override fun OnItemClickRecyclerViewClicks(
-        recyclerViewId: Int, position: Int, selecteditemclicked: String
+        recyclerViewId: Int, position: Int, selecteditemclicked: String,id:Int
     ) {
         when (recyclerViewId) {
             R.id.rv_vehicle_location -> {
@@ -1893,7 +1893,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
             mainViewModel.CreateVehicleReleaseReq(
                 Prefs.getInstance(App.instance).vmIdReturnveh.toDouble(),
-                Prefs.getInstance(App.instance).clebUserIds.toDouble()
+                Prefs.getInstance(App.instance).clebUserId.toDouble()
             )
             mainViewModel.CreateVehicleReleaseReqlivedata.observe(requireActivity(), Observer {
                 if (it != null) {

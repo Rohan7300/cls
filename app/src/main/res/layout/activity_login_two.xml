@@ -5,16 +5,20 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
+        android:background="@color/maroon"
+        android:backgroundTint="@color/maroon"
         android:layout_height="match_parent">
 
         <include
             android:id="@+id/headerTop"
+            android:background="@color/maroon"
             layout="@layout/loginlayout" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/background_curve_white"
+
             android:overScrollMode="never"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -23,30 +27,56 @@
                 android:layout_height="match_parent"
 
                 >
-<!--                <ImageView-->
-<!--                    android:id="@+id/imageView5"-->
+
+
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/imageView5"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="500dp"-->
+                <!--                    android:alpha="0.1"-->
+                <!--                    android:src="@drawable/cls_final_logo"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+
+<!--                <View-->
+<!--                    android:id="@+id/view2"-->
 <!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="500dp"-->
-<!--                    android:alpha="0.1"-->
-<!--                    android:src="@drawable/cls_final_logo"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+
+<!--                    android:layout_height="1dp"-->
+<!--                    android:background="@color/maroon"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
 <!--                    app:layout_constraintStart_toStartOf="parent"-->
 <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
 
-                <View
-                    android:id="@+id/view2"
-                    android:layout_width="match_parent"
-
-                    android:layout_height="1dp"
-                    android:background="@color/maroon"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="102dp"
+                    android:layout_height="101dp"
+                    android:background="#FFF8F5"
+                    android:rotation="360"
+
+                    android:src="@drawable/ellipse1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/orange" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="102dp"
+                    android:layout_height="101dp"
+                    android:background="#FFF8F5"
+                    android:rotation="270"
+                    android:src="@drawable/ellipse1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/orange" />
+                <ImageView
                     android:id="@+id/imageView3"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/orange"
                     android:src="@drawable/deep_curves"
@@ -54,11 +84,23 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+<!--                <com.airbnb.lottie.LottieAnimationView-->
+<!--                    android:id="@+id/animation_view"-->
+<!--                    android:layout_width="80dp"-->
+<!--                    android:layout_height="80dp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:lottie_autoPlay="true"-->
+<!--                    app:lottie_speed="4"-->
+<!--                    app:lottie_loop="true"-->
+<!--                    app:lottie_rawRes="@raw/my_animation" />-->
 
                 <TextView
                     android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="72dp"
+                    android:layout_height="29dp"
                     android:layout_marginTop="16dp"
                     android:letterSpacing="0.06"
                     android:text="SIGN IN"
@@ -70,38 +112,19 @@
                     app:layout_constraintStart_toStartOf="@+id/imageView3"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="120dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="120dp"
-                    android:background="@drawable/shape_edittext"
-                    android:backgroundTint="@color/maroon"
-                    android:gravity="center_horizontal"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="OSM PORTAL"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@+id/textView2"
-                    app:layout_constraintStart_toStartOf="@+id/textView2"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
                 <TextView
                     android:id="@+id/tv_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="60dp"
                     android:text="Email / Username"
                     android:textColor="@color/text_color"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                    app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_user"
@@ -144,7 +167,7 @@
 
                     android:text="Password"
                     android:textColor="@color/text_color"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/text_error" />
@@ -238,16 +261,17 @@
                     android:layout_height="47dp"
                     android:layout_marginTop="80dp"
                     android:layout_marginBottom="80dp"
+
                     android:src="@drawable/buttons"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/text_error_two" />
 
                 <ProgressBar
+                    android:id="@+id/pb"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:visibility="gone"
-                    android:id="@+id/pb"
                     android:indeterminateTint="@color/maroon"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="@+id/bt_login"
                     app:layout_constraintStart_toStartOf="@+id/bt_login"
                     app:layout_constraintTop_toTopOf="@+id/bt_login" />

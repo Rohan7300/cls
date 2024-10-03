@@ -37,9 +37,9 @@
     </style>
 
     <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
-        <item name="boxStrokeColor">@color/grey_main</item>
+        <item name="boxStrokeColor">@color/blue_hex</item>
         <item name="boxBackgroundColor">#FFFAFA</item>
-        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidth">1.5dp</item>
     </style>
 
     <style name="Theme.Celerity_admin.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

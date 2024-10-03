@@ -33,7 +33,11 @@
             android:icon="@drawable/turndown"
             android:title="Return to Depot"
             />
-
+        <item
+            android:id="@+id/changeVansLocation"
+            android:icon="@drawable/turndown"
+            android:title="Change /Transfer Van's Location"
+            />
         <!--        <item-->
         <!--            android:id="@+id/nav_weblogin"-->
         <!--            android:icon="@drawable/baseline_network_cell_24"-->

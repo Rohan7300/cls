@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.databinding.RecylerviewAdapterBinding
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelListItem
+import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleFuelIdDA
 import com.clebs.celerity_admin.utils.OnItemClickRecyclerView
 
 class FuelLevelAdapter(var data:ArrayList<GetVehicleFuelLevelListItem>, var click:OnItemClickRecyclerView):
@@ -16,10 +17,11 @@ class FuelLevelAdapter(var data:ArrayList<GetVehicleFuelLevelListItem>, var clic
                 click.OnItemClickRecyclerViewClicks(
                     R.id.rv_vehicle_fuellevel,
                     position,
-                    item.vehFuelLevelName
+                    item.vehFuelLevelName,item.vehFuelLevelId
                 )
             }
             binding.tvcompany.setText(item.vehFuelLevelName)
+
         }
 
     }

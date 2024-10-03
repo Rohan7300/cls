@@ -6,6 +6,7 @@
     android:id="@+id/rlinfo"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:backgroundTint="@color/maroon"
     android:background="@color/maroon"
     android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
@@ -42,14 +43,14 @@
 
             <ImageView
                 android:id="@+id/imageView4"
-                android:layout_width="102dp"
-                android:layout_height="101dp"
+                android:layout_width="119dp"
+                android:layout_height="114dp"
 
-                android:rotation="180"
+                android:rotation="270"
                 android:src="@drawable/ellipse1"
                 android:tint="@color/white"
-                app:layout_constraintBottom_toBottomOf="@+id/logo"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.CollapsingToolbarLayout>

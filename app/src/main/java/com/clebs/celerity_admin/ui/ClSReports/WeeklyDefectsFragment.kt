@@ -66,7 +66,7 @@ class WeeklyDefectsFragment() : Fragment(),
         WeeklyDefectAdapter = WeeklyDefectAdapter(requireContext(), ArrayList(), this)
         binding.rvList.adapter = WeeklyDefectAdapter
         selectVehcilelocationadapter = SelectVehicleLocationAdapterTwo(ArrayList(), this)
-        mainViewModel.GetLocationListbyUserId(Prefs.getInstance(App.instance).clebUserIds.toDouble())
+        mainViewModel.GetLocationListbyUserId(Prefs.getInstance(App.instance).clebUserId.toDouble())
         mainViewModel.GetLocationListbyUserIdLiveData.observe(viewLifecycleOwner, Observer {
             if (it != null) {
 
@@ -264,7 +264,8 @@ class WeeklyDefectsFragment() : Fragment(),
     override fun OnItemClickRecyclerViewClicks(
         recyclerViewId: Int,
         position: Int,
-        itemclicked: String
+        itemclicked: String,id:Int
+
     ) {
 //        loadingDialog.show()
         deleteDialogthree.dismiss()

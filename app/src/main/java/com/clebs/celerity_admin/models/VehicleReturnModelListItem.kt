@@ -9,5 +9,11 @@ data class VehicleReturnModelListItem(
     @SerializedName("VehicleName")
     val vehicleName: String,
     @SerializedName("VehicleRegNo")
-    val vehicleRegNo: String
+    val vehicleRegNo: String,
+    @SerializedName("VehicleType")
+    val VehicleType:String,
+    @SerializedName("LocationId")
+    val LocationId:Int,
+    @SerializedName("LocationName")
+    val LocationName:String
 )

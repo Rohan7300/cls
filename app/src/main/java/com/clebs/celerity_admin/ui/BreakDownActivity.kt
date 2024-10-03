@@ -85,7 +85,7 @@ class BreakDownActivity : AppCompatActivity(), DeleteCallback {
                 Comment = comment,
                 DriverId = selectedDriverId,
                 InspectionId = 0,
-                SuperVisorId = Prefs.getInstance(this@BreakDownActivity).clebUserIds.toInt(),
+                SuperVisorId = Prefs.getInstance(this@BreakDownActivity).clebUserId.toInt(),
                 VehInspectionDate = VehInspectionDate!!,
                 VehRequestTypeIds = vehicleDamageWorkingStatusList.map { it.Id },
                 VmId = selectedVehicleId

@@ -1,6 +1,8 @@
 package com.clebs.celerity_admin.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +36,13 @@ class CLSOsmHomeFragment : Fragment() {
         binding = FragmentCLSOsmHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.head.isSelected = true
+        val handler = Handler()
+        handler.postDelayed(Runnable {
+            setFullAlpha(binding.head)
+            setFullAlpha(binding.llmain)
+            setFullAlpha(binding.llthird)
+            setFullAlpha(binding.llsecond)
+        }, 500)
         binding.cardone.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("change_DA", "changeda")
@@ -52,7 +61,17 @@ class CLSOsmHomeFragment : Fragment() {
 
             findNavController().navigate(R.id.nav_changevehcilecommon, bundle)
         }
+        binding.llthird.setOnClickListener {
+            findNavController().navigate(R.id.nav_weblogin)
+        }
+        binding.cctransfer.setOnClickListener {
+            startActivity(Intent(requireContext(), ChangeVansLocationActivity::class.java))
+        }
         return root
     }
 
+    fun setFullAlpha(view: View) {
+        view.animate().alpha(1.0f);
+
+    }
 }

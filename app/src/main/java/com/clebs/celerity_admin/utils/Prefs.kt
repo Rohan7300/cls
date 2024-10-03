@@ -84,7 +84,13 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putString("vm_ID", value).apply()
         }
-
+    var vehLmId: String
+        get() {
+            return sharedPreferences.getString("vehLmId", "") ?: ""
+        }
+        set(value) {
+            sharedPreferences.edit().putString("vehLmId", value).apply()
+        }
     var saveNnext: Int
         get() {
             return sharedPreferences.getInt("saveNnext", 0)
@@ -247,12 +253,19 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putString(USER_ACCESS_TOKEN, value).apply()
         }
-    var clebUserIds: String
+    var clebUserId: String
         get() {
-            return sharedPreferences.getString("clebUserIds", " ") ?: " "
+            return sharedPreferences.getString("clebUserId", " ") ?: " "
         }
         set(value) {
-            sharedPreferences.edit().putString("clebUserIds", value).apply()
+            sharedPreferences.edit().putString("clebUserId", value).apply()
+        }
+    var companyId: String
+        get() {
+            return sharedPreferences.getString("companyId", " ") ?: " "
+        }
+        set(value) {
+            sharedPreferences.edit().putString("companyId", value).apply()
         }
     var days: String
         get() {

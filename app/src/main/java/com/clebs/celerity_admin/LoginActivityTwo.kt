@@ -104,7 +104,7 @@ class LoginActivityTwo : AppCompatActivity() {
                         setLoggedIn(true)
                         Toast.makeText(LoginActivity@this, "Login successfully", Toast.LENGTH_SHORT).show()
                         Prefs.getInstance(applicationContext).accessToken = it.token
-                        Prefs.getInstance(applicationContext).clebUserIds = it.userID.toString()
+                        Prefs.getInstance(applicationContext).clebUserId = it.userID.toString()
                         val i = Intent(
                             this@LoginActivityTwo,
                             MainActivityTwo::class.java

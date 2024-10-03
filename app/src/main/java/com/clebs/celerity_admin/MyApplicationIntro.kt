@@ -15,35 +15,35 @@ class MyApplicationIntro : AppIntro() {
 
         addSlide(
             AppIntroFragment.createInstance(
-                title = "WELCOME TO CLS OSM",
+                title = "WELCOME TO CLS - OSM",
                 description = "We are the friendly face of our business - Providing OSM features right away .",
                 imageDrawable = R.drawable.cls_final_logo,
-                backgroundDrawable = R.drawable.back_four,
-                titleColorRes = R.color.black,
-                descriptionColorRes = R.color.black,
+                backgroundDrawable = R.drawable.back_three,
+                titleColorRes = R.color.white,
+                descriptionColorRes = R.color.white,
 
                 )
         )
         addSlide(
             AppIntroFragment.createInstance(
                 title = "THE GREAT STUFF WE OFFER",
-                description = "1. PALLET SERVICE \n 2. MAN DELIVERY\n 3.FIRST MILE/MIDDLE MILE/LAST MILE \n 4. SAME DAY & EXPRESS DELIVERY \n 5. WAREHOUSING \n 6. CUSTOMISED SOLUTIONS",
+                description = "1. Pallet Service \n 2. Man Delivery \n 3. First Mile/Middle Mile/Last Mile \n 4. Same Day & Express Delivery \n 5. Warehousing \n 6. Customized Solutions",
                 imageDrawable = R.drawable.we,
-                backgroundDrawable = R.drawable.back_three,
-                titleColorRes = R.color.black,
-                descriptionColorRes = R.color.black,
+                backgroundDrawable = R.drawable.back_slide,
+                titleColorRes = R.color.white,
+                descriptionColorRes = R.color.white,
 
                 )
         )
 
         addSlide(
             AppIntroFragment.createInstance(
-                title = "LETS GO TO OSM",
+                title = "LETS GET STARTED",
                 description = "We are the fastest growing and most stable industry to be in right now.",
                 imageDrawable = R.drawable.started,
-                backgroundDrawable = R.drawable.back_two,
-                titleColorRes = R.color.black,
-                descriptionColorRes = R.color.black,
+                backgroundDrawable = R.drawable.back_three,
+                titleColorRes = R.color.white,
+                descriptionColorRes = R.color.white,
 
                 )
         )
