@@ -93,10 +93,10 @@ class Prefs(context: Context) {
         }
     var isFirst: Boolean?
         get() {
-            return sharedPreferences.getBoolean("isFirst", false)
+            return sharedPreferences.getBoolean("isFirst", true)
         }
         set(value) {
-            sharedPreferences.edit().putBoolean("isFirst", value ?: false).apply()
+            sharedPreferences.edit().putBoolean("isFirst", value ?: true).apply()
         }
 
     var isClientIDUplaoded: Boolean?

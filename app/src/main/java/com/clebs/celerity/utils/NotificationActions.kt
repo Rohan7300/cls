@@ -19,6 +19,7 @@ import com.clebs.celerity.ui.DeductionAgreementActivity
 import com.clebs.celerity.ui.ExpiringDocumentsActivity
 import com.clebs.celerity.ui.HomeActivity
 import com.clebs.celerity.ui.VehicleExpiringDocuments
+import com.clebs.celerity.ui.ViewTicketsActivity
 import com.clebs.celerity.ui.WeeklyRotaApprovalActivity
 import com.clebs.celerity.utils.DependencyProvider.dailyRotaNotificationShowing
 import com.clebs.celerity.utils.DependencyProvider.handlingDeductionNotification
@@ -166,7 +167,11 @@ fun dailyRota(
     }
 }
 
-fun invoiceReadyToView(notificationId: Int, fragmentManager: FragmentManager,notificationBody:String) {
+fun invoiceReadyToView(
+    notificationId: Int,
+    fragmentManager: FragmentManager,
+    notificationBody: String
+) {
 
     val dialog = InvoiceReadytoViewDialog.newInstance(
         getCurrentWeek().toString(),
@@ -210,9 +215,32 @@ fun expiredDocuments(
     }
 }
 
-fun breakDown(viewModel:MainViewModel,prefs: Prefs){
+fun breakDown(viewModel: MainViewModel, prefs: Prefs) {
     viewModel.GetVehBreakDownInspectionInfobyDriver(prefs.clebUserId.toInt())
 }
+
+fun handleTicketNotification(
+    viewModel: MainViewModel,
+    ticketId: Int,
+    viewLifecycleOwner: LifecycleOwner,
+    context: Context,
+    prefs: Prefs,
+    notificationId: Int
+) {
+    val loadingDialog = LoadingDialog(context)
+    viewModel.GetTicketInfoById(ticketId).observe(viewLifecycleOwner){
+        loadingDialog.dismiss()
+        if(it!=null){
+            prefs.saveCurrentTicket(it.Docs[0])
+            val intent = Intent(context, ViewTicketsActivity::class.java)
+            context.startActivity(intent)
+        }else{
+            showToast("Ticket not found for this TicketID",context)
+        }
+        viewModel.MarkNotificationAsRead(notificationId)
+    }
+}
+
 fun showAdvancePaymentDialog(
     amount: String,
     date: String,
@@ -304,7 +332,7 @@ fun vehicleExpiringDocuments(
     context.startActivity(intent)
 }
 
-fun thirdPartyAcessRequest(context: Context,notificationId: Int){
+fun thirdPartyAcessRequest(context: Context, notificationId: Int) {
     val intent = Intent(context, HomeActivity::class.java)
     intent.putExtra("destinationFragment", "ThirdPartyAcess")
     context.startActivity(intent)

@@ -2124,5 +2124,14 @@ class MainViewModel(
                 emit(response.body)
         } as MutableLiveData<SaveVehicleInspectionTrackHistoryInfoResponse?>
     }
+    fun GetTicketInfoById(tickedId:Int):MutableLiveData<GetUserTicketsResponse?>{
+        return liveData {
+            val response = repo.GetTicketInfoById(tickedId)
+            if(!response.isSuccessful||response.failed)
+                emit(null)
+            else
+                emit(response.body)
+        } as MutableLiveData<GetUserTicketsResponse?>
+    }
 
 }

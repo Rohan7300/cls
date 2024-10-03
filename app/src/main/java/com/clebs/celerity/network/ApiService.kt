@@ -1025,5 +1025,10 @@ interface ApiService {
     suspend fun SaveVehicleInspectionTrackHistoryInfo(
         @Body request:SaveVehicleInspectionTrackHistoryInfoRequest
     ):Response<SaveVehicleInspectionTrackHistoryInfoResponse>
+
+    @GET("/api/Ticket/GetTicketInfoById")
+    suspend fun GetTicketInfoById(
+        @Query("ticketId") tickedId:Int
+    ):Response<GetUserTicketsResponse>
 }
 

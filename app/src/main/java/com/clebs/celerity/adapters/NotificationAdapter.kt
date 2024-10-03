@@ -29,6 +29,7 @@ import com.clebs.celerity.utils.breakDown
 import com.clebs.celerity.utils.deductions
 import com.clebs.celerity.utils.expiredDocuments
 import com.clebs.celerity.utils.expiringDocument
+import com.clebs.celerity.utils.handleTicketNotification
 import com.clebs.celerity.utils.invoiceReadyToView
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.vehicleExpiringDocuments
@@ -91,6 +92,8 @@ class NotificationAdapter(
                 "DriverDeductionWithAgreement" -> binding.title.setText("Driver Deduction With Agreement")
                 "ThirdPartyAccessRequestNotification" -> binding.title.setText("Third Party Access Request Notification")
                 "VehicleBreakDownInspectionNotification" -> binding.title.setText("Complete BreakDown Vehicle Inspection")
+                "UserTicketNotification" -> binding.title.setText("User Ticket Notification")
+                else -> binding.title.setText(item.NotificationTitle)
             }
 //            binding.title.text = item.NotificationTitle
             Log.e("jhdjsfhjfdjnotification", "bind: " + item.NotificationTitle)
@@ -117,6 +120,7 @@ class NotificationAdapter(
                 item.ActionToPerform == "ThirdPartyAccessRequestNotification" ||
                 item.ActionToPerform == "VehicleExpiringDocuments" ||
                 item.ActionToPerform == "UserExpiringDocuments" ||
+                item.ActionToPerform == "UserTicketNotification" ||
                 item.ActionToPerform == "Daily Rota Approval"
             ) {
                 binding.notficationArrow.visibility = View.VISIBLE
@@ -192,7 +196,7 @@ class NotificationAdapter(
                     || item.ActionToPerform.equals("Invoice Ready to Review") ||
                     item.ActionToPerform.equals("InvoiceReadyToReview")
                 ) {
-                    invoiceReadyToView(item.NotificationId, fragmentManager,item.NotificationBody)
+                    invoiceReadyToView(item.NotificationId, fragmentManager, item.NotificationBody)
                     /*            val dialog = InvoiceReadytoViewDialog.newInstance(
                                     getCurrentWeek().toString(),
                                     getCurrentYear().toString(),
@@ -234,8 +238,7 @@ class NotificationAdapter(
                                               //dialog.showDialog(fragmentManager)
                                           }
                                       }*/
-                }
-                else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement") ||
+                } else if (item.ActionToPerform.equals("Vehicle Advance Payment Aggrement") ||
                     item.ActionToPerform.equals("Vehicle Advance Payment Agreement")
                 ) {
                     /*                    vehicleAdvancePaymentAgreement(
@@ -266,28 +269,28 @@ class NotificationAdapter(
                             showToast("Failed to fetch data", context)
                         }
                     }
-                }
-                else if (item.ActionToPerform.equals("Expiring Document") ||
+                } else if (item.ActionToPerform.equals("Expiring Document") ||
                     item.ActionToPerform.equals("UserExpiringDocuments")
                 ) {
                     expiringDocument(context, item.NotificationId)
                     /*                val intent = Intent(context, ExpiringDocumentsActivity::class.java)
                                     intent.putExtra("notificationID", item.NotificationId)
                                     context.startActivity(intent)*/
-                }
-                else if (item.ActionToPerform == "VehicleExpiringDocuments") {
+                } else if (item.ActionToPerform == "VehicleExpiringDocuments") {
                     vehicleExpiringDocuments(context, item.NotificationId)
-                }
-                else if (item.ActionToPerform == "ThirdPartyAccessRequestNotification") {
+                } else if (item.ActionToPerform == "ThirdPartyAccessRequestNotification") {
                     viewModel.MarkNotificationAsRead(item.NotificationId)
                     navController.navigate(R.id.profileFragment)
-                }
-                else if(item.ActionToPerform =="VehicleBreakDownInspectionNotification"){
+                } else if (item.ActionToPerform == "VehicleBreakDownInspectionNotification") {
                     viewModel.MarkNotificationAsRead(item.NotificationId)
                     callback.refresh()
-                    breakDown(viewModel,pref)
-                }
-                else {
+                    breakDown(viewModel, pref)
+                } else if (item.ActionToPerform == "UserTicketNotification") {
+                    handleTicketNotification(
+                        viewModel, item.NotificationActionId, viewLifecycleOwner, context, pref,
+                        item.NotificationId
+                    )
+                } else {
                     //viewModel.MarkNotificationAsRead(item.NotificationId)
                     viewModel.MarkNotificationAsRead(item.NotificationId)
                     callback.refresh()

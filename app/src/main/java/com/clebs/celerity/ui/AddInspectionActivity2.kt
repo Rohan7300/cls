@@ -75,7 +75,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
     private var sdkkey = ""
     private var imageUploadStarted: Boolean = false
     lateinit var fragmentManager: FragmentManager
-    private var startonetime: Boolean? = true
     private var allImagesUploaded: Boolean = false
     lateinit var viewModel: MainViewModel
     lateinit var oSyncViewModel: OSyncViewModel
@@ -116,7 +115,6 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         initPreviewView()
         noInternetCheck(this, binding.nointernetLL, this)
 
-        startonetime = prefs.Isfirst!!
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
@@ -473,7 +471,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
             isComingBackFromCLSCapture = false
         }
 
-        startonetime = prefs.Isfirst
+
         val message =
             intent.getStringExtra(PublicConstants.quoteCreationFlowStatusMsgKeyInIntent)
                 ?: "Could not identify status message"
@@ -556,12 +554,13 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                 loadingDialog.show()
                 viewModel.saveVehicleInspectionTrackHistoryInfo(request)
                     .observe(this@AddInspectionActivity2) {
-                        loadingDialog.dismiss()
+
                         if (it != null) {
                             prefs.normalInspectionHistoryId = it.HistoryId
                             startInspectionMain()
 
                         } else {
+                            loadingDialog.dismiss()
                             showToast("Offline Mode", this)
                         }
                     }
@@ -610,7 +609,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
         Log.d("CLSInspection", "VehicleModel: ${prefs.VehicleModel}")
         Log.d("CLSInspection", "VehicleBodyStyle ${prefs.VehicleBodyStyle}")
         Log.d("CLSInspection", "InspectionID: ${prefs.inspectionID.replace(" ", "")}")
-        Log.d("CLSInspection", "Offline: $startonetime")
+        Log.d("CLSInspection", "Offline: ${prefs.isFirst}")
         cqSDKInitializer.startInspection(activity = this,
             clientAttrs = ClientAttrs(
                 userName = " ",
@@ -633,7 +632,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                 )
             ),
             userFlowParams = UserFlowParams(
-                isOffline = !startonetime!!,
+                isOffline = !prefs.isFirst!!,
                 skipInputPage = true,
             ),
 
@@ -648,11 +647,11 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
                 Log.e("CQSDKXX", "regNo: ${prefs.scannedVmRegNo}")
                 if (isStarted) {
                     prefs.Isfirst = false
-                    startonetime = prefs.Isfirst
+                    //startonetime = prefs.Isfirst
                     Log.d("CQSDKXX", "isStarted " + msg)
                 } else {
                     prefs.Isfirst = true
-                    startonetime = prefs.Isfirst
+                    //startonetime = prefs.Isfirst
                     if (msg.equals("Online quote can not be created without internet")) {
                         showToast("Please Turn on the internet", this)
                         Log.d("CQSDKXX", "Not isStarted1  " + msg)
@@ -697,7 +696,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
 
 
 //        prefs.Isfirst = false
-        Log.d("Start OFfflne", "$startonetime")
+        Log.d("Start OFfflne", "ISFirst ${prefs.isFirst}")
     }
 
     private fun setUploadLabel() {
@@ -736,7 +735,7 @@ class AddInspectionActivity2 : AppCompatActivity(), BackgroundUploadDialogListen
              osData.isoillevelImageFailed = false
             }
              */
-            if (!imageUploadStarted){
+            if (!imageUploadStarted) {
                 startUploadWithWorkManager(0, prefs, this)
                 imageUploadStarted = true
             }

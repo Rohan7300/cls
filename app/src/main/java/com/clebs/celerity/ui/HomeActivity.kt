@@ -76,6 +76,7 @@ import com.clebs.celerity.utils.expiredDocuments
 import com.clebs.celerity.utils.expiringDocument
 import com.clebs.celerity.utils.getCurrentAppVersion
 import com.clebs.celerity.utils.getDeviceID
+import com.clebs.celerity.utils.handleTicketNotification
 import com.clebs.celerity.utils.invoiceReadyToView
 import com.clebs.celerity.utils.isVersionNewer
 import com.clebs.celerity.utils.logOSEntity
@@ -698,6 +699,13 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         } else if (destinationFragment == "ThirdPartyAcess") {
             navController.navigate(R.id.profileFragment)
         }
+
+        try {
+            if(intent.getStringExtra("actionToperform")!="undef")
+            handleNotifications(intent)
+        }catch (_:Exception){
+        }
+
     }
 
     private fun notificationObserver() {
@@ -735,7 +743,7 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 }
             } else {
                 viewModel.GetDAVehicleExpiredDocuments(prefs.clebUserId.toInt())
-                if(!updateMsgShown) {
+                if (!updateMsgShown) {
                     showToast("Failed to fetch the latest app version", this@HomeActivity)
                     updateMsgShown = true
                 }
@@ -906,6 +914,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     navController.navigate(R.id.profileFragment)
                 } else if (actionToPerform == "VehicleBreakDownInspectionNotification") {
                     viewModel.GetVehBreakDownInspectionInfobyDriver(prefs.clebUserId.toInt())
+                } else if (actionToPerform == "UserTicketNotification") {
+                    handleTicketNotification(viewModel, parseToInt(actionID), this, this, prefs,
+                        parseToInt(notificationID))
                 } else {
                     ActivityHomeBinding.title.text = "Notifications"
                     navController.navigate(R.id.notifficationsFragment)

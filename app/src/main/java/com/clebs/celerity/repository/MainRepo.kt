@@ -1859,4 +1859,11 @@ class MainRepo(private val ApiService: ApiService) {
             ApiService.SaveVehicleInspectionTrackHistoryInfo(request)
         }
     }
+    suspend fun GetTicketInfoById(
+        tickedId:Int
+    ):SimpleNetworkResponse<GetUserTicketsResponse>{
+        return safeApiCall {
+            ApiService.GetTicketInfoById(tickedId)
+        }
+    }
 }
