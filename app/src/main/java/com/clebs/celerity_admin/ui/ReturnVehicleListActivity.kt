@@ -103,19 +103,23 @@ class ReturnVehicleListActivity : ComponentActivity() {
 
     @Composable
     fun VehicleReturnList(viewModel: MainViewModel, prefs: Prefs) {
-        LoadingDialogComposable(true)
+        var showLoadingDialog by remember { mutableStateOf(true) }
         val vehReturnHistory by viewModel.GetVehicleReturnHistory(
             prefs.clebUserId.toInt(),
             true
         ).observeAsState(initial = null)
-
+        if (showLoadingDialog) {
+            LoadingDialogComposable(showDialog = true)
+        }
         vehReturnHistory?.let {history->
+            showLoadingDialog = false
             LazyColumn(Modifier.fillMaxSize()) {
-                items(history!!.size) {
-                    ReturnCollectionListItem()
+                items(history!!.size) {it->
+                    ReturnCollectionListItem(Modifier.fillMaxWidth(),history[it])
                 }
             }
         }?:run{
+            LoadingDialogComposable(false)
 
             Text("No Data Available")
         }

@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.clebs.celerity_admin.R
+import com.clebs.celerity_admin.models.GetVehicleReturnHistoryResponseItem
 
 @Composable
 fun ListItemX(modifier: Modifier = Modifier) {
@@ -249,7 +250,7 @@ fun ListItemX(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ReturnCollectionListItem(modifier: Modifier = Modifier) {
+fun ReturnCollectionListItem(modifier: Modifier = Modifier,item: GetVehicleReturnHistoryResponseItem) {
     var expanded by remember {
         mutableStateOf(false)
     }
@@ -270,7 +271,7 @@ fun ReturnCollectionListItem(modifier: Modifier = Modifier) {
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "Hire Company : ",
+                    text = item.CompanyName,
                     fontSize = 10.sp,
                     color = colorResource(id = R.color.orange),
                     fontWeight = FontWeight.Bold
@@ -312,7 +313,7 @@ fun ReturnCollectionListItem(modifier: Modifier = Modifier) {
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "2", fontSize = 12.sp)
+                    Text(text ="0", fontSize = 12.sp)
                 }
                 Column(
                     modifier = Modifier.weight(1f),
@@ -325,7 +326,7 @@ fun ReturnCollectionListItem(modifier: Modifier = Modifier) {
                         color = colorResource(id = R.color.orange)
                     )
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "23-Aug-2024", fontSize = 12.sp)
+                    Text(text =item.VehRetReqDate, fontSize = 12.sp)
                 }
                 Column(
                     modifier = Modifier.weight(1f),
@@ -352,7 +353,7 @@ fun ReturnCollectionListItem(modifier: Modifier = Modifier) {
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(text = "Carr wood Road, Castleford, WF10 4SB", fontSize = 12.sp)
+                    Text(text = item.CompanyAddress, fontSize = 12.sp)
                 }
 
             }
@@ -367,7 +368,7 @@ fun ReturnCollectionListItem(modifier: Modifier = Modifier) {
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(5.dp))
-                        Text(text = "Carr wood Road, Castleford, WF10 4SB", fontSize = 11.sp)
+                        Text(text = "Location" ,fontSize = 11.sp)
                     }
                 }
             }
@@ -468,5 +469,5 @@ fun LoadingDialogComposable(
 @Preview
 @Composable
 fun Preview(){
-    ReturnCollectionListItem()
+   // ReturnCollectionListItem()
 }
