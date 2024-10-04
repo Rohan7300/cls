@@ -122,10 +122,10 @@ class Prefs(context: Context) {
         }
     var returnInspectionFirstTime: Boolean?
         get() {
-            return sharedPreferences.getBoolean("returnInspectionFirstTime", false)
+            return sharedPreferences.getBoolean("returnInspectionFirstTime", true)
         }
         set(value) {
-            sharedPreferences.edit().putBoolean("returnInspectionFirstTime", value ?: false).apply()
+            sharedPreferences.edit().putBoolean("returnInspectionFirstTime", value ?: true).apply()
         }
 
     var baseVmID: String
