@@ -85,6 +85,7 @@ import com.clebs.celerity.utils.showBirthdayCard
 import com.clebs.celerity.utils.showBreakDownDialog
 import com.clebs.celerity.utils.showToast
 import com.clebs.celerity.utils.showUpdateDialog
+import com.clebs.celerity.utils.startUploadWithWorkManager
 import com.clebs.celerity.utils.vehicleAdvancePaymentAgreement
 import com.clebs.celerity.utils.vehicleExpiringDocuments
 import com.clebs.celerity.utils.weeklyLocationRota
@@ -701,9 +702,9 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
 
         try {
-            if(intent.getStringExtra("actionToperform")!="undef")
-            handleNotifications(intent)
-        }catch (_:Exception){
+            if (intent.getStringExtra("actionToperform") != "undef")
+                handleNotifications(intent)
+        } catch (_: Exception) {
         }
 
     }
@@ -915,8 +916,10 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 } else if (actionToPerform == "VehicleBreakDownInspectionNotification") {
                     viewModel.GetVehBreakDownInspectionInfobyDriver(prefs.clebUserId.toInt())
                 } else if (actionToPerform == "UserTicketNotification") {
-                    handleTicketNotification(viewModel, parseToInt(actionID), this, this, prefs,
-                        parseToInt(notificationID))
+                    handleTicketNotification(
+                        viewModel, parseToInt(actionID), this, this, prefs,
+                        parseToInt(notificationID)
+                    )
                 } else {
                     ActivityHomeBinding.title.text = "Notifications"
                     navController.navigate(R.id.notifficationsFragment)
@@ -1370,7 +1373,20 @@ class HomeActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     }
                 })
             // }
+            Log.d("BreakDownFailed","${prefs.breakDownFailed}")
+            if (prefs.breakDownFailed) {
+                try {
+                    Snackbar.make(
+                        ActivityHomeBinding.bottomNavigatinView,
+                        "Re-Uploading previously failed breakdown images...",
+                        Snackbar.LENGTH_SHORT
+                    ).setAction("Action", null).show()
+                }catch (_:Exception){
+                    showToast("Re-Uploading previously failed breakdown images...", this)
+                }
 
+                startUploadWithWorkManager(4, prefs, this)
+            }
         } catch (_: Exception) {
 
         }

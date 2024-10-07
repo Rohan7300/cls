@@ -887,4 +887,8 @@ class Prefs(context: Context) {
     var breakDownVehOilLevelId: Int
         get() = sharedPreferences.getInt("breakDownVehOilLevelId", 0)
         set(value) = sharedPreferences.edit().putInt("breakDownVehOilLevelId", value).apply()
+
+    var breakDownFailed:Boolean
+        get() = sharedPreferences.getBoolean("breakDownFailed",false)
+        set(value) = sharedPreferences.edit().putBoolean("breakDownFailed",value).apply()
 }

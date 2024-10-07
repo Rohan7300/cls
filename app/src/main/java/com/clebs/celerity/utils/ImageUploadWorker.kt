@@ -61,21 +61,20 @@ class ImageUploadWorker(
                     0 -> {
                         val data = osRepo.getData(clebUserId, todayDate)
                         logOSEntity("ImageWorker", data)
-                    prefs.currentImageUploading = true
-                     if (prefs.addBlueUri!=null) {
+                        prefs.currentImageUploading = true
+                        if (prefs.addBlueUri != null) {
                             val partBody = createMultipartPart(
                                 prefs.addBlueUri!!, "uploadVehicleAddBlueImage",
                                 appContext
                             )
-                            val addBlueResponse = withContext(Dispatchers.IO){
+                            val addBlueResponse = withContext(Dispatchers.IO) {
                                 mainRepo.uploadVehicleImage(
                                     clebUserId, partBody, 7, currentDateTime
                                 )
                             }
-                            if (!addBlueResponse.isSuccessful||addBlueResponse.failed)
+                            if (!addBlueResponse.isSuccessful || addBlueResponse.failed)
                                 data.isaddblueImageFailed = true
-                            else
-                            {
+                            else {
                                 prefs.addBlueUri = null
                                 prefs.addBlueRequired = false
                             }
@@ -87,26 +86,26 @@ class ImageUploadWorker(
                                 prefs.oilLevelUri!!, "uploadVehicleOilLevelImage",
                                 appContext
                             )
-                            val oilLevelResponse = withContext(Dispatchers.IO){
+                            val oilLevelResponse = withContext(Dispatchers.IO) {
                                 mainRepo.uploadVehicleImage(
                                     clebUserId, partBody, 5, currentDateTime
                                 )
                             }
-                            if (!oilLevelResponse.isSuccessful||oilLevelResponse.failed)
+                            if (!oilLevelResponse.isSuccessful || oilLevelResponse.failed)
                                 data.isoillevelImageFailed = true
-                            else{
-                                prefs.oilLevelRequired= false
+                            else {
+                                prefs.oilLevelRequired = false
                                 prefs.oilLevelUri = null
                             }
                         }
 
                         //if (data.faceMaskImage != null&&data.isfaceMaskImageRequired) {
-                        if (prefs.faceMaskUri!=null) {
+                        if (prefs.faceMaskUri != null) {
                             val partBody = createMultipartPart(
                                 prefs.faceMaskUri!!, "uploadFaceMaskImage",
                                 appContext
                             )
-                            val selfieeRes = withContext(Dispatchers.IO){
+                            val selfieeRes = withContext(Dispatchers.IO) {
                                 mainRepo.uploadVehicleImage(
                                     clebUserId,
                                     partBody,
@@ -114,9 +113,9 @@ class ImageUploadWorker(
                                     currentDateTime
                                 )
                             }
-                            if (!selfieeRes.isSuccessful||selfieeRes.failed)
+                            if (!selfieeRes.isSuccessful || selfieeRes.failed)
                                 data.isfaceMaskImageFailed = true
-                            else{
+                            else {
                                 prefs.faceMaskUri = null
                             }
 
@@ -128,7 +127,7 @@ class ImageUploadWorker(
                         val data = osRepo.getData(clebUserId, todayDate)
                         logOSEntity("ImageWorker", data)
 
-                        if (prefs.faceMaskUri!=null) {
+                        if (prefs.faceMaskUri != null) {
                             val partBody = createMultipartPart(
                                 prefs.faceMaskUri!!, "uploadFaceMaskImage",
                                 appContext
@@ -149,14 +148,14 @@ class ImageUploadWorker(
                         lmId = Prefs.getInstance(appContext).getLocationID().toInt()
                         val todayDate = dateFormat.format(Date())
                         val imageEntity = imagesRepo.getImagesbyUser(todayDate)
-                        Log.d("IMWorker","2 ")
+                        Log.d("IMWorker", "2 ")
                         if (imageEntity != null) {
                             if (checkNullorEmpty(imageEntity.exBodyDamageFront)) {
                                 val partBody = createMultipartPart(
                                     imageEntity.exBodyDamageFront!!, "uploadVehicleFrontDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 FRONT")
+                                Log.d("IMWorker", "2 FRONT")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -171,7 +170,7 @@ class ImageUploadWorker(
                                     imageEntity.inWindScreen!!, "uploadWindscreenDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 WindScreen")
+                                Log.d("IMWorker", "2 WindScreen")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -187,7 +186,7 @@ class ImageUploadWorker(
                                     "uploadWindowsOrGlassVisibilityDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 WindowGlass")
+                                Log.d("IMWorker", "2 WindowGlass")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -203,7 +202,7 @@ class ImageUploadWorker(
                                     "uploadVehicleWipersOrWashersDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 WIPERS_WASHERS")
+                                Log.d("IMWorker", "2 WIPERS_WASHERS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -218,7 +217,7 @@ class ImageUploadWorker(
                                     imageEntity.inMirrors!!, "uploadMirrorDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 MIRRORS")
+                                Log.d("IMWorker", "2 MIRRORS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -234,7 +233,7 @@ class ImageUploadWorker(
                                     "uploadVehicleCabSecurityOrInteriorDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 CAB_SECURITY_INTERIOR")
+                                Log.d("IMWorker", "2 CAB_SECURITY_INTERIOR")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -249,7 +248,7 @@ class ImageUploadWorker(
                                     imageEntity.inSeatBelt!!, "uploadVehicleSeatBeltDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 CAB_SECURITY_INTERIOR")
+                                Log.d("IMWorker", "2 CAB_SECURITY_INTERIOR")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -265,7 +264,7 @@ class ImageUploadWorker(
                                     "uploadVehicleWarningOrServiceLightDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 WARNING_SERVICE_LIGHTS")
+                                Log.d("IMWorker", "2 WARNING_SERVICE_LIGHTS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -281,7 +280,7 @@ class ImageUploadWorker(
                                     "uploadVehicleFuelOrAdBlueLevelDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 ADD_BLUE")
+                                Log.d("IMWorker", "2 ADD_BLUE")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -297,7 +296,7 @@ class ImageUploadWorker(
                                     "uploadVehicleOilOrCoolantLevel",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 OIL_COOLANT_LEVEL")
+                                Log.d("IMWorker", "2 OIL_COOLANT_LEVEL")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -312,7 +311,7 @@ class ImageUploadWorker(
                                     imageEntity.inFogLights!!, "uploadVehicleLightsDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 FOG_LIGHTS")
+                                Log.d("IMWorker", "2 FOG_LIGHTS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -328,7 +327,7 @@ class ImageUploadWorker(
                                     "uploadVehicleIndicatorsOrSideRepeatersDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 INDICATORS_SIDE_REPEATERS")
+                                Log.d("IMWorker", "2 INDICATORS_SIDE_REPEATERS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -344,7 +343,7 @@ class ImageUploadWorker(
                                     "uploadVehicleHornOrReverseBeeperDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 HORN_REVERSE_BEEPER")
+                                Log.d("IMWorker", "2 HORN_REVERSE_BEEPER")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -359,7 +358,7 @@ class ImageUploadWorker(
                                     imageEntity.inSteeringControl!!, "uploadVehicleSteeringDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 STEERING_CONTROL")
+                                Log.d("IMWorker", "2 STEERING_CONTROL")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -374,7 +373,7 @@ class ImageUploadWorker(
                                     imageEntity.inBrakedEbsAbs!!, "uploadVehicleBrakesDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 BRAKED_EBS_ABS")
+                                Log.d("IMWorker", "2 BRAKED_EBS_ABS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -390,7 +389,7 @@ class ImageUploadWorker(
                                     "uploadVehicleLockingSystemDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 VEHICLE_LOCKING_SYSTEM")
+                                Log.d("IMWorker", "2 VEHICLE_LOCKING_SYSTEM")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -402,10 +401,11 @@ class ImageUploadWorker(
                             }
                             if (checkNullorEmpty(imageEntity.exBodyDamageNearSide)) {
                                 val partBody = createMultipartPart(
-                                    imageEntity.exBodyDamageNearSide!!, "uploadVehicleNearSideDefect",
+                                    imageEntity.exBodyDamageNearSide!!,
+                                    "uploadVehicleNearSideDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 NEAR_SIDE")
+                                Log.d("IMWorker", "2 NEAR_SIDE")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -420,7 +420,7 @@ class ImageUploadWorker(
                                     imageEntity.exBodyDamageRear!!, "uploadVehicleRearDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 REAR")
+                                Log.d("IMWorker", "2 REAR")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -435,7 +435,7 @@ class ImageUploadWorker(
                                     imageEntity.exBodyDamageOffside!!, "uploadVehicleOffSideDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 OFF_SIDE")
+                                Log.d("IMWorker", "2 OFF_SIDE")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -451,7 +451,7 @@ class ImageUploadWorker(
                                     "uploadVehicleRegistrationNumberPlateDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 REGISTRATION_NUMBER_PLATES")
+                                Log.d("IMWorker", "2 REGISTRATION_NUMBER_PLATES")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -467,7 +467,7 @@ class ImageUploadWorker(
                                     "uploadVehicleReflectorOrMarkerDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 REFLECTORS_MARKERS")
+                                Log.d("IMWorker", "2 REFLECTORS_MARKERS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -483,7 +483,7 @@ class ImageUploadWorker(
                                     "uploadVehicleWheelsOrWheelFixingDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 WHEEL_FIXINGS")
+                                Log.d("IMWorker", "2 WHEEL_FIXINGS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -499,7 +499,7 @@ class ImageUploadWorker(
                                     "uploadVehicleTyresDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 TYRE_CONDITION_THREAD_DEPTH")
+                                Log.d("IMWorker", "2 TYRE_CONDITION_THREAD_DEPTH")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -515,7 +515,7 @@ class ImageUploadWorker(
                                     "uploadVehicleOilOrFuelOrCoolantLeaksDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 OIL_FUEL_COOLANT_LEAKS")
+                                Log.d("IMWorker", "2 OIL_FUEL_COOLANT_LEAKS")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -531,7 +531,7 @@ class ImageUploadWorker(
                                     "uploadVehExcessiveEngineExhaustSmokeDef",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 EXCESSIVE_ENG_EXHAUST_SMOKE")
+                                Log.d("IMWorker", "2 EXCESSIVE_ENG_EXHAUST_SMOKE")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -546,7 +546,7 @@ class ImageUploadWorker(
                                     imageEntity.exSpareWheel!!, "uploadSpareWheelDefect",
                                     appContext
                                 )
-                                Log.d("IMWorker","2 SPARE_WHEEL")
+                                Log.d("IMWorker", "2 SPARE_WHEEL")
                                 mainRepo.UploadVehicleDefectImages(
                                     clebUserId,
                                     lmId,
@@ -561,7 +561,7 @@ class ImageUploadWorker(
 
                     }
 
-                    3->{
+                    3 -> {
                         val currentLoction = Prefs.getInstance(App.instance).currLocationId
                         val workingLocation = Prefs.getInstance(App.instance).workLocationId
                         val locationID: Int = if (workingLocation != 0) {
@@ -569,98 +569,144 @@ class ImageUploadWorker(
                         } else {
                             currentLoction
                         }
-                        val response = mainRepo.SaveVehicleInspectionInfo(SaveVehicleInspectionInfo(
-                            driverId = prefs.clebUserId.toInt(),
-                            inspectionDate = prefs.inspectionDateTime?:"Date error",
-                            inspectionId = prefs.inspectionID.replace(" ",""),
-                            inspectionLmId =locationID,
-                            inspectionVmId = prefs.vmId,
-                            HistoryId = prefs.normalInspectionHistoryId
-                        ))
+                        val response = mainRepo.SaveVehicleInspectionInfo(
+                            SaveVehicleInspectionInfo(
+                                driverId = prefs.clebUserId.toInt(),
+                                inspectionDate = prefs.inspectionDateTime ?: "Date error",
+                                inspectionId = prefs.inspectionID.replace(" ", ""),
+                                inspectionLmId = locationID,
+                                inspectionVmId = prefs.vmId,
+                                HistoryId = prefs.normalInspectionHistoryId
+                            )
+                        )
 
-                        if(!response.isSuccessful||response.failed){
+                        if (!response.isSuccessful || response.failed) {
                             prefs.isInspectionIDFailedToUpload = true
-                        }else{
+                        } else {
                             prefs.isInspectionIDFailedToUpload = false
                             prefs.updateInspectionStatus(true)
                         }
                     }
-                    4->{
+
+                    4 -> {
                         prefs.isBreakDownImagesAreUploading = true
-                        if (!prefs.breakDownSpareWheelUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
+                        if (!prefs.breakDownSpareWheelUri.isNullOrBlank() && prefs.currBreakDownInspectionId != 0) {
                             val partBody = createMultipartPart(
-                                prefs.breakDownSpareWheelUri!!, "uploadDAVehBreakDownInpectionSpearWheelPictureFile",
+                                prefs.breakDownSpareWheelUri!!,
+                                "uploadDAVehBreakDownInpectionSpearWheelPictureFile",
                                 appContext
                             )
-                            Log.d("breakDownSpareWheelUri","Uploading>> ${prefs.breakDownSpareWheelUri}")
-                            val response = withContext(Dispatchers.IO){
+                            Log.d(
+                                "breakDownSpareWheelUri",
+                                "Uploading>> ${prefs.breakDownSpareWheelUri}"
+                            )
+                            val response = withContext(Dispatchers.IO) {
                                 mainRepo.UploadDAVehBreakDownInpectionSpearWheelPictureFile(
                                     prefs.currBreakDownInspectionId,
                                     prefs.breakDownSuperVisorID!!,
                                     partBody
                                 )
                             }
-                            prefs.breakDownSpareWheelUri = ""
+                            if (response.failed || !response.isSuccessful) {
+                                prefs.breakDownFailed = true
+                            } else
+                                prefs.breakDownSpareWheelUri = ""
                         }
-                        if (!prefs.breakDownVehicleInteriorUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
+                        if (!prefs.breakDownVehicleInteriorUri.isNullOrBlank() && prefs.currBreakDownInspectionId != 0) {
                             val partBody = createMultipartPart(
-                                prefs.breakDownVehicleInteriorUri!!, "uploadDAVehBreakDownInpectionInteriorPictureFile",
+                                prefs.breakDownVehicleInteriorUri!!,
+                                "uploadDAVehBreakDownInpectionInteriorPictureFile",
                                 appContext
                             )
-                            Log.d("breakDownVehicleInteriorUri","Uploading>> ${prefs.breakDownVehicleInteriorUri}")
-                            val response = withContext(Dispatchers.IO){
+                            Log.d(
+                                "breakDownVehicleInteriorUri",
+                                "Uploading>> ${prefs.breakDownVehicleInteriorUri}"
+                            )
+                            val response = withContext(Dispatchers.IO) {
                                 mainRepo.UploadDAVehBreakDownInpectionInteriorPictureFile(
                                     prefs.currBreakDownInspectionId,
                                     prefs.breakDownSuperVisorID!!,
                                     partBody
                                 )
                             }
-                            prefs.breakDownVehicleInteriorUri = ""
+                            if (response.failed || !response.isSuccessful) {
+                                prefs.breakDownFailed = true
+                            } else
+                                prefs.breakDownVehicleInteriorUri = ""
                         }
-                        if (!prefs.breakDownLoadingInteriorUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
+                        if (!prefs.breakDownLoadingInteriorUri.isNullOrBlank() && prefs.currBreakDownInspectionId != 0) {
                             val partBody = createMultipartPart(
-                                prefs.breakDownLoadingInteriorUri!!, "uploadDAVehBreakDownInpectionLoadingInteriorPictureFile",
+                                prefs.breakDownLoadingInteriorUri!!,
+                                "uploadDAVehBreakDownInpectionLoadingInteriorPictureFile",
                                 appContext
                             )
-                            Log.d("breakDownLoadingInteriorUri","Uploading>> ${prefs.breakDownLoadingInteriorUri}")
-                            val response = withContext(Dispatchers.IO){
+                            Log.d(
+                                "breakDownLoadingInteriorUri",
+                                "Uploading>> ${prefs.breakDownLoadingInteriorUri}"
+                            )
+                            val response = withContext(Dispatchers.IO) {
                                 mainRepo.UploadDAVehBreakDownInpectionLoadingInteriorPictureFile(
                                     prefs.currBreakDownInspectionId,
                                     prefs.breakDownSuperVisorID!!,
                                     partBody
                                 )
                             }
-                            prefs.breakDownLoadingInteriorUri = ""
+                            if (response.failed || !response.isSuccessful) {
+                                prefs.breakDownFailed = true
+                            } else
+                                prefs.breakDownLoadingInteriorUri = ""
                         }
-                        if (!prefs.breakDownToolsPictureUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
+                        if (!prefs.breakDownToolsPictureUri.isNullOrBlank() && prefs.currBreakDownInspectionId != 0) {
                             val partBody = createMultipartPart(
-                                prefs.breakDownToolsPictureUri!!, "uploadDAVehBreakDownInpectionToolsPictureFile",
+                                prefs.breakDownToolsPictureUri!!,
+                                "uploadDAVehBreakDownInpectionToolsPictureFile",
                                 appContext
                             )
-                            Log.d("breakDownToolsPictureUri","Uploading>> ${prefs.breakDownToolsPictureUri}")
-                            val response = withContext(Dispatchers.IO){
+                            Log.d(
+                                "breakDownToolsPictureUri",
+                                "Uploading>> ${prefs.breakDownToolsPictureUri}"
+                            )
+                            val response = withContext(Dispatchers.IO) {
                                 mainRepo.UploadDAVehBreakDownInpectionToolsPictureFile(
                                     prefs.currBreakDownInspectionId,
                                     prefs.breakDownSuperVisorID!!,
                                     partBody
                                 )
                             }
-                            prefs.breakDownToolsPictureUri=""
+                            if (response.failed || !response.isSuccessful) {
+                                prefs.breakDownFailed = true
+                            } else
+                                prefs.breakDownToolsPictureUri = ""
                         }
-                        if (!prefs.breakDownVinNumberPictureUri.isNullOrBlank()&& prefs.currBreakDownInspectionId!=0) {
+                        if (!prefs.breakDownVinNumberPictureUri.isNullOrBlank() && prefs.currBreakDownInspectionId != 0) {
                             val partBody = createMultipartPart(
-                                prefs.breakDownVinNumberPictureUri!!, "uploadDAVehBreakDownInpectionVinNoPictureFile",
+                                prefs.breakDownVinNumberPictureUri!!,
+                                "uploadDAVehBreakDownInpectionVinNoPictureFile",
                                 appContext
                             )
-                            Log.d("breakDownToolsPictureUri","Uploading>> ${prefs.breakDownVinNumberPictureUri}")
-                            val response = withContext(Dispatchers.IO){
+                            Log.d(
+                                "breakDownToolsPictureUri",
+                                "Uploading>> ${prefs.breakDownVinNumberPictureUri}"
+                            )
+                            val response = withContext(Dispatchers.IO) {
                                 mainRepo.UploadDAVehBreakDownInpectionVinNoPictureFile(
                                     prefs.currBreakDownInspectionId,
                                     prefs.breakDownSuperVisorID!!,
                                     partBody
                                 )
                             }
-                            prefs.breakDownVinNumberPictureUri = ""
+                            if (response.failed || !response.isSuccessful) {
+                                prefs.breakDownFailed = true
+                            } else
+                                prefs.breakDownVinNumberPictureUri = ""
+                        }
+                        if (prefs.breakDownSpareWheelUri.isNullOrBlank()
+                            && prefs.breakDownVehicleInteriorUri.isNullOrBlank()
+                            && prefs.breakDownLoadingInteriorUri.isNullOrBlank()
+                            && prefs.breakDownToolsPictureUri.isNullOrBlank()
+                            && prefs.breakDownVinNumberPictureUri.isNullOrBlank()
+                        ) {
+                            prefs.breakDownFailed = false
                         }
                         prefs.isBreakDownImagesAreUploading = false
                     }
@@ -679,10 +725,10 @@ class ImageUploadWorker(
         partName: String,
         context: Context
     ): MultipartBody.Part {
-/*        val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
-        var bs64ImageString = getImageBitmapFromUri(context, image.toUri())
-        val requestBody = bs64ImageString!!.toRequestBody()
-        return MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)*/
+        /*        val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
+                var bs64ImageString = getImageBitmapFromUri(context, image.toUri())
+                val requestBody = bs64ImageString!!.toRequestBody()
+                return MultipartBody.Part.createFormData(partName, uniqueFileName, requestBody)*/
         return try {
             val uniqueFileName = "image_${UUID.randomUUID()}.jpg"
             val bs64ImageString = getImageBitmapFromUri(context, image.toUri())

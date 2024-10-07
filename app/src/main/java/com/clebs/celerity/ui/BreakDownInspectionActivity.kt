@@ -37,6 +37,7 @@ import com.clebs.celerity.utils.ImageTakerActivity
 import com.clebs.celerity.utils.NetworkManager
 import com.clebs.celerity.utils.Prefs
 import com.clebs.celerity.utils.clientUniqueIDForBreakDown
+import com.clebs.celerity.utils.contains
 import com.clebs.celerity.utils.dateOnFullFormat
 import com.clebs.celerity.utils.dateToday
 import com.clebs.celerity.utils.showToast
@@ -520,6 +521,11 @@ class BreakDownInspectionActivity : AppCompatActivity() {
                                         "Vehicle not in fleet list", this
                                     )
                                     Log.d(TAG, "CQSDKXX : Not isStarted4  $msg")
+                                } else if (msg == "A Quote with same Registration Number is not synced yet"||msg.contains("Quote with same Registration Number is not synced yet")) {
+                                    showToast(
+                                        "Previous Inspection Is Uploading. Retry Later...", this
+                                    )
+                                    Log.d(TAG, "CQSDKXX : Not isStartedXX  $msg")
                                 }
                                 Log.d(TAG, "CQSDKXX : Not isStarted5 $msg")
                             }
