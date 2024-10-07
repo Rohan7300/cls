@@ -11,6 +11,7 @@ import com.clebs.celerity_admin.models.GetReturnVehicleListResponse
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
+import com.clebs.celerity_admin.models.GetVehicleCollectionHistoryResponse
 import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
@@ -230,4 +231,9 @@ interface ApiService {
         @Query("supervisorId") supervisorId:Int,
         @Query("includeReturned") includeReturned:Boolean
     ):Response<GetVehicleReturnHistoryResponse>
+    @GET("/api/VehAllocHistories/GetVehicleCollectionHistory")
+    suspend fun GetVehicleCollectionHistory(
+        @Query("supervisorId") supervisorId:Int,
+        @Query("includeReturned") includeReturned:Boolean
+    ):Response<GetVehicleCollectionHistoryResponse>
 }

@@ -40,6 +40,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -58,14 +59,29 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import com.clebs.celerity_admin.factory.MyViewModelFactory
+import com.clebs.celerity_admin.network.ApiService
+import com.clebs.celerity_admin.network.RetrofitService
+import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.theme.CLSOSMTheme
-import com.clebs.celerity_admin.utils.ListItemX
+import com.clebs.celerity_admin.utils.CollectionListItem
+import com.clebs.celerity_admin.utils.LoadingDialogComposable
+import com.clebs.celerity_admin.utils.Prefs
+import com.clebs.celerity_admin.utils.ReturnCollectionListItem
+import com.clebs.celerity_admin.viewModels.MainViewModel
 
 class VehicleCollectionListActivity : ComponentActivity() {
-
+    private lateinit var mainViewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.statusBarColor = ContextCompat.getColor(this, R.color.orange)
+        val prefs = Prefs.getInstance(this)
+        val apiService = RetrofitService.getInstance().create(ApiService::class.java)
+        val mainRepo = MainRepo(apiService)
+
+        mainViewModel =
+            ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         setContent {
             var showDialog by remember {
                 mutableStateOf(false)
@@ -78,13 +94,7 @@ class VehicleCollectionListActivity : ComponentActivity() {
                     Column {
                         VehicleCollectionList(dialogOpen = { showDialog = true })
                         FilterDialog(showDialog = showDialog, onDismissRequest = { showDialog = false })
-                        val data = listOf<String>("a", "b", "c", "d")
-
-                        LazyColumn(Modifier.fillMaxSize()) {
-                            items(data.size) {
-                                ListItemX()
-                            }
-                        }
+                        VehicleCollectionHistory(mainViewModel, prefs = prefs)
                     }
                 }
             }
@@ -197,7 +207,28 @@ class VehicleCollectionListActivity : ComponentActivity() {
             }
         }
     }
-
+    @Composable
+    fun VehicleCollectionHistory(viewModel: MainViewModel, prefs: Prefs) {
+        var showLoadingDialog by remember { mutableStateOf(true) }
+        val vehReturnHistory by viewModel.GetVehicleCollectionHistory(
+            prefs.clebUserId.toInt(),
+            true
+        ).observeAsState(initial = null)
+        if (showLoadingDialog) {
+            LoadingDialogComposable(showDialog = true)
+        }
+        vehReturnHistory?.let {history->
+            showLoadingDialog = false
+            LazyColumn(Modifier.fillMaxSize()) {
+                items(history!!.size) {it->
+                    CollectionListItem(Modifier.fillMaxWidth(),history[it])
+                }
+            }
+        }?:run{
+            LoadingDialogComposable(false)
+            Text("No Data Available")
+        }
+    }
     @Composable
     fun VehicleCollectionList(dialogOpen: () -> Unit) {
         Column(

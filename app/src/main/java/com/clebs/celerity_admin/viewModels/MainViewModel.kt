@@ -17,6 +17,7 @@ import com.clebs.celerity_admin.models.GetReturnVehicleListResponse
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
+import com.clebs.celerity_admin.models.GetVehicleCollectionHistoryResponse
 import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
@@ -543,10 +544,10 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
     }
 
     fun CreateVehicleReleaseReq(
-        vmID: Double,supervisor:Double
+        vmID: Double, supervisor: Double
     ) {
         viewModelScope.launch {
-            val response = repo.CreateVehicleReleaseReq(vmID,supervisor)
+            val response = repo.CreateVehicleReleaseReq(vmID, supervisor)
             if (!response.isSuccessful || response.failed)
                 CreateVehicleReleaseReqlivedata.postValue(null)
             else
@@ -555,16 +556,28 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
     }
 
     fun GetVehicleReturnHistory(
-        superVisorId:Int,
-        includeReturned:Boolean
-    ):MutableLiveData<GetVehicleReturnHistoryResponse?>{
-        return liveData{
-            val response = repo.GetVehicleReturnHistory(superVisorId,includeReturned)
-            if(!response.isSuccessful || response.failed)
-                emit( null)
+        superVisorId: Int,
+        includeReturned: Boolean
+    ): MutableLiveData<GetVehicleReturnHistoryResponse?> {
+        return liveData {
+            val response = repo.GetVehicleReturnHistory(superVisorId, includeReturned)
+            if (!response.isSuccessful || response.failed)
+                emit(null)
             else
                 emit(response.body)
         } as MutableLiveData<GetVehicleReturnHistoryResponse?>
     }
 
+    fun GetVehicleCollectionHistory(
+        superVisorId: Int,
+        includeReturned: Boolean
+    ): MutableLiveData<GetVehicleCollectionHistoryResponse> {
+        return liveData {
+            val response = repo.GetVehicleCollectionHistory(superVisorId, includeReturned)
+            if (!response.isSuccessful || response.failed)
+                emit(null)
+            else
+                emit(response.body)
+        } as MutableLiveData<GetVehicleCollectionHistoryResponse>
+    }
 }

@@ -12,6 +12,7 @@ import com.clebs.celerity_admin.models.GetReturnVehicleListResponse
 import com.clebs.celerity_admin.models.GetReturnVmID
 import com.clebs.celerity_admin.models.GetVehOilLevelListResponse
 import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
+import com.clebs.celerity_admin.models.GetVehicleCollectionHistoryResponse
 import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
 import com.clebs.celerity_admin.models.GetVehicleLocation
@@ -368,6 +369,17 @@ class MainRepo(private val ApiService: ApiService) {
     ):SimpleNetworkResponse<GetVehicleReturnHistoryResponse>{
         return safeApiCall {
             ApiService.GetVehicleReturnHistory(
+                supervisorId,
+                includeReturned
+            )
+        }
+    }
+    suspend fun GetVehicleCollectionHistory(
+        supervisorId:Int,
+        includeReturned:Boolean
+    ):SimpleNetworkResponse<GetVehicleCollectionHistoryResponse>{
+        return safeApiCall {
+            ApiService.GetVehicleCollectionHistory(
                 supervisorId,
                 includeReturned
             )

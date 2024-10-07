@@ -63,7 +63,6 @@ import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.ui.theme.CLSOSMTheme
-import com.clebs.celerity_admin.utils.ListItemX
 import com.clebs.celerity_admin.utils.LoadingDialogComposable
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.ReturnCollectionListItem
@@ -120,7 +119,6 @@ class ReturnVehicleListActivity : ComponentActivity() {
             }
         }?:run{
             LoadingDialogComposable(false)
-
             Text("No Data Available")
         }
     }
@@ -264,7 +262,8 @@ class ReturnVehicleListActivity : ComponentActivity() {
                     fontSize = 14.sp,
                 )
             }
-            Row(
+            //hiding search options
+/*            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = colorResource(id = R.color.orange))
@@ -310,7 +309,7 @@ class ReturnVehicleListActivity : ComponentActivity() {
                         modifier = Modifier.size(20.dp)
                     )
                 }
-            }
+            }*/
         }
     }
 

@@ -42,10 +42,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.clebs.celerity_admin.R
+import com.clebs.celerity_admin.models.GetVehicleCollectionHistoryResponse
+import com.clebs.celerity_admin.models.GetVehicleCollectionHistoryResponseItem
 import com.clebs.celerity_admin.models.GetVehicleReturnHistoryResponseItem
 
 @Composable
-fun ListItemX(modifier: Modifier = Modifier) {
+fun CollectionListItem(modifier: Modifier = Modifier,item: GetVehicleCollectionHistoryResponseItem) {
     var expanded by remember {
         mutableStateOf(false)
     }
@@ -271,14 +273,14 @@ fun ReturnCollectionListItem(modifier: Modifier = Modifier,item: GetVehicleRetur
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = item.CompanyName,
+                    text ="Company Name\t",
                     fontSize = 10.sp,
                     color = colorResource(id = R.color.orange),
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
-                    text = "CLS Test Supplier",
+                    text =item.CompanyName,
                     fontSize = 12.sp,
                     modifier = Modifier.weight(1f)
                 )
