@@ -226,12 +226,12 @@ interface ApiService {
         @Query("date") date:String
     ):Response<SucessStatusMsgResponse>
 
-    @GET("/api/VehAllocHistories/GetVehicleReturnHistory")
+    @GET("/api/VehAllocHistories/GetVehicleReturnHistoryById")
     suspend fun GetVehicleReturnHistory(
         @Query("supervisorId") supervisorId:Int,
         @Query("includeReturned") includeReturned:Boolean
     ):Response<GetVehicleReturnHistoryResponse>
-    @GET("/api/VehAllocHistories/GetVehicleCollectionHistory")
+    @GET("/api/VehAllocHistories/GetVehicleCollectionHistoryById")
     suspend fun GetVehicleCollectionHistory(
         @Query("supervisorId") supervisorId:Int,
         @Query("includeReturned") includeReturned:Boolean

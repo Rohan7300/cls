@@ -41,6 +41,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.CollectVehicleFromSupplier"
+            android:exported="false" />
+        <activity
+            android:name=".ui.SubmitReturnActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.ReturnVehicleListActivity"
             android:exported="false"
             android:label="@string/title_activity_return_vehicle_list"

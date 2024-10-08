@@ -221,7 +221,7 @@ class VehicleCollectionListActivity : ComponentActivity() {
             showLoadingDialog = false
             LazyColumn(Modifier.fillMaxSize()) {
                 items(history!!.size) {it->
-                    CollectionListItem(Modifier.fillMaxWidth(),history[it])
+                    CollectionListItem(Modifier.fillMaxWidth(),history[it],this@VehicleCollectionListActivity)
                 }
             }
         }?:run{
@@ -261,7 +261,7 @@ class VehicleCollectionListActivity : ComponentActivity() {
                     fontSize = 14.sp,
                 )
             }
-            Row(
+/*            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = colorResource(id = R.color.orange))
@@ -306,7 +306,7 @@ class VehicleCollectionListActivity : ComponentActivity() {
                         modifier = Modifier.size(20.dp)
                     )
                 }
-            }
+            }*/
         }
     }
 

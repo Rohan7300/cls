@@ -114,7 +114,7 @@ class ReturnVehicleListActivity : ComponentActivity() {
             showLoadingDialog = false
             LazyColumn(Modifier.fillMaxSize()) {
                 items(history!!.size) {it->
-                    ReturnCollectionListItem(Modifier.fillMaxWidth(),history[it])
+                    ReturnCollectionListItem(Modifier.fillMaxWidth(),history[it],this@ReturnVehicleListActivity)
                 }
             }
         }?:run{

@@ -383,7 +383,7 @@ class ReturnToDaActivity : AppCompatActivity(), DeleteCallback {
             }
         }
 
-        binding.layoutAddImages.addSpareWheelImageBtn.setOnClickListener {
+/*        binding.layoutAddImages.addSpareWheelImageBtn.setOnClickListener {
             imageUploadLevel = 1
             openCamera()
         }
@@ -401,6 +401,9 @@ class ReturnToDaActivity : AppCompatActivity(), DeleteCallback {
         }
         binding.layoutAddImages.addVinNumberImageBtn.setOnClickListener {
             imageUploadLevel = 5
+            openCamera()
+        }*/
+        binding.layoutAddImages.uploadImageBtn.setOnClickListener {
             openCamera()
         }
     }
@@ -424,7 +427,34 @@ class ReturnToDaActivity : AppCompatActivity(), DeleteCallback {
                 val data: Intent? = result.data
                 val outputUri = data?.getStringExtra("outputUri")
                 if (outputUri != null) {
-                    when(imageUploadLevel){
+
+                    when (imageUploadLevel) {
+                        0 -> {
+                            imageUploadLevel = 1
+                            updateImageUi(imageUploadLevel)
+                        }
+                        1 -> {
+                            imageUploadLevel = 2
+                            updateImageUi(imageUploadLevel)
+                        }
+
+                        2 -> {
+                            imageUploadLevel = 3
+                            updateImageUi(imageUploadLevel)
+                        }
+
+                        3 -> {
+                            imageUploadLevel = 4
+                            updateImageUi(imageUploadLevel)
+                        }
+
+                        4 -> {
+                            imageUploadLevel = 5
+                            updateImageUi(imageUploadLevel)
+                        }
+                    }
+                /*    when(imageUploadLevel){
+
                         0->{
                           //  binding.layoutAddImages.addVinNumberImageBtn.icon = ContextCompat.getDrawable(this,R.drawable.baseline_check_24)
                         }
@@ -447,7 +477,7 @@ class ReturnToDaActivity : AppCompatActivity(), DeleteCallback {
                         }else->{
                             showToast("Invalid Option",this@ReturnToDaActivity)
                         }
-                    }
+                    }*/
                 } else {
                     showToast("Failed to fetch image!!", this)
                 }
@@ -786,5 +816,68 @@ class ReturnToDaActivity : AppCompatActivity(), DeleteCallback {
         requestTypeList.remove(item)
         listAdapter.notifyItemRemoved(position)
         listAdapter.saveData(requestTypeList)
+    }
+    private fun updateImageUi(imageStage:Int) {
+        val drawable =
+            ContextCompat.getDrawable(this@ReturnToDaActivity, R.drawable.warning)
+        val yesDrawable =
+            ContextCompat.getDrawable(this@ReturnToDaActivity, R.drawable.ic_yes3)
+
+        binding.layoutAddImages.run {
+            listOf(
+                indicatorLoadingInterior,
+                indicatorSpareWheel,
+                indicatorToolsPicture,
+                indicatorVinNumber,
+                indicatorVehicleInterior
+            ).onEach {
+                it.setImageDrawable(
+                    drawable
+                )
+            }
+            when (imageStage) {
+                1 -> {
+                    indicatorSpareWheel.setImageDrawable(
+                        yesDrawable
+                    )
+                }
+
+                2 -> {
+                    listOf(
+                        indicatorSpareWheel, indicatorVehicleInterior
+                    ).onEach { it.setImageDrawable(yesDrawable) }
+                }
+
+                3 -> {
+                    listOf(
+                        indicatorSpareWheel, indicatorVehicleInterior, indicatorLoadingInterior
+                    ).onEach { it.setImageDrawable(yesDrawable) }
+                }
+
+                4 -> {
+                    listOf(
+                        indicatorSpareWheel,
+                        indicatorVehicleInterior,
+                        indicatorLoadingInterior,
+                        indicatorToolsPicture
+                    ).onEach { it.setImageDrawable(yesDrawable) }
+                }
+
+                5 -> {
+                    listOf(
+                        indicatorSpareWheel,
+                        indicatorVehicleInterior,
+                        indicatorLoadingInterior,
+                        indicatorToolsPicture,
+                        indicatorVinNumber
+                    ).onEach { it.setImageDrawable(yesDrawable) }
+                }
+
+                else -> {
+
+                }
+            }
+        }
+
     }
 }

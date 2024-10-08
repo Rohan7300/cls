@@ -41,7 +41,7 @@
             android:id="@+id/bodyAddInspectionImages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
+            android:layout_margin="10dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -65,13 +65,177 @@
                 android:layout_height="wrap_content"
                 android:text="Add Other Images"
                 android:fontFamily="@font/poppins_semibold"
-                android:layout_marginTop="10dp"
+                android:layout_marginVertical="10dp"
                 />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#36A9ABAF"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:padding="10dp"
+                            android:text="Spare Wheel"
+                            android:textColor="@color/text_color"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:id="@+id/indicatorSpareWheel"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/warning" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:padding="10dp"
+                            android:text="Vehicle Interior"
+                            android:textColor="@color/text_color"
+                            android:textSize="12sp" />
+
+
+                        <ImageView
+                            android:id="@+id/indicatorVehicleInterior"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/warning" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:padding="10dp"
+                            android:text="Loading Interior"
+                            android:textColor="@color/text_color"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:id="@+id/indicatorLoadingInterior"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/warning" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:padding="10dp"
+                            android:text="Tools Picture"
+                            android:textColor="@color/text_color"
+                            android:textSize="12sp" />
+
+
+                        <ImageView
+                            android:id="@+id/indicatorToolsPicture"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/warning" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:padding="10dp"
+                            android:text="Vin Number"
+                            android:textColor="@color/text_color"
+                            android:textSize="12sp" />
+
+
+                        <ImageView
+                            android:id="@+id/indicatorVinNumber"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/warning" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0.2dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="15dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@color/text_color" />
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginVertical="5dp"
+                    android:background="@color/text_color"
+                    android:backgroundTint="@color/text_color" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/uploadImageBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:backgroundTint="@color/medium_orange"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="12dp"
+                    android:text="Add Image"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:cornerRadius="10sp"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="4dp" />
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingHorizontal="10dp"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
@@ -141,6 +305,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:visibility="gone"
                 android:paddingHorizontal="10dp"
                 android:orientation="horizontal">
 
