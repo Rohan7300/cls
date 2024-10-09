@@ -452,6 +452,9 @@ class ReturnToDaActivity : AppCompatActivity(), DeleteCallback {
                             imageUploadLevel = 5
                             updateImageUi(imageUploadLevel)
                         }
+                        else->{
+                            updateCardLayout(8)
+                        }
                     }
                 /*    when(imageUploadLevel){
 
@@ -871,6 +874,7 @@ class ReturnToDaActivity : AppCompatActivity(), DeleteCallback {
                         indicatorToolsPicture,
                         indicatorVinNumber
                     ).onEach { it.setImageDrawable(yesDrawable) }
+                    updateCardLayout(8)
                 }
 
                 else -> {

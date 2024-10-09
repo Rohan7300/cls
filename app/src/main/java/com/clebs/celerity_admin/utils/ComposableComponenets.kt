@@ -16,14 +16,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,10 +42,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.VehicleCollectionListActivity
 import com.clebs.celerity_admin.models.GetVehicleCollectionHistoryResponseItem
@@ -464,8 +473,97 @@ fun LoadingDialogComposable(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CollectionNotReadyPopUp() {
+    var isChecked by remember { mutableStateOf(false) }
+    var textReason by remember {
+        mutableStateOf("")
+    }
+    Dialog(onDismissRequest = {}) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = colorResource(id = R.color.white),
+                    shape = RoundedCornerShape(16.dp)
+                )
+                .padding(20.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.carcross),
+                        contentDescription = "Car Image",
+                        modifier = Modifier.size(45.dp),
+                        tint = colorResource(id = R.color.medium_orange)
+                    )
+                }
+                Text(
+                    "Vehicle Not Ready",
+                    color = colorResource(id = R.color.black),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            OutlinedTextField(
+                value = textReason, onValueChange = { textReason = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .padding(top = 16.dp),
+                singleLine = false,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                ),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    unfocusedBorderColor = colorResource(id = R.color.medium_orange),
+                    focusedBorderColor = colorResource(id = R.color.medium_orange)
+                ),
+                placeholder = {
+                    Text(
+                        text = "Vehicle Not Ready Reason",
+                        color = colorResource(id = R.color.grey_main),
+                        fontSize = 12.sp
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = isChecked,
+                    onCheckedChange = { isChecked = it },
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = colorResource(id = R.color.medium_orange)
+                    )
+                )
+                Text(
+                    "Are you sure you want to set vehicle as not ready.",
+                    modifier = Modifier.padding(start = 8.dp),
+                    color = colorResource(id = R.color.text_color),
+                    fontSize = 12.sp
+                )
+            }
+            Spacer(modifier = Modifier.height(15.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 fun Preview() {
-    // ReturnCollectionListItem()
+    CollectionNotReadyPopUp()
 }
+

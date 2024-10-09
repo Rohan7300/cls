@@ -74,12 +74,11 @@
                 android:textColorHint="@color/hintColor">
 
                 <AutoCompleteTextView
-                    android:id="@+id/spinnerSelectVehicle"
+                    android:id="@+id/aTvVehicleRegNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:importantForAutofill="no"
-                    android:inputType="none"
                     android:padding="12dp"
                     android:textColorHint="@color/hintColor"
                     android:textSize="13sp" />
@@ -96,6 +95,20 @@
                 android:id="@+id/errorText"
                 android:text="Direct returns to the supplier are not permitted. Please create a vehicle return request instead."
                 />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addNewVehicleBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:backgroundTint="@color/medium_orange"
+                android:fontFamily="@font/poppins_semibold"
+                android:padding="12dp"
+                android:text="Add New Vehicle"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:cornerRadius="10sp"
+                app:strokeColor="#F6F3F3"
+                app:strokeWidth="4dp" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

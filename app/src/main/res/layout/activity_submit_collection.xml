@@ -56,6 +56,7 @@
                 android:id="@+id/layout_addImages"
                 layout="@layout/add_inspection_images"
                 />
+
             <include
                 android:id="@+id/layout_returnVehicle"
                 layout="@layout/return_to_depo"
