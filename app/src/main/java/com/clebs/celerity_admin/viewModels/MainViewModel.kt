@@ -591,4 +591,18 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
                 CHangeAllocatedDAVehicle.postValue(response.body)
         }
     }
+
+    fun SaveVehicleCollectionComment(
+        supervisorId: Int,
+        vehCollectionId:Int,
+        comment:String
+    ):MutableLiveData<SucessStatusMsgResponse>{
+   return liveData {
+       val response = repo.SaveVehicleCollectionComment(supervisorId,vehCollectionId,comment)
+       if(!response.isSuccessful||response.failed)
+           emit(null)
+       else
+           emit(response.body)
+   } as MutableLiveData<SucessStatusMsgResponse>
+    }
 }

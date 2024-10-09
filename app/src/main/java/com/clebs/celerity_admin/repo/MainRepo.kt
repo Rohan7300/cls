@@ -393,4 +393,18 @@ class MainRepo(private val ApiService: ApiService) {
             ApiService.AllocatVehicleToDA(request)
         }
     }
+
+    suspend fun SaveVehicleCollectionComment(
+        supervisorId: Int,
+        vehCollectionId:Int,
+        comment:String
+    ):SimpleNetworkResponse<SucessStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.SaveVehicleCollectionComment(
+                supervisorId,
+                vehCollectionId,
+                comment
+            )
+        }
+    }
 }

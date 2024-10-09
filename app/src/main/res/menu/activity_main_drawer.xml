@@ -40,6 +40,12 @@
             android:title="Return to Depot"
             />
 
+        <item
+            android:id="@+id/changeVansLocation"
+            android:icon="@drawable/undo"
+            android:title="Change Vans Location"
+            />
+
 
         <!--        <item-->
         <!--            android:id="@+id/nav_weblogin"-->

@@ -30,6 +30,7 @@ import com.clebs.celerity_admin.models.SaveInspectionRequestBody
 import com.clebs.celerity_admin.models.SaveDefectSheetWeeklyOSMCheckRequest
 import com.clebs.celerity_admin.models.SaveVehicleBreakDownInspectionRequest
 import com.clebs.celerity_admin.models.SucessStatusMsgResponse
+import com.clebs.celerity_admin.models.VehicleAllocateTODARequestBody
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
@@ -236,4 +237,14 @@ interface ApiService {
         @Query("supervisorId") supervisorId:Int,
         @Query("includeReturned") includeReturned:Boolean
     ):Response<GetVehicleCollectionHistoryResponse>
+
+    @POST("/api/VehAllocHistories/CreateOrUpdateDAVehicleAllocation")
+    suspend fun AllocatVehicleToDA( @Body request: VehicleAllocateTODARequestBody):Response<SucessStatusMsgResponse>
+
+    @POST("/api/VehAllocHistories/SaveVehicleCollectionComment")
+    suspend fun SaveVehicleCollectionComment(
+        @Query("supervisorId") supervisorId:Int,
+        @Query("vehCollectionId") vehCollectionId:Int,
+        @Query("comment") comment:String
+    ):Response<SucessStatusMsgResponse>
 }
