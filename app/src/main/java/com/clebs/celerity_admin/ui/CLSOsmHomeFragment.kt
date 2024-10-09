@@ -46,10 +46,9 @@ class CLSOsmHomeFragment : Fragment() {
         binding.cardone.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("change_DA", "changeda")
-
             findNavController().navigate(R.id.nav_changevehcilecommon, bundle)
         }
-        binding.rl.setOnClickListener {
+        binding.cardone.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("change_DA", "changeda")
 

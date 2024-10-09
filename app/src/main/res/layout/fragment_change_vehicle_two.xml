@@ -35,13 +35,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
-                    android:layout_marginVertical="8dp"
-                 android:background="@drawable/shape_edittext_onraod_white"
-                    app:strokeWidth="2dp">
+                    android:layout_marginVertical="20dp"
+                    android:background="@drawable/shape_edittext_onraod_white"
+                app:cardCornerRadius="16dp"
+                    app:strokeColor="@color/grey_main"
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+
                         android:background="@drawable/shape_edittext_onraod_white"
                         android:animateLayoutChanges="true"
                         android:orientation="vertical">
@@ -50,8 +53,8 @@
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="6dp"
-                            android:padding="6dp"
+
+
                             app:cardCornerRadius="10dp"
                             app:cardMaxElevation="8dp"
 
@@ -68,9 +71,10 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:animateLayoutChanges="true"
-                                    android:background="@color/blue_hex"
+                                    android:background="@drawable/back_three"
                                     android:orientation="horizontal"
                                     android:padding="13dp">
+
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -122,7 +126,7 @@
                                                 android:importantForAutofill="no"
                                                 android:inputType="text"
                                                 android:padding="12dp"
-                                                android:textSize="13sp" />
+                                                android:textSize="11sp" />
 
 
                                         </com.google.android.material.textfield.TextInputLayout>
@@ -170,7 +174,7 @@
                                             android:inputType="none"
                                             android:padding="12dp"
                                             android:textColorHint="@color/hintColor"
-                                            android:textSize="13sp" />
+                                            android:textSize="11sp" />
 
                                         <TextView
                                             android:id="@+id/textview"
@@ -213,12 +217,12 @@
                             android:id="@+id/headerVehicleInformation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
+
                             android:layout_marginTop="20dp"
-                            android:layout_marginEnd="6dp"
+
                             android:animateLayoutChanges="true"
-                            android:background="@drawable/shape_bottom_nav_two"
-                            android:backgroundTint="@color/blue_hex"
+                            android:background="@drawable/back_three"
+
                             android:orientation="horizontal"
                             android:padding="13dp"
                             android:visibility="gone">
@@ -238,12 +242,14 @@
                                 android:layout_height="20dp"
                                 android:src="@drawable/cq_sdk_down_arrow_thin"
                                 android:tint="@color/white" />
+
                         </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/bodyVehicleInfo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
                             android:background="@drawable/shape_edittext_onraod_white"
                             android:animateLayoutChanges="true"
                             android:orientation="vertical"
@@ -267,7 +273,7 @@
                                     android:inputType="none"
                                     android:padding="12dp"
                                     android:textColorHint="@color/hintColor"
-                                    android:textSize="13sp" />
+                                    android:textSize="11sp" />
 
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -342,7 +348,7 @@
                                     android:inputType="none"
                                     android:padding="12dp"
                                     android:textColorHint="@color/hintColor"
-                                    android:textSize="13sp" />
+                                    android:textSize="11sp" />
 
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -382,7 +388,7 @@
                                         android:inputType="numberDecimal"
                                         android:padding="12dp"
                                         android:textColorHint="@color/hintColor"
-                                        android:textSize="13sp" />
+                                        android:textSize="11sp" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -404,7 +410,7 @@
                                         android:inputType="numberDecimal"
                                         android:padding="12dp"
                                         android:textColorHint="@color/hintColor"
-                                        android:textSize="13sp" />
+                                        android:textSize="11sp" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -427,7 +433,7 @@
                                         android:inputType="none"
                                         android:padding="12dp"
                                         android:textColorHint="@color/hintColor"
-                                        android:textSize="13sp" />
+                                        android:textSize="11sp" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -475,7 +481,7 @@
                                         android:inputType="none"
                                         android:padding="12dp"
                                         android:textColorHint="@color/hintColor"
-                                        android:textSize="13sp" />
+                                        android:textSize="11sp" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -515,8 +521,8 @@
                             android:layout_marginStart="6dp"
                             android:layout_marginTop="20dp"
                             android:layout_marginEnd="6dp"
-                            android:background="@drawable/shape_bottom_nav_two"
-                            android:backgroundTint="@color/blue_hex"
+                            android:background="@drawable/back_three"
+
                             android:orientation="horizontal"
                             android:padding="13dp"
                             android:visibility="gone">
@@ -655,7 +661,7 @@
                                     android:inputType="text"
                                     android:padding="12dp"
 
-                                    android:textSize="13sp" />
+                                    android:textSize="11sp" />
 
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -688,7 +694,7 @@
                                     android:inputType="text"
                                     android:padding="12dp"
 
-                                    android:textSize="13sp" />
+                                    android:textSize="11sp" />
 
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -712,7 +718,7 @@
                                     android:inputType="text"
                                     android:padding="12dp"
 
-                                    android:textSize="13sp" />
+                                    android:textSize="11sp" />
 
                             </com.google.android.material.textfield.TextInputLayout>
 

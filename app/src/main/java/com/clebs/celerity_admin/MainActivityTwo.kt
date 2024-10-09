@@ -100,7 +100,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         val navView: NavigationView = binding.navView
         navController = findNavController(R.id.nav_host_fragment_content_main_activity_two)
 
-
+        drawerLayout.openDrawer(GravityCompat.START)
 
 //        CoroutineScope(Dispatchers.IO).async {
 //            withContext(Dispatchers.IO) {
@@ -249,7 +249,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         when (item.itemId) {
             R.id.nav_gallery -> {
                 binding.appBarMainActivityTwo.toolbarTitle.setText("Vehicle Allocation")
-                binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
+                binding.appBarMainActivityTwo.bottomBar.visibility = View.GONE
                 binding.appBarMainActivityTwo.filter.visibility = View.GONE
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
                 navController.navigate(R.id.nav_gallery)
@@ -269,7 +269,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
 
             R.id.nav_slideshow -> {
                 binding.appBarMainActivityTwo.toolbarTitle.setText("Weekly Defects Check")
-                binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
+                binding.appBarMainActivityTwo.bottomBar.visibility = View.GONE
                 binding.appBarMainActivityTwo.filter.visibility = View.VISIBLE
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
                 navController.navigate(R.id.nav_slideshow)

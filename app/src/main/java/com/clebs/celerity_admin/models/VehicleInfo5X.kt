@@ -9,6 +9,8 @@ data class VehicleInfo5X(
     val motAndRoad: String,
     @SerializedName("MotAndRoadExist")
     val motAndRoadExist: Boolean,
+    @SerializedName("sAllowVehicleWithoutInsurance")
+    val sAllowVehicleWithoutInsurance:Boolean,
     @SerializedName("MoveRequestAlreadyExistId")
     val moveRequestAlreadyExistId: Int,
     @SerializedName("NotAvailableTicketAlreadyGenerated")

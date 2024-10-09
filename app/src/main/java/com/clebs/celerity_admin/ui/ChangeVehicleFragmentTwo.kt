@@ -22,6 +22,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.compose.material.Snackbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -51,11 +52,13 @@ import com.clebs.celerity_admin.utils.DependencyClass.crDASelectedVehicleType
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleIdDA
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleLocIdDA
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleOilLevelListIdDA
+import com.clebs.celerity_admin.utils.LottieDialog
 import com.clebs.celerity_admin.utils.OnItemClickRecyclerView
 import com.clebs.celerity_admin.utils.OnReturnVehicle
 import com.clebs.celerity_admin.utils.Onclick
 import com.clebs.celerity_admin.utils.OnclickDriver
 import com.clebs.celerity_admin.utils.Prefs
+
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
@@ -64,6 +67,11 @@ import io.clearquote.assessment.cq_sdk.models.CustomerDetails
 import io.clearquote.assessment.cq_sdk.models.InputDetails
 import io.clearquote.assessment.cq_sdk.models.UserFlowParams
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -145,7 +153,13 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
         OillevelAdapter = VehicleOilLevelAdapter(ArrayList(), this)
         binding.rvVehicleFuellevel.adapter = FuellevelAdapter
         binding.rvVehicleOillevel.adapter = OillevelAdapter
-
+        LottieDialog.show(requireActivity())
+        CoroutineScope(Dispatchers.IO).async {
+            withContext(Dispatchers.IO) {
+                delay(3000)
+                LottieDialog.dismiss()
+            }
+        }
         Observers()
 
         EditableFalse(binding.edtCompanys)
@@ -239,7 +253,7 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                 intent.putExtra("VehicleType", vehicleType)
                 intent.putExtra("BLUEMILEAGE", binding.atvAddBlueMileage.text.toString())
                 intent.putExtra("CURRENTMILEAGE", binding.atvVehicleCurrentMileage.text.toString())
-                intent.putExtra("CLIENTUNIQUEID",inspectionID)
+                intent.putExtra("CLIENTUNIQUEID", inspectionID)
                 startActivity(intent)
             } else {
                 Toast.makeText(
@@ -444,7 +458,7 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
 
             }
         })
-
+//        LottieDialog.dismiss()
     }
 
     fun showcompanylistdialog() {
@@ -810,20 +824,20 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                     binding.llselectvehiclesub.visibility = View.GONE
                     binding.llstartinspection.visibility = View.GONE
                     binding.headeruploadVehicleInformation.visibility = View.GONE
-                    binding.headerSelectVehicleOptions.setBackgroundColor(
-                        requireContext().getColor(
-                            R.color.blue_hex
-                        )
-                    )
+//                    binding.headerSelectVehicleOptions.setBackgroundColor(
+//                        requireContext().getColor(
+//                            R.color.blue_hex
+//                        )
+//                    )
 
                 } else if (binding.edtCompanys.text.isNotEmpty() && binding.spinnerSelectDA.text.isNotEmpty() && checkChMessage!!.isEmpty() && checkChMessagetwo!!.isEmpty()) {
                     binding.headerVehicleInformation.visibility = View.VISIBLE
                     binding.bodyVehicleInfo.visibility = View.VISIBLE
-                    binding.headerSelectVehicleOptions.setBackgroundColor(
-                        requireContext().getColor(
-                            R.color.greenBtn
-                        )
-                    )
+//                    binding.headerSelectVehicleOptions.setBackgroundColor(
+//                        requireContext().getColor(
+//                            R.color.greenBtn
+//                        )
+//                    )
 
                 }
 
@@ -877,7 +891,7 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
 
                     }
 
-                } else if (it.vehicleInfo.motAndRoad.equals("This Vehicle is not insured") || it.vehicleInfo.motAndRoad.equals(
+                } else if ( it.vehicleInfo.motAndRoad.equals(
                         "Road Tax is expired"
                     ) || it.vehicleInfo.motAndRoad.equals("MOT is expired") && it.vehicleInfo.vehLmId.equals(
                         DriverHomeDepotId
@@ -893,7 +907,7 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                     binding.headeruploadVehicleInformation.visibility = View.VISIBLE
                     binding.milegaetext.visibility = View.VISIBLE
 
-                } else if (it.vehicleInfo.motAndRoad.equals("This Vehicle is not insured") || it.vehicleInfo.motAndRoad.equals(
+                } else if ( it.vehicleInfo.motAndRoad.equals(
                         "Road Tax is expired"
                     ) || it.vehicleInfo.motAndRoad.equals("MOT is expired") && !it.vehicleInfo.vehLmId.equals(
                         DriverHomeDepotId
@@ -902,8 +916,9 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                     binding.tvTransfer.visibility = View.GONE
                     binding.txterrortwo?.visibility = View.VISIBLE
                     binding.txterrortwo?.text = it.vehicleInfo.motAndRoad
-                    Log.e("jackdenial1", "GetVehicleCurrentInsuranceInfo:  ", )
+                    Log.e("jackdenial1", "GetVehicleCurrentInsuranceInfo:  ")
                     binding.txterror?.visibility = View.VISIBLE
+
                     binding.txterror.setText(" Vehicle is not on the drivers location, please make a request to transfer the vehicle to driver's location first.")
                     binding.llselectvehiclesub.visibility = View.GONE
                     binding.llstartinspection.visibility = View.GONE
@@ -911,7 +926,38 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                     binding.headeruploadVehicleInformation.visibility = View.GONE
                     binding.milegaetext.visibility = View.GONE
 
-                } else if (it.vehicleInfo.motAndRoad.equals("This vehicle is not Available to Allocate, For this vehicle, a release request has already been made, but the transport team has not yet taken any action. Contact the transport team if necessary.") || it.vehicleInfo.motAndRoad.equals(
+                }
+                else if (it.vehicleInfo.motAndRoad.contains("This Vehicle is not insured") && it.vehicleInfo.sAllowVehicleWithoutInsurance.equals(false)){
+                    binding.tvTransfer.visibility = View.GONE
+                    binding.txterrortwo?.visibility = View.VISIBLE
+                    binding.txterrortwo?.text = it.vehicleInfo.motAndRoad
+                    Log.e("jackdenial1", "GetVehicleCurrentInsuranceInfo:  ")
+                    binding.txterror?.visibility = View.VISIBLE
+
+                    binding.txterror.setText(" Vehicle is not on the drivers location, please make a request to transfer the vehicle to driver's location first.")
+                    binding.llselectvehiclesub.visibility = View.GONE
+                    binding.llstartinspection.visibility = View.GONE
+                    binding.tvRelease.visibility = View.GONE
+                    binding.headeruploadVehicleInformation.visibility = View.GONE
+                    binding.milegaetext.visibility = View.GONE
+
+                }
+                else if (it.vehicleInfo.motAndRoad.contains("This Vehicle is not insured") && it.vehicleInfo.sAllowVehicleWithoutInsurance.equals(true) && it.vehicleInfo.vehLmId.equals(
+                        DriverHomeDepotId)){
+                    binding.txterrortwo?.visibility = View.VISIBLE
+                    binding.tvTransfer.visibility = View.GONE
+                    binding.txterrortwo?.text = it.vehicleInfo.motAndRoad
+                    binding.txterror?.visibility = View.VISIBLE
+                    binding.tvRelease.visibility = View.GONE
+                    binding.llselectvehiclesub.visibility = View.VISIBLE
+                    binding.llstartinspection.visibility = View.VISIBLE
+                    binding.headeruploadVehicleInformation.visibility = View.VISIBLE
+                    binding.milegaetext.visibility = View.VISIBLE
+
+
+                }
+
+                else if (it.vehicleInfo.motAndRoad.equals("This vehicle is not Available to Allocate, For this vehicle, a release request has already been made, but the transport team has not yet taken any action. Contact the transport team if necessary.") || it.vehicleInfo.motAndRoad.equals(
                         "This vehicle is currently on the road. Please return it first"
                     ) || it.vehicleInfo.motAndRoad.equals("This vehicle is restricted to allocate as this vehicle is in Garage") || it.vehicleInfo.motAndRoad.equals(
                         "This vehicle is restricted to allocate as this vehicle has status Accident"
@@ -966,8 +1012,8 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                         showAlertRelease()
                     }
 
-                } else if (!it.vehicleInfo.vehLmId.equals(DriverHomeDepotId) ) {
-                    Log.e("jackdenial", "GetVehicleCurrentInsuranceInfo:  ", )
+                } else if (!it.vehicleInfo.vehLmId.equals(DriverHomeDepotId)) {
+                    Log.e("jackdenial", "GetVehicleCurrentInsuranceInfo:  ")
                     binding.txterror.visibility = View.VISIBLE
                     binding.tvRelease.visibility = View.GONE
                     binding.txterror.setText("  Vehicle is not on the drivers location, please make a request to transfer the vehicle to driver's location first.")
@@ -993,8 +1039,7 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                         binding.tvRelease?.setOnClickListener {
                             showAlertRelease()
                         }
-                    }
-                    else if (it.vehicleInfo.motAndRoad.isNotEmpty()){
+                    } else if (it.vehicleInfo.motAndRoad.isNotEmpty()) {
                         binding.txterror?.visibility = View.VISIBLE
                         binding.txterror.setText(it.vehicleInfo.motAndRoad)
                         binding.tvRelease.visibility = View.GONE
@@ -1009,10 +1054,7 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                     }
 
 
-
-                }
-
-                else if (it.vehicleInfo.vehLmId.equals(DriverHomeDepotId) && it.vehicleInfo.motAndRoad.isNotEmpty()){
+                } else if (it.vehicleInfo.vehLmId.equals(DriverHomeDepotId) && it.vehicleInfo.motAndRoad.isNotEmpty()) {
                     binding.txterror?.visibility = View.VISIBLE
                     binding.txterror.setText(it.vehicleInfo.motAndRoad)
                     binding.tvRelease.visibility = View.GONE
@@ -1023,8 +1065,7 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
                     binding.llstartinspection.visibility = View.GONE
                     binding.headeruploadVehicleInformation.visibility = View.GONE
                     binding.milegaetext.visibility = View.GONE
-                }
-                else{
+                } else {
                     binding.txterrortwo?.visibility = View.GONE
                     binding.tvTransfer.visibility = View.GONE
                     binding.txterror?.visibility = View.GONE
@@ -1160,7 +1201,9 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
             mainViewModel.CreateVehicleReleaseReqlivedata.observe(requireActivity(), Observer {
                 if (it != null) {
                     if (it.Status == "200") {
-                   Snackbar.make(binding.scrollmain,"Release request has been created.",2000).show()
+                        Snackbar.make(binding.scrollmain, "Release request has been created.", 2000)
+                            .show()
+                        GetVehicleCurrentInsuranceInfo()
 //                        Toast.makeText(
 //                            requireContext(), "Release request is created", Toast.LENGTH_SHORT
 //                        ).show()
