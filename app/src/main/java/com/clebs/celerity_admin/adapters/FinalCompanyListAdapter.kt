@@ -7,7 +7,9 @@ import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.databinding.RecylerviewAdapterBinding
 import com.clebs.celerity_admin.models.CompanyListResponseItem
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelListItem
+import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.OnItemClickRecyclerView
+import com.clebs.celerity_admin.utils.Prefs
 
 class FinalCompanyListAdapter(
     var data: ArrayList<CompanyListResponseItem>,
@@ -21,10 +23,13 @@ class FinalCompanyListAdapter(
                 click.OnItemClickRecyclerViewClicks(
                     R.id.sp1,
                     position,
-                    item.name
+                    item.name,item.id
+
                 )
             }
             binding.tvcompany.setText(item.name)
+
+
         }
 
     }

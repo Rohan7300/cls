@@ -7,6 +7,7 @@ import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.databinding.RecylerviewAdapterBinding
 import com.clebs.celerity_admin.models.GetVehicleLocationItem
 import com.clebs.celerity_admin.models.GetvehicleOilLevelListItem
+import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleOilLevelListIdDA
 import com.clebs.celerity_admin.utils.OnItemClickRecyclerView
 
 class VehicleOilLevelAdapter(var data:ArrayList<GetvehicleOilLevelListItem>, var click:OnItemClickRecyclerView):
@@ -17,10 +18,11 @@ class VehicleOilLevelAdapter(var data:ArrayList<GetvehicleOilLevelListItem>, var
                 click.OnItemClickRecyclerViewClicks(
                     R.id.rv_vehicle_oillevel,
                     position,
-                    item.vehOilLevelName
+                    item.vehOilLevelName,item.vehOilLevelId
                 )
             }
             binding.tvcompany.setText(item.vehOilLevelName)
+
 
 //            binding.tvcompany.setOnClickListener { callback.OnItemClickRecyclerViewClicks(item,data[position]) }
         }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -27,12 +28,12 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.clebs.celerity_admin.database.CheckInspection
 import com.clebs.celerity_admin.databinding.ActivityMainTwoBinding
-import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
 import com.clebs.celerity_admin.ui.BreakDownActivity
+import com.clebs.celerity_admin.ui.ChangeVansLocationActivity
 import com.clebs.celerity_admin.ui.ReturnToDaActivity
 import com.clebs.celerity_admin.ui.ReturnVehicleListActivity
 import com.clebs.celerity_admin.ui.VanHireReturnAgreementActivity
@@ -42,14 +43,21 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Timer
 
 class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var binding: ActivityMainTwoBinding
 
-    lateinit var loadingDialog: LoadingDialog
+
     private var saveClickCounter = 0
     lateinit var resumedialog: AlertDialog
 
@@ -70,7 +78,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
 
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
-        loadingDialog = LoadingDialog(this)
+
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
         setSupportActionBar(binding.appBarMainActivityTwo.toolbar)
@@ -93,12 +101,27 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         val navView: NavigationView = binding.navView
         navController = findNavController(R.id.nav_host_fragment_content_main_activity_two)
 
+        drawerLayout.openDrawer(GravityCompat.START)
+
+//        CoroutineScope(Dispatchers.IO).async {
+//            withContext(Dispatchers.IO) {
+//                delay(5000)
+//                drawerLayout.openDrawer(GravityCompat.START)
+//                delay(3000)
+//                drawerLayout.closeDrawers()
+//            }
+//        }
+
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_weblogin
+                R.id.nav_gallery,
+                R.id.nav_slideshow,
+                R.id.nav_weblogin,
+                R.id.nav_changevehcilecommon
             ), drawerLayout
         )
 
@@ -106,14 +129,14 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         navView.setupWithNavController(navController)
 
         navView.setNavigationItemSelectedListener(this)
-/*
-        lifecycleScope.launch {
+        /*
+                lifecycleScope.launch {
 
-            if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmpty()) {
-                resumeDialog()
-            }
-        }
-*/
+                    if (!SplashActivityTwo.offlineSyncDB!!.isUserTableEmpty()) {
+                        resumeDialog()
+                    }
+                }
+        */
 
         cqSDKInitializer = CQSDKInitializer(this)
         if (!cqSDKInitializer.isCQSDKInitialized()) {
@@ -131,15 +154,17 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
 
         binding.appBarMainActivityTwo.cardone.setOnClickListener {
 
-            navController.navigate(R.id.nav_changevehcilecommon)
+
             binding.appBarMainActivityTwo.filter.visibility = View.GONE
             binding.appBarMainActivityTwo.toolbarTitle.setText("Vehicle Allocation")
+            navController.navigate(R.id.nav_gallery)
             binding.appBarMainActivityTwo.cardone.setCardBackgroundColor(
                 ContextCompat.getColor(
                     applicationContext,
-                    R.color.very_very_light
+                    R.color.blue_hex
                 )
             )
+
             binding.appBarMainActivityTwo.cardone.alpha = 1f
             binding.appBarMainActivityTwo.cardtwo.setCardBackgroundColor(
                 ContextCompat.getColor(
@@ -159,7 +184,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
             binding.appBarMainActivityTwo.cardtwo.setCardBackgroundColor(
                 ContextCompat.getColor(
                     applicationContext,
-                    R.color.very_very_light
+                    R.color.blue_hex
                 )
             )
             binding.appBarMainActivityTwo.cardtwo.alpha = 1f
@@ -225,14 +250,14 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         when (item.itemId) {
             R.id.nav_gallery -> {
                 binding.appBarMainActivityTwo.toolbarTitle.setText("Vehicle Allocation")
-                binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
+                binding.appBarMainActivityTwo.bottomBar.visibility = View.GONE
                 binding.appBarMainActivityTwo.filter.visibility = View.GONE
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
                 navController.navigate(R.id.nav_gallery)
                 binding.appBarMainActivityTwo.cardone.setCardBackgroundColor(
                     ContextCompat.getColor(
                         applicationContext,
-                        R.color.very_very_light
+                        R.color.blue_hex
                     )
                 )
                 binding.appBarMainActivityTwo.cardtwo.setCardBackgroundColor(
@@ -245,7 +270,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
 
             R.id.nav_slideshow -> {
                 binding.appBarMainActivityTwo.toolbarTitle.setText("Weekly Defects Check")
-                binding.appBarMainActivityTwo.bottomBar.visibility = View.VISIBLE
+                binding.appBarMainActivityTwo.bottomBar.visibility = View.GONE
                 binding.appBarMainActivityTwo.filter.visibility = View.VISIBLE
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
                 navController.navigate(R.id.nav_slideshow)
@@ -259,7 +284,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
                 binding.appBarMainActivityTwo.cardtwo.setCardBackgroundColor(
                     ContextCompat.getColor(
                         applicationContext,
-                        R.color.very_very_light
+                        R.color.blue_hex
                     )
                 )
             }
@@ -290,9 +315,16 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
             R.id.vehicle_breakdown -> {
                 startActivity(Intent(this, BreakDownActivity::class.java))
             }
-            R.id.return_to_da->{
+
+            R.id.return_to_da -> {
                 //startActivity(Intent(this,VanHireReturnAgreementActivity::class.java))
-                startActivity(Intent(this,ReturnToDaActivity::class.java))
+                startActivity(Intent(this, ReturnToDaActivity::class.java))
+            }
+
+            R.id.changeVansLocation -> {
+
+                startActivity(Intent(this, ChangeVansLocationActivity::class.java))
+
             }
             R.id.return_vehicle_list->{
                 //startActivity(Intent(this,VanHireReturnAgreementActivity::class.java))

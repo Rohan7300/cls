@@ -1,38 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     xmlns:tools="http://schemas.android.com/tools">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:background="@color/home_blue"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@color/home_blue_two">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             tools:context=".ui.CLSOsmHomeFragment">
 
             <TextView
                 android:id="@+id/head"
+                android:alpha="0.5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:textColor="@color/white"
-                android:paddingStart="6dp"
-                android:paddingEnd="6dp"
-                android:paddingBottom="6dp"
-android:paddingTop="16dp"
                 android:background="@color/maroon"
-                android:singleLine="true"
-                android:marqueeRepeatLimit ="marquee_forever"
+                android:ellipsize="marquee"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:scrollHorizontally="true"
-                android:textSize="12sp"
                 android:fontFamily="@font/poppins_semibold"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:paddingStart="6dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="6dp"
+                android:paddingBottom="6dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
                 android:text="Welcome to CLS OSM, you can start with below options to start your work right away , you can change vehicle Allocation , collection of the vehicle , transfer and allocation of DA's and much more get started with below following options or choose options from side menu. Good luck !."
+                android:textColor="@color/light_grey"
                 android:textIsSelectable="true"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,15 +44,17 @@ android:paddingTop="16dp"
                 android:id="@+id/llmain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+
                 android:layout_marginTop="60dp"
+
                 android:orientation="horizontal"
                 android:weightSum="2"
+                android:alpha="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/head">
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardone"
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
                     android:layout_margin="16dp"
@@ -56,18 +62,19 @@ android:paddingTop="16dp"
                     android:padding="8dp"
 
                     app:cardCornerRadius="12dp"
-                    app:strokeColor="@color/grey_main"
-                    app:strokeWidth="3dp">
+                    app:strokeColor="@color/cardbg"
+                    app:strokeWidth="1dp">
 
                     <RelativeLayout
+                        android:id="@+id/rl"
                         android:layout_width="match_parent"
-                        android:id="@+id/cardOne"
                         android:layout_height="wrap_content">
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/imageView8"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="60dp"
+
+                            android:layout_height="60dp"
                             android:layout_alignParentBottom="true"
                             android:layout_centerInParent="true"
                             android:src="@drawable/vehicleallocation" />
@@ -78,7 +85,7 @@ android:paddingTop="16dp"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
                             android:paddingBottom="10dp"
-                            android:text="Change DA"
+                            android:text="Change DA vehicle"
                             android:textColor="@color/black"
                             android:textSize="10sp"
                             android:textStyle="bold" />
@@ -96,18 +103,18 @@ android:paddingTop="16dp"
                     android:padding="8dp"
 
                     app:cardCornerRadius="12dp"
-                    app:strokeColor="@color/grey_main"
-                    app:strokeWidth="3dp">
+
+                    app:strokeColor="@color/cardbg"
+                    app:strokeWidth="1dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:id="@+id/rl"
                         android:layout_height="wrap_content">
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/imageView9"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             android:layout_alignParentBottom="true"
                             android:layout_centerInParent="true"
                             android:src="@drawable/lease" />
@@ -133,7 +140,9 @@ android:paddingTop="16dp"
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+
+                android:id="@+id/llsecond"
+                android:alpha="0.5"
                 android:orientation="horizontal"
                 android:weightSum="2"
                 app:layout_constraintTop_toBottomOf="@id/llmain">
@@ -146,8 +155,8 @@ android:paddingTop="16dp"
                     android:padding="8dp"
 
                     app:cardCornerRadius="12dp"
-                    app:strokeColor="@color/grey_main"
-                    app:strokeWidth="3dp">
+                    app:strokeColor="@color/cardbg"
+                    app:strokeWidth="1dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -155,8 +164,8 @@ android:paddingTop="16dp"
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/imageView10"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             android:layout_alignParentBottom="true"
                             android:layout_centerInParent="true"
                             android:src="@drawable/carss" />
@@ -183,10 +192,10 @@ android:paddingTop="16dp"
                     android:layout_margin="16dp"
                     android:layout_weight="1"
                     android:padding="8dp"
-
+android:id="@+id/cctransfer"
                     app:cardCornerRadius="12dp"
-                    app:strokeColor="@color/grey_main"
-                    app:strokeWidth="3dp">
+                    app:strokeColor="@color/cardbg"
+                    app:strokeWidth="1dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -194,8 +203,8 @@ android:paddingTop="16dp"
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/imageView11"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             android:layout_alignParentBottom="true"
                             android:layout_centerInParent="true"
                             android:src="@drawable/transferda" />
@@ -218,6 +227,31 @@ android:paddingTop="16dp"
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:id="@+id/llthird"
+                android:alpha="0.5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llsecond"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_margin="16dp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:text="Emergency contacts"
+                    android:gravity="center"
+                    android:backgroundTint="@color/maroon"
+                    android:background="@drawable/shape_editext_main"/>
+
+
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

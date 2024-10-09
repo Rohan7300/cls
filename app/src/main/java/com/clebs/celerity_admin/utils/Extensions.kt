@@ -3,11 +3,14 @@ package com.clebs.celerity_admin.utils
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -24,6 +27,8 @@ import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.annotation.Keep
@@ -40,6 +45,7 @@ import androidx.work.Data
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.airbnb.lottie.LottieAnimationView
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.ui.App
 import com.clebs.celerity_admin.utils.DependencyClass.VehInspectionDate
@@ -666,5 +672,59 @@ fun createBackgroundUploadRequest(inputData: Data,context: Context,case:Int){
     val workRequestId = uploadWorkRequest.id
     workManager.enqueue(uploadWorkRequest)
 }
+object LottieDialog {
+
+    private var dialog: LottieDialogFragment? = null
+
+    fun init(context: Context) {
+        // Ensure that we are initializing with an Activity context
+        if (dialog == null && context is Activity) {
+            dialog = LottieDialogFragment(context)
+        }
+    }
+
+    fun show(context: Context) {
+        if (dialog == null) {
+            init(context)
+        }
+        // Check if the context is valid and the dialog is not already showing
+        if (dialog != null && context is Activity && !context.isFinishing) {
+            if (!dialog!!.isShowing) {
+                dialog!!.show()
+            }
+        }
+    }
+
+    fun dismiss() {
+        dialog?.let {
+            if (it.isShowing) {
+                it.dismiss()
+            }
+        }
+    }
+
+    private class LottieDialogFragment(context: Context) : Dialog(context) {
+        init {
+            val wlmp: WindowManager.LayoutParams? = window?.attributes
+
+            wlmp?.gravity = Gravity.CENTER_HORIZONTAL
+            window?.attributes = wlmp
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setTitle(null)
+            setCancelable(false)
+            setOnCancelListener(null)
+
+            val view: View = LayoutInflater.from(context).inflate(R.layout.loadermain, null)
+            setContentView(view)
+
+            // Optional: Set up your LottieAnimationView here if needed
+            val animationView = view.findViewById<LottieAnimationView>(R.id.animation_view)
+            animationView.setAnimation(R.raw.my_animation) // Replace with your animation
+            animationView.loop(true)
+            animationView.playAnimation()
+        }
+    }
+}
+
 
 

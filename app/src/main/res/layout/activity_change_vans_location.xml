@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/very_very_light"
+        android:animateLayoutChanges="true"
+        tools:context=".ui.ChangeVansLocationActivity">
+
+        <ImageView
+            android:id="@+id/ivback"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/back"
+            app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/materialTextView" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/materialTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_margin="16dp"
+
+            android:layout_weight="1"
+            android:background="@drawable/shape_editext_main"
+            android:backgroundTint="@color/blue_hex"
+            android:drawableRight="@drawable/down"
+            android:drawableTint="@color/white"
+            android:padding="16dp"
+            android:text="Add Location Move Requests "
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/materialTextView"
+            android:orientation="vertical"
+            android:id="@+id/llm"
+            android:visibility="visible"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edt_layouts"
+                style="@style/LoginTextInputLayoutStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="Select VAN to Change Location *"
+                app:expandedHintEnabled="false"
+                app:hintAnimationEnabled="true"
+                app:hintTextColor="@color/black"
+                >
+
+                <EditText
+                    android:id="@+id/edt_companys"
+                    style="@style/LoginTextInputLayoutStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:editable="false"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:padding="12dp"
+                    android:textSize="13sp" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edt_layouts_two"
+                style="@style/LoginTextInputLayoutStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="Select new Working Location *"
+                app:expandedHintEnabled="false"
+                app:hintAnimationEnabled="true"
+                app:hintTextColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/edt_layouts">
+
+                <EditText
+                    android:id="@+id/edt_companys_two"
+                    style="@style/LoginTextInputLayoutStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:editable="false"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:padding="12dp"
+                    android:textSize="13sp" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edt_layouts_three"
+                style="@style/LoginTextInputLayoutStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="Select Driver*"
+                app:expandedHintEnabled="false"
+                app:hintAnimationEnabled="true"
+                app:hintTextColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/edt_layouts_four">
+
+                <EditText
+                    android:id="@+id/edt_companys_three"
+                    style="@style/LoginTextInputLayoutStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:editable="false"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:padding="12dp"
+                    android:textSize="13sp" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edt_layouts_four"
+                style="@style/LoginTextInputLayoutStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="Select People to Notify*"
+                app:expandedHintEnabled="false"
+                app:hintAnimationEnabled="true"
+                app:hintTextColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/edt_layouts_two">
+
+                <EditText
+                    android:id="@+id/edt_companys_four"
+                    style="@style/LoginTextInputLayoutStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:editable="false"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:padding="12dp"
+                    android:textSize="13sp" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/llm"
+            android:id="@+id/llm2"
+            android:visibility="visible"
+            android:padding="8dp"
+            android:background="@drawable/shape_edittext_onraod_white"
+            android:orientation="vertical"
+            android:weightSum="3"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:weightSum="2"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/maroon"
+                    android:textSize="12sp"
+                    android:text="Transfer &amp; Assign DA"/>
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_weight="1"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:weightSum="2"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/maroon"
+                    android:textSize="12sp"
+                    android:text="Transfer &amp; Relocate"/>
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:weightSum="2"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/maroon"
+                    android:textSize="12sp"
+                    android:text="Transfer &amp; return to Deop"/>
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/cancel"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_editext_main"
+            android:backgroundTint="@color/maroon"
+            android:drawableRight="@drawable/baseline_close_24"
+            android:drawableTint="@color/white"
+            android:padding="16dp"
+            android:text="Cancel "
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/save"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_editext_main"
+            android:backgroundTint="@color/green"
+            android:gravity="center"
+            android:drawableTint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="16dp"
+            android:textSize="12sp"
+            android:text="Save "
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

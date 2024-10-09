@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/very_light_orange"
-    android:backgroundTint="@color/very_light_orange"
+android:background="@color/home_blue"
     tools:context=".MainActivityTwo">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -27,6 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
+                android:text="Vehicle Allocation"
                 style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
                 android:layout_gravity="center" />
             <ImageView
@@ -54,7 +54,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 >
-            <include layout="@layout/content_main_activity_two" />
+
+                <include
+                    layout="@layout/content_main_activity_two"
+                    android:layout_height="match_parent" />
             </LinearLayout>
             <ProgressBar
                 android:id="@+id/pbnew"
@@ -78,20 +81,22 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:id="@+id/bottomBar"
-                android:background="@color/maroon"
+                android:visibility="gone"
+                android:backgroundTint="@color/very_light_orange"
+                android:background="@drawable/shape_bottom_nav_two"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardone"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_bottom_nav"
-                    android:elevation="10dp"
+                 app:cardMaxElevation="10dp"
                     android:padding="4dp"
-                    app:cardBackgroundColor="@color/very_light_orange"
+                    app:cardBackgroundColor="@color/blue_hex"
                     app:cardCornerRadius="20dp"
 
                     app:cardElevation="10dp">
@@ -106,7 +111,7 @@
                         android:textColor="@color/white" />
 
 
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardtwo"
@@ -115,11 +120,11 @@
                     android:layout_margin="8dp"
                     android:layout_marginStart="2dp"
                     android:layout_weight="1"
-                    android:alpha="0.4"
+                    android:alpha="0.2"
                     android:background="@drawable/shape_bottom_nav"
                     android:elevation="10dp"
                     android:padding="4dp"
-                    app:cardBackgroundColor="@color/darkcommentbg"
+                    app:cardBackgroundColor="@color/blue_hex"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="10dp">
 

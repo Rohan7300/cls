@@ -24,7 +24,7 @@ class SelectVehicleLocationAdapterTwo(
                 click.OnItemClickRecyclerViewClicks(
                     R.id.tvcompany,
                     item.locId,
-                    item.locationName
+                    item.locationName,item.locId
                 )
 /*                if(data.indexOf(item)!=0 && item.locationName!="ALL") {
 

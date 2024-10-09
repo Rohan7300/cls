@@ -24,6 +24,9 @@ class LoginActivityTwo : AppCompatActivity() {
 
     lateinit var ActivityLoginBinding: ActivityLoginTwoBinding
     lateinit var mainViewModel: MainViewModel
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val window = window
         val winParams = window.attributes
@@ -47,6 +50,8 @@ class LoginActivityTwo : AppCompatActivity() {
 
 
         var isPasswordVisible = false
+
+
         ActivityLoginBinding.passIcon.setOnClickListener {
             val cursorPosition = ActivityLoginBinding.edtPass.selectionEnd
             if (!isPasswordVisible) {

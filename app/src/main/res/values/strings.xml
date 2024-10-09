@@ -17,4 +17,5 @@
     <string name="CQSDKKEY"></string>
     <string name="title_activity_vehicle_collection_list">VehicleCollectionListActivity</string>
     <string name="title_activity_return_vehicle_list">ReturnVehicleListActivity</string>
+    <string name="title_activity_main_compose">MainActivityCompose</string>
 </resources>

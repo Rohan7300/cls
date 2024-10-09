@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:animateLayoutChanges="true">
 
     <ScrollView
+        android:id="@+id/scrollmain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:background="@color/home_blue_two">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:orientation="vertical">
 
             <ProgressBar
@@ -22,6 +26,7 @@
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/nested"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -29,59 +34,63 @@
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginVertical="5dp"
-                    app:cardCornerRadius="10dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginVertical="20dp"
+                    android:background="@drawable/shape_edittext_onraod_white"
+                app:cardCornerRadius="16dp"
                     app:strokeColor="@color/grey_main"
-                    app:strokeWidth="2dp">
+                    app:strokeWidth="1dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+
+                        android:background="@drawable/shape_edittext_onraod_white"
+                        android:animateLayoutChanges="true"
                         android:orientation="vertical">
 
-                        <androidx.core.widget.NestedScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-
-                        </androidx.core.widget.NestedScrollView>
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
 
+
                             app:cardCornerRadius="10dp"
-                            app:strokeColor="@color/grey_main"
+                            app:cardMaxElevation="8dp"
+
                             app:strokeWidth="2dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:animateLayoutChanges="true"
                                 android:orientation="vertical">
 
                                 <LinearLayout
                                     android:id="@+id/headerSelectVehicleOptions"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="@color/orange"
+                                    android:animateLayoutChanges="true"
+                                    android:background="@drawable/back_three"
                                     android:orientation="horizontal"
                                     android:padding="13dp">
+
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-
                                         android:text="1 . Select Vehicle Options"
                                         android:textColor="@color/white"
+                                        android:textSize="16sp"
                                         android:textStyle="bold" />
 
                                     <ImageView
                                         android:id="@+id/headerStatusIcon"
                                         android:layout_width="20dp"
                                         android:layout_height="20dp"
-                                        android:src="@drawable/cq_sdk_down_arrow_thin" />
+                                        android:src="@drawable/cq_sdk_down_arrow_thin"
+                                        android:tint="@color/white" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -117,22 +126,33 @@
                                                 android:importantForAutofill="no"
                                                 android:inputType="text"
                                                 android:padding="12dp"
-                                                android:textSize="13sp" />
+                                                android:textSize="11sp" />
 
 
                                         </com.google.android.material.textfield.TextInputLayout>
 
-                                        <androidx.recyclerview.widget.RecyclerView
-                                            android:id="@+id/sp1"
+                                        <com.google.android.material.card.MaterialCardView
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="10dp"
-                                            android:layout_marginTop="16dp"
-                                            android:layout_marginEnd="10dp"
-                                            android:visibility="gone"
-                                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                            android:layout_marginTop="4dp"
+                                            app:cardBackgroundColor="@color/light_grey"
+                                            app:cardCornerRadius="4dp"
                                             app:layout_constraintStart_toStartOf="@+id/edt_layouts"
-                                            app:layout_constraintTop_toBottomOf="@+id/edt_layouts" />
+                                            app:layout_constraintTop_toBottomOf="@+id/edt_layouts"
+                                            app:strokeColor="@color/grey_main"
+                                            app:strokeWidth="0.5dp">
+
+                                            <androidx.recyclerview.widget.RecyclerView
+                                                android:id="@+id/sp1"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginStart="8dp"
+                                                android:layout_marginEnd="8dp"
+                                                android:visibility="gone"
+                                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                                        </com.google.android.material.card.MaterialCardView>
+
                                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -154,12 +174,13 @@
                                             android:inputType="none"
                                             android:padding="12dp"
                                             android:textColorHint="@color/hintColor"
-                                            android:textSize="13sp" />
+                                            android:textSize="11sp" />
 
                                         <TextView
                                             android:id="@+id/textview"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
+                                            android:padding="7dp"
                                             android:textColor="@color/red"
                                             android:textSize="12sp"
                                             android:visibility="gone" />
@@ -168,8 +189,14 @@
                                             android:id="@+id/textviewbreakdown"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:textColor="@color/red"
+                                            android:background="@drawable/shape_editext_main"
+                                            android:backgroundTint="@color/purple"
+                                            android:padding="10dp"
+                                            android:text="Breakdown Request"
+                                            android:textAllCaps="false"
+                                            android:textColor="@color/white"
                                             android:textSize="12sp"
+                                            android:textStyle="bold"
                                             android:visibility="gone" />
                                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -190,8 +217,12 @@
                             android:id="@+id/headerVehicleInformation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/orange"
+
+                            android:layout_marginTop="20dp"
+
+                            android:animateLayoutChanges="true"
+                            android:background="@drawable/back_three"
+
                             android:orientation="horizontal"
                             android:padding="13dp"
                             android:visibility="gone">
@@ -202,19 +233,25 @@
                                 android:layout_weight="1"
                                 android:text="2. Vehicle Information"
                                 android:textColor="@color/white"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                             <ImageView
                                 android:id="@+id/headerStatusIcontw"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/cq_sdk_down_arrow_thin" />
+                                android:src="@drawable/cq_sdk_down_arrow_thin"
+                                android:tint="@color/white" />
+
                         </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/bodyVehicleInfo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:background="@drawable/shape_edittext_onraod_white"
+                            android:animateLayoutChanges="true"
                             android:orientation="vertical"
                             android:visibility="gone">
 
@@ -236,7 +273,7 @@
                                     android:inputType="none"
                                     android:padding="12dp"
                                     android:textColorHint="@color/hintColor"
-                                    android:textSize="13sp" />
+                                    android:textSize="11sp" />
 
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -262,16 +299,58 @@
                                 android:id="@+id/tvRelease"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
+                                android:layout_marginStart="13dp"
                                 android:layout_marginTop="10dp"
+                                android:layout_marginBottom="24dp"
                                 android:background="@drawable/shape_editext_main"
                                 android:backgroundTint="@color/purple"
                                 android:padding="10dp"
-                                android:text="Release vehicle"
+                                android:text="Request to Release Vehicle"
                                 android:textAllCaps="true"
                                 android:textColor="@color/white"
                                 android:textSize="10sp"
+                                android:textStyle="bold"
                                 android:visibility="gone" />
+                            <TextView
+                                android:id="@+id/tvTransfer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="13dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="24dp"
+                                android:background="@drawable/shape_editext_main"
+                                android:backgroundTint="@color/purple"
+                                android:padding="10dp"
+                                android:text="Request to Transfer"
+                                android:textAllCaps="true"
+                                android:textColor="@color/white"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:visibility="gone" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/LoginTextInputLayoutStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginVertical="10dp"
+                                android:alpha="0.5"
+                                android:hint="Select Vehicle location*"
+                                android:textColorHint="@color/hintColor">
+
+                                <EditText
+                                    android:id="@+id/spinnerSelectVehicleLocation"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:editable="false"
+                                    android:importantForAutofill="no"
+                                    android:inputType="none"
+                                    android:padding="12dp"
+                                    android:textColorHint="@color/hintColor"
+                                    android:textSize="11sp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <TextView
                                 android:id="@+id/milegaetext"
@@ -281,12 +360,14 @@
                                 android:layout_marginTop="20dp"
                                 android:layout_weight="1"
                                 android:text="Previous Record Mileage: - - - -"
-                                android:textColor="@color/text_color" />
+                                android:textColor="@color/text_color"
+                                android:visibility="gone" />
 
                             <LinearLayout
                                 android:id="@+id/llselectvehiclesub"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:animateLayoutChanges="true"
                                 android:orientation="vertical">
 
                                 <com.google.android.material.textfield.TextInputLayout
@@ -307,7 +388,7 @@
                                         android:inputType="numberDecimal"
                                         android:padding="12dp"
                                         android:textColorHint="@color/hintColor"
-                                        android:textSize="13sp" />
+                                        android:textSize="11sp" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -329,7 +410,7 @@
                                         android:inputType="numberDecimal"
                                         android:padding="12dp"
                                         android:textColorHint="@color/hintColor"
-                                        android:textSize="13sp" />
+                                        android:textSize="11sp" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -352,20 +433,34 @@
                                         android:inputType="none"
                                         android:padding="12dp"
                                         android:textColorHint="@color/hintColor"
-                                        android:textSize="13sp" />
+                                        android:textSize="11sp" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/rv_vehicle_fuellevel"
+                                <com.google.android.material.card.MaterialCardView
                                     android:layout_width="match_parent"
-                                    android:layout_height="100dp"
-                                    android:layout_marginStart="10dp"
-                                    android:layout_marginTop="16dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:overScrollMode="never"
-                                    android:visibility="gone"
-                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="4dp"
+                                    android:layout_marginEnd="8dp"
+                                    app:cardBackgroundColor="@color/light_grey"
+                                    app:cardCornerRadius="4dp"
+                                    app:strokeColor="@color/grey_main"
+                                    app:strokeWidth="0.5dp">
+
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/rv_vehicle_fuellevel"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:nestedScrollingEnabled="false"
+                                        android:overScrollMode="never"
+                                        android:scrollbars="vertical"
+                                        android:visibility="gone"
+                                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                                </com.google.android.material.card.MaterialCardView>
+
 
                                 <com.google.android.material.textfield.TextInputLayout
                                     style="@style/LoginTextInputLayoutStyle"
@@ -386,20 +481,34 @@
                                         android:inputType="none"
                                         android:padding="12dp"
                                         android:textColorHint="@color/hintColor"
-                                        android:textSize="13sp" />
+                                        android:textSize="11sp" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/rv_vehicle_oillevel"
+                                <com.google.android.material.card.MaterialCardView
                                     android:layout_width="match_parent"
-                                    android:layout_height="100dp"
-                                    android:layout_marginStart="10dp"
-                                    android:layout_marginTop="16dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:overScrollMode="never"
-                                    android:visibility="gone"
-                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="4dp"
+                                    android:layout_marginEnd="8dp"
+                                    app:cardBackgroundColor="@color/light_grey"
+                                    app:cardCornerRadius="4dp"
+                                    app:strokeColor="@color/grey_main"
+                                    app:strokeWidth="0.5dp">
+
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/rv_vehicle_oillevel"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:nestedScrollingEnabled="false"
+                                        android:overScrollMode="never"
+                                        android:scrollbars="vertical"
+                                        android:visibility="gone"
+                                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                                </com.google.android.material.card.MaterialCardView>
+
                             </LinearLayout>
 
                         </LinearLayout>
@@ -409,11 +518,14 @@
                             android:id="@+id/headeruploadVehicleInformation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/orange"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginEnd="6dp"
+                            android:background="@drawable/back_three"
+
                             android:orientation="horizontal"
                             android:padding="13dp"
-                            android:visibility="visible">
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -421,13 +533,15 @@
                                 android:layout_weight="1"
                                 android:text="3. Upload pictures"
                                 android:textColor="@color/white"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                             <ImageView
                                 android:id="@+id/headerStatusIconthree"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/cq_sdk_down_arrow_thin" />
+                                android:src="@drawable/cq_sdk_down_arrow_thin"
+                                android:tint="@color/white" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -441,34 +555,37 @@
                             android:visibility="gone">
 
                             <TextView
+                                android:id="@+id/starts"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:background="@drawable/shape_editext_main"
-                                android:backgroundTint="@color/orange"
+                                android:backgroundTint="@color/cardbg"
                                 android:drawableRight="@drawable/baseline_camera_24"
                                 android:gravity="center"
-                                android:id="@+id/starts"
                                 android:padding="10dp"
                                 android:text="Start Inspection"
                                 android:textColor="@color/white"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
+
                             <ProgressBar
+                                android:id="@+id/pbs"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/pbs"
-                                android:visibility="gone"
                                 android:layout_gravity="center"
-                                android:indeterminateTint="@color/orange"/>
+                                android:indeterminateTint="@color/orange"
+                                android:visibility="gone" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/headeruploadVehicleInformationVanhire"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/orange"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginEnd="6dp"
+                            android:background="@color/blue_hex"
                             android:orientation="horizontal"
                             android:padding="13dp"
                             android:visibility="gone">
@@ -479,6 +596,7 @@
                                 android:layout_weight="1"
                                 android:text="4. Van hire"
                                 android:textColor="@color/white"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                             <ImageView
@@ -486,6 +604,35 @@
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:src="@drawable/cq_sdk_down_arrow_thin" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/startVanHire"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/btVanHire"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity=""
+                                android:layout_marginTop="4dp"
+                                android:background="@drawable/shape_edittext"
+                                android:backgroundTint="#BE1E2D"
+                                android:drawableRight="@drawable/baseline_file_upload_24"
+                                android:drawablePadding="4dp"
+                                android:paddingStart="26dp"
+                                android:paddingTop="12dp"
+                                android:paddingEnd="26dp"
+                                android:paddingBottom="12dp"
+                                android:text="Van Hire Agreement"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
                         </LinearLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -514,7 +661,7 @@
                                     android:inputType="text"
                                     android:padding="12dp"
 
-                                    android:textSize="13sp" />
+                                    android:textSize="11sp" />
 
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -547,7 +694,7 @@
                                     android:inputType="text"
                                     android:padding="12dp"
 
-                                    android:textSize="13sp" />
+                                    android:textSize="11sp" />
 
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -571,7 +718,7 @@
                                     android:inputType="text"
                                     android:padding="12dp"
 
-                                    android:textSize="13sp" />
+                                    android:textSize="11sp" />
 
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -679,7 +826,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="20dp"
                                 android:background="@drawable/shape_edittext"
-                                android:backgroundTint="@color/orange"
+                                android:backgroundTint="@color/cardbg"
                                 android:drawablePadding="10dp"
                                 android:paddingStart="26dp"
                                 android:paddingTop="12dp"

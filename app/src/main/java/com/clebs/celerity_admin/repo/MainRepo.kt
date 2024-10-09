@@ -31,6 +31,7 @@ import com.clebs.celerity_admin.models.ReturnVehicleToDepoRequest
 import com.clebs.celerity_admin.models.SaveInspectionRequestBody
 import com.clebs.celerity_admin.models.SaveVehicleBreakDownInspectionRequest
 import com.clebs.celerity_admin.models.SucessStatusMsgResponse
+import com.clebs.celerity_admin.models.VehicleAllocateTODARequestBody
 import com.clebs.celerity_admin.models.VehicleReturnModelList
 import com.clebs.celerity_admin.models.WeekYearModel
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModel
@@ -383,6 +384,13 @@ class MainRepo(private val ApiService: ApiService) {
                 supervisorId,
                 includeReturned
             )
+        }
+    }
+
+    suspend fun CreateVehicleReleaseReq(
+        request: VehicleAllocateTODARequestBody  ): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.AllocatVehicleToDA(request)
         }
     }
 }

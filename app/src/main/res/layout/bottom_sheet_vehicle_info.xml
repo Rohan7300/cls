@@ -74,8 +74,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
 
-                app:hintAnimationEnabled="false"
                 android:hint="Select Vehicle location *"
+                app:hintAnimationEnabled="false"
                 app:hintTextColor="@color/black">
 
                 <EditText
@@ -119,15 +119,72 @@
                 app:layout_constraintTop_toBottomOf="@id/edt_layout" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edt_layout_select_vehicle"
+                style="@style/LoginTextInputLayoutStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:hint="Select new vehicle"
+                app:hintAnimationEnabled="false"
+                app:hintTextColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/tv_milegae">
+
+                <EditText
+                    android:id="@+id/edt_select_vehicle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:padding="12dp"
+
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/txterror"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/red"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/txterrortwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/red"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvRelease"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shape_editext_main"
+                android:backgroundTint="@color/purple"
+                android:padding="10dp"
+                android:text="Release vehicle"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edt_layout_select_vehicle" />
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edt_layout_two"
                 style="@style/LoginTextInputLayoutStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:hintAnimationEnabled="false"
                 android:layout_marginTop="10dp"
                 android:hint="Enter Vehicle current mileage *"
+                app:hintAnimationEnabled="false"
                 app:hintTextColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/tv_milegae">
+                app:layout_constraintTop_toBottomOf="@id/tvRelease">
 
                 <EditText
                     android:id="@+id/edt_mileage"
@@ -147,9 +204,9 @@
                 style="@style/LoginTextInputLayoutStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:hintAnimationEnabled="false"
                 android:layout_marginTop="16dp"
                 android:hint="Enter Add Blue mileage *"
+                app:hintAnimationEnabled="false"
                 app:hintTextColor="@color/black"
                 app:layout_constraintTop_toBottomOf="@id/edt_layout_two">
 
@@ -172,9 +229,9 @@
                 style="@style/LoginTextInputLayoutStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:hintAnimationEnabled="false"
                 android:layout_marginTop="16dp"
                 android:hint="Select vehicle fuel level*"
+                app:hintAnimationEnabled="false"
                 app:hintTextColor="@color/black"
                 app:layout_constraintTop_toBottomOf="@id/edt_layout_three">
 
@@ -194,8 +251,8 @@
                     android:id="@+id/rv_vehicle_fuellevel"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:overScrollMode="never"
                     android:layout_marginTop="4dp"
+                    android:overScrollMode="never"
                     android:visibility="gone"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
@@ -206,9 +263,9 @@
                 style="@style/LoginTextInputLayoutStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:hintAnimationEnabled="false"
                 android:layout_marginTop="16dp"
                 android:hint="Select vehicle oil level*"
+                app:hintAnimationEnabled="false"
                 app:hintTextColor="@color/black"
                 app:layout_constraintTop_toBottomOf="@id/edt_layout_four">
 
@@ -228,8 +285,8 @@
                     android:id="@+id/rv_vehicle_oillevel"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:overScrollMode="never"
                     android:layout_marginTop="4dp"
+                    android:overScrollMode="never"
                     android:visibility="gone"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 

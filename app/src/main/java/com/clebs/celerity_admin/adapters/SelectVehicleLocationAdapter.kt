@@ -26,7 +26,7 @@ class SelectVehicleLocationAdapter(
                 click.OnItemClickRecyclerViewClicks(
                     R.id.rv_vehicle_location,
                     position,
-                    item.locationName
+                    item.locationName,item.locId
                 )
             }
             binding.tvcompany.setText(item.locationName)

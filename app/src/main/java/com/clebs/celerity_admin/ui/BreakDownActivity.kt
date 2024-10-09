@@ -11,7 +11,7 @@ import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.adapters.DeleteCallback
 import com.clebs.celerity_admin.adapters.RequestTypeListAdapter
 import com.clebs.celerity_admin.databinding.ActivityBreakDownBinding
-import com.clebs.celerity_admin.dialogs.LoadingDialog
+
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponseItem
@@ -28,7 +28,7 @@ import okhttp3.internal.notify
 
 class BreakDownActivity : AppCompatActivity(), DeleteCallback {
     lateinit var binding: ActivityBreakDownBinding
-    private lateinit var loadingDialog: LoadingDialog
+
     private var selectedVehicleId = -1
     private var selectedDriverId = -1
     lateinit var listAdapter: RequestTypeListAdapter
@@ -42,11 +42,11 @@ class BreakDownActivity : AppCompatActivity(), DeleteCallback {
         binding = ActivityBreakDownBinding.inflate(layoutInflater)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
-        loadingDialog = LoadingDialog(this)
+
 
         mainViewModel =
             ViewModelProvider(this, MyViewModelFactory(mainRepo))[MainViewModel::class.java]
-        loadingDialog.show()
+
         mainViewModel.GetAllVehicleInspectionList()
         mainViewModel.GetAllDriversInspectionList()
         mainViewModel.GetVehicleDamageWorkingStatus()
@@ -79,7 +79,7 @@ class BreakDownActivity : AppCompatActivity(), DeleteCallback {
         if (!binding.comment.text.isNullOrEmpty())
             comment = binding.comment.text.toString()
 
-        loadingDialog.show()
+
         mainViewModel.SaveVehicleBreakDownInspectionInfo(
             SaveVehicleBreakDownInspectionRequest(
                 Comment = comment,
@@ -112,7 +112,7 @@ class BreakDownActivity : AppCompatActivity(), DeleteCallback {
 
     private fun observers() {
         mainViewModel.VehicleInspectionListLiveData.observe(this) {
-            loadingDialog.dismiss()
+
             if (it != null) {
                 val vehicleNameList = arrayListOf<String>()
                 val vehicleIdList = arrayListOf<Int>()
@@ -171,7 +171,7 @@ class BreakDownActivity : AppCompatActivity(), DeleteCallback {
         }
 
         mainViewModel.SaveVehicleBreakDownInspectionLD.observe(this) {
-            loadingDialog.dismiss()
+
             if (it != null) {
                 if (it.Status == "200") {
                     showToast("Data saved successfully", this@BreakDownActivity)
