@@ -1893,7 +1893,7 @@ class ChangeVehicleFragment : Fragment(), Onclick, OnclickDriver, OnReturnVehicl
 
             mainViewModel.CreateVehicleReleaseReq(
                 Prefs.getInstance(App.instance).vmIdReturnveh.toDouble(),
-                Prefs.getInstance(App.instance).clebUserId.toDouble()
+                Prefs.getInstance(App.instance).osmUserId.toDouble()
             )
             mainViewModel.CreateVehicleReleaseReqlivedata.observe(requireActivity(), Observer {
                 if (it != null) {

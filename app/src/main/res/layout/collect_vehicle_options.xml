@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -33,7 +34,8 @@
                 android:id="@+id/headerStatusIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/dropup" />
+                android:src="@drawable/dropup"
+                 />
         </LinearLayout>
 
         <LinearLayout
@@ -64,37 +66,59 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="10dp"
-                android:hint="Enter Vehicle RegNo."
-                android:textColorHint="@color/hintColor">
+                android:orientation="horizontal">
 
-                <AutoCompleteTextView
-                    android:id="@+id/aTvVehicleRegNo"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:importantForAutofill="no"
-                    android:padding="12dp"
-                    android:textColorHint="@color/hintColor"
-                    android:textSize="13sp" />
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="10dp"
+                    android:layout_weight="1"
+                    android:hint="Enter Vehicle RegNo."
+                    android:textColorHint="@color/hintColor">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <AutoCompleteTextView
+                        android:id="@+id/aTvVehicleRegNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:importantForAutofill="no"
+                        android:padding="12dp"
+                        android:textColorHint="@color/hintColor"
+                        android:textSize="13sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:id="@+id/checkRegNo"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#8EADAD"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="12dp"
+                    android:text="Check"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:cornerRadius="10sp"
+                    app:strokeColor="#F6F3F3"
+                    app:strokeWidth="4dp" />
+            </LinearLayout>
 
             <TextView
+                android:id="@+id/regNoResText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="10dp"
-                android:textColor="@color/red"
-                android:visibility="gone"
-                android:id="@+id/errorText"
                 android:text="Direct returns to the supplier are not permitted. Please create a vehicle return request instead."
-                />
+                android:textColor="@color/red"
+                android:visibility="gone" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/addNewVehicleBtn"
                 android:layout_width="wrap_content"

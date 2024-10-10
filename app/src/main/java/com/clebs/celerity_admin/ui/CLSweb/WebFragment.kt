@@ -8,7 +8,6 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.clebs.celerity_admin.SplashActivityTwo
 import com.clebs.celerity_admin.databinding.FragmentWebBinding
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.network.ApiService
@@ -56,7 +55,7 @@ class WebFragment : Fragment() {
         binding.web.visibility=View.GONE
         binding.pb.visibility=View.VISIBLE
         mainViewModel.GetemergencyContact(
-            Prefs.getInstance(App.instance).clebUserId.toString().toInt()
+            Prefs.getInstance(App.instance).osmUserId.toString().toInt()
         ).observe(viewLifecycleOwner, Observer {
             if (it!=null){
 

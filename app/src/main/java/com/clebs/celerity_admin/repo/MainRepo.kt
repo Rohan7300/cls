@@ -291,28 +291,31 @@ class MainRepo(private val ApiService: ApiService) {
         }
     }
 
-    suspend fun DownloadVehicleHireAgreementPDF():SimpleNetworkResponse<ResponseBody>{
+    suspend fun DownloadVehicleHireAgreementPDF(): SimpleNetworkResponse<ResponseBody> {
         return safeApiCall {
             ApiService.DownloadVehicleHireAgreementPDF()
         }
     }
-    suspend fun DownloadVehicleSignOutHireAgreementPDF():SimpleNetworkResponse<ResponseBody>{
+
+    suspend fun DownloadVehicleSignOutHireAgreementPDF(): SimpleNetworkResponse<ResponseBody> {
         return safeApiCall {
             ApiService.DownloadVehicleSignOutHireAgreementPDF()
         }
     }
-    suspend fun ReturnVehicleToDepo(request: ReturnVehicleToDepoRequest):SimpleNetworkResponse<SucessStatusMsgResponse>{
+
+    suspend fun ReturnVehicleToDepo(request: ReturnVehicleToDepoRequest): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
             ApiService.ReturnVehicleToDepo(request)
         }
     }
+
     suspend fun UploadVehAccidentPictureFile(
         userID: Int,
         date: String,
-        image:MultipartBody.Part
-    ):SimpleNetworkResponse<SucessStatusMsgResponse>{
+        image: MultipartBody.Part
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
-            ApiService.UploadVehAccidentPictureFile(userID,date,image)
+            ApiService.UploadVehAccidentPictureFile(userID, date, image)
         }
     }
 
@@ -326,48 +329,57 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun CreateVehicleReleaseReq(
         vmId: Double,
-        supervisorid:Double): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        supervisorid: Double
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
-            ApiService.CreateVehicleReleaseReq(vmId,supervisorid)
+            ApiService.CreateVehicleReleaseReq(vmId, supervisorid)
         }
     }
+
     suspend fun UploadVehSpearWheelPictureFile(
-        supervisorId:Int,
+        supervisorId: Int,
         daId: Int,
-        date:String): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        date: String
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
-            ApiService.UploadVehSpearWheelPictureFile(supervisorId,daId,date)
+            ApiService.UploadVehSpearWheelPictureFile(supervisorId, daId, date)
         }
     }
+
     suspend fun UploadVehInterierPictureFile(
-        supervisorId:Int,
+        supervisorId: Int,
         daId: Int,
-        date:String): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        date: String
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
-            ApiService.UploadVehInterierPictureFile(supervisorId,daId,date)
+            ApiService.UploadVehInterierPictureFile(supervisorId, daId, date)
         }
     }
+
     suspend fun UploadVehLoadingInteriorPictureFile(
-        supervisorId:Int,
+        supervisorId: Int,
         daId: Int,
-        date:String): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        date: String
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
-            ApiService.UploadVehLoadingInteriorPictureFile(supervisorId,daId,date)
+            ApiService.UploadVehLoadingInteriorPictureFile(supervisorId, daId, date)
         }
     }
+
     suspend fun UploadVehToolsPictureFile(
-        supervisorId:Int,
+        supervisorId: Int,
         daId: Int,
-        date:String): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        date: String
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
-            ApiService.UploadVehToolsPictureFile(supervisorId,daId,date)
+            ApiService.UploadVehToolsPictureFile(supervisorId, daId, date)
         }
     }
 
     suspend fun GetVehicleReturnHistory(
-        supervisorId:Int,
-        includeReturned:Boolean
-    ):SimpleNetworkResponse<GetVehicleReturnHistoryResponse>{
+        supervisorId: Int,
+        includeReturned: Boolean
+    ): SimpleNetworkResponse<GetVehicleReturnHistoryResponse> {
         return safeApiCall {
             ApiService.GetVehicleReturnHistory(
                 supervisorId,
@@ -375,10 +387,11 @@ class MainRepo(private val ApiService: ApiService) {
             )
         }
     }
+
     suspend fun GetVehicleCollectionHistory(
-        supervisorId:Int,
-        includeReturned:Boolean
-    ):SimpleNetworkResponse<GetVehicleCollectionHistoryResponse>{
+        supervisorId: Int,
+        includeReturned: Boolean
+    ): SimpleNetworkResponse<GetVehicleCollectionHistoryResponse> {
         return safeApiCall {
             ApiService.GetVehicleCollectionHistory(
                 supervisorId,
@@ -388,7 +401,8 @@ class MainRepo(private val ApiService: ApiService) {
     }
 
     suspend fun CreateVehicleReleaseReq(
-        request: VehicleAllocateTODARequestBody  ): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        request: VehicleAllocateTODARequestBody
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
             ApiService.AllocatVehicleToDA(request)
         }
@@ -396,14 +410,24 @@ class MainRepo(private val ApiService: ApiService) {
 
     suspend fun SaveVehicleCollectionComment(
         supervisorId: Int,
-        vehCollectionId:Int,
-        comment:String
-    ):SimpleNetworkResponse<SucessStatusMsgResponse>{
+        vehCollectionId: Int,
+        comment: String
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
         return safeApiCall {
             ApiService.SaveVehicleCollectionComment(
                 supervisorId,
                 vehCollectionId,
                 comment
+            )
+        }
+    }
+
+    suspend fun GetExistingRegIds(
+        vmRegNo: String
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.GetExistingRegIds(
+                vmRegNo
             )
         }
     }

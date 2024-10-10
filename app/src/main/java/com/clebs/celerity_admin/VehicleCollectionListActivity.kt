@@ -1,6 +1,5 @@
 package com.clebs.celerity_admin
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,16 +19,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.RadioButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,7 +30,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -64,11 +56,10 @@ import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.ui.composables.CollectionListItem
+import com.clebs.celerity_admin.ui.composables.LoadingDialogComposable
 import com.clebs.celerity_admin.ui.theme.CLSOSMTheme
-import com.clebs.celerity_admin.utils.CollectionListItem
-import com.clebs.celerity_admin.utils.LoadingDialogComposable
 import com.clebs.celerity_admin.utils.Prefs
-import com.clebs.celerity_admin.utils.ReturnCollectionListItem
 import com.clebs.celerity_admin.viewModels.MainViewModel
 
 class VehicleCollectionListActivity : ComponentActivity() {
@@ -93,7 +84,9 @@ class VehicleCollectionListActivity : ComponentActivity() {
                 ) {
                     Column {
                         VehicleCollectionList(dialogOpen = { showDialog = true })
-                        FilterDialog(showDialog = showDialog, onDismissRequest = { showDialog = false })
+                        FilterDialog(
+                            showDialog = showDialog,
+                            onDismissRequest = { showDialog = false })
                         VehicleCollectionHistory(mainViewModel, prefs = prefs)
                     }
                 }
@@ -172,10 +165,10 @@ class VehicleCollectionListActivity : ComponentActivity() {
                             }
                         }
                     }
-/*                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(selected = false, onClick = { *//*TODO*//* })
+                    /*                    Row(
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            RadioButton(selected = false, onClick = { *//*TODO*//* })
                         Text("Collect Vehicle")
 
                     }
@@ -207,28 +200,47 @@ class VehicleCollectionListActivity : ComponentActivity() {
             }
         }
     }
+
     @Composable
     fun VehicleCollectionHistory(viewModel: MainViewModel, prefs: Prefs) {
         var showLoadingDialog by remember { mutableStateOf(true) }
-        val vehReturnHistory by viewModel.GetVehicleCollectionHistory(
-            prefs.clebUserId.toInt(),
-            true
-        ).observeAsState(initial = null)
+        var shouldRefresh by remember { mutableStateOf(false) }
+        val vehReturnHistory by if (shouldRefresh) {
+            shouldRefresh = false
+            showLoadingDialog = true
+            viewModel.GetVehicleCollectionHistory(
+                prefs.osmUserId.toInt(),
+                true
+            ).observeAsState(initial = null)
+        } else {
+            viewModel.GetVehicleCollectionHistory(
+                prefs.osmUserId.toInt(),
+                true
+            ).observeAsState(initial = null)
+        }
         if (showLoadingDialog) {
             LoadingDialogComposable(showDialog = true)
         }
-        vehReturnHistory?.let {history->
+        vehReturnHistory?.let { history ->
             showLoadingDialog = false
             LazyColumn(Modifier.fillMaxSize()) {
-                items(history!!.size) {it->
-                    CollectionListItem(Modifier.fillMaxWidth(),history[it],this@VehicleCollectionListActivity)
+                items(history!!.size) { it ->
+                    CollectionListItem(
+                        Modifier.fillMaxWidth(),
+                        history[it],
+                        this@VehicleCollectionListActivity,
+                        viewModel
+                    ) {
+                        shouldRefresh = true
+                    }
                 }
             }
-        }?:run{
-            LoadingDialogComposable(false)
+        } ?: run {
+            showLoadingDialog = false
             Text("No Data Available")
         }
     }
+
     @Composable
     fun VehicleCollectionList(dialogOpen: () -> Unit) {
         Column(
@@ -261,52 +273,52 @@ class VehicleCollectionListActivity : ComponentActivity() {
                     fontSize = 14.sp,
                 )
             }
-/*            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = colorResource(id = R.color.orange))
-                    .padding(vertical = 12.dp, horizontal = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(vertical = 5.dp, horizontal = 12.dp),
-                    elevation = CardDefaults.cardElevation(8.dp)
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        TextField(value = "",
-                            onValueChange = {
+            /*            Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(color = colorResource(id = R.color.orange))
+                                .padding(vertical = 12.dp, horizontal = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                                    .padding(vertical = 5.dp, horizontal = 12.dp),
+                                elevation = CardDefaults.cardElevation(8.dp)
+                            ) {
+                                Row(
+                                    horizontalArrangement = Arrangement.Start,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    TextField(value = "",
+                                        onValueChange = {
 
-                            },
-                            placeholder = {
-                                Text(
-                                    text = "Search",
-                                    fontSize = 12.sp
+                                        },
+                                        placeholder = {
+                                            Text(
+                                                text = "Search",
+                                                fontSize = 12.sp
+                                            )
+                                        })
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.search2),
+                                        contentDescription = "Search",
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            IconButton(onClick = dialogOpen) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.sort),
+                                    contentDescription = "Search",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(20.dp)
                                 )
-                            })
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Icon(
-                            painter = painterResource(id = R.drawable.search2),
-                            contentDescription = "Search",
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                IconButton(onClick = dialogOpen) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.sort),
-                        contentDescription = "Search",
-                        tint = Color.White,
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-            }*/
+                            }
+                        }*/
         }
     }
 

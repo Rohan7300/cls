@@ -14,13 +14,10 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.View
-import android.webkit.MimeTypeMap
-import android.widget.AdapterViewFlipper
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.Data
@@ -39,7 +36,6 @@ import com.clebs.celerity_admin.utils.DependencyClass.addBlueMileage
 import com.clebs.celerity_admin.utils.DependencyClass.crrMileage
 import com.clebs.celerity_admin.utils.DependencyClass.requestTypeList
 import com.clebs.celerity_admin.utils.DependencyClass.selectedCompanyId
-import com.clebs.celerity_admin.utils.DependencyClass.selectedRequestTypeId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleFuelId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleId
 import com.clebs.celerity_admin.utils.DependencyClass.selectedVehicleLocId
@@ -48,16 +44,12 @@ import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.SignatureDialog
 import com.clebs.celerity_admin.utils.SignatureDialogListener
 import com.clebs.celerity_admin.utils.bitmapToBase64
-import com.clebs.celerity_admin.utils.contains
 import com.clebs.celerity_admin.utils.createBackgroundUploadRequest
 import com.clebs.celerity_admin.utils.getFileUri
-import com.clebs.celerity_admin.utils.getMimeType
 import com.clebs.celerity_admin.utils.showDatePickerDialog
 import com.clebs.celerity_admin.utils.showToast
 import com.clebs.celerity_admin.viewModels.MainViewModel
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -358,7 +350,7 @@ class VanHireReturnAgreementActivity : AppCompatActivity() {
                             VehCurrentOILLevelId = selectedVehicleOilLevelListId,
                             VehSelectedLocationId = selectedVehicleLocId,
                             VehType = vehType,
-                            supervisorId = prefs.clebUserId.toInt(),
+                            supervisorId = prefs.osmUserId.toInt(),
                         )
                     )
                 }

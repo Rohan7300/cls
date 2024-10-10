@@ -381,6 +381,24 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
         binding.layoutAddImages.uploadImageBtn.setOnClickListener {
             openCamera()
         }
+        binding.layoutSelectVehicleOptions.checkRegNo.setOnClickListener {
+            val regNo =binding.layoutSelectVehicleOptions.aTvVehicleRegNo.text
+            if(regNo.isBlank())
+                showToast("Please add Vehicle RegNo first!!",this@CollectVehicleFromSupplier)
+            else{
+                loadingDialog.show()
+                mainViewModel.GetExistingRegIds(regNo.toString()).observe(this@CollectVehicleFromSupplier){
+                    binding.layoutSelectVehicleOptions.regNoResText.visibility = View.VISIBLE
+                    loadingDialog.dismiss()
+                    if(it!=null){
+                        binding.layoutSelectVehicleOptions.regNoResText.text = it.Message
+                    }
+                    else{
+                        binding.layoutSelectVehicleOptions.regNoResText.text = "No information available for this registration number."
+                    }
+                }
+            }
+        }
     }
 
     private fun openCamera() {
@@ -561,7 +579,6 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
             }
 
             3 -> {
-                binding.layoutSelectVehicleOptions.errorText.visibility = View.VISIBLE
                 binding.layoutSelectVehicleOptions.bodyVehicleOptions.isVisible = true
                 binding.layoutSelectVehicleOptions.headerStatusIcon.setImageDrawable(
                     ContextCompat.getDrawable(this, R.drawable.dropup)
@@ -579,7 +596,6 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
             }
 
             4 -> {
-                binding.layoutSelectVehicleOptions.errorText.visibility = View.GONE
                 binding.layoutSelectVehicleOptions.bodyVehicleOptions.isVisible = false
                 binding.layoutSelectVehicleInformation.headerVehicleInformation.isClickable = true
                 binding.layoutSelectVehicleOptions.headerStatusIcon.setImageDrawable(
@@ -616,7 +632,6 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
             }
 
             6 -> {
-                binding.layoutSelectVehicleOptions.errorText.visibility = View.GONE
                 binding.layoutSelectVehicleOptions.bodyVehicleOptions.isVisible = false
                 binding.layoutSelectVehicleInformation.headerVehicleInformation.isClickable = true
                 binding.layoutSelectVehicleOptions.headerStatusIcon.setImageDrawable(
@@ -648,7 +663,6 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
             }
 
             8 -> {
-                binding.layoutSelectVehicleOptions.errorText.visibility = View.GONE
                 binding.layoutSelectVehicleOptions.bodyVehicleOptions.isVisible = false
                 binding.layoutSelectVehicleInformation.headerVehicleInformation.isClickable = true
                 binding.layoutSelectVehicleOptions.headerStatusIcon.setImageDrawable(

@@ -17,11 +17,8 @@ import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.RadioGroup.OnCheckedChangeListener
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,7 +27,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.Data
 import com.clebs.celerity_admin.R
@@ -38,7 +34,6 @@ import com.clebs.celerity_admin.adapters.AddFilesAdapter
 import com.clebs.celerity_admin.databinding.ActivityVanHireReturnAgreementBinding
 import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
-import com.clebs.celerity_admin.models.ReturnVehicleToDepoRequest
 import com.clebs.celerity_admin.models.VehicleAllocateTODARequestBody
 import com.clebs.celerity_admin.models.VehicleInfoXXXX
 import com.clebs.celerity_admin.network.ApiService
@@ -361,7 +356,7 @@ class VanHireChangeDAActivity : AppCompatActivity() {
                             bse64,
                             "",
                             "",
-                            prefs.clebUserId.toInt(),
+                            prefs.osmUserId.toInt(),
                             0,
                             0,
                             if (binding.vehicleAlocComment.text != null) binding.vehicleAlocComment.text.toString() else prefs.getCurrentVehicleInfo()!!.Comments

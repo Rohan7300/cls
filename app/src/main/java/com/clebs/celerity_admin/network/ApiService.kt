@@ -247,4 +247,9 @@ interface ApiService {
         @Query("vehCollectionId") vehCollectionId:Int,
         @Query("comment") comment:String
     ):Response<SucessStatusMsgResponse>
+
+    @GET("/api/VehAllocHistories/GetExistingRegIds/{vmRegNo}")
+    suspend fun GetExistingRegIds(
+        @Path("vmRegNo") vmRegNo:String
+    ):Response<SucessStatusMsgResponse>
 }

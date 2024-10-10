@@ -20,10 +20,8 @@ import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okio.BufferedSink
-import okio.source
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -58,7 +56,7 @@ class BackgroundUploadWorker(
                             TyreThreadDepthFrontOSVal = 0,
                             TyreThreadDepthRearNSVal = 0,
                             TyreThreadDepthRearOSVal = 0,
-                            UserId = Prefs.getInstance(applicationContext).clebUserId.toInt(),
+                            UserId = Prefs.getInstance(applicationContext).osmUserId.toInt(),
                             VdhAdminComment = "",
                             VdhBrakeFluidLevelId = dbDefectSheet.brakeFluidLevelID,
                             VdhCheckId = dbDefectSheet.id,
@@ -222,7 +220,7 @@ class BackgroundUploadWorker(
                     prefs.isAccidentImageUploading = true
                     val response = withContext(Dispatchers.IO) {
                         mainRepo.UploadVehAccidentPictureFile(
-                            prefs.clebUserId.toInt(),
+                            prefs.osmUserId.toInt(),
                             dateToday(),
                             partBody
                         )
@@ -234,7 +232,7 @@ class BackgroundUploadWorker(
             }else if(prefs.backgroundUploadCase==3&&!prefs.spareWheelUri.isNullOrEmpty()){
                 val response = withContext(Dispatchers.IO){
                     mainRepo.UploadVehSpearWheelPictureFile(
-                        prefs.clebUserId.toInt(),
+                        prefs.osmUserId.toInt(),
                         prefs.crrDriverId,
                         dateToday()
                     )
@@ -243,7 +241,7 @@ class BackgroundUploadWorker(
             else if(prefs.backgroundUploadCase==4&&!prefs.vehicleInteriorPicture.isNullOrEmpty()){
                 val response = withContext(Dispatchers.IO){
                     mainRepo.UploadVehInterierPictureFile(
-                        prefs.clebUserId.toInt(),
+                        prefs.osmUserId.toInt(),
                         prefs.crrDriverId,
                         dateToday()
                     )
@@ -252,7 +250,7 @@ class BackgroundUploadWorker(
             else if(prefs.backgroundUploadCase==5&&prefs.loadingInteriorPicture.isNullOrEmpty()){
                 val response = withContext(Dispatchers.IO){
                     mainRepo.UploadVehLoadingInteriorPictureFile(
-                        prefs.clebUserId.toInt(),
+                        prefs.osmUserId.toInt(),
                         prefs.crrDriverId,
                         dateToday()
                     )
@@ -261,7 +259,7 @@ class BackgroundUploadWorker(
             else if(prefs.backgroundUploadCase==6&&prefs.toolsPicture.isNullOrEmpty()){
                 val response = withContext(Dispatchers.IO){
                     mainRepo.UploadVehToolsPictureFile(
-                        prefs.clebUserId.toInt(),
+                        prefs.osmUserId.toInt(),
                         prefs.crrDriverId,
                         dateToday()
                     )

@@ -19,12 +19,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.RadioButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,7 +30,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -57,15 +53,13 @@ import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.clebs.celerity_admin.R
-import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
-import com.clebs.celerity_admin.ui.ui.theme.CLSOSMTheme
-import com.clebs.celerity_admin.utils.LoadingDialogComposable
+import com.clebs.celerity_admin.ui.composables.LoadingDialogComposable
 import com.clebs.celerity_admin.utils.Prefs
-import com.clebs.celerity_admin.utils.ReturnCollectionListItem
+import com.clebs.celerity_admin.ui.composables.ReturnCollectionListItem
 import com.clebs.celerity_admin.viewModels.MainViewModel
 
 class ReturnVehicleListActivity : ComponentActivity() {
@@ -104,7 +98,7 @@ class ReturnVehicleListActivity : ComponentActivity() {
     fun VehicleReturnList(viewModel: MainViewModel, prefs: Prefs) {
         var showLoadingDialog by remember { mutableStateOf(true) }
         val vehReturnHistory by viewModel.GetVehicleReturnHistory(
-            prefs.clebUserId.toInt(),
+            prefs.osmUserId.toInt(),
             true
         ).observeAsState(initial = null)
         if (showLoadingDialog) {

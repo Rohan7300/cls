@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.MainActivityTwo
 import com.clebs.celerity_admin.R
-import com.clebs.celerity_admin.SplashActivityTwo
 import com.clebs.celerity_admin.SubmitWeeklyDefectActivity
 import com.clebs.celerity_admin.adapters.SelectVehicleLocationAdapterTwo
 import com.clebs.celerity_admin.adapters.WeeklyDefectAdapter
@@ -66,7 +65,7 @@ class WeeklyDefectsFragment() : Fragment(),
         WeeklyDefectAdapter = WeeklyDefectAdapter(requireContext(), ArrayList(), this)
         binding.rvList.adapter = WeeklyDefectAdapter
         selectVehcilelocationadapter = SelectVehicleLocationAdapterTwo(ArrayList(), this)
-        mainViewModel.GetLocationListbyUserId(Prefs.getInstance(App.instance).clebUserId.toDouble())
+        mainViewModel.GetLocationListbyUserId(Prefs.getInstance(App.instance).osmUserId.toDouble())
         mainViewModel.GetLocationListbyUserIdLiveData.observe(viewLifecycleOwner, Observer {
             if (it != null) {
 

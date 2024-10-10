@@ -2,7 +2,6 @@ package com.clebs.celerity_admin.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.net.Uri
 import android.util.Log
 import com.clebs.celerity_admin.models.VehicleInfoXXXX
 
@@ -253,12 +252,12 @@ class Prefs(context: Context) {
         set(value) {
             sharedPreferences.edit().putString(USER_ACCESS_TOKEN, value).apply()
         }
-    var clebUserId: String
+    var osmUserId: String
         get() {
-            return sharedPreferences.getString("clebUserId", " ") ?: " "
+            return sharedPreferences.getString("osmUserId", " ") ?: " "
         }
         set(value) {
-            sharedPreferences.edit().putString("clebUserId", value).apply()
+            sharedPreferences.edit().putString("osmUserId", value).apply()
         }
     var companyId: String
         get() {

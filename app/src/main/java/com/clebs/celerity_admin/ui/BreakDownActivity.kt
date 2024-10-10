@@ -13,7 +13,6 @@ import com.clebs.celerity_admin.adapters.RequestTypeListAdapter
 import com.clebs.celerity_admin.databinding.ActivityBreakDownBinding
 
 import com.clebs.celerity_admin.factory.MyViewModelFactory
-import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponseItem
 import com.clebs.celerity_admin.models.SaveVehicleBreakDownInspectionRequest
 import com.clebs.celerity_admin.network.ApiService
@@ -24,7 +23,6 @@ import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.showDatePickerDialog
 import com.clebs.celerity_admin.utils.showToast
 import com.clebs.celerity_admin.viewModels.MainViewModel
-import okhttp3.internal.notify
 
 class BreakDownActivity : AppCompatActivity(), DeleteCallback {
     lateinit var binding: ActivityBreakDownBinding
@@ -85,7 +83,7 @@ class BreakDownActivity : AppCompatActivity(), DeleteCallback {
                 Comment = comment,
                 DriverId = selectedDriverId,
                 InspectionId = 0,
-                SuperVisorId = Prefs.getInstance(this@BreakDownActivity).clebUserId.toInt(),
+                SuperVisorId = Prefs.getInstance(this@BreakDownActivity).osmUserId.toInt(),
                 VehInspectionDate = VehInspectionDate!!,
                 VehRequestTypeIds = vehicleDamageWorkingStatusList.map { it.Id!! },
                 VmId = selectedVehicleId

@@ -15,19 +15,14 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.ScrollView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.compose.material.Snackbar
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.adapters.CompanyListAdapter
@@ -1196,7 +1191,7 @@ class ChangeVehicleFragmentTwo : Fragment(), Onclick, OnclickDriver, OnReturnVeh
 
             mainViewModel.CreateVehicleReleaseReq(
                 Prefs.getInstance(App.instance).vmIdReturnveh.toDouble(),
-                Prefs.getInstance(App.instance).clebUserId.toDouble()
+                Prefs.getInstance(App.instance).osmUserId.toDouble()
             )
             mainViewModel.CreateVehicleReleaseReqlivedata.observe(requireActivity(), Observer {
                 if (it != null) {

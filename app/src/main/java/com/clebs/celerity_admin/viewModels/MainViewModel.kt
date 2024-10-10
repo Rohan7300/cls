@@ -546,10 +546,10 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
     }
 
     fun CreateVehicleReleaseReq(
-        vmID: Double,supervisor:Double
+        vmID: Double, supervisor: Double
     ) {
         viewModelScope.launch {
-            val response = repo.CreateVehicleReleaseReq(vmID,supervisor)
+            val response = repo.CreateVehicleReleaseReq(vmID, supervisor)
             if (!response.isSuccessful || response.failed)
                 CreateVehicleReleaseReqlivedata.postValue(null)
             else
@@ -582,6 +582,7 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
                 emit(response.body)
         } as MutableLiveData<GetVehicleCollectionHistoryResponse>
     }
+
     fun ChangeALlocatedDAvehicle(request: VehicleAllocateTODARequestBody) {
         viewModelScope.launch {
             val response = repo.CreateVehicleReleaseReq(request)
@@ -594,15 +595,27 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
 
     fun SaveVehicleCollectionComment(
         supervisorId: Int,
-        vehCollectionId:Int,
-        comment:String
+        vehCollectionId: Int,
+        comment: String
+    ): MutableLiveData<SucessStatusMsgResponse> {
+        return liveData {
+            val response = repo.SaveVehicleCollectionComment(supervisorId, vehCollectionId, comment)
+            if (!response.isSuccessful || response.failed)
+                emit(null)
+            else
+                emit(response.body)
+        } as MutableLiveData<SucessStatusMsgResponse>
+    }
+
+    fun GetExistingRegIds(
+        vmRegNo:String
     ):MutableLiveData<SucessStatusMsgResponse>{
-   return liveData {
-       val response = repo.SaveVehicleCollectionComment(supervisorId,vehCollectionId,comment)
-       if(!response.isSuccessful||response.failed)
-           emit(null)
-       else
-           emit(response.body)
-   } as MutableLiveData<SucessStatusMsgResponse>
+        return liveData {
+            val response = repo.GetExistingRegIds(vmRegNo)
+            if(!response.isSuccessful || response.failed)
+                emit(null)
+            else
+                emit(response.body)
+        } as MutableLiveData<SucessStatusMsgResponse>
     }
 }

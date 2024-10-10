@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -36,21 +35,13 @@ import com.clebs.celerity_admin.ui.BreakDownActivity
 import com.clebs.celerity_admin.ui.ChangeVansLocationActivity
 import com.clebs.celerity_admin.ui.ReturnToDaActivity
 import com.clebs.celerity_admin.ui.ReturnVehicleListActivity
-import com.clebs.celerity_admin.ui.VanHireReturnAgreementActivity
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.viewModels.MainViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import io.clearquote.assessment.cq_sdk.CQSDKInitializer
 import io.clearquote.assessment.cq_sdk.singletons.PublicConstants
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Delay
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.Timer
 
 class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
 
@@ -86,7 +77,7 @@ class MainActivityTwo : AppCompatActivity(), OnNavigationItemSelectedListener {
         getSupportActionBar()?.setDisplayShowTitleEnabled(false)
         binding.appBarMainActivityTwo.toolbarTitle.setText("Vehicle Allocation")
         binding.navView.getHeaderView(0).findViewById<TextView>(R.id.textViewweb)
-            .setText("CLS OSM ID-" + Prefs.getInstance(this).clebUserId)
+            .setText("CLS OSM ID-" + Prefs.getInstance(this).osmUserId)
 //        binding.appBarMainActivityTwo.fab.setOnClickListener { view ->
 //            Snackbar.make(view, "Refreshing...", Snackbar.LENGTH_LONG)
 //                .setAction("Action", null).show()
