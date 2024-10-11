@@ -1,6 +1,7 @@
 package com.clebs.celerity_admin.utils
 
 import androidx.lifecycle.MutableLiveData
+import com.clebs.celerity_admin.models.GetVehicleCollectionHistoryResponseItem
 import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponseItem
 import com.clebs.celerity_admin.models.WeeklyDefectChecksModelItem
 
@@ -27,5 +28,9 @@ object DependencyClass {
     var requestTypeList =
         arrayListOf<GetVehicleDamageWorkingStatusResponseItem>()
     var accidentImagePos:MutableLiveData<Int> = MutableLiveData()
+    lateinit var currentVehicleCollectionHistoryResponseItem:GetVehicleCollectionHistoryResponseItem
 
+    var collectionSelectedVehicleLocId: Int = -1
+    var collectionSelectedVehicleFuelId: Int = -1
+    var collectionSelectedVehicleOilLevelListId: Int = -1
 }

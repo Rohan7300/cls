@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.CollectVehicleFromSupplier">
+    tools:context=".ui.CollectionModule.CollectVehicleFromSupplier">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,11 +50,11 @@
 
             <include
                 android:id="@+id/layoutSelectVehicleInformation"
-                layout="@layout/vehicle_information" />
+                layout="@layout/collection_vehicle_information" />
 
             <include
                 android:id="@+id/layout_addImages"
-                layout="@layout/add_inspection_images"
+                layout="@layout/collection_supplier_docs"
                 />
 
             <include

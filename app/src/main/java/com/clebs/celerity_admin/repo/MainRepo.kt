@@ -1,6 +1,7 @@
 package com.clebs.celerity_admin.repo
 
 import android.util.Log
+import com.clebs.celerity_admin.models.CollectVehicleFromSupplierRequest
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
@@ -15,6 +16,7 @@ import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleCollectionHistoryResponse
 import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
+import com.clebs.celerity_admin.models.GetVehicleIdOnCollectVehicleOptionResponse
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
 import com.clebs.celerity_admin.models.GetVehicleReturnHistoryResponse
@@ -428,6 +430,24 @@ class MainRepo(private val ApiService: ApiService) {
         return safeApiCall {
             ApiService.GetExistingRegIds(
                 vmRegNo
+            )
+        }
+    }
+    suspend fun GetVehicleIdOnCollectVehicleOption(
+        vmRegNo: String
+    ): SimpleNetworkResponse<GetVehicleIdOnCollectVehicleOptionResponse> {
+        return safeApiCall {
+            ApiService.GetVehicleIdOnCollectVehicleOption(
+                vmRegNo
+            )
+        }
+    }
+    suspend fun CollectVehicelFromSupplier(
+        request: CollectVehicleFromSupplierRequest
+    ): SimpleNetworkResponse<SucessStatusMsgResponse> {
+        return safeApiCall {
+            ApiService.CollectVehicelFromSupplier(
+                request
             )
         }
     }

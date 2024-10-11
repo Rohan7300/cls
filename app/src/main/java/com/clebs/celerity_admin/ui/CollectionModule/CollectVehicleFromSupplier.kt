@@ -1,4 +1,4 @@
-package com.clebs.celerity_admin.ui
+package com.clebs.celerity_admin.ui.CollectionModule
 
 import android.Manifest
 import android.content.Intent
@@ -14,19 +14,22 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clebs.celerity_admin.R
+import com.clebs.celerity_admin.adapters.DeleteCallback
 import com.clebs.celerity_admin.adapters.RequestTypeListAdapter
 import com.clebs.celerity_admin.databinding.ActivitySubmitCollectionBinding
-import com.clebs.celerity_admin.databinding.CollectVehicleOptionsBinding
 import com.clebs.celerity_admin.dialogs.LoadingDialog
 import com.clebs.celerity_admin.factory.MyViewModelFactory
 import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponseItem
 import com.clebs.celerity_admin.network.ApiService
 import com.clebs.celerity_admin.network.RetrofitService
 import com.clebs.celerity_admin.repo.MainRepo
+import com.clebs.celerity_admin.ui.App
+import com.clebs.celerity_admin.ui.ImageCaptureActivity
+import com.clebs.celerity_admin.ui.VanHireCollectionActivity
+import com.clebs.celerity_admin.ui.VanHireReturnAgreementActivity
 import com.clebs.celerity_admin.utils.DependencyClass
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.clientUniqueID
@@ -40,11 +43,12 @@ import io.clearquote.assessment.cq_sdk.models.InputDetails
 import io.clearquote.assessment.cq_sdk.models.UserFlowParams
 import io.clearquote.assessment.cq_sdk.models.VehicleDetails
 
-class CollectVehicleFromSupplier : AppCompatActivity() {
-    private lateinit var binding:ActivitySubmitCollectionBinding
+class CollectVehicleFromSupplier : AppCompatActivity(), DeleteCallback {
+    private lateinit var binding: ActivitySubmitCollectionBinding
     private lateinit var loadingDialog: LoadingDialog
     private lateinit var mainViewModel: MainViewModel
-
+    private var crrVmId = 0
+    private var crrMileage = 0
     lateinit var prefs: Prefs
     private var isRbRoadWorthySelected: Boolean = false
     private var isRbNotRoadWorthy: Boolean = false
@@ -71,7 +75,7 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
         setContentView(binding.root)
         val apiService = RetrofitService.getInstance().create(ApiService::class.java)
         val mainRepo = MainRepo(apiService)
-        if(DependencyClass.requestTypeList.size>0){
+        if (DependencyClass.requestTypeList.size > 0) {
             DependencyClass.requestTypeList.clear()
         }
         window.statusBarColor = resources.getColor(R.color.commentbg, null)
@@ -84,10 +88,8 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
         mainViewModel.GetAllVehicleInspectionList()
         loadingDialog.show()
 
-        /*
-        mainViewModel.GetReturnVehicleList()
         listAdapter = RequestTypeListAdapter(this@CollectVehicleFromSupplier)
-        binding.layoutReturnVehicle.selectRequestTypeRV.adapter = listAdapter*/
+        binding.layoutReturnVehicle.selectRequestTypeRV.adapter = listAdapter
         binding.layoutReturnVehicle.selectRequestTypeRV.layoutManager = LinearLayoutManager(this)
         observers()
         updateCardLayout(-1)
@@ -95,6 +97,12 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
 
     private fun observers() {
 
+        mainViewModel.mileageApiLiveData.observe(this) {
+            if (it != null) {
+                crrMileage = it.vehicleInfo.vehLastMillage
+                binding.layoutSelectVehicleInformation.previousMileage.text = crrMileage.toString()
+            }
+        }
         mainViewModel.GetCompanyListing().observe(this) {
             loadingDialog.dismiss()
             if (it != null) {
@@ -134,23 +142,23 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
                 )
             }
         }*/
-        /*        mainViewModel.GetVehicleLocationListing().observe(this) {
-                    if (it != null) {
-                        val locationIds = arrayListOf<Int>()
-                        val locationNames = arrayListOf<String>()
-                        it.map { locations ->
-                            if (locations.locId != null && locations.locationName != null) {
-                                locationIds.add(locations.locId)
-                                locationNames.add(locations.locationName)
-                            }
-                        }
-                        setSpinner(
-                            binding.layoutSelectVehicleInformation.spinnerSelectVehicleLocation,
-                            locationNames,
-                            locationIds
-                        )
+        mainViewModel.GetVehicleLocationListing().observe(this) {
+            if (it != null) {
+                val locationIds = arrayListOf<Int>()
+                val locationNames = arrayListOf<String>()
+                it.map { locations ->
+                    if (locations.locId != null && locations.locationName != null) {
+                        locationIds.add(locations.locId)
+                        locationNames.add(locations.locationName)
                     }
-                }*/
+                }
+                setSpinner(
+                    binding.layoutSelectVehicleInformation.spinnerSelectVehicleLocation,
+                    locationNames,
+                    locationIds
+                )
+            }
+        }
         mainViewModel.GetVehiclefuelListing().observeOnce(this) {
             if (it != null) {
                 val fuelIds = arrayListOf<Int>()
@@ -170,6 +178,7 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
                 )
             }
         }
+
         mainViewModel.GetVehicleOilListing().observe(this) {
             if (it != null) {
                 val oilIds = arrayListOf<Int>()
@@ -202,19 +211,19 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
                 )
             }
         }
-/*        mainViewModel.GetCurrentAllocatedDaLD.observe(this) {
-            loadingDialog.dismiss()
-            vehicleValid = false
-            if (it != null) {
-                if (it.VehicleInfo.AllowReturnSupplier != null) {
-                    binding.layoutSelectVehicleOptions.errorText.text =
-                        it.VehicleInfo.AllowReturnSupplier!!
-                    updateCardLayout(3)
-                } else {
+        /*        mainViewModel.GetCurrentAllocatedDaLD.observe(this) {
+                    loadingDialog.dismiss()
+                    vehicleValid = false
+                    if (it != null) {
+                        if (it.VehicleInfo.AllowReturnSupplier != null) {
+                            binding.layoutSelectVehicleOptions.errorText.text =
+                                it.VehicleInfo.AllowReturnSupplier!!
+                            updateCardLayout(3)
+                        } else {
 
-                }
-            }
-        }*/
+                        }
+                    }
+                }*/
     }
 
     private fun setSpinner(
@@ -244,33 +253,34 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
                                 if (vehicleValid) updateCardLayout(4)
                             }
 
-         /*                   binding.layoutSelectVehicleOptions.spinnerSelectVehicle -> {
-                                DependencyClass.selectedVehicleId = ids[position]
-                                loadingDialog.show()
-                                mainViewModel.GetCurrentAllocatedDa(
-                                    DependencyClass.selectedVehicleId.toString(), true
-                                )
-                                DependencyClass.selectedVehicleLocId = locationIds!![position]
-                                DependencyClass.selectedVehicleLocationName = locationNames!![position]
-                                binding.layoutSelectVehicleInformation.vehicleLocation.text =
-                                    locationNames[position]
-                                crrRegNo = items[position]
-                                if (!regNos.isNullOrEmpty())
-                                    DependencyClass.crrSelectedVehicleType = regNos[position]
-                            }*/
+                            /*                   binding.layoutSelectVehicleOptions.spinnerSelectVehicle -> {
+                                                   DependencyClass.selectedVehicleId = ids[position]
+                                                   loadingDialog.show()
+                                                   mainViewModel.GetCurrentAllocatedDa(
+                                                       DependencyClass.selectedVehicleId.toString(), true
+                                                   )
+                                                   DependencyClass.selectedVehicleLocId = locationIds!![position]
+                                                   DependencyClass.selectedVehicleLocationName = locationNames!![position]
+                                                   binding.layoutSelectVehicleInformation.vehicleLocation.text =
+                                                       locationNames[position]
+                                                   crrRegNo = items[position]
+                                                   if (!regNos.isNullOrEmpty())
+                                                       DependencyClass.crrSelectedVehicleType = regNos[position]
+                                               }*/
 
-                            /*            binding.layoutSelectVehicleInformation.spinnerSelectVehicleLocation -> {
-                                            selectedVehicleLocId = ids[position]
+                                        binding.layoutSelectVehicleInformation.spinnerSelectVehicleLocation -> {
+                                            //selectedVehicleLocId = ids[position]
+                                            DependencyClass.collectionSelectedVehicleLocId = ids[position]
                                             card2Update()
-                                        }*/
+                                        }
 
                             binding.layoutSelectVehicleInformation.spinnerVehicleFuelLevel -> {
-                                DependencyClass.selectedVehicleFuelId = ids[position]
+                                DependencyClass.collectionSelectedVehicleFuelId = ids[position]
                                 card2Update()
                             }
 
                             binding.layoutSelectVehicleInformation.spinnerVehicleOilLevel -> {
-                                DependencyClass.selectedVehicleOilLevelListId = ids[position]
+                                DependencyClass.collectionSelectedVehicleOilLevelListId = ids[position]
                                 card2Update()
                             }
 
@@ -282,7 +292,7 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
                                         items[position]
                                     )
                                 )
-                                Log.d("RequestTypeList","${DependencyClass.requestTypeList}")
+                                Log.d("RequestTypeList", "${DependencyClass.requestTypeList}")
                                 listAdapter.saveData(DependencyClass.requestTypeList)
                                 listAdapter.notifyItemInserted(listAdapter.itemCount)
 
@@ -296,7 +306,8 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
 
 
     private fun card2Update() {
-        if (DependencyClass.selectedVehicleLocId != -1 && DependencyClass.selectedVehicleFuelId != -1 && DependencyClass.selectedVehicleOilLevelListId != -1) {
+        if (DependencyClass.collectionSelectedVehicleLocId != -1 && DependencyClass.collectionSelectedVehicleFuelId != -1
+            && DependencyClass.collectionSelectedVehicleOilLevelListId != -1) {
             updateCardLayout(6)
         }
     }
@@ -317,19 +328,30 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
         binding.layoutAddImages.addImagesBtn.setOnClickListener {
             startInspection()
         }
-/*        binding.layoutSelectVehicleOptions.aTvVehicleRegNo.doOnTextChanged { text, start, before, count ->
-            //prefs.saveCurrentVehicleInfo(text)
-            vehicleValid = true
-            if (DependencyClass.selectedCompanyId != -1) {
-                updateCardLayout(4)
-            }
-        }*/
+        /*        binding.layoutSelectVehicleOptions.aTvVehicleRegNo.doOnTextChanged { text, start, before, count ->
+                    //prefs.saveCurrentVehicleInfo(text)
+                    vehicleValid = true
+                    if (DependencyClass.selectedCompanyId != -1) {
+                        updateCardLayout(4)
+                    }
+                }*/
         binding.layoutSelectVehicleOptions.addNewVehicleBtn.setOnClickListener {
             vehicleValid = true
-            if (DependencyClass.selectedCompanyId != -1) {
-                updateCardLayout(4)
-            }
+            val regNo = binding.layoutSelectVehicleOptions.aTvVehicleRegNo.text.toString()
+            loadingDialog.show()
+            mainViewModel.GetVehicleIdOnCollectVehicleOption(regNo)
+                .observe(this@CollectVehicleFromSupplier) {
+                    loadingDialog.dismiss()
+                    if (it != null) {
+                        crrVmId = it.VehicleId
+                    }
+                    if (DependencyClass.selectedCompanyId != -1) {
+                        updateCardLayout(4)
+                    }
+                    mainViewModel.GetVehicleLastMileageInfo(crrVmId.toString())
+                }
         }
+
         binding.layoutReturnVehicle.rbRoadWorthy.setOnClickListener {
             if (binding.layoutReturnVehicle.rbRoadWorthy.isChecked) {
                 updateCardLayout(9)
@@ -382,21 +404,22 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
             openCamera()
         }
         binding.layoutSelectVehicleOptions.checkRegNo.setOnClickListener {
-            val regNo =binding.layoutSelectVehicleOptions.aTvVehicleRegNo.text
-            if(regNo.isBlank())
-                showToast("Please add Vehicle RegNo first!!",this@CollectVehicleFromSupplier)
-            else{
+            val regNo = binding.layoutSelectVehicleOptions.aTvVehicleRegNo.text
+            if (regNo.isBlank())
+                showToast("Please add Vehicle RegNo first!!", this@CollectVehicleFromSupplier)
+            else {
                 loadingDialog.show()
-                mainViewModel.GetExistingRegIds(regNo.toString()).observe(this@CollectVehicleFromSupplier){
-                    binding.layoutSelectVehicleOptions.regNoResText.visibility = View.VISIBLE
-                    loadingDialog.dismiss()
-                    if(it!=null){
-                        binding.layoutSelectVehicleOptions.regNoResText.text = it.Message
+                mainViewModel.GetExistingRegIds(regNo.toString())
+                    .observe(this@CollectVehicleFromSupplier) {
+                        binding.layoutSelectVehicleOptions.regNoResText.visibility = View.VISIBLE
+                        loadingDialog.dismiss()
+                        if (it != null) {
+                            binding.layoutSelectVehicleOptions.regNoResText.text = it.Message
+                        } else {
+                            binding.layoutSelectVehicleOptions.regNoResText.text =
+                                "No information available for this registration number."
+                        }
                     }
-                    else{
-                        binding.layoutSelectVehicleOptions.regNoResText.text = "No information available for this registration number."
-                    }
-                }
             }
         }
     }
@@ -426,6 +449,7 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
                             imageUploadLevel = 1
                             updateImageUi(imageUploadLevel)
                         }
+
                         1 -> {
                             imageUploadLevel = 2
                             updateImageUi(imageUploadLevel)
@@ -445,7 +469,8 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
                             imageUploadLevel = 5
                             updateImageUi(imageUploadLevel)
                         }
-                        else->{
+
+                        else -> {
                             updateCardLayout(8)
                         }
                     }
@@ -525,7 +550,7 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
             showToast("Please add current Mileage", this)
             return
         }
-        startActivity(Intent(this, VanHireReturnAgreementActivity::class.java))
+        startActivity(Intent(this, VanHireCollectionActivity::class.java))
     }
 
     private fun updateCardLayout(cardToShow: Int) {
@@ -753,7 +778,8 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
                                 loadingDialog.dismiss()
                                 if (msg == "Online quote can not be created without internet") {
                                     showToast(
-                                        "Please Turn on the internet", this@CollectVehicleFromSupplier
+                                        "Please Turn on the internet",
+                                        this@CollectVehicleFromSupplier
                                     )
                                     Log.d(TAG, "CQ: Not isStarted1  $msg")
                                 } else if (msg == "Sufficient data not available to create an offline quote") {
@@ -765,7 +791,8 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
                                     Log.d(TAG, "CQSDKXX : Not isStarted2  $msg")
                                 } else if (msg == "Unable to download setting updates, Please check internet") {
                                     showToast(
-                                        "Please Turn on the internet", this@CollectVehicleFromSupplier
+                                        "Please Turn on the internet",
+                                        this@CollectVehicleFromSupplier
                                     )
                                     Log.d(TAG, "CQSDKXX : Not isStarted3  $msg")
                                 } else if (msg == "Vehicle not in fleet list") {
@@ -804,12 +831,12 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
         }
     }
 
-/*    override fun onDelete(item: GetVehicleDamageWorkingStatusResponseItem, position: Int) {
-        DependencyClass.requestTypeList.remove(item)
-        listAdapter.notifyItemRemoved(position)
-        listAdapter.saveData(DependencyClass.requestTypeList)
-    }*/
-    private fun updateImageUi(imageStage:Int) {
+    /*    override fun onDelete(item: GetVehicleDamageWorkingStatusResponseItem, position: Int) {
+            DependencyClass.requestTypeList.remove(item)
+            listAdapter.notifyItemRemoved(position)
+            listAdapter.saveData(DependencyClass.requestTypeList)
+        }*/
+    private fun updateImageUi(imageStage: Int) {
         val drawable =
             ContextCompat.getDrawable(this@CollectVehicleFromSupplier, R.drawable.warning)
         val yesDrawable =
@@ -872,5 +899,11 @@ class CollectVehicleFromSupplier : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onDelete(item: GetVehicleDamageWorkingStatusResponseItem, position: Int) {
+        DependencyClass.requestTypeList.remove(item)
+        listAdapter.notifyItemRemoved(position)
+        listAdapter.saveData(DependencyClass.requestTypeList)
     }
 }

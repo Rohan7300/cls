@@ -1,5 +1,6 @@
 package com.clebs.celerity_admin.network
 
+import com.clebs.celerity_admin.models.CollectVehicleFromSupplierRequest
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
@@ -14,6 +15,7 @@ import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleCollectionHistoryResponse
 import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
+import com.clebs.celerity_admin.models.GetVehicleIdOnCollectVehicleOptionResponse
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
 import com.clebs.celerity_admin.models.GetVehicleReturnHistoryResponse
@@ -85,7 +87,7 @@ interface ApiService {
     suspend fun GetDAEmergencyContact(@Path("userId") userId: Int): Response<String>
 
     @GET("/api/VehAllocHistories/GetVehicleLastMileageInfo/{vmId}")
-    suspend fun GetVehicleLastMileage(@Path("userId") vmID: String): Response<LastMileageInfo>
+    suspend fun GetVehicleLastMileage(@Path("vmId") vmID: String): Response<LastMileageInfo>
 
     @GET("/api/VehAllocHistories/GetISO8601WeekandYear")
     suspend fun getCurrentWeekAndYear(): Response<WeekYearModel>
@@ -174,25 +176,26 @@ interface ApiService {
     ): Response<GetCurrentAllocatedDaResponse>
 
     @GET("/api/VehAllocHistories/GetReturnVehicleList")
-    suspend fun GetReturnVehicleList():Response<GetReturnVehicleListResponse>
+    suspend fun GetReturnVehicleList(): Response<GetReturnVehicleListResponse>
 
     @GET("/api/HtmlToPDF/DownloadVehicleHireAgreementPDF")
-    suspend fun DownloadVehicleHireAgreementPDF():Response<ResponseBody>
+    suspend fun DownloadVehicleHireAgreementPDF(): Response<ResponseBody>
+
     @GET("/api/HtmlToPDF/DownloadVehicleSignOutHireAgreementPDF")
-    suspend fun DownloadVehicleSignOutHireAgreementPDF():Response<ResponseBody>
+    suspend fun DownloadVehicleSignOutHireAgreementPDF(): Response<ResponseBody>
 
     @POST("/api/VehAllocHistories/ReturnVehicleToDepo")
     suspend fun ReturnVehicleToDepo(
-        @Body request:ReturnVehicleToDepoRequest
-    ):Response<SucessStatusMsgResponse>
+        @Body request: ReturnVehicleToDepoRequest
+    ): Response<SucessStatusMsgResponse>
 
     @Multipart
     @POST("/api/Vehicle/UploadVehAccidentPictureFile")
     suspend fun UploadVehAccidentPictureFile(
         @Query("userId") userId: Int,
         @Query("date") date: String,
-        @Part image:MultipartBody.Part
-    ):Response<SucessStatusMsgResponse>
+        @Part image: MultipartBody.Part
+    ): Response<SucessStatusMsgResponse>
 
     @GET("/api/VehAllocHistories/GetVehicleCurrentInsuranceInfo/{vmId}")
     suspend fun GetVehicleCurrentInsuranceInfo(@Path("vmId") vmId: Int): Response<GetCurrentInsuranceInfo>
@@ -200,56 +203,71 @@ interface ApiService {
     @GET("/api/VehAllocHistories/CreateNewVehicleReleaseTicket")
     suspend fun CreateVehicleReleaseReq(
         @Query("vmId") vmId: Double,
-        @Query("supervisorId") supervisorId: Double):Response<SucessStatusMsgResponse>
+        @Query("supervisorId") supervisorId: Double
+    ): Response<SucessStatusMsgResponse>
 
     @POST("/api/Vehicle/UploadVehSpearWheelPictureFile")
     suspend fun UploadVehSpearWheelPictureFile(
-        @Query("supervisorId") supervisorId:Int,
-        @Query("driverId") driverId:Int,
-        @Query("date") date:String
-    ):Response<SucessStatusMsgResponse>
+        @Query("supervisorId") supervisorId: Int,
+        @Query("driverId") driverId: Int,
+        @Query("date") date: String
+    ): Response<SucessStatusMsgResponse>
+
     @POST("/api/Vehicle/UploadVehInterierPictureFile")
     suspend fun UploadVehInterierPictureFile(
-        @Query("supervisorId") supervisorId:Int,
-        @Query("driverId") driverId:Int,
-        @Query("date") date:String
-    ):Response<SucessStatusMsgResponse>
+        @Query("supervisorId") supervisorId: Int,
+        @Query("driverId") driverId: Int,
+        @Query("date") date: String
+    ): Response<SucessStatusMsgResponse>
+
     @POST("/api/Vehicle/UploadVehLoadingInteriorPictureFile")
     suspend fun UploadVehLoadingInteriorPictureFile(
-        @Query("supervisorId") supervisorId:Int,
-        @Query("driverId") driverId:Int,
-        @Query("date") date:String
-    ):Response<SucessStatusMsgResponse>
+        @Query("supervisorId") supervisorId: Int,
+        @Query("driverId") driverId: Int,
+        @Query("date") date: String
+    ): Response<SucessStatusMsgResponse>
+
     @POST("/api/Vehicle/UploadVehToolsPictureFile")
     suspend fun UploadVehToolsPictureFile(
-        @Query("supervisorId") supervisorId:Int,
-        @Query("driverId") driverId:Int,
-        @Query("date") date:String
-    ):Response<SucessStatusMsgResponse>
+        @Query("supervisorId") supervisorId: Int,
+        @Query("driverId") driverId: Int,
+        @Query("date") date: String
+    ): Response<SucessStatusMsgResponse>
 
     @GET("/api/VehAllocHistories/GetVehicleReturnHistoryById")
     suspend fun GetVehicleReturnHistory(
-        @Query("supervisorId") supervisorId:Int,
-        @Query("includeReturned") includeReturned:Boolean
-    ):Response<GetVehicleReturnHistoryResponse>
+        @Query("supervisorId") supervisorId: Int,
+        @Query("includeReturned") includeReturned: Boolean
+    ): Response<GetVehicleReturnHistoryResponse>
+
     @GET("/api/VehAllocHistories/GetVehicleCollectionHistoryById")
     suspend fun GetVehicleCollectionHistory(
-        @Query("supervisorId") supervisorId:Int,
-        @Query("includeReturned") includeReturned:Boolean
-    ):Response<GetVehicleCollectionHistoryResponse>
+        @Query("supervisorId") supervisorId: Int,
+        @Query("includeReturned") includeReturned: Boolean
+    ): Response<GetVehicleCollectionHistoryResponse>
 
     @POST("/api/VehAllocHistories/CreateOrUpdateDAVehicleAllocation")
-    suspend fun AllocatVehicleToDA( @Body request: VehicleAllocateTODARequestBody):Response<SucessStatusMsgResponse>
+    suspend fun AllocatVehicleToDA(@Body request: VehicleAllocateTODARequestBody): Response<SucessStatusMsgResponse>
 
     @POST("/api/VehAllocHistories/SaveVehicleCollectionComment")
     suspend fun SaveVehicleCollectionComment(
-        @Query("supervisorId") supervisorId:Int,
-        @Query("vehCollectionId") vehCollectionId:Int,
-        @Query("comment") comment:String
-    ):Response<SucessStatusMsgResponse>
+        @Query("supervisorId") supervisorId: Int,
+        @Query("vehCollectionId") vehCollectionId: Int,
+        @Query("comment") comment: String
+    ): Response<SucessStatusMsgResponse>
 
     @GET("/api/VehAllocHistories/GetExistingRegIds/{vmRegNo}")
     suspend fun GetExistingRegIds(
-        @Path("vmRegNo") vmRegNo:String
+        @Path("vmRegNo") vmRegNo: String
+    ): Response<SucessStatusMsgResponse>
+
+    @GET("/api/VehAllocHistories/GetVehicleIdOnCollectVehicleOption/{vmRegNo}")
+    suspend fun GetVehicleIdOnCollectVehicleOption(
+        @Path("vmRegNo") vmRegNo: String
+    ):Response<GetVehicleIdOnCollectVehicleOptionResponse>
+
+    @POST("/api/VehAllocHistories/CollectVehicleFromSupplier")
+    suspend fun CollectVehicelFromSupplier(
+        @Body request:CollectVehicleFromSupplierRequest
     ):Response<SucessStatusMsgResponse>
 }

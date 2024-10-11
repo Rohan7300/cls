@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.clebs.celerity_admin.database.User
+import com.clebs.celerity_admin.models.CollectVehicleFromSupplierRequest
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
 import com.clebs.celerity_admin.models.DriverListResponseModel
@@ -20,6 +21,7 @@ import com.clebs.celerity_admin.models.GetVehWindScreenConditionStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleCollectionHistoryResponse
 import com.clebs.celerity_admin.models.GetVehicleDamageWorkingStatusResponse
 import com.clebs.celerity_admin.models.GetVehicleFuelLevelList
+import com.clebs.celerity_admin.models.GetVehicleIdOnCollectVehicleOptionResponse
 import com.clebs.celerity_admin.models.GetVehicleLocation
 import com.clebs.celerity_admin.models.GetVehicleRequestType
 import com.clebs.celerity_admin.models.GetVehicleReturnHistoryResponse
@@ -57,6 +59,7 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
     val lDUploadVehOSMDefectChkFile: MutableLiveData<SucessStatusMsgResponse?> = MutableLiveData()
     val lDSaveDefectSheetWeeklyOSMCheck: MutableLiveData<SucessStatusMsgResponse?> =
         MutableLiveData()
+    var mileageApiLiveData:MutableLiveData<LastMileageInfo?> = MutableLiveData()
     val saveinspectionlivedata: MutableLiveData<SucessStatusMsgResponse?> = MutableLiveData()
     val isinspectiondonelivedata: MutableLiveData<ResponseInspectionDone?> = MutableLiveData()
     val otherImagesListLiveData: MutableLiveData<OtherDefectCheckImagesInDropBoxResponse?> =
@@ -618,4 +621,41 @@ class MainViewModel(private val repo: MainRepo) : ViewModel() {
                 emit(response.body)
         } as MutableLiveData<SucessStatusMsgResponse>
     }
+    fun GetVehicleIdOnCollectVehicleOption(
+        vmRegNo:String
+    ):MutableLiveData<GetVehicleIdOnCollectVehicleOptionResponse>{
+        return liveData {
+            val response = repo.GetVehicleIdOnCollectVehicleOption(vmRegNo)
+            if(!response.isSuccessful || response.failed)
+                emit(null)
+            else
+                emit(response.body)
+        } as MutableLiveData<GetVehicleIdOnCollectVehicleOptionResponse>
+    }
+
+    fun GetVehicleLastMileageInfo(vmID: String){
+        viewModelScope.launch {
+            val response = repo.GetLastMileageInfo(vmID)
+            if (response.failed) {
+                mileageApiLiveData.postValue(null)
+            }
+            if (!response.isSuccessful) {
+                mileageApiLiveData.postValue(null)
+            } else {
+                mileageApiLiveData.postValue(response.body)
+            }
+        }
+    }
+
+    fun CollectVehicelFromSupplier(request: CollectVehicleFromSupplierRequest):MutableLiveData<SucessStatusMsgResponse?>{
+        return liveData {
+            val response = repo.CollectVehicelFromSupplier(request)
+            if(response.failed||!response.isSuccessful)
+                emit(null)
+            else
+                emit(response.body)
+        } as MutableLiveData<SucessStatusMsgResponse?>
+    }
+
+
 }

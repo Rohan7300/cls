@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="5dp"
+    android:layout_marginVertical="5dp"
+    app:cardCornerRadius="10dp"
+    app:strokeColor="@color/cardbg"
+    app:strokeWidth="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/headerReturnVehicle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cardHeader"
+            android:orientation="horizontal"
+            android:padding="13dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="4. Upload Supplier Documents"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:id="@+id/headerStatusIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/dropup" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="horizontal">
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:layout_marginStart="5dp"
+    android:textSize="13sp"
+    android:text="Upload Vehicle Supplier Docs"
+    android:fontFamily="@font/poppins_semibold"
+    android:textColor="@color/text_color"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:id="@+id/checkRegNo"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#8EADAD"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="12dp"
+                    android:text="Upload"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:cornerRadius="10sp"
+                    app:strokeColor="#F6F3F3"
+                    app:strokeWidth="4dp" />
+            </LinearLayout>
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+            android:layout_margin="10dp"
+                android:hint="Additional Information"
+                android:textColorHint="@color/hintColor">
+
+                <AutoCompleteTextView
+                    android:id="@+id/atvVehicleCurrentMileage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    android:padding="12dp"
+                    android:textColorHint="@color/hintColor"
+                    android:textSize="13sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <CheckBox
+                android:id="@+id/rbNotRoadWorthy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_margin="10dp"
+                android:text="Tick to Upload Vehicle Defect Images!" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/selectRequestTypeRV"
+                android:layout_margin="10dp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:gravity="center">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/returnVehicleBtn"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/cardHeader"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="10dp"
+                    android:text="Return Vehicle"
+                    android:textColor="@color/cardbg"
+                    app:cornerRadius="12sp"
+                    app:icon="@drawable/steeringwheel"
+                    app:iconSize="25dp"
+                    app:iconTint="@color/cardbg"
+                    app:strokeColor="@color/cardbg"
+                    app:strokeWidth="1dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

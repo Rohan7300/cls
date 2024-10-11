@@ -1,7 +1,6 @@
 package com.clebs.celerity_admin.ui.composables
 
 import android.content.Intent
-import android.service.autofill.SaveCallback
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -47,7 +46,8 @@ import androidx.compose.ui.window.Dialog
 import com.clebs.celerity_admin.R
 import com.clebs.celerity_admin.VehicleCollectionListActivity
 import com.clebs.celerity_admin.models.GetVehicleCollectionHistoryResponseItem
-import com.clebs.celerity_admin.ui.CollectVehicleFromSupplier
+import com.clebs.celerity_admin.ui.CollectionModule.CollectVehicleFromSupplier
+import com.clebs.celerity_admin.utils.DependencyClass.currentVehicleCollectionHistoryResponseItem
 import com.clebs.celerity_admin.utils.Prefs
 import com.clebs.celerity_admin.utils.convertDateFormat
 import com.clebs.celerity_admin.utils.showToast
@@ -206,6 +206,7 @@ fun CollectionListItem(
                 Spacer(modifier = Modifier.width(10.dp))
                 Button(
                     onClick = {
+                        currentVehicleCollectionHistoryResponseItem  =item
                         context.startActivity(
                             Intent(
                                 context,
