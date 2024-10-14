@@ -1,5 +1,6 @@
 package com.clebs.celerity_admin.network
 
+import androidx.work.ListenableWorker.Result.Success
 import com.clebs.celerity_admin.models.CollectVehicleFromSupplierRequest
 import com.clebs.celerity_admin.models.CompanyListResponse
 import com.clebs.celerity_admin.models.DDAMandateModel
@@ -270,4 +271,13 @@ interface ApiService {
     suspend fun CollectVehicelFromSupplier(
         @Body request:CollectVehicleFromSupplierRequest
     ):Response<SucessStatusMsgResponse>
+
+    @Multipart
+    @POST("/api/Vehicle/UploadVehSupplierPictureFile")
+    suspend fun UploadVehSupplierPictureFile(
+        @Query("userId") userId: Int,
+        @Query("date") date:String,
+        @Part image:MultipartBody.Part
+    ):Response<SucessStatusMsgResponse>
+
 }

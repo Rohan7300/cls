@@ -54,13 +54,10 @@
 
             <include
                 android:id="@+id/layout_addImages"
-                layout="@layout/collection_supplier_docs"
+                layout="@layout/collection_inspection_images"
                 />
 
-            <include
-                android:id="@+id/layout_returnVehicle"
-                layout="@layout/return_to_depo"
-                />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

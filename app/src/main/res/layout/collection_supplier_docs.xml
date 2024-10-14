@@ -3,11 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="5dp"
-    android:layout_marginVertical="5dp"
-    app:cardCornerRadius="10dp"
+    app:cardCornerRadius="0dp"
     app:strokeColor="@color/cardbg"
-    app:strokeWidth="2dp">
+    app:strokeWidth="0.5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,22 +43,34 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:orientation="horizontal">
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:layout_marginStart="5dp"
-    android:textSize="13sp"
-    android:text="Upload Vehicle Supplier Docs"
-    android:fontFamily="@font/poppins_semibold"
-    android:textColor="@color/text_color"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="5dp"
+                        android:text="Upload Vehicle Supplier Docs"
+                        android:textColor="@color/text_color"
+                        android:textSize="13sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/supplierdocRV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/uploadSupplierDocsBtn"
                     android:layout_width="wrap_content"
-                    android:id="@+id/checkRegNo"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:backgroundTint="#8EADAD"
@@ -75,12 +85,11 @@
             </LinearLayout>
 
 
-
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-            android:layout_margin="10dp"
+                android:layout_margin="10dp"
                 android:hint="Additional Information"
                 android:textColorHint="@color/hintColor">
 
@@ -99,19 +108,61 @@
 
 
             <CheckBox
-                android:id="@+id/rbNotRoadWorthy"
+                android:id="@+id/checkboxUploadAccidentImages"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:layout_margin="10dp"
+                android:padding="5dp"
                 android:text="Tick to Upload Vehicle Defect Images!" />
-            <androidx.recyclerview.widget.RecyclerView
+
+
+            <LinearLayout
+                android:id="@+id/accidentImageSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:id="@+id/selectRequestTypeRV"
-                android:layout_margin="10dp"
-                />
+                android:layout_marginHorizontal="10dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="visible">
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical"
+    >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:layout_weight="1"
+                    android:text="Upload Vehicle Supplier Docs"
+                    android:textColor="@color/text_color"
+                    android:textSize="13sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/accidentImageRV"
+        android:layout_width="match_parent"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/uploadAccidentImagesBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#8EADAD"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="12dp"
+                    android:text="Upload"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:cornerRadius="10sp"
+                    app:strokeColor="#F6F3F3"
+                    app:strokeWidth="4dp" />
+
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -119,20 +170,21 @@
                 android:gravity="center">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/returnVehicleBtn"
-                    android:visibility="gone"
+                    android:id="@+id/saveVehicleInfoBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/cardHeader"
+                    android:backgroundTint="@color/medium_orange"
                     android:fontFamily="@font/poppins_semibold"
                     android:padding="10dp"
-                    android:text="Return Vehicle"
-                    android:textColor="@color/cardbg"
+                    android:text="Save Vehicle Information"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:visibility="visible"
                     app:cornerRadius="12sp"
-                    app:icon="@drawable/steeringwheel"
-                    app:iconSize="25dp"
-                    app:iconTint="@color/cardbg"
-                    app:strokeColor="@color/cardbg"
+                    app:icon="@drawable/check"
+                    app:iconSize="20dp"
+                    app:iconTint="@color/white"
+                    app:strokeColor="@color/white"
                     app:strokeWidth="1dp" />
             </LinearLayout>
         </LinearLayout>

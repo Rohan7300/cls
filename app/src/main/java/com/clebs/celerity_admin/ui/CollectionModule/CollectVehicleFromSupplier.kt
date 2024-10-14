@@ -89,8 +89,8 @@ class CollectVehicleFromSupplier : AppCompatActivity(), DeleteCallback {
         loadingDialog.show()
 
         listAdapter = RequestTypeListAdapter(this@CollectVehicleFromSupplier)
-        binding.layoutReturnVehicle.selectRequestTypeRV.adapter = listAdapter
-        binding.layoutReturnVehicle.selectRequestTypeRV.layoutManager = LinearLayoutManager(this)
+        //binding.layoutReturnVehicle.selectRequestTypeRV.adapter = listAdapter
+        //binding.layoutReturnVehicle.selectRequestTypeRV.layoutManager = LinearLayoutManager(this)
         observers()
         updateCardLayout(-1)
     }
@@ -193,7 +193,7 @@ class CollectVehicleFromSupplier : AppCompatActivity(), DeleteCallback {
                     binding.layoutSelectVehicleInformation.spinnerVehicleOilLevel, oilNames, oilIds
                 )
             }
-        }
+        }  /*
         mainViewModel.GetVehicleDamageWorkingStatus()
         mainViewModel.VehicleDamageWorkingStatusLD.observe(this) {
             if (it != null) {
@@ -211,7 +211,7 @@ class CollectVehicleFromSupplier : AppCompatActivity(), DeleteCallback {
                 )
             }
         }
-        /*        mainViewModel.GetCurrentAllocatedDaLD.observe(this) {
+         mainViewModel.GetCurrentAllocatedDaLD.observe(this) {
                     loadingDialog.dismiss()
                     vehicleValid = false
                     if (it != null) {
@@ -284,7 +284,7 @@ class CollectVehicleFromSupplier : AppCompatActivity(), DeleteCallback {
                                 card2Update()
                             }
 
-                            binding.layoutReturnVehicle.spinnerRequestType -> {
+       /*                     binding.layoutReturnVehicle.spinnerRequestType -> {
                                 DependencyClass.selectedRequestTypeId = ids[position]
                                 DependencyClass.requestTypeList.add(
                                     GetVehicleDamageWorkingStatusResponseItem(
@@ -296,7 +296,7 @@ class CollectVehicleFromSupplier : AppCompatActivity(), DeleteCallback {
                                 listAdapter.saveData(DependencyClass.requestTypeList)
                                 listAdapter.notifyItemInserted(listAdapter.itemCount)
 
-                            }
+                            }*/
                         }
                     }
                 }
@@ -328,6 +328,9 @@ class CollectVehicleFromSupplier : AppCompatActivity(), DeleteCallback {
         binding.layoutAddImages.addImagesBtn.setOnClickListener {
             startInspection()
         }
+        binding.layoutAddImages.nextBtn.setOnClickListener {
+            startActivity(Intent(this,VanHireCollectionActivity::class.java))
+        }
         /*        binding.layoutSelectVehicleOptions.aTvVehicleRegNo.doOnTextChanged { text, start, before, count ->
                     //prefs.saveCurrentVehicleInfo(text)
                     vehicleValid = true
@@ -351,8 +354,13 @@ class CollectVehicleFromSupplier : AppCompatActivity(), DeleteCallback {
                     mainViewModel.GetVehicleLastMileageInfo(crrVmId.toString())
                 }
         }
+/*        binding.layoutSupplierImages.checkboxUploadAccidentImages.setOnClickListener {
+            if(binding.layoutSupplierImages.checkboxUploadAccidentImages.isChecked){
 
-        binding.layoutReturnVehicle.rbRoadWorthy.setOnClickListener {
+            }
+        }*/
+
+/*        binding.layoutReturnVehicle.rbRoadWorthy.setOnClickListener {
             if (binding.layoutReturnVehicle.rbRoadWorthy.isChecked) {
                 updateCardLayout(9)
                 isRbRoadWorthySelected = true
@@ -378,7 +386,7 @@ class CollectVehicleFromSupplier : AppCompatActivity(), DeleteCallback {
             } else {
                 showToast("Please select road worthiness first!!", this@CollectVehicleFromSupplier)
             }
-        }
+        }*/
 
         /*        binding.layoutAddImages.addSpareWheelImageBtn.setOnClickListener {
                     imageUploadLevel = 1
@@ -568,11 +576,11 @@ class CollectVehicleFromSupplier : AppCompatActivity(), DeleteCallback {
                     ContextCompat.getDrawable(this, R.drawable.dropdown)
                 )
 
-                binding.layoutReturnVehicle.body.isVisible = false
-                binding.layoutReturnVehicle.headerReturnVehicle.isClickable = false
-                binding.layoutReturnVehicle.headerStatusIcon.setImageDrawable(
+              /*  binding.layoutSupplierImages.body.isVisible = false
+                binding.layoutSupplierImages.headerReturnVehicle.isClickable = false
+                binding.layoutSupplierImages.headerStatusIcon.setImageDrawable(
                     ContextCompat.getDrawable(this, R.drawable.dropdown)
-                )
+                )*/
             }
 
             0 -> {
@@ -672,20 +680,20 @@ class CollectVehicleFromSupplier : AppCompatActivity(), DeleteCallback {
                 binding.layoutAddImages.headerAddInspectionImages.isClickable = true
             }
 
-            7 -> {
-                if (binding.layoutReturnVehicle.body.isVisible) {
+/*            7 -> {
+                if (binding.layoutSupplierImages.body.isVisible) {
 
-                    binding.layoutReturnVehicle.body.isVisible = false
-                    binding.layoutReturnVehicle.headerStatusIcon.setImageDrawable(
+                    binding.layoutSupplierImages.body.isVisible = false
+                    binding.layoutSupplierImages.headerStatusIcon.setImageDrawable(
                         ContextCompat.getDrawable(this, R.drawable.dropdown)
                     )
                 } else {
-                    binding.layoutReturnVehicle.body.isVisible = true
-                    binding.layoutReturnVehicle.headerStatusIcon.setImageDrawable(
+                    binding.layoutSupplierImages.body.isVisible = true
+                    binding.layoutSupplierImages.headerStatusIcon.setImageDrawable(
                         ContextCompat.getDrawable(this, R.drawable.dropup)
                     )
                 }
-            }
+            }*/
 
             8 -> {
                 binding.layoutSelectVehicleOptions.bodyVehicleOptions.isVisible = false
@@ -704,26 +712,27 @@ class CollectVehicleFromSupplier : AppCompatActivity(), DeleteCallback {
                 binding.layoutAddImages.headerStatusIcon.setImageDrawable(
                     ContextCompat.getDrawable(this, R.drawable.dropdown)
                 )
-
-                binding.layoutReturnVehicle.headerReturnVehicle.isClickable = true
-                binding.layoutReturnVehicle.body.isVisible = true
-                binding.layoutReturnVehicle.headerStatusIcon.setImageDrawable(
+                binding.layoutAddImages.nextBtn.visibility = View.VISIBLE
+  /*              binding.layoutSupplierImages.headerReturnVehicle.isClickable = true
+                binding.layoutSupplierImages.body.isVisible = true
+                binding.layoutSupplierImages.headerStatusIcon.setImageDrawable(
                     ContextCompat.getDrawable(this, R.drawable.dropup)
-                )
+                )*/
             }
 
             9 -> {
                 updateCardLayout(8)
-                binding.layoutReturnVehicle.tilSpinnerRequestType.visibility = View.GONE
-                binding.layoutReturnVehicle.selectRequestTypeRV.visibility = View.GONE
-                binding.layoutReturnVehicle.returnVehicleBtn.visibility = View.VISIBLE
+               /* binding.layoutSupplierImages.tilSpinnerRequestType.visibility = View.GONE
+                binding.layoutSupplierImages.selectRequestTypeRV.visibility = View.GONE*/
+              /*  binding.layoutSupplierImages.returnVehicleBtn.visibility = View.VISIBLE*/
             }
 
             10 -> {
-                updateCardLayout(8)
-                binding.layoutReturnVehicle.tilSpinnerRequestType.visibility = View.VISIBLE
-                binding.layoutReturnVehicle.selectRequestTypeRV.visibility = View.VISIBLE
-                binding.layoutReturnVehicle.returnVehicleBtn.visibility = View.VISIBLE
+                updateCardLayout(8)/*
+                binding.layoutSupplierImages.tilSpinnerRequestType.visibility = View.VISIBLE
+                binding.layoutSupplierImages.selectRequestTypeRV.visibility = View.VISIBLE*/
+             /*   binding.layoutSupplierImages.returnVehicleBtn.visibility = View.VISIBLE
+                binding.layoutSupplierImages.accidentImageSection.visibility = View.VISIBLE*/
             }
         }
     }

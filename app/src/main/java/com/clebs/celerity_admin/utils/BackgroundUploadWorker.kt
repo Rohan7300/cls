@@ -229,7 +229,8 @@ class BackgroundUploadWorker(
                     prefs.accidentImagePos = crrPointer+1
 
                 }
-            }else if(prefs.backgroundUploadCase==3&&!prefs.spareWheelUri.isNullOrEmpty()){
+            }
+            else if(prefs.backgroundUploadCase==3&&!prefs.spareWheelUri.isNullOrEmpty()){
                 val response = withContext(Dispatchers.IO){
                     mainRepo.UploadVehSpearWheelPictureFile(
                         prefs.osmUserId.toInt(),
@@ -264,6 +265,9 @@ class BackgroundUploadWorker(
                         dateToday()
                     )
                 }
+            }
+            else if(prefs.backgroundUploadCase==7){
+
             }
         }
 

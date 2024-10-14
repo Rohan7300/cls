@@ -16,7 +16,7 @@ object DependencyClass {
     var selectedVehicleIdDA: Int = -1
     var selectedVehicleLocId: Int = -1
     var selectedVehicleLocIdDA: Int = -1
-
+    var currentImageUploadCode :Int = -1
     var selectedVehicleFuelId: Int = -1
     var selectedVehicleFuelIdDA: Int = -1
     var selectedVehicleOilLevelListId: Int = -1

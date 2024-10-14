@@ -178,6 +178,9 @@ class Prefs(context: Context) {
     var isAccidentImageUploading: Boolean
         get() = sharedPreferences.getBoolean("isAccidentImageUploading",false)
         set(value) = sharedPreferences.edit().putBoolean("isAccidentImageUploading",value).apply()
+    var isSupplierDocsUploading: Boolean
+        get() = sharedPreferences.getBoolean("isSupplierDocsUploading",false)
+        set(value) = sharedPreferences.edit().putBoolean("isSupplierDocsUploading",value).apply()
     var isBirthdayCardShown: Boolean?
         get() {
             return sharedPreferences.getBoolean("isBirthdayCardShown", false)
