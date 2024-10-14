@@ -101,7 +101,7 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics:18.6.4")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     //implementation("com.google.firebase:firebase-messaging:23.4.1")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
+    kapt("com.github.bumptech.glide:compiler:4.14.2")
     implementation("com.google.android.gms:play-services-vision:20.1.3")
     implementation("com.github.tapadoo:alerter:7.2.4")
     implementation("com.google.firebase:firebase-ml-vision:24.1.0")
@@ -155,7 +155,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     implementation ("com.squareup.retrofit2:converter-scalars:2.9.0")
 
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
     implementation ("com.squareup.retrofit2:converter-scalars:2.9.0")
 
 //    implementation("org.mozilla.geckoview:geckoview-nightly:100.0.20220308100756")
