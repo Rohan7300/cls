@@ -15,6 +15,7 @@ dependencyResolutionManagement {
         mavenLocal()
         mavenCentral()
         maven { url = uri("https://jitpack.io") }
+        maven { url= uri("https://jcenter.bintray.com/") }
         maven { url = uri("https://europe-maven.pkg.dev/anyline-ttr-sdk/maven") }
 
     }

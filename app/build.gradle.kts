@@ -145,7 +145,7 @@ dependencies {
     implementation("com.github.quickpermissions:quickpermissions-kotlin:0.4.0")
 
     implementation("ru.superjob:kotlin-permissions:1.0.3")
-    implementation("org.jetbrains.anko:anko-commons:0.10.4")
+    implementation("org.jetbrains.anko:anko-commons:0.10.5")
 
     implementation("com.github.skydoves:balloon:1.6.5")
     implementation("com.github.tapadoo:alerter:7.2.4")
