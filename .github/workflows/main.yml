@@ -23,6 +23,9 @@ jobs:
       - name: Clean
         run: ./gradlew clean
 
+      - name: unit test
+        run: ./gradlew test
+
       - name: Build apk
         run: ./gradlew assembleDebug
 
