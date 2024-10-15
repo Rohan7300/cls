@@ -28,4 +28,12 @@ jobs:
         with:
           name: debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Install APP Center CLI
+        run: npm install -g appcenter-cli
+
+      - name: Upload app on App Center
+        run: |
+          appcenter login --token ${{ secrets.APPCENTER_TOKEN }}
+          appcenter distribute release --app Rohan7300/<CLS> --group CLS-TEST --file app/build/outputs/apk/debug/app-debug.apk
           
