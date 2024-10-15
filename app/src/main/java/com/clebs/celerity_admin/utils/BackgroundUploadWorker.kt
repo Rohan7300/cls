@@ -267,7 +267,7 @@ class BackgroundUploadWorker(
 
             } else if (prefs.backgroundUploadCase == 8) {
                 if (prefs.getSelectedFileUrisSupplier().size > 0) {
-                    val crrPointer = prefs.collectionAccidentImagePos
+                    val crrPointer = prefs.collectionSupplierImagePos
                     val partBody = createMultipartPart(
                         prefs.getSelectedFileUrisSupplier()[crrPointer],
                         "uploadVehicleAccidentImage",
@@ -275,14 +275,14 @@ class BackgroundUploadWorker(
                     )
                     prefs.isSupplierDocsUploading = true
                     val response = withContext(Dispatchers.IO) {
-                        mainRepo.UploadVehAccidentPictureFile(
+                        mainRepo.UploadVehSupplierPictureFile(
                             prefs.osmUserId.toInt(),
                             dateToday(),
                             partBody
                         )
                     }
                     prefs.isSupplierDocsUploading = false
-                    prefs.accidentImagePos = crrPointer + 1
+                    prefs.collectionSupplierImagePos = crrPointer + 1
                 }
             } else if (prefs.backgroundUploadCase == 9) {
                 if (prefs.getUrisForAccidentsImages().size > 0) {
@@ -301,7 +301,7 @@ class BackgroundUploadWorker(
                         )
                     }
                     prefs.isCollectionAccidentDocsUploading = false
-                    prefs.accidentImagePos = crrPointer + 1
+                    prefs.collectionAccidentImagePos = crrPointer + 1
                 }
             }
         }

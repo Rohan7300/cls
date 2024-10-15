@@ -280,4 +280,5 @@ interface ApiService {
         @Part image:MultipartBody.Part
     ):Response<SucessStatusMsgResponse>
 
+
 }
