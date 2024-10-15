@@ -451,4 +451,16 @@ class MainRepo(private val ApiService: ApiService) {
             )
         }
     }
+
+    suspend fun UploadVehSupplierPictureFile(
+        userId: Int,
+        date:String,
+        image:MultipartBody.Part
+    ):SimpleNetworkResponse<SucessStatusMsgResponse>{
+        return safeApiCall {
+            ApiService.UploadVehSupplierPictureFile(
+                userId,date,image
+            )
+        }
+    }
 }

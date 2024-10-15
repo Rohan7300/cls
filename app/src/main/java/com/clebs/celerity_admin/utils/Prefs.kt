@@ -181,6 +181,9 @@ class Prefs(context: Context) {
     var isSupplierDocsUploading: Boolean
         get() = sharedPreferences.getBoolean("isSupplierDocsUploading",false)
         set(value) = sharedPreferences.edit().putBoolean("isSupplierDocsUploading",value).apply()
+    var isCollectionAccidentDocsUploading: Boolean
+        get() = sharedPreferences.getBoolean("isCollectionAccidentDocsUploading",false)
+        set(value) = sharedPreferences.edit().putBoolean("isCollectionAccidentDocsUploading",value).apply()
     var isBirthdayCardShown: Boolean?
         get() {
             return sharedPreferences.getBoolean("isBirthdayCardShown", false)
@@ -346,6 +349,12 @@ class Prefs(context: Context) {
     var accidentImagePos:Int
         get() = sharedPreferences.getInt("accidentImagePos",0)
         set(value) = sharedPreferences.edit().putInt("accidentImagePos",value).apply()
+    var collectionSupplierImagePos:Int
+        get() = sharedPreferences.getInt("collectionSupplierImagePos",0)
+        set(value) = sharedPreferences.edit().putInt("collectionSupplierImagePos",value).apply()
+    var collectionAccidentImagePos:Int
+        get() = sharedPreferences.getInt("collectionAccidentImagePos",0)
+        set(value) = sharedPreferences.edit().putInt("collectionAccidentImagePos",value).apply()
 
     var spareWheelUri:String?
         get() = sharedPreferences.getString("spareWheelUri",null)
@@ -369,6 +378,23 @@ class Prefs(context: Context) {
 
     fun getSelectedFileUris(): MutableList<String> {
         val uriStrings = sharedPreferences.getStringSet("selectedFileUris", setOf())
+        return uriStrings?.map { it }?.toMutableList() ?: mutableListOf()
+    }
+
+    fun saveSelectedUrisSupplier(selectedFileUris: MutableList<String>) {
+        sharedPreferences.edit().putStringSet("selectedUrisSupplier", selectedFileUris.toSet()).apply()
+    }
+
+    fun getSelectedFileUrisSupplier(): MutableList<String> {
+        val uriStrings = sharedPreferences.getStringSet("selectedUrisSupplier", setOf())
+        return uriStrings?.map { it }?.toMutableList() ?: mutableListOf()
+    }
+    fun saveUrisForAccidentsImages(selectedFileUris: MutableList<String>) {
+        sharedPreferences.edit().putStringSet("urisForAccidentsImages", selectedFileUris.toSet()).apply()
+    }
+
+    fun getUrisForAccidentsImages(): MutableList<String> {
+        val uriStrings = sharedPreferences.getStringSet("urisForAccidentsImages", setOf())
         return uriStrings?.map { it }?.toMutableList() ?: mutableListOf()
     }
     fun saveBoolean(key: String?, value: Boolean?) {

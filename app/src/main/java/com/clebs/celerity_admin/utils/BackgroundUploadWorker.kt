@@ -38,7 +38,7 @@ class BackgroundUploadWorker(
         val mainRepo = MainRepo(apiService)
         val prefs = Prefs.getInstance(appContext)
         GlobalScope.launch {
-            if(prefs.backgroundUploadCase==1){
+            if (prefs.backgroundUploadCase == 1) {
                 val dbDefectSheet = App.offlineSyncDB?.getDefectSheet(
                     DependencyClass.currentWeeklyDefectItem!!.vdhCheckId
                 )
@@ -147,7 +147,10 @@ class BackgroundUploadWorker(
                                 appContext
                             )
                             mainRepo.UploadVehOSMDefectChkFile(
-                                dbDefectSheet.id, DefectFileType.EngineOilLevel, dateToday(), partBody
+                                dbDefectSheet.id,
+                                DefectFileType.EngineOilLevel,
+                                dateToday(),
+                                partBody
                             )
 
 
@@ -208,12 +211,11 @@ class BackgroundUploadWorker(
                         }
                     }
                 }
-            }
-            else if(prefs.backgroundUploadCase==2){
-                if(prefs.getSelectedFileUris().size>0){
+            } else if (prefs.backgroundUploadCase == 2) {
+                if (prefs.getSelectedFileUris().size > 0) {
                     val crrPointer = prefs.accidentImagePos
                     val partBody = createMultipartPart(
-                      prefs.getSelectedFileUris()[crrPointer],
+                        prefs.getSelectedFileUris()[crrPointer],
                         "uploadVehicleAccidentImage",
                         appContext
                     )
@@ -226,51 +228,83 @@ class BackgroundUploadWorker(
                         )
                     }
                     prefs.isAccidentImageUploading = false
-                    prefs.accidentImagePos = crrPointer+1
+                    prefs.accidentImagePos = crrPointer + 1
 
                 }
-            }
-            else if(prefs.backgroundUploadCase==3&&!prefs.spareWheelUri.isNullOrEmpty()){
-                val response = withContext(Dispatchers.IO){
+            } else if (prefs.backgroundUploadCase == 3 && !prefs.spareWheelUri.isNullOrEmpty()) {
+                val response = withContext(Dispatchers.IO) {
                     mainRepo.UploadVehSpearWheelPictureFile(
                         prefs.osmUserId.toInt(),
                         prefs.crrDriverId,
                         dateToday()
                     )
                 }
-            }
-            else if(prefs.backgroundUploadCase==4&&!prefs.vehicleInteriorPicture.isNullOrEmpty()){
-                val response = withContext(Dispatchers.IO){
+            } else if (prefs.backgroundUploadCase == 4 && !prefs.vehicleInteriorPicture.isNullOrEmpty()) {
+                val response = withContext(Dispatchers.IO) {
                     mainRepo.UploadVehInterierPictureFile(
                         prefs.osmUserId.toInt(),
                         prefs.crrDriverId,
                         dateToday()
                     )
                 }
-            }
-            else if(prefs.backgroundUploadCase==5&&prefs.loadingInteriorPicture.isNullOrEmpty()){
-                val response = withContext(Dispatchers.IO){
+            } else if (prefs.backgroundUploadCase == 5 && prefs.loadingInteriorPicture.isNullOrEmpty()) {
+                val response = withContext(Dispatchers.IO) {
                     mainRepo.UploadVehLoadingInteriorPictureFile(
                         prefs.osmUserId.toInt(),
                         prefs.crrDriverId,
                         dateToday()
                     )
                 }
-            }
-            else if(prefs.backgroundUploadCase==6&&prefs.toolsPicture.isNullOrEmpty()){
-                val response = withContext(Dispatchers.IO){
+            } else if (prefs.backgroundUploadCase == 6 && prefs.toolsPicture.isNullOrEmpty()) {
+                val response = withContext(Dispatchers.IO) {
                     mainRepo.UploadVehToolsPictureFile(
                         prefs.osmUserId.toInt(),
                         prefs.crrDriverId,
                         dateToday()
                     )
                 }
-            }
-            else if(prefs.backgroundUploadCase==7){
+            } else if (prefs.backgroundUploadCase == 7) {
 
+            } else if (prefs.backgroundUploadCase == 8) {
+                if (prefs.getSelectedFileUrisSupplier().size > 0) {
+                    val crrPointer = prefs.collectionAccidentImagePos
+                    val partBody = createMultipartPart(
+                        prefs.getSelectedFileUrisSupplier()[crrPointer],
+                        "uploadVehicleAccidentImage",
+                        appContext
+                    )
+                    prefs.isSupplierDocsUploading = true
+                    val response = withContext(Dispatchers.IO) {
+                        mainRepo.UploadVehAccidentPictureFile(
+                            prefs.osmUserId.toInt(),
+                            dateToday(),
+                            partBody
+                        )
+                    }
+                    prefs.isSupplierDocsUploading = false
+                    prefs.accidentImagePos = crrPointer + 1
+                }
+            } else if (prefs.backgroundUploadCase == 9) {
+                if (prefs.getUrisForAccidentsImages().size > 0) {
+                    val crrPointer = prefs.collectionAccidentImagePos
+                    val partBody = createMultipartPart(
+                        prefs.getUrisForAccidentsImages()[crrPointer],
+                        "uploadVehicleAccidentImage",
+                        appContext
+                    )
+                    prefs.isCollectionAccidentDocsUploading = true
+                    val response = withContext(Dispatchers.IO) {
+                        mainRepo.UploadVehAccidentPictureFile(
+                            prefs.osmUserId.toInt(),
+                            dateToday(),
+                            partBody
+                        )
+                    }
+                    prefs.isCollectionAccidentDocsUploading = false
+                    prefs.accidentImagePos = crrPointer + 1
+                }
             }
         }
-
         return Result.success()
     }
 

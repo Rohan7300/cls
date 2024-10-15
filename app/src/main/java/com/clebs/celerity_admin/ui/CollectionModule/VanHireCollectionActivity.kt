@@ -85,6 +85,7 @@ class VanHireCollectionActivity : AppCompatActivity(), DeleteCallback {
 
     lateinit var binding: ActivityVanHireCollectionBinding
     private var selectedFileUri: MutableList<String>? = mutableListOf()
+    private var selectedFileUriAccident: MutableList<String>? = mutableListOf()
     lateinit var prefs: Prefs
     private lateinit var loadingDialog: LoadingDialog
     private lateinit var mainViewModel: MainViewModel
@@ -121,6 +122,9 @@ class VanHireCollectionActivity : AppCompatActivity(), DeleteCallback {
     }
 
     private fun clickListeners() {
+        binding.back.setOnClickListener {
+            finish()
+        }
         binding.layoutSupplierImages.checkboxUploadAccidentImages.setOnClickListener {
             if (binding.layoutSupplierImages.checkboxUploadAccidentImages.isChecked)
                 binding.layoutSupplierImages.accidentImageSection.visibility = View.VISIBLE
@@ -128,7 +132,7 @@ class VanHireCollectionActivity : AppCompatActivity(), DeleteCallback {
                 binding.layoutSupplierImages.accidentImageSection.visibility = View.GONE
         }
         binding.layoutSupplierImages.uploadSupplierDocsBtn.setOnClickListener {
-            currentImageUploadCode = 1
+            currentImageUploadCode = 5
             if (!prefs.isSupplierDocsUploading)
                 browseFiles()
             else
@@ -138,8 +142,8 @@ class VanHireCollectionActivity : AppCompatActivity(), DeleteCallback {
 
         }
         binding.layoutSupplierImages.uploadAccidentImagesBtn.setOnClickListener {
-            currentImageUploadCode = 2
-            if (!prefs.isSupplierDocsUploading)
+            currentImageUploadCode = 6
+            if (!prefs.isCollectionAccidentDocsUploading)
                 browseFiles()
             else
                 showToast("Please wait other images are uploading!!", this)
@@ -299,32 +303,14 @@ class VanHireCollectionActivity : AppCompatActivity(), DeleteCallback {
 
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = result.data
-                data?.data?.let {
-                    adapter.data = selectedFileUri!!
-                    adapter.notifyItemInserted(selectedFileUri!!.size)
-                    val tmpFile = createTempFile("temp", null, cacheDir).apply {
-                        deleteOnExit()
-                    }
-
-                    val inputStream = contentResolver.openInputStream(it)
-                    val outputStream = tmpFile.outputStream()
-
-                    inputStream?.use { input ->
-                        outputStream.use { output ->
-                            input.copyTo(output)
-                        }
-                    }
-                }
-            } else if (result.resultCode == 11) {
+  if (result.resultCode == 10 && currentImageUploadCode==5) {
                 val data: Intent? = result.data
                 val outputUri = data?.getStringExtra("outputUri")
                 if (outputUri != null) {
                     selectedFileUri!!.add(outputUri)
                     adapter.data = selectedFileUri!!
                     adapter.notifyItemInserted(selectedFileUri!!.size)
-                    prefs.saveSelectedFileUris(selectedFileUri!!)
+                    prefs.saveUrisForAccidentsImages(selectedFileUri!!)
 
                     val inputData = Data.Builder().putInt("defectSheetID", 0)
                         .putInt("defectSheetUserId", 0).build()
@@ -334,26 +320,26 @@ class VanHireCollectionActivity : AppCompatActivity(), DeleteCallback {
                     showToast("Failed to fetch image!!", this)
                 }
             }
-            else if(result.resultCode==12){
+            else if(result.resultCode==10&& currentImageUploadCode==6){
                 val data: Intent? = result.data
                 val outputUri = data?.getStringExtra("outputUri")
                 if (outputUri != null) {
-                    selectedFileUri!!.add(outputUri)
-                    accidentAdapter.data = selectedFileUri!!
-                    accidentAdapter.notifyItemInserted(selectedFileUri!!.size)
-                    prefs.saveSelectedFileUris(selectedFileUri!!)
+                    selectedFileUriAccident!!.add(outputUri)
+                    accidentAdapter.data = selectedFileUriAccident!!
+                    accidentAdapter.notifyItemInserted(selectedFileUriAccident!!.size)
+                    prefs.saveUrisForAccidentsImages(selectedFileUri!!)
 
                     val inputData = Data.Builder().putInt("defectSheetID", 0)
                         .putInt("defectSheetUserId", 0).build()
-                    createBackgroundUploadRequest(inputData, this, 7)
+                    createBackgroundUploadRequest(inputData, this, 8)
                     Log.d("ImageCaptureXX", "Output URI: $outputUri")
                 } else {
                     showToast("Failed to fetch image!!", this)
                 }
             }
             else {
-                finish()
-                showToast("Failed!!", this)
+
+              showToast("Failed!!", this)
             }
         }
 }

@@ -28,7 +28,7 @@
             android:fontFamily="@font/poppins_semibold"
             android:gravity="center"
             android:letterSpacing="0.04"
-            android:text="Van Hire Aggreement"
+            android:text="Collect Vehicle From Supplier"
             android:textColor="#000000"
             android:textSize="16sp" />
     </LinearLayout>
