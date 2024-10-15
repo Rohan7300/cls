@@ -2,7 +2,7 @@ name: Build Android APK
 on:
   push:
     branches:
-      - new-branch-master
+      - celerity-osm
 jobs:
   build:
     runs-on: ubuntu-latest
