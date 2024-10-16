@@ -46,6 +46,6 @@ jobs:
       - name: Get download link
         id: get_link
         run: |
-          APP_CENTER_URL=$(appcenter distribute show --app rohan8171/CLS --release 1  --json |jq -r '.shortLink')
+          APP_CENTER_URL=$(appcenter distribute show --app rohan8171/CLS --release 1  --json | jq -r '.shortLink')
           echo "download_link=${APP_CENTER_URL} >> $GITHUB_ENV 
           
