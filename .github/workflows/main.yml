@@ -42,4 +42,10 @@ jobs:
         run: |
           appcenter login --token ${{ secrets.APPCENTER_TOKEN }}
           appcenter distribute release --app rohan8171/CLS --group CLS-TEST --file app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Get download link
+        id: get_link
+        run: |
+          APP_CENTER_URL=$(appcenter distribute show --app rohan8171/CLS --release 1  --json |jq -r '.shortLink')
+          echo "download_link=${APP_CENTER_URL} >> $GITHUB_ENV 
           
