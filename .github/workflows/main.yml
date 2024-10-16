@@ -42,16 +42,9 @@ jobs:
         run: npm install -g appcenter-cli
 
       - name: Upload App to App Center
-        id: upload
         run: |
           appcenter login --token ${{ secrets.APPCENTER_TOKEN }}
           appcenter distribute release --app rohan8171/CLS --group CLS-TEST --file app/build/outputs/apk/debug/app-debug.apk
-
-      - name: Get Download Link
-        id: get_link
-        run: |
-          APP_CENTER_URL=$(appcenter distribute show --app rohan8171/CLS --release ${{ steps.upload.outputs.releaseId }} --json | jq -r '.shortLink')
-          echo "download_link=${APP_CENTER_URL}" >> $GITHUB_ENV
 
       - name: Create GitHub Release
         id: create_release
