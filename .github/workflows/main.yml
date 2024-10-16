@@ -1,53 +1,67 @@
 name: Build Android APK
+
 on:
   push:
     branches:
       - celerity-osm
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout code
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: set up JDK
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Permission
+      - name: Grant Permissions
         run: chmod +x ./gradlew
 
       - name: Clean
         run: ./gradlew clean
 
-     # - name: unit test
-      #  run: ./gradlew test
+      # Uncomment to run unit tests if needed
+      # - name: Run Unit Tests
+      #   run: ./gradlew test
 
-      - name: Build apk
+      - name: Build APK
         run: ./gradlew assembleDebug
 
-      - name: Archieve apk
+      - name: Archive APK
         uses: actions/upload-artifact@v4
         with:
           name: debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Install APP Center CLI
+      - name: Install App Center CLI
         run: npm install -g appcenter-cli
 
-      - name: Upload app on App Center
+      - name: Upload App to App Center
         id: upload
         run: |
           appcenter login --token ${{ secrets.APPCENTER_TOKEN }}
           appcenter distribute release --app rohan8171/CLS --group CLS-TEST --file app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Get download link
+      - name: Get Download Link
         id: get_link
         run: |
-          RELEASE_ID=$(echo "${{ steps.upload.outputs }}" | jq -r '.id')
-          APP_CENTER_URL=$(appcenter distribute show --app rohan8171/CLS --release $RELEASE_ID --json | jq -r '.shortLink')
+          APP_CENTER_URL=$(appcenter distribute show --app rohan8171/CLS --release ${{ steps.upload.outputs.releaseId }} --json | jq -r '.shortLink')
           echo "download_link=${APP_CENTER_URL}" >> $GITHUB_ENV
-          
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag: v1.0.0  # Update this as needed
+          files: app/build/outputs/apk/debug/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify Users
+        run: |
+          echo "Download your APK here: https://github.com/${{ github.repository }}/releases/download/v1.0.0/app-debug.apk" | mail -s "Your APK is Ready" rohan96negi@gmail.com
