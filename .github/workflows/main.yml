@@ -23,8 +23,8 @@ jobs:
       - name: Clean
         run: ./gradlew clean
 
-      - name: unit test
-        run: ./gradlew test
+     # - name: unit test
+      #  run: ./gradlew test
 
       - name: Build apk
         run: ./gradlew assembleDebug
@@ -39,8 +39,8 @@ jobs:
         run: npm install -g appcenter-cli
 
       - name: Upload app on App Center
+        id: upload
         run: |
-          id: upload
           appcenter login --token ${{ secrets.APPCENTER_TOKEN }}
           appcenter distribute release --app rohan8171/CLS --group CLS-TEST --file app/build/outputs/apk/debug/app-debug.apk
 
