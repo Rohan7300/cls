@@ -58,11 +58,11 @@ jobs:
       - name: Send Notification Email
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.gmail.com 
+          server_address: smtp.gmail.com
           server_port: 587  # or 465 for SSL
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "New APK Release"
-          body: "The new APK has been released! You can download it [here](https://github.com/${{ github.repository }}/releases/download/${{ github.ref }}/app-release.apk)."
+          subject: "New APK Release: v1.0.0"  # Update subject as needed
+          body: "The new APK has been released! You can download it [here](https://github.com/${{ github.repository }}/releases/download/v1.0.0/app-debug.apk)."
           to: rohan99negi@gmail.com  # Replace with the recipient's email
           from: rohan96negi@gmail.com  # Replace with your sender's email
