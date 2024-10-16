@@ -55,6 +55,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
-      - name: Notify Users
-        run: |
-          echo "Download your APK here: https://github.com/${{ github.repository }}/releases/download/v1.0.0/app-debug.apk" | mail -s "Your APK is Ready" rohan96negi@gmail.com
+      - name: Send Notification Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com 
+          server_port: 587  # or 465 for SSL
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "New APK Release"
+          body: "The new APK has been released! You can download it [here](https://github.com/${{ github.repository }}/releases/download/${{ github.ref }}/app-release.apk)."
+          to: rohan98negi@gmail.com  # Replace with the recipient's email
+          from: rohannegi8171@gmail.com  # Replace with your sender's email
