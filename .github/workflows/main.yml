@@ -64,5 +64,5 @@ jobs:
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: "New APK Release"
           body: "The new APK has been released! You can download it [here](https://github.com/${{ github.repository }}/releases/download/${{ github.ref }}/app-release.apk)."
-          to: rohan98negi@gmail.com  # Replace with the recipient's email
+          to: rohan99negi@gmail.com  # Replace with the recipient's email
           from: rohan96negi@gmail.com  # Replace with your sender's email
